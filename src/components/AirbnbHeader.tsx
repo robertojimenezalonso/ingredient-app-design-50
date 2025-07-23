@@ -1,0 +1,150 @@
+import { SlidersHorizontal, Search, Plus, ChevronDown, Coffee, UtensilsCrossed, Moon, Wine, Package, Cake } from 'lucide-react';
+import { useUserConfig } from '@/contexts/UserConfigContext';
+import { useState, useEffect } from 'react';
+
+const foodTypes = [
+  { id: "desayuno", name: "Desayuno", emoji: "🥞" },
+  { id: "almuerzo", name: "Almuerzo", emoji: "🍝" },
+  { id: "cena", name: "Cena", emoji: "🥗" },
+  { id: "aperitivo", name: "Aperitivo", emoji: "🧀" },
+  { id: "snack", name: "Snack", emoji: "🥨" },
+  { id: "postres", name: "Postres", emoji: "🧁" },
+  { id: "otros", name: "Otros", emoji: "🏪" }
+];
+
+const filters = [
+  { id: "promociones", name: "Promociones", hasDropdown: false },
+  { id: "precio", name: "Precio", hasDropdown: true },
+  { id: "dietetica", name: "Dietética", hasDropdown: true },
+  { id: "nutricion", name: "Nutrición", hasDropdown: true },
+  { id: "usado", name: "% Usado", hasDropdown: true },
+  { id: "ingredientes", name: "Ingredientes", hasDropdown: true },
+  { id: "tipo-comida", name: "Tipo de comida", hasDropdown: true },
+  { id: "utensilios", name: "Utensilios", hasDropdown: true },
+  { id: "tiempo", name: "Tiempo", hasDropdown: true },
+];
+
+export const AirbnbHeader = () => {
+  const { config } = useUserConfig();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [selectedFoodType, setSelectedFoodType] = useState<string | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
+  const supermarketName = config.supermarket || 'LIDL';
+  const servingsText = config.servingsPerRecipe === 1 
+    ? '1 Ración por receta' 
+    : `${config.servingsPerRecipe} Raciones por receta`;
+  const locationText = config.postalCode 
+    ? `${config.postalCode} • ${servingsText}`
+    : `En tienda • ${servingsText}`;
+
+  return (
+    <div className={`fixed top-0 left-0 right-0 z-50 bg-background transition-all duration-300 ${
+      isScrolled ? 'border-b border-gray-200/30 shadow-[0_4px_20px_rgba(0,0,0,0.08)]' : ''
+    }`} style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+      
+      {/* Main Header - Always Visible */}
+      <div className="flex items-center gap-3 p-4">
+        <div className="flex-1 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
+          <div className="px-6 py-2 relative">
+            {supermarketName === 'LIDL' && (
+              <img 
+                src="/lovable-uploads/e959efca-f3da-43ea-96a2-ac6b262be062.png" 
+                alt="LIDL Logo" 
+                className="h-8 w-8 rounded-full absolute left-6 top-1/2 transform -translate-y-1/2"
+              />
+            )}
+            <div className="text-center">
+              <div className="font-semibold text-foreground">
+                Recetas en {supermarketName}
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {locationText}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Search Bar and Food Icons - Hidden when scrolled */}
+      <div className={`transition-all duration-300 overflow-hidden ${
+        isScrolled ? 'max-h-0 opacity-0' : 'max-h-96 opacity-100'
+      }`}>
+        {/* Search Bar */}
+        <div className="px-4 pb-4 pt-2">
+          <div className="flex gap-3 items-center">
+            <div className="flex-1 relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
+              <input
+                type="text"
+                placeholder="Buscar receta"
+                className="w-full pl-12 pr-4 py-4 rounded-full text-sm font-medium placeholder:text-foreground"
+                style={{ backgroundColor: '#F3F3F4' }}
+              />
+            </div>
+          </div>
+        </div>
+        
+        {/* Food Type Icons */}
+        <div className="mb-4 -mt-2">
+          <div className="flex gap-6 overflow-x-auto pb-2 scrollbar-hide px-4 py-4">
+            {foodTypes.map((type) => (
+              <button
+                key={type.id}
+                onClick={() => setSelectedFoodType(selectedFoodType === type.id ? null : type.id)}
+                className={`flex flex-col items-center justify-center min-w-[60px] px-2 transition-all duration-200 ${
+                  selectedFoodType === type.id
+                    ? "text-primary"
+                    : "text-gray-600 hover:text-gray-800"
+                }`}
+              >
+                <span className="text-5xl mb-2">{type.emoji}</span>
+                <span className={`text-sm font-medium ${
+                  selectedFoodType === type.id ? "text-primary" : "text-gray-700"
+                }`}>
+                  {type.name}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Filter Tags - Always visible */}
+      <div className={`mb-1 ${isScrolled ? 'mt-2' : '-mt-2'}`}>
+        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide px-4">
+          {filters.map((filter) => (
+            <button
+              key={filter.id}
+              onClick={() => setSelectedFilter(selectedFilter === filter.id ? null : filter.id)}
+              className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
+                selectedFilter === filter.id
+                  ? "bg-foreground text-background"
+                  : "text-foreground hover:shadow-sm"
+              }`}
+              style={{ backgroundColor: selectedFilter === filter.id ? undefined : '#F3F3F4' }}
+            >
+              <span>{filter.name}</span>
+              {filter.hasDropdown && (
+                <ChevronDown 
+                  className={`h-4 w-4 transition-transform duration-200 ${
+                    selectedFilter === filter.id ? "rotate-180" : ""
+                  }`} 
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
