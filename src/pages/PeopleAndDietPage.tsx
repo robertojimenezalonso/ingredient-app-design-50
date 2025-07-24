@@ -12,9 +12,7 @@ const PeopleAndDietPage = () => {
   const navigate = useNavigate();
   const { updateConfig } = useUserConfig();
   const [peopleCount, setPeopleCount] = useState({
-    adultos: 0,
-    niños: 0,
-    bebes: 0
+    adultos: 0
   });
 
   const dietOptions = [
@@ -37,12 +35,12 @@ const PeopleAndDietPage = () => {
 
   const handleGeneratePlan = () => {
     updateConfig({
-      servingsPerRecipe: peopleCount.adultos + peopleCount.niños + peopleCount.bebes
+      servingsPerRecipe: peopleCount.adultos
     });
     navigate('/subscription-benefits');
   };
 
-  const totalPeople = peopleCount.adultos + peopleCount.niños + peopleCount.bebes;
+  const totalPeople = peopleCount.adultos;
   const canContinue = totalPeople > 0;
 
   return (
@@ -109,58 +107,6 @@ const PeopleAndDietPage = () => {
                       </span>
                       <button
                         onClick={() => handlePersonChange('adultos', 1)}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
-                      >
-                        <Plus className="h-4 w-4 text-foreground" />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="border-b border-muted" />
-                </div>
-
-                {/* Children */}
-                <div>
-                  <div className="flex items-center justify-between py-4">
-                    <span className="text-foreground font-medium">Niños</span>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => handlePersonChange('niños', -1)}
-                        disabled={peopleCount.niños === 0}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
-                      >
-                        <Minus className="h-4 w-4 text-foreground" />
-                      </button>
-                      <span className="w-8 text-center text-foreground font-medium">
-                        {peopleCount.niños}
-                      </span>
-                      <button
-                        onClick={() => handlePersonChange('niños', 1)}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
-                      >
-                        <Plus className="h-4 w-4 text-foreground" />
-                      </button>
-                    </div>
-                  </div>
-                  <div className="border-b border-muted" />
-                </div>
-
-                {/* Babies */}
-                <div>
-                  <div className="flex items-center justify-between py-4">
-                    <span className="text-foreground font-medium">Bebés</span>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => handlePersonChange('bebes', -1)}
-                        disabled={peopleCount.bebes === 0}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
-                      >
-                        <Minus className="h-4 w-4 text-foreground" />
-                      </button>
-                      <span className="w-8 text-center text-foreground font-medium">
-                        {peopleCount.bebes}
-                      </span>
-                      <button
-                        onClick={() => handlePersonChange('bebes', 1)}
                         className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
                       >
                         <Plus className="h-4 w-4 text-foreground" />
