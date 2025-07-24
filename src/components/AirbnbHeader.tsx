@@ -94,29 +94,6 @@ export const AirbnbHeader = () => {
           </div>
         </div>
         
-        {/* Food Type Icons */}
-        <div className="mb-4 -mt-2">
-          <div className="flex gap-6 overflow-x-auto pb-2 scrollbar-hide px-4 py-4">
-            {foodTypes.map((type) => (
-              <button
-                key={type.id}
-                onClick={() => setSelectedFoodType(selectedFoodType === type.id ? null : type.id)}
-                className={`flex flex-col items-center justify-center min-w-[60px] px-2 transition-all duration-200 ${
-                  selectedFoodType === type.id
-                    ? "text-primary"
-                    : "text-gray-600 hover:text-gray-800"
-                }`}
-              >
-                <span className="text-5xl mb-2">{type.emoji}</span>
-                <span className={`text-sm font-medium ${
-                  selectedFoodType === type.id ? "text-primary" : "text-gray-700"
-                }`}>
-                  {type.name}
-                </span>
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
 
     </div>
