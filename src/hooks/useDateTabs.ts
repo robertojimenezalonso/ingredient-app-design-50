@@ -42,6 +42,13 @@ export const useDateTabs = () => {
       })
     : [];
 
+  // Inicializar el primer tab como activo
+  useEffect(() => {
+    if (mealPlan.length > 0 && !activeTab) {
+      setActiveTab(mealPlan[0].dateStr);
+    }
+  }, [mealPlan, activeTab]);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
@@ -56,19 +63,24 @@ export const useDateTabs = () => {
 
     // Observer para detectar cuando el título de cada sección está a la altura del tabulador
     const observerOptions = {
-      rootMargin: '-170px 0px -100% 0px',
-      threshold: 0
+      rootMargin: '-170px 0px -90% 0px',
+      threshold: 0.1
     };
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const dateStr = entry.target.getAttribute('data-date');
-          if (dateStr) {
-            setActiveTab(dateStr);
-          }
+      // Encontrar la entrada que está más arriba y visible
+      const visibleEntries = entries.filter(entry => entry.isIntersecting);
+      if (visibleEntries.length > 0) {
+        // Tomar la primera sección visible (la que está más arriba)
+        const topEntry = visibleEntries.reduce((top, current) => {
+          return current.boundingClientRect.top < top.boundingClientRect.top ? current : top;
+        });
+        
+        const dateStr = topEntry.target.getAttribute('data-date');
+        if (dateStr) {
+          setActiveTab(dateStr);
         }
-      });
+      }
     }, observerOptions);
 
     // Timeout para asegurar que las refs estén disponibles
