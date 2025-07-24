@@ -67,7 +67,7 @@ export const AirbnbHeader = () => {
           </div>
         </div>
         <button className="p-2">
-          <MoreVertical className="h-5 w-5 text-black" />
+          <Filter className="h-5 w-5 text-black" />
         </button>
       </div>
       
