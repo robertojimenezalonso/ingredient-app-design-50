@@ -49,7 +49,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
         />
       </div>
       
-      <div className="flex-1 flex flex-col justify-start pt-1 relative min-h-40">
+      <div className="flex-1 flex flex-col justify-start pt-1 relative h-32">
         <h3 className="font-medium text-lg line-clamp-2 mb-0.5 leading-tight overflow-hidden mt-2">
           {recipe.title}
         </h3>
