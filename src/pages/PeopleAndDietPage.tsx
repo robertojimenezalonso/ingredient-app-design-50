@@ -183,7 +183,7 @@ const PeopleAndDietPage = () => {
                       </span>
                     </div>
                     {index < dietOptions.length - 1 && (
-                      <div className="border-b border-muted/30" />
+                      <div className="border-b border-muted" />
                     )}
                   </div>
                 ))}
