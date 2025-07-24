@@ -74,7 +74,7 @@ export const CategoryCarousel = ({
         {mealPlan.map(({ date, dateStr, meals }) => (
           <Card key={dateStr} className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
             <CardHeader className="pb-3 px-4">
-              <CardTitle className="text-xl font-semibold text-neutral-950">
+              <CardTitle className="text-lg font-semibold text-neutral-950">
                 {format(date, "EEEE d", { locale: es })}
               </CardTitle>
             </CardHeader>
