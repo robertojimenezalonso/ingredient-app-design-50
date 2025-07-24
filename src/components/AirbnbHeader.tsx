@@ -127,7 +127,7 @@ export const AirbnbHeader = ({
 
       {/* Date Tabs - Show when scrolled */}
       {showTabs && (
-        <div className="bg-white/95 backdrop-blur-sm border-b-4 border-gray-200">
+        <div className="bg-white/95 backdrop-blur-sm relative">
           <div className="px-4">
             <div ref={tabsContainerRef} className="flex gap-6 overflow-x-auto">
               {mealPlan.map(({ date, dateStr }) => (
@@ -135,17 +135,21 @@ export const AirbnbHeader = ({
                   key={dateStr}
                   data-tab={dateStr}
                   onClick={() => onTabChange?.(dateStr)}
-                  className={`flex-shrink-0 pb-3 pt-2 text-base font-medium border-b-4 transition-colors ${
+                  className={`flex-shrink-0 pb-3 pt-2 text-base font-medium relative ${
                     activeTab === dateStr
-                      ? 'text-black border-black'
-                      : 'text-gray-500 border-transparent hover:text-gray-700'
+                      ? 'text-black'
+                      : 'text-gray-500 hover:text-gray-700'
                   }`}
                 >
                   {format(date, "eee d", { locale: es }).toLowerCase()}
+                  {activeTab === dateStr && (
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-black"></div>
+                  )}
                 </button>
               ))}
             </div>
           </div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200"></div>
         </div>
       )}
 
