@@ -152,20 +152,22 @@ const CalendarSelectionPage = () => {
         </Card>
 
         {/* Floating Continue Button with Reset */}
-        <div className="fixed bottom-6 left-4 right-4 flex items-center gap-4">
+        <div className="fixed bottom-6 left-4 right-4">
           <button 
             onClick={handleReset}
-            className="text-foreground underline text-lg font-medium"
+            className="absolute left-0 top-0 text-foreground underline text-lg font-medium"
           >
             Restablecer
           </button>
-          <Button 
-            onClick={handleContinue} 
-            disabled={!canContinue} 
-            className="flex-1 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold backdrop-blur-sm"
-          >
-            Siguiente
-          </Button>
+          <div className="ml-[50%]">
+            <Button 
+              onClick={handleContinue} 
+              disabled={!canContinue} 
+              className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold backdrop-blur-sm"
+            >
+              Siguiente
+            </Button>
+          </div>
         </div>
       </div>
     </div>;
