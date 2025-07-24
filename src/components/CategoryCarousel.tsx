@@ -75,7 +75,7 @@ export const CategoryCarousel = ({
             {/* Fecha del día */}
             <div className="flex items-center gap-2">
               <h3 className="text-base font-medium text-foreground">
-                {format(date, "EEEE d 'de' MMMM", { locale: es })}
+                {format(date, "EEEE d", { locale: es })}
               </h3>
               <div className="flex-1 h-px bg-border"></div>
             </div>
