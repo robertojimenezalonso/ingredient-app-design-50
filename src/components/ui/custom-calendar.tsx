@@ -20,11 +20,12 @@ export function CustomCalendar({
   const tenDaysAgo = new Date(today);
   tenDaysAgo.setDate(today.getDate() - 10);
   
-  // Generate dates from 10 days ago to 2 months from now
+  // Generate dates from 10 days ago to next month only
   const generateDates = () => {
     const dates = [];
     const endDate = new Date(today);
-    endDate.setMonth(today.getMonth() + 2);
+    endDate.setMonth(today.getMonth() + 1);
+    endDate.setDate(0); // Last day of next month
     
     const currentDate = new Date(tenDaysAgo);
     while (currentDate <= endDate) {
