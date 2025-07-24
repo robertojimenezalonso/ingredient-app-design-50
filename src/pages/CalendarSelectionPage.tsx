@@ -74,7 +74,7 @@ const CalendarSelectionPage = () => {
 
         {/* Calendar Container */}
         <div className="px-4 mb-4">
-          <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0">
+          <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
             <CardHeader className="pb-3 px-4">
               <CardTitle className="text-2xl font-bold text-foreground">¿Cuándo?</CardTitle>
               <p className="text-muted-foreground">
@@ -94,7 +94,7 @@ const CalendarSelectionPage = () => {
 
         {/* Meal Selection Container */}
         <div className="px-4 mb-4">
-          <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0">
+          <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
             <CardContent className="px-4 py-4">
               <div className="space-y-4">
                 <h3 className="font-semibold text-foreground">¿Qué comidas?</h3>
