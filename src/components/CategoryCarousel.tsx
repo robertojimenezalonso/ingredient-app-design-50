@@ -75,15 +75,18 @@ export const CategoryCarousel = ({
     }
   };
 
-  const handleDeleteRecipe = (recipe: Recipe) => {
-    setDeletedRecipes(prev => new Set([...prev, recipe.id]));
+  const handleDeleteRecipe = (recipe: Recipe, dateStr: string, meal: string) => {
+    const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+    setDeletedRecipes(prev => new Set([...prev, uniqueKey]));
     setActiveSwipedRecipe(null);
   };
 
-  const handleSubstituteRecipe = (recipe: Recipe) => {
-    // Aquí puedes implementar la lógica de sustitución
-    console.log('Sustituir receta:', recipe.title);
+  const handleSubstituteRecipe = (recipe: Recipe, dateStr: string, meal: string) => {
+    const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+    setDeletedRecipes(prev => new Set([...prev, uniqueKey]));
     setActiveSwipedRecipe(null);
+    // Aquí puedes implementar la lógica de sustitución
+    console.log('Sustituir receta:', recipe.title, 'en', dateStr, meal);
   };
 
   return (
@@ -104,7 +107,11 @@ export const CategoryCarousel = ({
               <CardContent className="px-4 pb-1 pt-4">
                 <div className="space-y-4">
                   {meals
-                    .filter(({ recipe }) => recipe && !deletedRecipes.has(recipe.id))
+                    .filter(({ recipe, meal }) => {
+                      if (!recipe) return false;
+                      const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+                      return !deletedRecipes.has(uniqueKey);
+                    })
                     .map(({ meal, recipe }, index, filteredMeals) => (
                     <div key={`${dateStr}-${meal}`}>
                       {recipe && (
@@ -112,8 +119,8 @@ export const CategoryCarousel = ({
                           recipe={recipe}
                           onAdd={onAddRecipe}
                           onClick={onRecipeClick}
-                          onDelete={handleDeleteRecipe}
-                          onSubstitute={handleSubstituteRecipe}
+                          onDelete={(recipe) => handleDeleteRecipe(recipe, dateStr, meal)}
+                          onSubstitute={(recipe) => handleSubstituteRecipe(recipe, dateStr, meal)}
                           onSwipeStateChange={handleSwipeStateChange}
                           shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id}
                           mealType={meal}
