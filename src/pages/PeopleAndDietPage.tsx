@@ -108,8 +108,8 @@ const PeopleAndDietPage = () => {
               <div className="space-y-0">
                 {(showAllOptions ? dietOptions : dietOptions.slice(0, 3)).map((option, index) => <div key={option}>
                     <div className="flex items-center justify-between py-4">
-                      <span className="text-foreground font-medium">{option}</span>
-                      <span className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                      <span className="text-muted-foreground font-medium">{option}</span>
+                      <span className="text-foreground cursor-pointer hover:text-primary transition-colors">
                         Añadir
                       </span>
                     </div>
