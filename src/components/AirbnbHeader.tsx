@@ -83,50 +83,48 @@ export const AirbnbHeader = ({
     }`} style={{ paddingTop: 'env(safe-area-inset-top)' }}>
       
       {/* Main Header - Always Visible */}
-      <div className="bg-white">
-        <div className="flex items-center gap-3 p-4">
-          <div className="flex-1 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
-            <div className="px-6 py-2 relative">
-              <div className="text-center">
-                <div className="font-semibold text-foreground">
-                  Mi lista de la compra
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
-                </div>
+      <div className="flex items-center gap-3 p-4 bg-white">
+        <div className="flex-1 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
+          <div className="px-6 py-2 relative">
+            <div className="text-center">
+              <div className="font-semibold text-foreground">
+                Mi lista de la compra
+              </div>
+              <div className="text-sm text-muted-foreground">
+                {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
               </div>
             </div>
           </div>
-          <button className="p-2">
-            <Filter className="h-5 w-5 text-black" />
-          </button>
         </div>
-        
-        {/* Switch entre Receta y Lista de ingredientes - Always visible */}
-        <div className="flex items-center justify-center gap-1 px-4 pb-4">
-          <button 
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              selectedFilter === 'receta' 
-                ? 'bg-black text-white' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-            onClick={() => setSelectedFilter('receta')}
-          >
-            <UtensilsCrossed className="h-4 w-4" />
-            Recetas
-          </button>
-          <button 
-            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-              selectedFilter === 'ingredientes' 
-                ? 'bg-black text-white' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-            onClick={() => setSelectedFilter('ingredientes')}
-          >
-            <Package className="h-4 w-4" />
-            Ingredientes
-          </button>
-        </div>
+        <button className="p-2">
+          <Filter className="h-5 w-5 text-black" />
+        </button>
+      </div>
+      
+      {/* Switch entre Receta y Lista de ingredientes */}
+      <div className="flex items-center justify-center gap-1 px-4 py-4 bg-white">
+        <button 
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            selectedFilter === 'receta' 
+              ? 'bg-black text-white' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+          onClick={() => setSelectedFilter('receta')}
+        >
+          <UtensilsCrossed className="h-4 w-4" />
+          Recetas
+        </button>
+        <button 
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            selectedFilter === 'ingredientes' 
+              ? 'bg-black text-white' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+          onClick={() => setSelectedFilter('ingredientes')}
+        >
+          <Package className="h-4 w-4" />
+          Ingredientes
+        </button>
       </div>
 
       {/* Date Tabs - Show when scrolled */}
