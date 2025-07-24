@@ -1,10 +1,11 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChevronRight, Plus, Search, MoreHorizontal } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Separator } from './ui/separator';
+import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
 import { format } from 'date-fns';
@@ -36,13 +37,44 @@ export const CategoryCarousel = ({
   const { getRecipesByCategory } = useRecipes();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
+  const [showTabs, setShowTabs] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>('');
+  const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-  
-  // Global click/scroll listener to reset swipe
+  // Scroll and intersection observer effects
   useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      setShowTabs(scrollY > 200);
+      
+      if (activeSwipedRecipe) {
+        setActiveSwipedRecipe(null);
+      }
+    };
+
+    const observerOptions = {
+      rootMargin: '-50% 0px -50% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const dateStr = entry.target.getAttribute('data-date');
+          if (dateStr) {
+            setActiveTab(dateStr);
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections
+    Object.values(sectionRefs.current).forEach((ref) => {
+      if (ref) observer.observe(ref);
+    });
+
     const handleGlobalInteraction = (e: Event) => {
       const target = e.target as HTMLElement;
-      // Si el click/touch no es en una recipe card o en los botones de acción
       if (!target.closest('[data-recipe-card="true"]') && 
           !target.closest('.absolute.left-0.top-0') && 
           activeSwipedRecipe) {
@@ -52,16 +84,13 @@ export const CategoryCarousel = ({
 
     document.addEventListener('click', handleGlobalInteraction);
     document.addEventListener('touchstart', handleGlobalInteraction);
-    document.addEventListener('scroll', () => {
-      if (activeSwipedRecipe) {
-        setActiveSwipedRecipe(null);
-      }
-    }, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
     
     return () => {
       document.removeEventListener('click', handleGlobalInteraction);
       document.removeEventListener('touchstart', handleGlobalInteraction);
-      document.removeEventListener('scroll', () => {});
+      document.removeEventListener('scroll', handleScroll);
+      observer.disconnect();
     };
   }, [activeSwipedRecipe]);
   
@@ -119,12 +148,44 @@ export const CategoryCarousel = ({
     console.log('Sustituir receta:', recipe.title, 'en', dateStr, meal);
   };
 
+  const scrollToDate = (dateStr: string) => {
+    const section = sectionRefs.current[dateStr];
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <div className="mb-4">
+      {/* Fixed Tabs */}
+      {showTabs && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 py-2">
+          <div className="px-4">
+            <Tabs value={activeTab} onValueChange={scrollToDate}>
+              <TabsList className="w-full justify-start overflow-x-auto">
+                {mealPlan.map(({ date, dateStr }) => (
+                  <TabsTrigger 
+                    key={dateStr} 
+                    value={dateStr}
+                    className="flex-shrink-0 text-sm"
+                  >
+                    {format(date, "EEE d", { locale: es })}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+      )}
       
       <div className="px-4 space-y-6 mt-8">
         {mealPlan.map(({ date, dateStr, meals }) => (
-          <div key={dateStr} className="space-y-2">
+          <div 
+            key={dateStr} 
+            className="space-y-2"
+            ref={(el) => { sectionRefs.current[dateStr] = el; }}
+            data-date={dateStr}
+          >
             <div className="flex items-center justify-between">
               <h3 className="text-base font-normal text-muted-foreground capitalize">
                 {format(date, "EEEE d", { locale: es })}
