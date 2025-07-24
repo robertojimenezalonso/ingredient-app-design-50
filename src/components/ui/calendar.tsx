@@ -18,16 +18,16 @@ function Calendar({
   const maxDate = new Date();
   maxDate.setMonth(today.getMonth() + 2);
   
-  // Start exactly 10 days before today
-  const minDate = new Date(today);
-  minDate.setDate(today.getDate() - 10);
+  // Start exactly 10 days before today - this will be the absolute minimum date shown
+  const tenDaysAgo = new Date(today);
+  tenDaysAgo.setDate(today.getDate() - 10);
 
   return (
     <div className="max-h-96 overflow-y-auto">
       <DayPicker
         showOutsideDays={false}
         numberOfMonths={2}
-        fromDate={minDate}
+        fromDate={tenDaysAgo}
         toDate={maxDate}
         weekStartsOn={1}
         className={cn("p-3", className)}
@@ -82,17 +82,6 @@ function Calendar({
             textDecoration: 'line-through',
             opacity: 0.6
           }
-        }}
-        hidden={(date) => {
-          const dateTime = new Date(date);
-          dateTime.setHours(0, 0, 0, 0);
-          const todayTime = new Date();
-          todayTime.setHours(0, 0, 0, 0);
-          
-          const tenDaysAgo = new Date(todayTime);
-          tenDaysAgo.setDate(todayTime.getDate() - 10);
-          
-          return dateTime < tenDaysAgo;
         }}
         {...props}
       />
