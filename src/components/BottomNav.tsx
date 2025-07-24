@@ -1,4 +1,4 @@
-import { Search, ShoppingCart, ChefHat, User, Plus, BookOpen } from 'lucide-react';
+import { Search, ShoppingCart, ChefHat, User, Plus } from 'lucide-react';
 
 interface BottomNavProps {
   activeTab: 'explore' | 'cart' | 'recipes' | 'profile';
@@ -7,8 +7,8 @@ interface BottomNavProps {
 
 export const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
   const tabs = [
-    { id: 'explore' as const, icon: BookOpen, label: 'Recetas' },
-    { id: 'cart' as const, icon: Search, label: 'Super' }
+    { id: 'explore' as const, icon: Search, label: 'Explorar' },
+    { id: 'cart' as const, icon: ShoppingCart, label: 'Compra' }
   ];
 
   const tabsRight = [
