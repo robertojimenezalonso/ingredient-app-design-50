@@ -107,9 +107,9 @@ const CalendarSelectionPage = () => {
                       className={cn(
                         "cursor-pointer px-2 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center",
                         selectedMeals.includes(meal) 
-                          ? "bg-muted border-2 border-foreground text-foreground" 
+                          ? "bg-muted/80 border-2 border-foreground text-foreground" 
                           : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
-                      )} 
+                      )}
                       onClick={() => toggleMeal(meal)}
                     >
                       {meal}
@@ -136,9 +136,9 @@ const CalendarSelectionPage = () => {
                         className={cn(
                           "cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors",
                           selectedMeals.includes(meal) 
-                            ? "bg-muted border-2 border-foreground text-foreground" 
+                            ? "bg-muted/80 border-2 border-foreground text-foreground" 
                             : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
-                        )} 
+                        )}
                         onClick={() => toggleMeal(meal)}
                       >
                         {meal}
