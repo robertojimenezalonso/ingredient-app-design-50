@@ -40,7 +40,7 @@ const CalendarSelectionPage = () => {
   const canContinue = selectedDates.length > 0 && selectedMeals.length > 0;
   return <div className="fixed inset-0 z-50">
       {/* Background with WelcomePage content - blurred */}
-      <div className="absolute inset-0 bg-green-500 flex flex-col items-center justify-center p-4">
+      <div className="absolute inset-0 bg-sky-200 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-sm">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-foreground mb-4">Oliv.ai</h1>
