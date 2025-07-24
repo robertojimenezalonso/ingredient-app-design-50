@@ -99,13 +99,13 @@ const CalendarSelectionPage = () => {
               
               <div className="space-y-2">
                 {/* Main meals - same line */}
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                   {['Desayuno', 'Almuerzo', 'Comida'].map(meal => 
                     <Badge 
                       key={meal} 
                       variant="outline" 
                       className={cn(
-                        "cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors",
+                        "cursor-pointer px-3 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center",
                         selectedMeals.includes(meal) 
                           ? "bg-muted border-2 border-foreground text-foreground" 
                           : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
@@ -119,7 +119,7 @@ const CalendarSelectionPage = () => {
                   {/* Plus button */}
                   <Badge 
                     variant="outline" 
-                    className="cursor-pointer px-3 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors" 
+                    className="cursor-pointer px-2 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0" 
                     onClick={() => setShowMoreMeals(!showMoreMeals)}
                   >
                     <Plus className="h-4 w-4" />
