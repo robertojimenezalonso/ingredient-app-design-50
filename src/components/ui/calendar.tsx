@@ -18,7 +18,7 @@ function Calendar({
   const maxDate = new Date();
   maxDate.setMonth(today.getMonth() + 2);
   
-  // Show exactly 10 days before today
+  // Start exactly 10 days before today
   const minDate = new Date(today);
   minDate.setDate(today.getDate() - 10);
 
