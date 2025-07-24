@@ -50,7 +50,7 @@ const PeopleAndDietPage = () => {
           </button>
           
           <div className="flex-1 mx-4">
-            <Progress value={75} className="h-1" />
+            <Progress value={100} className="h-1" />
           </div>
         </div>
 
