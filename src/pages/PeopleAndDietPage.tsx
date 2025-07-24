@@ -91,73 +91,81 @@ const PeopleAndDietPage = () => {
             </CardHeader>
 
             <CardContent className="px-4 pb-4">
-              <div className="space-y-4">
+              <div className="space-y-0">
                 {/* Adults */}
-                <div className="flex items-center justify-between">
-                  <span className="text-foreground font-medium">Adultos</span>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => handlePersonChange('adultos', -1)}
-                      disabled={peopleCount.adultos === 0}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
-                    >
-                      <Minus className="h-4 w-4 text-foreground" />
-                    </button>
-                    <span className="w-8 text-center text-foreground font-medium">
-                      {peopleCount.adultos}
-                    </span>
-                    <button
-                      onClick={() => handlePersonChange('adultos', 1)}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
-                    >
-                      <Plus className="h-4 w-4 text-foreground" />
-                    </button>
+                <div>
+                  <div className="flex items-center justify-between py-4">
+                    <span className="text-foreground font-medium">Adultos</span>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => handlePersonChange('adultos', -1)}
+                        disabled={peopleCount.adultos === 0}
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
+                      >
+                        <Minus className="h-4 w-4 text-foreground" />
+                      </button>
+                      <span className="w-8 text-center text-foreground font-medium">
+                        {peopleCount.adultos}
+                      </span>
+                      <button
+                        onClick={() => handlePersonChange('adultos', 1)}
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
+                      >
+                        <Plus className="h-4 w-4 text-foreground" />
+                      </button>
+                    </div>
                   </div>
+                  <div className="border-b border-muted" />
                 </div>
 
                 {/* Children */}
-                <div className="flex items-center justify-between">
-                  <span className="text-foreground font-medium">Niños</span>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => handlePersonChange('niños', -1)}
-                      disabled={peopleCount.niños === 0}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
-                    >
-                      <Minus className="h-4 w-4 text-foreground" />
-                    </button>
-                    <span className="w-8 text-center text-foreground font-medium">
-                      {peopleCount.niños}
-                    </span>
-                    <button
-                      onClick={() => handlePersonChange('niños', 1)}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
-                    >
-                      <Plus className="h-4 w-4 text-foreground" />
-                    </button>
+                <div>
+                  <div className="flex items-center justify-between py-4">
+                    <span className="text-foreground font-medium">Niños</span>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => handlePersonChange('niños', -1)}
+                        disabled={peopleCount.niños === 0}
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
+                      >
+                        <Minus className="h-4 w-4 text-foreground" />
+                      </button>
+                      <span className="w-8 text-center text-foreground font-medium">
+                        {peopleCount.niños}
+                      </span>
+                      <button
+                        onClick={() => handlePersonChange('niños', 1)}
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
+                      >
+                        <Plus className="h-4 w-4 text-foreground" />
+                      </button>
+                    </div>
                   </div>
+                  <div className="border-b border-muted" />
                 </div>
 
                 {/* Babies */}
-                <div className="flex items-center justify-between">
-                  <span className="text-foreground font-medium">Bebés</span>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={() => handlePersonChange('bebes', -1)}
-                      disabled={peopleCount.bebes === 0}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
-                    >
-                      <Minus className="h-4 w-4 text-foreground" />
-                    </button>
-                    <span className="w-8 text-center text-foreground font-medium">
-                      {peopleCount.bebes}
-                    </span>
-                    <button
-                      onClick={() => handlePersonChange('bebes', 1)}
-                      className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
-                    >
-                      <Plus className="h-4 w-4 text-foreground" />
-                    </button>
+                <div>
+                  <div className="flex items-center justify-between py-4">
+                    <span className="text-foreground font-medium">Bebés</span>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={() => handlePersonChange('bebes', -1)}
+                        disabled={peopleCount.bebes === 0}
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
+                      >
+                        <Minus className="h-4 w-4 text-foreground" />
+                      </button>
+                      <span className="w-8 text-center text-foreground font-medium">
+                        {peopleCount.bebes}
+                      </span>
+                      <button
+                        onClick={() => handlePersonChange('bebes', 1)}
+                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
+                      >
+                        <Plus className="h-4 w-4 text-foreground" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
