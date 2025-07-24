@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { ChevronRight, MoreHorizontal, Search } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
@@ -25,17 +25,29 @@ const mealCategoryMap: Record<string, CategoryType> = {
   'Tentempié': 'snacks'
 };
 
-export const CategoryCarousel = ({ 
+export const CategoryCarousel = forwardRef<
+  { resetSwipe: () => void },
+  CategoryCarouselProps
+>(({ 
   category, 
   recipes, 
   onAddRecipe, 
   onRecipeClick, 
   onViewAll 
-}: CategoryCarouselProps) => {
+}, ref) => {
   const { config } = useUserConfig();
   const { getRecipesByCategory } = useRecipes();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
+
+  useImperativeHandle(ref, () => ({
+    resetSwipe: () => {
+      console.log('Reset swipe llamado desde ref');
+      if (activeSwipedRecipe) {
+        setActiveSwipedRecipe(null);
+      }
+    }
+  }));
   
   // Si no hay configuración, no mostrar nada
   if (!config.selectedDates || !config.selectedMeals || 
@@ -76,38 +88,6 @@ export const CategoryCarousel = ({
     }
   };
 
-  // Resetear swipe al hacer scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      console.log('Scroll detectado, activeSwipedRecipe:', activeSwipedRecipe);
-      if (activeSwipedRecipe) {
-        console.log('Reseteando swipe por scroll');
-        setActiveSwipedRecipe(null);
-      }
-    };
-
-    const handleTouchMove = (e: TouchEvent) => {
-      // Solo resetear si es un movimiento vertical significativo
-      if (activeSwipedRecipe && e.touches[0]) {
-        console.log('TouchMove detectado durante swipe activo');
-        handleScroll();
-      }
-    };
-
-    if (activeSwipedRecipe) {
-      console.log('Agregando listeners de scroll para recipe:', activeSwipedRecipe);
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      document.addEventListener('touchmove', handleTouchMove, { passive: true });
-    }
-
-    return () => {
-      if (activeSwipedRecipe) {
-        console.log('Removiendo listeners de scroll');
-        window.removeEventListener('scroll', handleScroll);
-        document.removeEventListener('touchmove', handleTouchMove);
-      }
-    };
-  }, [activeSwipedRecipe]);
 
   const handleDeleteRecipe = (recipe: Recipe, dateStr: string, meal: string) => {
     const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
@@ -126,7 +106,19 @@ export const CategoryCarousel = ({
   return (
     <div className="mb-4">
       
-      <div className="px-4 space-y-6 mt-8">
+      <div className="px-4 space-y-6 mt-8" 
+           onScroll={() => {
+             console.log('Scroll en contenedor principal');
+             if (activeSwipedRecipe) {
+               setActiveSwipedRecipe(null);
+             }
+           }}
+           onTouchMove={() => {
+             console.log('TouchMove en contenedor principal');
+             if (activeSwipedRecipe) {
+               setActiveSwipedRecipe(null);
+             }
+           }}>
         {mealPlan.map(({ date, dateStr, meals }) => (
           <div key={dateStr} className="space-y-2">
             <div className="flex items-center justify-between">
@@ -183,4 +175,6 @@ export const CategoryCarousel = ({
       </div>
     </div>
   );
-};
+});
+
+CategoryCarousel.displayName = 'CategoryCarousel';
