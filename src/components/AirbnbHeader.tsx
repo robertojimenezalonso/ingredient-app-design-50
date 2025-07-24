@@ -56,13 +56,6 @@ export const AirbnbHeader = () => {
       <div className="flex items-center gap-3 p-4">
         <div className="flex-1 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
           <div className="px-6 py-2 relative">
-            {supermarketName === 'LIDL' && (
-              <img 
-                src="/lovable-uploads/e959efca-f3da-43ea-96a2-ac6b262be062.png" 
-                alt="LIDL Logo" 
-                className="h-8 w-8 rounded-full absolute left-6 top-1/2 transform -translate-y-1/2"
-              />
-            )}
             <div className="text-center">
               <div className="font-semibold text-foreground">
                 Recetas en {supermarketName}
