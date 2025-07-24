@@ -80,6 +80,12 @@ export const CategoryCarousel = ({
     setActiveSwipedRecipe(null);
   };
 
+  const handleSubstituteRecipe = (recipe: Recipe) => {
+    // Aquí puedes implementar la lógica de sustitución
+    console.log('Sustituir receta:', recipe.title);
+    setActiveSwipedRecipe(null);
+  };
+
   return (
     <div className="mb-4">
       
@@ -105,6 +111,7 @@ export const CategoryCarousel = ({
                           onAdd={onAddRecipe}
                           onClick={onRecipeClick}
                           onDelete={handleDeleteRecipe}
+                          onSubstitute={handleSubstituteRecipe}
                           onSwipeStateChange={handleSwipeStateChange}
                           shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id}
                           mealType={meal}

@@ -4,24 +4,29 @@ import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useEffect, useState, useRef } from 'react';
 import { IngredientAvatars } from './IngredientAvatars';
 import { Badge } from './ui/badge';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
+import { useToast } from '@/hooks/use-toast';
 
 interface RecipeCardProps {
   recipe: Recipe;
   onAdd: (recipe: Recipe) => void;
   onClick: (recipe: Recipe) => void;
   onDelete?: (recipe: Recipe) => void;
+  onSubstitute?: (recipe: Recipe) => void;
   onSwipeStateChange?: (recipeId: string, isSwiped: boolean) => void;
   shouldResetSwipe?: boolean;
   mealType?: string;
 }
 
-export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSwipeStateChange, shouldResetSwipe, mealType }: RecipeCardProps) => {
+export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onSwipeStateChange, shouldResetSwipe, mealType }: RecipeCardProps) => {
   const { config } = useUserConfig();
+  const { toast } = useToast();
   const [useTotalAbbreviation, setUseTotalAbbreviation] = useState(false);
   const [swipeX, setSwipeX] = useState(0);
   const [isSwipeActive, setIsSwipeActive] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const [isSwiped, setIsSwiped] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -136,10 +141,28 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSwipeStateChang
 
   const handleDelete = (e: React.MouseEvent) => {
     e.stopPropagation(); // Evitar que se ejecute onClick del card
+    setShowDeleteDialog(true);
+  };
+
+  const handleConfirmDelete = () => {
     setIsDeleted(true);
+    setShowDeleteDialog(false);
+    toast({
+      title: "Receta eliminada",
+      description: `${recipe.title} ha sido eliminada de tu lista`,
+    });
     setTimeout(() => {
       onDelete?.(recipe);
     }, 200);
+  };
+
+  const handleSubstitute = () => {
+    setShowDeleteDialog(false);
+    toast({
+      title: "Receta sustituida",
+      description: `Buscando una nueva receta para sustituir ${recipe.title}`,
+    });
+    onSubstitute?.(recipe);
   };
 
   if (isDeleted) {
@@ -150,16 +173,15 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSwipeStateChang
     <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-50' : 'z-10'}`} style={{ touchAction: 'none' }}>
       {/* Delete background */}
       <div 
-        className={`absolute inset-0 bg-red-500 flex items-center justify-end pr-6 rounded-2xl transition-opacity duration-200 ${
+        className={`absolute inset-0 bg-red-500 flex items-center justify-center rounded-2xl transition-opacity duration-200 cursor-pointer ${
           isSwipeActive || isSwiped ? 'opacity-100' : 'opacity-0'
         }`}
+        onClick={handleDelete}
       >
-        <button 
-          onClick={handleDelete}
-          className="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-colors"
-        >
-          <Trash2 className="h-5 w-5 text-white" />
-        </button>
+        <div className="flex flex-col items-center justify-center text-white">
+          <Trash2 className="h-8 w-8 mb-1" />
+          <span className="text-sm font-medium">Eliminar</span>
+        </div>
       </div>
       
       {/* Main card */}
@@ -200,6 +222,35 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSwipeStateChang
         </div>
         
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Qué quieres hacer con esta receta?</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que quieres eliminar "{recipe.title}" o prefieres sustituirla por una nueva receta?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="flex-col gap-2">
+            <AlertDialogAction 
+              onClick={handleSubstitute}
+              className="w-full bg-blue-600 hover:bg-blue-700"
+            >
+              Sustituir por nueva receta
+            </AlertDialogAction>
+            <AlertDialogAction 
+              onClick={handleConfirmDelete}
+              className="w-full bg-red-600 hover:bg-red-700"
+            >
+              Eliminar definitivamente
+            </AlertDialogAction>
+            <AlertDialogCancel className="w-full">
+              Cancelar
+            </AlertDialogCancel>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
