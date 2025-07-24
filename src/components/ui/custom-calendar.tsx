@@ -219,18 +219,18 @@ export function CustomCalendar({
             {/* Date grid */}
             <div className="space-y-1">
               {weekStructure.map((week, weekIndex) => (
-                <div key={weekIndex} className="flex w-full mt-2">
+                <div key={weekIndex} className="flex w-full mt-2 gap-1">
                   {week.map((date, dayIndex) => (
                     <div
                       key={dayIndex}
-                      className="h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20"
+                      className="h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20 flex items-center justify-center"
                     >
                       {date && (
                         <button
                           onClick={() => handleDateClick(date)}
                           className={cn(
                             buttonVariants({ variant: "ghost" }),
-                            "h-9 w-9 p-0 font-normal rounded-full relative transition-colors",
+                            "h-8 w-8 p-0 font-normal rounded-full relative transition-colors",
                             isSelected(date) &&
                               "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
                             isToday(date) && !isSelected(date) && "bg-accent text-accent-foreground",
