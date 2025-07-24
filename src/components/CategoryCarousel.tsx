@@ -104,7 +104,7 @@ export const CategoryCarousel = ({
               </button>
             </div>
             <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-              <CardContent className="px-4 pb-1 pt-4">
+              <CardContent className="px-4 pb-4 pt-4">
                 <div className="space-y-4">
                   {meals
                     .filter(({ recipe, meal }) => {
