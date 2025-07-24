@@ -136,7 +136,7 @@ const PeopleAndDietPage = () => {
                       <span className="text-muted-foreground cursor-pointer hover:text-primary transition-colors text-left font-normal">
                         Ver menos
                       </span>
-                      <ChevronRight className="h-4 w-4 text-muted-foreground rotate-90" />
+                      <ChevronRight className="h-4 w-4 text-muted-foreground -rotate-90" />
                     </div>
                   </>
                 )}
