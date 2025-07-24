@@ -73,12 +73,12 @@ export const CategoryCarousel = ({
       <div className="px-4 space-y-6">
         {mealPlan.map(({ date, dateStr, meals }) => (
           <div key={dateStr} className="space-y-3">
-            <div className="flex items-center justify-between px-4">
+            <div className="flex items-center justify-between pr-4">
               <h3 className="text-base font-normal text-muted-foreground">
                 {format(date, "EEEE d", { locale: es })}
               </h3>
-              <button className="w-6 h-6 rounded-full bg-white border border-gray-200 flex items-center justify-center text-muted-foreground hover:bg-gray-50">
-                <Plus size={14} />
+              <button className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-muted-foreground hover:bg-gray-50">
+                <Plus size={16} />
               </button>
             </div>
             <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
