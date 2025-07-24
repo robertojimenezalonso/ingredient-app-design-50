@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronRight, MoreHorizontal, Search } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
@@ -74,6 +74,23 @@ export const CategoryCarousel = ({
       setActiveSwipedRecipe(null);
     }
   };
+
+  // Resetear swipe al hacer scroll
+  useEffect(() => {
+    const handleScroll = () => {
+      if (activeSwipedRecipe) {
+        setActiveSwipedRecipe(null);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    document.addEventListener('touchmove', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('touchmove', handleScroll);
+    };
+  }, [activeSwipedRecipe]);
 
   const handleDeleteRecipe = (recipe: Recipe, dateStr: string, meal: string) => {
     const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
