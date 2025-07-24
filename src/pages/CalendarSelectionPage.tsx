@@ -155,7 +155,7 @@ const CalendarSelectionPage = () => {
         <div className="fixed bottom-6 left-4 right-4">
           <button 
             onClick={handleReset}
-            className="absolute left-0 top-0 text-foreground underline text-lg font-medium"
+            className="absolute left-0 top-1/2 transform -translate-y-1/2 text-foreground underline text-lg font-medium"
           >
             Restablecer
           </button>
