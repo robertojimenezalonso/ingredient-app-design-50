@@ -54,9 +54,9 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
           {recipe.title}
         </h3>
         <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1.5">
-          <span>{CATEGORIES[recipe.category as keyof typeof CATEGORIES] || recipe.category}</span>
-          <span>·</span>
           <span>{recipe.calories} kcal</span>
+          <span>·</span>
+          <span>{recipe.time} min</span>
         </div>
       </div>
       
