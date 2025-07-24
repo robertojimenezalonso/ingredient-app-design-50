@@ -14,7 +14,7 @@ interface RecipeCardProps {
   onDelete?: (recipe: Recipe) => void;
   onSubstitute?: (recipe: Recipe) => void;
   onSwipeStateChange?: (recipeId: string, isSwiped: boolean) => void;
-  shouldResetSwipe?: boolean;
+  shouldResetSwipe?: number;
   mealType?: string;
 }
 
@@ -69,15 +69,13 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
 
   // Reset swipe when shouldResetSwipe changes
   useEffect(() => {
-    console.log('RecipeCard useEffect - shouldResetSwipe:', shouldResetSwipe, 'isSwiped:', isSwiped, 'recipe:', recipe.title);
-    if (shouldResetSwipe && (isSwiped || isSwipeActive)) {
-      console.log('Reseteando estado interno de RecipeCard:', recipe.title);
+    if (shouldResetSwipe && shouldResetSwipe > 0) {
       setSwipeX(0);
       setIsSwiped(false);
       setIsSwipeActive(false);
       onSwipeStateChange?.(recipe.id, false);
     }
-  }, [shouldResetSwipe, isSwiped, isSwipeActive, recipe.id, recipe.title, onSwipeStateChange]);
+  }, [shouldResetSwipe, recipe.id, onSwipeStateChange]);
 
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {

@@ -36,6 +36,7 @@ export const CategoryCarousel = ({
   const { getRecipesByCategory } = useRecipes();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
+  const [resetTrigger, setResetTrigger] = useState(0);
 
   
   // Global click/scroll listener to reset swipe
@@ -47,21 +48,25 @@ export const CategoryCarousel = ({
           !target.closest('.absolute.left-0.top-0') && 
           activeSwipedRecipe) {
         setActiveSwipedRecipe(null);
+        setResetTrigger(prev => prev + 1); // Trigger reset
+      }
+    };
+
+    const handleScroll = () => {
+      if (activeSwipedRecipe) {
+        setActiveSwipedRecipe(null);
+        setResetTrigger(prev => prev + 1); // Trigger reset
       }
     };
 
     document.addEventListener('click', handleGlobalInteraction);
     document.addEventListener('touchstart', handleGlobalInteraction);
-    document.addEventListener('scroll', () => {
-      if (activeSwipedRecipe) {
-        setActiveSwipedRecipe(null);
-      }
-    }, { passive: true });
+    document.addEventListener('scroll', handleScroll, { passive: true });
     
     return () => {
       document.removeEventListener('click', handleGlobalInteraction);
       document.removeEventListener('touchstart', handleGlobalInteraction);
-      document.removeEventListener('scroll', () => {});
+      document.removeEventListener('scroll', handleScroll);
     };
   }, [activeSwipedRecipe]);
   
@@ -152,7 +157,7 @@ export const CategoryCarousel = ({
                           onDelete={(recipe) => handleDeleteRecipe(recipe, dateStr, meal)}
                           onSubstitute={(recipe) => handleSubstituteRecipe(recipe, dateStr, meal)}
                           onSwipeStateChange={handleSwipeStateChange}
-                          shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id}
+                          shouldResetSwipe={resetTrigger}
                           mealType={meal}
                         />
                       )}
