@@ -41,19 +41,28 @@ export const CategoryCarousel = ({
   // Simple global scroll listener
   useEffect(() => {
     const handleScrollReset = () => {
-      if (activeSwipedRecipe) {
+      console.log('Detectado scroll - reseteando activeSwipedRecipe');
+      setActiveSwipedRecipe(null);
+    };
+
+    // Agregar listener al scroll del contenedor principal también
+    const handleTouchMove = (e: TouchEvent) => {
+      // Solo resetear si es un movimiento vertical (scroll)
+      const target = e.target as HTMLElement;
+      if (!target.closest('[data-recipe-card="true"]')) {
+        console.log('TouchMove fuera de recipe card - reseteando');
         setActiveSwipedRecipe(null);
       }
     };
 
-    window.addEventListener('scroll', handleScrollReset);
-    window.addEventListener('touchmove', handleScrollReset);
+    window.addEventListener('scroll', handleScrollReset, { passive: true });
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
     
     return () => {
       window.removeEventListener('scroll', handleScrollReset);
-      window.removeEventListener('touchmove', handleScrollReset);
+      window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, [activeSwipedRecipe]);
+  }, []);
   
   // Si no hay configuración, no mostrar nada
   if (!config.selectedDates || !config.selectedMeals || 
