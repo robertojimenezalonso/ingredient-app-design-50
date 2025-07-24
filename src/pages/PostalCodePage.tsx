@@ -13,7 +13,7 @@ const PostalCodePage = () => {
 
   const handleContinue = () => {
     updateConfig({ postalCode });
-    navigate('/supermarket-selection');
+    navigate('/calendar-selection');
   };
 
   const isValidPostalCode = postalCode.length === 5 && /^\d+$/.test(postalCode);

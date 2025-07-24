@@ -4,6 +4,8 @@ interface UserConfig {
   postalCode: string;
   supermarket: string;
   servingsPerRecipe: number;
+  selectedDates?: string[];
+  selectedMeals?: string[];
 }
 
 interface UserConfigContextType {
@@ -27,6 +29,8 @@ export const UserConfigProvider: React.FC<{ children: ReactNode }> = ({ children
     postalCode: '',
     supermarket: '',
     servingsPerRecipe: 1,
+    selectedDates: [],
+    selectedMeals: [],
   });
 
   const updateConfig = (updates: Partial<UserConfig>) => {
