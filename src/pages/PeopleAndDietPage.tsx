@@ -118,8 +118,8 @@ const PeopleAndDietPage = () => {
                 
                 {!showAllOptions && <>
                     <div className="border-b border-muted" />
-                    <div className="flex items-center justify-between py-4">
-                      <span className="text-foreground font-medium cursor-pointer hover:text-primary transition-colors" onClick={() => setShowAllOptions(true)}>
+                    <div className="flex items-center justify-center py-4">
+                      <span className="text-muted-foreground font-medium cursor-pointer hover:text-primary transition-colors" onClick={() => setShowAllOptions(true)}>
                         Más opciones
                       </span>
                     </div>
