@@ -35,6 +35,7 @@ export const CategoryCarousel = ({
   const { config } = useUserConfig();
   const { getRecipesByCategory } = useRecipes();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
+  const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
   
   // Si no hay configuración, no mostrar nada
   if (!config.selectedDates || !config.selectedMeals || 
@@ -75,8 +76,7 @@ export const CategoryCarousel = ({
   };
 
   const handleDeleteRecipe = (recipe: Recipe) => {
-    // Aquí puedes implementar la lógica de eliminación
-    console.log('Eliminar receta:', recipe.title);
+    setDeletedRecipes(prev => new Set([...prev, recipe.id]));
     setActiveSwipedRecipe(null);
   };
 
@@ -103,7 +103,9 @@ export const CategoryCarousel = ({
             <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
               <CardContent className="px-4 pb-1 pt-4">
                 <div className="space-y-4">
-                  {meals.map(({ meal, recipe }, index) => (
+                  {meals
+                    .filter(({ recipe }) => recipe && !deletedRecipes.has(recipe.id))
+                    .map(({ meal, recipe }, index, filteredMeals) => (
                     <div key={`${dateStr}-${meal}`}>
                       {recipe && (
                         <RecipeCard
@@ -117,7 +119,7 @@ export const CategoryCarousel = ({
                           mealType={meal}
                         />
                       )}
-                      {index < meals.length - 1 && (
+                      {index < filteredMeals.length - 1 && (
                         <div className="mt-4 -mx-4">
                           <Separator />
                         </div>

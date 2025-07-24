@@ -78,33 +78,39 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
 
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
-    e.preventDefault();
-    e.stopPropagation(); // Evitar que el evento se propague al contenedor padre
     const touch = e.touches[0];
     containerRef.current?.setAttribute('data-start-x', touch.clientX.toString());
+    containerRef.current?.setAttribute('data-start-y', touch.clientY.toString());
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    e.preventDefault();
-    e.stopPropagation(); // Evitar que el evento se propague al contenedor padre
     const touch = e.touches[0];
     const startX = parseFloat(containerRef.current?.getAttribute('data-start-x') || '0');
+    const startY = parseFloat(containerRef.current?.getAttribute('data-start-y') || '0');
     const currentX = touch.clientX;
+    const currentY = touch.clientY;
     const deltaX = currentX - startX;
+    const deltaY = currentY - startY;
     
-    if (isSwiped) {
-      // Si ya está swipeada, permitir swipe hacia la izquierda para volver
-      if (deltaX < 0 && deltaX >= -80) {
-        setSwipeX(80 + deltaX);
-        setIsSwipeActive(true);
-      }
-    } else {
-      // Swipe inicial hacia la derecha
-      if (deltaX > 0 && deltaX <= 80) {
-        setSwipeX(deltaX);
-        setIsSwipeActive(true);
-        // Notificar que esta card está siendo swipeada
-        onSwipeStateChange?.(recipe.id, true);
+    // Solo prevenir el comportamiento por defecto si hay más movimiento horizontal que vertical
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (isSwiped) {
+        // Si ya está swipeada, permitir swipe hacia la izquierda para volver
+        if (deltaX < 0 && deltaX >= -80) {
+          setSwipeX(80 + deltaX);
+          setIsSwipeActive(true);
+        }
+      } else {
+        // Swipe inicial hacia la derecha
+        if (deltaX > 0 && deltaX <= 80) {
+          setSwipeX(deltaX);
+          setIsSwipeActive(true);
+          // Notificar que esta card está siendo swipeada
+          onSwipeStateChange?.(recipe.id, true);
+        }
       }
     }
   };
