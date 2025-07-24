@@ -47,15 +47,6 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
             e.currentTarget.src = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=400';
           }}
         />
-        <button 
-          className="absolute top-2 right-2 p-1 hover:scale-110 transition-transform"
-          onClick={(e) => {
-            e.stopPropagation();
-            onAdd(recipe);
-          }}
-        >
-          <Heart className="h-5 w-5 text-white drop-shadow-lg" />
-        </button>
       </div>
       
       <div className="flex-1 flex flex-col justify-start pt-1 relative min-h-40">
