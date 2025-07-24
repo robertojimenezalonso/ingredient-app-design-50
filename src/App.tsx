@@ -7,10 +7,6 @@ import { UserConfigProvider } from "./contexts/UserConfigContext";
 import WelcomePage from "./pages/WelcomePage";
 import CalendarSelectionPage from "./pages/CalendarSelectionPage";
 import PeopleAndDietPage from "./pages/PeopleAndDietPage";
-import SupermarketSelectionPage from "./pages/SupermarketSelectionPage";
-import PriceComparisonPage from "./pages/PriceComparisonPage";
-import ServingsSelectionPage from "./pages/ServingsSelectionPage";
-import SubscriptionTrialPage from "./pages/SubscriptionTrialPage";
 import SubscriptionBenefitsPage from "./pages/SubscriptionBenefitsPage";
 import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
@@ -33,10 +29,6 @@ const App = () => (
             <Route path="/welcome" element={<WelcomePage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
-            <Route path="/supermarket-selection" element={<SupermarketSelectionPage />} />
-            <Route path="/price-comparison" element={<PriceComparisonPage />} />
-            <Route path="/servings-selection" element={<ServingsSelectionPage />} />
-            <Route path="/subscription-trial" element={<SubscriptionTrialPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
             <Route path="/explore" element={<Index />} />
             <Route path="/category/:category" element={<CategoryPage />} />
