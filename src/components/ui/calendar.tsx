@@ -16,15 +16,20 @@ function Calendar({
   const maxDate = new Date();
   maxDate.setMonth(today.getMonth() + 2);
   
+  // For current month, allow up to 10 days back
   const minDate = new Date();
   minDate.setDate(today.getDate() - 10);
+  
+  // But don't go before the start of current month
+  const currentMonthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+  const effectiveMinDate = minDate < currentMonthStart ? currentMonthStart : minDate;
 
   return (
     <div className="max-h-96 overflow-y-auto">
       <DayPicker
         showOutsideDays={false}
         numberOfMonths={2}
-        fromDate={minDate}
+        fromDate={effectiveMinDate}
         toDate={maxDate}
         className={cn("p-3", className)}
         classNames={{
@@ -66,7 +71,11 @@ function Calendar({
           past: (date) => {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            return date < today;
+            const currentMonth = today.getMonth();
+            const dateMonth = date.getMonth();
+            
+            // Only apply past styling to current month
+            return dateMonth === currentMonth && date < today;
           }
         }}
         modifiersStyles={{
