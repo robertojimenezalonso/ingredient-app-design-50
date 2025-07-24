@@ -48,7 +48,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-slate-100 pb-24">
       <AirbnbHeader />
       
       <div style={{ paddingTop: '284px' }}>
