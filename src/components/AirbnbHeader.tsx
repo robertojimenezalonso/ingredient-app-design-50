@@ -1,6 +1,9 @@
 import { SlidersHorizontal, Search, Plus, ChevronDown, Coffee, UtensilsCrossed, Moon, Wine, Package, Cake, Filter, MoreVertical } from 'lucide-react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useState, useEffect } from 'react';
+import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const foodTypes = [
   { id: "desayuno", name: "Desayuno", emoji: "🥞" },
@@ -24,7 +27,19 @@ const filters = [
   { id: "tiempo", name: "Tiempo", hasDropdown: true },
 ];
 
-export const AirbnbHeader = () => {
+interface AirbnbHeaderProps {
+  showTabs?: boolean;
+  activeTab?: string;
+  mealPlan?: Array<{ date: Date; dateStr: string; meals: any[] }>;
+  onTabChange?: (dateStr: string) => void;
+}
+
+export const AirbnbHeader = ({ 
+  showTabs = false, 
+  activeTab = '', 
+  mealPlan = [], 
+  onTabChange 
+}: AirbnbHeaderProps = {}) => {
   const { config } = useUserConfig();
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedFoodType, setSelectedFoodType] = useState<string | null>(null);
@@ -94,6 +109,27 @@ export const AirbnbHeader = () => {
           Lista de ingredientes
         </button>
       </div>
+
+      {/* Date Tabs - Show when scrolled */}
+      {showTabs && (
+        <div className="bg-white/95 backdrop-blur-sm border-b border-gray-200 py-2">
+          <div className="px-4">
+            <Tabs value={activeTab} onValueChange={onTabChange}>
+              <TabsList className="w-full justify-start overflow-x-auto">
+                {mealPlan.map(({ date, dateStr }) => (
+                  <TabsTrigger 
+                    key={dateStr} 
+                    value={dateStr}
+                    className="flex-shrink-0 text-sm"
+                  >
+                    {format(date, "EEE d", { locale: es })}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
+          </div>
+        </div>
+      )}
 
       {/* Search Bar and Food Icons - Hidden when scrolled */}
       <div className={`transition-all duration-300 overflow-hidden ${

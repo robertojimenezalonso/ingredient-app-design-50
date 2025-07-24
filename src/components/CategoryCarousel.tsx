@@ -17,6 +17,7 @@ interface CategoryCarouselProps {
   onAddRecipe: (recipe: Recipe) => void;
   onRecipeClick: (recipe: Recipe) => void;
   onViewAll: (category: CategoryType) => void;
+  sectionRefs?: React.MutableRefObject<{ [key: string]: HTMLDivElement | null }>;
 }
 
 const mealCategoryMap: Record<string, CategoryType> = {
@@ -31,53 +32,27 @@ export const CategoryCarousel = ({
   recipes, 
   onAddRecipe, 
   onRecipeClick, 
-  onViewAll 
+  onViewAll,
+  sectionRefs 
 }: CategoryCarouselProps) => {
   const { config } = useUserConfig();
   const { getRecipesByCategory } = useRecipes();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
-  const [showTabs, setShowTabs] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>('');
-  const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
-  // Scroll and intersection observer effects
+  // Scroll and interaction effects
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      setShowTabs(scrollY > 200);
-      
-      if (activeSwipedRecipe) {
-        setActiveSwipedRecipe(null);
-      }
-    };
-
-    const observerOptions = {
-      rootMargin: '-50% 0px -50% 0px',
-      threshold: 0
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const dateStr = entry.target.getAttribute('data-date');
-          if (dateStr) {
-            setActiveTab(dateStr);
-          }
-        }
-      });
-    }, observerOptions);
-
-    // Observe all sections
-    Object.values(sectionRefs.current).forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
     const handleGlobalInteraction = (e: Event) => {
       const target = e.target as HTMLElement;
       if (!target.closest('[data-recipe-card="true"]') && 
           !target.closest('.absolute.left-0.top-0') && 
           activeSwipedRecipe) {
+        setActiveSwipedRecipe(null);
+      }
+    };
+
+    const handleScroll = () => {
+      if (activeSwipedRecipe) {
         setActiveSwipedRecipe(null);
       }
     };
@@ -90,7 +65,6 @@ export const CategoryCarousel = ({
       document.removeEventListener('click', handleGlobalInteraction);
       document.removeEventListener('touchstart', handleGlobalInteraction);
       document.removeEventListener('scroll', handleScroll);
-      observer.disconnect();
     };
   }, [activeSwipedRecipe]);
   
@@ -148,42 +122,18 @@ export const CategoryCarousel = ({
     console.log('Sustituir receta:', recipe.title, 'en', dateStr, meal);
   };
 
-  const scrollToDate = (dateStr: string) => {
-    const section = sectionRefs.current[dateStr];
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   return (
     <div className="mb-4">
-      {/* Fixed Tabs */}
-      {showTabs && (
-        <div className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 py-2">
-          <div className="px-4">
-            <Tabs value={activeTab} onValueChange={scrollToDate}>
-              <TabsList className="w-full justify-start overflow-x-auto">
-                {mealPlan.map(({ date, dateStr }) => (
-                  <TabsTrigger 
-                    key={dateStr} 
-                    value={dateStr}
-                    className="flex-shrink-0 text-sm"
-                  >
-                    {format(date, "EEE d", { locale: es })}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-          </div>
-        </div>
-      )}
-      
       <div className="px-4 space-y-6 mt-8">
         {mealPlan.map(({ date, dateStr, meals }) => (
           <div 
             key={dateStr} 
             className="space-y-2"
-            ref={(el) => { sectionRefs.current[dateStr] = el; }}
+            ref={(el) => { 
+              if (sectionRefs?.current) {
+                sectionRefs.current[dateStr] = el; 
+              }
+            }}
             data-date={dateStr}
           >
             <div className="flex items-center justify-between">

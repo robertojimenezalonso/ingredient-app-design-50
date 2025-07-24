@@ -4,7 +4,7 @@ import { useRecipes } from '@/hooks/useRecipes';
 import { useCart } from '@/hooks/useCart';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
-
+import { useDateTabs } from '@/hooks/useDateTabs';
 import { BottomNav } from '@/components/BottomNav';
 import { Recipe, CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
@@ -15,6 +15,7 @@ const Index = () => {
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
   const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('explore');
+  const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   
 
   const categories: CategoryType[] = [
@@ -50,10 +51,14 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 pb-24">
-      <AirbnbHeader />
+      <AirbnbHeader 
+        showTabs={showTabs}
+        activeTab={activeTabDate}
+        mealPlan={mealPlan}
+        onTabChange={scrollToDate}
+      />
       
       <div style={{ paddingTop: '120px' }}>
-        
         {/* All recipes mixed together */}
         <CategoryCarousel
           category="trending"
@@ -61,6 +66,7 @@ const Index = () => {
           onAddRecipe={handleAddRecipe}
           onRecipeClick={handleRecipeClick}
           onViewAll={handleViewAll}
+          sectionRefs={sectionRefs}
         />
       </div>
 
