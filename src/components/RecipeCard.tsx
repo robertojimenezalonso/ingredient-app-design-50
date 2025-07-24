@@ -58,10 +58,6 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
           <span>·</span>
           <span>{recipe.calories} kcal</span>
         </div>
-        <div ref={containerRef} className="flex flex-col">
-          <span ref={textRef} className="text-base">{pricePerServing} € ración</span>
-          <span className="text-xs text-muted-foreground">{totalPrice} € total</span>
-        </div>
       </div>
       
     </div>
