@@ -369,9 +369,6 @@ const RecipeDetailPage = () => {
           <Button variant="secondary" size="icon" onClick={() => navigate(-1)} className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <Button variant="secondary" size="icon" onClick={() => toggleFavorite(recipe.id)} className="rounded-full">
-            <Heart className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`} />
-          </Button>
         </div>
       </div>
 
