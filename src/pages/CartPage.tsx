@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
+import { useUserConfig } from '@/contexts/UserConfigContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -25,6 +26,7 @@ const CartPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { cart, removeFromCart, getTotalIngredients, getGroupedIngredients } = useCart();
+  const { config } = useUserConfig();
   const [viewMode, setViewMode] = useState<'recipes' | 'ingredients'>('recipes');
 
   const groupedIngredients = getGroupedIngredients();
@@ -56,7 +58,12 @@ const CartPage = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Carrito</h1>
+          <div>
+            <h1 className="text-lg font-semibold">Mi lista de la compra</h1>
+            <p className="text-sm text-muted-foreground">
+              {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
+            </p>
+          </div>
         </div>
 
         <div className="flex flex-col items-center justify-center h-96 px-4">
@@ -84,7 +91,12 @@ const CartPage = () => {
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
-        <h1 className="text-lg font-semibold">Carrito</h1>
+        <div>
+          <h1 className="text-lg font-semibold">Mi lista de la compra</h1>
+          <p className="text-sm text-muted-foreground">
+            {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
+          </p>
+        </div>
       </div>
 
       <div className="p-4">
