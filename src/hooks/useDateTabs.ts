@@ -55,8 +55,8 @@ export const useDateTabs = () => {
     };
 
     const observerOptions = {
-      rootMargin: '-20% 0px -20% 0px',
-      threshold: 0.1
+      rootMargin: '-150px 0px -80% 0px',
+      threshold: 0
     };
 
     const observer = new IntersectionObserver((entries) => {
