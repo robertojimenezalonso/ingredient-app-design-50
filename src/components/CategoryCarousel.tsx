@@ -71,7 +71,7 @@ export const CategoryCarousel = ({
         {mealPlan.map(({ date, dateStr, meals }) => (
           <div key={dateStr} className="space-y-2">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-normal text-muted-foreground">
+              <h3 className="text-base font-normal text-muted-foreground capitalize">
                 {format(date, "EEEE d", { locale: es })}
               </h3>
               <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-gray-50">
