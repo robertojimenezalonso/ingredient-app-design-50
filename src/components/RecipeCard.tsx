@@ -34,7 +34,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps
       case 'Almuerzo':
         return 'bg-blue-100 text-blue-800 border-blue-200';
       case 'Cena':
-        return 'bg-purple-100 text-purple-800 border-purple-200';
+        return 'bg-green-100 text-green-800 border-green-200';
       case 'Aperitivo':
         return 'bg-green-100 text-green-800 border-green-200';
       case 'Snack':
