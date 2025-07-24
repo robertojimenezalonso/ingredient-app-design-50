@@ -1,5 +1,5 @@
 
-import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronRight, MoreHorizontal, Search } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
@@ -25,29 +25,35 @@ const mealCategoryMap: Record<string, CategoryType> = {
   'Tentempié': 'snacks'
 };
 
-export const CategoryCarousel = forwardRef<
-  { resetSwipe: () => void },
-  CategoryCarouselProps
->(({ 
+export const CategoryCarousel = ({ 
   category, 
   recipes, 
   onAddRecipe, 
   onRecipeClick, 
   onViewAll 
-}, ref) => {
+}: CategoryCarouselProps) => {
   const { config } = useUserConfig();
   const { getRecipesByCategory } = useRecipes();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
 
-  useImperativeHandle(ref, () => ({
-    resetSwipe: () => {
-      console.log('Reset swipe llamado desde ref');
+  
+  // Simple global scroll listener
+  useEffect(() => {
+    const handleScrollReset = () => {
       if (activeSwipedRecipe) {
         setActiveSwipedRecipe(null);
       }
-    }
-  }));
+    };
+
+    window.addEventListener('scroll', handleScrollReset);
+    window.addEventListener('touchmove', handleScrollReset);
+    
+    return () => {
+      window.removeEventListener('scroll', handleScrollReset);
+      window.removeEventListener('touchmove', handleScrollReset);
+    };
+  }, [activeSwipedRecipe]);
   
   // Si no hay configuración, no mostrar nada
   if (!config.selectedDates || !config.selectedMeals || 
@@ -106,19 +112,7 @@ export const CategoryCarousel = forwardRef<
   return (
     <div className="mb-4">
       
-      <div className="px-4 space-y-6 mt-8" 
-           onScroll={() => {
-             console.log('Scroll en contenedor principal');
-             if (activeSwipedRecipe) {
-               setActiveSwipedRecipe(null);
-             }
-           }}
-           onTouchMove={() => {
-             console.log('TouchMove en contenedor principal');
-             if (activeSwipedRecipe) {
-               setActiveSwipedRecipe(null);
-             }
-           }}>
+      <div className="px-4 space-y-6 mt-8">
         {mealPlan.map(({ date, dateStr, meals }) => (
           <div key={dateStr} className="space-y-2">
             <div className="flex items-center justify-between">
@@ -175,6 +169,4 @@ export const CategoryCarousel = forwardRef<
       </div>
     </div>
   );
-});
-
-CategoryCarousel.displayName = 'CategoryCarousel';
+};

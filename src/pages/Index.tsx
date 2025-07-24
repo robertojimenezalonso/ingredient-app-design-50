@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecipes } from '@/hooks/useRecipes';
 import { useCart } from '@/hooks/useCart';
@@ -15,7 +15,7 @@ const Index = () => {
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
   const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('explore');
-  const categoryCarouselRef = useRef<{ resetSwipe: () => void }>(null);
+  
 
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 
@@ -49,22 +49,13 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-24"
-         onScroll={() => {
-           console.log('Scroll en página principal');
-           categoryCarouselRef.current?.resetSwipe();
-         }}
-         onTouchMove={() => {
-           console.log('TouchMove en página principal');
-           categoryCarouselRef.current?.resetSwipe();
-         }}>
+    <div className="min-h-screen bg-gray-100 pb-24">
       <AirbnbHeader />
       
       <div style={{ paddingTop: '120px' }}>
         
         {/* All recipes mixed together */}
         <CategoryCarousel
-          ref={categoryCarouselRef}
           category="trending"
           recipes={categories.flatMap(category => getRecipesByCategory(category, 10))}
           onAddRecipe={handleAddRecipe}
