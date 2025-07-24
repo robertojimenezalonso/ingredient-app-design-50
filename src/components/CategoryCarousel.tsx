@@ -92,7 +92,7 @@ export const CategoryCarousel = ({
                         />
                       )}
                       {index < meals.length - 1 && (
-                        <Separator className="mt-4 -mx-4" />
+                        <Separator className="mt-4 -mx-6" />
                       )}
                     </div>
                   ))}
