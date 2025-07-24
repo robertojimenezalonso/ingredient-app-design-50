@@ -102,25 +102,27 @@ export const AirbnbHeader = ({
       </div>
       
       {/* Switch entre Receta y Lista de ingredientes */}
-      <div className="flex items-center justify-center gap-1 px-4 pb-4" style={{ backgroundColor: '#F3F4F6' }}>
+      <div className="flex items-center justify-center gap-1 px-4 py-4" style={{ backgroundColor: '#F3F4F6' }}>
         <button 
-          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
             selectedFilter === 'receta' 
               ? 'bg-black text-white' 
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
           onClick={() => setSelectedFilter('receta')}
         >
+          <UtensilsCrossed className="h-4 w-4" />
           Recetas
         </button>
         <button 
-          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
             selectedFilter === 'ingredientes' 
               ? 'bg-black text-white' 
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
           onClick={() => setSelectedFilter('ingredientes')}
         >
+          <Package className="h-4 w-4" />
           Ingredientes
         </button>
       </div>
