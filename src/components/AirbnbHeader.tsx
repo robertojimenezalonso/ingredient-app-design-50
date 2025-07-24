@@ -53,7 +53,7 @@ export const AirbnbHeader = () => {
     }`} style={{ paddingTop: 'env(safe-area-inset-top)' }}>
       
       {/* Main Header - Always Visible */}
-      <div className="flex items-center gap-3 p-4 backdrop-blur-md bg-background/80">
+      <div className="flex items-center gap-3 p-4 backdrop-blur-md bg-background/30">
         <div className="flex-1 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
           <div className="px-6 py-2 relative">
             <div className="text-center">
