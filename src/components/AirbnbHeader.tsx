@@ -114,19 +114,21 @@ export const AirbnbHeader = ({
       {showTabs && (
         <div className="bg-white/95 backdrop-blur-sm border-b border-gray-200 py-2">
           <div className="px-4">
-            <Tabs value={activeTab} onValueChange={onTabChange}>
-              <TabsList className="w-full justify-start overflow-x-auto">
-                {mealPlan.map(({ date, dateStr }) => (
-                  <TabsTrigger 
-                    key={dateStr} 
-                    value={dateStr}
-                    className="flex-shrink-0 text-sm"
-                  >
-                    {format(date, "EEE d", { locale: es })}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+            <div className="flex gap-1 overflow-x-auto">
+              {mealPlan.map(({ date, dateStr }) => (
+                <button
+                  key={dateStr}
+                  onClick={() => onTabChange(dateStr)}
+                  className={`flex-shrink-0 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    activeTab === dateStr
+                      ? 'bg-primary text-primary-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
+                >
+                  {format(date, "eee d", { locale: es }).toLowerCase()}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}
