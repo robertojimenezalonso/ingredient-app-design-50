@@ -82,8 +82,11 @@ const CalendarSelectionPage = () => {
               </p>
             </CardHeader>
 
-            <CardContent className={cn("px-4 transition-all duration-300", showMoreMeals ? "pb-2" : "pb-4")}>
-              <div className={cn("flex justify-center transition-all duration-300", showMoreMeals ? "max-h-[280px] overflow-hidden" : "")}>
+            <CardContent className="px-4 pb-4">
+              <div className={cn(
+                "flex justify-center transition-all duration-300",
+                showMoreMeals ? "max-h-[240px] overflow-hidden" : "max-h-[320px]"
+              )}>
                 <Calendar 
                   selected={selectedDates}
                   onSelect={(dates) => {
