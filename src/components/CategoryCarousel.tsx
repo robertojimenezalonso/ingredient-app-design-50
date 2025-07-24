@@ -1,5 +1,5 @@
 
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Plus } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -73,9 +73,14 @@ export const CategoryCarousel = ({
       <div className="px-4 space-y-6">
         {mealPlan.map(({ date, dateStr, meals }) => (
           <div key={dateStr} className="space-y-3">
-            <h3 className="text-lg font-semibold text-neutral-950 px-4">
-              {format(date, "EEEE d", { locale: es })}
-            </h3>
+            <div className="flex items-center justify-between px-4">
+              <h3 className="text-sm font-normal text-muted-foreground">
+                {format(date, "EEEE d", { locale: es })}
+              </h3>
+              <button className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-muted-foreground hover:bg-muted/80">
+                <Plus size={14} />
+              </button>
+            </div>
             <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
               <CardContent className="px-4 pb-4">
                 <div className="space-y-4">
