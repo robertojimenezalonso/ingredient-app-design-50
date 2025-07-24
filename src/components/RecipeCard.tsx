@@ -42,7 +42,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
         <img 
           src={recipe.image} 
           alt={recipe.title}
-          className="w-40 h-40 object-cover rounded-[22px]"
+          className="w-32 h-32 object-cover rounded-[22px]"
           onError={(e) => {
             e.currentTarget.src = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=400';
           }}
