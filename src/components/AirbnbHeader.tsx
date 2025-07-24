@@ -143,7 +143,7 @@ export const AirbnbHeader = ({
                 >
                   {format(date, "eee d", { locale: es }).toLowerCase()}
                   {activeTab === dateStr && (
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-black"></div>
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-black z-10"></div>
                   )}
                 </button>
               ))}
