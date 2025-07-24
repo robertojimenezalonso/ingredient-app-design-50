@@ -33,7 +33,7 @@ const CalendarSelectionPage = () => {
   };
   const handleContinue = () => {
     updateConfig({
-      selectedDates: selectedDates.map(d => d.toISOString()),
+      selectedDates: selectedDates.map(d => d.toISOString().split('T')[0]), // Solo la parte de fecha YYYY-MM-DD
       selectedMeals
     });
     navigate('/people-and-diet');

@@ -41,7 +41,7 @@ export const CategoryCarousel = ({
 
   // Generar el plan de comidas
   const mealPlan = config.selectedDates.map(dateStr => {
-    const date = new Date(dateStr);
+    const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
     const dayMeals = config.selectedMeals!.map(meal => {
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
