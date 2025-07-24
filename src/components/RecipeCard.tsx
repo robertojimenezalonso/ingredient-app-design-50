@@ -18,6 +18,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
   const [useTotalAbbreviation, setUseTotalAbbreviation] = useState(false);
   const [swipeX, setSwipeX] = useState(0);
   const [isSwipeActive, setIsSwipeActive] = useState(false);
+  const [isDeleted, setIsDeleted] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -78,14 +79,22 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
 
   const handleTouchEnd = () => {
     if (swipeX > 50 && onDelete) {
-      onDelete(recipe);
+      setIsDeleted(true);
+      setTimeout(() => {
+        onDelete(recipe);
+      }, 200);
+    } else {
+      setSwipeX(0);
+      setIsSwipeActive(false);
     }
-    setSwipeX(0);
-    setIsSwipeActive(false);
   };
 
+  if (isDeleted) {
+    return null;
+  }
+
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden h-32">
       {/* Delete background */}
       <div 
         className={`absolute inset-0 bg-red-500 flex items-center justify-end pr-6 rounded-2xl transition-opacity duration-200 ${
