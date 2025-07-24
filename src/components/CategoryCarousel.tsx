@@ -66,9 +66,6 @@ export const CategoryCarousel = ({
 
   return (
     <div className="mb-4">
-      <div className="flex items-center gap-1 px-4 mb-4">
-        <h2 className="text-lg font-semibold">Tu planificación semanal</h2>
-      </div>
       
       <div className="px-4 space-y-6">
         {mealPlan.map(({ date, dateStr, meals }) => (
