@@ -91,17 +91,35 @@ const CalendarSelectionPage = () => {
           <CardContent className="space-y-6">
             {/* Calendar */}
             <div className="flex justify-center">
-              <Calendar mode="multiple" selected={selectedDates} onSelect={dates => {
-              if (Array.isArray(dates)) {
-                setSelectedDates(dates.filter(d => d !== undefined) as Date[]);
-              }
-            }} disabled={date => date < today || date > oneMonthFromNow || selectedDates.length >= 31 && !selectedDates.some(d => d.toDateString() === date.toDateString())} className="pointer-events-auto" numberOfMonths={1} />
+              <Calendar 
+                mode="range" 
+                selected={selectedDates.length > 0 ? {
+                  from: selectedDates[0],
+                  to: selectedDates[selectedDates.length - 1]
+                } : undefined}
+                onSelect={(range) => {
+                  if (range?.from) {
+                    if (range?.to) {
+                      // Range selection
+                      const dates = [];
+                      const current = new Date(range.from);
+                      while (current <= range.to) {
+                        dates.push(new Date(current));
+                        current.setDate(current.getDate() + 1);
+                      }
+                      setSelectedDates(dates);
+                    } else {
+                      // Single date selection
+                      setSelectedDates([range.from]);
+                    }
+                  } else {
+                    setSelectedDates([]);
+                  }
+                }}
+                disabled={date => date < today || date > oneMonthFromNow} 
+                className="pointer-events-auto" 
+              />
             </div>
-
-            {/* Selected dates count */}
-            {selectedDates.length > 0 && <div className="text-center text-sm text-muted-foreground">
-                {selectedDates.length} día{selectedDates.length !== 1 ? 's' : ''} seleccionado{selectedDates.length !== 1 ? 's' : ''}
-              </div>}
 
             {/* Meal selection */}
             <div className="space-y-4">
