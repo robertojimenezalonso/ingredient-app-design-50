@@ -116,7 +116,7 @@ const CalendarSelectionPage = () => {
         {/* Footer with Floating Continue Button and Reset */}
         <div className="fixed bottom-0 left-0 right-0 p-4">
           <div className="flex items-center justify-between mb-4">
-            <button onClick={handleReset} className="text-foreground underline text-lg font-medium">
+            <button onClick={handleReset} className="text-foreground underline text-base font-medium">
               Restablecer
             </button>
             <Button onClick={handleContinue} disabled={!canContinue} className="px-8 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold">
