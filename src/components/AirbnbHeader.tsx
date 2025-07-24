@@ -135,7 +135,7 @@ export const AirbnbHeader = ({
                   key={dateStr}
                   data-tab={dateStr}
                   onClick={() => onTabChange?.(dateStr)}
-                  className={`flex-shrink-0 pb-3 pt-2 text-sm font-medium border-b-4 transition-colors ${
+                  className={`flex-shrink-0 pb-3 pt-2 text-base font-medium border-b-4 transition-colors ${
                     activeTab === dateStr
                       ? 'text-black border-black'
                       : 'text-gray-500 border-transparent hover:text-gray-700'
