@@ -79,20 +79,6 @@ export const AirbnbHeader = () => {
       <div className={`transition-all duration-300 overflow-hidden ${
         isScrolled ? 'max-h-0 opacity-0' : 'max-h-96 opacity-100'
       }`}>
-        {/* Search Bar */}
-        <div className="px-4 pb-4 pt-2">
-          <div className="flex gap-3 items-center">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
-              <input
-                type="text"
-                placeholder="Buscar receta"
-                className="w-full pl-12 pr-4 py-4 rounded-full text-sm font-medium placeholder:text-foreground"
-                style={{ backgroundColor: '#F3F3F4' }}
-              />
-            </div>
-          </div>
-        </div>
         
       </div>
 
