@@ -125,20 +125,55 @@ const CalendarSelectionPage = () => {
             <div className="space-y-4">
               <h3 className="font-semibold text-foreground">¿Qué comidas planeas?</h3>
               
-              <div className="flex flex-wrap gap-2">
-                {['Desayuno', 'Almuerzo', 'Comida'].map(meal => <Badge key={meal} variant={selectedMeals.includes(meal) ? "default" : "outline"} className={cn("cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors", selectedMeals.includes(meal) ? "bg-foreground text-background hover:bg-foreground/90" : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50")} onClick={() => toggleMeal(meal)}>
-                    {meal}
-                  </Badge>)}
+              <div className="space-y-2">
+                {/* Main meals - same line */}
+                <div className="flex gap-2">
+                  {['Desayuno', 'Almuerzo', 'Comida'].map(meal => 
+                    <Badge 
+                      key={meal} 
+                      variant="outline" 
+                      className={cn(
+                        "cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors",
+                        selectedMeals.includes(meal) 
+                          ? "bg-muted border-2 border-foreground text-foreground" 
+                          : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
+                      )} 
+                      onClick={() => toggleMeal(meal)}
+                    >
+                      {meal}
+                    </Badge>
+                  )}
 
-                {/* Show more meals if expanded */}
-                {showMoreMeals && additionalMeals.map(meal => <Badge key={meal} variant={selectedMeals.includes(meal) ? "default" : "outline"} className={cn("cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors", selectedMeals.includes(meal) ? "bg-foreground text-background hover:bg-foreground/90" : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50")} onClick={() => toggleMeal(meal)}>
-                    {meal}
-                  </Badge>)}
+                  {/* Plus button */}
+                  <Badge 
+                    variant="outline" 
+                    className="cursor-pointer px-3 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors" 
+                    onClick={() => setShowMoreMeals(!showMoreMeals)}
+                  >
+                    <Plus className="h-4 w-4" />
+                  </Badge>
+                </div>
 
-                {/* Plus button */}
-                <Badge variant="outline" className="cursor-pointer px-3 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors" onClick={() => setShowMoreMeals(!showMoreMeals)}>
-                  <Plus className="h-4 w-4" />
-                </Badge>
+                {/* Additional meals - new line */}
+                {showMoreMeals && (
+                  <div className="flex gap-2">
+                    {additionalMeals.map(meal => 
+                      <Badge 
+                        key={meal} 
+                        variant="outline" 
+                        className={cn(
+                          "cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors",
+                          selectedMeals.includes(meal) 
+                            ? "bg-muted border-2 border-foreground text-foreground" 
+                            : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
+                        )} 
+                        onClick={() => toggleMeal(meal)}
+                      >
+                        {meal}
+                      </Badge>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </CardContent>
