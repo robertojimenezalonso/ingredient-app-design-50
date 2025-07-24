@@ -51,7 +51,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-100 pb-24">
       <AirbnbHeader />
       
-      <div style={{ paddingTop: '284px' }}>
+      <div style={{ paddingTop: '120px' }}>
         
         {/* All recipes mixed together */}
         <CategoryCarousel
