@@ -64,34 +64,34 @@ export const AirbnbHeader = () => {
                 {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
               </div>
             </div>
-            
-            {/* Switch entre Receta y Lista de ingredientes */}
-            <div className="flex items-center justify-center gap-1 mt-3">
-              <button 
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  selectedFilter === 'receta' 
-                    ? 'bg-black text-white' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-                onClick={() => setSelectedFilter('receta')}
-              >
-                Receta
-              </button>
-              <button 
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  selectedFilter === 'ingredientes' 
-                    ? 'bg-black text-white' 
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-                onClick={() => setSelectedFilter('ingredientes')}
-              >
-                Lista de ingredientes
-              </button>
-            </div>
           </div>
         </div>
         <button className="p-2">
           <MoreVertical className="h-5 w-5 text-black" />
+        </button>
+      </div>
+      
+      {/* Switch entre Receta y Lista de ingredientes */}
+      <div className="flex items-center justify-center gap-1 px-4 pb-4" style={{ backgroundColor: '#F3F4F6' }}>
+        <button 
+          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            selectedFilter === 'receta' 
+              ? 'bg-black text-white' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+          onClick={() => setSelectedFilter('receta')}
+        >
+          Receta
+        </button>
+        <button 
+          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            selectedFilter === 'ingredientes' 
+              ? 'bg-black text-white' 
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+          onClick={() => setSelectedFilter('ingredientes')}
+        >
+          Lista de ingredientes
         </button>
       </div>
 
