@@ -71,18 +71,6 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
           <span ref={textRef} className="text-base">{pricePerServing} € ración</span>
           <span className="text-xs text-muted-foreground">{totalPrice} € total</span>
         </div>
-        <div className="mt-3 mb-2 flex items-center justify-between">
-          <IngredientAvatars recipe={recipe} />
-          <button 
-            className="bg-muted text-muted-foreground p-2 rounded-full hover:scale-110 transition-transform flex-shrink-0"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClick(recipe);
-            }}
-          >
-            <Plus className="h-5 w-5" />
-          </button>
-        </div>
       </div>
       
     </div>
