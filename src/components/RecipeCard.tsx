@@ -57,7 +57,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps
 
   return (
     <div 
-      className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white"
+      className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md"
       onClick={() => onClick(recipe)}
     >
       <div className="relative flex-shrink-0">
