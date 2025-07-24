@@ -92,10 +92,15 @@ const CalendarSelectionPage = () => {
                 className="pointer-events-auto"
               />
             </div>
+          </CardContent>
+        </Card>
 
-            {/* Separator line */}
-            <div className="w-full h-px bg-border -mx-4"></div>
+        {/* Separator line */}
+        <div className="w-full h-px bg-border mx-2 mb-4"></div>
 
+        {/* Meal Selection Area */}
+        <Card className={cn("bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0 mx-2 transition-all duration-300", showMoreMeals ? "-mt-2 mb-20" : "mb-6")}>
+          <CardContent className="space-y-4 px-4 py-4">
             {/* Meal selection */}
             <div className="space-y-4">
               <h3 className="font-semibold text-foreground">¿Qué comidas planeas?</h3>
