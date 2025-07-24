@@ -190,64 +190,68 @@ export function CustomCalendar({
   };
 
   return (
-    <div className={cn("max-h-96 overflow-y-auto p-3", className)}>
-      {Object.entries(monthGroups).map(([monthKey, weeks]) => {
-        const monthDate = dates.find(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
-        if (!monthDate) return null;
-        
-        const monthDates = dates.filter(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
-        const weekStructure = createWeekStructure(monthDates);
-        
-        return (
-          <div key={monthKey} className="space-y-4 mb-6">
-            <div className="flex justify-start pt-1 relative items-center pl-2">
-              <span className="text-sm font-medium">{formatMonth(monthDate)}</span>
+    <div>
+      <div className={cn("max-h-96 overflow-y-auto p-3", className)}>
+        {Object.entries(monthGroups).map(([monthKey, weeks]) => {
+          const monthDate = dates.find(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
+          if (!monthDate) return null;
+          
+          const monthDates = dates.filter(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
+          const weekStructure = createWeekStructure(monthDates);
+          
+          return (
+            <div key={monthKey} className="space-y-4 mb-6">
+              <div className="flex justify-start pt-1 relative items-center pl-2">
+                <span className="text-sm font-medium">{formatMonth(monthDate)}</span>
+              </div>
+              
+              {/* Day headers */}
+              <div className="flex">
+                {["L", "M", "X", "J", "V", "S", "D"].map((day) => (
+                  <div
+                    key={day}
+                    className="text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] flex items-center justify-center"
+                  >
+                    {day}
+                  </div>
+                ))}
+              </div>
+              
+              {/* Date grid */}
+              <div className="space-y-1">
+                {weekStructure.map((week, weekIndex) => (
+                  <div key={weekIndex} className="flex w-full mt-2 gap-1">
+                    {week.map((date, dayIndex) => (
+                      <div
+                        key={dayIndex}
+                        className="h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20 flex items-center justify-center"
+                      >
+                        {date && (
+                          <button
+                            onClick={() => handleDateClick(date)}
+                            className={cn(
+                              "h-9 w-9 p-0 font-normal rounded-full relative transition-colors bg-transparent hover:bg-muted/50",
+                              isSelected(date) &&
+                                "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
+                              isToday(date) && !isSelected(date) && "bg-accent text-accent-foreground",
+                              isPast(date) && "opacity-60"
+                            )}
+                            style={isPast(date) ? { textDecoration: 'line-through' } : {}}
+                          >
+                            {date.getDate()}
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
-            
-            {/* Day headers */}
-            <div className="flex">
-              {["L", "M", "X", "J", "V", "S", "D"].map((day) => (
-                <div
-                  key={day}
-                  className="text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] flex items-center justify-center"
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
-            
-            {/* Date grid */}
-            <div className="space-y-1">
-              {weekStructure.map((week, weekIndex) => (
-                <div key={weekIndex} className="flex w-full mt-2 gap-1">
-                  {week.map((date, dayIndex) => (
-                    <div
-                      key={dayIndex}
-                      className="h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20 flex items-center justify-center"
-                    >
-                      {date && (
-                        <button
-                          onClick={() => handleDateClick(date)}
-                          className={cn(
-                            "h-9 w-9 p-0 font-normal rounded-full relative transition-colors bg-transparent hover:bg-muted/50",
-                            isSelected(date) &&
-                              "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
-                            isToday(date) && !isSelected(date) && "bg-accent text-accent-foreground",
-                            isPast(date) && "opacity-60"
-                          )}
-                          style={isPast(date) ? { textDecoration: 'line-through' } : {}}
-                        >
-                          {date.getDate()}
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
+      {/* Separator line */}
+      <div className="w-full h-px bg-muted"></div>
     </div>
   );
 }
