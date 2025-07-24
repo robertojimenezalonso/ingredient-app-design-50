@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Minus } from 'lucide-react';
+import { ArrowLeft, Plus, Minus, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -118,10 +118,11 @@ const PeopleAndDietPage = () => {
                 
                 {!showAllOptions && <>
                     <div className="border-b border-muted" />
-                    <div className="flex items-center justify-center py-4">
+                    <div className="flex items-center justify-between py-4">
                       <span className="text-muted-foreground font-medium cursor-pointer hover:text-primary transition-colors" onClick={() => setShowAllOptions(true)}>
                         Más opciones
                       </span>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground" />
                     </div>
                   </>}
               </div>
