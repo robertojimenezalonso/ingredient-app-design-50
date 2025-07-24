@@ -81,7 +81,7 @@ const CalendarSelectionPage = () => {
             </p>
           </CardHeader>
 
-          <CardContent className="space-y-4 px-4">
+          <CardContent className={cn("space-y-4 px-4 transition-all duration-300", showMoreMeals ? "pb-2" : "pb-4")}>
             {/* Calendar */}
             <div className="flex justify-center">
               <Calendar 
