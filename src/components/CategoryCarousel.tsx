@@ -1,4 +1,5 @@
 
+import { useState } from 'react';
 import { ChevronRight, MoreHorizontal, Search } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
@@ -33,6 +34,7 @@ export const CategoryCarousel = ({
 }: CategoryCarouselProps) => {
   const { config } = useUserConfig();
   const { getRecipesByCategory } = useRecipes();
+  const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   
   // Si no hay configuración, no mostrar nada
   if (!config.selectedDates || !config.selectedMeals || 
@@ -64,6 +66,20 @@ export const CategoryCarousel = ({
     };
   });
 
+  const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
+    if (isSwiped) {
+      setActiveSwipedRecipe(recipeId);
+    } else {
+      setActiveSwipedRecipe(null);
+    }
+  };
+
+  const handleDeleteRecipe = (recipe: Recipe) => {
+    // Aquí puedes implementar la lógica de eliminación
+    console.log('Eliminar receta:', recipe.title);
+    setActiveSwipedRecipe(null);
+  };
+
   return (
     <div className="mb-4">
       
@@ -88,6 +104,9 @@ export const CategoryCarousel = ({
                           recipe={recipe}
                           onAdd={onAddRecipe}
                           onClick={onRecipeClick}
+                          onDelete={handleDeleteRecipe}
+                          onSwipeStateChange={handleSwipeStateChange}
+                          shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id}
                           mealType={meal}
                         />
                       )}

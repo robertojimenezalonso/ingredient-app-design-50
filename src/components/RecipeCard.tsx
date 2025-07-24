@@ -10,10 +10,12 @@ interface RecipeCardProps {
   onAdd: (recipe: Recipe) => void;
   onClick: (recipe: Recipe) => void;
   onDelete?: (recipe: Recipe) => void;
+  onSwipeStateChange?: (recipeId: string, isSwiped: boolean) => void;
+  shouldResetSwipe?: boolean;
   mealType?: string;
 }
 
-export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: RecipeCardProps) => {
+export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSwipeStateChange, shouldResetSwipe, mealType }: RecipeCardProps) => {
   const { config } = useUserConfig();
   const [useTotalAbbreviation, setUseTotalAbbreviation] = useState(false);
   const [swipeX, setSwipeX] = useState(0);
@@ -60,38 +62,71 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
     }
   }, [pricePerServing, totalPrice]);
 
+  // Reset swipe when shouldResetSwipe changes
+  useEffect(() => {
+    if (shouldResetSwipe && isSwiped) {
+      setSwipeX(0);
+      setIsSwiped(false);
+      setIsSwipeActive(false);
+    }
+  }, [shouldResetSwipe, isSwiped]);
+
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (isSwiped) return; // No permitir nuevo swipe si ya está swipeado
     const touch = e.touches[0];
     containerRef.current?.setAttribute('data-start-x', touch.clientX.toString());
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (isSwiped) return; // No permitir movimiento si ya está swipeado
     const touch = e.touches[0];
     const startX = parseFloat(containerRef.current?.getAttribute('data-start-x') || '0');
     const currentX = touch.clientX;
     const deltaX = currentX - startX;
     
-    if (deltaX > 0 && deltaX <= 80) {
-      setSwipeX(deltaX);
-      setIsSwipeActive(true);
+    if (isSwiped) {
+      // Si ya está swipeada, permitir swipe hacia la izquierda para volver
+      if (deltaX < 0 && deltaX >= -80) {
+        setSwipeX(80 + deltaX);
+        setIsSwipeActive(true);
+      }
+    } else {
+      // Swipe inicial hacia la derecha
+      if (deltaX > 0 && deltaX <= 80) {
+        setSwipeX(deltaX);
+        setIsSwipeActive(true);
+        // Notificar que esta card está siendo swipeada
+        onSwipeStateChange?.(recipe.id, true);
+      }
     }
   };
 
   const handleTouchEnd = () => {
-    if (isSwiped) return; // No procesar si ya está swipeado
-    
-    if (swipeX > 40) {
-      // Mantener la card en posición swipeada
-      setSwipeX(80);
-      setIsSwiped(true);
-      setIsSwipeActive(true);
+    if (isSwiped) {
+      // Si está swipeada y el swipe actual es menor a 20, volver a la posición original
+      if (swipeX < 20) {
+        setSwipeX(0);
+        setIsSwiped(false);
+        setIsSwipeActive(false);
+        onSwipeStateChange?.(recipe.id, false);
+      } else {
+        // Mantener en posición swipeada
+        setSwipeX(80);
+        setIsSwipeActive(true);
+      }
     } else {
-      // Volver a la posición original
-      setSwipeX(0);
-      setIsSwipeActive(false);
+      // Swipe inicial
+      if (swipeX > 40) {
+        // Mantener la card en posición swipeada
+        setSwipeX(80);
+        setIsSwiped(true);
+        setIsSwipeActive(true);
+        onSwipeStateChange?.(recipe.id, true);
+      } else {
+        // Volver a la posición original
+        setSwipeX(0);
+        setIsSwipeActive(false);
+        onSwipeStateChange?.(recipe.id, false);
+      }
     }
   };
 
@@ -108,7 +143,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
   }
 
   return (
-    <div className="relative overflow-hidden h-32">
+    <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-50' : 'z-10'}`}>
       {/* Delete background */}
       <div 
         className={`absolute inset-0 bg-red-500 flex items-center justify-end pr-6 rounded-2xl transition-opacity duration-200 ${
@@ -126,7 +161,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
       {/* Main card */}
       <div 
         ref={containerRef}
-        className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200"
+        className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200 shadow-lg"
         style={{ transform: `translateX(${swipeX}px)` }}
         onClick={() => !isSwipeActive && !isSwiped && onClick(recipe)}
         onTouchStart={handleTouchStart}
