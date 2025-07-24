@@ -73,6 +73,9 @@ export function CustomCalendar({
   };
 
   const handleDateClick = (date: Date) => {
+    // Don't allow selection of past dates
+    if (isPast(date)) return;
+    
     const isDateSelected = isSelected(date);
     
     if (isDateSelected) {
@@ -229,12 +232,13 @@ export function CustomCalendar({
                         {date && (
                           <button
                             onClick={() => handleDateClick(date)}
+                            disabled={isPast(date)}
                             className={cn(
                               "h-9 w-9 p-0 font-normal rounded-full relative transition-colors bg-transparent hover:bg-muted/50",
                               isSelected(date) &&
                                 "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
                               isToday(date) && !isSelected(date) && "bg-accent text-accent-foreground",
-                              isPast(date) && "opacity-60"
+                              isPast(date) && "opacity-60 cursor-not-allowed hover:bg-transparent"
                             )}
                             style={isPast(date) ? { textDecoration: 'line-through' } : {}}
                           >
