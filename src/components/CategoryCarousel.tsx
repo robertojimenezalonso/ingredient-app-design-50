@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { ChevronRight, MoreHorizontal, Search } from 'lucide-react';
+import { ChevronRight, Plus, Search } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
@@ -130,7 +130,7 @@ export const CategoryCarousel = ({
                 {format(date, "EEEE d", { locale: es })}
               </h3>
               <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-gray-50">
-                <MoreHorizontal size={16} />
+                <Plus size={16} />
               </button>
             </div>
             <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
