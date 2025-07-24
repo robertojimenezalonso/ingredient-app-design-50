@@ -513,32 +513,17 @@ const RecipeDetailPage = () => {
               return <div key={ingredient.id}>
                     <div className="flex items-center gap-3 py-3">
                       <div className="relative">
-                        <img src={carrefourProduct?.image || `https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=100`} alt={ingredient.name} className="w-16 h-16 rounded-lg object-cover border" onError={e => {
-                      e.currentTarget.src = 'https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=100';
-                    }} />
+                        <img src={`https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=100`} alt={ingredient.name} className="w-16 h-16 rounded-lg object-cover border" />
                        </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="font-medium line-clamp-5">
-                            {carrefourProduct?.name || ingredient.name}
+                            {ingredient.name}
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground mb-1">
-                          {finalDisplayAmount} {finalUnit} · {usagePercentage}% de uso
+                          {finalDisplayAmount} {finalUnit}
                         </p>
-                        <div className="flex items-center gap-2">
-                          <span className="font-semibold text-base">
-                            {carrefourProduct?.price || `${((displayIndex + 1) * 0.75 + 1).toFixed(2).replace('.', ',')} €`}
-                          </span>
-                          {carrefourProduct?.pricePerKg && <span className="text-xs text-muted-foreground">
-                              • {carrefourProduct.pricePerKg}
-                            </span>}
-                        </div>
-                        {carrefourProduct?.offers && carrefourProduct.offers.length > 0 && <div className="mt-1">
-                            <Badge variant="destructive" className="text-xs">
-                              {carrefourProduct.offers[0]}
-                            </Badge>
-                          </div>}
                       </div>
                       <Checkbox checked={selectedIngredients.includes(ingredient.id)} onCheckedChange={() => handleIngredientToggle(ingredient.id)} />
                     </div>
