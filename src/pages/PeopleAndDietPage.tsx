@@ -149,7 +149,7 @@ const PeopleAndDietPage = () => {
         <div className="fixed bottom-0 left-0 right-0 p-4">
           <div className="flex justify-center mb-4">
             <Button onClick={handleGeneratePlan} disabled={!canContinue} className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold">
-              <div className="flex items-center justify-center gap-2">
+              <div className="flex items-center justify-center gap-3">
                 <span>Generar lista</span>
                 <img src="/lovable-uploads/a06f3ae9-f80a-48b6-bf55-8c1b736c79f8.png" alt="List icon" className="h-7 w-7" />
               </div>
