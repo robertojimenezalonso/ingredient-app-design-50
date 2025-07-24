@@ -77,18 +77,36 @@ export const CategoryCarousel = ({
 
   // Resetear swipe al hacer scroll
   useEffect(() => {
+    let scrollTimeout: NodeJS.Timeout;
+    
     const handleScroll = () => {
       if (activeSwipedRecipe) {
-        setActiveSwipedRecipe(null);
+        // Pequeño delay para evitar conflictos con el swipe
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          setActiveSwipedRecipe(null);
+        }, 50);
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      // Solo resetear si es un movimiento vertical (scroll)
+      if (activeSwipedRecipe && e.touches[0]) {
+        const target = e.target as HTMLElement;
+        // Verificar si el touch no es en una RecipeCard
+        if (!target.closest('[data-recipe-card]')) {
+          handleScroll();
+        }
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    document.addEventListener('touchmove', handleScroll, { passive: true });
+    document.addEventListener('touchmove', handleTouchMove, { passive: true });
 
     return () => {
+      clearTimeout(scrollTimeout);
       window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('touchmove', handleScroll);
+      document.removeEventListener('touchmove', handleTouchMove);
     };
   }, [activeSwipedRecipe]);
 

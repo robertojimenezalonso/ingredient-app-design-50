@@ -69,12 +69,13 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
 
   // Reset swipe when shouldResetSwipe changes
   useEffect(() => {
-    if (shouldResetSwipe && isSwiped) {
+    if (shouldResetSwipe && (isSwiped || isSwipeActive)) {
       setSwipeX(0);
       setIsSwiped(false);
       setIsSwipeActive(false);
+      onSwipeStateChange?.(recipe.id, false);
     }
-  }, [shouldResetSwipe, isSwiped]);
+  }, [shouldResetSwipe, isSwiped, isSwipeActive, recipe.id, onSwipeStateChange]);
 
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -210,6 +211,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       {/* Main card */}
       <div 
         ref={containerRef}
+        data-recipe-card="true"
         className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200"
         style={{ transform: `translateX(${swipeX}px)` }}
         onClick={() => !isSwipeActive && !isSwiped && onClick(recipe)}
