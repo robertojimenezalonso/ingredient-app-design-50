@@ -19,6 +19,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
   const [swipeX, setSwipeX] = useState(0);
   const [isSwipeActive, setIsSwipeActive] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
+  const [isSwiped, setIsSwiped] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -61,32 +62,45 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
 
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
+    if (isSwiped) return; // No permitir nuevo swipe si ya está swipeado
     const touch = e.touches[0];
     containerRef.current?.setAttribute('data-start-x', touch.clientX.toString());
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
+    if (isSwiped) return; // No permitir movimiento si ya está swipeado
     const touch = e.touches[0];
     const startX = parseFloat(containerRef.current?.getAttribute('data-start-x') || '0');
     const currentX = touch.clientX;
     const deltaX = currentX - startX;
     
-    if (deltaX > 0 && deltaX <= 100) {
+    if (deltaX > 0 && deltaX <= 80) {
       setSwipeX(deltaX);
       setIsSwipeActive(true);
     }
   };
 
   const handleTouchEnd = () => {
-    if (swipeX > 50 && onDelete) {
-      setIsDeleted(true);
-      setTimeout(() => {
-        onDelete(recipe);
-      }, 200);
+    if (isSwiped) return; // No procesar si ya está swipeado
+    
+    if (swipeX > 40) {
+      // Mantener la card en posición swipeada
+      setSwipeX(80);
+      setIsSwiped(true);
+      setIsSwipeActive(true);
     } else {
+      // Volver a la posición original
       setSwipeX(0);
       setIsSwipeActive(false);
     }
+  };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Evitar que se ejecute onClick del card
+    setIsDeleted(true);
+    setTimeout(() => {
+      onDelete?.(recipe);
+    }, 200);
   };
 
   if (isDeleted) {
@@ -98,10 +112,15 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
       {/* Delete background */}
       <div 
         className={`absolute inset-0 bg-red-500 flex items-center justify-end pr-6 rounded-2xl transition-opacity duration-200 ${
-          isSwipeActive ? 'opacity-100' : 'opacity-0'
+          isSwipeActive || isSwiped ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <Trash2 className="h-6 w-6 text-white" />
+        <button 
+          onClick={handleDelete}
+          className="w-8 h-8 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-colors"
+        >
+          <Trash2 className="h-5 w-5 text-white" />
+        </button>
       </div>
       
       {/* Main card */}
@@ -109,7 +128,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: Recip
         ref={containerRef}
         className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200"
         style={{ transform: `translateX(${swipeX}px)` }}
-        onClick={() => !isSwipeActive && onClick(recipe)}
+        onClick={() => !isSwipeActive && !isSwiped && onClick(recipe)}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
