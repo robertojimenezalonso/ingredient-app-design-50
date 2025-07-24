@@ -112,17 +112,17 @@ export const AirbnbHeader = ({
 
       {/* Date Tabs - Show when scrolled */}
       {showTabs && (
-        <div className="bg-white/95 backdrop-blur-sm border-b border-gray-200 py-2">
+        <div className="bg-white/95 backdrop-blur-sm border-b border-gray-200">
           <div className="px-4">
-            <div className="flex gap-1 overflow-x-auto">
+            <div className="flex gap-6 overflow-x-auto">
               {mealPlan.map(({ date, dateStr }) => (
                 <button
                   key={dateStr}
                   onClick={() => onTabChange(dateStr)}
-                  className={`flex-shrink-0 px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                  className={`flex-shrink-0 pb-3 pt-2 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === dateStr
-                      ? 'bg-primary text-primary-foreground'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      ? 'text-black border-black'
+                      : 'text-gray-500 border-transparent hover:text-gray-700'
                   }`}
                 >
                   {format(date, "eee d", { locale: es }).toLowerCase()}
