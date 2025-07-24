@@ -3,6 +3,10 @@ import { ChevronRight } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
 import { Card, CardContent } from './ui/card';
+import { useUserConfig } from '@/contexts/UserConfigContext';
+import { useRecipes } from '@/hooks/useRecipes';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 interface CategoryCarouselProps {
   category: CategoryType;
@@ -12,6 +16,13 @@ interface CategoryCarouselProps {
   onViewAll: (category: CategoryType) => void;
 }
 
+const mealCategoryMap: Record<string, CategoryType> = {
+  'Desayuno': 'breakfast',
+  'Almuerzo': 'lunch', 
+  'Cena': 'dinner',
+  'Tentempié': 'snacks'
+};
+
 export const CategoryCarousel = ({ 
   category, 
   recipes, 
@@ -19,23 +30,74 @@ export const CategoryCarousel = ({
   onRecipeClick, 
   onViewAll 
 }: CategoryCarouselProps) => {
-  if (recipes.length === 0) return null;
+  const { config } = useUserConfig();
+  const { getRecipesByCategory } = useRecipes();
+  
+  // Si no hay configuración, no mostrar nada
+  if (!config.selectedDates || !config.selectedMeals || 
+      config.selectedDates.length === 0 || config.selectedMeals.length === 0) {
+    return null;
+  }
+
+  // Generar el plan de comidas
+  const mealPlan = config.selectedDates.map(dateStr => {
+    const date = new Date(dateStr);
+    const dayMeals = config.selectedMeals!.map(meal => {
+      const categoryKey = mealCategoryMap[meal];
+      if (!categoryKey) return null;
+      
+      const categoryRecipes = getRecipesByCategory(categoryKey, 5);
+      // Tomar una receta aleatoria para variedad
+      const randomRecipe = categoryRecipes[Math.floor(Math.random() * categoryRecipes.length)];
+      
+      return {
+        meal,
+        recipe: randomRecipe
+      };
+    }).filter(Boolean);
+    
+    return {
+      date,
+      dateStr,
+      meals: dayMeals
+    };
+  });
 
   return (
     <div className="mb-4">
-
-      <div className="flex items-center gap-1 px-4 mb-2">
-        <h2 className="text-lg font-semibold">Las recetas</h2>
+      <div className="flex items-center gap-1 px-4 mb-4">
+        <h2 className="text-lg font-semibold">Tu planificación semanal</h2>
       </div>
       
-      <div className="px-4">
-        {recipes.slice(0, 6).map(recipe => (
-          <RecipeCard
-            key={recipe.id}
-            recipe={recipe}
-            onAdd={onAddRecipe}
-            onClick={onRecipeClick}
-          />
+      <div className="px-4 space-y-6">
+        {mealPlan.map(({ date, dateStr, meals }) => (
+          <div key={dateStr} className="space-y-3">
+            {/* Fecha del día */}
+            <div className="flex items-center gap-2">
+              <h3 className="text-base font-medium text-foreground">
+                {format(date, "EEEE d 'de' MMMM", { locale: es })}
+              </h3>
+              <div className="flex-1 h-px bg-border"></div>
+            </div>
+            
+            {/* Comidas del día */}
+            <div className="space-y-3">
+              {meals.map(({ meal, recipe }) => (
+                <div key={`${dateStr}-${meal}`} className="space-y-2">
+                  <h4 className="text-sm font-medium text-muted-foreground px-2">
+                    {meal}
+                  </h4>
+                  {recipe && (
+                    <RecipeCard
+                      recipe={recipe}
+                      onAdd={onAddRecipe}
+                      onClick={onRecipeClick}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </div>
