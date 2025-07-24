@@ -66,7 +66,7 @@ const PeopleAndDietPage = () => {
                 {/* Adults */}
                 <div>
                   <div className="flex items-center justify-between py-4">
-                    <span className="text-muted-foreground font-normal">Raciones</span>
+                    <span className="text-muted-foreground font-normal">Raciones por receta</span>
                     <div className="flex items-center gap-3">
                       <button onClick={() => handlePersonChange('adultos', -1)} disabled={peopleCount.adultos === 0} className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50">
                         <Minus className="h-4 w-4 text-foreground" />
