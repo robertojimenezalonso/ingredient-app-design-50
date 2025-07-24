@@ -87,7 +87,7 @@ const CalendarSelectionPage = () => {
         {/* Header with back button and progress */}
         <div className="flex items-center mb-8">
           <button 
-            onClick={() => navigate('/postal-code')}
+            onClick={() => navigate('/')}
             className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm mr-4"
           >
             <ArrowLeft className="h-5 w-5 text-foreground" />
