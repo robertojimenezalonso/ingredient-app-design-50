@@ -2,7 +2,8 @@
 import { ChevronRight } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
-import { Card, CardContent } from './ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Separator } from './ui/separator';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
 import { format } from 'date-fns';
@@ -71,31 +72,33 @@ export const CategoryCarousel = ({
       
       <div className="px-4 space-y-6">
         {mealPlan.map(({ date, dateStr, meals }) => (
-          <div key={dateStr} className="space-y-3">
-            {/* Fecha del día */}
-            <div className="flex items-center gap-2">
-              <h3 className="text-base font-medium text-foreground">
+          <Card key={dateStr} className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+            <CardHeader className="pb-3 px-4">
+              <CardTitle className="text-xl font-semibold text-neutral-950">
                 {format(date, "EEEE d", { locale: es })}
-              </h3>
-              <div className="flex-1 h-px bg-border"></div>
-            </div>
+              </CardTitle>
+            </CardHeader>
             
-            {/* Comidas del día */}
-            <div className="space-y-3">
-              {meals.map(({ meal, recipe }) => (
-                <div key={`${dateStr}-${meal}`} className="space-y-2">
-                  {recipe && (
-                    <RecipeCard
-                      recipe={recipe}
-                      onAdd={onAddRecipe}
-                      onClick={onRecipeClick}
-                      mealType={meal}
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+            <CardContent className="px-4 pb-4">
+              <div className="space-y-4">
+                {meals.map(({ meal, recipe }, index) => (
+                  <div key={`${dateStr}-${meal}`}>
+                    {recipe && (
+                      <RecipeCard
+                        recipe={recipe}
+                        onAdd={onAddRecipe}
+                        onClick={onRecipeClick}
+                        mealType={meal}
+                      />
+                    )}
+                    {index < meals.length - 1 && (
+                      <Separator className="mt-4" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </div>
