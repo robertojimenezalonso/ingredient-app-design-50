@@ -74,7 +74,7 @@ export const CategoryCarousel = ({
               <h3 className="text-base font-normal text-muted-foreground">
                 {format(date, "EEEE d", { locale: es })}
               </h3>
-              <button className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-muted-foreground hover:bg-gray-50">
+              <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-gray-50">
                 <Plus size={16} />
               </button>
             </div>
