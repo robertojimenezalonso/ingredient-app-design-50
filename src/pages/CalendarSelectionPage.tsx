@@ -98,8 +98,8 @@ const CalendarSelectionPage = () => {
                   to: selectedDates[selectedDates.length - 1]
                 } : undefined}
                 onSelect={(range) => {
-                  if (range?.from) {
-                    if (range?.to) {
+                  if (range && typeof range === 'object' && 'from' in range && range.from) {
+                    if (range.to) {
                       // Range selection
                       const dates = [];
                       const current = new Date(range.from);
@@ -116,14 +116,7 @@ const CalendarSelectionPage = () => {
                     setSelectedDates([]);
                   }
                 }}
-                disabled={date => {
-                  const dateTime = new Date(date);
-                  dateTime.setHours(0, 0, 0, 0);
-                  const todayTime = new Date();
-                  todayTime.setHours(0, 0, 0, 0);
-                  return dateTime < todayTime;
-                }}
-                className="pointer-events-auto" 
+                className="pointer-events-auto"
               />
             </div>
 
