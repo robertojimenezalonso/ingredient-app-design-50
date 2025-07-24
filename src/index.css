@@ -23,6 +23,13 @@ All colors MUST be HSL.
 */
 
 @layer base {
+  body {
+    overflow-x: hidden;
+  }
+  
+  html {
+    overflow-x: hidden;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
