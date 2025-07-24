@@ -1,3 +1,4 @@
+
 import { ChevronRight } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
@@ -21,7 +22,7 @@ export const CategoryCarousel = ({
   if (recipes.length === 0) return null;
 
   return (
-    <div className="mb-4 pt-6">
+    <div className="mb-4">
 
       <div className="flex items-center gap-1 px-4 mb-2">
         <h2 className="text-lg font-semibold">Las recetas</h2>
