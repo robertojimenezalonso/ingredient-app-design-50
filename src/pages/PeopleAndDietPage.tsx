@@ -15,7 +15,7 @@ const PeopleAndDietPage = () => {
   const [peopleCount, setPeopleCount] = useState({
     adultos: 0
   });
-  const dietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Macros', 'Nutrientes', 'Ingredientes Bio', 'Cantidades'];
+  const dietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Cantidades', 'Macros', 'Nutrientes', 'Ingredientes Bio'];
   const handlePersonChange = (type: keyof typeof peopleCount, delta: number) => {
     setPeopleCount(prev => ({
       ...prev,
