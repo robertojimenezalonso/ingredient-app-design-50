@@ -194,7 +194,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
   }
 
   return (
-    <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-50' : 'z-10'}`}>
+    <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-20' : 'z-10'}`}>
       {/* Delete background */}
       <div 
         className={`absolute inset-0 bg-red-500 rounded-2xl transition-opacity duration-200 ${
