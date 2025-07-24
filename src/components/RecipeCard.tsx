@@ -81,6 +81,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
     const touch = e.touches[0];
     containerRef.current?.setAttribute('data-start-x', touch.clientX.toString());
     containerRef.current?.setAttribute('data-start-y', touch.clientY.toString());
+    containerRef.current?.setAttribute('data-is-swiping', 'false');
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -91,9 +92,23 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
     const currentY = touch.clientY;
     const deltaX = currentX - startX;
     const deltaY = currentY - startY;
+    const isSwipingHorizontal = containerRef.current?.getAttribute('data-is-swiping') === 'true';
     
-    // Solo prevenir el comportamiento por defecto si hay más movimiento horizontal que vertical
-    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    // Determinar si es un swipe horizontal solo si no se ha determinado aún
+    if (!isSwipingHorizontal && (Math.abs(deltaX) > 10 || Math.abs(deltaY) > 10)) {
+      if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 10) {
+        // Es un swipe horizontal
+        containerRef.current?.setAttribute('data-is-swiping', 'true');
+        e.preventDefault();
+        e.stopPropagation();
+      } else if (Math.abs(deltaY) > Math.abs(deltaX)) {
+        // Es scroll vertical, no hacer nada más
+        return;
+      }
+    }
+    
+    // Solo procesar swipe horizontal si se determinó que es swipe
+    if (isSwipingHorizontal || containerRef.current?.getAttribute('data-is-swiping') === 'true') {
       e.preventDefault();
       e.stopPropagation();
       
@@ -176,7 +191,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
   }
 
   return (
-    <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-50' : 'z-10'}`} style={{ touchAction: 'none' }}>
+    <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-50' : 'z-10'}`}>
       {/* Delete background */}
       <div 
         className={`absolute inset-0 bg-red-500 rounded-2xl transition-opacity duration-200 ${
@@ -196,7 +211,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       <div 
         ref={containerRef}
         className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200"
-        style={{ transform: `translateX(${swipeX}px)`, touchAction: 'none' }}
+        style={{ transform: `translateX(${swipeX}px)` }}
         onClick={() => !isSwipeActive && !isSwiped && onClick(recipe)}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
