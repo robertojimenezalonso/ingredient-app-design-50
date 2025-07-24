@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { cn } from '@/lib/utils';
 const PeopleAndDietPage = () => {
@@ -16,7 +17,8 @@ const PeopleAndDietPage = () => {
     adultos: 0
   });
   const [showAllOptions, setShowAllOptions] = useState(false);
-  const dietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Cantidades', 'Macros', 'Nutrientes', 'Ingredientes Bio'];
+  const allDietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Cantidades', 'Macros', 'Nutrientes', 'Ingredientes Bio'];
+  const additionalOptions = allDietOptions.slice(3);
   const handlePersonChange = (type: keyof typeof peopleCount, delta: number) => {
     setPeopleCount(prev => ({
       ...prev,
@@ -106,25 +108,39 @@ const PeopleAndDietPage = () => {
 
             <CardContent className="px-4 pb-4">
               <div className="space-y-0">
-                {(showAllOptions ? dietOptions : dietOptions.slice(0, 3)).map((option, index) => <div key={option}>
+                {allDietOptions.slice(0, 3).map((option, index) => (
+                  <div key={option}>
                     <div className="flex items-center justify-between py-4">
                       <span className="text-muted-foreground font-normal">{option}</span>
                       <span className="text-foreground cursor-pointer hover:text-primary transition-colors">
                         Añadir
                       </span>
                     </div>
-                    {index < (showAllOptions ? dietOptions.length - 1 : Math.min(2, dietOptions.length - 1)) && <div className="border-b border-muted" />}
-                  </div>)}
+                    {index < 2 && <div className="border-b border-muted" />}
+                  </div>
+                ))}
                 
-                {!showAllOptions && <>
-                    <div className="border-b border-muted" />
-                    <div className="flex items-center justify-between py-4">
-                      <span onClick={() => setShowAllOptions(true)} className="text-muted-foreground cursor-pointer hover:text-primary transition-colors text-left font-normal">
+                <div className="border-b border-muted" />
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div className="flex items-center justify-between py-4 cursor-pointer">
+                      <span className="text-muted-foreground cursor-pointer hover:text-primary transition-colors text-left font-normal">
                         Más opciones
                       </span>
                       <ChevronRight className="h-4 w-4 text-muted-foreground" />
                     </div>
-                  </>}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="start" className="w-64 bg-background border border-border shadow-lg z-50">
+                    {additionalOptions.map((option) => (
+                      <DropdownMenuItem key={option} className="flex items-center justify-between">
+                        <span className="text-muted-foreground font-normal">{option}</span>
+                        <span className="text-foreground cursor-pointer hover:text-primary transition-colors">
+                          Añadir
+                        </span>
+                      </DropdownMenuItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </CardContent>
           </Card>
