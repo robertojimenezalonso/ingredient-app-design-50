@@ -76,12 +76,9 @@ export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps
           {recipe.title}
         </h3>
         {mealType && (
-          <Badge 
-            variant="outline" 
-            className={`text-xs px-2 py-0.5 mb-2 w-fit ${getMealTypeColor(mealType)}`}
-          >
+          <span className="text-xs text-muted-foreground mb-2 block">
             {mealType}
-          </Badge>
+          </span>
         )}
         <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1.5">
           <span>{recipe.calories} kcal</span>
