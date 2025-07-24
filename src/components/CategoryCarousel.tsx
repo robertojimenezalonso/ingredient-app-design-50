@@ -38,31 +38,32 @@ export const CategoryCarousel = ({
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
 
   
-  // Simple global scroll listener
+  // Global click/scroll listener to reset swipe
   useEffect(() => {
-    const handleScrollReset = () => {
-      console.log('Detectado scroll - reseteando activeSwipedRecipe');
-      setActiveSwipedRecipe(null);
-    };
-
-    // Agregar listener al scroll del contenedor principal también
-    const handleTouchMove = (e: TouchEvent) => {
-      // Solo resetear si es un movimiento vertical (scroll)
+    const handleGlobalInteraction = (e: Event) => {
       const target = e.target as HTMLElement;
-      if (!target.closest('[data-recipe-card="true"]')) {
-        console.log('TouchMove fuera de recipe card - reseteando');
+      // Si el click/touch no es en una recipe card o en los botones de acción
+      if (!target.closest('[data-recipe-card="true"]') && 
+          !target.closest('.absolute.left-0.top-0') && 
+          activeSwipedRecipe) {
         setActiveSwipedRecipe(null);
       }
     };
 
-    window.addEventListener('scroll', handleScrollReset, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    document.addEventListener('click', handleGlobalInteraction);
+    document.addEventListener('touchstart', handleGlobalInteraction);
+    document.addEventListener('scroll', () => {
+      if (activeSwipedRecipe) {
+        setActiveSwipedRecipe(null);
+      }
+    }, { passive: true });
     
     return () => {
-      window.removeEventListener('scroll', handleScrollReset);
-      window.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('click', handleGlobalInteraction);
+      document.removeEventListener('touchstart', handleGlobalInteraction);
+      document.removeEventListener('scroll', () => {});
     };
-  }, []);
+  }, [activeSwipedRecipe]);
   
   // Si no hay configuración, no mostrar nada
   if (!config.selectedDates || !config.selectedMeals || 
