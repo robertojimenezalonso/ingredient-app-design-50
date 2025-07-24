@@ -58,7 +58,7 @@ const PeopleAndDietPage = () => {
         <div className="px-4 mb-4">
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
             <CardHeader className="pb-3 px-4">
-              <CardTitle className="text-2xl font-bold text-foreground">¿Para cuántos?</CardTitle>
+              <CardTitle className="text-2xl font-semibold text-neutral-950">¿Para cuántos?</CardTitle>
             </CardHeader>
 
             <CardContent className="px-4 pb-4">
@@ -89,7 +89,7 @@ const PeopleAndDietPage = () => {
         <div className="px-4 mb-4">
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
             <CardHeader className="pb-3 px-4">
-              <CardTitle className="text-2xl font-bold text-foreground">Nutrición</CardTitle>
+              <CardTitle className="text-2xl font-semibold text-neutral-950">Nutrición</CardTitle>
             </CardHeader>
 
             <CardContent className="px-4 pb-4">
