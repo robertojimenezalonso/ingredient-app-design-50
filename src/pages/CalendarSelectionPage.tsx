@@ -93,7 +93,7 @@ const CalendarSelectionPage = () => {
                       </Badge>)}
                     
                     {/* Plus button - in same line */}
-                    <Badge variant="outline" className="cursor-pointer px-2 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0" onClick={() => setShowMoreMeals(!showMoreMeals)}>
+                    <Badge variant="outline" className="cursor-pointer w-12 h-12 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0 flex items-center justify-center" onClick={() => setShowMoreMeals(!showMoreMeals)}>
                       {showMoreMeals ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                     </Badge>
                   </div>
