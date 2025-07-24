@@ -16,16 +16,23 @@ export function CustomCalendar({
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   
-  // Calculate 10 days before today
-  const tenDaysAgo = new Date(today);
-  tenDaysAgo.setDate(today.getDate() - 10);
+  // Calculate Monday of current week
+  const getMondayOfWeek = (date: Date) => {
+    const monday = new Date(date);
+    const dayOfWeek = monday.getDay();
+    const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    monday.setDate(monday.getDate() - daysToSubtract);
+    return monday;
+  };
   
-  // Generate dates from 10 days ago to end of next month
+  const mondayOfCurrentWeek = getMondayOfWeek(today);
+  
+  // Generate dates from Monday of current week to end of next month
   const generateDates = () => {
     const dates = [];
     const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); // Last day of next month
     
-    const currentDate = new Date(tenDaysAgo);
+    const currentDate = new Date(mondayOfCurrentWeek);
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
@@ -65,6 +72,15 @@ export function CustomCalendar({
   };
 
   const isPast = (date: Date) => {
+    // If today is Monday, no dates are considered past
+    const todayDayOfWeek = today.getDay();
+    const isTodayMonday = todayDayOfWeek === 1;
+    
+    if (isTodayMonday) {
+      return false;
+    }
+    
+    // Otherwise, dates before today are past
     return date < today;
   };
 
