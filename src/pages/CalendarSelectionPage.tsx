@@ -98,14 +98,14 @@ const CalendarSelectionPage = () => {
               <h3 className="font-semibold text-foreground">¿Qué comidas planeas?</h3>
               
               <div className="space-y-2">
-                {/* Main meals - same line */}
+                {/* Main meals with plus button - same line */}
                 <div className="flex gap-1">
                   {['Desayuno', 'Almuerzo', 'Comida'].map(meal => 
                     <Badge 
                       key={meal} 
                       variant="outline" 
                       className={cn(
-                        "cursor-pointer px-3 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center",
+                        "cursor-pointer px-2 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center",
                         selectedMeals.includes(meal) 
                           ? "bg-muted border-2 border-foreground text-foreground" 
                           : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
@@ -115,8 +115,8 @@ const CalendarSelectionPage = () => {
                       {meal}
                     </Badge>
                   )}
-
-                  {/* Plus button */}
+                  
+                  {/* Plus button - in same line */}
                   <Badge 
                     variant="outline" 
                     className="cursor-pointer px-2 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0" 
