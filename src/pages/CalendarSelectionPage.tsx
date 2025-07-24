@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useUserConfig } from '@/contexts/UserConfigContext';
+import WelcomePage from '@/pages/WelcomePage';
 import { cn } from '@/lib/utils';
 const CalendarSelectionPage = () => {
   const navigate = useNavigate();
@@ -40,20 +41,8 @@ const CalendarSelectionPage = () => {
   const canContinue = selectedDates.length > 0 && selectedMeals.length > 0;
   return <div className="fixed inset-0 z-50">
       {/* Background with WelcomePage content - blurred */}
-      <div className="absolute inset-0 bg-sky-200 flex flex-col items-center justify-center p-4">
-        <div className="w-full max-w-sm">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-foreground mb-4">Oliv.ai</h1>
-            <p className="text-muted-foreground text-lg text-center font-normal">
-              Compara precios en diferentes supermercados y consigue recetas personalizadas al mejor precio.
-            </p>
-          </div>
-          <Button className="w-full bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.1)] text-foreground border-0 py-4 h-auto" variant="outline" disabled>
-            <div className="text-center">
-              <div className="font-semibold">Empezar a buscar</div>
-            </div>
-          </Button>
-        </div>
+      <div className="absolute inset-0 pointer-events-none">
+        <WelcomePage />
       </div>
 
       {/* Blur overlay */}
