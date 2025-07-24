@@ -101,31 +101,6 @@ export const AirbnbHeader = ({
         </button>
       </div>
       
-      {/* Switch entre Receta y Lista de ingredientes */}
-      <div className="flex items-center justify-center gap-1 px-4 py-4 bg-white">
-        <button 
-          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-            selectedFilter === 'receta' 
-              ? 'bg-black text-white' 
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-          onClick={() => setSelectedFilter('receta')}
-        >
-          <UtensilsCrossed className="h-4 w-4" />
-          Recetas
-        </button>
-        <button 
-          className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-            selectedFilter === 'ingredientes' 
-              ? 'bg-black text-white' 
-              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
-          onClick={() => setSelectedFilter('ingredientes')}
-        >
-          <Package className="h-4 w-4" />
-          Ingredientes
-        </button>
-      </div>
 
       {/* Date Tabs - Show when scrolled */}
       {showTabs && (
@@ -155,11 +130,34 @@ export const AirbnbHeader = ({
         </div>
       )}
 
-      {/* Search Bar and Food Icons - Hidden when scrolled */}
+      {/* Switch entre Receta y Lista de ingredientes - Hidden when scrolled */}
       <div className={`transition-all duration-300 overflow-hidden ${
         isScrolled ? 'max-h-0 opacity-0' : 'max-h-96 opacity-100'
       }`}>
-        
+        <div className="flex items-center justify-center gap-1 px-4 py-4 bg-white">
+          <button 
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              selectedFilter === 'receta' 
+                ? 'bg-black text-white' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+            onClick={() => setSelectedFilter('receta')}
+          >
+            <UtensilsCrossed className="h-4 w-4" />
+            Recetas
+          </button>
+          <button 
+            className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              selectedFilter === 'ingredientes' 
+                ? 'bg-black text-white' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+            onClick={() => setSelectedFilter('ingredientes')}
+          >
+            <Package className="h-4 w-4" />
+            Ingredientes
+          </button>
+        </div>
       </div>
 
     </div>
