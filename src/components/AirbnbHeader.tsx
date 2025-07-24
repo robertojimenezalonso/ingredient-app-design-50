@@ -127,7 +127,7 @@ export const AirbnbHeader = ({
 
       {/* Date Tabs - Show when scrolled */}
       {showTabs && (
-        <div className="bg-white/95 backdrop-blur-sm relative">
+        <div className="bg-white/95 backdrop-blur-sm relative border-0 shadow-none">
           <div className="px-4">
             <div ref={tabsContainerRef} className="flex gap-6 overflow-x-auto">
               {mealPlan.map(({ date, dateStr }) => (
