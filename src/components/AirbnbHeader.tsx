@@ -119,32 +119,6 @@ export const AirbnbHeader = () => {
         </div>
       </div>
 
-      {/* Filter Tags - Always visible */}
-      <div className={`mb-1 ${isScrolled ? 'mt-2' : '-mt-2'}`}>
-        <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide px-4">
-          {filters.map((filter) => (
-            <button
-              key={filter.id}
-              onClick={() => setSelectedFilter(selectedFilter === filter.id ? null : filter.id)}
-              className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200 ${
-                selectedFilter === filter.id
-                  ? "bg-foreground text-background"
-                  : "text-foreground hover:shadow-sm"
-              }`}
-              style={{ backgroundColor: selectedFilter === filter.id ? undefined : '#F3F3F4' }}
-            >
-              <span>{filter.name}</span>
-              {filter.hasDropdown && (
-                <ChevronDown 
-                  className={`h-4 w-4 transition-transform duration-200 ${
-                    selectedFilter === filter.id ? "rotate-180" : ""
-                  }`} 
-                />
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
