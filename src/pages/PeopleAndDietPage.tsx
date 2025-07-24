@@ -15,6 +15,7 @@ const PeopleAndDietPage = () => {
   const [peopleCount, setPeopleCount] = useState({
     adultos: 0
   });
+  const [showAllOptions, setShowAllOptions] = useState(false);
   const dietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Cantidades', 'Macros', 'Nutrientes', 'Ingredientes Bio'];
   const handlePersonChange = (type: keyof typeof peopleCount, delta: number) => {
     setPeopleCount(prev => ({
@@ -107,15 +108,29 @@ const PeopleAndDietPage = () => {
 
             <CardContent className="px-4 pb-4">
               <div className="space-y-0">
-                {dietOptions.map((option, index) => <div key={option}>
+                {(showAllOptions ? dietOptions : dietOptions.slice(0, 3)).map((option, index) => <div key={option}>
                     <div className="flex items-center justify-between py-4">
                       <span className="text-foreground font-medium">{option}</span>
                       <span className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
                         Añadir
                       </span>
                     </div>
-                    {index < dietOptions.length - 1 && <div className="border-b border-muted" />}
+                    {index < (showAllOptions ? dietOptions.length - 1 : Math.min(2, dietOptions.length - 1)) && <div className="border-b border-muted" />}
                   </div>)}
+                
+                {!showAllOptions && (
+                  <>
+                    <div className="border-b border-muted" />
+                    <div className="flex items-center justify-between py-4">
+                      <span 
+                        className="text-foreground font-medium cursor-pointer hover:text-primary transition-colors"
+                        onClick={() => setShowAllOptions(true)}
+                      >
+                        Más opciones
+                      </span>
+                    </div>
+                  </>
+                )}
               </div>
             </CardContent>
           </Card>
