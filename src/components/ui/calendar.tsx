@@ -29,6 +29,7 @@ function Calendar({
         numberOfMonths={2}
         fromDate={minDate}
         toDate={maxDate}
+        weekStartsOn={1}
         className={cn("p-3", className)}
         classNames={{
           months: "flex flex-col space-y-6",
@@ -61,6 +62,7 @@ function Calendar({
         formatters={{
           formatWeekdayName: (date) => {
             const day = date.getDay();
+            // When weekStartsOn=1 (Monday), the days are: Mon=1, Tue=2, Wed=3, Thu=4, Fri=5, Sat=6, Sun=0
             const dayNames = ["D", "L", "M", "X", "J", "V", "S"];
             return dayNames[day];
           }

@@ -116,7 +116,13 @@ const CalendarSelectionPage = () => {
                     setSelectedDates([]);
                   }
                 }}
-                disabled={date => false} // All dates are selectable 
+                disabled={date => {
+                  const dateTime = new Date(date);
+                  dateTime.setHours(0, 0, 0, 0);
+                  const todayTime = new Date();
+                  todayTime.setHours(0, 0, 0, 0);
+                  return dateTime < todayTime;
+                }}
                 className="pointer-events-auto" 
               />
             </div>
