@@ -70,9 +70,7 @@ const PeopleAndDietPage = () => {
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0">
             <CardHeader className="pb-3 px-4">
               <CardTitle className="text-2xl font-bold text-foreground">¿Quién?</CardTitle>
-              <p className="text-muted-foreground">
-                Para quién vas a cocinar
-              </p>
+              <p className="text-muted-foreground">Para cuantos vas a cocinar</p>
             </CardHeader>
 
             <CardContent className="px-4 pb-4">
@@ -118,19 +116,14 @@ const PeopleAndDietPage = () => {
                     {index < (showAllOptions ? dietOptions.length - 1 : Math.min(2, dietOptions.length - 1)) && <div className="border-b border-muted" />}
                   </div>)}
                 
-                {!showAllOptions && (
-                  <>
+                {!showAllOptions && <>
                     <div className="border-b border-muted" />
                     <div className="flex items-center justify-between py-4">
-                      <span 
-                        className="text-foreground font-medium cursor-pointer hover:text-primary transition-colors"
-                        onClick={() => setShowAllOptions(true)}
-                      >
+                      <span className="text-foreground font-medium cursor-pointer hover:text-primary transition-colors" onClick={() => setShowAllOptions(true)}>
                         Más opciones
                       </span>
                     </div>
-                  </>
-                )}
+                  </>}
               </div>
             </CardContent>
           </Card>
