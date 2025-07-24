@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Minus, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Plus, Minus, ChevronRight, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -149,7 +149,10 @@ const PeopleAndDietPage = () => {
         <div className="fixed bottom-0 left-0 right-0 p-4">
           <div className="flex justify-center mb-4">
             <Button onClick={handleGeneratePlan} disabled={!canContinue} className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold">
-              Generar Plan
+              <div className="flex items-center justify-center gap-2">
+                <span>Generar lista</span>
+                <List className="h-5 w-5" />
+              </div>
             </Button>
           </div>
         </div>
