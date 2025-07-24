@@ -420,58 +420,6 @@ const RecipeDetailPage = () => {
 
           <h2 className="text-lg font-semibold mb-4">Ingredientes para la receta</h2>
 
-          {/* Supermarket selector */}
-          <div className="flex gap-4 mb-4">
-            <div className="relative flex-1">
-              <div className="w-full h-auto bg-muted rounded-lg px-3 py-3 text-base font-medium border-none focus:outline-none cursor-pointer flex items-center justify-between" onClick={() => {
-              // Handle dropdown toggle
-            }}>
-                <div className="flex items-center gap-3">
-                  <img src="/lovable-uploads/e959efca-f3da-43ea-96a2-ac6b262be062.png" alt="LIDL Logo" className="h-8 w-8 rounded-full" />
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold text-foreground text-base">En LIDL</span>
-                      <span className="text-black">·</span>
-                      <span className="text-foreground text-base">
-                        {(() => {
-                        let totalPrice = 0;
-                        getCurrentValidIngredients().forEach((validIngredient, displayIndex) => {
-                          if (selectedIngredients.includes(validIngredient.ingredient.id)) {
-                            const price = validIngredient.carrefourProduct?.price ? parseFloat(validIngredient.carrefourProduct.price.replace('€', '').replace(',', '.')) : (displayIndex + 1) * 0.75 + 1;
-                            totalPrice += price;
-                          }
-                        });
-                        return `${totalPrice.toFixed(2).replace('.', ',')} € total`;
-                      })()}
-                      </span>
-                    </div>
-                     <div className="flex items-center justify-between gap-3">
-                       <div className="text-sm text-muted-foreground font-normal">3 opciones desde 8,45€</div>
-                       {(() => {
-                       let totalPrice = 0;
-                       getCurrentValidIngredients().forEach((validIngredient, displayIndex) => {
-                         if (selectedIngredients.includes(validIngredient.ingredient.id)) {
-                           const price = validIngredient.carrefourProduct?.price ? parseFloat(validIngredient.carrefourProduct.price.replace('€', '').replace(',', '.')) : (displayIndex + 1) * 0.75 + 1;
-                           totalPrice += price;
-                         }
-                       });
-                       const discountPrice = 8.45;
-                       const discountPercentage = Math.round((totalPrice - discountPrice) / totalPrice * 100);
-                       return discountPercentage > 0 ? <Badge variant="secondary" className="bg-green-100 text-green-700 text-sm font-medium px-2 py-1">
-                             -{discountPercentage}%
-                           </Badge> : null;
-                     })()}
-                     </div>
-                  </div>
-                </div>
-                <div className="pointer-events-none">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <polyline points="6,9 12,15 18,9"></polyline>
-                  </svg>
-                </div>
-              </div>
-            </div>
-          </div>
 
 
           <div className="mb-4">
