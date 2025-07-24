@@ -84,14 +84,12 @@ export const CategoryCarousel = ({
             <div className="space-y-3">
               {meals.map(({ meal, recipe }) => (
                 <div key={`${dateStr}-${meal}`} className="space-y-2">
-                  <h4 className="text-sm font-medium text-muted-foreground px-2">
-                    {meal}
-                  </h4>
                   {recipe && (
                     <RecipeCard
                       recipe={recipe}
                       onAdd={onAddRecipe}
                       onClick={onRecipeClick}
+                      mealType={meal}
                     />
                   )}
                 </div>

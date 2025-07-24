@@ -3,14 +3,16 @@ import { Recipe, CATEGORIES } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useEffect, useState, useRef } from 'react';
 import { IngredientAvatars } from './IngredientAvatars';
+import { Badge } from './ui/badge';
 
 interface RecipeCardProps {
   recipe: Recipe;
   onAdd: (recipe: Recipe) => void;
   onClick: (recipe: Recipe) => void;
+  mealType?: string;
 }
 
-export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
+export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps) => {
   const { config } = useUserConfig();
   const [useTotalAbbreviation, setUseTotalAbbreviation] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
@@ -23,6 +25,26 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
   // Calculate prices based on servings
   const pricePerServing = (rawPrice / servings).toFixed(2).replace('.', ',');
   const totalPrice = rawPrice.toFixed(2).replace('.', ',');
+
+  // Función para obtener el color del tag según el tipo de comida
+  const getMealTypeColor = (meal: string) => {
+    switch (meal) {
+      case 'Desayuno':
+        return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'Almuerzo':
+        return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'Cena':
+        return 'bg-purple-100 text-purple-800 border-purple-200';
+      case 'Aperitivo':
+        return 'bg-green-100 text-green-800 border-green-200';
+      case 'Snack':
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'Merienda':
+        return 'bg-pink-100 text-pink-800 border-pink-200';
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
 
   useEffect(() => {
     if (textRef.current && containerRef.current) {
@@ -53,7 +75,15 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
         <h3 className="font-medium text-lg line-clamp-2 mb-0.5 leading-tight overflow-hidden mt-2">
           {recipe.title}
         </h3>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1.5 mt-2">
+        {mealType && (
+          <Badge 
+            variant="outline" 
+            className={`text-xs px-2 py-0.5 mb-2 w-fit ${getMealTypeColor(mealType)}`}
+          >
+            {mealType}
+          </Badge>
+        )}
+        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1.5">
           <span>{recipe.calories} kcal</span>
           <span>·</span>
           <span>{recipe.time} min</span>
