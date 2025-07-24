@@ -88,6 +88,17 @@ function Calendar({
             opacity: 0.6
           }
         }}
+        hidden={(date) => {
+          const dateTime = new Date(date);
+          dateTime.setHours(0, 0, 0, 0);
+          const todayTime = new Date();
+          todayTime.setHours(0, 0, 0, 0);
+          
+          const tenDaysAgo = new Date(todayTime);
+          tenDaysAgo.setDate(todayTime.getDate() - 10);
+          
+          return dateTime < tenDaysAgo;
+        }}
         {...props}
       />
     </div>
