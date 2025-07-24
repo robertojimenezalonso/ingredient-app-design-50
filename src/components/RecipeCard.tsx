@@ -1,4 +1,4 @@
-import { Heart, Plus } from 'lucide-react';
+import { Heart, Plus, Trash2 } from 'lucide-react';
 import { Recipe, CATEGORIES } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useEffect, useState, useRef } from 'react';
@@ -9,12 +9,15 @@ interface RecipeCardProps {
   recipe: Recipe;
   onAdd: (recipe: Recipe) => void;
   onClick: (recipe: Recipe) => void;
+  onDelete?: (recipe: Recipe) => void;
   mealType?: string;
 }
 
-export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps) => {
+export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, mealType }: RecipeCardProps) => {
   const { config } = useUserConfig();
   const [useTotalAbbreviation, setUseTotalAbbreviation] = useState(false);
+  const [swipeX, setSwipeX] = useState(0);
+  const [isSwipeActive, setIsSwipeActive] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   
@@ -55,11 +58,53 @@ export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps
     }
   }, [pricePerServing, totalPrice]);
 
+  // Touch handlers for swipe
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    containerRef.current?.setAttribute('data-start-x', touch.clientX.toString());
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    const startX = parseFloat(containerRef.current?.getAttribute('data-start-x') || '0');
+    const currentX = touch.clientX;
+    const deltaX = currentX - startX;
+    
+    if (deltaX > 0 && deltaX <= 100) {
+      setSwipeX(deltaX);
+      setIsSwipeActive(true);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (swipeX > 50 && onDelete) {
+      onDelete(recipe);
+    }
+    setSwipeX(0);
+    setIsSwipeActive(false);
+  };
+
   return (
-    <div 
-      className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4"
-      onClick={() => onClick(recipe)}
-    >
+    <div className="relative overflow-hidden">
+      {/* Delete background */}
+      <div 
+        className={`absolute inset-0 bg-red-500 flex items-center justify-end pr-6 rounded-2xl transition-opacity duration-200 ${
+          isSwipeActive ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <Trash2 className="h-6 w-6 text-white" />
+      </div>
+      
+      {/* Main card */}
+      <div 
+        ref={containerRef}
+        className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200"
+        style={{ transform: `translateX(${swipeX}px)` }}
+        onClick={() => !isSwipeActive && onClick(recipe)}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
       <div className="relative flex-shrink-0">
         <img 
           src={recipe.image} 
@@ -85,8 +130,9 @@ export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps
           <span>·</span>
           <span>{recipe.time} min</span>
         </div>
+        </div>
+        
       </div>
-      
     </div>
   );
 };
