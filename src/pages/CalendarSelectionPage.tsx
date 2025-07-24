@@ -84,13 +84,9 @@ const CalendarSelectionPage = () => {
 
             <CardContent className="px-4 pb-4">
               <div className="flex justify-center max-h-[320px]">
-                <Calendar 
-                  selected={selectedDates}
-                  onSelect={(dates) => {
-                    setSelectedDates(dates || []);
-                  }}
-                  className="pointer-events-auto"
-                />
+                <Calendar selected={selectedDates} onSelect={dates => {
+                setSelectedDates(dates || []);
+              }} className="pointer-events-auto" />
               </div>
             </CardContent>
           </Card>
@@ -101,57 +97,27 @@ const CalendarSelectionPage = () => {
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0">
             <CardContent className="px-4 py-4">
               <div className="space-y-4">
-                <h3 className="font-semibold text-foreground">¿Qué comidas planeas?</h3>
+                <h3 className="font-semibold text-foreground">¿Qué comidas planificamos?</h3>
                 
                 <div className="space-y-2">
                   {/* Main meals with plus button - same line */}
                   <div className="flex gap-1 justify-center">
-                    {['Desayuno', 'Almuerzo', 'Comida'].map(meal => 
-                      <Badge 
-                        key={meal} 
-                        variant="outline" 
-                        className={cn(
-                          "cursor-pointer px-2 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center justify-center",
-                          selectedMeals.includes(meal) 
-                            ? "bg-foreground/15 border-2 border-foreground text-foreground" 
-                            : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
-                        )}
-                        onClick={() => toggleMeal(meal)}
-                      >
+                    {['Desayuno', 'Almuerzo', 'Comida'].map(meal => <Badge key={meal} variant="outline" className={cn("cursor-pointer px-2 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center justify-center", selectedMeals.includes(meal) ? "bg-foreground/15 border-2 border-foreground text-foreground" : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50")} onClick={() => toggleMeal(meal)}>
                         {meal}
-                      </Badge>
-                    )}
+                      </Badge>)}
                     
                     {/* Plus button - in same line */}
-                    <Badge 
-                      variant="outline" 
-                      className="cursor-pointer px-2 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0" 
-                      onClick={() => setShowMoreMeals(!showMoreMeals)}
-                    >
+                    <Badge variant="outline" className="cursor-pointer px-2 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0" onClick={() => setShowMoreMeals(!showMoreMeals)}>
                       {showMoreMeals ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                     </Badge>
                   </div>
 
                   {/* Additional meals - new line */}
-                  {showMoreMeals && (
-                    <div className="flex gap-2 animate-fade-in">
-                      {additionalMeals.map(meal => 
-                        <Badge 
-                          key={meal} 
-                          variant="outline" 
-                          className={cn(
-                            "cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors",
-                            selectedMeals.includes(meal) 
-                              ? "bg-foreground/15 border-2 border-foreground text-foreground" 
-                              : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
-                          )}
-                          onClick={() => toggleMeal(meal)}
-                        >
+                  {showMoreMeals && <div className="flex gap-2 animate-fade-in">
+                      {additionalMeals.map(meal => <Badge key={meal} variant="outline" className={cn("cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors", selectedMeals.includes(meal) ? "bg-foreground/15 border-2 border-foreground text-foreground" : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50")} onClick={() => toggleMeal(meal)}>
                           {meal}
-                        </Badge>
-                      )}
-                    </div>
-                  )}
+                        </Badge>)}
+                    </div>}
                 </div>
               </div>
             </CardContent>
@@ -164,18 +130,11 @@ const CalendarSelectionPage = () => {
         {/* Footer with Floating Continue Button and Reset */}
         <div className="fixed bottom-0 left-0 right-0 p-4">
           <div className="flex items-center justify-between mb-4">
-            <button 
-              onClick={handleReset}
-              className="text-foreground underline text-lg font-medium"
-            >
+            <button onClick={handleReset} className="text-foreground underline text-lg font-medium">
               Restablecer
             </button>
             <div className="flex-1 ml-8">
-              <Button 
-                onClick={handleContinue} 
-                disabled={!canContinue} 
-                className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold"
-              >
+              <Button onClick={handleContinue} disabled={!canContinue} className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold">
                 Siguiente
               </Button>
             </div>
