@@ -77,33 +77,15 @@ export function CustomCalendar({
     const isDateSelected = isSelected(date);
     
     if (isDateSelected) {
-      // Deselect the date
+      // Deselect the date - remove it from the array
       const newSelected = selected.filter(selectedDate => 
         selectedDate.getTime() !== date.getTime()
       );
       onSelect?.(newSelected);
     } else {
-      // Check if this date would create a continuous range
-      if (selected.length === 0) {
-        // First date selection
-        onSelect?.([date]);
-      } else if (selected.length === 1) {
-        // Second date - create range
-        const firstDate = selected[0];
-        const startDate = date < firstDate ? date : firstDate;
-        const endDate = date < firstDate ? firstDate : date;
-        
-        const rangeDates = [];
-        const current = new Date(startDate);
-        while (current <= endDate) {
-          rangeDates.push(new Date(current));
-          current.setDate(current.getDate() + 1);
-        }
-        onSelect?.(rangeDates);
-      } else {
-        // Multiple dates selected - start new selection
-        onSelect?.([date]);
-      }
+      // Select the date - add it to the array
+      const newSelected = [...selected, date].sort((a, b) => a.getTime() - b.getTime());
+      onSelect?.(newSelected);
     }
   };
 
