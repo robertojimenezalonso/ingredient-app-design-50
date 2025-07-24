@@ -15,13 +15,16 @@ function Calendar({
   const today = new Date();
   const maxDate = new Date();
   maxDate.setMonth(today.getMonth() + 2);
+  
+  const minDate = new Date();
+  minDate.setDate(today.getDate() - 10);
 
   return (
     <div className="max-h-96 overflow-y-auto">
       <DayPicker
-        showOutsideDays={showOutsideDays}
+        showOutsideDays={false}
         numberOfMonths={2}
-        fromDate={today}
+        fromDate={minDate}
         toDate={maxDate}
         className={cn("p-3", className)}
         classNames={{
@@ -38,18 +41,17 @@ function Calendar({
           cell: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20",
           day: cn(
             buttonVariants({ variant: "ghost" }),
-            "h-9 w-9 p-0 font-normal aria-selected:opacity-100 rounded-full"
+            "h-9 w-9 p-0 font-normal aria-selected:opacity-100 rounded-full relative"
           ),
           day_selected:
             "bg-foreground text-background hover:bg-foreground hover:text-background focus:bg-foreground focus:text-background rounded-full",
           day_today: "bg-accent text-accent-foreground rounded-full",
-          day_outside:
-            "day-outside text-muted-foreground opacity-50",
+          day_outside: "hidden",
           day_disabled: "text-muted-foreground opacity-50",
           day_range_middle:
             "aria-selected:bg-foreground/20 aria-selected:text-foreground rounded-none",
-          day_range_start: "rounded-l-full rounded-r-none",
-          day_range_end: "rounded-r-full rounded-l-none",
+          day_range_start: "rounded-l-full rounded-r-none bg-foreground text-background",
+          day_range_end: "rounded-r-full rounded-l-none bg-foreground text-background",
           day_hidden: "invisible",
           ...classNames,
         }}
@@ -58,6 +60,19 @@ function Calendar({
             const day = date.getDay();
             const dayNames = ["D", "L", "M", "X", "J", "V", "S"];
             return dayNames[day];
+          }
+        }}
+        modifiers={{
+          past: (date) => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            return date < today;
+          }
+        }}
+        modifiersStyles={{
+          past: {
+            textDecoration: 'line-through',
+            opacity: 0.6
           }
         }}
         {...props}
