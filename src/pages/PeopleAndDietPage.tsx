@@ -7,44 +7,30 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { cn } from '@/lib/utils';
-
 const PeopleAndDietPage = () => {
   const navigate = useNavigate();
-  const { updateConfig } = useUserConfig();
+  const {
+    updateConfig
+  } = useUserConfig();
   const [peopleCount, setPeopleCount] = useState({
     adultos: 0
   });
-
-  const dietOptions = [
-    'Objetivos',
-    'Alimentación', 
-    'Alergias/Intolerancias',
-    'Calorías',
-    'Macros',
-    'Nutrientes',
-    'Ingredientes Bio',
-    'Cantidades'
-  ];
-
+  const dietOptions = ['Objetivos', 'Alimentación', 'Alergias/Intolerancias', 'Calorías', 'Macros', 'Nutrientes', 'Ingredientes Bio', 'Cantidades'];
   const handlePersonChange = (type: keyof typeof peopleCount, delta: number) => {
     setPeopleCount(prev => ({
       ...prev,
       [type]: Math.max(0, prev[type] + delta)
     }));
   };
-
   const handleGeneratePlan = () => {
     updateConfig({
       servingsPerRecipe: peopleCount.adultos
     });
     navigate('/subscription-benefits');
   };
-
   const totalPeople = peopleCount.adultos;
   const canContinue = totalPeople > 0;
-
-  return (
-    <div className="fixed inset-0 z-50">
+  return <div className="fixed inset-0 z-50">
       {/* Background with WelcomePage content - blurred */}
       <div className="absolute inset-0 bg-sky-200 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-sm">
@@ -95,20 +81,13 @@ const PeopleAndDietPage = () => {
                   <div className="flex items-center justify-between py-4">
                     <span className="text-foreground font-medium">Adultos</span>
                     <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => handlePersonChange('adultos', -1)}
-                        disabled={peopleCount.adultos === 0}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50"
-                      >
+                      <button onClick={() => handlePersonChange('adultos', -1)} disabled={peopleCount.adultos === 0} className="flex items-center justify-center w-8 h-8 rounded-full bg-muted disabled:opacity-50">
                         <Minus className="h-4 w-4 text-foreground" />
                       </button>
                       <span className="w-8 text-center text-foreground font-medium">
                         {peopleCount.adultos}
                       </span>
-                      <button
-                        onClick={() => handlePersonChange('adultos', 1)}
-                        className="flex items-center justify-center w-8 h-8 rounded-full bg-muted"
-                      >
+                      <button onClick={() => handlePersonChange('adultos', 1)} className="flex items-center justify-center w-8 h-8 rounded-full bg-muted">
                         <Plus className="h-4 w-4 text-foreground" />
                       </button>
                     </div>
@@ -123,24 +102,20 @@ const PeopleAndDietPage = () => {
         <div className="px-4 mb-4">
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0">
             <CardHeader className="pb-3 px-4">
-              <CardTitle className="text-2xl font-bold text-foreground">Dieta</CardTitle>
+              <CardTitle className="text-2xl font-bold text-foreground">Nutrición</CardTitle>
             </CardHeader>
 
             <CardContent className="px-4 pb-4">
               <div className="space-y-0">
-                {dietOptions.map((option, index) => (
-                  <div key={option}>
+                {dietOptions.map((option, index) => <div key={option}>
                     <div className="flex items-center justify-between py-4">
                       <span className="text-foreground font-medium">{option}</span>
                       <span className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
                         Añadir
                       </span>
                     </div>
-                    {index < dietOptions.length - 1 && (
-                      <div className="border-b border-muted" />
-                    )}
-                  </div>
-                ))}
+                    {index < dietOptions.length - 1 && <div className="border-b border-muted" />}
+                  </div>)}
               </div>
             </CardContent>
           </Card>
@@ -152,18 +127,12 @@ const PeopleAndDietPage = () => {
         {/* Footer with Generate Plan Button */}
         <div className="fixed bottom-0 left-0 right-0 p-4">
           <div className="flex justify-center">
-            <Button 
-              onClick={handleGeneratePlan} 
-              disabled={!canContinue} 
-              className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold"
-            >
+            <Button onClick={handleGeneratePlan} disabled={!canContinue} className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold">
               Generar Plan
             </Button>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default PeopleAndDietPage;
