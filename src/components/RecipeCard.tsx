@@ -69,13 +69,15 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
 
   // Reset swipe when shouldResetSwipe changes
   useEffect(() => {
+    console.log('RecipeCard useEffect - shouldResetSwipe:', shouldResetSwipe, 'isSwiped:', isSwiped, 'recipe:', recipe.title);
     if (shouldResetSwipe && (isSwiped || isSwipeActive)) {
+      console.log('Reseteando estado interno de RecipeCard:', recipe.title);
       setSwipeX(0);
       setIsSwiped(false);
       setIsSwipeActive(false);
       onSwipeStateChange?.(recipe.id, false);
     }
-  }, [shouldResetSwipe, isSwiped, isSwipeActive, recipe.id, onSwipeStateChange]);
+  }, [shouldResetSwipe, isSwiped, isSwipeActive, recipe.id, recipe.title, onSwipeStateChange]);
 
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {

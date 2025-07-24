@@ -68,6 +68,7 @@ export const CategoryCarousel = ({
   });
 
   const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
+    console.log('Swipe state change:', recipeId, isSwiped ? 'swipeado' : 'normal');
     if (isSwiped) {
       setActiveSwipedRecipe(recipeId);
     } else {
@@ -77,36 +78,34 @@ export const CategoryCarousel = ({
 
   // Resetear swipe al hacer scroll
   useEffect(() => {
-    let scrollTimeout: NodeJS.Timeout;
-    
     const handleScroll = () => {
+      console.log('Scroll detectado, activeSwipedRecipe:', activeSwipedRecipe);
       if (activeSwipedRecipe) {
-        // Pequeño delay para evitar conflictos con el swipe
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
-          setActiveSwipedRecipe(null);
-        }, 50);
+        console.log('Reseteando swipe por scroll');
+        setActiveSwipedRecipe(null);
       }
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      // Solo resetear si es un movimiento vertical (scroll)
+      // Solo resetear si es un movimiento vertical significativo
       if (activeSwipedRecipe && e.touches[0]) {
-        const target = e.target as HTMLElement;
-        // Verificar si el touch no es en una RecipeCard
-        if (!target.closest('[data-recipe-card]')) {
-          handleScroll();
-        }
+        console.log('TouchMove detectado durante swipe activo');
+        handleScroll();
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    document.addEventListener('touchmove', handleTouchMove, { passive: true });
+    if (activeSwipedRecipe) {
+      console.log('Agregando listeners de scroll para recipe:', activeSwipedRecipe);
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      document.addEventListener('touchmove', handleTouchMove, { passive: true });
+    }
 
     return () => {
-      clearTimeout(scrollTimeout);
-      window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('touchmove', handleTouchMove);
+      if (activeSwipedRecipe) {
+        console.log('Removiendo listeners de scroll');
+        window.removeEventListener('scroll', handleScroll);
+        document.removeEventListener('touchmove', handleTouchMove);
+      }
     };
   }, [activeSwipedRecipe]);
 
