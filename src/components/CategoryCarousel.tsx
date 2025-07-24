@@ -107,7 +107,7 @@ export const CategoryCarousel = ({
       <div className="fixed bottom-20 left-4 right-4 z-40">
         <button className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3">
           <Search className="h-5 w-5" />
-          Buscar supermercados · Desde 84,72 €
+          Buscar supermercados
         </button>
       </div>
     </div>
