@@ -53,7 +53,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
         <h3 className="font-medium text-lg line-clamp-2 mb-0.5 leading-tight overflow-hidden mt-2">
           {recipe.title}
         </h3>
-        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1.5">
+        <div className="flex items-center gap-1 text-xs text-muted-foreground mb-1.5 mt-2">
           <span>{recipe.calories} kcal</span>
           <span>·</span>
           <span>{recipe.time} min</span>
