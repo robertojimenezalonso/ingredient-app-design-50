@@ -100,7 +100,7 @@ const CalendarSelectionPage = () => {
         </div>
 
         {/* Meal Selection Container */}
-        <div className="px-4 mb-6">
+        <div className="px-4 mb-4">
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0">
             <CardContent className="px-4 py-4">
               <div className="space-y-4">
