@@ -173,13 +173,18 @@ const PeopleAndDietPage = () => {
             </CardHeader>
 
             <CardContent className="px-4 pb-4">
-              <div className="space-y-4">
-                {dietOptions.map((option) => (
-                  <div key={option} className="flex items-center justify-between">
-                    <span className="text-foreground font-medium">{option}</span>
-                    <span className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
-                      Añadir
-                    </span>
+              <div className="space-y-0">
+                {dietOptions.map((option, index) => (
+                  <div key={option}>
+                    <div className="flex items-center justify-between py-4">
+                      <span className="text-foreground font-medium">{option}</span>
+                      <span className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                        Añadir
+                      </span>
+                    </div>
+                    {index < dietOptions.length - 1 && (
+                      <div className="border-b border-muted/30" />
+                    )}
                   </div>
                 ))}
               </div>
