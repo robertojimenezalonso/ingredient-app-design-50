@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 const WelcomePage = () => {
   const navigate = useNavigate();
-  return <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4 relative">
+  return <div className="min-h-screen bg-green-500 flex flex-col items-center justify-center p-4 relative">
       <p className="absolute top-4 right-4 text-muted-foreground">Iniciar sesión</p>
       <div className="w-full max-w-sm">
         <div className="text-center mb-12">
