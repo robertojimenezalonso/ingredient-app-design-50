@@ -95,8 +95,6 @@ const CalendarSelectionPage = () => {
           </CardContent>
         </Card>
 
-        {/* Separator line */}
-        <div className="w-full h-px bg-border mx-2 mb-4"></div>
 
         {/* Meal Selection Area */}
         <Card className={cn("bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0 mx-2 transition-all duration-300", showMoreMeals ? "-mt-2 mb-20" : "mb-6")}>
