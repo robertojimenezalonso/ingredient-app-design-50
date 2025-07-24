@@ -101,8 +101,8 @@ export const AirbnbHeader = ({
         </button>
       </div>
       
-      {/* Switch entre Receta y Lista de ingredientes */}
-      <div className="flex items-center justify-center gap-1 px-4 py-4 bg-white">
+      {/* Switch entre Receta y Lista de ingredientes - Always visible */}
+      <div className="flex items-center justify-center gap-1 px-4 py-4 bg-white border-b border-border">
         <button 
           className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
             selectedFilter === 'receta' 
