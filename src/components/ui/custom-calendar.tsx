@@ -255,7 +255,7 @@ export function CustomCalendar({
         })}
       </div>
       {/* Separator line */}
-      <div className="w-full h-px bg-border -mx-3"></div>
+      <div className="w-full h-px bg-border -mx-4"></div>
     </div>
   );
 }
