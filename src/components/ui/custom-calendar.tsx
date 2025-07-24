@@ -193,7 +193,7 @@ export function CustomCalendar({
   };
 
   return (
-    <div>
+    <div className="relative">
       <div className={cn("max-h-96 overflow-y-auto p-3", className)}>
         {Object.entries(monthGroups).map(([monthKey, weeks]) => {
           const monthDate = dates.find(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
@@ -255,7 +255,7 @@ export function CustomCalendar({
         })}
       </div>
       {/* Separator line */}
-      <div className="w-full h-px bg-border -mx-4"></div>
+      <div className="absolute left-0 right-0 h-px bg-border"></div>
     </div>
   );
 }
