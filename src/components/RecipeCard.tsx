@@ -76,7 +76,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps
           {recipe.title}
         </h3>
         {mealType && (
-          <span className="text-xs text-muted-foreground mb-2 block">
+          <span className={`text-sm font-medium mb-2 block ${getMealTypeColor(mealType).replace('bg-', 'text-').replace('-100', '-600').replace('border-', '')}`}>
             {mealType}
           </span>
         )}
