@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserConfigProvider } from "./contexts/UserConfigContext";
 import WelcomePage from "./pages/WelcomePage";
 import CalendarSelectionPage from "./pages/CalendarSelectionPage";
+import PeopleAndDietPage from "./pages/PeopleAndDietPage";
 import SupermarketSelectionPage from "./pages/SupermarketSelectionPage";
 import PriceComparisonPage from "./pages/PriceComparisonPage";
 import ServingsSelectionPage from "./pages/ServingsSelectionPage";
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/" element={<WelcomePage />} />
             <Route path="/welcome" element={<WelcomePage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
+            <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/supermarket-selection" element={<SupermarketSelectionPage />} />
             <Route path="/price-comparison" element={<PriceComparisonPage />} />
             <Route path="/servings-selection" element={<ServingsSelectionPage />} />

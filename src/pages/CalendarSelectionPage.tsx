@@ -35,7 +35,7 @@ const CalendarSelectionPage = () => {
       selectedDates: selectedDates.map(d => d.toISOString()),
       selectedMeals
     });
-    navigate('/supermarket-selection');
+    navigate('/people-and-diet');
   };
   const canContinue = selectedDates.length > 0 && selectedMeals.length > 0;
   return <div className="fixed inset-0 z-50">
