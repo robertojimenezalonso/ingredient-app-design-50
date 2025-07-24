@@ -73,7 +73,7 @@ export const CategoryCarousel = ({
       <div className="px-4 space-y-6">
         {mealPlan.map(({ date, dateStr, meals }) => (
           <div key={dateStr} className="space-y-3">
-            <div className="flex items-center justify-between pr-4">
+            <div className="flex items-center justify-between">
               <h3 className="text-base font-normal text-muted-foreground">
                 {format(date, "EEEE d", { locale: es })}
               </h3>
