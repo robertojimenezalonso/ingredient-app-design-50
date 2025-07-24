@@ -28,7 +28,7 @@ export const AirbnbHeader = () => {
   const { config } = useUserConfig();
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedFoodType, setSelectedFoodType] = useState<string | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState<string | null>(null);
+  const [selectedFilter, setSelectedFilter] = useState<string | null>('receta');
   
   useEffect(() => {
     const handleScroll = () => {
@@ -66,6 +66,30 @@ export const AirbnbHeader = () => {
               <div className="text-sm text-muted-foreground">
                 {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
               </div>
+            </div>
+            
+            {/* Switch entre Receta y Lista de ingredientes */}
+            <div className="flex items-center justify-center gap-1 mt-3">
+              <button 
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  selectedFilter === 'receta' 
+                    ? 'bg-black text-white' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+                onClick={() => setSelectedFilter('receta')}
+              >
+                Receta
+              </button>
+              <button 
+                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  selectedFilter === 'ingredientes' 
+                    ? 'bg-black text-white' 
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+                onClick={() => setSelectedFilter('ingredientes')}
+              >
+                Lista de ingredientes
+              </button>
             </div>
           </div>
         </div>
