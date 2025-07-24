@@ -173,14 +173,16 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
     <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-50' : 'z-10'}`} style={{ touchAction: 'none' }}>
       {/* Delete background */}
       <div 
-        className={`absolute inset-0 bg-red-500 flex items-center justify-center rounded-2xl transition-opacity duration-200 cursor-pointer ${
+        className={`absolute inset-0 bg-red-500 rounded-2xl transition-opacity duration-200 ${
           isSwipeActive || isSwiped ? 'opacity-100' : 'opacity-0'
         }`}
-        onClick={handleDelete}
       >
-        <div className="flex flex-col items-center justify-center text-white">
-          <Trash2 className="h-8 w-8 mb-1" />
-          <span className="text-sm font-medium">Eliminar</span>
+        <div 
+          className="absolute left-0 top-0 w-20 h-full flex flex-col items-center justify-center text-white cursor-pointer"
+          onClick={handleDelete}
+        >
+          <Trash2 className="h-6 w-6 mb-1" />
+          <span className="text-xs font-medium">Eliminar</span>
         </div>
       </div>
       
