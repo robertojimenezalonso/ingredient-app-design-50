@@ -102,39 +102,11 @@ export const AirbnbHeader = ({
       </div>
       
 
-      {/* Date Tabs - Show when scrolled */}
-      {showTabs && (
-        <div className="bg-white/95 backdrop-blur-sm relative border-0 shadow-none">
-          <div className="px-4">
-            <div ref={tabsContainerRef} className="flex gap-6 overflow-x-auto">
-              {mealPlan.map(({ date, dateStr }) => (
-                <button
-                  key={dateStr}
-                  data-tab={dateStr}
-                  onClick={() => onTabChange?.(dateStr)}
-                  className={`flex-shrink-0 pb-3 pt-2 text-base font-medium relative ${
-                    activeTab === dateStr
-                      ? 'text-black'
-                      : 'text-gray-500 hover:text-gray-700'
-                  }`}
-                >
-                  {format(date, "eee d", { locale: es }).toLowerCase()}
-                  {activeTab === dateStr && (
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-black z-10"></div>
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200"></div>
-        </div>
-      )}
-
       {/* Switch entre Receta y Lista de ingredientes - Hidden when scrolled */}
-      <div className={`transition-all duration-300 overflow-hidden ${
+      <div className={`transition-all duration-300 overflow-hidden bg-white relative z-10 ${
         isScrolled ? 'max-h-0 opacity-0' : 'max-h-96 opacity-100'
       }`}>
-        <div className="flex items-center justify-center gap-1 px-4 py-4 bg-white">
+        <div className="flex items-center justify-center gap-1 px-4 py-4">
           <button 
             className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
               selectedFilter === 'receta' 
@@ -159,6 +131,34 @@ export const AirbnbHeader = ({
           </button>
         </div>
       </div>
+
+      {/* Date Tabs - Show when scrolled */}
+      {showTabs && (
+        <div className="bg-white/95 backdrop-blur-sm relative border-0 shadow-none z-20">
+          <div className="px-4">
+            <div ref={tabsContainerRef} className="flex gap-6 overflow-x-auto">
+              {mealPlan.map(({ date, dateStr }) => (
+                <button
+                  key={dateStr}
+                  data-tab={dateStr}
+                  onClick={() => onTabChange?.(dateStr)}
+                  className={`flex-shrink-0 pb-3 pt-2 text-base font-medium relative ${
+                    activeTab === dateStr
+                      ? 'text-black'
+                      : 'text-gray-500 hover:text-gray-700'
+                  }`}
+                >
+                  {format(date, "eee d", { locale: es }).toLowerCase()}
+                  {activeTab === dateStr && (
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-black z-10"></div>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-200"></div>
+        </div>
+      )}
 
     </div>
   );
