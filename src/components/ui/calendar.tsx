@@ -75,28 +75,24 @@ function Calendar({
             todayTime.setHours(0, 0, 0, 0);
             
             return dateTime < todayTime;
-          },
-          hidden: (date) => {
-            const dateTime = new Date(date);
-            dateTime.setHours(0, 0, 0, 0);
-            const todayTime = new Date();
-            todayTime.setHours(0, 0, 0, 0);
-            
-            const tenDaysAgo = new Date(todayTime);
-            tenDaysAgo.setDate(todayTime.getDate() - 10);
-            
-            // Hide dates older than 10 days ago
-            return dateTime < tenDaysAgo;
           }
         }}
         modifiersStyles={{
           past: {
             textDecoration: 'line-through',
             opacity: 0.6
-          },
-          hidden: {
-            visibility: 'hidden'
           }
+        }}
+        hidden={(date) => {
+          const dateTime = new Date(date);
+          dateTime.setHours(0, 0, 0, 0);
+          const todayTime = new Date();
+          todayTime.setHours(0, 0, 0, 0);
+          
+          const tenDaysAgo = new Date(todayTime);
+          tenDaysAgo.setDate(todayTime.getDate() - 10);
+          
+          return dateTime < tenDaysAgo;
         }}
         {...props}
       />
