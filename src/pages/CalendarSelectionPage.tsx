@@ -93,6 +93,9 @@ const CalendarSelectionPage = () => {
               />
             </div>
 
+            {/* Separator line */}
+            <div className="w-full h-px bg-border -mx-4"></div>
+
             {/* Meal selection */}
             <div className="space-y-4">
               <h3 className="font-semibold text-foreground">¿Qué comidas planeas?</h3>
