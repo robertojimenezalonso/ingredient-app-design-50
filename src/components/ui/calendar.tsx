@@ -52,11 +52,11 @@ function Calendar({
           day_today: "bg-accent text-accent-foreground rounded-full",
           day_outside: "hidden",
           day_disabled: "text-muted-foreground opacity-50",
+          day_hidden: "invisible",
           day_range_middle:
             "aria-selected:bg-foreground/20 aria-selected:text-foreground rounded-none",
           day_range_start: "rounded-l-full rounded-r-none bg-foreground text-background",
           day_range_end: "rounded-r-full rounded-l-none bg-foreground text-background",
-          day_hidden: "invisible",
           ...classNames,
         }}
         formatters={{
@@ -75,12 +75,27 @@ function Calendar({
             todayTime.setHours(0, 0, 0, 0);
             
             return dateTime < todayTime;
+          },
+          hidden: (date) => {
+            const dateTime = new Date(date);
+            dateTime.setHours(0, 0, 0, 0);
+            const todayTime = new Date();
+            todayTime.setHours(0, 0, 0, 0);
+            
+            const tenDaysAgo = new Date(todayTime);
+            tenDaysAgo.setDate(todayTime.getDate() - 10);
+            
+            // Hide dates older than 10 days ago
+            return dateTime < tenDaysAgo;
           }
         }}
         modifiersStyles={{
           past: {
             textDecoration: 'line-through',
             opacity: 0.6
+          },
+          hidden: {
+            visibility: 'hidden'
           }
         }}
         {...props}
