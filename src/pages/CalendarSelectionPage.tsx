@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeft, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Progress } from '@/components/ui/progress';
@@ -122,7 +122,7 @@ const CalendarSelectionPage = () => {
                     className="cursor-pointer px-2 py-2 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0" 
                     onClick={() => setShowMoreMeals(!showMoreMeals)}
                   >
-                    <Plus className="h-4 w-4" />
+                    {showMoreMeals ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
                   </Badge>
                 </div>
 
