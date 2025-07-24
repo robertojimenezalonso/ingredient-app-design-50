@@ -20,15 +20,8 @@ const CalendarSelectionPage = () => {
   const oneMonthFromNow = new Date();
   oneMonthFromNow.setMonth(today.getMonth() + 1);
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
-  const handleDateSelect = (date: Date | undefined) => {
-    if (!date) return;
-    const isAlreadySelected = selectedDates.some(d => d.toDateString() === date.toDateString());
-    if (isAlreadySelected) {
-      setSelectedDates(selectedDates.filter(d => d.toDateString() !== date.toDateString()));
-    } else if (selectedDates.length < 31) {
-      // Maximum 1 month
-      setSelectedDates([...selectedDates, date]);
-    }
+  const handleReset = () => {
+    setSelectedDates([]);
   };
   const toggleMeal = (meal: string) => {
     if (selectedMeals.includes(meal)) {
@@ -92,29 +85,9 @@ const CalendarSelectionPage = () => {
             {/* Calendar */}
             <div className="flex justify-center">
               <Calendar 
-                mode="range" 
-                selected={selectedDates.length > 0 ? {
-                  from: selectedDates[0],
-                  to: selectedDates[selectedDates.length - 1]
-                } : undefined}
-                onSelect={(range) => {
-                  if (range && typeof range === 'object' && 'from' in range && range.from) {
-                    if (range.to) {
-                      // Range selection
-                      const dates = [];
-                      const current = new Date(range.from);
-                      while (current <= range.to) {
-                        dates.push(new Date(current));
-                        current.setDate(current.getDate() + 1);
-                      }
-                      setSelectedDates(dates);
-                    } else {
-                      // Single date selection
-                      setSelectedDates([range.from]);
-                    }
-                  } else {
-                    setSelectedDates([]);
-                  }
+                selected={selectedDates}
+                onSelect={(dates) => {
+                  setSelectedDates(dates || []);
                 }}
                 className="pointer-events-auto"
               />
@@ -178,9 +151,19 @@ const CalendarSelectionPage = () => {
           </CardContent>
         </Card>
 
-        {/* Floating Continue Button */}
-        <div className="fixed bottom-6 left-4 right-4">
-          <Button onClick={handleContinue} disabled={!canContinue} className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold backdrop-blur-sm">
+        {/* Floating Continue Button with Reset */}
+        <div className="fixed bottom-6 left-4 right-4 flex items-center gap-4">
+          <button 
+            onClick={handleReset}
+            className="text-foreground underline text-lg font-medium"
+          >
+            Restablecer
+          </button>
+          <Button 
+            onClick={handleContinue} 
+            disabled={!canContinue} 
+            className="flex-1 bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold backdrop-blur-sm"
+          >
             Siguiente
           </Button>
         </div>

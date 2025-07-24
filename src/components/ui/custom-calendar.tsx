@@ -4,15 +4,13 @@ import { buttonVariants } from "@/components/ui/button";
 
 interface CustomCalendarProps {
   className?: string;
-  mode?: "single" | "range";
-  selected?: Date | { from?: Date; to?: Date };
-  onSelect?: (date: Date | { from?: Date; to?: Date } | undefined) => void;
+  selected?: Date[];
+  onSelect?: (dates: Date[]) => void;
 }
 
 export function CustomCalendar({
   className,
-  mode = "single",
-  selected,
+  selected = [],
   onSelect,
 }: CustomCalendarProps) {
   const today = new Date();
@@ -62,18 +60,9 @@ export function CustomCalendar({
   const monthGroups = groupDatesByMonth();
   
   const isSelected = (date: Date) => {
-    if (mode === "single" && selected instanceof Date) {
-      return date.getTime() === selected.getTime();
-    }
-    if (mode === "range" && selected && typeof selected === "object" && "from" in selected) {
-      if (selected.from && selected.to) {
-        return date >= selected.from && date <= selected.to;
-      }
-      if (selected.from) {
-        return date.getTime() === selected.from.getTime();
-      }
-    }
-    return false;
+    return selected.some(selectedDate => 
+      selectedDate.getTime() === date.getTime()
+    );
   };
 
   const isPast = (date: Date) => {
@@ -85,18 +74,35 @@ export function CustomCalendar({
   };
 
   const handleDateClick = (date: Date) => {
-    if (mode === "single") {
-      onSelect?.(date);
-    } else if (mode === "range") {
-      const rangeSelected = selected as { from?: Date; to?: Date } | undefined;
-      if (!rangeSelected?.from || (rangeSelected.from && rangeSelected.to)) {
-        onSelect?.({ from: date, to: undefined });
-      } else if (rangeSelected.from && !rangeSelected.to) {
-        if (date >= rangeSelected.from) {
-          onSelect?.({ from: rangeSelected.from, to: date });
-        } else {
-          onSelect?.({ from: date, to: rangeSelected.from });
+    const isDateSelected = isSelected(date);
+    
+    if (isDateSelected) {
+      // Deselect the date
+      const newSelected = selected.filter(selectedDate => 
+        selectedDate.getTime() !== date.getTime()
+      );
+      onSelect?.(newSelected);
+    } else {
+      // Check if this date would create a continuous range
+      if (selected.length === 0) {
+        // First date selection
+        onSelect?.([date]);
+      } else if (selected.length === 1) {
+        // Second date - create range
+        const firstDate = selected[0];
+        const startDate = date < firstDate ? date : firstDate;
+        const endDate = date < firstDate ? firstDate : date;
+        
+        const rangeDates = [];
+        const current = new Date(startDate);
+        while (current <= endDate) {
+          rangeDates.push(new Date(current));
+          current.setDate(current.getDate() + 1);
         }
+        onSelect?.(rangeDates);
+      } else {
+        // Multiple dates selected - start new selection
+        onSelect?.([date]);
       }
     }
   };
