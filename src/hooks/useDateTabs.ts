@@ -61,26 +61,21 @@ export const useDateTabs = () => {
       }
     };
 
-    // Observer para detectar cuando el título de cada sección está a la altura del tabulador
+    // Observer más simple que detecta cuando cada sección entra en el área del header
     const observerOptions = {
-      rootMargin: '-170px 0px -90% 0px',
-      threshold: 0.1
+      rootMargin: '-200px 0px -75% 0px',
+      threshold: 0
     };
 
     const observer = new IntersectionObserver((entries) => {
-      // Encontrar la entrada que está más arriba y visible
-      const visibleEntries = entries.filter(entry => entry.isIntersecting);
-      if (visibleEntries.length > 0) {
-        // Tomar la primera sección visible (la que está más arriba)
-        const topEntry = visibleEntries.reduce((top, current) => {
-          return current.boundingClientRect.top < top.boundingClientRect.top ? current : top;
-        });
-        
-        const dateStr = topEntry.target.getAttribute('data-date');
-        if (dateStr) {
-          setActiveTab(dateStr);
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const dateStr = entry.target.getAttribute('data-date');
+          if (dateStr && dateStr !== activeTab) {
+            setActiveTab(dateStr);
+          }
         }
-      }
+      });
     }, observerOptions);
 
     // Timeout para asegurar que las refs estén disponibles
