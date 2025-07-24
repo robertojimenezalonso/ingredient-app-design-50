@@ -35,7 +35,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick }: RecipeCardProps) => {
 
   return (
     <div 
-      className="flex gap-3 cursor-pointer mb-3 relative border border-[#C3C3C3] rounded-2xl"
+      className="flex gap-3 cursor-pointer mb-3 relative border border-[#E5E5E5] rounded-2xl"
       onClick={() => onClick(recipe)}
     >
       <div className="relative flex-shrink-0">
