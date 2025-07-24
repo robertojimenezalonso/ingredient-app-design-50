@@ -30,7 +30,7 @@ const PeopleAndDietPage = () => {
   };
   const totalPeople = peopleCount.adultos;
   const canContinue = totalPeople > 0;
-  return <div className="fixed inset-0 z-50">
+  return <div className="fixed inset-0 z-50 overflow-y-auto">
       {/* Background with WelcomePage content - blurred */}
       <div className="absolute inset-0 bg-sky-200 flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-sm">
@@ -52,7 +52,7 @@ const PeopleAndDietPage = () => {
       <div className="absolute inset-0 bg-background/50 backdrop-blur-sm" />
 
       {/* Main content */}
-      <div className="relative z-10 min-h-screen flex flex-col">
+      <div className="relative z-10 min-h-screen flex flex-col pb-24">
         {/* Header with back button and progress */}
         <div className="flex items-center p-4">
           <button onClick={() => navigate('/calendar-selection')} className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm mr-4">
@@ -121,11 +121,8 @@ const PeopleAndDietPage = () => {
           </Card>
         </div>
 
-        {/* Spacer to push footer to bottom */}
-        <div className="flex-1 min-h-[1rem]"></div>
-
         {/* Footer with Generate Plan Button */}
-        <div className="fixed bottom-0 left-0 right-0 p-4">
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm">
           <div className="flex justify-center">
             <Button onClick={handleGeneratePlan} disabled={!canContinue} className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold">
               Generar Plan
