@@ -36,6 +36,20 @@ export const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
           ))}
           
 
+          {tabsRight.map(({ id, icon: Icon, label }) => (
+            <button
+              key={id}
+              onClick={() => onTabChange(id)}
+              className={`flex flex-col items-center justify-start pt-3 gap-1 flex-1 h-full transition-colors ${
+                activeTab === id 
+                  ? 'text-black' 
+                  : 'text-muted-foreground'
+              }`}
+            >
+              <Icon className="h-5 w-5" />
+              <span className="text-xs font-medium">{label}</span>
+            </button>
+          ))}
         </div>
       </div>
     </div>
