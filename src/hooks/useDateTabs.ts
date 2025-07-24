@@ -54,8 +54,9 @@ export const useDateTabs = () => {
       }
     };
 
+    // Observer para detectar cuando el título de cada sección está a la altura del tabulador
     const observerOptions = {
-      rootMargin: '-150px 0px -80% 0px',
+      rootMargin: '-170px 0px -100% 0px',
       threshold: 0
     };
 
