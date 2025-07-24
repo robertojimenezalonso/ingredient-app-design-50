@@ -73,13 +73,15 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSwipeStateChang
 
   // Touch handlers for swipe
   const handleTouchStart = (e: React.TouchEvent) => {
-    e.preventDefault(); // Prevenir el scroll de la pantalla
+    e.preventDefault();
+    e.stopPropagation(); // Evitar que el evento se propague al contenedor padre
     const touch = e.touches[0];
     containerRef.current?.setAttribute('data-start-x', touch.clientX.toString());
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    e.preventDefault(); // Prevenir el scroll de la pantalla
+    e.preventDefault();
+    e.stopPropagation(); // Evitar que el evento se propague al contenedor padre
     const touch = e.touches[0];
     const startX = parseFloat(containerRef.current?.getAttribute('data-start-x') || '0');
     const currentX = touch.clientX;
@@ -145,7 +147,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSwipeStateChang
   }
 
   return (
-    <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-50' : 'z-10'}`}>
+    <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-50' : 'z-10'}`} style={{ touchAction: 'none' }}>
       {/* Delete background */}
       <div 
         className={`absolute inset-0 bg-red-500 flex items-center justify-end pr-6 rounded-2xl transition-opacity duration-200 ${
@@ -164,7 +166,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSwipeStateChang
       <div 
         ref={containerRef}
         className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200"
-        style={{ transform: `translateX(${swipeX}px)` }}
+        style={{ transform: `translateX(${swipeX}px)`, touchAction: 'none' }}
         onClick={() => !isSwipeActive && !isSwiped && onClick(recipe)}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
