@@ -1,6 +1,6 @@
 import { SlidersHorizontal, Search, Plus, ChevronDown, Coffee, UtensilsCrossed, Moon, Wine, Package, Cake, Filter, MoreVertical } from 'lucide-react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -44,6 +44,21 @@ export const AirbnbHeader = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedFoodType, setSelectedFoodType] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string | null>('receta');
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
+
+  // Scroll to active tab
+  useEffect(() => {
+    if (activeTab && tabsContainerRef.current) {
+      const activeButton = tabsContainerRef.current.querySelector(`[data-tab="${activeTab}"]`) as HTMLElement;
+      if (activeButton) {
+        activeButton.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'nearest', 
+          inline: 'start' 
+        });
+      }
+    }
+  }, [activeTab]);
   
   useEffect(() => {
     const handleScroll = () => {
@@ -114,11 +129,12 @@ export const AirbnbHeader = ({
       {showTabs && (
         <div className="bg-white/95 backdrop-blur-sm border-b border-gray-200">
           <div className="px-4">
-            <div className="flex gap-6 overflow-x-auto">
+            <div ref={tabsContainerRef} className="flex gap-6 overflow-x-auto">
               {mealPlan.map(({ date, dateStr }) => (
                 <button
                   key={dateStr}
-                  onClick={() => onTabChange(dateStr)}
+                  data-tab={dateStr}
+                  onClick={() => onTabChange?.(dateStr)}
                   className={`flex-shrink-0 pb-3 pt-2 text-sm font-medium border-b-2 transition-colors ${
                     activeTab === dateStr
                       ? 'text-black border-black'
