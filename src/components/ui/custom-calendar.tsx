@@ -230,7 +230,7 @@ export function CustomCalendar({
                           onClick={() => handleDateClick(date)}
                           className={cn(
                             buttonVariants({ variant: "ghost" }),
-                            "h-8 w-8 p-0 font-normal rounded-full relative transition-colors",
+                            "h-9 w-9 p-0 font-normal rounded-full relative transition-colors",
                             isSelected(date) &&
                               "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
                             isToday(date) && !isSelected(date) && "bg-accent text-accent-foreground",
