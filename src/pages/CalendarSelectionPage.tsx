@@ -94,7 +94,7 @@ const CalendarSelectionPage = () => {
             </div>
 
             {/* Meal selection */}
-            <div className="space-y-4 pt-4">
+            <div className={cn("space-y-4 transition-all duration-300", showMoreMeals ? "pt-4 -mt-4" : "pt-4")}>
               <h3 className="font-semibold text-foreground">¿Qué comidas planeas?</h3>
               
               <div className="space-y-2">
