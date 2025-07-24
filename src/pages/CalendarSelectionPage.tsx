@@ -116,7 +116,7 @@ const CalendarSelectionPage = () => {
                     setSelectedDates([]);
                   }
                 }}
-                disabled={date => date < today || date > oneMonthFromNow} 
+                disabled={date => false} // All dates are selectable 
                 className="pointer-events-auto" 
               />
             </div>
