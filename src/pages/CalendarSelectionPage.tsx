@@ -97,7 +97,7 @@ const CalendarSelectionPage = () => {
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
             <CardContent className="px-4 py-4">
               <div className="space-y-4">
-                <h3 className="font-semibold text-foreground">¿Qué comidas?</h3>
+                <h3 className="font-semibold text-2xl text-neutral-950">¿Qué comidas?</h3>
                 
                 <div className="space-y-2">
                   {/* Main meals with plus button - same line */}
