@@ -57,14 +57,14 @@ export const RecipeCard = ({ recipe, onAdd, onClick, mealType }: RecipeCardProps
 
   return (
     <div 
-      className="flex gap-3 cursor-pointer mb-3 relative shadow-[inset_0_0_0_1px_#E5E5E5] rounded-2xl bg-white"
+      className="flex gap-3 cursor-pointer mb-3 relative rounded-2xl bg-white"
       onClick={() => onClick(recipe)}
     >
       <div className="relative flex-shrink-0">
         <img 
           src={recipe.image} 
           alt={recipe.title}
-          className="w-32 h-32 object-cover rounded-l-2xl"
+          className="w-32 h-32 object-cover rounded-2xl"
           onError={(e) => {
             e.currentTarget.src = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=400';
           }}
