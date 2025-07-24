@@ -16,23 +16,23 @@ export function CustomCalendar({
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   
-  // Calculate Monday of current week
-  const getMondayOfWeek = (date: Date) => {
+  // Calculate Monday of previous week
+  const getMondayOfPreviousWeek = (date: Date) => {
     const monday = new Date(date);
     const dayOfWeek = monday.getDay();
     const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    monday.setDate(monday.getDate() - daysToSubtract);
+    monday.setDate(monday.getDate() - daysToSubtract - 7); // Subtract additional 7 days for previous week
     return monday;
   };
   
-  const mondayOfCurrentWeek = getMondayOfWeek(today);
+  const mondayOfPreviousWeek = getMondayOfPreviousWeek(today);
   
-  // Generate dates from Monday of current week to end of next month
+  // Generate dates from Monday of previous week to end of next month
   const generateDates = () => {
     const dates = [];
     const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); // Last day of next month
     
-    const currentDate = new Date(mondayOfCurrentWeek);
+    const currentDate = new Date(mondayOfPreviousWeek);
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
