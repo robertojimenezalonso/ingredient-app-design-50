@@ -35,14 +35,6 @@ export const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
             </button>
           ))}
           
-          {/* Add button in the middle */}
-          <button
-            className="flex flex-col items-center justify-start pt-3 gap-1 flex-1 h-full"
-          >
-            <div className="rounded-full p-3" style={{ backgroundColor: '#F3F3F5' }}>
-              <Plus className="h-5 w-5 text-gray-600" />
-            </div>
-          </button>
 
           {tabsRight.map(({ id, icon: Icon, label }) => (
             <button
