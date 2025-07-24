@@ -1,4 +1,4 @@
-import { Heart, Plus, Trash2 } from 'lucide-react';
+import { Heart, Plus, Trash2, RefreshCw } from 'lucide-react';
 import { Recipe, CATEGORIES } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useEffect, useState, useRef } from 'react';
@@ -26,6 +26,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
   const [isSwipeActive, setIsSwipeActive] = useState(false);
   const [isDeleted, setIsDeleted] = useState(false);
   const [isSwiped, setIsSwiped] = useState(false);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const textRef = useRef<HTMLSpanElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -75,6 +76,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       setSwipeX(0);
       setIsSwiped(false);
       setIsSwipeActive(false);
+      setSwipeDirection(null);
       onSwipeStateChange?.(recipe.id, false);
     }
   }, [shouldResetSwipe, isSwiped, isSwipeActive, recipe.id, recipe.title, onSwipeStateChange]);
@@ -116,17 +118,27 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       e.stopPropagation();
       
       if (isSwiped) {
-        // Si ya está swipeada, permitir swipe hacia la izquierda para volver
-        if (deltaX < 0 && deltaX >= -80) {
+        // Si ya está swipeada, permitir swipe hacia el centro para volver
+        if (swipeDirection === 'right' && deltaX < 0 && deltaX >= -80) {
           setSwipeX(80 + deltaX);
+          setIsSwipeActive(true);
+        } else if (swipeDirection === 'left' && deltaX > 0 && deltaX <= 80) {
+          setSwipeX(-80 + deltaX);
           setIsSwipeActive(true);
         }
       } else {
-        // Swipe inicial hacia la derecha
+        // Swipe inicial hacia la derecha (eliminar)
         if (deltaX > 0 && deltaX <= 80) {
           setSwipeX(deltaX);
+          setSwipeDirection('right');
           setIsSwipeActive(true);
-          // Notificar que esta card está siendo swipeada
+          onSwipeStateChange?.(recipe.id, true);
+        }
+        // Swipe inicial hacia la izquierda (cambiar)
+        else if (deltaX < 0 && deltaX >= -80) {
+          setSwipeX(deltaX);
+          setSwipeDirection('left');
+          setIsSwipeActive(true);
           onSwipeStateChange?.(recipe.id, true);
         }
       }
@@ -135,29 +147,44 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
 
   const handleTouchEnd = () => {
     if (isSwiped) {
-      // Si está swipeada y el swipe actual es menor a 20, volver a la posición original
-      if (swipeX < 20) {
+      // Si está swipeada y el swipe actual es cerca del centro, volver a la posición original
+      if ((swipeDirection === 'right' && swipeX < 20) || (swipeDirection === 'left' && swipeX > -20)) {
         setSwipeX(0);
         setIsSwiped(false);
         setIsSwipeActive(false);
+        setSwipeDirection(null);
         onSwipeStateChange?.(recipe.id, false);
       } else {
         // Mantener en posición swipeada
-        setSwipeX(80);
+        if (swipeDirection === 'right') {
+          setSwipeX(80);
+        } else if (swipeDirection === 'left') {
+          setSwipeX(-80);
+        }
         setIsSwipeActive(true);
       }
     } else {
-      // Swipe inicial
+      // Swipe inicial hacia la derecha
       if (swipeX > 40) {
-        // Mantener la card en posición swipeada
         setSwipeX(80);
         setIsSwiped(true);
         setIsSwipeActive(true);
+        setSwipeDirection('right');
         onSwipeStateChange?.(recipe.id, true);
-      } else {
-        // Volver a la posición original
+      }
+      // Swipe inicial hacia la izquierda
+      else if (swipeX < -40) {
+        setSwipeX(-80);
+        setIsSwiped(true);
+        setIsSwipeActive(true);
+        setSwipeDirection('left');
+        onSwipeStateChange?.(recipe.id, true);
+      }
+      // Volver a la posición original
+      else {
         setSwipeX(0);
         setIsSwipeActive(false);
+        setSwipeDirection(null);
         onSwipeStateChange?.(recipe.id, false);
       }
     }
@@ -195,10 +222,10 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
 
   return (
     <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-20' : 'z-10'}`}>
-      {/* Delete background */}
+      {/* Delete background (swipe right) */}
       <div 
         className={`absolute inset-0 bg-red-500 rounded-2xl transition-opacity duration-200 ${
-          isSwipeActive || isSwiped ? 'opacity-100' : 'opacity-0'
+          (isSwipeActive || isSwiped) && swipeDirection === 'right' ? 'opacity-100' : 'opacity-0'
         }`}
       >
         <div 
@@ -207,6 +234,21 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         >
           <Trash2 className="h-6 w-6 mb-1" />
           <span className="text-xs font-medium">Eliminar</span>
+        </div>
+      </div>
+
+      {/* Change background (swipe left) */}
+      <div 
+        className={`absolute inset-0 bg-blue-500 rounded-2xl transition-opacity duration-200 ${
+          (isSwipeActive || isSwiped) && swipeDirection === 'left' ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <div 
+          className="absolute right-0 top-0 w-20 h-full flex flex-col items-center justify-center text-white cursor-pointer"
+          onClick={handleSubstitute}
+        >
+          <RefreshCw className="h-6 w-6 mb-1" />
+          <span className="text-xs font-medium">Cambiar</span>
         </div>
       </div>
       
