@@ -46,12 +46,13 @@ export const CategoryCarousel = ({
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
       
-      // Obtener todas las recetas de esta categoría (no solo una)
+      // Obtener recetas de esta categoría y tomar solo una
       const categoryRecipes = getRecipesByCategory(categoryKey, 10);
+      const selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
       
       return {
         meal,
-        recipes: categoryRecipes
+        recipe: selectedRecipe
       };
     }).filter(Boolean);
     
@@ -81,21 +82,18 @@ export const CategoryCarousel = ({
             
             {/* Comidas del día */}
             <div className="space-y-3">
-              {meals.map(({ meal, recipes }) => (
+              {meals.map(({ meal, recipe }) => (
                 <div key={`${dateStr}-${meal}`} className="space-y-2">
                   <h4 className="text-sm font-medium text-muted-foreground px-2">
                     {meal}
                   </h4>
-                  <div className="space-y-3">
-                    {recipes.map(recipe => (
-                      <RecipeCard
-                        key={`${dateStr}-${meal}-${recipe.id}`}
-                        recipe={recipe}
-                        onAdd={onAddRecipe}
-                        onClick={onRecipeClick}
-                      />
-                    ))}
-                  </div>
+                  {recipe && (
+                    <RecipeCard
+                      recipe={recipe}
+                      onAdd={onAddRecipe}
+                      onClick={onRecipeClick}
+                    />
+                  )}
                 </div>
               ))}
             </div>
