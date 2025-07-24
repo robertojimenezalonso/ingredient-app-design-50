@@ -46,13 +46,12 @@ export const CategoryCarousel = ({
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
       
-      const categoryRecipes = getRecipesByCategory(categoryKey, 5);
-      // Tomar una receta aleatoria para variedad
-      const randomRecipe = categoryRecipes[Math.floor(Math.random() * categoryRecipes.length)];
+      // Obtener todas las recetas de esta categoría (no solo una)
+      const categoryRecipes = getRecipesByCategory(categoryKey, 10);
       
       return {
         meal,
-        recipe: randomRecipe
+        recipes: categoryRecipes
       };
     }).filter(Boolean);
     
@@ -82,18 +81,21 @@ export const CategoryCarousel = ({
             
             {/* Comidas del día */}
             <div className="space-y-3">
-              {meals.map(({ meal, recipe }) => (
+              {meals.map(({ meal, recipes }) => (
                 <div key={`${dateStr}-${meal}`} className="space-y-2">
                   <h4 className="text-sm font-medium text-muted-foreground px-2">
                     {meal}
                   </h4>
-                  {recipe && (
-                    <RecipeCard
-                      recipe={recipe}
-                      onAdd={onAddRecipe}
-                      onClick={onRecipeClick}
-                    />
-                  )}
+                  <div className="space-y-3">
+                    {recipes.map(recipe => (
+                      <RecipeCard
+                        key={`${dateStr}-${meal}-${recipe.id}`}
+                        recipe={recipe}
+                        onAdd={onAddRecipe}
+                        onClick={onRecipeClick}
+                      />
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
