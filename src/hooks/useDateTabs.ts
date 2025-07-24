@@ -68,9 +68,13 @@ export const useDateTabs = () => {
     };
 
     const observer = new IntersectionObserver((entries) => {
+      console.log('Observer triggered with entries:', entries.length);
       entries.forEach((entry) => {
+        const dateStr = entry.target.getAttribute('data-date');
+        console.log(`Section ${dateStr}: isIntersecting=${entry.isIntersecting}, boundingClientRect.top=${entry.boundingClientRect.top}`);
+        
         if (entry.isIntersecting) {
-          const dateStr = entry.target.getAttribute('data-date');
+          console.log(`Setting active tab to: ${dateStr}`);
           if (dateStr) {
             setActiveTab(dateStr);
           }
