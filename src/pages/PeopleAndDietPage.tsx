@@ -146,7 +146,7 @@ const PeopleAndDietPage = () => {
         </div>
 
         {/* Footer with Generate Plan Button */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background/80 backdrop-blur-sm">
+        <div className="fixed bottom-0 left-0 right-0 p-4">
           <div className="flex justify-center">
             <Button onClick={handleGeneratePlan} disabled={!canContinue} className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-4 h-auto text-lg font-semibold">
               Generar Plan
