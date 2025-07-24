@@ -12,7 +12,7 @@ const SubscriptionBenefitsPage = () => {
 
   useEffect(() => {
     const startTime = Date.now();
-    const duration = 10000; // 10 seconds total
+    const duration = 5000; // 5 seconds total
     
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
