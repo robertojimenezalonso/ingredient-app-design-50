@@ -82,9 +82,28 @@ export function CustomCalendar({
       );
       onSelect?.(newSelected);
     } else {
-      // Select the date - add it to the array
-      const newSelected = [...selected, date].sort((a, b) => a.getTime() - b.getTime());
-      onSelect?.(newSelected);
+      // Select the date
+      if (selected.length === 0) {
+        // First date selection
+        onSelect?.([date]);
+      } else if (selected.length === 1) {
+        // Second date - create range between the two dates
+        const firstDate = selected[0];
+        const startDate = date < firstDate ? date : firstDate;
+        const endDate = date < firstDate ? firstDate : date;
+        
+        const rangeDates = [];
+        const current = new Date(startDate);
+        while (current <= endDate) {
+          rangeDates.push(new Date(current));
+          current.setDate(current.getDate() + 1);
+        }
+        onSelect?.(rangeDates);
+      } else {
+        // Multiple dates already selected - add this date individually
+        const newSelected = [...selected, date].sort((a, b) => a.getTime() - b.getTime());
+        onSelect?.(newSelected);
+      }
     }
   };
 
