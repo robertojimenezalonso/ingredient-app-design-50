@@ -72,7 +72,6 @@ const PeopleAndDietPage = () => {
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0">
             <CardHeader className="pb-3 px-4">
               <CardTitle className="text-2xl font-bold text-foreground">Raciones</CardTitle>
-              <p className="text-muted-foreground">Para cuantos vas a cocinar</p>
             </CardHeader>
 
             <CardContent className="px-4 pb-4">
