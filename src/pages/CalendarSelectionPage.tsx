@@ -15,7 +15,7 @@ const CalendarSelectionPage = () => {
     updateConfig
   } = useUserConfig();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const [selectedMeals, setSelectedMeals] = useState<string[]>(['Desayuno', 'Almuerzo', 'Comida']);
+  const [selectedMeals, setSelectedMeals] = useState<string[]>(['Desayuno', 'Almuerzo', 'Cena']);
   const [showMoreMeals, setShowMoreMeals] = useState(false);
   const today = new Date();
   const oneMonthFromNow = new Date();
@@ -88,7 +88,7 @@ const CalendarSelectionPage = () => {
                 <div className="space-y-2">
                   {/* Main meals with plus button - same line */}
                   <div className="flex gap-1 justify-center">
-                    {['Desayuno', 'Almuerzo', 'Comida'].map(meal => <Badge key={meal} variant="outline" className={cn("cursor-pointer px-2 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center justify-center", selectedMeals.includes(meal) ? "bg-foreground/15 border-2 border-foreground text-foreground" : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50")} onClick={() => toggleMeal(meal)}>
+                    {['Desayuno', 'Almuerzo', 'Cena'].map(meal => <Badge key={meal} variant="outline" className={cn("cursor-pointer px-2 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center justify-center", selectedMeals.includes(meal) ? "bg-foreground/15 border-2 border-foreground text-foreground" : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50")} onClick={() => toggleMeal(meal)}>
                         {meal}
                       </Badge>)}
                     
