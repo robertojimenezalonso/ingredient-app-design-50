@@ -72,8 +72,8 @@ const CalendarSelectionPage = () => {
           </div>
         </div>
 
-        {/* Main Card */}
-        <Card className={cn("bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0 mx-2 transition-all duration-300", showMoreMeals ? "mb-20" : "mb-6")}>
+        {/* Calendar Card */}
+        <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0 mx-2 mb-4">
           <CardHeader className="pb-3 px-4">
             <CardTitle className="text-2xl font-bold text-foreground">¿Cuándo?</CardTitle>
             <p className="text-muted-foreground">
@@ -92,7 +92,12 @@ const CalendarSelectionPage = () => {
                 className="pointer-events-auto"
               />
             </div>
+          </CardContent>
+        </Card>
 
+        {/* Meal Selection Card */}
+        <Card className={cn("bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border-0 mx-2 transition-all duration-300", showMoreMeals ? "mb-32" : "mb-24")}>
+          <CardContent className="space-y-4 px-4 py-4">
             {/* Meal selection */}
             <div className={cn("space-y-4 transition-all duration-300", showMoreMeals ? "pt-4 -mt-4" : "pt-4")}>
               <h3 className="font-semibold text-foreground">¿Qué comidas planeas?</h3>
