@@ -415,7 +415,7 @@ const RecipeDetailPage = () => {
         {/* Ingredientes Tab */}
         <TabsContent value="ingredientes" className="px-4 mb-8">
 
-          <h2 className="text-lg font-semibold mb-4">Ingredientes para la receta</h2>
+          <h2 className="text-lg font-semibold mb-4">{selectedCount} Ingredientes</h2>
 
 
 
