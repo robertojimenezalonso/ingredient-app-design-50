@@ -137,8 +137,8 @@ export const CategoryCarousel = ({
             data-date={dateStr}
           >
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-normal text-muted-foreground capitalize">
-                {format(date, "EEEE d", { locale: es })}
+              <h3 className="text-base font-normal text-muted-foreground">
+                {format(date, "eee d", { locale: es }).toLowerCase()}
               </h3>
               <div className="flex items-center gap-2">
                 <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-gray-50">
