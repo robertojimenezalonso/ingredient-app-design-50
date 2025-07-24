@@ -121,7 +121,7 @@ export const AirbnbHeader = ({
           }`}
           onClick={() => setSelectedFilter('ingredientes')}
         >
-          Lista de ingredientes
+          Ingredientes
         </button>
       </div>
 
