@@ -21,7 +21,7 @@ export const CategoryCarousel = ({
   if (recipes.length === 0) return null;
 
   return (
-    <div className="mb-4">
+    <div className="mb-4 -mt-4">
 
       <div className="flex items-center gap-1 px-4 mb-2">
         <h2 className="text-lg font-semibold">Las recetas</h2>
