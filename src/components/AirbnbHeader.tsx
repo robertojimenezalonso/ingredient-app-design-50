@@ -58,10 +58,10 @@ export const AirbnbHeader = () => {
           <div className="px-6 py-2 relative">
             <div className="text-center">
               <div className="font-semibold text-foreground">
-                Recetas en {supermarketName}
+                Mi lista de la compra
               </div>
               <div className="text-sm text-muted-foreground">
-                {locationText}
+                {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
               </div>
             </div>
           </div>
