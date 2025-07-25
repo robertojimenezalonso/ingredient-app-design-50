@@ -58,11 +58,27 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
           <Card key={index}>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <Checkbox
-                  checked={ingredient.isSelected}
-                  onCheckedChange={() => toggleIngredientSelection(ingredient.id)}
-                  className="rounded"
-                />
+                <div 
+                  className={`relative w-12 h-12 rounded-lg overflow-hidden cursor-pointer ${
+                    ingredient.isSelected ? 'ring-2 ring-primary' : 'opacity-50'
+                  }`}
+                  onClick={() => toggleIngredientSelection(ingredient.id)}
+                >
+                  <img
+                    src={`https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=100&h=100&fit=crop`}
+                    alt={ingredient.name}
+                    className="w-full h-full object-cover"
+                  />
+                  {ingredient.isSelected && (
+                    <div className="absolute inset-0 bg-primary/20 flex items-center justify-center">
+                      <div className="w-4 h-4 bg-primary rounded-full flex items-center justify-center">
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </div>
                 <div className="flex-1">
                   <h3 className="font-medium">{ingredient.name}</h3>
                   <p className="text-sm text-muted-foreground">
