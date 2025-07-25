@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { FloatingButton } from '@/components/FloatingButton';
+
 import { useToast } from '@/hooks/use-toast';
 import { Recipe } from '@/types/recipe';
 
@@ -30,16 +30,8 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
     });
   };
 
-  const handleSearchInSupermarket = () => {
-    toast({
-      title: "Buscar en supermercado",
-      description: "Función próximamente disponible"
-    });
-  };
-
   return (
-    <>
-      <div className="bg-white p-4 mt-8 pb-24">{/* Added pb-24 for FloatingButton space */}
+    <div className="bg-white p-4 mt-8">{/* Removed pb-24 and fragment */}
         {/* Search bar and add button */}
         <div className="flex items-center gap-3 mb-4">
           <div className="relative flex-1">
@@ -102,10 +94,5 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
           )}
         </div>
       </div>
-
-      <FloatingButton onClick={handleSearchInSupermarket}>
-        Buscar en supermercado
-      </FloatingButton>
-    </>
   );
 };

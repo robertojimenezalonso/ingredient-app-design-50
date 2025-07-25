@@ -5,6 +5,7 @@ import { useCart } from '@/hooks/useCart';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { IngredientsView } from '@/components/IngredientsView';
+import { FloatingButton } from '@/components/FloatingButton';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { BottomNav } from '@/components/BottomNav';
 import { Recipe, CategoryType } from '@/types/recipe';
@@ -51,6 +52,13 @@ const Index = () => {
     }
   };
 
+  const handleSearchInSupermarket = () => {
+    toast({
+      title: "Buscar en supermercado",
+      description: "Función próximamente disponible"
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 pb-24">
       <AirbnbHeader 
@@ -76,6 +84,12 @@ const Index = () => {
           <IngredientsView recipes={categories.flatMap(category => getRecipesByCategory(category, 10))} />
         )}
       </div>
+
+      {selectedFilter === 'ingredientes' && (
+        <FloatingButton onClick={handleSearchInSupermarket}>
+          Buscar en supermercado
+        </FloatingButton>
+      )}
 
       <BottomNav 
         activeTab={activeTab}
