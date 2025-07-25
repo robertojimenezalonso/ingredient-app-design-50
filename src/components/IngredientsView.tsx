@@ -59,9 +59,7 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div 
-                  className={`relative w-12 h-12 rounded-lg overflow-hidden cursor-pointer ${
-                    ingredient.isSelected ? 'ring-2 ring-primary' : 'opacity-50'
-                  }`}
+                  className="relative w-12 h-12 rounded-lg overflow-hidden cursor-pointer"
                   onClick={() => toggleIngredientSelection(ingredient.id)}
                 >
                   <img
