@@ -186,13 +186,6 @@ export const CategoryCarousel = ({
         ))}
       </div>
       
-      {/* Floating Button */}
-      <div className="fixed bottom-4 left-4 right-4 z-40" style={{ bottom: '80px' }}>
-        <button className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4">
-          <Search className="h-5 w-5" />
-          Buscar súper · Lista (24)
-        </button>
-      </div>
     </div>
   );
 };
