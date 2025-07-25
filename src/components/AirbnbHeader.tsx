@@ -89,7 +89,7 @@ export const AirbnbHeader = ({
       {/* Main Header - Always Visible */}
       <div className="flex items-center gap-3 p-4 bg-white">
         <button 
-          onClick={() => navigate('/welcome')}
+          onClick={() => navigate('/')}
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
         >
           <ArrowLeft className="h-5 w-5 text-black" />

@@ -7,7 +7,7 @@ import { useCart } from '@/hooks/useCart';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { IngredientsView } from '@/components/IngredientsView';
-import { FloatingButton } from '@/components/FloatingButton';
+import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { BottomNav } from '@/components/BottomNav';
 import { Recipe, CategoryType } from '@/types/recipe';
@@ -63,10 +63,14 @@ const Index = () => {
   };
 
   const handleSearchInSupermarket = () => {
-    toast({
-      title: "Buscar en supermercado",
-      description: "Función próximamente disponible"
-    });
+    if (selectedIngredientsCount > 0) {
+      navigate('/milista');
+    } else {
+      toast({
+        title: "Buscar en supermercado",
+        description: "Función próximamente disponible"
+      });
+    }
   };
 
   return (
@@ -80,6 +84,8 @@ const Index = () => {
       />
       
       <div style={{ paddingTop: '120px' }}>
+        <SavedShoppingListCard />
+        
         {selectedFilter === 'receta' ? (
           /* All recipes mixed together */
           <CategoryCarousel
@@ -102,7 +108,7 @@ const Index = () => {
           className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
         >
           <Search className="h-5 w-5" />
-          Buscar súper · Lista ({selectedIngredientsCount})
+          {selectedIngredientsCount > 0 ? 'Continuar con Mi lista' : 'Buscar súper'} · Lista ({selectedIngredientsCount})
         </button>
       </div>
 
