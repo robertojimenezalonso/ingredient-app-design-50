@@ -28,7 +28,7 @@ const PeopleAndDietPage = () => {
     updateConfig({
       servingsPerRecipe: peopleCount.adultos
     });
-    navigate('/explore');
+    navigate('/milista');
   };
   const totalPeople = peopleCount.adultos;
   const canContinue = totalPeople > 0;

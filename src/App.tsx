@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserConfigProvider } from "./contexts/UserConfigContext";
 import InitialWelcomePage from "./pages/InitialWelcomePage";
-import WelcomePage from "./pages/WelcomePage";
+import ExplorePage from "./pages/ExplorePage";
 import CalendarSelectionPage from "./pages/CalendarSelectionPage";
 import PeopleAndDietPage from "./pages/PeopleAndDietPage";
 import SubscriptionBenefitsPage from "./pages/SubscriptionBenefitsPage";
@@ -31,7 +31,7 @@ const App = () => (
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
-            <Route path="/explore" element={<WelcomePage />} />
+            <Route path="/milista" element={<ExplorePage />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/recipe/:id" element={<RecipeDetailPage />} />
             <Route path="/cart" element={<CartPage />} />
