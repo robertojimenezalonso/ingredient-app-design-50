@@ -8,7 +8,7 @@ import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { IngredientsView } from '@/components/IngredientsView';
 import { useDateTabs } from '@/hooks/useDateTabs';
-import { BottomNav } from '@/components/BottomNav';
+
 import { Recipe, CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
 
@@ -69,7 +69,7 @@ const WelcomePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-24">
+    <div className="min-h-screen bg-gray-100">
       <AirbnbHeader 
         showTabs={showTabs}
         activeTab={activeTabDate}
@@ -95,7 +95,7 @@ const WelcomePage = () => {
       </div>
 
       {/* Floating Button - Always visible */}
-      <div className="fixed bottom-4 left-4 right-4 z-40" style={{ bottom: '80px' }}>
+      <div className="fixed bottom-4 left-4 right-4 z-40">
         <button 
           onClick={handleSearchInSupermarket}
           className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
@@ -105,10 +105,6 @@ const WelcomePage = () => {
         </button>
       </div>
 
-      <BottomNav 
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
     </div>
   );
 };
