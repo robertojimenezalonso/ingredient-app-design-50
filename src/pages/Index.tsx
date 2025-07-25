@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
@@ -31,8 +31,10 @@ const Index = () => {
   const allRecipes = categories.flatMap(category => getRecipesByCategory(category, 10));
   const { getGroupedIngredients } = useRecipeIngredients(allRecipes);
   
-  // Calculate selected ingredients count
-  const selectedIngredientsCount = getGroupedIngredients().filter(ingredient => ingredient.isSelected).length;
+  // Calculate selected ingredients count with memoization
+  const selectedIngredientsCount = useMemo(() => {
+    return getGroupedIngredients().filter(ingredient => ingredient.isSelected).length;
+  }, [getGroupedIngredients]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);
