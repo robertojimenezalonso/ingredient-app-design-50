@@ -68,8 +68,8 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
                   <p className="text-sm text-muted-foreground">
                     {ingredient.displayAmount} · en {ingredient.recipeCount} receta{ingredient.recipeCount > 1 ? 's' : ''}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    Para: {ingredient.recipes.join(', ')}
+                  <p className="text-xs text-muted-foreground mt-1 whitespace-nowrap overflow-hidden text-ellipsis">
+                    Para: {ingredient.recipes.join(", ")}
                   </p>
                 </div>
               </div>
