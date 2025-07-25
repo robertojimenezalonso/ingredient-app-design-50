@@ -101,7 +101,7 @@ const WelcomePage = () => {
           className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
         >
           <Search className="h-5 w-5" />
-          Buscar súper · Mi lista ({selectedIngredientsCount})
+          Buscar súper · Ingredientes ({selectedIngredientsCount})
         </button>
       </div>
 
