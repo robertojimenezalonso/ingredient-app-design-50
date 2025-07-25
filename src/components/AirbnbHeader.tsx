@@ -32,13 +32,15 @@ interface AirbnbHeaderProps {
   activeTab?: string;
   mealPlan?: Array<{ date: Date; dateStr: string; meals: any[] }>;
   onTabChange?: (dateStr: string) => void;
+  onFilterChange?: (filter: 'receta' | 'ingredientes') => void;
 }
 
 export const AirbnbHeader = ({ 
   showTabs = false, 
   activeTab = '', 
   mealPlan = [], 
-  onTabChange 
+  onTabChange,
+  onFilterChange 
 }: AirbnbHeaderProps = {}) => {
   const { config } = useUserConfig();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -113,7 +115,10 @@ export const AirbnbHeader = ({
                 ? 'bg-black text-white' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
-            onClick={() => setSelectedFilter('receta')}
+            onClick={() => {
+              setSelectedFilter('receta');
+              onFilterChange?.('receta');
+            }}
           >
             <UtensilsCrossed className="h-4 w-4" />
             Recetas
@@ -124,7 +129,10 @@ export const AirbnbHeader = ({
                 ? 'bg-black text-white' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
-            onClick={() => setSelectedFilter('ingredientes')}
+            onClick={() => {
+              setSelectedFilter('ingredientes');
+              onFilterChange?.('ingredientes');
+            }}
           >
             <Package className="h-4 w-4" />
             Ingredientes

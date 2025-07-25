@@ -4,6 +4,7 @@ import { useRecipes } from '@/hooks/useRecipes';
 import { useCart } from '@/hooks/useCart';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
+import { IngredientsView } from '@/components/IngredientsView';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { BottomNav } from '@/components/BottomNav';
 import { Recipe, CategoryType } from '@/types/recipe';
@@ -15,6 +16,7 @@ const Index = () => {
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
   const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('explore');
+  const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   
 
@@ -56,18 +58,23 @@ const Index = () => {
         activeTab={activeTabDate}
         mealPlan={mealPlan}
         onTabChange={scrollToDate}
+        onFilterChange={setSelectedFilter}
       />
       
       <div style={{ paddingTop: '120px' }}>
-        {/* All recipes mixed together */}
-        <CategoryCarousel
-          category="trending"
-          recipes={categories.flatMap(category => getRecipesByCategory(category, 10))}
-          onAddRecipe={handleAddRecipe}
-          onRecipeClick={handleRecipeClick}
-          onViewAll={handleViewAll}
-          sectionRefs={sectionRefs}
-        />
+        {selectedFilter === 'receta' ? (
+          /* All recipes mixed together */
+          <CategoryCarousel
+            category="trending"
+            recipes={categories.flatMap(category => getRecipesByCategory(category, 10))}
+            onAddRecipe={handleAddRecipe}
+            onRecipeClick={handleRecipeClick}
+            onViewAll={handleViewAll}
+            sectionRefs={sectionRefs}
+          />
+        ) : (
+          <IngredientsView />
+        )}
       </div>
 
       <BottomNav 
