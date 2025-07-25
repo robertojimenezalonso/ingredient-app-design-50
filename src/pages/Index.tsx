@@ -54,7 +54,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gray-100 pb-24">
       <AirbnbHeader 
-        showTabs={showTabs || selectedFilter === 'ingredientes'}
+        showTabs={showTabs}
         activeTab={activeTabDate}
         mealPlan={mealPlan}
         onTabChange={scrollToDate}
