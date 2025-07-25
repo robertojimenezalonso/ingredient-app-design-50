@@ -1,9 +1,10 @@
-import { SlidersHorizontal, Search, Plus, ChevronDown, Coffee, UtensilsCrossed, Moon, Wine, Package, Cake, Filter, MoreVertical } from 'lucide-react';
+import { SlidersHorizontal, Search, Plus, ChevronDown, Coffee, UtensilsCrossed, Moon, Wine, Package, Cake, Filter, MoreVertical, ArrowLeft } from 'lucide-react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { useNavigate } from 'react-router-dom';
 
 const foodTypes = [
   { id: "desayuno", name: "Desayuno", emoji: "🥞" },
@@ -43,6 +44,7 @@ export const AirbnbHeader = ({
   onFilterChange 
 }: AirbnbHeaderProps = {}) => {
   const { config } = useUserConfig();
+  const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedFoodType, setSelectedFoodType] = useState<string | null>(null);
   const [selectedFilter, setSelectedFilter] = useState<string | null>('receta');
@@ -86,6 +88,12 @@ export const AirbnbHeader = ({
       
       {/* Main Header - Always Visible */}
       <div className="flex items-center gap-3 p-4 bg-white">
+        <button 
+          onClick={() => navigate('/')}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+        >
+          <ArrowLeft className="h-5 w-5 text-black" />
+        </button>
         <div className="flex-1 bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-shadow cursor-pointer">
           <div className="px-6 py-2 relative">
             <div className="text-center">
