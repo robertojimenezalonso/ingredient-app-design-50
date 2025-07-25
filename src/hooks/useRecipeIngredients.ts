@@ -24,8 +24,15 @@ export const useRecipeIngredients = (recipes: Recipe[]) => {
         allIngredientIds.add(ingredient.id);
       });
     });
-    setSelectedIngredientIds(allIngredientIds);
-  }, [recipes]);
+    
+    // Only update if the set of ingredient IDs has actually changed
+    const currentIds = Array.from(selectedIngredientIds).sort().join(',');
+    const newIds = Array.from(allIngredientIds).sort().join(',');
+    
+    if (currentIds !== newIds) {
+      setSelectedIngredientIds(allIngredientIds);
+    }
+  }, [recipes.length, recipes.map(r => r.id).join(',')]); // More stable dependency
 
   const toggleIngredientSelection = (ingredientId: string) => {
     // Find all ingredient IDs that share the same name as the clicked ingredient
