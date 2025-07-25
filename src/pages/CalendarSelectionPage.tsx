@@ -7,7 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useUserConfig } from '@/contexts/UserConfigContext';
-import WelcomePage from '@/pages/WelcomePage';
+
 import { cn } from '@/lib/utils';
 const CalendarSelectionPage = () => {
   const navigate = useNavigate();
@@ -39,20 +39,12 @@ const CalendarSelectionPage = () => {
     navigate('/people-and-diet');
   };
   const canContinue = selectedDates.length > 0 && selectedMeals.length > 0;
-  return <div className="fixed inset-0 z-50">
-      {/* Background with WelcomePage content - blurred */}
-      <div className="absolute inset-0 pointer-events-none">
-        <WelcomePage />
-      </div>
-
-      {/* Blur overlay */}
-      <div className="absolute inset-0 bg-background/50 backdrop-blur-sm" />
-
+  return <div className="min-h-screen bg-gray-100">
       {/* Main content */}
-      <div className="relative z-10 min-h-screen flex flex-col">
+      <div className="flex flex-col min-h-screen">
         {/* Header with back button and progress */}
         <div className="flex items-center p-4">
-          <button onClick={() => navigate('/')} className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm mr-4">
+          <button onClick={() => navigate('/welcome')} className="flex items-center justify-center w-10 h-10 rounded-full bg-white mr-4">
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </button>
           
