@@ -10,7 +10,9 @@ export const SavedShoppingListCard = () => {
   const { config } = useUserConfig();
   
   const selectedIngredientsCount = useMemo(() => {
-    return getGroupedIngredients().filter(ingredient => ingredient.isSelected).length;
+    const groupedIngredients = getGroupedIngredients();
+    console.log('SavedShoppingListCard - Grouped ingredients:', groupedIngredients);
+    return groupedIngredients.length;
   }, [getGroupedIngredients]);
 
   // Don't show if no ingredients selected
