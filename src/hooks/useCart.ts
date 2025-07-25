@@ -90,13 +90,16 @@ export const useCart = () => {
     cart.forEach(item => {
       item.selectedIngredients.forEach(ingredientId => {
         const ingredient = item.recipe.ingredients.find(ing => ing.id === ingredientId);
-        if (ingredient && selectedIngredientIds.has(ingredientId)) {
+        if (ingredient) {
           const key = ingredient.name;
           const amount = parseFloat(ingredient.amount) || 0;
+          const isSelected = selectedIngredientIds.has(ingredientId);
           
           if (grouped[key]) {
             grouped[key].recipes.push(item.recipe.title);
             grouped[key].totalAmount += amount;
+            // Keep selected if any ingredient with this name is selected
+            grouped[key].isSelected = grouped[key].isSelected || isSelected;
           } else {
             grouped[key] = {
               id: ingredientId,
@@ -105,7 +108,7 @@ export const useCart = () => {
               unit: ingredient.unit,
               recipes: [item.recipe.title],
               totalAmount: amount,
-              isSelected: selectedIngredientIds.has(ingredientId)
+              isSelected: isSelected
             };
           }
         }
