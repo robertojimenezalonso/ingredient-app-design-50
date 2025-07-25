@@ -1,23 +1,115 @@
+import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useRecipes } from '@/hooks/useRecipes';
+import { useRecipeIngredients } from '@/hooks/useRecipeIngredients';
+import { useCart } from '@/hooks/useCart';
+import { AirbnbHeader } from '@/components/AirbnbHeader';
+import { CategoryCarousel } from '@/components/CategoryCarousel';
+import { IngredientsView } from '@/components/IngredientsView';
+import { useDateTabs } from '@/hooks/useDateTabs';
+import { BottomNav } from '@/components/BottomNav';
+import { Recipe, CategoryType } from '@/types/recipe';
+import { useToast } from '@/hooks/use-toast';
+
 const WelcomePage = () => {
   const navigate = useNavigate();
-  return <div className="min-h-screen flex flex-col items-center justify-center p-4 relative bg-gray-100">
-      <p className="absolute top-4 right-4 text-muted-foreground">Iniciar sesión</p>
-      <div className="w-full max-w-sm">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">Oliv.ai</h1>
-          <p className="text-muted-foreground text-lg text-center font-normal">Compara precios en diferentes supermercados y consigue recetas personalizadas al mejor precio.</p>
-        </div>
+  const { toast } = useToast();
+  const { getRecipesByCategory } = useRecipes();
+  const { addToCart } = useCart();
+  const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('explore');
+  const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
+  const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
+  
+  const categories: CategoryType[] = [
+    'breakfast', 'lunch', 'dinner', 
+    'appetizer', 'snacks', 'desserts', 'favorites'
+  ];
 
-        <Button onClick={() => navigate('/calendar-selection')} className="w-full bg-white rounded-full shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-shadow text-foreground border-0 py-4 h-auto" variant="outline">
-          <Search className="h-5 w-5 mr-3" />
-          <div className="text-center">
-            <div className="font-semibold">Empezar a buscar</div>
-          </div>
-        </Button>
+  // Get all recipes for ingredient management
+  const allRecipes = categories.flatMap(category => getRecipesByCategory(category, 10));
+  const { getGroupedIngredients } = useRecipeIngredients(allRecipes);
+  
+  // Calculate selected ingredients count with memoization
+  const selectedIngredientsCount = useMemo(() => {
+    return getGroupedIngredients().filter(ingredient => ingredient.isSelected).length;
+  }, [getGroupedIngredients]);
+
+  const handleAddRecipe = (recipe: Recipe) => {
+    const selectedIngredients = recipe.ingredients.map(ing => ing.id);
+    addToCart(recipe, recipe.servings, selectedIngredients);
+    toast({
+      title: "Receta añadida",
+      description: `${recipe.title} añadida a favoritos`
+    });
+  };
+
+  const handleRecipeClick = (recipe: Recipe) => {
+    navigate(`/recipe/${recipe.id}`);
+  };
+
+  const handleViewAll = (category: CategoryType) => {
+    navigate(`/category/${category}`);
+  };
+
+  const handleTabChange = (tab: 'explore' | 'cart' | 'recipes' | 'profile') => {
+    setActiveTab(tab);
+    if (tab === 'profile') {
+      navigate('/profile');
+    } else if (tab === 'cart') {
+      navigate('/cart');
+    }
+  };
+
+  const handleSearchInSupermarket = () => {
+    toast({
+      title: "Buscar en supermercado",
+      description: "Función próximamente disponible"
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 pb-24">
+      <AirbnbHeader 
+        showTabs={showTabs}
+        activeTab={activeTabDate}
+        mealPlan={mealPlan}
+        onTabChange={scrollToDate}
+        onFilterChange={setSelectedFilter}
+      />
+      
+      <div style={{ paddingTop: '120px' }}>
+        {selectedFilter === 'receta' ? (
+          /* All recipes mixed together */
+          <CategoryCarousel
+            category="trending"
+            recipes={categories.flatMap(category => getRecipesByCategory(category, 10))}
+            onAddRecipe={handleAddRecipe}
+            onRecipeClick={handleRecipeClick}
+            onViewAll={handleViewAll}
+            sectionRefs={sectionRefs}
+          />
+        ) : (
+          <IngredientsView recipes={categories.flatMap(category => getRecipesByCategory(category, 10))} />
+        )}
       </div>
-    </div>;
+
+      {/* Floating Button - Always visible */}
+      <div className="fixed bottom-4 left-4 right-4 z-40" style={{ bottom: '80px' }}>
+        <button 
+          onClick={handleSearchInSupermarket}
+          className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
+        >
+          <Search className="h-5 w-5" />
+          Buscar súper · Lista ({selectedIngredientsCount})
+        </button>
+      </div>
+
+      <BottomNav 
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
+    </div>
+  );
 };
 export default WelcomePage;
