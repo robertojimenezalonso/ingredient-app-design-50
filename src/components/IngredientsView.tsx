@@ -25,7 +25,7 @@ export const IngredientsView = () => {
   };
 
   return (
-    <div className="bg-white p-4">
+    <div className="bg-white p-4 mt-4">
       {/* Search bar and add button */}
       <div className="flex items-center gap-3 mb-4">
         <div className="relative flex-1">
