@@ -55,13 +55,18 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
       {/* Ingredients list */}
       <div className="space-y-3">
         {filteredIngredients.map((ingredient, index) => (
-          <Card key={index}>
+          <Card 
+            key={index}
+            className={`cursor-pointer transition-colors ${
+              ingredient.isSelected 
+                ? 'border-black bg-gray-100' 
+                : 'border-gray-200 bg-white hover:bg-gray-50'
+            }`}
+            onClick={() => toggleIngredientSelection(ingredient.id)}
+          >
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div 
-                  className="relative w-12 h-12 rounded-lg overflow-hidden cursor-pointer"
-                  onClick={() => toggleIngredientSelection(ingredient.id)}
-                >
+                <div className="relative w-12 h-12 rounded-lg overflow-hidden">
                   <img
                     src={`https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=100&h=100&fit=crop`}
                     alt={ingredient.name}
