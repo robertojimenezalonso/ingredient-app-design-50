@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserConfigProvider } from "./contexts/UserConfigContext";
+import InitialWelcomePage from "./pages/InitialWelcomePage";
 import WelcomePage from "./pages/WelcomePage";
 import CalendarSelectionPage from "./pages/CalendarSelectionPage";
 import PeopleAndDietPage from "./pages/PeopleAndDietPage";
@@ -25,12 +26,12 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<WelcomePage />} />
-            <Route path="/welcome" element={<WelcomePage />} />
+            <Route path="/" element={<InitialWelcomePage />} />
+            <Route path="/welcome" element={<InitialWelcomePage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
-            <Route path="/explore" element={<Index />} />
+            <Route path="/explore" element={<WelcomePage />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/recipe/:id" element={<RecipeDetailPage />} />
             <Route path="/cart" element={<CartPage />} />
