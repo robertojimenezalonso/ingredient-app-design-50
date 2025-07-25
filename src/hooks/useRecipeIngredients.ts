@@ -16,16 +16,17 @@ export interface GroupedIngredient {
 export const useRecipeIngredients = (recipes: Recipe[]) => {
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    // Auto-select all ingredients when recipes change
-    const allIngredientIds = new Set<string>();
-    recipes.forEach(recipe => {
-      recipe.ingredients.forEach(ingredient => {
-        allIngredientIds.add(ingredient.id);
-      });
-    });
-    setSelectedIngredientIds(allIngredientIds);
-  }, [recipes]);
+  // Start with no ingredients selected by default
+  // useEffect(() => {
+  //   // Auto-select all ingredients when recipes change
+  //   const allIngredientIds = new Set<string>();
+  //   recipes.forEach(recipe => {
+  //     recipe.ingredients.forEach(ingredient => {
+  //       allIngredientIds.add(ingredient.id);
+  //     });
+  //   });
+  //   setSelectedIngredientIds(allIngredientIds);
+  // }, [recipes]);
 
   const toggleIngredientSelection = (ingredientId: string) => {
     const newSelected = new Set(selectedIngredientIds);
