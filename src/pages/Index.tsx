@@ -73,7 +73,7 @@ const Index = () => {
             sectionRefs={sectionRefs}
           />
         ) : (
-          <IngredientsView />
+          <IngredientsView recipes={categories.flatMap(category => getRecipesByCategory(category, 10))} />
         )}
       </div>
 

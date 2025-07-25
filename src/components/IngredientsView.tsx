@@ -1,15 +1,20 @@
 import { useState } from 'react';
 import { Search, Plus } from 'lucide-react';
-import { useCart } from '@/hooks/useCart';
+import { useRecipeIngredients } from '@/hooks/useRecipeIngredients';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useToast } from '@/hooks/use-toast';
+import { Recipe } from '@/types/recipe';
 
-export const IngredientsView = () => {
+interface IngredientsViewProps {
+  recipes: Recipe[];
+}
+
+export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
   const { toast } = useToast();
-  const { getGroupedIngredients, toggleIngredientSelection } = useCart();
+  const { getGroupedIngredients, toggleIngredientSelection } = useRecipeIngredients(recipes);
   const [searchQuery, setSearchQuery] = useState('');
 
   const groupedIngredients = getGroupedIngredients();
