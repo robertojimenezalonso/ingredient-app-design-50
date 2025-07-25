@@ -70,12 +70,12 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-medium">{ingredient.name}</h3>
-                  <p className="text-sm text-muted-foreground">
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium truncate">{ingredient.name}</h3>
+                  <p className="text-sm text-muted-foreground truncate">
                     {ingredient.displayAmount} · en {ingredient.recipeCount} receta{ingredient.recipeCount > 1 ? 's' : ''}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1 truncate max-w-full">
+                  <p className="text-xs text-muted-foreground mt-1 truncate">
                     Para: {ingredient.recipes.join(", ")}
                   </p>
                 </div>
