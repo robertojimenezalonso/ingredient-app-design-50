@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
+import { useRecipeIngredients } from '@/hooks/useRecipeIngredients';
 import { useCart } from '@/hooks/useCart';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
@@ -21,11 +22,17 @@ const Index = () => {
   const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   
-
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 
     'appetizer', 'snacks', 'desserts', 'favorites'
   ];
+
+  // Get all recipes for ingredient management
+  const allRecipes = categories.flatMap(category => getRecipesByCategory(category, 10));
+  const { getGroupedIngredients } = useRecipeIngredients(allRecipes);
+  
+  // Calculate selected ingredients count
+  const selectedIngredientsCount = getGroupedIngredients().filter(ingredient => ingredient.isSelected).length;
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);
@@ -93,7 +100,7 @@ const Index = () => {
           className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
         >
           <Search className="h-5 w-5" />
-          Buscar súper · Lista (24)
+          Buscar súper · Lista ({selectedIngredientsCount})
         </button>
       </div>
 
