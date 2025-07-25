@@ -6,13 +6,15 @@ import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useUserConfig } from '@/contexts/UserConfigContext';
+import { useCart } from '@/hooks/useCart';
+import { useRecipes } from '@/hooks/useRecipes';
 
 import { cn } from '@/lib/utils';
 const PeopleAndDietPage = () => {
   const navigate = useNavigate();
-  const {
-    updateConfig
-  } = useUserConfig();
+  const { updateConfig } = useUserConfig();
+  const { addToCart } = useCart();
+  const { recipes } = useRecipes();
   const [peopleCount, setPeopleCount] = useState({
     adultos: 0
   });
@@ -25,9 +27,18 @@ const PeopleAndDietPage = () => {
     }));
   };
   const handleGeneratePlan = () => {
+    // Update configuration
     updateConfig({
       servingsPerRecipe: peopleCount.adultos
     });
+    
+    // Add sample recipes to cart with all ingredients selected
+    const sampleRecipes = recipes.slice(0, 4); // Get first 4 recipes as samples
+    sampleRecipes.forEach(recipe => {
+      const allIngredientIds = recipe.ingredients.map(ing => ing.id);
+      addToCart(recipe, peopleCount.adultos, allIngredientIds);
+    });
+    
     navigate('/milista');
   };
   const totalPeople = peopleCount.adultos;

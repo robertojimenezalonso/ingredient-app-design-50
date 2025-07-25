@@ -25,16 +25,22 @@ export const useUserConfig = () => {
 };
 
 export const UserConfigProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [config, setConfig] = useState<UserConfig>({
-    postalCode: '',
-    supermarket: '',
-    servingsPerRecipe: 1,
-    selectedDates: [],
-    selectedMeals: [],
+  const [config, setConfig] = useState<UserConfig>(() => {
+    // Load saved config from localStorage
+    const savedConfig = localStorage.getItem('user-config');
+    return savedConfig ? JSON.parse(savedConfig) : {
+      postalCode: '',
+      supermarket: '',
+      servingsPerRecipe: 1,
+      selectedDates: [],
+      selectedMeals: [],
+    };
   });
 
   const updateConfig = (updates: Partial<UserConfig>) => {
-    setConfig(prev => ({ ...prev, ...updates }));
+    const newConfig = { ...config, ...updates };
+    setConfig(newConfig);
+    localStorage.setItem('user-config', JSON.stringify(newConfig));
   };
 
   const isConfigComplete = config.postalCode !== '' && config.supermarket !== '';
