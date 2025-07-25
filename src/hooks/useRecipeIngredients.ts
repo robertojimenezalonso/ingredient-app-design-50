@@ -28,12 +28,31 @@ export const useRecipeIngredients = (recipes: Recipe[]) => {
   }, [recipes]);
 
   const toggleIngredientSelection = (ingredientId: string) => {
+    // Find all ingredient IDs that share the same name as the clicked ingredient
+    const clickedIngredientName = recipes
+      .flatMap(recipe => recipe.ingredients)
+      .find(ingredient => ingredient.id === ingredientId)?.name;
+    
+    if (!clickedIngredientName) return;
+    
+    // Get all ingredient IDs with the same name
+    const relatedIds = recipes
+      .flatMap(recipe => recipe.ingredients)
+      .filter(ingredient => ingredient.name === clickedIngredientName)
+      .map(ingredient => ingredient.id);
+    
     const newSelected = new Set(selectedIngredientIds);
-    if (newSelected.has(ingredientId)) {
-      newSelected.delete(ingredientId);
+    
+    // If any of the related IDs are selected, deselect all of them
+    // Otherwise, select all of them
+    const anySelected = relatedIds.some(id => newSelected.has(id));
+    
+    if (anySelected) {
+      relatedIds.forEach(id => newSelected.delete(id));
     } else {
-      newSelected.add(ingredientId);
+      relatedIds.forEach(id => newSelected.add(id));
     }
+    
     setSelectedIngredientIds(newSelected);
   };
 
@@ -46,6 +65,7 @@ export const useRecipeIngredients = (recipes: Recipe[]) => {
       recipes: string[];
       totalAmount: number;
       isSelected: boolean;
+      allIds: string[]; // Track all ingredient IDs for this group
     }> = {};
 
     recipes.forEach(recipe => {
@@ -56,6 +76,7 @@ export const useRecipeIngredients = (recipes: Recipe[]) => {
         if (grouped[key]) {
           grouped[key].recipes.push(recipe.title);
           grouped[key].totalAmount += amount;
+          grouped[key].allIds.push(ingredient.id);
         } else {
           grouped[key] = {
             id: ingredient.id,
@@ -64,7 +85,8 @@ export const useRecipeIngredients = (recipes: Recipe[]) => {
             unit: ingredient.unit,
             recipes: [recipe.title],
             totalAmount: amount,
-            isSelected: selectedIngredientIds.has(ingredient.id)
+            isSelected: selectedIngredientIds.has(ingredient.id),
+            allIds: [ingredient.id]
           };
         }
       });
@@ -74,7 +96,8 @@ export const useRecipeIngredients = (recipes: Recipe[]) => {
       ...item,
       displayAmount: item.totalAmount > 0 ? `${item.totalAmount} ${item.unit}` : `${item.amount} ${item.unit}`,
       recipeCount: item.recipes.length,
-      isSelected: selectedIngredientIds.has(item.id)
+      // Check if ANY of the ingredient IDs in this group are selected
+      isSelected: item.allIds.some(id => selectedIngredientIds.has(id))
     }));
   };
 
