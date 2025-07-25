@@ -72,7 +72,7 @@ export const useRecipeIngredients = (recipes: Recipe[]) => {
 
     return Object.values(grouped).map(item => ({
       ...item,
-      displayAmount: item.totalAmount > 0 ? `${item.totalAmount}${item.unit}` : item.amount,
+      displayAmount: item.totalAmount > 0 ? `${item.totalAmount} ${item.unit}` : `${item.amount} ${item.unit}`,
       recipeCount: item.recipes.length,
       isSelected: selectedIngredientIds.has(item.id)
     }));
