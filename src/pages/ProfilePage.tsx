@@ -1,15 +1,23 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, User, Settings, Heart, History } from 'lucide-react';
+import { ArrowLeft, User, Settings, Heart, History, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BottomNav } from '@/components/BottomNav';
 import { useCart } from '@/hooks/useCart';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { getTotalIngredients } = useCart();
   const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('profile');
+  const { user, loading, signOut } = useAuth();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      navigate('/auth');
+    }
+  }, [user, loading, navigate]);
 
   const handleTabChange = (tab: 'explore' | 'cart' | 'recipes' | 'profile') => {
     setActiveTab(tab);
@@ -64,7 +72,7 @@ const ProfilePage = () => {
                 <User className="h-8 w-8 text-primary" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold">Usuario</h2>
+                <h2 className="text-xl font-semibold">{user?.user_metadata?.display_name || user?.email || 'Usuario'}</h2>
                 <p className="text-muted-foreground">Cocinero aficionado</p>
               </div>
             </div>
@@ -112,6 +120,21 @@ const ProfilePage = () => {
               </CardContent>
             </Card>
           ))}
+          
+          {/* Logout Button */}
+          <Card className="cursor-pointer hover:shadow-md transition-shadow border-destructive/20">
+            <CardContent className="p-4" onClick={signOut}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-destructive/10 rounded-lg flex items-center justify-center">
+                  <LogOut className="h-5 w-5 text-destructive" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium text-destructive">Cerrar Sesión</h3>
+                  <p className="text-sm text-muted-foreground">Salir de tu cuenta</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
