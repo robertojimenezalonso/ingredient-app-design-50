@@ -9,19 +9,18 @@ export const SavedShoppingListCard = () => {
   const { config } = useUserConfig();
   
   const selectedIngredientsCount = getTotalIngredients();
-
-  // Only show if there's a saved configuration and we're returning from Mi Lista
   const showSavedConfig = localStorage.getItem('showSavedConfig') === 'true';
   
-  // Debug logging
-  console.log('SavedShoppingListCard conditions:', {
+  console.log('SavedShoppingListCard rendering', {
     selectedIngredientsCount,
     hasPlanningSession: config.hasPlanningSession,
     showSavedConfig,
-    config
+    localStorage: localStorage.getItem('showSavedConfig')
   });
   
-  if (selectedIngredientsCount === 0 || !config.hasPlanningSession || !showSavedConfig) {
+  // Show if we have a planning session and the flag is set
+  if (!config.hasPlanningSession || !showSavedConfig) {
+    console.log('SavedShoppingListCard hidden due to conditions');
     return null;
   }
 
