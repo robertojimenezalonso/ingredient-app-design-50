@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BottomNav } from '@/components/BottomNav';
+import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 
 const InitialWelcomePage = () => {
   const navigate = useNavigate();
@@ -19,6 +20,9 @@ const InitialWelcomePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 pb-24">
+      {/* Saved Shopping List Card - only shows when returning from Mi Lista */}
+      <SavedShoppingListCard />
+      
       {/* Main welcome content */}
       <div className="p-6">
         <div className="text-center mb-8">
