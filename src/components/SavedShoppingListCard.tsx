@@ -13,12 +13,16 @@ export const SavedShoppingListCard = () => {
     return getGroupedIngredients().length;
   }, [getGroupedIngredients]);
 
-  // Don't show if no ingredients selected or no planning session
-  if (selectedIngredientsCount === 0 || !config.hasPlanningSession) {
+  // Only show if there's a saved configuration and we're returning from Mi Lista
+  const showSavedConfig = localStorage.getItem('showSavedConfig') === 'true';
+  
+  if (selectedIngredientsCount === 0 || !config.hasPlanningSession || !showSavedConfig) {
     return null;
   }
 
   const handleContinueShopping = () => {
+    // Clear the flag when user clicks to continue
+    localStorage.removeItem('showSavedConfig');
     navigate('/milista');
   };
 
