@@ -2,19 +2,24 @@ import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Calendar, Users } from 'lucide-react';
 import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
-import { useMemo } from 'react';
 
 export const SavedShoppingListCard = () => {
   const navigate = useNavigate();
-  const { getGroupedIngredients } = useCart();
+  const { getTotalIngredients } = useCart();
   const { config } = useUserConfig();
   
-  const selectedIngredientsCount = useMemo(() => {
-    return getGroupedIngredients().length;
-  }, [getGroupedIngredients]);
+  const selectedIngredientsCount = getTotalIngredients();
 
   // Only show if there's a saved configuration and we're returning from Mi Lista
   const showSavedConfig = localStorage.getItem('showSavedConfig') === 'true';
+  
+  // Debug logging
+  console.log('SavedShoppingListCard conditions:', {
+    selectedIngredientsCount,
+    hasPlanningSession: config.hasPlanningSession,
+    showSavedConfig,
+    config
+  });
   
   if (selectedIngredientsCount === 0 || !config.hasPlanningSession || !showSavedConfig) {
     return null;
