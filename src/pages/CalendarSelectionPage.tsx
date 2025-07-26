@@ -44,7 +44,7 @@ const CalendarSelectionPage = () => {
       <div className="flex flex-col min-h-screen">
         {/* Header with back button and progress */}
         <div className="flex items-center p-4">
-          <button onClick={() => navigate('/explore')} className="flex items-center justify-center w-10 h-10 rounded-full bg-white mr-4">
+          <button onClick={() => navigate('/')} className="flex items-center justify-center w-10 h-10 rounded-full bg-white mr-4">
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </button>
           
