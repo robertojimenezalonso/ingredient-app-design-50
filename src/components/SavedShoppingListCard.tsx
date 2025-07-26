@@ -16,12 +16,16 @@ export const SavedShoppingListCard = () => {
     selectedIngredientsCount,
     hasPlanningSession: config.hasPlanningSession,
     showSavedConfig,
-    localStorage: localStorage.getItem('showSavedConfig')
+    localStorage: localStorage.getItem('showSavedConfig'),
+    selectedDates: config.selectedDates,
+    configComplete: config.hasPlanningSession && (config.selectedDates?.length || 0) > 0
   });
   
-  // Show if we have a planning session and the flag is set
-  if (!config.hasPlanningSession || !showSavedConfig) {
-    console.log('SavedShoppingListCard hidden due to conditions');
+  // Show if we have a completed planning session OR if the flag is set
+  const shouldShow = showSavedConfig || (config.hasPlanningSession && (config.selectedDates?.length || 0) > 0);
+  
+  if (!shouldShow) {
+    console.log('SavedShoppingListCard hidden - no planning session or flag');
     return null;
   }
 

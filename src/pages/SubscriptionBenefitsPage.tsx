@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useUserConfig } from "@/contexts/UserConfigContext";
 
 const SubscriptionBenefitsPage = () => {
   const navigate = useNavigate();
+  const { updateConfig } = useUserConfig();
   const [progress, setProgress] = useState(1);
   const [checkedItems, setCheckedItems] = useState<boolean[]>([false, false, false, false, false]);
   
@@ -20,8 +22,10 @@ const SubscriptionBenefitsPage = () => {
       
       if (ratio >= 1) {
         setProgress(100);
-        // Navigate to explorer after reaching 100%
-        setTimeout(() => navigate('/explore'), 500);
+        // Mark as having a planning session when complete
+        updateConfig({ hasPlanningSession: true });
+        // Navigate to milista after reaching 100%
+        setTimeout(() => navigate('/milista'), 500);
         return;
       }
       
