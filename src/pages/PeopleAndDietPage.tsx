@@ -16,7 +16,7 @@ const PeopleAndDietPage = () => {
   const { addToCart } = useCart();
   const { recipes } = useRecipes();
   const [peopleCount, setPeopleCount] = useState({
-    adultos: 1
+    adultos: 0
   });
   const [showAllOptions, setShowAllOptions] = useState(false);
   const dietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Cantidades', 'Macros', 'Nutrientes', 'Ingredientes Bio'];

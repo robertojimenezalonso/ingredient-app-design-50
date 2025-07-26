@@ -82,7 +82,7 @@ const WelcomePage = () => {
       <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200/50">
         <div className="flex items-center justify-between p-4">
           <button 
-            onClick={() => navigate('/explore')} 
+            onClick={() => navigate('/')} 
             className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
           >
             <ArrowLeft className="h-5 w-5 text-foreground" />
