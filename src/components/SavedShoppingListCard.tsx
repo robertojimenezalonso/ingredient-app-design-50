@@ -4,6 +4,7 @@ import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 
 export const SavedShoppingListCard = () => {
+  console.log('SavedShoppingListCard ALWAYS renders');
   const navigate = useNavigate();
   const { getTotalIngredients } = useCart();
   const { config } = useUserConfig();
