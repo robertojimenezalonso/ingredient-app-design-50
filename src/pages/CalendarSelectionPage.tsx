@@ -15,7 +15,7 @@ const CalendarSelectionPage = () => {
     updateConfig
   } = useUserConfig();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const [selectedMeals, setSelectedMeals] = useState<string[]>(['Desayuno', 'Almuerzo', 'Cena']);
+  const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
   const [showMoreMeals, setShowMoreMeals] = useState(false);
   const today = new Date();
   const oneMonthFromNow = new Date();

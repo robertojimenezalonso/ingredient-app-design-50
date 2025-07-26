@@ -27,7 +27,8 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<InitialWelcomePage />} />
-            <Route path="/explore" element={<InitialWelcomePage />} />
+            <Route path="/welcome" element={<InitialWelcomePage />} />
+            <Route path="/explore" element={<Index />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />

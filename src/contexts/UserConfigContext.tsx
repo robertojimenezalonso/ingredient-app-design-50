@@ -6,6 +6,7 @@ interface UserConfig {
   servingsPerRecipe: number;
   selectedDates?: string[];
   selectedMeals?: string[];
+  hasPlanningSession?: boolean;
 }
 
 interface UserConfigContextType {
@@ -34,6 +35,7 @@ export const UserConfigProvider: React.FC<{ children: ReactNode }> = ({ children
       servingsPerRecipe: 1,
       selectedDates: [],
       selectedMeals: [],
+      hasPlanningSession: false,
     };
   });
 

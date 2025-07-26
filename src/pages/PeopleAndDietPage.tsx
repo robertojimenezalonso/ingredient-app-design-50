@@ -16,7 +16,7 @@ const PeopleAndDietPage = () => {
   const { addToCart } = useCart();
   const { recipes } = useRecipes();
   const [peopleCount, setPeopleCount] = useState({
-    adultos: 0
+    adultos: 1
   });
   const [showAllOptions, setShowAllOptions] = useState(false);
   const dietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Cantidades', 'Macros', 'Nutrientes', 'Ingredientes Bio'];
@@ -29,7 +29,8 @@ const PeopleAndDietPage = () => {
   const handleGeneratePlan = () => {
     // Update configuration
     updateConfig({
-      servingsPerRecipe: peopleCount.adultos
+      servingsPerRecipe: peopleCount.adultos,
+      hasPlanningSession: true
     });
     
     // Add sample recipes to cart with all ingredients selected

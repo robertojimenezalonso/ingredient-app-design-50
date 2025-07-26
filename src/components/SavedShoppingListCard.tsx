@@ -13,8 +13,8 @@ export const SavedShoppingListCard = () => {
     return getGroupedIngredients().length;
   }, [getGroupedIngredients]);
 
-  // Don't show if no ingredients selected
-  if (selectedIngredientsCount === 0) {
+  // Don't show if no ingredients selected or no planning session
+  if (selectedIngredientsCount === 0 || !config.hasPlanningSession) {
     return null;
   }
 
