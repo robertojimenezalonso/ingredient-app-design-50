@@ -52,9 +52,12 @@ const WelcomePage = () => {
     }
   }, [recommendedRecipes.length, initializeIngredients]);
   
-  // Calculate selected ingredients count with memoization - now reactive to selection changes
-  const selectedIngredientsCount = useMemo(() => {
-    return getSelectedIngredientsCount(recommendedRecipes);
+  // Calculate selected ingredients count - use useState for reactivity
+  const [selectedIngredientsCount, setSelectedIngredientsCount] = useState(0);
+  
+  // Update count when selection changes
+  useEffect(() => {
+    setSelectedIngredientsCount(getSelectedIngredientsCount(recommendedRecipes));
   }, [getSelectedIngredientsCount, recommendedRecipes, selectedIngredientIds]);
 
   const handleAddRecipe = (recipe: Recipe) => {
