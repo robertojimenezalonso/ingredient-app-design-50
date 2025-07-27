@@ -23,9 +23,12 @@ const RecipeListPage = () => {
   // Load AI recipes from localStorage when component mounts
   useEffect(() => {
     const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+    console.log('RecipeListPage: Checking for AI recipes in localStorage:', savedAiRecipes ? 'Found' : 'Not found');
+    
     if (savedAiRecipes) {
       try {
         const parsedRecipes = JSON.parse(savedAiRecipes);
+        console.log('RecipeListPage: Loaded AI recipes:', parsedRecipes.length, 'recipes');
         setAiRecipes(parsedRecipes);
         // Clear from localStorage after loading
         localStorage.removeItem('aiGeneratedRecipes');
@@ -50,7 +53,17 @@ const RecipeListPage = () => {
     ? mealPlanRecipes 
     : categories.flatMap(category => getRecipesByCategory(category, 3));
   
-  const recommendedRecipes = [...aiRecipes, ...defaultRecipes];
+  // Prioritize AI recipes - if we have them, show them first
+  const recommendedRecipes = aiRecipes.length > 0 
+    ? aiRecipes 
+    : [...defaultRecipes];
+
+  console.log('RecipeListPage: Current recipes state:', {
+    aiRecipesCount: aiRecipes.length,
+    mealPlanRecipesCount: mealPlanRecipes.length,
+    defaultRecipesCount: defaultRecipes.length,
+    recommendedRecipesCount: recommendedRecipes.length
+  });
 
   const { 
     getSelectedIngredientsCount,

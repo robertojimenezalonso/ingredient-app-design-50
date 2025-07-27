@@ -48,13 +48,17 @@ const PeopleAndDietPage = () => {
     });
 
     try {
+      // Calculate the correct number of recipes based on days and meals
+      const recipesToGenerate = config.selectedDates.length * config.selectedMeals.length;
+      console.log(`Generating ${recipesToGenerate} recipes for ${config.selectedDates.length} days and ${config.selectedMeals.length} meals`);
+      
       // Generate AI recipes
       const aiRecipes = await generateMultipleRecipes({
         people: peopleCount.adultos,
         days: config.selectedDates,
         meals: config.selectedMeals,
         restrictions: [] // TODO: Add diet restrictions from user config
-      }, 6);
+      }, recipesToGenerate);
 
       // Initialize ingredients with AI recipes
       if (aiRecipes.length > 0) {

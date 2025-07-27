@@ -72,13 +72,20 @@ export const useAIRecipes = () => {
   const generateMultipleRecipes = async (request: GenerateRecipeRequest, count: number = 3): Promise<Recipe[]> => {
     const recipes: Recipe[] = [];
     
+    console.log(`Starting generation of ${count} recipes`);
+    
     for (let i = 0; i < count; i++) {
+      console.log(`Generating recipe ${i + 1} of ${count}`);
       const recipe = await generateRecipe(request);
       if (recipe) {
         recipes.push(recipe);
+        console.log(`Successfully generated recipe: ${recipe.title}`);
+      } else {
+        console.error(`Failed to generate recipe ${i + 1}`);
       }
     }
     
+    console.log(`Completed generation. Total recipes: ${recipes.length}`);
     return recipes;
   };
 
