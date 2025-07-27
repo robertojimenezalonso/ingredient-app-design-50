@@ -57,10 +57,11 @@ const WelcomePage = () => {
   
   // Update count when selection changes - must react to selectedIngredientIds changes
   useEffect(() => {
+    console.log('ExplorePage useEffect triggered - selectedIngredientIds size:', selectedIngredientIds.size);
     const count = getSelectedIngredientsCount(recommendedRecipes);
     console.log('ExplorePage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
     setSelectedIngredientsCount(count);
-  }, [selectedIngredientIds, recommendedRecipes, getSelectedIngredientsCount]);
+  }, [Array.from(selectedIngredientIds).join(','), recommendedRecipes, getSelectedIngredientsCount]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);
