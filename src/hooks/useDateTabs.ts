@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
-import { Recipe, CategoryType } from '@/types/recipe';
 
 const mealCategoryMap: Record<string, any> = {
   'Desayuno': 'breakfast',
@@ -18,32 +17,20 @@ export const useDateTabs = () => {
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const lastScrollY = useRef(0);
 
-  // Función para clonar una receta con IDs únicos de ingredientes
-  const cloneRecipeWithUniqueIds = (recipe: Recipe, dayIndex: number, mealIndex: number): Recipe => {
-    return {
-      ...recipe,
-      id: `${recipe.id}-day${dayIndex}-meal${mealIndex}`, // ID único para cada instancia
-      ingredients: recipe.ingredients.map((ingredient, ingredientIndex) => ({
-        ...ingredient,
-        id: `${ingredient.id}-day${dayIndex}-meal${mealIndex}-ing${ingredientIndex}` // ID único para cada ingrediente
-      }))
-    };
-  };
-
   // Generar el plan de comidas
   const mealPlan = config.selectedDates && config.selectedMeals 
-    ? config.selectedDates.map((dateStr, dayIndex) => {
+    ? config.selectedDates.map(dateStr => {
         const date = new Date(dateStr + 'T12:00:00');
-        const dayMeals = config.selectedMeals!.map((meal, mealIndex) => {
+        const dayMeals = config.selectedMeals!.map(meal => {
           const categoryKey = mealCategoryMap[meal];
           if (!categoryKey) return null;
           
-          const categoryRecipes = getRecipesByCategory(categoryKey as CategoryType, 10);
-          const selectedRecipe = categoryRecipes[dayIndex % categoryRecipes.length];
+          const categoryRecipes = getRecipesByCategory(categoryKey, 10);
+          const selectedRecipe = categoryRecipes[0];
           
           return {
             meal,
-            recipe: selectedRecipe ? cloneRecipeWithUniqueIds(selectedRecipe, dayIndex, mealIndex) : null
+            recipe: selectedRecipe
           };
         }).filter(Boolean);
         
