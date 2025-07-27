@@ -75,6 +75,7 @@ const CartPage = () => {
           showTabs={false}
           onFilterChange={setViewMode}
           mealPlan={mealPlan}
+          currentFilter={viewMode}
         />
         
         <div className="flex flex-col items-center justify-center h-96 px-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 200px)' }}>
@@ -99,6 +100,7 @@ const CartPage = () => {
         mealPlan={mealPlan}
         onTabChange={setActiveTab}
         onFilterChange={setViewMode}
+        currentFilter={viewMode}
       />
       
       <div className="p-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 200px)' }}>

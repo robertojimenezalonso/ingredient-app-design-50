@@ -34,6 +34,7 @@ interface AirbnbHeaderProps {
   mealPlan?: Array<{ date: Date; dateStr: string; meals: any[] }>;
   onTabChange?: (dateStr: string) => void;
   onFilterChange?: (filter: 'receta' | 'ingredientes') => void;
+  currentFilter?: 'receta' | 'ingredientes';
 }
 
 export const AirbnbHeader = ({ 
@@ -41,14 +42,21 @@ export const AirbnbHeader = ({
   activeTab = '', 
   mealPlan = [], 
   onTabChange,
-  onFilterChange 
+  onFilterChange,
+  currentFilter = 'receta'
 }: AirbnbHeaderProps = {}) => {
   const { config } = useUserConfig();
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedFoodType, setSelectedFoodType] = useState<string | null>(null);
-  const [selectedFilter, setSelectedFilter] = useState<string | null>('receta');
   const tabsContainerRef = useRef<HTMLDivElement>(null);
+
+  // Sync selectedFilter with currentFilter prop
+  useEffect(() => {
+    setSelectedFilter(currentFilter);
+  }, [currentFilter]);
+
+  const [selectedFilter, setSelectedFilter] = useState<string | null>(currentFilter);
 
   // Scroll to active tab
   useEffect(() => {
