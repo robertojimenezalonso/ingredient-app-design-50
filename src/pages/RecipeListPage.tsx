@@ -125,35 +125,6 @@ const RecipeListPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header with back button */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200/50">
-        <div className="flex items-center justify-between p-4">
-          <button 
-            onClick={() => {
-              console.log('Setting showSavedConfig flag and navigating to /');
-              // Set flag to show saved configuration when returning to Explorer
-              localStorage.setItem('showSavedConfig', 'true');
-              navigate('/');
-            }}
-            className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-          >
-            <ArrowLeft className="h-5 w-5 text-foreground" />
-          </button>
-          
-          <div className="flex-1 text-center">
-            <h1 className="text-lg font-semibold text-foreground">Mi lista de la compra</h1>
-            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mt-1">
-              <Calendar className="h-4 w-4" />
-              <span>{daysText}</span>
-              <span>•</span>
-              <Users className="h-4 w-4" />
-              <span>{servingsText}</span>
-            </div>
-          </div>
-          
-          <div className="w-10"></div> {/* Spacer for centering */}
-        </div>
-      </div>
 
       <AirbnbHeader 
         showTabs={showTabs}
