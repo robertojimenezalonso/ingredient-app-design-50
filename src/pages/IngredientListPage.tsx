@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
@@ -46,8 +46,10 @@ const IngredientListPage = () => {
     }
   }, [recommendedRecipes.length, initializeIngredients]);
   
-  // Calculate selected ingredients count directly
-  const selectedIngredientsCount = getSelectedIngredientsCount(recommendedRecipes);
+  // Calculate selected ingredients count reactively when selection changes
+  const selectedIngredientsCount = useMemo(() => {
+    return getSelectedIngredientsCount(recommendedRecipes);
+  }, [getSelectedIngredientsCount, recommendedRecipes, selectedIngredientIds]);
 
   const handleFilterChange = (filter: 'receta' | 'ingredientes') => {
     if (filter === 'receta') {
