@@ -44,13 +44,6 @@ export const FloatingButton = ({
       paddingBottom: 'env(safe-area-inset-bottom)'
     }}>
       <div className="p-4">
-        {recipeCount !== undefined && selectedCount !== undefined && (
-          <div className="text-left mb-2">
-            <span className="text-sm text-gray-500">
-              {recipeCount} recetas · {selectedCount} ingredientes
-            </span>
-          </div>
-        )}
         <Button 
           onClick={onClick}
           className={`w-full h-12 text-base font-medium ${className}`}
@@ -58,7 +51,7 @@ export const FloatingButton = ({
         >
           <div className="flex items-center justify-center gap-2">
             <Search className="h-5 w-5" />
-            <span>{children || buttonText}</span>
+            <span>Buscar oferta</span>
           </div>
         </Button>
       </div>
