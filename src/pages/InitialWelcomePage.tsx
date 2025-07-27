@@ -61,13 +61,6 @@ const InitialWelcomePage = () => {
               Indica para cuántas personas cocinas y tus preferencias dietéticas
             </p>
           </div>
-          
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold mb-2">🛒 Lista automática</h2>
-            <p className="text-gray-600 text-sm">
-              Genera tu lista de la compra con todos los ingredientes necesarios
-            </p>
-          </div>
         </div>
 
         <div className="mt-8 space-y-3">
