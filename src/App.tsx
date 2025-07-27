@@ -6,8 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserConfigProvider } from "./contexts/UserConfigContext";
 import InitialWelcomePage from "./pages/InitialWelcomePage";
 import ExplorePage from "./pages/ExplorePage";
-import RecipeListPage from "./pages/RecipeListPage";
-import IngredientListPage from "./pages/IngredientListPage";
 import CalendarSelectionPage from "./pages/CalendarSelectionPage";
 import PeopleAndDietPage from "./pages/PeopleAndDietPage";
 import SubscriptionBenefitsPage from "./pages/SubscriptionBenefitsPage";
@@ -34,8 +32,6 @@ const App = () => (
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
             <Route path="/milista" element={<ExplorePage />} />
-            <Route path="/recetas" element={<RecipeListPage />} />
-            <Route path="/ingredientes" element={<IngredientListPage />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/recipe/:id" element={<RecipeDetailPage />} />
             <Route path="/cart" element={<CartPage />} />

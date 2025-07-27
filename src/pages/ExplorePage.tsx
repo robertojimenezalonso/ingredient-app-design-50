@@ -1,18 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, Users, ChefHat, ShoppingBasket } from 'lucide-react';
+import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
+import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
+import { AirbnbHeader } from '@/components/AirbnbHeader';
+import { CategoryCarousel } from '@/components/CategoryCarousel';
+import { IngredientsView } from '@/components/IngredientsView';
 import { useDateTabs } from '@/hooks/useDateTabs';
-import { CategoryType } from '@/types/recipe';
-import { Card, CardContent } from '@/components/ui/card';
+import { Recipe, CategoryType } from '@/types/recipe';
+import { useToast } from '@/hooks/use-toast';
 
 const MiListaPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
+  const { addToCart } = useCart();
   const { config } = useUserConfig();
-  const { mealPlan } = useDateTabs();
+  const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
+  const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 
@@ -47,9 +54,35 @@ const MiListaPage = () => {
   
   // Update count when selection changes
   useEffect(() => {
+    console.log('MiListaPage useEffect triggered - selectedIngredientIds size:', selectedIngredientIds.size);
     const count = getSelectedIngredientsCount(recommendedRecipes);
+    console.log('MiListaPage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
     setSelectedIngredientsCount(count);
   }, [Array.from(selectedIngredientIds).join(','), recommendedRecipes, getSelectedIngredientsCount]);
+
+  const handleAddRecipe = (recipe: Recipe) => {
+    const selectedIngredients = recipe.ingredients.map(ing => ing.id);
+    addToCart(recipe, recipe.servings, selectedIngredients);
+    toast({
+      title: "Receta añadida",
+      description: `${recipe.title} añadida a favoritos`
+    });
+  };
+
+  const handleRecipeClick = (recipe: Recipe) => {
+    navigate(`/recipe/${recipe.id}`);
+  };
+
+  const handleViewAll = (category: CategoryType) => {
+    navigate(`/category/${category}`);
+  };
+
+  const handleSearchInSupermarket = () => {
+    toast({
+      title: "Buscar en supermercado",
+      description: "Función próximamente disponible"
+    });
+  };
 
   const daysText = config.selectedDates?.length 
     ? `${config.selectedDates.length} día${config.selectedDates.length > 1 ? 's' : ''}`
@@ -88,55 +121,40 @@ const MiListaPage = () => {
           <div className="w-10"></div> {/* Spacer for centering */}
         </div>
       </div>
-      
-      <div className="bg-white pt-24 px-4 pb-8">
-        <div className="space-y-4">
-          {/* Recetas Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => navigate('/recetas')}
-          >
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-blue-50 rounded-xl">
-                  <ChefHat className="h-6 w-6 text-blue-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-foreground">Recetas</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Ver y gestionar tus recetas planificadas
-                  </p>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {recommendedRecipes.length} recetas
-                </div>
-              </div>
-            </CardContent>
-          </Card>
 
-          {/* Ingredientes Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => navigate('/ingredientes')}
-          >
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-green-50 rounded-xl">
-                  <ShoppingBasket className="h-6 w-6 text-green-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-foreground">Ingredientes</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Seleccionar ingredientes para tu compra
-                  </p>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {selectedIngredientsCount || 0} seleccionados
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      <AirbnbHeader 
+        showTabs={showTabs && selectedFilter === 'receta'}
+        activeTab={activeTabDate}
+        mealPlan={mealPlan}
+        onTabChange={scrollToDate}
+        onFilterChange={setSelectedFilter}
+        currentFilter={selectedFilter}
+      />
+      
+      <div className="bg-white" style={{ paddingTop: '180px' }}>
+        {selectedFilter === 'receta' ? (
+          <CategoryCarousel
+            category="trending"
+            recipes={recommendedRecipes}
+            onAddRecipe={handleAddRecipe}
+            onRecipeClick={handleRecipeClick}
+            onViewAll={handleViewAll}
+            sectionRefs={sectionRefs}
+          />
+        ) : (
+          <IngredientsView recipes={recommendedRecipes} />
+        )}
+      </div>
+
+      {/* Floating Button - Always visible */}
+      <div className="fixed bottom-4 left-4 right-4 z-40">
+        <button 
+          onClick={handleSearchInSupermarket}
+          className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
+        >
+          <Search className="h-5 w-5" />
+          Buscar súper · Ingredientes ({selectedIngredientsCount || 0})
+        </button>
       </div>
     </div>
   );
