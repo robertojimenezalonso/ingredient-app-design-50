@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
@@ -45,8 +45,7 @@ const WelcomePage = () => {
   } = useGlobalIngredients();
   
   // Initialize ingredients when recipes load
-  useMemo(() => {
-    console.log('ExplorePage: recommendedRecipes', recommendedRecipes);
+  useEffect(() => {
     if (recommendedRecipes.length > 0) {
       initializeIngredients(recommendedRecipes);
     }

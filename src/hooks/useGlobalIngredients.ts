@@ -46,11 +46,13 @@ export const useGlobalIngredients = () => {
     
     console.log('Initializing ingredients:', Array.from(allIngredientIds));
     
-    // Always initialize with all ingredients selected (this ensures they start selected)
-    // But merge with existing selections to preserve user choices
-    const newSelection = new Set([...selectedIngredientIds, ...allIngredientIds]);
-    saveSelection(newSelection);
-  }, [selectedIngredientIds, saveSelection]);
+    // Set all ingredients as selected (merge with existing but prioritize new recipes)
+    setSelectedIngredientIds(current => {
+      const newSelection = new Set([...current, ...allIngredientIds]);
+      localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
+      return newSelection;
+    });
+  }, []);
 
   // Toggle ingredient selection by name (affects all ingredients with same name)
   const toggleIngredientByName = useCallback((recipes: Recipe[], ingredientName: string) => {

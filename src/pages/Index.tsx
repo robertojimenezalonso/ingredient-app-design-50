@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
@@ -32,7 +32,7 @@ const Index = () => {
   const { getGroupedIngredients, getSelectedIngredientsCount, initializeIngredients } = useGlobalIngredients();
   
   // Initialize ingredients when recipes load
-  useMemo(() => {
+  useEffect(() => {
     if (explorationRecipes.length > 0) {
       initializeIngredients(explorationRecipes);
     }
