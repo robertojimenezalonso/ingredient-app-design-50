@@ -81,9 +81,21 @@ export const CategoryCarousel = ({
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
       
-      // Obtener recetas de esta categoría y tomar solo una
-      const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-      const selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
+      // Si hay recetas de IA disponibles, usarlas en lugar de las de ejemplo
+      let selectedRecipe;
+      if (recipes && recipes.length > 0) {
+        // Buscar una receta de IA que coincida con la categoría de la comida
+        selectedRecipe = recipes.find(recipe => 
+          recipe.category === categoryKey || 
+          recipe.category === 'breakfast' // La mayoría de recetas de IA son desayunos
+        ) || recipes[0]; // Si no hay coincidencia, usar la primera receta de IA
+        console.log('CategoryCarousel: Using AI recipe for', meal, ':', selectedRecipe.title);
+      } else {
+        // Fallback a recetas de ejemplo si no hay recetas de IA
+        const categoryRecipes = getRecipesByCategory(categoryKey, 10);
+        selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
+        console.log('CategoryCarousel: Using example recipe for', meal, ':', selectedRecipe?.title);
+      }
       
       return {
         meal,
