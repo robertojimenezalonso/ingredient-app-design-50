@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BottomNav } from '@/components/BottomNav';
@@ -54,13 +55,6 @@ const InitialWelcomePage = () => {
         </div>
 
         <div className="space-y-4">
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold mb-2">🗓️ Planifica tus comidas</h2>
-            <p className="text-gray-600 text-sm">
-              Selecciona los días que quieres planificar y las comidas que prefieres
-            </p>
-          </div>
-          
           <div className="bg-white rounded-xl p-6 shadow-sm">
             <h2 className="text-lg font-semibold mb-2">👥 Configura raciones</h2>
             <p className="text-gray-600 text-sm">
