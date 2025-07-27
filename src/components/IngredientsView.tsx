@@ -21,8 +21,14 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
   const groupedIngredients = useMemo(() => {
     const ingredients = getGroupedIngredients(recipes);
     console.log('IngredientsView: groupedIngredients recalculated', ingredients.length);
+    console.log('IngredientsView: selectedIngredientIds', selectedIngredientIds);
+    console.log('IngredientsView: ingredients with selection status:', ingredients.map(ing => ({
+      name: ing.name,
+      isSelected: ing.isSelected,
+      allIds: ing.allIds
+    })));
     return ingredients;
-  }, [getGroupedIngredients, recipes]);
+  }, [getGroupedIngredients, recipes, selectedIngredientIds]);
   
   const filteredIngredients = groupedIngredients.filter(ingredient =>
     ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
