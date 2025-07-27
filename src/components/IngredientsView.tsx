@@ -19,6 +19,7 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const groupedIngredients = getGroupedIngredients(recipes);
+  console.log('IngredientsView: groupedIngredients', groupedIngredients);
   const filteredIngredients = groupedIngredients.filter(ingredient =>
     ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
   );

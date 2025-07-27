@@ -44,11 +44,13 @@ export const useGlobalIngredients = () => {
       });
     });
     
-    // Only update if we don't have any selected ingredients yet
-    if (selectedIngredientIds.size === 0) {
-      saveSelection(allIngredientIds);
-    }
-  }, [selectedIngredientIds.size, saveSelection]);
+    console.log('Initializing ingredients:', Array.from(allIngredientIds));
+    
+    // Always initialize with all ingredients selected (this ensures they start selected)
+    // But merge with existing selections to preserve user choices
+    const newSelection = new Set([...selectedIngredientIds, ...allIngredientIds]);
+    saveSelection(newSelection);
+  }, [selectedIngredientIds, saveSelection]);
 
   // Toggle ingredient selection by name (affects all ingredients with same name)
   const toggleIngredientByName = useCallback((recipes: Recipe[], ingredientName: string) => {
