@@ -122,7 +122,10 @@ export const AirbnbHeader = ({
 
 
       {/* Date Tabs - Only show when showTabs is true AND mealPlan has data */}
-      {showTabs && mealPlan.length > 0 && (
+      {(() => {
+        console.log('AirbnbHeader: showTabs =', showTabs, 'mealPlan.length =', mealPlan.length);
+        return showTabs && mealPlan.length > 0;
+      })() && (
         <div className="bg-white/95 backdrop-blur-sm relative border-0 shadow-none z-20">
           <div className="px-4">
             <div ref={tabsContainerRef} className="flex gap-6 overflow-x-auto">
