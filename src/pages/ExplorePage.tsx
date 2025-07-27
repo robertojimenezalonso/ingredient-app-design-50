@@ -55,21 +55,12 @@ const WelcomePage = () => {
   // Calculate selected ingredients count - use useState for reactivity
   const [selectedIngredientsCount, setSelectedIngredientsCount] = useState(0);
   
-  // Update count when selection changes - CRITICAL: use only the recipes shown in current view
+  // Update count when selection changes - must react to selectedIngredientIds changes
   useEffect(() => {
-    if (selectedFilter === 'ingredientes') {
-      // When viewing ingredients, count only from the recipes being displayed
-      const count = getSelectedIngredientsCount(recommendedRecipes);
-      console.log('ExplorePage: Counting ingredients from recommendedRecipes:', count);
-      console.log('ExplorePage: RecommendedRecipes:', recommendedRecipes.map(r => r.title));
-      setSelectedIngredientsCount(count);
-    } else {
-      // When viewing recipes, count from all selected ingredients 
-      const count = getSelectedIngredientsCount(recommendedRecipes);
-      console.log('ExplorePage: Counting ingredients from recipe view:', count);
-      setSelectedIngredientsCount(count);
-    }
-  }, [getSelectedIngredientsCount, recommendedRecipes, selectedIngredientIds, selectedFilter]);
+    const count = getSelectedIngredientsCount(recommendedRecipes);
+    console.log('ExplorePage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
+    setSelectedIngredientsCount(count);
+  }, [selectedIngredientIds, recommendedRecipes, getSelectedIngredientsCount]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);
