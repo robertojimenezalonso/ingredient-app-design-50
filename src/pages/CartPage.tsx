@@ -8,6 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { BottomNav } from '@/components/BottomNav';
 import { FloatingButton } from '@/components/FloatingButton';
+import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -29,7 +30,7 @@ const CartPage = () => {
   const { toast } = useToast();
   const { cart, removeFromCart, getTotalIngredients, getGroupedIngredients, toggleIngredientSelection } = useCart();
   const { config } = useUserConfig();
-  const [viewMode, setViewMode] = useState<'recipes' | 'ingredients'>('recipes');
+  const [viewMode, setViewMode] = useState<'receta' | 'ingredientes'>('receta');
   const [searchQuery, setSearchQuery] = useState('');
 
   const groupedIngredients = getGroupedIngredients();
@@ -61,25 +62,13 @@ const CartPage = () => {
 
   if (cart.length === 0) {
     return (
-      <div className="min-h-screen bg-background pb-8">
-        <div className="flex items-center gap-3 px-4 py-3 border-b">
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => navigate('/')}
-            className="rounded-xl"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className="text-lg font-semibold">Mi lista de la compra</h1>
-            <p className="text-sm text-muted-foreground">
-              {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
-            </p>
-          </div>
-        </div>
-
-        <div className="flex flex-col items-center justify-center h-96 px-4">
+      <div className="min-h-screen bg-white pb-8">
+        <AirbnbHeader 
+          showTabs={false}
+          onFilterChange={setViewMode}
+        />
+        
+        <div className="flex flex-col items-center justify-center h-96 px-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 160px)' }}>
           <ShoppingBag className="h-16 w-16 text-muted-foreground mb-4" />
           <h2 className="text-xl font-semibold mb-2">Tu carrito está vacío</h2>
           <p className="text-muted-foreground text-center mb-6">
@@ -94,53 +83,37 @@ const CartPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background pb-8">
-      <div className="flex items-center gap-3 px-4 py-3 border-b">
-        <Button 
-          variant="ghost" 
-          size="icon"
-          onClick={() => navigate('/')}
-          className="rounded-xl"
-        >
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <div>
-          <h1 className="text-lg font-semibold">Mi lista de la compra</h1>
-          <p className="text-sm text-muted-foreground">
-            {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
-          </p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-white pb-8">
+      <AirbnbHeader 
+        showTabs={viewMode === 'receta'}
+        onFilterChange={setViewMode}
+      />
+      
+      <div className="p-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 160px)' }}>
 
-      <div className="p-4">
-        <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as 'recipes' | 'ingredients')}>
-          <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="recipes">Recetas</TabsTrigger>
-            <TabsTrigger value="ingredients">Ingredientes</TabsTrigger>
-          </TabsList>
-
-          {/* Search bar and add button */}
-          <div className="flex items-center gap-3 mb-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder={viewMode === 'recipes' ? "Buscar recetas..." : "Buscar ingredientes..."}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 rounded-xl border-0 bg-muted/50"
-              />
-            </div>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={handleAddIngredient}
-              className="rounded-xl border-0 bg-muted/50"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
+        {/* Search bar and add button */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder={viewMode === 'receta' ? "Buscar recetas..." : "Buscar ingredientes..."}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 rounded-xl border-0 bg-muted/50"
+            />
           </div>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleAddIngredient}
+            className="rounded-xl border-0 bg-muted/50"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
 
-          <TabsContent value="recipes" className="space-y-4">
+        {viewMode === 'receta' && (
+          <div className="space-y-4">
             {cart.map(item => (
               <Card key={item.recipe.id}>
                 <CardContent className="p-4">
@@ -188,9 +161,11 @@ const CartPage = () => {
                 </CardContent>
               </Card>
             ))}
-          </TabsContent>
+          </div>
+        )}
 
-          <TabsContent value="ingredients" className="space-y-3">
+        {viewMode === 'ingredientes' && (
+          <div className="space-y-3">
             {filteredIngredients.map((ingredient, index) => (
               <Card key={index}>
                 <CardContent className="p-4">
@@ -213,8 +188,8 @@ const CartPage = () => {
                 </CardContent>
               </Card>
             ))}
-          </TabsContent>
-        </Tabs>
+          </div>
+        )}
       </div>
 
       <FloatingButton onClick={handleSearchInSupermarket}>
