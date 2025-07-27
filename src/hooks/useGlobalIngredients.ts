@@ -20,6 +20,7 @@ export interface GroupedIngredient {
  */
 export const useGlobalIngredients = () => {
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<string>>(new Set());
+  const [version, setVersion] = useState(0); // Force re-renders
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -31,8 +32,8 @@ export const useGlobalIngredients = () => {
 
   // Save to localStorage whenever selection changes
   const saveSelection = useCallback((newSelection: Set<string>) => {
-    setSelectedIngredientIds(newSelection);
     localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
+    setSelectedIngredientIds(newSelection);
   }, []);
 
   // Initialize ingredients from recipes (select all by default)
@@ -90,6 +91,7 @@ export const useGlobalIngredients = () => {
       }
       
       localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
+      setVersion(v => v + 1); // Force re-render
       return newSelection;
     });
   }, []);

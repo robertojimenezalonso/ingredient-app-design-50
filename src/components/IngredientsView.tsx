@@ -20,9 +20,9 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
 
   const groupedIngredients = useMemo(() => {
     const ingredients = getGroupedIngredients(recipes);
-    console.log('IngredientsView: groupedIngredients recalculated', ingredients.length, 'selectedIds size:', selectedIngredientIds.size);
+    console.log('IngredientsView: groupedIngredients recalculated', ingredients.length);
     return ingredients;
-  }, [getGroupedIngredients, recipes, selectedIngredientIds.size]);
+  }, [getGroupedIngredients, recipes]);
   
   const filteredIngredients = groupedIngredients.filter(ingredient =>
     ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
