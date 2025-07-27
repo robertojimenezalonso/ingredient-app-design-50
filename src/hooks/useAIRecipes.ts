@@ -13,7 +13,7 @@ interface GenerateRecipeRequest {
 export const useAIRecipes = () => {
   const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateRecipe = async (request: GenerateRecipeRequest): Promise<Recipe | null> => {
+  const generateRecipe = async (request: GenerateRecipeRequest, showToast: boolean = true): Promise<Recipe | null> => {
     setIsGenerating(true);
     
     try {
@@ -50,10 +50,12 @@ export const useAIRecipes = () => {
         image: imageData?.imageUrl || 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'
       };
 
-      toast({
-        title: "Receta generada",
-        description: `${recipe.title} ha sido creada con IA`
-      });
+      if (showToast) {
+        toast({
+          title: "Receta generada",
+          description: `${recipe.title} ha sido creada con IA`
+        });
+      }
 
       return finalRecipe;
     } catch (error) {
@@ -69,7 +71,7 @@ export const useAIRecipes = () => {
     }
   };
 
-  const generateMultipleRecipes = async (request: GenerateRecipeRequest, count: number = 3): Promise<Recipe[]> => {
+  const generateMultipleRecipes = async (request: GenerateRecipeRequest, count: number = 3, showToast: boolean = true): Promise<Recipe[]> => {
     const recipes: Recipe[] = [];
     
     console.log(`Starting generation of ${count} recipes`);
@@ -77,7 +79,7 @@ export const useAIRecipes = () => {
     for (let i = 0; i < count; i++) {
       console.log(`Generating recipe ${i + 1} of ${count}`);
       try {
-        const recipe = await generateRecipe(request);
+        const recipe = await generateRecipe(request, showToast);
         if (recipe) {
           recipes.push(recipe);
           console.log(`Successfully generated recipe: ${recipe.title}`);

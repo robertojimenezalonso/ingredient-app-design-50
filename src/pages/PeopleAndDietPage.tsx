@@ -47,71 +47,18 @@ const PeopleAndDietPage = () => {
       hasPlanningSession: true
     });
 
-    try {
-      // Calculate total recipes needed (days × meals)
-      const totalCombinations = config.selectedDates.length * config.selectedMeals.length;
-      console.log('PeopleAndDietPage: Need to generate', totalCombinations, 'different recipes');
-      
-      // Generate specific recipes for each day-meal combination
-      const recipePromises = [];
-      for (const date of config.selectedDates) {
-        for (const meal of config.selectedMeals) {
-          console.log(`Generating recipe for ${date} - ${meal}`);
-          recipePromises.push(
-            generateRecipe({
-              people: peopleCount.adultos,
-              days: [date],
-              meals: [meal],
-              restrictions: [] // TODO: Add diet restrictions from user config
-            })
-          );
-        }
-      }
-      
-      // Generate all recipes in parallel for speed
-      console.log('PeopleAndDietPage: Starting parallel AI recipe generation...');
-      const aiRecipes = (await Promise.all(recipePromises)).filter(recipe => recipe !== null);
-
-      console.log('PeopleAndDietPage: AI generation completed. Recipes received:', aiRecipes.length);
-      console.log('PeopleAndDietPage: Recipe titles:', aiRecipes.map(r => r.title));
-
-      // Initialize ingredients with AI recipes
-      if (aiRecipes.length > 0) {
-        console.log('PeopleAndDietPage: Generated AI recipes:', aiRecipes.map(r => r.title));
-        initializeIngredients(aiRecipes);
-        
-        // Add AI recipes to cart automatically
-        aiRecipes.forEach(recipe => {
-          const selectedIngredients = recipe.ingredients.map(ing => ing.id);
-          addToCart(recipe, recipe.servings, selectedIngredients);
-        });
-
-        // Store AI recipes in localStorage to pass them to RecipeListPage
-        console.log('PeopleAndDietPage: Storing AI recipes in localStorage:', aiRecipes.length, 'recipes');
-        localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
-        
-        // Verify localStorage save
-        const savedRecipes = localStorage.getItem('aiGeneratedRecipes');
-        console.log('PeopleAndDietPage: Verification - localStorage now contains:', savedRecipes ? 'Data found' : 'No data');
-        if (savedRecipes) {
-          const parsed = JSON.parse(savedRecipes);
-          console.log('PeopleAndDietPage: Verified saved recipes count:', parsed.length);
-        }
-      } else {
-        console.error('PeopleAndDietPage: No AI recipes were generated successfully');
-      }
-
-      // Navigate to the recipe list
-      console.log('PeopleAndDietPage: Navigating to /milista...');
-      navigate('/milista');
-    } catch (error) {
-      console.error('Error generating AI recipes:', error);
-      toast({
-        title: "Error",
-        description: "No se pudieron generar las recetas. Intenta de nuevo.",
-        variant: "destructive"
-      });
-    }
+    // Store generation parameters in localStorage for the benefits page to handle
+    const generationParams = {
+      people: peopleCount.adultos,
+      selectedDates: config.selectedDates,
+      selectedMeals: config.selectedMeals,
+      restrictions: [] // TODO: Add diet restrictions from user config
+    };
+    
+    localStorage.setItem('pendingRecipeGeneration', JSON.stringify(generationParams));
+    
+    // Navigate to subscription benefits page which will handle the loading and generation
+    navigate('/subscription-benefits');
   };
   const totalPeople = peopleCount.adultos;
   const canContinue = totalPeople > 0;
@@ -218,7 +165,7 @@ const PeopleAndDietPage = () => {
               className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-3 h-auto text-base font-semibold"
             >
               <div className="flex items-center justify-center gap-3">
-                <span>{isGenerating ? 'Generando recetas con IA...' : 'IA Generar Lista'}</span>
+                <span>{isGenerating ? 'Generando recetas con IA...' : 'Generar plan'}</span>
                 {isGenerating ? (
                   <Sparkles className="h-5 w-5 animate-pulse" />
                 ) : (

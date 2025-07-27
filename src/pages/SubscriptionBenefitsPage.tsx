@@ -2,19 +2,77 @@ import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useUserConfig } from "@/contexts/UserConfigContext";
+import { useAIRecipes } from "@/hooks/useAIRecipes";
+import { useGlobalIngredients } from "@/hooks/useGlobalIngredients";
+import { useCart } from "@/hooks/useCart";
 
 const SubscriptionBenefitsPage = () => {
   const navigate = useNavigate();
   const { updateConfig } = useUserConfig();
+  const { generateRecipe } = useAIRecipes();
+  const { initializeIngredients } = useGlobalIngredients();
+  const { addToCart } = useCart();
   const [progress, setProgress] = useState(1);
   const [checkedItems, setCheckedItems] = useState<boolean[]>([false, false, false, false, false]);
+  const [isGeneratingRecipes, setIsGeneratingRecipes] = useState(false);
   
   const items = ['Supermercados', 'Ingredientes', 'Nutrición', 'Recetas', 'Precios'];
   const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Comparando precios…'];
 
+  const generateRecipesInBackground = async (params: any) => {
+    try {
+      console.log('SubscriptionBenefitsPage: Starting recipe generation...');
+      
+      // Generate specific recipes for each day-meal combination
+      const recipePromises = [];
+      for (const date of params.selectedDates) {
+        for (const meal of params.selectedMeals) {
+          console.log(`Generating recipe for ${date} - ${meal}`);
+          recipePromises.push(
+            generateRecipe({
+              people: params.people,
+              days: [date],
+              meals: [meal],
+              restrictions: params.restrictions
+            }, false) // Don't show toasts during generation
+          );
+        }
+      }
+      
+      // Generate all recipes in parallel
+      const aiRecipes = (await Promise.all(recipePromises)).filter(recipe => recipe !== null);
+      
+      console.log('SubscriptionBenefitsPage: AI generation completed. Recipes received:', aiRecipes.length);
+      
+      // Initialize ingredients and add to cart
+      if (aiRecipes.length > 0) {
+        initializeIngredients(aiRecipes);
+        
+        aiRecipes.forEach(recipe => {
+          const selectedIngredients = recipe.ingredients.map(ing => ing.id);
+          addToCart(recipe, recipe.servings, selectedIngredients);
+        });
+
+        // Store AI recipes in localStorage
+        localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
+        console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
+      }
+    } catch (error) {
+      console.error('Error generating recipes in background:', error);
+    }
+  };
+
   useEffect(() => {
+    // Check if we should generate recipes
+    const pendingGeneration = localStorage.getItem('pendingRecipeGeneration');
+    if (pendingGeneration) {
+      setIsGeneratingRecipes(true);
+      generateRecipesInBackground(JSON.parse(pendingGeneration));
+      localStorage.removeItem('pendingRecipeGeneration');
+    }
+
     const startTime = Date.now();
-    const duration = 2000; // 2 seconds total
+    const duration = isGeneratingRecipes ? 15000 : 2000; // Longer duration if generating recipes
     
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
