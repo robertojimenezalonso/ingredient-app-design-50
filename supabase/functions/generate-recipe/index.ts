@@ -40,46 +40,56 @@ serve(async (req) => {
 
     console.log('Request parsed:', { people, days: days.length, meals: meals.length, restrictions });
 
-    const prompt = `Genera una receta personalizada con las siguientes especificaciones:
-- Para ${people} persona${people > 1 ? 's' : ''}
-- Días: ${days.join(', ')}
-- Comidas: ${meals.join(', ')}
-- ${restrictionsText}
+    // Crear prompt más específico para cada comida
+    const mealType = meals[0]; // Tomar la primera comida
+    const dateStr = days[0]; // Tomar el primer día
+    
+    const prompt = `Genera UNA receta de ${mealType.toLowerCase()} para ${people} persona${people > 1 ? 's' : ''} para el día ${dateStr}. ${restrictionsText}
 
-Devuelve SOLO un JSON válido con la siguiente estructura:
+Devuelve SOLO un JSON válido con esta estructura EXACTA:
 {
-  "id": "string único",
-  "title": "nombre de la receta",
-  "category": "breakfast|lunch|dinner|snacks|desserts",
+  "id": "string-único-con-fecha-y-comida",
+  "title": "Nombre específico de la receta",
+  "category": "${mealType === 'Desayuno' ? 'breakfast' : mealType === 'Almuerzo' ? 'lunch' : mealType === 'Cena' ? 'dinner' : 'snacks'}",
   "servings": ${people},
-  "time": "tiempo en minutos (número)",
-  "calories": "calorías por porción (número)",
+  "time": número_en_minutos,
+  "calories": número_de_calorías,
   "ingredients": [
     {
-      "id": "string único",
-      "name": "nombre del ingrediente",
+      "id": "id-único-ingrediente",
+      "name": "Nombre del ingrediente",
       "amount": "cantidad",
       "unit": "unidad",
       "selected": true
     }
   ],
-  "instructions": ["paso 1", "paso 2", "..."],
+  "instructions": [
+    "Paso 1...",
+    "Paso 2..."
+  ],
   "macros": {
-    "carbs": "número",
-    "protein": "número", 
-    "fat": "número"
+    "carbs": número,
+    "protein": número,
+    "fat": número
   },
   "nutrition": {
-    "calories": "número",
-    "protein": "número",
-    "carbs": "número", 
-    "fat": "número",
-    "fiber": "número",
-    "sugar": "número"
+    "calories": número,
+    "protein": número,
+    "carbs": número,
+    "fat": número,
+    "fiber": número,
+    "sugar": número
   }
 }
 
-La receta debe ser realista, saludable y adecuada para las especificaciones dadas.`;
+IMPORTANTE: 
+- Incluye 4-7 ingredientes realistas y específicos
+- Haz que cada receta sea DIFERENTE a otras que puedas haber generado
+- El título debe ser específico y atractivo
+- Las cantidades deben ser realistas para ${people} persona${people > 1 ? 's' : ''}
+- Los pasos deben ser claros y concisos (máximo 7 pasos)
+
+La receta debe ser realista, saludable y adecuada para ${mealType.toLowerCase()}.`;
 
     console.log('Generated prompt:', prompt.substring(0, 200) + '...');
 

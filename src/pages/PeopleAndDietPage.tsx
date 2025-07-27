@@ -18,7 +18,7 @@ const PeopleAndDietPage = () => {
   const { config, updateConfig } = useUserConfig();
   const { addToCart } = useCart();
   const { recipes } = useRecipes();
-  const { generateMultipleRecipes, isGenerating } = useAIRecipes();
+  const { generateRecipe, generateMultipleRecipes, isGenerating } = useAIRecipes();
   const { initializeIngredients } = useGlobalIngredients();
   const { toast } = useToast();
   const [peopleCount, setPeopleCount] = useState({
@@ -48,18 +48,29 @@ const PeopleAndDietPage = () => {
     });
 
     try {
-      // Calculate the correct number of recipes based on days and meals
-      const recipesToGenerate = config.selectedDates.length * config.selectedMeals.length;
-      console.log(`Generating ${recipesToGenerate} recipes for ${config.selectedDates.length} days and ${config.selectedMeals.length} meals`);
+      // Calculate total recipes needed (days × meals)
+      const totalCombinations = config.selectedDates.length * config.selectedMeals.length;
+      console.log('PeopleAndDietPage: Need to generate', totalCombinations, 'different recipes');
       
-      // Generate AI recipes
-      console.log('PeopleAndDietPage: Starting AI recipe generation...');
-      const aiRecipes = await generateMultipleRecipes({
-        people: peopleCount.adultos,
-        days: config.selectedDates,
-        meals: config.selectedMeals,
-        restrictions: [] // TODO: Add diet restrictions from user config
-      }, recipesToGenerate);
+      // Generate specific recipes for each day-meal combination
+      const recipePromises = [];
+      for (const date of config.selectedDates) {
+        for (const meal of config.selectedMeals) {
+          console.log(`Generating recipe for ${date} - ${meal}`);
+          recipePromises.push(
+            generateRecipe({
+              people: peopleCount.adultos,
+              days: [date],
+              meals: [meal],
+              restrictions: [] // TODO: Add diet restrictions from user config
+            })
+          );
+        }
+      }
+      
+      // Generate all recipes in parallel for speed
+      console.log('PeopleAndDietPage: Starting parallel AI recipe generation...');
+      const aiRecipes = (await Promise.all(recipePromises)).filter(recipe => recipe !== null);
 
       console.log('PeopleAndDietPage: AI generation completed. Recipes received:', aiRecipes.length);
       console.log('PeopleAndDietPage: Recipe titles:', aiRecipes.map(r => r.title));

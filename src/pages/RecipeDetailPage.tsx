@@ -59,7 +59,21 @@ const RecipeDetailPage = () => {
   const [isOptimized, setIsOptimized] = useState(false);
   const [showOptimizationAnimation, setShowOptimizationAnimation] = useState(false);
   const [isOptimizationOpen, setIsOptimizationOpen] = useState(false);
-  const recipe = getRecipeById(id!);
+  // Function to get AI recipe by ID from localStorage
+  const getAIRecipeById = (id: string) => {
+    try {
+      const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+      if (savedAiRecipes) {
+        const aiRecipes = JSON.parse(savedAiRecipes);
+        return aiRecipes.find((recipe: any) => recipe.id === id) || null;
+      }
+    } catch (error) {
+      console.error('Error loading AI recipe from localStorage:', error);
+    }
+    return null;
+  };
+
+  const recipe = getRecipeById(id!) || getAIRecipeById(id!);
   const [selectedCategory, setSelectedCategory] = useState(recipe?.category || 'lunch');
 
   // Get the current valid ingredients (4-10 per recipe, no duplicates within same recipe)

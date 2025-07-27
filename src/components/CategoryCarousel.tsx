@@ -75,21 +75,20 @@ export const CategoryCarousel = ({
   }
 
   // Generar el plan de comidas
-  const mealPlan = config.selectedDates.map(dateStr => {
+  const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
     const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
-    const dayMeals = config.selectedMeals!.map(meal => {
+    const dayMeals = config.selectedMeals!.map((meal, mealIndex) => {
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
       
-      // Si hay recetas de IA disponibles, usarlas en lugar de las de ejemplo
+      // Si hay recetas de IA disponibles, asignar la receta correspondiente a esta combinación día+comida
       let selectedRecipe;
       if (recipes && recipes.length > 0) {
-        // Buscar una receta de IA que coincida con la categoría de la comida
-        selectedRecipe = recipes.find(recipe => 
-          recipe.category === categoryKey || 
-          recipe.category === 'breakfast' // La mayoría de recetas de IA son desayunos
-        ) || recipes[0]; // Si no hay coincidencia, usar la primera receta de IA
-        console.log('CategoryCarousel: Using AI recipe for', meal, ':', selectedRecipe.title);
+        // Calcular el índice de la receta para esta combinación día+comida
+        // Orden: día1-comida1, día1-comida2, día2-comida1, día2-comida2, etc.
+        const recipeIndex = (dayIndex * config.selectedMeals!.length) + mealIndex;
+        selectedRecipe = recipes[recipeIndex] || recipes[0]; // Fallback a la primera si no hay suficientes
+        console.log(`CategoryCarousel: Using AI recipe for ${dateStr}-${meal} (index ${recipeIndex}): ${selectedRecipe.title}`);
       } else {
         // Fallback a recetas de ejemplo si no hay recetas de IA
         const categoryRecipes = getRecipesByCategory(categoryKey, 10);
