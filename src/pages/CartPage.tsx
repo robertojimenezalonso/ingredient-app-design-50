@@ -32,6 +32,14 @@ const CartPage = () => {
   const { config } = useUserConfig();
   const [viewMode, setViewMode] = useState<'receta' | 'ingredientes'>('receta');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState('');
+
+  // Create mealPlan from selectedDates for tabs
+  const mealPlan = config.selectedDates?.map(dateStr => ({
+    date: new Date(dateStr),
+    dateStr,
+    meals: []
+  })) || [];
 
   const groupedIngredients = getGroupedIngredients();
   const filteredIngredients = groupedIngredients.filter(ingredient =>
@@ -66,9 +74,10 @@ const CartPage = () => {
         <AirbnbHeader 
           showTabs={false}
           onFilterChange={setViewMode}
+          mealPlan={mealPlan}
         />
         
-        <div className="flex flex-col items-center justify-center h-96 px-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 160px)' }}>
+        <div className="flex flex-col items-center justify-center h-96 px-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 200px)' }}>
           <ShoppingBag className="h-16 w-16 text-muted-foreground mb-4" />
           <h2 className="text-xl font-semibold mb-2">Tu carrito está vacío</h2>
           <p className="text-muted-foreground text-center mb-6">
@@ -86,10 +95,13 @@ const CartPage = () => {
     <div className="min-h-screen bg-white pb-8">
       <AirbnbHeader 
         showTabs={viewMode === 'receta'}
+        activeTab={activeTab}
+        mealPlan={mealPlan}
+        onTabChange={setActiveTab}
         onFilterChange={setViewMode}
       />
       
-      <div className="p-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 160px)' }}>
+      <div className="p-4" style={{ paddingTop: 'calc(env(safe-area-inset-top) + 200px)' }}>
 
         {/* Search bar and add button */}
         <div className="flex items-center gap-3 mb-4">
