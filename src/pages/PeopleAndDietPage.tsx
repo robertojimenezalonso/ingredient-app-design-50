@@ -33,13 +33,7 @@ const PeopleAndDietPage = () => {
       hasPlanningSession: true
     });
     
-    // Add sample recipes to cart with all ingredients selected
-    const sampleRecipes = recipes.slice(0, 4); // Get first 4 recipes as samples
-    sampleRecipes.forEach(recipe => {
-      const allIngredientIds = recipe.ingredients.map(ing => ing.id);
-      addToCart(recipe, peopleCount.adultos, allIngredientIds);
-    });
-    
+    // Navigate to the recipe list where AI recipes will be generated
     navigate('/milista');
   };
   const totalPeople = peopleCount.adultos;

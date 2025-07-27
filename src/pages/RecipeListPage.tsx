@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
+import { Search, ArrowLeft, Calendar, Users, Sparkles } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
+import { useAIRecipes } from '@/hooks/useAIRecipes';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { Recipe, CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 const RecipeListPage = () => {
   const navigate = useNavigate();
@@ -17,7 +19,9 @@ const RecipeListPage = () => {
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
   const { config } = useUserConfig();
+  const { generateMultipleRecipes, isGenerating } = useAIRecipes();
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
+  const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
   
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 
@@ -29,10 +33,12 @@ const RecipeListPage = () => {
     day.meals.map(meal => meal.recipe).filter(Boolean)
   );
   
-  // If no meal plan, show some default recipes for exploration
-  const recommendedRecipes = mealPlanRecipes.length > 0 
+  // Combine AI recipes with meal plan or default recipes
+  const defaultRecipes = mealPlanRecipes.length > 0 
     ? mealPlanRecipes 
     : categories.flatMap(category => getRecipesByCategory(category, 3));
+  
+  const recommendedRecipes = [...aiRecipes, ...defaultRecipes];
 
   const { 
     getSelectedIngredientsCount,
@@ -79,6 +85,31 @@ const RecipeListPage = () => {
     if (filter === 'ingredientes') {
       navigate('/ingredientes');
     }
+  };
+
+  const handleGenerateAIRecipes = async () => {
+    if (!config.selectedDates || !config.selectedMeals || !config.servingsPerRecipe) {
+      toast({
+        title: "Información incompleta",
+        description: "Asegúrate de haber completado la configuración desde el calendario y personas."
+      });
+      return;
+    }
+
+    const recipes = await generateMultipleRecipes({
+      people: config.servingsPerRecipe,
+      days: config.selectedDates,
+      meals: config.selectedMeals,
+      restrictions: [] // TODO: Add diet restrictions from user config
+    }, 6);
+
+    setAiRecipes(recipes);
+    
+    // Add AI recipes to cart automatically
+    recipes.forEach(recipe => {
+      const selectedIngredients = recipe.ingredients.map(ing => ing.id);
+      addToCart(recipe, recipe.servings, selectedIngredients);
+    });
   };
 
   const handleSearchInSupermarket = () => {
@@ -136,6 +167,21 @@ const RecipeListPage = () => {
       />
       
       <div className="bg-white" style={{ paddingTop: '180px' }}>
+        {/* AI Recipe Generation Button */}
+        {aiRecipes.length === 0 && config.hasPlanningSession && (
+          <div className="px-4 pb-6">
+            <Button 
+              onClick={handleGenerateAIRecipes}
+              disabled={isGenerating}
+              className="w-full bg-gradient-to-r from-primary to-primary/80 text-white"
+              size="lg"
+            >
+              <Sparkles className="w-5 h-5 mr-2" />
+              {isGenerating ? 'Generando recetas con IA...' : 'Generar recetas personalizadas con IA'}
+            </Button>
+          </div>
+        )}
+
         <CategoryCarousel
           category="trending"
           recipes={recommendedRecipes}
