@@ -73,16 +73,46 @@ export const useAIRecipes = () => {
 
   const generateMultipleRecipes = async (request: GenerateRecipeRequest, count: number = 3, showToast: boolean = true): Promise<Recipe[]> => {
     const recipes: Recipe[] = [];
+    const generatedTitles = new Set<string>();
     
     console.log(`Starting generation of ${count} recipes`);
+    
+    // Add variety prompts to ensure different recipes
+    const varietyPrompts = [
+      "Genera una receta completamente diferente y original",
+      "Crea una receta con ingredientes y estilo de cocina únicos", 
+      "Diseña una receta innovadora y creativa",
+      "Elabora una receta con técnicas culinarias distintas",
+      "Inventa una receta con sabores y texturas diferentes"
+    ];
     
     for (let i = 0; i < count; i++) {
       console.log(`Generating recipe ${i + 1} of ${count}`);
       try {
-        const recipe = await generateRecipe(request, showToast);
-        if (recipe) {
+        // Add variety and uniqueness to each request
+        const enhancedRequest = {
+          ...request,
+          restrictions: [...(request.restrictions || []), varietyPrompts[i % varietyPrompts.length]]
+        };
+        
+        const recipe = await generateRecipe(enhancedRequest, showToast);
+        if (recipe && !generatedTitles.has(recipe.title)) {
           recipes.push(recipe);
+          generatedTitles.add(recipe.title);
           console.log(`Successfully generated recipe: ${recipe.title}`);
+        } else if (recipe && generatedTitles.has(recipe.title)) {
+          console.log(`Skipping duplicate recipe: ${recipe.title}`);
+          // Try again with more specific prompt
+          const retryRequest = {
+            ...request,
+            restrictions: [...(request.restrictions || []), `Evita repetir estas recetas: ${Array.from(generatedTitles).join(', ')}`, varietyPrompts[(i + 2) % varietyPrompts.length]]
+          };
+          const retryRecipe = await generateRecipe(retryRequest, false);
+          if (retryRecipe && !generatedTitles.has(retryRecipe.title)) {
+            recipes.push(retryRecipe);
+            generatedTitles.add(retryRecipe.title);
+            console.log(`Successfully generated unique recipe on retry: ${retryRecipe.title}`);
+          }
         } else {
           console.error(`Failed to generate recipe ${i + 1} - recipe is null`);
         }
