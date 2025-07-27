@@ -50,8 +50,11 @@ export const useDateTabs = () => {
   }, [mealPlan, activeTab]);
 
   useEffect(() => {
+    // Encontrar el contenedor con scroll (CategoryCarousel)
+    const scrollContainer = document.querySelector('.fixed.overflow-y-auto') as HTMLElement;
+    
     const handleScroll = () => {
-      const scrollY = window.scrollY;
+      const scrollY = scrollContainer ? scrollContainer.scrollTop : window.scrollY;
       console.log('useDateTabs: scrollY =', scrollY);
       
       // Mostrar tabs cuando se hace scroll hacia abajo después de 50px
@@ -66,6 +69,7 @@ export const useDateTabs = () => {
 
     // Observer para detectar cuando cada sección llega exactamente a la posición de los tabs
     const observerOptions = {
+      root: scrollContainer, // Usar el contenedor de scroll como root
       rootMargin: '-170px 0px -70% 0px',
       threshold: 0
     };
@@ -92,10 +96,18 @@ export const useDateTabs = () => {
       });
     }, 100);
 
-    document.addEventListener('scroll', handleScroll, { passive: true });
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', handleScroll, { passive: true });
+    } else {
+      document.addEventListener('scroll', handleScroll, { passive: true });
+    }
     
     return () => {
-      document.removeEventListener('scroll', handleScroll);
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', handleScroll);
+      } else {
+        document.removeEventListener('scroll', handleScroll);
+      }
       observer.disconnect();
       clearTimeout(timeoutId);
     };
