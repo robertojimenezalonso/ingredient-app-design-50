@@ -28,11 +28,16 @@ const SearchOffersPage = () => {
     }
   }, []);
 
-  // Obtener ingredientes agrupados de las recetas AI
-  const groupedIngredients = getGroupedIngredients(aiRecipes);
-  const selectedIngredients = groupedIngredients.filter(ingredient => ingredient.isSelected);
+  // Obtener TODOS los ingredientes de las recetas AI (sin filtro de selección)
+  const getAllIngredients = () => {
+    const allIngredients = getGroupedIngredients(aiRecipes);
+    // Retornar todos los ingredientes sin importar si están seleccionados o no
+    return allIngredients;
+  };
 
-  // Calcular precios por supermercado
+  const allIngredients = getAllIngredients();
+
+  // Calcular precios por supermercado usando TODOS los ingredientes
   const calculateSupermarketPrices = () => {
     const supermarkets = [
       { 
@@ -86,7 +91,7 @@ const SearchOffersPage = () => {
       let totalPrice = 0;
       let availableItems = 0;
 
-      selectedIngredients.forEach(ingredient => {
+      allIngredients.forEach(ingredient => {
         const product = findMatchingProduct(ingredient.name);
         if (product) {
           // Extraer precio numérico del string
@@ -103,7 +108,7 @@ const SearchOffersPage = () => {
         ...supermarket,
         totalPrice: totalPrice.toFixed(2),
         availableItems,
-        totalItems: selectedIngredients.length
+        totalItems: allIngredients.length
       };
     });
 
@@ -132,7 +137,7 @@ const SearchOffersPage = () => {
           </Button>
           <div>
             <h1 className="text-lg font-semibold">Buscar ofertas</h1>
-            <p className="text-sm text-gray-600">{selectedIngredients.length} ingredientes seleccionados</p>
+            <p className="text-sm text-gray-600">{allIngredients.length} ingredientes encontrados</p>
           </div>
         </div>
       </div>
@@ -141,7 +146,7 @@ const SearchOffersPage = () => {
       <div className="h-1/2 p-4 overflow-y-auto">
         <h2 className="text-base font-medium mb-3 text-gray-900">Ingredientes de tus recetas</h2>
         <div className="space-y-2">
-          {selectedIngredients.map((ingredient, index) => {
+          {allIngredients.map((ingredient, index) => {
             const product = findMatchingProduct(ingredient.name);
             return (
               <Card key={index} className="bg-white">
