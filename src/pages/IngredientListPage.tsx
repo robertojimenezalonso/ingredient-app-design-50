@@ -45,16 +45,8 @@ const IngredientListPage = () => {
     }
   }, [recommendedRecipes.length, initializeIngredients]);
   
-  // Calculate selected ingredients count - use useState for reactivity
-  const [selectedIngredientsCount, setSelectedIngredientsCount] = useState(0);
-  
-  // Update count when selection changes
-  useEffect(() => {
-    console.log('IngredientListPage useEffect triggered - selectedIngredientIds size:', selectedIngredientIds.size);
-    const count = getSelectedIngredientsCount(recommendedRecipes);
-    console.log('IngredientListPage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
-    setSelectedIngredientsCount(count);
-  }, [selectedIngredientIds.size, recommendedRecipes, getSelectedIngredientsCount]);
+  // Calculate selected ingredients count directly
+  const selectedIngredientsCount = getSelectedIngredientsCount(recommendedRecipes);
 
   const handleFilterChange = (filter: 'receta' | 'ingredientes') => {
     if (filter === 'receta') {
