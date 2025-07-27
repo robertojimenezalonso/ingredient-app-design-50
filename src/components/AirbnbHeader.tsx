@@ -115,7 +115,7 @@ export const AirbnbHeader = ({
           </div>
         </div>
         <button className="p-2">
-          <Filter className="h-5 w-5 text-black" />
+          <img src="/lovable-uploads/8f17d96b-3966-4959-b7ba-b9d53435740d.png" alt="Filter" className="h-5 w-5" />
         </button>
       </div>
       
