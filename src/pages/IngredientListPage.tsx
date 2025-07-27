@@ -48,8 +48,10 @@ const IngredientListPage = () => {
   
   // Calculate selected ingredients count reactively when selection changes
   const selectedIngredientsCount = useMemo(() => {
-    return getSelectedIngredientsCount(recommendedRecipes);
-  }, [getSelectedIngredientsCount, recommendedRecipes, selectedIngredientIds]);
+    const count = getSelectedIngredientsCount(recommendedRecipes);
+    console.log('IngredientListPage: selectedIngredientsCount updated:', count, 'selectedIds size:', selectedIngredientIds.size);
+    return count;
+  }, [getSelectedIngredientsCount, recommendedRecipes, selectedIngredientIds.size]); // Use .size instead of the Set object
 
   const handleFilterChange = (filter: 'receta' | 'ingredientes') => {
     if (filter === 'receta') {
