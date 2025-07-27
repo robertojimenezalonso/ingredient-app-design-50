@@ -15,8 +15,8 @@ export interface GroupedIngredient {
 }
 
 /**
- * Global hook to manage ingredient selection state across the entire app.
- * This ensures consistency between recipe details, cart, and ingredients list.
+ * Simple global hook to manage ingredient selection state.
+ * Each ingredient has a unique ID, and we track which IDs are selected.
  */
 export const useGlobalIngredients = () => {
   const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<string>>(new Set());
@@ -35,7 +35,7 @@ export const useGlobalIngredients = () => {
     localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
   }, []);
 
-  // Initialize ingredients when recipes are loaded
+  // Initialize ingredients from recipes (select all by default)
   const initializeIngredients = useCallback((recipes: Recipe[]) => {
     const allIngredientIds = new Set<string>();
     recipes.forEach(recipe => {
@@ -44,17 +44,32 @@ export const useGlobalIngredients = () => {
       });
     });
     
-    console.log('Initializing ingredients:', Array.from(allIngredientIds));
-    
-    // Set all ingredients as selected (merge with existing but prioritize new recipes)
+    // Select all ingredients by default (only if we have no selection yet)
     setSelectedIngredientIds(current => {
-      const newSelection = new Set([...current, ...allIngredientIds]);
+      if (current.size === 0) {
+        const newSelection = new Set(allIngredientIds);
+        localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
+        return newSelection;
+      }
+      return current;
+    });
+  }, []);
+
+  // Toggle individual ingredient by ID
+  const toggleIngredientById = useCallback((ingredientId: string) => {
+    setSelectedIngredientIds(current => {
+      const newSelection = new Set(current);
+      if (newSelection.has(ingredientId)) {
+        newSelection.delete(ingredientId);
+      } else {
+        newSelection.add(ingredientId);
+      }
       localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
       return newSelection;
     });
   }, []);
 
-  // Toggle ingredient selection by name (affects all ingredients with same name)
+  // Toggle all ingredients with the same name
   const toggleIngredientByName = useCallback((recipes: Recipe[], ingredientName: string) => {
     // Find all ingredient IDs with this name across all recipes
     const relatedIds = recipes
@@ -62,34 +77,24 @@ export const useGlobalIngredients = () => {
       .filter(ingredient => ingredient.name === ingredientName)
       .map(ingredient => ingredient.id);
 
-    const newSelected = new Set(selectedIngredientIds);
-    
-    // If any are selected, deselect all. Otherwise, select all.
-    const anySelected = relatedIds.some(id => newSelected.has(id));
-    
-    if (anySelected) {
-      relatedIds.forEach(id => newSelected.delete(id));
-    } else {
-      relatedIds.forEach(id => newSelected.add(id));
-    }
-    
-    saveSelection(newSelected);
-  }, [selectedIngredientIds, saveSelection]);
+    setSelectedIngredientIds(current => {
+      const newSelection = new Set(current);
+      
+      // If any are selected, deselect all. Otherwise, select all.
+      const anySelected = relatedIds.some(id => newSelection.has(id));
+      
+      if (anySelected) {
+        relatedIds.forEach(id => newSelection.delete(id));
+      } else {
+        relatedIds.forEach(id => newSelection.add(id));
+      }
+      
+      localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
+      return newSelection;
+    });
+  }, []);
 
-  // Toggle individual ingredient by ID
-  const toggleIngredientById = useCallback((ingredientId: string) => {
-    const newSelected = new Set(selectedIngredientIds);
-    
-    if (newSelected.has(ingredientId)) {
-      newSelected.delete(ingredientId);
-    } else {
-      newSelected.add(ingredientId);
-    }
-    
-    saveSelection(newSelected);
-  }, [selectedIngredientIds, saveSelection]);
-
-  // Get grouped ingredients from recipes
+  // Get grouped ingredients from recipes (for ingredients list view)
   const getGroupedIngredients = useCallback((recipes: Recipe[]): GroupedIngredient[] => {
     const grouped: Record<string, {
       id: string;
@@ -103,6 +108,9 @@ export const useGlobalIngredients = () => {
 
     recipes.forEach(recipe => {
       recipe.ingredients.forEach(ingredient => {
+        // Only include if ingredient is selected
+        if (!selectedIngredientIds.has(ingredient.id)) return;
+        
         const key = ingredient.name;
         const amount = parseFloat(ingredient.amount) || 0;
 
@@ -128,8 +136,7 @@ export const useGlobalIngredients = () => {
       ...item,
       displayAmount: item.totalAmount > 0 ? `${item.totalAmount} ${item.unit}` : `${item.amount} ${item.unit}`,
       recipeCount: item.recipes.length,
-      // Check if ANY of the ingredient IDs in this group are selected
-      isSelected: item.allIds.some(id => selectedIngredientIds.has(id))
+      isSelected: true // These are all selected by definition
     }));
   }, [selectedIngredientIds]);
 
