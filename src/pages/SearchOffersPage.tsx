@@ -28,16 +28,10 @@ const SearchOffersPage = () => {
     }
   }, []);
 
-  // Obtener TODOS los ingredientes de las recetas AI (sin filtro de selección)
-  const getAllIngredients = () => {
-    const allIngredients = getGroupedIngredients(aiRecipes);
-    // Retornar todos los ingredientes sin importar si están seleccionados o no
-    return allIngredients;
-  };
+  // Obtener ingredientes agrupados de las recetas AI (igual que en la pantalla ingredientes)
+  const groupedIngredients = getGroupedIngredients(aiRecipes);
 
-  const allIngredients = getAllIngredients();
-
-  // Calcular precios por supermercado usando TODOS los ingredientes
+  // Calcular precios por supermercado usando los ingredientes agrupados
   const calculateSupermarketPrices = () => {
     const supermarkets = [
       { 
@@ -91,7 +85,7 @@ const SearchOffersPage = () => {
       let totalPrice = 0;
       let availableItems = 0;
 
-      allIngredients.forEach(ingredient => {
+      groupedIngredients.forEach(ingredient => {
         const product = findMatchingProduct(ingredient.name);
         if (product) {
           // Extraer precio numérico del string
@@ -108,7 +102,7 @@ const SearchOffersPage = () => {
         ...supermarket,
         totalPrice: totalPrice.toFixed(2),
         availableItems,
-        totalItems: allIngredients.length
+        totalItems: groupedIngredients.length
       };
     });
 
@@ -137,7 +131,7 @@ const SearchOffersPage = () => {
           </Button>
           <div>
             <h1 className="text-lg font-semibold">Buscar ofertas</h1>
-            <p className="text-sm text-gray-600">{allIngredients.length} ingredientes encontrados</p>
+            <p className="text-sm text-gray-600">{groupedIngredients.length} ingredientes encontrados</p>
           </div>
         </div>
       </div>
@@ -146,33 +140,27 @@ const SearchOffersPage = () => {
       <div className="h-1/2 p-4 overflow-y-auto">
         <h2 className="text-base font-medium mb-3 text-gray-900">Ingredientes de tus recetas</h2>
         <div className="space-y-2">
-          {allIngredients.map((ingredient, index) => {
-            const product = findMatchingProduct(ingredient.name);
-            return (
-              <Card key={index} className="bg-white">
-                <CardContent className="p-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100">
-                      <img
-                        src={product?.image || `https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=100&h=100&fit=crop`}
-                        alt={ingredient.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium text-sm">{ingredient.name}</h3>
-                      <p className="text-xs text-gray-600">
-                        {ingredient.displayAmount} · {ingredient.recipeCount} receta{ingredient.recipeCount > 1 ? 's' : ''}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium">{product?.price || 'N/A'}</p>
-                    </div>
+          {groupedIngredients.map((ingredient, index) => (
+            <Card key={index} className="bg-white">
+              <CardContent className="p-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100">
+                    <img
+                      src={`https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=100&h=100&fit=crop`}
+                      alt={ingredient.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                </CardContent>
-              </Card>
-            );
-          })}
+                  <div className="flex-1">
+                    <h3 className="font-medium text-sm">{ingredient.name}</h3>
+                    <p className="text-xs text-gray-600">
+                      {ingredient.displayAmount} · {ingredient.recipeCount} receta{ingredient.recipeCount > 1 ? 's' : ''}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
 
