@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus, Minus, ChevronRight, List } from 'lucide-react';
+import { ArrowLeft, Plus, Minus, ChevronRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,13 +8,19 @@ import { Badge } from '@/components/ui/badge';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useCart } from '@/hooks/useCart';
 import { useRecipes } from '@/hooks/useRecipes';
+import { useAIRecipes } from '@/hooks/useAIRecipes';
+import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
+import { useToast } from '@/hooks/use-toast';
 
 import { cn } from '@/lib/utils';
 const PeopleAndDietPage = () => {
   const navigate = useNavigate();
-  const { updateConfig } = useUserConfig();
+  const { config, updateConfig } = useUserConfig();
   const { addToCart } = useCart();
   const { recipes } = useRecipes();
+  const { generateMultipleRecipes, isGenerating } = useAIRecipes();
+  const { initializeIngredients } = useGlobalIngredients();
+  const { toast } = useToast();
   const [peopleCount, setPeopleCount] = useState({
     adultos: 0
   });
@@ -26,15 +32,54 @@ const PeopleAndDietPage = () => {
       [type]: Math.max(0, prev[type] + delta)
     }));
   };
-  const handleGeneratePlan = () => {
+  const handleGeneratePlan = async () => {
+    if (!config.selectedDates || !config.selectedMeals || peopleCount.adultos === 0) {
+      toast({
+        title: "Información incompleta",
+        description: "Asegúrate de haber completado la configuración desde el calendario y personas."
+      });
+      return;
+    }
+
     // Update configuration
     updateConfig({
       servingsPerRecipe: peopleCount.adultos,
       hasPlanningSession: true
     });
-    
-    // Navigate to the recipe list where AI recipes will be generated
-    navigate('/milista');
+
+    try {
+      // Generate AI recipes
+      const aiRecipes = await generateMultipleRecipes({
+        people: peopleCount.adultos,
+        days: config.selectedDates,
+        meals: config.selectedMeals,
+        restrictions: [] // TODO: Add diet restrictions from user config
+      }, 6);
+
+      // Initialize ingredients with AI recipes
+      if (aiRecipes.length > 0) {
+        initializeIngredients(aiRecipes);
+        
+        // Add AI recipes to cart automatically
+        aiRecipes.forEach(recipe => {
+          const selectedIngredients = recipe.ingredients.map(ing => ing.id);
+          addToCart(recipe, recipe.servings, selectedIngredients);
+        });
+
+        // Store AI recipes in localStorage to pass them to RecipeListPage
+        localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
+      }
+
+      // Navigate to the recipe list
+      navigate('/milista');
+    } catch (error) {
+      console.error('Error generating AI recipes:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron generar las recetas. Intenta de nuevo.",
+        variant: "destructive"
+      });
+    }
   };
   const totalPeople = peopleCount.adultos;
   const canContinue = totalPeople > 0;
@@ -135,10 +180,18 @@ const PeopleAndDietPage = () => {
         {/* Footer with Generate Plan Button */}
         <div className="fixed bottom-0 left-0 right-0 p-4">
           <div className="flex justify-center mb-4">
-            <Button onClick={handleGeneratePlan} disabled={!canContinue} className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-3 h-auto text-base font-semibold">
+            <Button 
+              onClick={handleGeneratePlan} 
+              disabled={!canContinue || isGenerating} 
+              className="w-full bg-foreground text-background hover:bg-foreground/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-3 h-auto text-base font-semibold"
+            >
               <div className="flex items-center justify-center gap-3">
-                <span>Generar lista</span>
-                <img src="/lovable-uploads/a06f3ae9-f80a-48b6-bf55-8c1b736c79f8.png" alt="List icon" className="h-7 w-7" />
+                <span>{isGenerating ? 'Generando recetas con IA...' : 'IA Generar Lista'}</span>
+                {isGenerating ? (
+                  <Sparkles className="h-5 w-5 animate-pulse" />
+                ) : (
+                  <img src="/lovable-uploads/a06f3ae9-f80a-48b6-bf55-8c1b736c79f8.png" alt="List icon" className="h-7 w-7" />
+                )}
               </div>
             </Button>
           </div>
