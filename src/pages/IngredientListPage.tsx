@@ -3,22 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
-import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
-import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { IngredientsView } from '@/components/IngredientsView';
 import { useDateTabs } from '@/hooks/useDateTabs';
-import { Recipe, CategoryType } from '@/types/recipe';
+import { CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
 
-const MiListaPage = () => {
+const IngredientListPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
-  const { addToCart } = useCart();
   const { config } = useUserConfig();
-  const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   
   const categories: CategoryType[] = [
@@ -54,27 +50,16 @@ const MiListaPage = () => {
   
   // Update count when selection changes
   useEffect(() => {
-    console.log('MiListaPage useEffect triggered - selectedIngredientIds size:', selectedIngredientIds.size);
+    console.log('IngredientListPage useEffect triggered - selectedIngredientIds size:', selectedIngredientIds.size);
     const count = getSelectedIngredientsCount(recommendedRecipes);
-    console.log('MiListaPage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
+    console.log('IngredientListPage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
     setSelectedIngredientsCount(count);
   }, [Array.from(selectedIngredientIds).join(','), recommendedRecipes, getSelectedIngredientsCount]);
 
-  const handleAddRecipe = (recipe: Recipe) => {
-    const selectedIngredients = recipe.ingredients.map(ing => ing.id);
-    addToCart(recipe, recipe.servings, selectedIngredients);
-    toast({
-      title: "Receta añadida",
-      description: `${recipe.title} añadida a favoritos`
-    });
-  };
-
-  const handleRecipeClick = (recipe: Recipe) => {
-    navigate(`/recipe/${recipe.id}`);
-  };
-
-  const handleViewAll = (category: CategoryType) => {
-    navigate(`/category/${category}`);
+  const handleFilterChange = (filter: 'receta' | 'ingredientes') => {
+    if (filter === 'receta') {
+      navigate('/milista');
+    }
   };
 
   const handleSearchInSupermarket = () => {
@@ -123,27 +108,16 @@ const MiListaPage = () => {
       </div>
 
       <AirbnbHeader 
-        showTabs={showTabs && selectedFilter === 'receta'}
+        showTabs={false} /* No tabs in ingredients view */
         activeTab={activeTabDate}
         mealPlan={mealPlan}
         onTabChange={scrollToDate}
-        onFilterChange={setSelectedFilter}
-        currentFilter={selectedFilter}
+        onFilterChange={handleFilterChange}
+        currentFilter="ingredientes"
       />
       
       <div className="bg-white" style={{ paddingTop: '180px' }}>
-        {selectedFilter === 'receta' ? (
-          <CategoryCarousel
-            category="trending"
-            recipes={recommendedRecipes}
-            onAddRecipe={handleAddRecipe}
-            onRecipeClick={handleRecipeClick}
-            onViewAll={handleViewAll}
-            sectionRefs={sectionRefs}
-          />
-        ) : (
-          <IngredientsView recipes={recommendedRecipes} />
-        )}
+        <IngredientsView recipes={recommendedRecipes} />
       </div>
 
       {/* Floating Button - Always visible */}
@@ -160,4 +134,4 @@ const MiListaPage = () => {
   );
 };
 
-export default MiListaPage;
+export default IngredientListPage;
