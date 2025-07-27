@@ -1,12 +1,27 @@
 import { useState, useEffect, useRef } from 'react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
+import { Recipe } from '@/types/recipe';
 
 const mealCategoryMap: Record<string, any> = {
   'Desayuno': 'breakfast',
   'Almuerzo': 'lunch', 
   'Cena': 'dinner',
   'Tentempié': 'snacks'
+};
+
+// Función para clonar una receta con IDs únicos
+const cloneRecipeWithUniqueIds = (recipe: Recipe, dayIndex: number, mealIndex: number): Recipe => {
+  const uniqueRecipeId = `${recipe.id}-day${dayIndex}-meal${mealIndex}`;
+  
+  return {
+    ...recipe,
+    id: uniqueRecipeId,
+    ingredients: recipe.ingredients.map((ingredient, ingredientIndex) => ({
+      ...ingredient,
+      id: `${ingredient.id}-day${dayIndex}-meal${mealIndex}-ing${ingredientIndex}`
+    }))
+  };
 };
 
 export const useDateTabs = () => {
@@ -19,18 +34,21 @@ export const useDateTabs = () => {
 
   // Generar el plan de comidas
   const mealPlan = config.selectedDates && config.selectedMeals 
-    ? config.selectedDates.map(dateStr => {
+    ? config.selectedDates.map((dateStr, dayIndex) => {
         const date = new Date(dateStr + 'T12:00:00');
-        const dayMeals = config.selectedMeals!.map(meal => {
+        const dayMeals = config.selectedMeals!.map((meal, mealIndex) => {
           const categoryKey = mealCategoryMap[meal];
           if (!categoryKey) return null;
           
           const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-          const selectedRecipe = categoryRecipes[0];
+          const originalRecipe = categoryRecipes[0];
+          
+          // Clonar la receta con IDs únicos para evitar cruces entre recetas del mismo nombre
+          const uniqueRecipe = cloneRecipeWithUniqueIds(originalRecipe, dayIndex, mealIndex);
           
           return {
             meal,
-            recipe: selectedRecipe
+            recipe: uniqueRecipe
           };
         }).filter(Boolean);
         
