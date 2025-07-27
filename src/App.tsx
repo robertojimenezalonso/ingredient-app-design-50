@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserConfigProvider } from "./contexts/UserConfigContext";
 import InitialWelcomePage from "./pages/InitialWelcomePage";
 import RecipeListPage from "./pages/RecipeListPage";
-
+import SearchOffersPage from "./pages/SearchOffersPage";
 import CalendarSelectionPage from "./pages/CalendarSelectionPage";
 import PeopleAndDietPage from "./pages/PeopleAndDietPage";
 import SubscriptionBenefitsPage from "./pages/SubscriptionBenefitsPage";
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
             <Route path="/milista" element={<RecipeListPage />} />
+            <Route path="/search-offers" element={<SearchOffersPage />} />
             
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/recipe/:id" element={<RecipeDetailPage />} />

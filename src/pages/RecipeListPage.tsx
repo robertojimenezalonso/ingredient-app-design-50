@@ -109,12 +109,8 @@ const RecipeListPage = () => {
     // Navigation removed as ingredients page no longer exists
   };
 
-
   const handleSearchOffers = () => {
-    toast({
-      title: "Buscar ofertas",
-      description: "Función próximamente disponible"
-    });
+    navigate('/search-offers');
   };
 
   const daysText = config.selectedDates?.length 

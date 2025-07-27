@@ -1,14 +1,18 @@
+
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
+
 interface FloatingButtonProps {
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   children?: React.ReactNode;
   selectedCount?: number;
   totalPrice?: number;
   recipeCount?: number;
 }
+
 export const FloatingButton = ({
   onClick,
   className = "",
@@ -17,7 +21,9 @@ export const FloatingButton = ({
   totalPrice,
   recipeCount
 }: FloatingButtonProps) => {
+  const navigate = useNavigate();
   const [isAtBottom, setIsAtBottom] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -33,6 +39,16 @@ export const FloatingButton = ({
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else {
+      // Navegar a la nueva página de búsqueda de ofertas
+      navigate('/search-offers');
+    }
+  };
+
   const buttonText = selectedCount !== undefined 
     ? `Buscar súper · Ingredientes (${selectedCount})` 
     : "Cambiar receta";
@@ -44,7 +60,7 @@ export const FloatingButton = ({
       paddingBottom: `calc(32px + env(safe-area-inset-bottom))`
     }}>
       <Button 
-        onClick={onClick}
+        onClick={handleClick}
         className={`h-12 text-base font-medium rounded-full px-6 shadow-lg ${className}`}
         size="lg"
       >
