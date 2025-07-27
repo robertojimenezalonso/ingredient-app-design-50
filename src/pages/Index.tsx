@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
-import { useRecipeIngredients } from '@/hooks/useRecipeIngredients';
+import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
@@ -28,13 +28,20 @@ const Index = () => {
   ];
 
   // Get all recipes for ingredient management
-  const allRecipes = categories.flatMap(category => getRecipesByCategory(category, 10));
-  const { getGroupedIngredients } = useRecipeIngredients(allRecipes);
+  const explorationRecipes = categories.flatMap(category => getRecipesByCategory(category, 10));
+  const { getGroupedIngredients, getSelectedIngredientsCount, initializeIngredients } = useGlobalIngredients();
+  
+  // Initialize ingredients when recipes load
+  useMemo(() => {
+    if (explorationRecipes.length > 0) {
+      initializeIngredients(explorationRecipes);
+    }
+  }, [explorationRecipes.length, initializeIngredients]);
   
   // Calculate selected ingredients count with memoization
   const selectedIngredientsCount = useMemo(() => {
-    return getGroupedIngredients().filter(ingredient => ingredient.isSelected).length;
-  }, [getGroupedIngredients]);
+    return getSelectedIngredientsCount();
+  }, [getSelectedIngredientsCount]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);
@@ -90,14 +97,14 @@ const Index = () => {
           /* All recipes mixed together */
           <CategoryCarousel
             category="trending"
-            recipes={categories.flatMap(category => getRecipesByCategory(category, 10))}
+            recipes={explorationRecipes}
             onAddRecipe={handleAddRecipe}
             onRecipeClick={handleRecipeClick}
             onViewAll={handleViewAll}
             sectionRefs={sectionRefs}
           />
         ) : (
-          <IngredientsView recipes={categories.flatMap(category => getRecipesByCategory(category, 10))} />
+          <IngredientsView recipes={explorationRecipes} />
         )}
       </div>
 

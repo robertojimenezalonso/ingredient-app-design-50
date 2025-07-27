@@ -46,6 +46,7 @@ const WelcomePage = () => {
   
   // Initialize ingredients when recipes load
   useMemo(() => {
+    console.log('ExplorePage: recommendedRecipes', recommendedRecipes);
     if (recommendedRecipes.length > 0) {
       initializeIngredients(recommendedRecipes);
     }
