@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Clock, Star } from 'lucide-react';
@@ -124,7 +123,7 @@ const SearchOffersPage = () => {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/milista')}
             className="rounded-full"
           >
             <ArrowLeft className="h-5 w-5" />
