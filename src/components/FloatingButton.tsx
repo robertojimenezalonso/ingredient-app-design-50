@@ -43,18 +43,16 @@ export const FloatingButton = ({
     <div className={containerClasses} style={{
       paddingBottom: 'env(safe-area-inset-bottom)'
     }}>
-      <div className="p-4">
-        <Button 
-          onClick={onClick}
-          className={`w-full h-12 text-base font-medium ${className}`}
-          size="lg"
-        >
-          <div className="flex items-center justify-center gap-2">
-            <Search className="h-5 w-5" />
-            <span>Buscar oferta</span>
-          </div>
-        </Button>
-      </div>
+      <Button 
+        onClick={onClick}
+        className={`h-12 text-base font-medium rounded-full px-6 ${className}`}
+        size="lg"
+      >
+        <div className="flex items-center justify-center gap-2">
+          <Search className="h-5 w-5" />
+          <span>Buscar oferta</span>
+        </div>
+      </Button>
     </div>
   );
 };
