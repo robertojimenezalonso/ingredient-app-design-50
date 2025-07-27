@@ -75,28 +75,39 @@ La receta debe ser realista, saludable y adecuada para las especificaciones dada
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4.1-2025-04-14',
         messages: [
           { 
             role: 'system', 
-            content: 'Eres un chef experto que genera recetas en formato JSON válido. Siempre responde SOLO con JSON válido, sin texto adicional.' 
+            content: 'Eres un chef experto que genera recetas en formato JSON válido. Responde ÚNICAMENTE con JSON válido, sin texto adicional, sin comillas externas, sin markdown. Solo el objeto JSON puro.' 
           },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.7,
+        temperature: 0.3,
+        response_format: { type: "json_object" }
       }),
     });
 
     const data = await response.json();
+    
+    if (!response.ok) {
+      console.error('OpenAI API error:', data);
+      throw new Error(`OpenAI API error: ${data.error?.message || 'Unknown error'}`);
+    }
+    
     const recipeText = data.choices[0].message.content;
+    console.log('Raw OpenAI response:', recipeText);
     
     // Parse the JSON response
     let recipe;
     try {
-      recipe = JSON.parse(recipeText);
+      // Clean the response in case there are extra characters
+      const cleanedText = recipeText.trim().replace(/^```json\n?/, '').replace(/\n?```$/, '');
+      recipe = JSON.parse(cleanedText);
     } catch (parseError) {
       console.error('Error parsing recipe JSON:', parseError);
-      throw new Error('Invalid JSON response from OpenAI');
+      console.error('Raw response:', recipeText);
+      throw new Error(`Invalid JSON response from OpenAI: ${parseError.message}`);
     }
 
     return new Response(JSON.stringify({ recipe }), {
