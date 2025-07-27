@@ -52,11 +52,14 @@ export const useDateTabs = () => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
+      console.log('useDateTabs: scrollY =', scrollY);
       
       // Mostrar tabs cuando se hace scroll hacia abajo después de 50px
       if (scrollY > 50) {
+        console.log('useDateTabs: Setting showTabs to true');
         setShowTabs(true);
       } else {
+        console.log('useDateTabs: Setting showTabs to false');
         setShowTabs(false);
       }
     };
