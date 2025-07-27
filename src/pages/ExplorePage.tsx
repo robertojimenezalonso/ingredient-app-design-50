@@ -41,7 +41,8 @@ const WelcomePage = () => {
   const { 
     getGroupedIngredients, 
     getSelectedIngredientsCount,
-    initializeIngredients 
+    initializeIngredients,
+    selectedIngredientIds
   } = useGlobalIngredients();
   
   // Initialize ingredients when recipes load
@@ -51,10 +52,10 @@ const WelcomePage = () => {
     }
   }, [recommendedRecipes.length, initializeIngredients]);
   
-  // Calculate selected ingredients count with memoization
+  // Calculate selected ingredients count with memoization - now reactive to selection changes
   const selectedIngredientsCount = useMemo(() => {
     return getSelectedIngredientsCount(recommendedRecipes);
-  }, [getSelectedIngredientsCount, recommendedRecipes]);
+  }, [getSelectedIngredientsCount, recommendedRecipes, selectedIngredientIds]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);
