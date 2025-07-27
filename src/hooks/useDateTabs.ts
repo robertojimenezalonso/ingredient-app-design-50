@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
+import { Recipe, CategoryType } from '@/types/recipe';
 
 const mealCategoryMap: Record<string, any> = {
   'Desayuno': 'breakfast',
@@ -17,18 +18,14 @@ export const useDateTabs = () => {
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const lastScrollY = useRef(0);
 
-  // Función para crear una copia de receta con IDs únicos
-  const cloneRecipeWithUniqueIds = (originalRecipe: any, dayIndex: number, mealIndex: number) => {
-    if (!originalRecipe) return null;
-    
-    const uniqueRecipeId = `${originalRecipe.id}-day${dayIndex}-meal${mealIndex}`;
-    
+  // Función para clonar una receta con IDs únicos de ingredientes
+  const cloneRecipeWithUniqueIds = (recipe: Recipe, dayIndex: number, mealIndex: number): Recipe => {
     return {
-      ...originalRecipe,
-      id: uniqueRecipeId,
-      ingredients: originalRecipe.ingredients.map((ingredient: any, ingIndex: number) => ({
+      ...recipe,
+      id: `${recipe.id}-day${dayIndex}-meal${mealIndex}`, // ID único para cada instancia
+      ingredients: recipe.ingredients.map((ingredient, ingredientIndex) => ({
         ...ingredient,
-        id: `${ingredient.id}-day${dayIndex}-meal${mealIndex}-ing${ingIndex}`
+        id: `${ingredient.id}-day${dayIndex}-meal${mealIndex}-ing${ingredientIndex}` // ID único para cada ingrediente
       }))
     };
   };
@@ -41,13 +38,12 @@ export const useDateTabs = () => {
           const categoryKey = mealCategoryMap[meal];
           if (!categoryKey) return null;
           
-          const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-          const originalRecipe = categoryRecipes[0];
-          const uniqueRecipe = cloneRecipeWithUniqueIds(originalRecipe, dayIndex, mealIndex);
+          const categoryRecipes = getRecipesByCategory(categoryKey as CategoryType, 10);
+          const selectedRecipe = categoryRecipes[dayIndex % categoryRecipes.length];
           
           return {
             meal,
-            recipe: uniqueRecipe
+            recipe: selectedRecipe ? cloneRecipeWithUniqueIds(selectedRecipe, dayIndex, mealIndex) : null
           };
         }).filter(Boolean);
         
