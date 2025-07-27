@@ -159,7 +159,6 @@ const WelcomePage = () => {
         )}
       </div>
 
-      {/* Floating Button - Always visible */}
       <div className="fixed bottom-4 left-4 right-4 z-40">
         <button 
           onClick={handleSearchInSupermarket}
