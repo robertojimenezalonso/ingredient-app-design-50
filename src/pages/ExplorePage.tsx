@@ -17,7 +17,7 @@ const WelcomePage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
-  const { addToCart } = useCart();
+  const { addToCart, cart } = useCart();
   const { config } = useUserConfig();
   const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('explore');
   const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
@@ -28,8 +28,14 @@ const WelcomePage = () => {
     'appetizer', 'snacks', 'desserts', 'favorites'
   ];
 
-  // Get all recipes for ingredient management
-  const allRecipes = categories.flatMap(category => getRecipesByCategory(category, 10));
+  // Get recipes from cart - these are the actual selected recipes
+  const cartRecipes = cart.map(item => item.recipe);
+  
+  // If cart is empty, show some default recipes for exploration
+  const allRecipes = cartRecipes.length > 0 
+    ? cartRecipes 
+    : categories.flatMap(category => getRecipesByCategory(category, 3)); // Reduced from 10 to 3
+
   const { 
     getGroupedIngredients, 
     getSelectedIngredientsCount,
@@ -130,17 +136,17 @@ const WelcomePage = () => {
       
       <div className="bg-white" style={{ paddingTop: '180px' }}>
         {selectedFilter === 'receta' ? (
-          /* All recipes mixed together */
+          /* Show actual cart recipes or default exploration recipes */
           <CategoryCarousel
             category="trending"
-            recipes={categories.flatMap(category => getRecipesByCategory(category, 10))}
+            recipes={allRecipes}
             onAddRecipe={handleAddRecipe}
             onRecipeClick={handleRecipeClick}
             onViewAll={handleViewAll}
             sectionRefs={sectionRefs}
           />
         ) : (
-          <IngredientsView recipes={categories.flatMap(category => getRecipesByCategory(category, 10))} />
+          <IngredientsView recipes={allRecipes} />
         )}
       </div>
 
