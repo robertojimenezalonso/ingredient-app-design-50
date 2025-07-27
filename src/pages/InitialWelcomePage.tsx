@@ -40,9 +40,6 @@ const InitialWelcomePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 pb-24">
-      {/* Saved Shopping List Card - only shows when returning from Mi Lista */}
-      <SavedShoppingListCard />
-      
       {/* Main welcome content */}
       <div className="p-6">
         <div className="text-center mb-8">
@@ -73,6 +70,9 @@ const InitialWelcomePage = () => {
           )}
         </div>
       </div>
+
+      {/* Saved Shopping List Card - now shows below the button */}
+      <SavedShoppingListCard />
 
       <BottomNav 
         activeTab={activeTab}
