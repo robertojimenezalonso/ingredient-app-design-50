@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Search, Plus } from 'lucide-react';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,11 +15,15 @@ interface IngredientsViewProps {
 
 export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
   const { toast } = useToast();
-  const { getGroupedIngredients, toggleIngredientByName } = useGlobalIngredients();
+  const { getGroupedIngredients, toggleIngredientByName, selectedIngredientIds } = useGlobalIngredients();
   const [searchQuery, setSearchQuery] = useState('');
 
-  const groupedIngredients = getGroupedIngredients(recipes);
-  console.log('IngredientsView: groupedIngredients', groupedIngredients);
+  const groupedIngredients = useMemo(() => {
+    const ingredients = getGroupedIngredients(recipes);
+    console.log('IngredientsView: groupedIngredients recalculated', ingredients.length, 'selectedIds size:', selectedIngredientIds.size);
+    return ingredients;
+  }, [getGroupedIngredients, recipes, selectedIngredientIds.size]);
+  
   const filteredIngredients = groupedIngredients.filter(ingredient =>
     ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
