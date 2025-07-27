@@ -7,13 +7,15 @@ interface FloatingButtonProps {
   children?: React.ReactNode;
   selectedCount?: number;
   totalPrice?: number;
+  recipeCount?: number;
 }
 export const FloatingButton = ({
   onClick,
   className = "",
   children,
   selectedCount,
-  totalPrice
+  totalPrice,
+  recipeCount
 }: FloatingButtonProps) => {
   const [isAtBottom, setIsAtBottom] = useState(false);
   useEffect(() => {
@@ -42,14 +44,21 @@ export const FloatingButton = ({
       paddingBottom: 'env(safe-area-inset-bottom)'
     }}>
       <div className="p-4">
+        {recipeCount !== undefined && selectedCount !== undefined && (
+          <div className="text-left mb-2">
+            <span className="text-sm text-gray-500">
+              {recipeCount} recetas · {selectedCount} ingredientes
+            </span>
+          </div>
+        )}
         <Button 
           onClick={onClick}
           className={`w-full h-12 text-base font-medium ${className}`}
           size="lg"
         >
           <div className="flex items-center justify-center gap-2">
-            {selectedCount !== undefined && <Search className="h-5 w-5" />}
-            <span>{buttonText}</span>
+            <Search className="h-5 w-5" />
+            <span>{children || buttonText}</span>
           </div>
         </Button>
       </div>

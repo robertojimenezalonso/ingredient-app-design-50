@@ -179,9 +179,10 @@ const RecipeListPage = () => {
 
       <FloatingButton 
         onClick={handleSearchOffers}
-        selectedCount={1}
+        selectedCount={selectedIngredientsCount}
+        recipeCount={recommendedRecipes.length}
       >
-        Buscar ofertas
+        Buscar mejor oferta
       </FloatingButton>
 
     </div>
