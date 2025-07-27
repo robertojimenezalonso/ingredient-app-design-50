@@ -48,21 +48,14 @@ const RecipeListPage = () => {
     day.meals.map(meal => meal.recipe).filter(Boolean)
   );
   
-  // Combine AI recipes with meal plan or default recipes
-  const defaultRecipes = mealPlanRecipes.length > 0 
-    ? mealPlanRecipes 
-    : categories.flatMap(category => getRecipesByCategory(category, 3));
-  
-  // Prioritize AI recipes - if we have them, show them first
-  const recommendedRecipes = aiRecipes.length > 0 
-    ? aiRecipes 
-    : [...defaultRecipes];
+  // Only show AI recipes if available, no fallback to examples
+  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : [];
 
   console.log('RecipeListPage: Current recipes state:', {
     aiRecipesCount: aiRecipes.length,
-    mealPlanRecipesCount: mealPlanRecipes.length,
-    defaultRecipesCount: defaultRecipes.length,
-    recommendedRecipesCount: recommendedRecipes.length
+    aiRecipesTitles: aiRecipes.map(r => r.title),
+    recommendedRecipesCount: recommendedRecipes.length,
+    showingAI: aiRecipes.length > 0
   });
 
   const { 

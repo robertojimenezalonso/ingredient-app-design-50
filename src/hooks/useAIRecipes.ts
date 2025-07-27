@@ -76,16 +76,21 @@ export const useAIRecipes = () => {
     
     for (let i = 0; i < count; i++) {
       console.log(`Generating recipe ${i + 1} of ${count}`);
-      const recipe = await generateRecipe(request);
-      if (recipe) {
-        recipes.push(recipe);
-        console.log(`Successfully generated recipe: ${recipe.title}`);
-      } else {
-        console.error(`Failed to generate recipe ${i + 1}`);
+      try {
+        const recipe = await generateRecipe(request);
+        if (recipe) {
+          recipes.push(recipe);
+          console.log(`Successfully generated recipe: ${recipe.title}`);
+        } else {
+          console.error(`Failed to generate recipe ${i + 1} - recipe is null`);
+        }
+      } catch (error) {
+        console.error(`Error generating recipe ${i + 1}:`, error);
+        // Continue with the next recipe instead of stopping
       }
     }
     
-    console.log(`Completed generation. Total recipes: ${recipes.length}`);
+    console.log(`Completed generation. Total successful recipes: ${recipes.length} out of ${count} requested`);
     return recipes;
   };
 

@@ -62,6 +62,7 @@ const PeopleAndDietPage = () => {
 
       // Initialize ingredients with AI recipes
       if (aiRecipes.length > 0) {
+        console.log('PeopleAndDietPage: Generated AI recipes:', aiRecipes.map(r => r.title));
         initializeIngredients(aiRecipes);
         
         // Add AI recipes to cart automatically
@@ -71,7 +72,10 @@ const PeopleAndDietPage = () => {
         });
 
         // Store AI recipes in localStorage to pass them to RecipeListPage
+        console.log('PeopleAndDietPage: Storing AI recipes in localStorage:', aiRecipes.length, 'recipes');
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
+      } else {
+        console.error('PeopleAndDietPage: No AI recipes were generated successfully');
       }
 
       // Navigate to the recipe list
