@@ -106,9 +106,7 @@ const RecipeListPage = () => {
   };
 
   const handleFilterChange = (filter: 'receta' | 'ingredientes') => {
-    if (filter === 'ingredientes') {
-      navigate('/ingredientes');
-    }
+    // Navigation removed as ingredients page no longer exists
   };
 
 
