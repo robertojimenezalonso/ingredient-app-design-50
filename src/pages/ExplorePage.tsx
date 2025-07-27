@@ -117,7 +117,7 @@ const WelcomePage = () => {
         currentFilter={selectedFilter}
       />
       
-      <div style={{ paddingTop: '180px' }}>
+      <div className="bg-white" style={{ paddingTop: '180px' }}>
         {selectedFilter === 'receta' ? (
           /* All recipes mixed together */
           <CategoryCarousel
