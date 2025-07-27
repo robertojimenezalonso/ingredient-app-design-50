@@ -19,38 +19,30 @@ export interface GroupedIngredient {
  * Each ingredient has a unique ID, and we track which IDs are selected.
  */
 export const useGlobalIngredients = () => {
-  const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<string>>(new Set());
-  const [version, setVersion] = useState(0); // Force re-renders
+  const [selectedIngredientIds, setSelectedIngredientIds] = useState<string[]>([]);
 
   // Load from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem('global-selected-ingredients');
     if (saved) {
-      setSelectedIngredientIds(new Set(JSON.parse(saved)));
+      setSelectedIngredientIds(JSON.parse(saved));
     }
-  }, []);
-
-  // Save to localStorage whenever selection changes
-  const saveSelection = useCallback((newSelection: Set<string>) => {
-    localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
-    setSelectedIngredientIds(newSelection);
   }, []);
 
   // Initialize ingredients from recipes (select all by default)
   const initializeIngredients = useCallback((recipes: Recipe[]) => {
-    const allIngredientIds = new Set<string>();
+    const allIngredientIds: string[] = [];
     recipes.forEach(recipe => {
       recipe.ingredients.forEach(ingredient => {
-        allIngredientIds.add(ingredient.id);
+        allIngredientIds.push(ingredient.id);
       });
     });
     
     // Select all ingredients by default (only if we have no selection yet)
     setSelectedIngredientIds(current => {
-      if (current.size === 0) {
-        const newSelection = new Set(allIngredientIds);
-        localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
-        return newSelection;
+      if (current.length === 0) {
+        localStorage.setItem('global-selected-ingredients', JSON.stringify(allIngredientIds));
+        return allIngredientIds;
       }
       return current;
     });
@@ -59,13 +51,11 @@ export const useGlobalIngredients = () => {
   // Toggle individual ingredient by ID
   const toggleIngredientById = useCallback((ingredientId: string) => {
     setSelectedIngredientIds(current => {
-      const newSelection = new Set(current);
-      if (newSelection.has(ingredientId)) {
-        newSelection.delete(ingredientId);
-      } else {
-        newSelection.add(ingredientId);
-      }
-      localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
+      const newSelection = current.includes(ingredientId)
+        ? current.filter(id => id !== ingredientId)
+        : [...current, ingredientId];
+      
+      localStorage.setItem('global-selected-ingredients', JSON.stringify(newSelection));
       return newSelection;
     });
   }, []);
@@ -79,19 +69,20 @@ export const useGlobalIngredients = () => {
       .map(ingredient => ingredient.id);
 
     setSelectedIngredientIds(current => {
-      const newSelection = new Set(current);
-      
       // If any are selected, deselect all. Otherwise, select all.
-      const anySelected = relatedIds.some(id => newSelection.has(id));
+      const anySelected = relatedIds.some(id => current.includes(id));
       
+      let newSelection: string[];
       if (anySelected) {
-        relatedIds.forEach(id => newSelection.delete(id));
+        // Remove all related IDs
+        newSelection = current.filter(id => !relatedIds.includes(id));
       } else {
-        relatedIds.forEach(id => newSelection.add(id));
+        // Add all related IDs that aren't already selected
+        newSelection = [...current, ...relatedIds.filter(id => !current.includes(id))];
       }
       
-      localStorage.setItem('global-selected-ingredients', JSON.stringify(Array.from(newSelection)));
-      setVersion(v => v + 1); // Force re-render
+      localStorage.setItem('global-selected-ingredients', JSON.stringify(newSelection));
+      console.log('toggleIngredientByName:', ingredientName, 'newSelection length:', newSelection.length);
       return newSelection;
     });
   }, []);
@@ -137,7 +128,7 @@ export const useGlobalIngredients = () => {
       ...item,
       displayAmount: item.totalAmount > 0 ? `${item.totalAmount} ${item.unit}` : `0 ${item.unit}`,
       recipeCount: item.recipes.length,
-      isSelected: item.allIds.some(id => selectedIngredientIds.has(id))
+      isSelected: item.allIds.some(id => selectedIngredientIds.includes(id))
     }));
   }, [selectedIngredientIds]);
 
@@ -151,13 +142,13 @@ export const useGlobalIngredients = () => {
 
   // Check if ingredient is selected
   const isIngredientSelected = useCallback((ingredientId: string) => {
-    return selectedIngredientIds.has(ingredientId);
+    return selectedIngredientIds.includes(ingredientId);
   }, [selectedIngredientIds]);
 
   // Get selected ingredients for a specific recipe
   const getSelectedIngredientsForRecipe = useCallback((recipe: Recipe) => {
     return recipe.ingredients.filter(ingredient => 
-      selectedIngredientIds.has(ingredient.id)
+      selectedIngredientIds.includes(ingredient.id)
     ).map(ingredient => ingredient.id);
   }, [selectedIngredientIds]);
 
