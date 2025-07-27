@@ -140,7 +140,9 @@ export const useGlobalIngredients = () => {
   // Get total count of selected ingredients (unique by name)
   const getSelectedIngredientsCount = useCallback((recipes: Recipe[]) => {
     const grouped = getGroupedIngredients(recipes);
-    return grouped.filter(ingredient => ingredient.isSelected).length;
+    const selectedCount = grouped.filter(ingredient => ingredient.isSelected).length;
+    console.log('getSelectedIngredientsCount:', selectedCount, 'from grouped:', grouped.map(g => ({ name: g.name, isSelected: g.isSelected })));
+    return selectedCount;
   }, [getGroupedIngredients]);
 
   // Check if ingredient is selected
