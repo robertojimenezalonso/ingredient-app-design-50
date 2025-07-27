@@ -112,10 +112,8 @@ export const AirbnbHeader = ({
       </div>
       
 
-      {/* Switch entre Receta y Lista de ingredientes - Hidden when scrolled */}
-      <div className={`transition-all duration-300 overflow-hidden bg-white relative z-10 ${
-        isScrolled ? 'max-h-0 opacity-0' : 'max-h-96 opacity-100'
-      }`}>
+      {/* Switch entre Receta y Lista de ingredientes - Always visible as part of header */}
+      <div className="bg-white border-t border-gray-100">
         <div className="flex items-center justify-center gap-1 px-4 py-4">
           <button 
             className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
