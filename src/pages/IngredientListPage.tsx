@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Calendar, Users, ChefHat, ShoppingBasket } from 'lucide-react';
+import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useUserConfig } from '@/contexts/UserConfigContext';
+import { IngredientsView } from '@/components/IngredientsView';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { CategoryType } from '@/types/recipe';
-import { Card, CardContent } from '@/components/ui/card';
+import { useToast } from '@/hooks/use-toast';
 
-const MiListaPage = () => {
+const IngredientListPage = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   const { config } = useUserConfig();
   const { mealPlan } = useDateTabs();
@@ -47,9 +49,18 @@ const MiListaPage = () => {
   
   // Update count when selection changes
   useEffect(() => {
+    console.log('IngredientListPage useEffect triggered - selectedIngredientIds size:', selectedIngredientIds.size);
     const count = getSelectedIngredientsCount(recommendedRecipes);
+    console.log('IngredientListPage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
     setSelectedIngredientsCount(count);
   }, [Array.from(selectedIngredientIds).join(','), recommendedRecipes, getSelectedIngredientsCount]);
+
+  const handleSearchInSupermarket = () => {
+    toast({
+      title: "Buscar en supermercado",
+      description: "Función próximamente disponible"
+    });
+  };
 
   const daysText = config.selectedDates?.length 
     ? `${config.selectedDates.length} día${config.selectedDates.length > 1 ? 's' : ''}`
@@ -63,19 +74,14 @@ const MiListaPage = () => {
       <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200/50">
         <div className="flex items-center justify-between p-4">
           <button 
-            onClick={() => {
-              console.log('Setting showSavedConfig flag and navigating to /');
-              // Set flag to show saved configuration when returning to Explorer
-              localStorage.setItem('showSavedConfig', 'true');
-              navigate('/');
-            }}
+            onClick={() => navigate('/milista')}
             className="flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
           >
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </button>
           
           <div className="flex-1 text-center">
-            <h1 className="text-lg font-semibold text-foreground">Mi lista de la compra</h1>
+            <h1 className="text-lg font-semibold text-foreground">Ingredientes</h1>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground mt-1">
               <Calendar className="h-4 w-4" />
               <span>{daysText}</span>
@@ -89,57 +95,22 @@ const MiListaPage = () => {
         </div>
       </div>
       
-      <div className="bg-white pt-24 px-4 pb-8">
-        <div className="space-y-4">
-          {/* Recetas Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => navigate('/recetas')}
-          >
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-blue-50 rounded-xl">
-                  <ChefHat className="h-6 w-6 text-blue-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-foreground">Recetas</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Ver y gestionar tus recetas planificadas
-                  </p>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {recommendedRecipes.length} recetas
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+      <div className="bg-white" style={{ paddingTop: '100px' }}>
+        <IngredientsView recipes={recommendedRecipes} />
+      </div>
 
-          {/* Ingredientes Card */}
-          <Card 
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            onClick={() => navigate('/ingredientes')}
-          >
-            <CardContent className="p-6">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center justify-center w-12 h-12 bg-green-50 rounded-xl">
-                  <ShoppingBasket className="h-6 w-6 text-green-600" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-foreground">Ingredientes</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Seleccionar ingredientes para tu compra
-                  </p>
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {selectedIngredientsCount || 0} seleccionados
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+      {/* Floating Button - Always visible */}
+      <div className="fixed bottom-4 left-4 right-4 z-40">
+        <button 
+          onClick={handleSearchInSupermarket}
+          className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
+        >
+          <Search className="h-5 w-5" />
+          Buscar súper · Ingredientes ({selectedIngredientsCount || 0})
+        </button>
       </div>
     </div>
   );
 };
 
-export default MiListaPage;
+export default IngredientListPage;
