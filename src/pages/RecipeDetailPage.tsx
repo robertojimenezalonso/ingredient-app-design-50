@@ -9,7 +9,7 @@ import { useCarrefourAPI } from '@/hooks/useCarrefourAPI';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Checkbox } from '@/components/ui/checkbox';
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -511,7 +511,6 @@ const RecipeDetailPage = () => {
                           {finalDisplayAmount} {finalUnit}
                         </p>
                       </div>
-                      <Checkbox checked={isIngredientSelected(ingredient.id)} onCheckedChange={() => handleIngredientToggle(ingredient.id)} />
                     </div>
                     {displayIndex < getCurrentValidIngredients().length - 1 && <div className="border-b border-border"></div>}
                   </div>;
