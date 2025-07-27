@@ -28,13 +28,15 @@ const WelcomePage = () => {
     'appetizer', 'snacks', 'desserts', 'favorites'
   ];
 
-  // Get recipes from cart - these are the actual selected recipes
-  const cartRecipes = cart.map(item => item.recipe);
+  // Get recipes from the meal plan - these are the recommended recipes
+  const mealPlanRecipes = mealPlan.flatMap(day => 
+    day.meals.map(meal => meal.recipe).filter(Boolean)
+  );
   
-  // If cart is empty, show some default recipes for exploration
-  const allRecipes = cartRecipes.length > 0 
-    ? cartRecipes 
-    : categories.flatMap(category => getRecipesByCategory(category, 3)); // Reduced from 10 to 3
+  // If no meal plan, show some default recipes for exploration
+  const recommendedRecipes = mealPlanRecipes.length > 0 
+    ? mealPlanRecipes 
+    : categories.flatMap(category => getRecipesByCategory(category, 3));
 
   const { 
     getGroupedIngredients, 
@@ -44,10 +46,10 @@ const WelcomePage = () => {
   
   // Initialize ingredients when recipes load
   useMemo(() => {
-    if (allRecipes.length > 0) {
-      initializeIngredients(allRecipes);
+    if (recommendedRecipes.length > 0) {
+      initializeIngredients(recommendedRecipes);
     }
-  }, [allRecipes.length, initializeIngredients]);
+  }, [recommendedRecipes.length, initializeIngredients]);
   
   // Calculate selected ingredients count with memoization
   const selectedIngredientsCount = useMemo(() => {
@@ -136,17 +138,17 @@ const WelcomePage = () => {
       
       <div className="bg-white" style={{ paddingTop: '180px' }}>
         {selectedFilter === 'receta' ? (
-          /* Show actual cart recipes or default exploration recipes */
+          /* Show recommended recipes from meal plan */
           <CategoryCarousel
             category="trending"
-            recipes={allRecipes}
+            recipes={recommendedRecipes}
             onAddRecipe={handleAddRecipe}
             onRecipeClick={handleRecipeClick}
             onViewAll={handleViewAll}
             sectionRefs={sectionRefs}
           />
         ) : (
-          <IngredientsView recipes={allRecipes} />
+          <IngredientsView recipes={recommendedRecipes} />
         )}
       </div>
 
