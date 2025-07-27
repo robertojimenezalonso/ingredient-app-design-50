@@ -19,6 +19,12 @@ const IngredientListPage = () => {
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
 
+  const { 
+    getSelectedIngredientsCount,
+    initializeIngredients,
+    selectedIngredientIds
+  } = useGlobalIngredients();
+
   // Load AI recipes from localStorage when component mounts
   useEffect(() => {
     console.log('IngredientListPage: Component mounted, checking localStorage...');
@@ -31,13 +37,19 @@ const IngredientListPage = () => {
         console.log('IngredientListPage: Successfully parsed AI recipes:', parsedRecipes.length, 'recipes');
         console.log('IngredientListPage: Recipe titles:', parsedRecipes.map(r => r.title));
         setAiRecipes(parsedRecipes);
+        
+        // Initialize ingredients immediately when AI recipes are loaded
+        if (parsedRecipes.length > 0) {
+          console.log('IngredientListPage: Immediately initializing ingredients with AI recipes');
+          initializeIngredients(parsedRecipes);
+        }
       } catch (error) {
         console.error('IngredientListPage: Error parsing AI recipes from localStorage:', error);
       }
     } else {
       console.log('IngredientListPage: No AI recipes found in localStorage');
     }
-  }, []);
+  }, [initializeIngredients]);
   
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 
@@ -63,19 +75,6 @@ const IngredientListPage = () => {
     showingAI: aiRecipes.length > 0
   });
 
-  const { 
-    getSelectedIngredientsCount,
-    initializeIngredients,
-    selectedIngredientIds
-  } = useGlobalIngredients();
-  
-  // Initialize ingredients when recipes load
-  useEffect(() => {
-    if (recommendedRecipes.length > 0) {
-      console.log('IngredientListPage: Initializing ingredients with', recommendedRecipes.length, 'recipes');
-      initializeIngredients(recommendedRecipes);
-    }
-  }, [recommendedRecipes.length, initializeIngredients]);
   
   // Calculate selected ingredients count reactively when selection changes
   const selectedIngredientsCount = useMemo(() => {
