@@ -1,47 +1,50 @@
 import { useState, useEffect } from 'react';
 import { CartItem, Recipe } from '@/types/recipe';
+import { useGlobalIngredients } from './useGlobalIngredients';
 
 export const useCart = () => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [selectedIngredientIds, setSelectedIngredientIds] = useState<Set<string>>(new Set());
+  const { 
+    getSelectedIngredientsForRecipe, 
+    getGroupedIngredients,
+    getSelectedIngredientsCount,
+    toggleIngredientByName,
+    initializeIngredients
+  } = useGlobalIngredients();
 
   useEffect(() => {
     const savedCart = localStorage.getItem('recipe-cart');
-    const savedSelected = localStorage.getItem('selected-ingredients');
     if (savedCart) {
-      setCart(JSON.parse(savedCart));
+      const parsedCart = JSON.parse(savedCart);
+      setCart(parsedCart);
+      
+      // Initialize global ingredients with cart recipes
+      const allRecipes = parsedCart.map((item: CartItem) => item.recipe);
+      initializeIngredients(allRecipes);
     }
-    if (savedSelected) {
-      setSelectedIngredientIds(new Set(JSON.parse(savedSelected)));
-    }
-  }, []);
+  }, [initializeIngredients]);
 
   const saveCart = (newCart: CartItem[]) => {
     setCart(newCart);
     localStorage.setItem('recipe-cart', JSON.stringify(newCart));
-    
-    // Auto-select all ingredients from new cart
-    const allIngredientIds = new Set<string>();
-    newCart.forEach(item => {
-      item.selectedIngredients.forEach(id => allIngredientIds.add(id));
-    });
-    setSelectedIngredientIds(allIngredientIds);
-    localStorage.setItem('selected-ingredients', JSON.stringify(Array.from(allIngredientIds)));
   };
 
-  const addToCart = (recipe: Recipe, servings: number, selectedIngredients: string[]) => {
+  const addToCart = (recipe: Recipe, servings: number, selectedIngredients?: string[]) => {
     const existingIndex = cart.findIndex(item => item.recipe.id === recipe.id);
+    
+    // Use current selected ingredients if not provided
+    const ingredientsToUse = selectedIngredients || getSelectedIngredientsForRecipe(recipe);
     
     if (existingIndex >= 0) {
       const newCart = [...cart];
       newCart[existingIndex] = {
         recipe,
         servings,
-        selectedIngredients
+        selectedIngredients: ingredientsToUse
       };
       saveCart(newCart);
     } else {
-      saveCart([...cart, { recipe, servings, selectedIngredients }]);
+      saveCart([...cart, { recipe, servings, selectedIngredients: ingredientsToUse }]);
     }
   };
 
@@ -51,75 +54,17 @@ export const useCart = () => {
   };
 
   const getTotalIngredients = () => {
-    return cart.reduce((total, item) => total + item.selectedIngredients.length, 0);
+    return getSelectedIngredientsCount();
   };
 
-  const toggleIngredientSelection = (ingredientId: string) => {
-    const newSelected = new Set(selectedIngredientIds);
-    if (newSelected.has(ingredientId)) {
-      newSelected.delete(ingredientId);
-    } else {
-      newSelected.add(ingredientId);
-    }
-    setSelectedIngredientIds(newSelected);
-    localStorage.setItem('selected-ingredients', JSON.stringify(Array.from(newSelected)));
-    
-    // Update cart items to reflect deselected ingredients
-    const updatedCart = cart.map(item => ({
-      ...item,
-      selectedIngredients: item.selectedIngredients.filter(id => 
-        id === ingredientId ? newSelected.has(id) : true
-      )
-    }));
-    
-    setCart(updatedCart);
-    localStorage.setItem('recipe-cart', JSON.stringify(updatedCart));
+  const toggleIngredientSelection = (ingredientName: string) => {
+    const allRecipes = cart.map(item => item.recipe);
+    toggleIngredientByName(allRecipes, ingredientName);
   };
 
-  const getGroupedIngredients = () => {
-    const grouped: Record<string, { 
-      id: string;
-      name: string; 
-      amount: string; 
-      unit: string; 
-      recipes: string[];
-      totalAmount: number;
-      isSelected: boolean;
-    }> = {};
-    
-    cart.forEach(item => {
-      item.selectedIngredients.forEach(ingredientId => {
-        const ingredient = item.recipe.ingredients.find(ing => ing.id === ingredientId);
-        if (ingredient) {
-          const key = ingredient.name;
-          const amount = parseFloat(ingredient.amount) || 0;
-          const isSelected = selectedIngredientIds.has(ingredientId);
-          
-          if (grouped[key]) {
-            grouped[key].recipes.push(item.recipe.title);
-            grouped[key].totalAmount += amount;
-            // Keep selected if any ingredient with this name is selected
-            grouped[key].isSelected = grouped[key].isSelected || isSelected;
-          } else {
-            grouped[key] = {
-              id: ingredientId,
-              name: ingredient.name,
-              amount: ingredient.amount,
-              unit: ingredient.unit,
-              recipes: [item.recipe.title],
-              totalAmount: amount,
-              isSelected: isSelected
-            };
-          }
-        }
-      });
-    });
-
-    return Object.values(grouped).map(item => ({
-      ...item,
-      displayAmount: item.totalAmount > 0 ? `${item.totalAmount}${item.unit}` : item.amount,
-      recipeCount: item.recipes.length
-    }));
+  const getGroupedIngredientsFromCart = () => {
+    const allRecipes = cart.map(item => item.recipe);
+    return getGroupedIngredients(allRecipes);
   };
 
   return {
@@ -127,8 +72,7 @@ export const useCart = () => {
     addToCart,
     removeFromCart,
     getTotalIngredients,
-    getGroupedIngredients,
-    toggleIngredientSelection,
-    selectedIngredientIds
+    getGroupedIngredients: getGroupedIngredientsFromCart,
+    toggleIngredientSelection
   };
 };

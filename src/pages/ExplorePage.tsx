@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
-import { useRecipeIngredients } from '@/hooks/useRecipeIngredients';
+import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
@@ -30,12 +30,23 @@ const WelcomePage = () => {
 
   // Get all recipes for ingredient management
   const allRecipes = categories.flatMap(category => getRecipesByCategory(category, 10));
-  const { getGroupedIngredients } = useRecipeIngredients(allRecipes);
+  const { 
+    getGroupedIngredients, 
+    getSelectedIngredientsCount,
+    initializeIngredients 
+  } = useGlobalIngredients();
+  
+  // Initialize ingredients when recipes load
+  useMemo(() => {
+    if (allRecipes.length > 0) {
+      initializeIngredients(allRecipes);
+    }
+  }, [allRecipes.length, initializeIngredients]);
   
   // Calculate selected ingredients count with memoization
   const selectedIngredientsCount = useMemo(() => {
-    return getGroupedIngredients().filter(ingredient => ingredient.isSelected).length;
-  }, [getGroupedIngredients]);
+    return getSelectedIngredientsCount();
+  }, [getSelectedIngredientsCount]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);

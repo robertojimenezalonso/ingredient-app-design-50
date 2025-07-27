@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Search, Plus } from 'lucide-react';
-import { useRecipeIngredients } from '@/hooks/useRecipeIngredients';
+import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -15,10 +15,10 @@ interface IngredientsViewProps {
 
 export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
   const { toast } = useToast();
-  const { getGroupedIngredients, toggleIngredientSelection } = useRecipeIngredients(recipes);
+  const { getGroupedIngredients, toggleIngredientByName } = useGlobalIngredients();
   const [searchQuery, setSearchQuery] = useState('');
 
-  const groupedIngredients = getGroupedIngredients();
+  const groupedIngredients = getGroupedIngredients(recipes);
   const filteredIngredients = groupedIngredients.filter(ingredient =>
     ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -63,7 +63,7 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
                   ? 'border-black bg-gray-100' 
                   : 'border-gray-200 bg-white hover:bg-gray-50'
               }`}
-              onClick={() => toggleIngredientSelection(ingredient.id)}
+              onClick={() => toggleIngredientByName(recipes, ingredient.name)}
             >
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
