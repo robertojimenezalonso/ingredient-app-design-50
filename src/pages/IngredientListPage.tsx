@@ -8,7 +8,7 @@ import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { IngredientsView } from '@/components/IngredientsView';
 import { FloatingButton } from '@/components/FloatingButton';
 import { useDateTabs } from '@/hooks/useDateTabs';
-import { CategoryType } from '@/types/recipe';
+import { CategoryType, Recipe } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
 
 const IngredientListPage = () => {
@@ -17,6 +17,27 @@ const IngredientListPage = () => {
   const { getRecipesByCategory } = useRecipes();
   const { config } = useUserConfig();
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
+  const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
+
+  // Load AI recipes from localStorage when component mounts
+  useEffect(() => {
+    console.log('IngredientListPage: Component mounted, checking localStorage...');
+    const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+    console.log('IngredientListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
+    
+    if (savedAiRecipes) {
+      try {
+        const parsedRecipes = JSON.parse(savedAiRecipes);
+        console.log('IngredientListPage: Successfully parsed AI recipes:', parsedRecipes.length, 'recipes');
+        console.log('IngredientListPage: Recipe titles:', parsedRecipes.map(r => r.title));
+        setAiRecipes(parsedRecipes);
+      } catch (error) {
+        console.error('IngredientListPage: Error parsing AI recipes from localStorage:', error);
+      }
+    } else {
+      console.log('IngredientListPage: No AI recipes found in localStorage');
+    }
+  }, []);
   
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 
@@ -28,10 +49,19 @@ const IngredientListPage = () => {
     day.meals.map(meal => meal.recipe).filter(Boolean)
   );
   
-  // If no meal plan, show some default recipes for exploration
-  const recommendedRecipes = mealPlanRecipes.length > 0 
-    ? mealPlanRecipes 
-    : categories.flatMap(category => getRecipesByCategory(category, 3));
+  // Use AI recipes if available, otherwise fall back to meal plan or example recipes
+  const recommendedRecipes = aiRecipes.length > 0 
+    ? aiRecipes 
+    : mealPlanRecipes.length > 0 
+      ? mealPlanRecipes 
+      : categories.flatMap(category => getRecipesByCategory(category, 3));
+
+  console.log('IngredientListPage: Current recipes state:', {
+    aiRecipesCount: aiRecipes.length,
+    aiRecipesTitles: aiRecipes.map(r => r.title),
+    recommendedRecipesCount: recommendedRecipes.length,
+    showingAI: aiRecipes.length > 0
+  });
 
   const { 
     getSelectedIngredientsCount,
@@ -42,6 +72,7 @@ const IngredientListPage = () => {
   // Initialize ingredients when recipes load
   useEffect(() => {
     if (recommendedRecipes.length > 0) {
+      console.log('IngredientListPage: Initializing ingredients with', recommendedRecipes.length, 'recipes');
       initializeIngredients(recommendedRecipes);
     }
   }, [recommendedRecipes.length, initializeIngredients]);
