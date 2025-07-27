@@ -30,8 +30,7 @@ const RecipeListPage = () => {
         const parsedRecipes = JSON.parse(savedAiRecipes);
         console.log('RecipeListPage: Loaded AI recipes:', parsedRecipes.length, 'recipes');
         setAiRecipes(parsedRecipes);
-        // Clear from localStorage after loading
-        localStorage.removeItem('aiGeneratedRecipes');
+        // Keep recipes in localStorage for future visits - don't remove them
       } catch (error) {
         console.error('Error parsing AI recipes from localStorage:', error);
       }
