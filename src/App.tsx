@@ -13,6 +13,8 @@ import Index from "./pages/Index";
 import CategoryPage from "./pages/CategoryPage";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
 import CartPage from "./pages/CartPage";
+import CartRecipesPage from "./pages/CartRecipesPage";
+import CartIngredientsPage from "./pages/CartIngredientsPage";
 import ProfilePage from "./pages/ProfilePage";
 import AuthPage from "./pages/AuthPage";
 import NotFound from "./pages/NotFound";
@@ -31,10 +33,12 @@ const App = () => (
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
-            <Route path="/milista" element={<ExplorePage />} />
+            <Route path="/milista" element={<CartRecipesPage />} />
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/recipe/:id" element={<RecipeDetailPage />} />
             <Route path="/cart" element={<CartPage />} />
+            <Route path="/milista/recetas" element={<CartRecipesPage />} />
+            <Route path="/milista/ingredientes" element={<CartIngredientsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/auth" element={<AuthPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
