@@ -113,10 +113,8 @@ export const useGlobalIngredients = () => {
 
         if (grouped[key]) {
           grouped[key].recipes.push(recipe.title);
-          // Only add to total if this specific ingredient ID is selected
-          if (selectedIngredientIds.has(ingredient.id)) {
-            grouped[key].totalAmount += amount;
-          }
+          // Always add to total regardless of selection status
+          grouped[key].totalAmount += amount;
           grouped[key].allIds.push(ingredient.id);
         } else {
           grouped[key] = {
@@ -125,8 +123,8 @@ export const useGlobalIngredients = () => {
             amount: ingredient.amount,
             unit: ingredient.unit,
             recipes: [recipe.title],
-            // Only add to total if this specific ingredient ID is selected
-            totalAmount: selectedIngredientIds.has(ingredient.id) ? amount : 0,
+            // Always add to total regardless of selection status
+            totalAmount: amount,
             allIds: [ingredient.id]
           };
         }
