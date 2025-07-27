@@ -90,6 +90,12 @@ export const useAIRecipes = () => {
       }
     }
     
+    // Save recipes to localStorage so they persist across page navigation
+    if (recipes.length > 0) {
+      localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
+      console.log(`Saved ${recipes.length} AI recipes to localStorage`);
+    }
+    
     console.log(`Completed generation. Total successful recipes: ${recipes.length} out of ${count} requested`);
     return recipes;
   };
