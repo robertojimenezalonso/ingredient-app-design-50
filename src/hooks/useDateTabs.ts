@@ -17,20 +17,37 @@ export const useDateTabs = () => {
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const lastScrollY = useRef(0);
 
+  // Función para crear una copia de receta con IDs únicos
+  const cloneRecipeWithUniqueIds = (originalRecipe: any, dayIndex: number, mealIndex: number) => {
+    if (!originalRecipe) return null;
+    
+    const uniqueRecipeId = `${originalRecipe.id}-day${dayIndex}-meal${mealIndex}`;
+    
+    return {
+      ...originalRecipe,
+      id: uniqueRecipeId,
+      ingredients: originalRecipe.ingredients.map((ingredient: any, ingIndex: number) => ({
+        ...ingredient,
+        id: `${ingredient.id}-day${dayIndex}-meal${mealIndex}-ing${ingIndex}`
+      }))
+    };
+  };
+
   // Generar el plan de comidas
   const mealPlan = config.selectedDates && config.selectedMeals 
-    ? config.selectedDates.map(dateStr => {
+    ? config.selectedDates.map((dateStr, dayIndex) => {
         const date = new Date(dateStr + 'T12:00:00');
-        const dayMeals = config.selectedMeals!.map(meal => {
+        const dayMeals = config.selectedMeals!.map((meal, mealIndex) => {
           const categoryKey = mealCategoryMap[meal];
           if (!categoryKey) return null;
           
           const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-          const selectedRecipe = categoryRecipes[0];
+          const originalRecipe = categoryRecipes[0];
+          const uniqueRecipe = cloneRecipeWithUniqueIds(originalRecipe, dayIndex, mealIndex);
           
           return {
             meal,
-            recipe: selectedRecipe
+            recipe: uniqueRecipe
           };
         }).filter(Boolean);
         
