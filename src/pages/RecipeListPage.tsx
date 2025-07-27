@@ -7,6 +7,7 @@ import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
+import { FloatingButton } from '@/components/FloatingButton';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { Recipe, CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
@@ -111,9 +112,9 @@ const RecipeListPage = () => {
   };
 
 
-  const handleSearchInSupermarket = () => {
+  const handleSearchOffers = () => {
     toast({
-      title: "Buscar en supermercado",
+      title: "Buscar ofertas",
       description: "Función próximamente disponible"
     });
   };
@@ -175,6 +176,13 @@ const RecipeListPage = () => {
           sectionRefs={sectionRefs}
         />
       </div>
+
+      <FloatingButton 
+        onClick={handleSearchOffers}
+        selectedCount={1}
+      >
+        Buscar ofertas
+      </FloatingButton>
 
     </div>
   );
