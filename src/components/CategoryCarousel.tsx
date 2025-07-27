@@ -125,7 +125,7 @@ export const CategoryCarousel = ({
     console.log('Sustituir receta:', recipe.title, 'en', dateStr, meal);
   };
   return <div className="mb-4">
-      <div className="px-4 space-y-6 bg-white pb-32" style={{ paddingTop: '180px' }}>
+      <div className="fixed top-0 left-0 right-0 px-4 space-y-6 bg-white pb-32 overflow-y-auto h-screen z-10">
         {mealPlan.map(({
         date,
         dateStr,
