@@ -54,15 +54,6 @@ const InitialWelcomePage = () => {
           </p>
         </div>
 
-        <div className="space-y-4">
-          <div className="bg-white rounded-xl p-6 shadow-sm">
-            <h2 className="text-lg font-semibold mb-2">👥 Configura raciones</h2>
-            <p className="text-gray-600 text-sm">
-              Indica para cuántas personas cocinas y tus preferencias dietéticas
-            </p>
-          </div>
-        </div>
-
         <div className="mt-8 space-y-3">
           <button 
             onClick={() => navigate('/calendar-selection')}
