@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Clock, Star } from 'lucide-react';
@@ -27,7 +28,7 @@ const SearchOffersPage = () => {
     }
   }, []);
 
-  // Obtener ingredientes agrupados de las recetas AI (igual que en la pantalla ingredientes)
+  // Obtener ingredientes agrupados de las recetas AI
   const groupedIngredients = getGroupedIngredients(aiRecipes);
 
   // Calcular precios por supermercado usando los ingredientes agrupados
@@ -37,52 +38,36 @@ const SearchOffersPage = () => {
         id: 'carrefour', 
         name: 'Carrefour', 
         logo: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&h=100&fit=crop',
-        distance: '0.5 km',
-        deliveryTime: '30-45 min',
-        rating: 4.2,
         multiplier: 1.0 
       },
       { 
         id: 'mercadona', 
         name: 'Mercadona', 
         logo: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop',
-        distance: '0.8 km',
-        deliveryTime: '45-60 min',
-        rating: 4.5,
         multiplier: 0.85 
       },
       { 
         id: 'dia', 
         name: 'Día', 
         logo: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&h=100&fit=crop',
-        distance: '1.2 km',
-        deliveryTime: '60-75 min',
-        rating: 3.8,
         multiplier: 0.75 
       },
       { 
         id: 'alcampo', 
         name: 'Alcampo', 
         logo: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop',
-        distance: '2.1 km',
-        deliveryTime: '75-90 min',
-        rating: 4.0,
         multiplier: 0.90 
       },
       { 
         id: 'lidl', 
         name: 'Lidl', 
         logo: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&h=100&fit=crop',
-        distance: '1.5 km',
-        deliveryTime: '50-65 min',
-        rating: 4.1,
         multiplier: 0.70 
       }
     ];
 
     const supermarketsWithPrices = supermarkets.map(supermarket => {
       let totalPrice = 0;
-      let availableItems = 0;
 
       groupedIngredients.forEach(ingredient => {
         const product = findMatchingProduct(ingredient.name);
@@ -92,16 +77,13 @@ const SearchOffersPage = () => {
           if (priceMatch) {
             const price = parseFloat(priceMatch[1].replace(',', '.'));
             totalPrice += price * supermarket.multiplier;
-            availableItems++;
           }
         }
       });
 
       return {
         ...supermarket,
-        totalPrice: totalPrice.toFixed(2),
-        availableItems,
-        totalItems: groupedIngredients.length
+        totalPrice: totalPrice.toFixed(2)
       };
     });
 
@@ -187,30 +169,10 @@ const SearchOffersPage = () => {
                     />
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-medium text-sm">{supermarket.name}</h3>
-                      <div className="flex items-center gap-1">
-                        <Star className="h-3 w-3 fill-yellow-400 text-yellow-400" />
-                        <span className="text-xs text-gray-600">{supermarket.rating}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4 text-xs text-gray-600">
-                      <div className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {supermarket.distance}
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Clock className="h-3 w-3" />
-                        {supermarket.deliveryTime}
-                      </div>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {supermarket.availableItems} de {supermarket.totalItems} productos disponibles
-                    </p>
+                    <h3 className="font-medium text-sm text-black">{supermarket.name}</h3>
                   </div>
                   <div className="text-right">
-                    <p className="text-lg font-semibold text-green-600">{supermarket.totalPrice}€</p>
-                    <p className="text-xs text-gray-500">Total estimado</p>
+                    <p className="text-lg font-semibold text-black">{supermarket.totalPrice}€</p>
                   </div>
                 </div>
               </CardContent>
