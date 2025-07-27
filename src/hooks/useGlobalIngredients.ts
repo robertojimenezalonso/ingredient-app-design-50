@@ -128,7 +128,8 @@ export const useGlobalIngredients = () => {
       ...item,
       displayAmount: item.totalAmount > 0 ? `${item.totalAmount} ${item.unit}` : `0 ${item.unit}`,
       recipeCount: item.recipes.length,
-      isSelected: item.allIds.some(id => selectedIngredientIds.includes(id))
+      // Un ingrediente está seleccionado si TODOS sus IDs están seleccionados
+      isSelected: item.allIds.every(id => selectedIngredientIds.includes(id))
     }));
   }, [selectedIngredientIds]);
 
