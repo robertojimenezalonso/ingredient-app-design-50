@@ -130,7 +130,7 @@ export const CategoryCarousel = ({
         date,
         dateStr,
         meals
-      }) => <div key={dateStr} className="space-y-2 -mt-10" ref={el => {
+      }) => <div key={dateStr} className="space-y-2 -mt-12" ref={el => {
         if (sectionRefs?.current) {
           sectionRefs.current[dateStr] = el;
         }
