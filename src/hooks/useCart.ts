@@ -54,7 +54,8 @@ export const useCart = () => {
   };
 
   const getTotalIngredients = () => {
-    return getSelectedIngredientsCount();
+    const allRecipes = cart.map(item => item.recipe);
+    return getSelectedIngredientsCount(allRecipes);
   };
 
   const toggleIngredientSelection = (ingredientName: string) => {

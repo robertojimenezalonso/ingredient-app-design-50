@@ -40,8 +40,8 @@ const Index = () => {
   
   // Calculate selected ingredients count with memoization
   const selectedIngredientsCount = useMemo(() => {
-    return getSelectedIngredientsCount();
-  }, [getSelectedIngredientsCount]);
+    return getSelectedIngredientsCount(explorationRecipes);
+  }, [getSelectedIngredientsCount, explorationRecipes]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);

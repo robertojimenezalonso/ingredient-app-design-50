@@ -108,9 +108,6 @@ export const useGlobalIngredients = () => {
 
     recipes.forEach(recipe => {
       recipe.ingredients.forEach(ingredient => {
-        // Only include if ingredient is selected
-        if (!selectedIngredientIds.has(ingredient.id)) return;
-        
         const key = ingredient.name;
         const amount = parseFloat(ingredient.amount) || 0;
 
@@ -136,14 +133,15 @@ export const useGlobalIngredients = () => {
       ...item,
       displayAmount: item.totalAmount > 0 ? `${item.totalAmount} ${item.unit}` : `${item.amount} ${item.unit}`,
       recipeCount: item.recipes.length,
-      isSelected: true // These are all selected by definition
+      isSelected: item.allIds.some(id => selectedIngredientIds.has(id))
     }));
   }, [selectedIngredientIds]);
 
-  // Get total count of selected ingredients
-  const getSelectedIngredientsCount = useCallback(() => {
-    return selectedIngredientIds.size;
-  }, [selectedIngredientIds]);
+  // Get total count of selected ingredients (unique by name)
+  const getSelectedIngredientsCount = useCallback((recipes: Recipe[]) => {
+    const grouped = getGroupedIngredients(recipes);
+    return grouped.filter(ingredient => ingredient.isSelected).length;
+  }, [getGroupedIngredients]);
 
   // Check if ingredient is selected
   const isIngredientSelected = useCallback((ingredientId: string) => {
