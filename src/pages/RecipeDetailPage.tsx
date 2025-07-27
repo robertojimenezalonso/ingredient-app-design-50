@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Heart, Plus, Minus, Clock, Flame, ChevronDown, ChevronRight, X, CheckCircle } from 'lucide-react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
+import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { useCarrefourAPI } from '@/hooks/useCarrefourAPI';
 import { Button } from '@/components/ui/button';
@@ -43,9 +44,13 @@ const RecipeDetailPage = () => {
     findMatchingProduct,
     loading: productsLoading
   } = useCarrefourAPI();
+  const {
+    toggleIngredientById,
+    isIngredientSelected,
+    initializeIngredients
+  } = useGlobalIngredients();
   const [servings, setServings] = useState(2);
   const [servingsInput, setServingsInput] = useState('2');
-  const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [activeTab, setActiveTab] = useState<'recipes' | 'cart' | 'profile'>('recipes');
   const [optimizationOption, setOptimizationOption] = useState<'more-servings' | 'bigger-portions' | null>(null);
@@ -112,35 +117,13 @@ const RecipeDetailPage = () => {
     return validIngredients; // Return only valid ingredients from API
   };
 
-  // Auto-select ALL ingredients when component mounts and API data is loaded
+  // Initialize ingredients when component mounts
   useEffect(() => {
-    console.log('🔍 useEffect triggered:', {
-      recipeId: recipe?.id,
-      productsLoading,
-      currentSelectedIngredients: selectedIngredients
-    });
     if (!recipe || productsLoading) {
-      console.log('⏳ Waiting for recipe or API data...');
       return;
     }
-    const validIngredients = getCurrentValidIngredients();
-    const allIngredientIds = validIngredients.map(vi => vi.ingredient.id);
-    console.log('✅ Valid ingredients found:', validIngredients.map(vi => ({
-      id: vi.ingredient.id,
-      name: vi.ingredient.name,
-      isFallback: vi.isFallback
-    })));
-
-    // Only update if different from current selection
-    const currentIds = selectedIngredients.sort().join(',');
-    const newIds = allIngredientIds.sort().join(',');
-    if (currentIds !== newIds) {
-      console.log('🔄 Updating selected ingredients:', allIngredientIds);
-      setSelectedIngredients(allIngredientIds);
-    } else {
-      console.log('✨ Selection already correct, no update needed');
-    }
-  }, [recipe?.id, productsLoading]);
+    initializeIngredients([recipe]);
+  }, [recipe?.id, productsLoading, initializeIngredients]);
 
   // Scroll to top when component mounts or recipe changes
   useEffect(() => {
@@ -215,7 +198,7 @@ const RecipeDetailPage = () => {
   const calculateAverageUsagePercentage = (): number => {
     if (!recipe) return 0;
     const validIngredients = getCurrentValidIngredients();
-    const selectedValidIngredients = validIngredients.filter(vi => selectedIngredients.includes(vi.ingredient.id));
+    const selectedValidIngredients = validIngredients.filter(vi => isIngredientSelected(vi.ingredient.id));
     if (selectedValidIngredients.length === 0) return 0;
     const total = selectedValidIngredients.reduce((sum, vi) => {
       const ingredient = vi.ingredient;
@@ -307,14 +290,14 @@ const RecipeDetailPage = () => {
   // Get the count of selected ingredients from current valid ingredients
   const getSelectedCount = () => {
     const validIngredients = getCurrentValidIngredients();
-    return validIngredients.filter(vi => selectedIngredients.includes(vi.ingredient.id)).length;
+    return validIngredients.filter(vi => isIngredientSelected(vi.ingredient.id)).length;
   };
   const selectedCount = getSelectedCount();
 
   // Calculate total price of selected ingredients using current valid ingredients
   const calculateTotalPrice = () => {
     const validIngredients = getCurrentValidIngredients();
-    return validIngredients.filter(vi => selectedIngredients.includes(vi.ingredient.id)).reduce((total, vi) => {
+    return validIngredients.filter(vi => isIngredientSelected(vi.ingredient.id)).reduce((total, vi) => {
       if (vi.carrefourProduct?.price && vi.carrefourProduct.price !== '') {
         // Extract numeric value from price string like "1,35 €"
         const priceStr = vi.carrefourProduct.price.replace(',', '.').replace('€', '').trim();
@@ -335,7 +318,7 @@ const RecipeDetailPage = () => {
   };
   const totalPrice = calculateTotalPrice();
   const handleIngredientToggle = (ingredientId: string) => {
-    setSelectedIngredients(prev => prev.includes(ingredientId) ? prev.filter(id => id !== ingredientId) : [...prev, ingredientId]);
+    toggleIngredientById(ingredientId);
   };
   const handleStepToggle = (stepIndex: number) => {
     setCompletedSteps(prev => prev.includes(stepIndex) ? prev.filter(i => i !== stepIndex) : [...prev, stepIndex]);
@@ -345,7 +328,13 @@ const RecipeDetailPage = () => {
       handleOptimizeRecipe();
       return;
     }
-    addToCart(recipe, servings, selectedIngredients);
+    // Get selected ingredient IDs for cart
+    const validIngredients = getCurrentValidIngredients();
+    const selectedIngredientIds = validIngredients
+      .filter(vi => isIngredientSelected(vi.ingredient.id))
+      .map(vi => vi.ingredient.id);
+    
+    addToCart(recipe, servings, selectedIngredientIds);
     toast({
       title: "Añadido al carrito",
       description: `${selectedCount} ingredientes añadidos`
@@ -522,7 +511,7 @@ const RecipeDetailPage = () => {
                           {finalDisplayAmount} {finalUnit}
                         </p>
                       </div>
-                      <Checkbox checked={selectedIngredients.includes(ingredient.id)} onCheckedChange={() => handleIngredientToggle(ingredient.id)} />
+                      <Checkbox checked={isIngredientSelected(ingredient.id)} onCheckedChange={() => handleIngredientToggle(ingredient.id)} />
                     </div>
                     {displayIndex < getCurrentValidIngredients().length - 1 && <div className="border-b border-border"></div>}
                   </div>;
