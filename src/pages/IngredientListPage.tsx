@@ -54,7 +54,7 @@ const IngredientListPage = () => {
     const count = getSelectedIngredientsCount(recommendedRecipes);
     console.log('IngredientListPage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
     setSelectedIngredientsCount(count);
-  }, [Array.from(selectedIngredientIds).join(','), recommendedRecipes, getSelectedIngredientsCount]);
+  }, [selectedIngredientIds.size, recommendedRecipes, getSelectedIngredientsCount]);
 
   const handleFilterChange = (filter: 'receta' | 'ingredientes') => {
     if (filter === 'receta') {
