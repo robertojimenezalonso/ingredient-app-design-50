@@ -49,8 +49,8 @@ const RecipeDetailPage = () => {
     isIngredientSelected,
     initializeIngredients
   } = useGlobalIngredients();
-  const [servings, setServings] = useState(2);
-  const [servingsInput, setServingsInput] = useState('2');
+  const [servings, setServings] = useState(config.servingsPerRecipe || 2);
+  const [servingsInput, setServingsInput] = useState((config.servingsPerRecipe || 2).toString());
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
   const [activeTab, setActiveTab] = useState<'recipes' | 'cart' | 'profile'>('recipes');
   const [optimizationOption, setOptimizationOption] = useState<'more-servings' | 'bigger-portions' | null>(null);
