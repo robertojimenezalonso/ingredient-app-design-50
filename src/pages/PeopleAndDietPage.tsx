@@ -53,12 +53,16 @@ const PeopleAndDietPage = () => {
       console.log(`Generating ${recipesToGenerate} recipes for ${config.selectedDates.length} days and ${config.selectedMeals.length} meals`);
       
       // Generate AI recipes
+      console.log('PeopleAndDietPage: Starting AI recipe generation...');
       const aiRecipes = await generateMultipleRecipes({
         people: peopleCount.adultos,
         days: config.selectedDates,
         meals: config.selectedMeals,
         restrictions: [] // TODO: Add diet restrictions from user config
       }, recipesToGenerate);
+
+      console.log('PeopleAndDietPage: AI generation completed. Recipes received:', aiRecipes.length);
+      console.log('PeopleAndDietPage: Recipe titles:', aiRecipes.map(r => r.title));
 
       // Initialize ingredients with AI recipes
       if (aiRecipes.length > 0) {
@@ -74,11 +78,20 @@ const PeopleAndDietPage = () => {
         // Store AI recipes in localStorage to pass them to RecipeListPage
         console.log('PeopleAndDietPage: Storing AI recipes in localStorage:', aiRecipes.length, 'recipes');
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
+        
+        // Verify localStorage save
+        const savedRecipes = localStorage.getItem('aiGeneratedRecipes');
+        console.log('PeopleAndDietPage: Verification - localStorage now contains:', savedRecipes ? 'Data found' : 'No data');
+        if (savedRecipes) {
+          const parsed = JSON.parse(savedRecipes);
+          console.log('PeopleAndDietPage: Verified saved recipes count:', parsed.length);
+        }
       } else {
         console.error('PeopleAndDietPage: No AI recipes were generated successfully');
       }
 
       // Navigate to the recipe list
+      console.log('PeopleAndDietPage: Navigating to /milista...');
       navigate('/milista');
     } catch (error) {
       console.error('Error generating AI recipes:', error);

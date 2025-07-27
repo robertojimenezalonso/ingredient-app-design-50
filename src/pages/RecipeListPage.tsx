@@ -22,18 +22,24 @@ const RecipeListPage = () => {
 
   // Load AI recipes from localStorage when component mounts
   useEffect(() => {
+    console.log('RecipeListPage: Component mounted, checking localStorage...');
     const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-    console.log('RecipeListPage: Checking for AI recipes in localStorage:', savedAiRecipes ? 'Found' : 'Not found');
+    console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
     
     if (savedAiRecipes) {
+      console.log('RecipeListPage: Raw localStorage data length:', savedAiRecipes.length);
       try {
         const parsedRecipes = JSON.parse(savedAiRecipes);
-        console.log('RecipeListPage: Loaded AI recipes:', parsedRecipes.length, 'recipes');
+        console.log('RecipeListPage: Successfully parsed AI recipes:', parsedRecipes.length, 'recipes');
+        console.log('RecipeListPage: Recipe titles:', parsedRecipes.map(r => r.title));
         setAiRecipes(parsedRecipes);
+        console.log('RecipeListPage: AI recipes state updated');
         // Keep recipes in localStorage for future visits - don't remove them
       } catch (error) {
-        console.error('Error parsing AI recipes from localStorage:', error);
+        console.error('RecipeListPage: Error parsing AI recipes from localStorage:', error);
       }
+    } else {
+      console.log('RecipeListPage: No AI recipes found in localStorage');
     }
   }, []);
   
