@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const foodTypes = [
   { id: "desayuno", name: "Desayuno", emoji: "🥞" },
@@ -45,24 +45,10 @@ export const AirbnbHeader = ({
 }: AirbnbHeaderProps = {}) => {
   const { config } = useUserConfig();
   const navigate = useNavigate();
-  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [selectedFoodType, setSelectedFoodType] = useState<string | null>(null);
-  
-  // Determine initial selectedFilter based on current route
-  const getInitialFilter = () => {
-    if (location.pathname.includes('/ingredientes')) return 'ingredientes';
-    if (location.pathname.includes('/recetas')) return 'receta';
-    return 'receta';
-  };
-  
-  const [selectedFilter, setSelectedFilter] = useState<string | null>(getInitialFilter());
+  const [selectedFilter, setSelectedFilter] = useState<string | null>('receta');
   const tabsContainerRef = useRef<HTMLDivElement>(null);
-
-  // Update selectedFilter when route changes
-  useEffect(() => {
-    setSelectedFilter(getInitialFilter());
-  }, [location.pathname]);
 
   // Scroll to active tab
   useEffect(() => {
