@@ -37,11 +37,11 @@ export const FloatingButton = ({
     ? `Buscar súper · Ingredientes (${selectedCount})` 
     : "Cambiar receta";
   
-  const containerClasses = isAtBottom ? "fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-transparent" : "fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.12)]";
+  const containerClasses = "fixed bottom-0 left-0 right-0 z-40 flex justify-center";
   
   return (
     <div className={containerClasses} style={{
-      paddingBottom: 'env(safe-area-inset-bottom)'
+      paddingBottom: `calc(24px + env(safe-area-inset-bottom))`
     }}>
       <Button 
         onClick={onClick}
