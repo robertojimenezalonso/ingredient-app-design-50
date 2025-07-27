@@ -124,7 +124,7 @@ export const CategoryCarousel = ({
 
   return (
     <div className="mb-4">
-      <div className="px-4 space-y-6 mt-8 bg-white pb-32">
+      <div className="px-4 space-y-6 pt-20 bg-white pb-32 fixed top-0 left-0 right-0 z-10 overflow-y-auto h-screen">
         {mealPlan.map(({ date, dateStr, meals }) => (
           <div 
             key={dateStr} 
