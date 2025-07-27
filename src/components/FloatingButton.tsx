@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Search } from 'lucide-react';
 interface FloatingButtonProps {
   onClick: () => void;
   className?: string;
@@ -30,19 +31,26 @@ export const FloatingButton = ({
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  const buttonText = "Cambiar receta";
+  const buttonText = selectedCount !== undefined 
+    ? `Buscar súper · Ingredientes (${selectedCount})` 
+    : "Cambiar receta";
+  
   const containerClasses = isAtBottom ? "fixed bottom-0 left-0 right-0 z-40 bg-background border-t border-transparent" : "fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur-sm border-t border-gray-200/50 shadow-[0_-4px_20px_rgba(0,0,0,0.12)]";
+  
   return (
     <div className={containerClasses} style={{
       paddingBottom: 'env(safe-area-inset-bottom)'
     }}>
       <div className="p-4">
         <Button 
-          onClick={() => {}}
+          onClick={onClick}
           className={`w-full h-12 text-base font-medium ${className}`}
           size="lg"
         >
-          {buttonText}
+          <div className="flex items-center justify-center gap-2">
+            {selectedCount !== undefined && <Search className="h-5 w-5" />}
+            <span>{buttonText}</span>
+          </div>
         </Button>
       </div>
     </div>

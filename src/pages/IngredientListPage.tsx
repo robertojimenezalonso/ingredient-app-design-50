@@ -6,6 +6,7 @@ import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { IngredientsView } from '@/components/IngredientsView';
+import { FloatingButton } from '@/components/FloatingButton';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
@@ -108,10 +109,14 @@ const IngredientListPage = () => {
         currentFilter="ingredientes"
       />
       
-      <div className="bg-white" style={{ paddingTop: '180px' }}>
+      <div className="bg-white" style={{ paddingTop: '180px', paddingBottom: '80px' }}>
         <IngredientsView recipes={recommendedRecipes} />
       </div>
 
+      <FloatingButton 
+        onClick={handleSearchInSupermarket}
+        selectedCount={selectedIngredientsCount}
+      />
     </div>
   );
 };
