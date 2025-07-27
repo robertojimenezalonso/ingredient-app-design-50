@@ -33,12 +33,14 @@ const SearchOffersPage = () => {
   // Obtener ingredientes agrupados de las recetas AI
   const groupedIngredients = getGroupedIngredients(aiRecipes);
 
-  // Handle scroll to expand
+  // Handle scroll to expand/collapse
   const handleScroll = () => {
     if (scrollRef.current) {
       const scrollTop = scrollRef.current.scrollTop;
       if (scrollTop > 50 && !isExpanded) {
         setIsExpanded(true);
+      } else if (scrollTop <= 20 && isExpanded) {
+        setIsExpanded(false);
       }
     }
   };
