@@ -109,11 +109,12 @@ const WelcomePage = () => {
       </div>
 
       <AirbnbHeader 
-        showTabs={showTabs}
+        showTabs={showTabs && selectedFilter === 'receta'}
         activeTab={activeTabDate}
         mealPlan={mealPlan}
         onTabChange={scrollToDate}
         onFilterChange={setSelectedFilter}
+        currentFilter={selectedFilter}
       />
       
       <div style={{ paddingTop: '180px' }}>
