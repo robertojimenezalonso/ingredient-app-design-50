@@ -225,9 +225,9 @@ export default function SupermarketDetailPage() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
                     {/* Product image */}
-                    <img src={`https://images.unsplash.com/photo-1546548970-71785318a17b?w=80&h=80&fit=crop&q=80&auto=format&cs=tinysrgb&dpr=1&s=${encodeURIComponent(product.name)}`} alt={product.name} className="h-16 w-16 object-cover rounded-lg" onError={e => {
+                    <img src={`https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=60&h=60&fit=crop&q=80&auto=format&cs=tinysrgb&dpr=1&s=${encodeURIComponent(product.name)}`} alt={product.name} className="h-12 w-12 object-cover rounded-lg" onError={e => {
                 const target = e.target as HTMLImageElement;
-                target.src = `https://images.unsplash.com/photo-1546548970-71785318a17b?w=80&h=80&fit=crop&q=80&auto=format`;
+                target.src = `https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=60&h=60&fit=crop&q=80&auto=format`;
               }} />
                     
                     {/* Product info */}
