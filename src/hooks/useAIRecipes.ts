@@ -31,23 +31,45 @@ export const useAIRecipes = () => {
 
       const recipe = recipeData.recipe;
 
-      // Generate recipe image
-      const { data: imageData, error: imageError } = await supabase.functions.invoke(
-        'generate-recipe-image',
-        {
-          body: { recipeName: recipe.title }
-        }
-      );
+      // Generate recipe image with retry logic for rate limits
+      let imageUrl = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop';
+      let retryCount = 0;
+      const maxRetries = 3;
+      
+      while (retryCount < maxRetries) {
+        try {
+          const { data: imageData, error: imageError } = await supabase.functions.invoke(
+            'generate-recipe-image',
+            {
+              body: { recipeName: recipe.title }
+            }
+          );
 
-      if (imageError) {
-        console.warn('Error generating image:', imageError.message);
-        // Continue without image if image generation fails
+          if (imageError) {
+            // If it's a rate limit error, wait and retry
+            if (imageError.message.includes('rate_limit_exceeded') || imageError.message.includes('429')) {
+              console.log(`Rate limit hit, waiting before retry ${retryCount + 1}/${maxRetries}`);
+              await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 15000)); // Wait 15s, 30s, 45s
+              retryCount++;
+              continue;
+            } else {
+              console.warn('Error generating image:', imageError.message);
+              break;
+            }
+          } else if (imageData?.imageUrl) {
+            imageUrl = imageData.imageUrl;
+            break;
+          }
+        } catch (error) {
+          console.warn('Image generation attempt failed:', error);
+          retryCount++;
+        }
       }
 
       // Combine recipe with image
       const finalRecipe: Recipe = {
         ...recipe,
-        image: imageData?.imageUrl || 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'
+        image: imageUrl
       };
 
       if (showToast) {
