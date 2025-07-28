@@ -6,6 +6,7 @@ import { IngredientAvatars } from './IngredientAvatars';
 import { Badge } from './ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { ImageLoader } from './ui/image-loader';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -264,13 +265,14 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         onTouchEnd={handleTouchEnd}
       >
       <div className="relative flex-shrink-0">
-        <img 
+        <ImageLoader
           src={recipe.image} 
           alt={recipe.title}
           className="w-32 h-32 object-cover rounded-2xl"
-          onError={(e) => {
-            e.currentTarget.src = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=400';
-          }}
+          fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=400"
+          placeholder={
+            <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
+          }
         />
       </div>
       

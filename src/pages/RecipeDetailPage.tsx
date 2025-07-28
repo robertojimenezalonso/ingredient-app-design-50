@@ -18,6 +18,8 @@ import { FloatingButton } from '@/components/FloatingButton';
 import { BottomNav } from '@/components/BottomNav';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import { RecipeSkeleton } from '@/components/ui/recipe-skeleton';
+import { ImageLoader } from '@/components/ui/image-loader';
 const RecipeDetailPage = () => {
   const {
     id
@@ -59,6 +61,7 @@ const RecipeDetailPage = () => {
   const [isOptimized, setIsOptimized] = useState(false);
   const [showOptimizationAnimation, setShowOptimizationAnimation] = useState(false);
   const [isOptimizationOpen, setIsOptimizationOpen] = useState(false);
+  const [isLoadingRecipe, setIsLoadingRecipe] = useState(true);
   // Function to get AI recipe by ID from localStorage
   const getAIRecipeById = (id: string) => {
     try {
@@ -75,6 +78,23 @@ const RecipeDetailPage = () => {
 
   const recipe = getRecipeById(id!) || getAIRecipeById(id!);
   const [selectedCategory, setSelectedCategory] = useState(recipe?.category || 'lunch');
+
+  // Effect to handle recipe loading state
+  useEffect(() => {
+    // Simulate loading for AI recipes or when ingredients are being loaded
+    const timer = setTimeout(() => {
+      setIsLoadingRecipe(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [id]);
+
+  // Show skeleton if loading or no recipe found with some content
+  useEffect(() => {
+    if (!recipe || !recipe.title || !recipe.ingredients || recipe.ingredients.length === 0) {
+      setIsLoadingRecipe(true);
+    }
+  }, [recipe]);
 
   // Get the current valid ingredients (4-10 per recipe, no duplicates within same recipe)
   const getCurrentValidIngredients = () => {
@@ -294,10 +314,9 @@ const RecipeDetailPage = () => {
       description: `${optimizationOption === 'more-servings' ? 'Se añadió 1 ración más' : 'Se aumentó el tamaño de las raciones un 10%'}`
     });
   };
-  if (!recipe) {
-    return <div className="min-h-screen flex items-center justify-center">
-        <p>Receta no encontrada</p>
-      </div>;
+  // Show skeleton while loading or if no valid recipe content
+  if (isLoadingRecipe || !recipe || !recipe.title || !recipe.ingredients || recipe.ingredients.length === 0) {
+    return <RecipeSkeleton />;
   }
   const isFavorite = favorites.includes(recipe.id);
 
@@ -367,7 +386,15 @@ const RecipeDetailPage = () => {
   return <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="relative">
-        <img src={recipe.image} alt={recipe.title} className="w-full h-64 object-cover" />
+        <ImageLoader
+          src={recipe.image} 
+          alt={recipe.title} 
+          className="w-full h-64 object-cover"
+          fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=800&h=600&fit=crop"
+          placeholder={
+            <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          }
+        />
         <div className="absolute top-4 left-4 right-4 flex justify-between">
           <Button variant="secondary" size="icon" onClick={() => navigate(-1)} className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
