@@ -280,7 +280,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
           {recipe.title}
         </h3>
         {mealType && (
-          <span className={`text-sm font-medium mb-2 block ${getMealTypeColor(mealType).replace('bg-', 'text-').replace('-100', '-600').replace('border-', '')}`}>
+          <span className="text-sm font-medium mb-2 block text-gray-500">
             {mealType}
           </span>
         )}
