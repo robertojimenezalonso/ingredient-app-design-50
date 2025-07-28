@@ -172,58 +172,56 @@ export const CategoryCarousel = ({
                 </button>
               </div>
             </div>
-            <div className="flex gap-3 px-4 overflow-x-auto scrollbar-hide">
-              {meals.filter(({
-              recipe,
-              meal
-            }) => {
-              if (!recipe) return false;
-              const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
-              return !deletedRecipes.has(uniqueKey);
-            }).map(({
-              meal,
-              recipe
-            }) => (
-              <div key={`${dateStr}-${meal}`} className="flex-shrink-0 w-52">
-                {recipe && (
-                  <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md border border-border/50 hover:shadow-lg transition-shadow duration-200">
-                    <button
-                      onClick={() => onRecipeClick(recipe)}
-                      className="w-full text-left"
-                    >
-                      <div className="aspect-[4/3] overflow-hidden">
-                        <img
-                          src={recipe.image}
-                          alt={recipe.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+            {meals.filter(({
+            recipe,
+            meal
+          }) => {
+            if (!recipe) return false;
+            const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+            return !deletedRecipes.has(uniqueKey);
+          }).map(({
+            meal,
+            recipe
+          }) => (
+            <div key={`${dateStr}-${meal}`} className="flex-shrink-0 w-52 px-4">
+              {recipe && (
+                <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md border border-border/50 hover:shadow-lg transition-shadow duration-200">
+                  <button
+                    onClick={() => onRecipeClick(recipe)}
+                    className="w-full text-left"
+                  >
+                    <div className="aspect-[4/3] overflow-hidden">
+                      <img
+                        src={recipe.image}
+                        alt={recipe.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-3 space-y-2">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          meal === 'Desayuno' ? 'bg-orange-100 text-orange-700' :
+                          meal === 'Almuerzo' ? 'bg-blue-100 text-blue-700' :
+                          meal === 'Cena' ? 'bg-purple-100 text-purple-700' :
+                          'bg-green-100 text-green-700'
+                        }`}>
+                          {meal}
+                        </span>
                       </div>
-                      <div className="p-3 space-y-2">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            meal === 'Desayuno' ? 'bg-orange-100 text-orange-700' :
-                            meal === 'Almuerzo' ? 'bg-blue-100 text-blue-700' :
-                            meal === 'Cena' ? 'bg-purple-100 text-purple-700' :
-                            'bg-green-100 text-green-700'
-                          }`}>
-                            {meal}
-                          </span>
-                        </div>
-                        <h4 className="text-sm font-semibold leading-tight line-clamp-2 text-foreground">
-                          {recipe.title}
-                        </h4>
-                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                          <span>{recipe.time} min</span>
-                          <span>•</span>
-                          <span>{recipe.calories} cal</span>
-                        </div>
+                      <h4 className="text-sm font-semibold leading-tight line-clamp-2 text-foreground">
+                        {recipe.title}
+                      </h4>
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <span>{recipe.time} min</span>
+                        <span>•</span>
+                        <span>{recipe.calories} cal</span>
                       </div>
-                    </button>
-                  </div>
-                )}
-              </div>
-            ))}
+                    </div>
+                  </button>
+                </div>
+              )}
             </div>
+          ))}
           </div>)}
       </div>
       
