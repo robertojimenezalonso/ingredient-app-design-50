@@ -97,18 +97,51 @@ export const useAIRecipes = () => {
 
   const generateRecipeImages = async (recipeNames: string[]): Promise<{ [recipeName: string]: string }> => {
     const imageMap: { [recipeName: string]: string } = {};
-    const defaultImage = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop';
+    
+    // Define diverse food images based on recipe category/type
+    const getDefaultImageForRecipe = (recipeName: string): string => {
+      const name = recipeName.toLowerCase();
+      
+      if (name.includes('ensalada') || name.includes('salad')) {
+        return 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=500&h=300&fit=crop'; // Salad
+      } else if (name.includes('pollo') || name.includes('chicken')) {
+        return 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=500&h=300&fit=crop'; // Chicken
+      } else if (name.includes('salmón') || name.includes('salmon') || name.includes('pescado')) {
+        return 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=500&h=300&fit=crop'; // Salmon
+      } else if (name.includes('omelette') || name.includes('huevo') || name.includes('egg')) {
+        return 'https://images.unsplash.com/photo-1525351484163-7529414344d8?w=500&h=300&fit=crop'; // Eggs
+      } else if (name.includes('avena') || name.includes('oats')) {
+        return 'https://images.unsplash.com/photo-1571197238394-0090f3fde7df?w=500&h=300&fit=crop'; // Oats
+      } else if (name.includes('tostada') || name.includes('toast')) {
+        return 'https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=500&h=300&fit=crop'; // Avocado toast
+      } else if (name.includes('quinoa')) {
+        return 'https://images.unsplash.com/photo-1505576633757-0ac1084af824?w=500&h=300&fit=crop'; // Quinoa bowl
+      } else if (name.includes('bowl')) {
+        return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=500&h=300&fit=crop'; // Buddha bowl
+      } else if (name.includes('sopa') || name.includes('soup')) {
+        return 'https://images.unsplash.com/photo-1547592180-85f173990554?w=500&h=300&fit=crop'; // Soup
+      } else if (name.includes('pasta')) {
+        return 'https://images.unsplash.com/photo-1551892374-ecf8754cf8b0?w=500&h=300&fit=crop'; // Pasta
+      } else {
+        return 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'; // Generic healthy food
+      }
+    };
     
     console.log(`🖼️ Starting image generation for ${recipeNames.length} recipes`);
     
-    // Generate images one by one to avoid rate limits completely
+    // Generate images one by one with more conservative delays
     for (let i = 0; i < recipeNames.length; i++) {
       const recipeName = recipeNames[i];
+      const defaultImage = getDefaultImageForRecipe(recipeName);
+      
       console.log(`\n🎨 Generating image ${i + 1}/${recipeNames.length}: "${recipeName}"`);
+      
+      // Start with fallback image and try to improve it
+      imageMap[recipeName] = defaultImage;
       
       let imageGenerated = false;
       let retryCount = 0;
-      const maxRetries = 3;
+      const maxRetries = 2; // Reduced retries to avoid long waits
       
       while (retryCount < maxRetries && !imageGenerated) {
         try {
@@ -120,46 +153,46 @@ export const useAIRecipes = () => {
           );
 
           if (imageError) {
-            if (imageError.message.includes('rate_limit_exceeded') || imageError.message.includes('429')) {
-              const waitTime = (retryCount + 1) * 60000; // Wait 1min, 2min, 3min
-              console.log(`⏳ Rate limit hit for "${recipeName}", waiting ${waitTime/1000}s (attempt ${retryCount + 1}/${maxRetries})`);
-              await new Promise(resolve => setTimeout(resolve, waitTime));
-              retryCount++;
-              continue;
+            const errorMsg = imageError.message || '';
+            if (errorMsg.includes('rate_limit_exceeded') || errorMsg.includes('429')) {
+              console.log(`⏳ Rate limit hit for "${recipeName}", using fallback image instead of waiting`);
+              imageGenerated = true; // Don't retry on rate limits, just use fallback
             } else {
-              console.warn(`❌ Error generating image for "${recipeName}":`, imageError.message);
-              imageMap[recipeName] = defaultImage;
-              imageGenerated = true;
+              console.warn(`❌ Error generating image for "${recipeName}":`, errorMsg);
+              imageGenerated = true; // Use fallback on any error
             }
           } else if (imageData?.imageUrl) {
-            console.log(`✅ Successfully generated image for "${recipeName}"`);
+            console.log(`✅ Successfully generated AI image for "${recipeName}"`);
             imageMap[recipeName] = imageData.imageUrl;
             imageGenerated = true;
           } else {
             console.warn(`⚠️ No image URL returned for "${recipeName}"`);
-            imageMap[recipeName] = defaultImage;
-            imageGenerated = true;
+            imageGenerated = true; // Use fallback
           }
         } catch (error) {
           console.warn(`💥 Image generation failed for "${recipeName}":`, error);
           retryCount++;
           if (retryCount >= maxRetries) {
-            imageMap[recipeName] = defaultImage;
+            console.log(`Using fallback image for "${recipeName}"`);
             imageGenerated = true;
+          } else {
+            // Short delay before retry
+            await new Promise(resolve => setTimeout(resolve, 5000));
           }
         }
       }
       
-      // Add delay between individual requests to respect rate limits
+      // Reduced delay between requests to 12 seconds
       if (i < recipeNames.length - 1) {
-        const delay = 15000; // 15 seconds between each image
+        const delay = 12000;
         console.log(`⏱️ Waiting ${delay/1000}s before next image...`);
         await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
     
-    const successCount = Object.values(imageMap).filter(url => url !== defaultImage).length;
-    console.log(`🏁 Image generation complete: ${successCount}/${recipeNames.length} successful`);
+    const aiSuccessCount = Object.values(imageMap).filter(url => 
+      !url.includes('unsplash.com')).length;
+    console.log(`🏁 Image generation complete: ${aiSuccessCount}/${recipeNames.length} AI images, ${recipeNames.length - aiSuccessCount} fallbacks`);
     
     return imageMap;
   };
