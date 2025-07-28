@@ -51,31 +51,31 @@ const SearchOffersPage = () => {
       { 
         id: 'carrefour', 
         name: 'Carrefour', 
-        logo: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&h=100&fit=crop',
+        logo: '/lovable-uploads/62545d3b-2a8b-4a13-a64c-d485492f24c1.png',
         multiplier: 1.0 
       },
       { 
         id: 'mercadona', 
         name: 'Mercadona', 
-        logo: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop',
+        logo: '/lovable-uploads/a06f3ae9-f80a-48b6-bf55-8c1b736c79f8.png',
         multiplier: 0.85 
       },
       { 
         id: 'dia', 
         name: 'Día', 
-        logo: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&h=100&fit=crop',
+        logo: '/lovable-uploads/eeddbd2d-b7e8-45f2-a498-8bca36687a55.png',
         multiplier: 0.75 
       },
       { 
-        id: 'alcampo', 
-        name: 'Alcampo', 
-        logo: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=100&h=100&fit=crop',
+        id: 'eroski', 
+        name: 'Eroski', 
+        logo: '/lovable-uploads/e959efca-f3da-43ea-96a2-ac6b262be062.png',
         multiplier: 0.90 
       },
       { 
         id: 'lidl', 
         name: 'Lidl', 
-        logo: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=100&h=100&fit=crop',
+        logo: '/lovable-uploads/8530d68e-8316-44b0-8389-d319fd405949.png',
         multiplier: 0.70 
       }
     ];
