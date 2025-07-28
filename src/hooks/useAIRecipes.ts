@@ -181,7 +181,7 @@ export const useAIRecipes = () => {
     const recipes: Recipe[] = [];
     const generatedTitles = new Set<string>();
     
-    console.log(`Starting generation of ${count} recipes`);
+    console.log(`Starting sequential generation of ${count} recipes`);
     
     // Add variety prompts to ensure different recipes
     const varietyPrompts = [
@@ -196,30 +196,49 @@ export const useAIRecipes = () => {
       "Elabora una receta con legumbres como protagonista",
       "Inventa una receta de pescado al horno",
       "Desarrolla una receta con quinoa o arroz integral",
-      "Crea una receta de pollo con verduras al vapor"
+      "Crea una receta de pollo con verduras al vapor",
+      "Prepara una receta francesa clásica",
+      "Diseña una receta peruana sabrosa",
+      "Crea una receta india con especias",
+      "Elabora una receta tailandesa picante",
+      "Inventa una receta griega tradicional",
+      "Desarrolla una receta marroquí aromática",
+      "Crea una receta japonesa equilibrada",
+      "Diseña una receta brasileña tropical"
     ];
     
-    // First, generate all recipes without images
+    // Generate recipes SEQUENTIALLY to avoid duplicates
     for (let i = 0; i < count; i++) {
       console.log(`Generating recipe ${i + 1} of ${count}`);
       
-      // Use multiple variety prompts for better uniqueness
-      const maxRetries = 3;
+      const maxRetries = 5;
       let recipeGenerated = false;
       
       for (let retry = 0; retry < maxRetries && !recipeGenerated; retry++) {
         try {
-          // Add multiple variety prompts to ensure uniqueness
-          const currentVarietyPrompts = [
-            varietyPrompts[i % varietyPrompts.length],
-            varietyPrompts[(i + 3) % varietyPrompts.length],
-            `Evita absolutamente repetir estas recetas ya generadas: ${Array.from(generatedTitles).join(', ')}`
+          // Create unique request with strong variety constraints
+          const varietyIndex = (i * 3 + retry) % varietyPrompts.length;
+          const secondaryVarietyIndex = (i * 5 + retry + 7) % varietyPrompts.length;
+          
+          const uniquePrompts = [
+            varietyPrompts[varietyIndex],
+            varietyPrompts[secondaryVarietyIndex],
+            `NUNCA generes estas recetas ya creadas: ${Array.from(generatedTitles).join(', ')}`,
+            `Receta número ${i + 1}, debe ser completamente diferente`,
+            `Usa ingredientes y técnicas totalmente distintas`
           ];
           
           const enhancedRequest = {
             ...request,
-            restrictions: [...(request.restrictions || []), ...currentVarietyPrompts]
+            restrictions: [...(request.restrictions || []), ...uniquePrompts]
           };
+          
+          // Add delay between requests to avoid rate limits and improve uniqueness
+          if (i > 0 || retry > 0) {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+          }
+          
+          console.log(`Attempting recipe generation with variety: ${varietyPrompts[varietyIndex]}`);
           
           // Generate recipe text only
           const { data: recipeData, error: recipeError } = await supabase.functions.invoke(
@@ -242,21 +261,22 @@ export const useAIRecipes = () => {
               image: 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'
             });
             generatedTitles.add(recipe.title);
-            console.log(`Successfully generated unique recipe: ${recipe.title}`);
+            console.log(`✅ Successfully generated unique recipe: ${recipe.title}`);
             recipeGenerated = true;
           } else if (recipe && generatedTitles.has(recipe.title)) {
-            console.log(`Duplicate recipe detected (${recipe.title}), retrying with different prompt...`);
-            // Will retry with different prompts
+            console.log(`❌ Duplicate recipe detected (${recipe.title}), retrying with different constraints...`);
           } else {
-            console.error(`Failed to generate valid recipe on attempt ${retry + 1}`);
+            console.error(`❌ Failed to generate valid recipe on attempt ${retry + 1}`);
           }
         } catch (error) {
           console.error(`Error generating recipe ${i + 1}, attempt ${retry + 1}:`, error);
+          // Add longer delay on error
+          await new Promise(resolve => setTimeout(resolve, 2000));
         }
       }
       
       if (!recipeGenerated) {
-        console.warn(`Failed to generate unique recipe ${i + 1} after ${maxRetries} attempts`);
+        console.warn(`⚠️ Failed to generate unique recipe ${i + 1} after ${maxRetries} attempts`);
       }
     }
     
