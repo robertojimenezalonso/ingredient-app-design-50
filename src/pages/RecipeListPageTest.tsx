@@ -190,8 +190,24 @@ const RecipeListPageTest = () => {
                         </div>
                       </button>
                     ) : (
-                      <div className="w-full h-full min-h-[120px] bg-muted/50 rounded-md flex items-center justify-center">
-                        <span className="text-xs text-muted-foreground">Sin receta</span>
+                      <div className="w-full space-y-2">
+                        <div className="aspect-square rounded-md overflow-hidden bg-muted">
+                          <img
+                            src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&q=60"
+                            alt="Receta placeholder"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-xs font-medium line-clamp-2 leading-tight">
+                            Receta Saludable
+                          </h4>
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <span>25 min</span>
+                            <span>•</span>
+                            <span>2 pers.</span>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
