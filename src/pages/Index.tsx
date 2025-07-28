@@ -27,8 +27,24 @@ const Index = () => {
     'appetizer', 'snacks', 'desserts', 'favorites'
   ];
 
-  // Get all recipes for ingredient management
-  const explorationRecipes = categories.flatMap(category => getRecipesByCategory(category, 10));
+  // Load AI recipes from localStorage if available
+  const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
+  
+  useEffect(() => {
+    const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+    if (storedAiRecipes) {
+      try {
+        const parsedRecipes = JSON.parse(storedAiRecipes);
+        setAiRecipes(parsedRecipes);
+        console.log('Loaded', parsedRecipes.length, 'AI recipes from localStorage');
+      } catch (error) {
+        console.error('Error parsing stored AI recipes:', error);
+      }
+    }
+  }, []);
+
+  // Get all recipes for ingredient management - prioritize AI recipes
+  const explorationRecipes = aiRecipes.length > 0 ? aiRecipes : categories.flatMap(category => getRecipesByCategory(category, 10));
   const { getGroupedIngredients, getSelectedIngredientsCount, initializeIngredients } = useGlobalIngredients();
   
   // Initialize ingredients when recipes load
