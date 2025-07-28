@@ -159,7 +159,7 @@ const SearchOffersPage = () => {
                         <img src={supermarket.logo} alt={supermarket.name} className="w-full h-full object-cover" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-medium text-sm text-black">{supermarket.name}</h3>
+                        <h3 className="font-medium text-black text-base">{supermarket.name}</h3>
                       </div>
                       <div className="text-right">
                         <p className="font-semibold text-black text-base">{supermarket.totalPrice}€</p>
