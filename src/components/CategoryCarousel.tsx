@@ -187,35 +187,33 @@ export const CategoryCarousel = ({
               }) => (
                 <div key={`${dateStr}-${meal}`} className="flex-shrink-0 w-36">
                   {recipe && (
-                    <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md border border-border/50 hover:shadow-lg transition-shadow duration-200">
-                      <button
-                        onClick={() => onRecipeClick(recipe)}
-                        className="w-full text-left"
-                      >
-                        <div className="aspect-square overflow-hidden">
-                          <img
-                            src={recipe.image}
-                            alt={recipe.title}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
+                    <button
+                      onClick={() => onRecipeClick(recipe)}
+                      className="w-full text-left"
+                    >
+                      <div className="aspect-square overflow-hidden rounded-2xl">
+                        <img
+                          src={recipe.image}
+                          alt={recipe.title}
+                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <div className="mt-2 space-y-1">
+                        <h4 className="text-sm font-normal leading-tight line-clamp-2 text-foreground">
+                          {recipe.title}
+                        </h4>
+                        <div className="flex items-center gap-3 text-xs">
+                          <span className={`font-medium ${
+                            meal === 'Desayuno' ? 'text-orange-700' :
+                            meal === 'Almuerzo' ? 'text-blue-700' :
+                            meal === 'Cena' ? 'text-purple-700' :
+                            'text-green-700'
+                          }`}>
+                            {meal}
+                          </span>
                         </div>
-                        <div className="p-3 space-y-2">
-                          <h4 className="text-sm font-normal leading-tight line-clamp-2 text-foreground">
-                            {recipe.title}
-                          </h4>
-                          <div className="flex items-center gap-3 text-xs">
-                            <span className={`font-medium ${
-                              meal === 'Desayuno' ? 'text-orange-700' :
-                              meal === 'Almuerzo' ? 'text-blue-700' :
-                              meal === 'Cena' ? 'text-purple-700' :
-                              'text-green-700'
-                            }`}>
-                              {meal}
-                            </span>
-                          </div>
-                        </div>
-                      </button>
-                    </div>
+                      </div>
+                    </button>
                   )}
                 </div>
               ))}
