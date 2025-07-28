@@ -302,28 +302,6 @@ export default function SupermarketDetailPage() {
         )}
       </div>
 
-      {/* Footer summary */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t p-4 z-10">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-gray-600">
-              {checkedCount} de {products.length} productos
-            </p>
-            <p className="text-xs text-gray-500">
-              Entrega: {supermarketData.deliveryFee}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-lg font-bold">{calculatedTotalPrice}</p>
-            <Button 
-              className="mt-2"
-              disabled={checkedCount === 0}
-            >
-              Ir a pagar
-            </Button>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
