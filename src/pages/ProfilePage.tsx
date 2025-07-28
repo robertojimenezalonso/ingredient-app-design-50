@@ -1,17 +1,20 @@
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, User, Settings, Heart, History, LogOut } from 'lucide-react';
+import { ArrowLeft, User, Settings, Heart, History, LogOut, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BottomNav } from '@/components/BottomNav';
 import { useCart } from '@/hooks/useCart';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
+import { useGlobalRecipeRegistry } from '@/hooks/useGlobalRecipeRegistry';
+import { toast } from '@/hooks/use-toast';
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { getTotalIngredients } = useCart();
   const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('profile');
   const { user, loading, signOut } = useAuth();
+  const registry = useGlobalRecipeRegistry();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -26,6 +29,15 @@ const ProfilePage = () => {
     } else if (tab === 'cart') {
       navigate('/cart');
     }
+  };
+
+  const clearRecipes = () => {
+    registry.clear();
+    localStorage.removeItem('aiGeneratedRecipes');
+    toast({
+      title: "Recetas eliminadas",
+      description: "Se han eliminado todas las recetas generadas"
+    });
   };
 
   const menuItems = [
@@ -120,6 +132,21 @@ const ProfilePage = () => {
               </CardContent>
             </Card>
           ))}
+          
+          {/* Clear Recipes Button */}
+          <Card className="cursor-pointer hover:shadow-md transition-shadow border-orange-200">
+            <CardContent className="p-4" onClick={clearRecipes}>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                  <Trash2 className="h-5 w-5 text-orange-600" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-medium text-orange-600">Limpiar Recetas</h3>
+                  <p className="text-sm text-muted-foreground">Eliminar todas las recetas generadas ({registry.getCount()} recetas)</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
           
           {/* Logout Button */}
           <Card className="cursor-pointer hover:shadow-md transition-shadow border-destructive/20">

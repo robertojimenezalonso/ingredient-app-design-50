@@ -99,92 +99,113 @@ export const useAIRecipes = () => {
     const imageMap: { [recipeName: string]: string } = {};
     const defaultImage = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop';
     
-    // Split into batches of 3 (reduced from 5 to avoid rate limits)
-    const batches = [];
-    for (let i = 0; i < recipeNames.length; i += 3) {
-      batches.push(recipeNames.slice(i, i + 3));
-    }
+    console.log(`🖼️ Starting image generation for ${recipeNames.length} recipes`);
     
-    console.log(`Generating images for ${recipeNames.length} recipes in ${batches.length} batch(es)`);
-    
-    for (let batchIndex = 0; batchIndex < batches.length; batchIndex++) {
-      const batch = batches[batchIndex];
-      console.log(`Processing batch ${batchIndex + 1}/${batches.length} with ${batch.length} recipes:`, batch);
+    // Generate images one by one to avoid rate limits completely
+    for (let i = 0; i < recipeNames.length; i++) {
+      const recipeName = recipeNames[i];
+      console.log(`\n🎨 Generating image ${i + 1}/${recipeNames.length}: "${recipeName}"`);
       
+      let imageGenerated = false;
       let retryCount = 0;
       const maxRetries = 3;
       
-      while (retryCount < maxRetries) {
+      while (retryCount < maxRetries && !imageGenerated) {
         try {
           const { data: imageData, error: imageError } = await supabase.functions.invoke(
             'generate-recipe-image',
             {
-              body: { recipeNames: batch }
+              body: { recipeName }
             }
           );
 
           if (imageError) {
-            // If it's a rate limit error, wait longer and retry
             if (imageError.message.includes('rate_limit_exceeded') || imageError.message.includes('429')) {
-              const waitTime = (retryCount + 1) * 30000; // Wait 30s, 60s, 90s
-              console.log(`Rate limit hit for batch ${batchIndex + 1}, waiting ${waitTime/1000}s before retry ${retryCount + 1}/${maxRetries}`);
+              const waitTime = (retryCount + 1) * 60000; // Wait 1min, 2min, 3min
+              console.log(`⏳ Rate limit hit for "${recipeName}", waiting ${waitTime/1000}s (attempt ${retryCount + 1}/${maxRetries})`);
               await new Promise(resolve => setTimeout(resolve, waitTime));
               retryCount++;
               continue;
             } else {
-              console.warn(`Error generating images for batch ${batchIndex + 1}:`, imageError.message);
-              // Use default images for this batch
-              batch.forEach(recipeName => {
-                imageMap[recipeName] = defaultImage;
-              });
-              break;
-            }
-          } else if (imageData?.images) {
-            // Process batch results
-            imageData.images.forEach((result: any) => {
-              if (result.success && result.imageUrl) {
-                imageMap[result.recipeName] = result.imageUrl;
-              } else {
-                console.warn(`Failed to generate image for ${result.recipeName}:`, result.error);
-                imageMap[result.recipeName] = defaultImage;
-              }
-            });
-            console.log(`Successfully processed batch ${batchIndex + 1}`);
-            break;
-          } else {
-            console.warn(`No image data returned for batch ${batchIndex + 1}`);
-            batch.forEach(recipeName => {
+              console.warn(`❌ Error generating image for "${recipeName}":`, imageError.message);
               imageMap[recipeName] = defaultImage;
-            });
-            break;
+              imageGenerated = true;
+            }
+          } else if (imageData?.imageUrl) {
+            console.log(`✅ Successfully generated image for "${recipeName}"`);
+            imageMap[recipeName] = imageData.imageUrl;
+            imageGenerated = true;
+          } else {
+            console.warn(`⚠️ No image URL returned for "${recipeName}"`);
+            imageMap[recipeName] = defaultImage;
+            imageGenerated = true;
           }
         } catch (error) {
-          console.warn(`Image generation attempt failed for batch ${batchIndex + 1}:`, error);
+          console.warn(`💥 Image generation failed for "${recipeName}":`, error);
           retryCount++;
           if (retryCount >= maxRetries) {
-            // Use default images for failed batch
-            batch.forEach(recipeName => {
-              imageMap[recipeName] = defaultImage;
-            });
+            imageMap[recipeName] = defaultImage;
+            imageGenerated = true;
           }
         }
       }
       
-      // Add longer delay between batches to avoid rate limits
-      if (batchIndex < batches.length - 1) {
-        console.log('Waiting 45 seconds before next batch...');
-        await new Promise(resolve => setTimeout(resolve, 45000));
+      // Add delay between individual requests to respect rate limits
+      if (i < recipeNames.length - 1) {
+        const delay = 15000; // 15 seconds between each image
+        console.log(`⏱️ Waiting ${delay/1000}s before next image...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
       }
     }
+    
+    const successCount = Object.values(imageMap).filter(url => url !== defaultImage).length;
+    console.log(`🏁 Image generation complete: ${successCount}/${recipeNames.length} successful`);
     
     return imageMap;
   };
 
   const generateMultipleRecipes = async (request: GenerateRecipeRequest, count: number = 3, showToast: boolean = true): Promise<Recipe[]> => {
     const recipes: Recipe[] = [];
-    const generatedTitles = new Set<string>();
+    const sessionTitles = new Set<string>();
+    
+    // Get all existing recipe titles from global registry and localStorage
+    const existingAIRecipes = JSON.parse(localStorage.getItem('aiGeneratedRecipes') || '[]');
+    const existingTitles = new Set(existingAIRecipes.map((r: Recipe) => r.title));
+    const globalTitles = registry.getAllTitles();
+    const allExistingTitles = new Set([...existingTitles, ...globalTitles]);
     
     console.log(`Starting sequential generation of ${count} recipes`);
+    console.log(`Found ${allExistingTitles.size} existing recipes to avoid`);
+    
+    // Define meal-specific prompts to ensure proper categorization
+    const getMealSpecificPrompts = (meals: string[]) => {
+      const prompts: string[] = [];
+      
+      meals.forEach(meal => {
+        switch(meal.toLowerCase()) {
+          case 'desayuno':
+            prompts.push(
+              "DEBE ser una receta de DESAYUNO: huevos, tostadas, cereales, yogur, frutas, avena, batidos",
+              "DESAYUNO típico: omelette, tostadas con aguacate, yogur con granola, avena, frutas"
+            );
+            break;
+          case 'almuerzo':
+            prompts.push(
+              "DEBE ser una receta de ALMUERZO: ensaladas sustanciosas, platos principales, proteínas con acompañantes",
+              "ALMUERZO completo: pollo/pescado/carne con verduras, ensaladas con proteína, pasta, quinoa"
+            );
+            break;
+          case 'cena':
+            prompts.push(
+              "DEBE ser una receta de CENA: platos ligeros pero nutritivos, pescado, verduras, sopas",
+              "CENA saludable: salmón, verduras al vapor, sopas nutritivas, ensaladas ligeras"
+            );
+            break;
+        }
+      });
+      
+      return prompts;
+    };
     
     // Add variety prompts to ensure different recipes
     const varietyPrompts = [
@@ -207,33 +228,42 @@ export const useAIRecipes = () => {
       "Inventa una receta griega tradicional",
       "Desarrolla una receta marroquí aromática",
       "Crea una receta japonesa equilibrada",
-      "Diseña una receta brasileña tropical"
+      "Diseña una receta brasileña tropical",
+      "Elabora una receta nórdica con pescado",
+      "Crea una receta turca especiada",
+      "Diseña una receta argentina parrillada",
+      "Inventa una receta coreana fermentada"
     ];
     
     // Generate recipes SEQUENTIALLY to avoid duplicates
     for (let i = 0; i < count; i++) {
-      console.log(`Generating recipe ${i + 1} of ${count}`);
+      console.log(`\n🍳 Generating recipe ${i + 1} of ${count}`);
       
-      const maxRetries = 5;
+      const maxRetries = 8;
       let recipeGenerated = false;
       
       for (let retry = 0; retry < maxRetries && !recipeGenerated; retry++) {
         try {
-          // Create unique request with strong variety constraints
-          const varietyIndex = (i * 3 + retry) % varietyPrompts.length;
-          const secondaryVarietyIndex = (i * 5 + retry + 7) % varietyPrompts.length;
+          // Create unique constraints for each attempt
+          const varietyIndex = (i * 7 + retry * 3) % varietyPrompts.length;
+          const secondaryVarietyIndex = (i * 11 + retry * 5 + 13) % varietyPrompts.length;
+          const tertiaryVarietyIndex = (i * 13 + retry * 7 + 19) % varietyPrompts.length;
           
-          // Get global avoidance prompts to prevent duplicates across all days
-          const globalAvoidancePrompts = registry.getAvoidancePrompts();
+          const mealSpecificPrompts = getMealSpecificPrompts(request.meals);
+          const allExistingArray = Array.from(allExistingTitles);
+          const sessionArray = Array.from(sessionTitles);
           
           const uniquePrompts = [
+            ...mealSpecificPrompts,
             varietyPrompts[varietyIndex],
             varietyPrompts[secondaryVarietyIndex],
-            ...globalAvoidancePrompts,
-            `NUNCA generes estas recetas de esta sesión: ${Array.from(generatedTitles).join(', ')}`,
-            `Receta número ${i + 1}, debe ser completamente diferente`,
-            `Usa ingredientes y técnicas totalmente distintas`,
-            `Total de recetas en registro global: ${registry.getCount()}`
+            varietyPrompts[tertiaryVarietyIndex],
+            `PROHIBIDO repetir estas ${allExistingArray.length} recetas existentes: ${allExistingArray.join(', ')}`,
+            `PROHIBIDO repetir estas ${sessionArray.length} recetas de esta sesión: ${sessionArray.join(', ')}`,
+            `Receta única #${i + 1}, ingredientes y técnicas COMPLETAMENTE diferentes`,
+            `Evita: ${allExistingArray.slice(-8).join(', ')}`,
+            `Timestamp: ${Date.now()}-${retry}`,
+            `Creatividad máxima, combinaciones únicas de ingredientes`
           ];
           
           const enhancedRequest = {
@@ -241,14 +271,16 @@ export const useAIRecipes = () => {
             restrictions: [...(request.restrictions || []), ...uniquePrompts]
           };
           
-          // Add delay between requests to avoid rate limits and improve uniqueness
-          if (i > 0 || retry > 0) {
-            await new Promise(resolve => setTimeout(resolve, 1000));
+          // Add progressive delay between requests
+          const delay = Math.min((i * 1000) + (retry * 2000), 8000);
+          if (delay > 0) {
+            console.log(`⏱️ Waiting ${delay}ms before generation...`);
+            await new Promise(resolve => setTimeout(resolve, delay));
           }
           
-          console.log(`Attempting recipe generation with variety: ${varietyPrompts[varietyIndex]}`);
+          console.log(`🎯 Attempt ${retry + 1}: Using variety "${varietyPrompts[varietyIndex]}"`);
           
-          // Generate recipe text only
+          // Generate recipe text
           const { data: recipeData, error: recipeError } = await supabase.functions.invoke(
             'generate-recipe',
             {
@@ -262,35 +294,41 @@ export const useAIRecipes = () => {
 
           const recipe = recipeData.recipe;
           
-          if (recipe && !generatedTitles.has(recipe.title) && !registry.hasRecipe(recipe.title)) {
-            // Add recipe with default image for now
-            const newRecipe = {
+          if (recipe && 
+              !sessionTitles.has(recipe.title) && 
+              !allExistingTitles.has(recipe.title)) {
+            
+            // Add recipe with default image
+            const newRecipe: Recipe = {
               ...recipe,
               image: 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'
             };
             
             recipes.push(newRecipe);
-            generatedTitles.add(recipe.title);
+            sessionTitles.add(recipe.title);
+            allExistingTitles.add(recipe.title);
             
-            // Add to global registry to prevent future duplicates
+            // Add to global registry
             registry.addRecipe(newRecipe);
             
-            console.log(`✅ Successfully generated unique recipe: ${recipe.title}`);
+            console.log(`✅ SUCCESS: Generated unique recipe: "${recipe.title}"`);
             recipeGenerated = true;
-          } else if (recipe && (generatedTitles.has(recipe.title) || registry.hasRecipe(recipe.title))) {
-            console.log(`❌ Duplicate recipe detected (${recipe.title}) - exists in ${generatedTitles.has(recipe.title) ? 'session' : 'global registry'}, retrying...`);
+          } else if (recipe) {
+            const isDuplicateSession = sessionTitles.has(recipe.title);
+            const isDuplicateGlobal = allExistingTitles.has(recipe.title);
+            console.log(`❌ DUPLICATE: "${recipe.title}" (${isDuplicateSession ? 'session' : 'global'} duplicate)`);
           } else {
-            console.error(`❌ Failed to generate valid recipe on attempt ${retry + 1}`);
+            console.error(`❌ INVALID: No valid recipe returned on attempt ${retry + 1}`);
           }
         } catch (error) {
-          console.error(`Error generating recipe ${i + 1}, attempt ${retry + 1}:`, error);
+          console.error(`💥 ERROR: Recipe ${i + 1}, attempt ${retry + 1}:`, error);
           // Add longer delay on error
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          await new Promise(resolve => setTimeout(resolve, 3000));
         }
       }
       
       if (!recipeGenerated) {
-        console.warn(`⚠️ Failed to generate unique recipe ${i + 1} after ${maxRetries} attempts`);
+        console.warn(`⚠️ FAILED: Could not generate unique recipe ${i + 1} after ${maxRetries} attempts`);
       }
     }
     
