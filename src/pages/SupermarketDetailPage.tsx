@@ -33,7 +33,7 @@ const supermarketInfo: Record<string, SupermarketData> = {
   },
   lidl: {
     name: 'Lidl',
-    logo: '/lovable-uploads/8f17d96b-3966-4959-b7ba-b9d53435740d.png',
+    logo: '/lovable-uploads/8530d68e-8316-44b0-8389-d319fd405949.png',
     totalPrice: '€52.30',
     deliveryFee: '€3.99'
   },
