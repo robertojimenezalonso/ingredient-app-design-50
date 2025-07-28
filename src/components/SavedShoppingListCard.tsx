@@ -62,7 +62,7 @@ export const SavedShoppingListCard = () => {
             </div>
             <div className="flex items-center gap-2 text-sm font-medium text-primary">
               <ShoppingCart className="h-4 w-4" />
-              <span>{selectedIngredientsCount} ingrediente{selectedIngredientsCount > 1 ? 's' : ''} seleccionado{selectedIngredientsCount > 1 ? 's' : ''}</span>
+              <span>Desde 12,50 €</span>
             </div>
           </div>
           <div className="w-24 h-16 flex gap-1 overflow-hidden rounded-xl">
