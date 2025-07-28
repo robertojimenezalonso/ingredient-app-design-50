@@ -82,42 +82,11 @@ export const CategoryCarousel = ({
       // Si hay recetas de IA disponibles, asignar la receta correspondiente a esta combinación día+comida
       let selectedRecipe;
       if (recipes && recipes.length > 0) {
-        // Mapear comidas a categorías para buscar
-        const mealCategories: { [key: string]: string[] } = {
-          'Desayuno': ['breakfast', 'desayuno'],
-          'Almuerzo': ['lunch', 'almuerzo'],
-          'Cena': ['dinner', 'cena']
-        };
-        
-        const mealKeywords = mealCategories[meal] || [meal.toLowerCase()];
-        
-        // Buscar una receta específica para este día y comida
-        selectedRecipe = recipes.find(recipe => {
-          if (!recipe.id) return false;
-          
-          // Convertir fecha al formato usado en los IDs (YYYY-MM-DD)
-          const formattedDate = dateStr; // Ya debería estar en formato YYYY-MM-DD
-          
-          // Verificar si el ID contiene la fecha
-          const hasDate = recipe.id.includes(formattedDate);
-          
-          // Verificar si el ID contiene alguna palabra clave de la comida
-          const hasMealKeyword = mealKeywords.some(keyword => 
-            recipe.id.toLowerCase().includes(keyword)
-          );
-          
-          console.log(`Checking recipe ${recipe.id} for ${formattedDate}-${meal}: hasDate=${hasDate}, hasMealKeyword=${hasMealKeyword}`);
-          
-          return hasDate && hasMealKeyword;
-        });
-        
-        // Si no encuentra una específica, usar lógica de índice secuencial con shuffle
-        if (!selectedRecipe) {
-          const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
-          selectedRecipe = recipes[recipeIndex % recipes.length];
-        }
-        
-        console.log(`CategoryCarousel: Using AI recipe for ${dateStr}-${meal} (index ${dayIndex * config.selectedMeals!.length + mealIndex}): ${selectedRecipe?.title || 'No recipe found'}`);
+        // Calcular el índice de la receta para esta combinación día+comida
+        // Orden: día1-comida1, día1-comida2, día2-comida1, día2-comida2, etc.
+        const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
+        selectedRecipe = recipes[recipeIndex] || recipes[0]; // Fallback a la primera si no hay suficientes
+        console.log(`CategoryCarousel: Using AI recipe for ${dateStr}-${meal} (index ${recipeIndex}): ${selectedRecipe.title}`);
       } else {
         // Fallback a recetas de ejemplo si no hay recetas de IA
         const categoryRecipes = getRecipesByCategory(categoryKey, 10);
