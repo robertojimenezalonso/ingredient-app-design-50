@@ -190,7 +190,6 @@ export default function SupermarketDetailPage() {
             className="flex items-center gap-2 text-gray-600"
           >
             <ArrowLeft className="h-5 w-5" />
-            <span>Buscar ofertas</span>
           </button>
           
           <div className="flex items-center gap-3">
