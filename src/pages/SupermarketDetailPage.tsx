@@ -256,34 +256,21 @@ export default function SupermarketDetailPage() {
                 key={product.id}
                 className={`cursor-pointer transition-all duration-200 ${
                   product.isChecked 
-                    ? 'bg-green-50 border-green-200 opacity-75' 
+                    ? 'bg-gray-100 border-gray-300 opacity-75' 
                     : 'bg-white hover:shadow-md'
                 }`}
                 onClick={() => toggleProductCheck(product.id)}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
-                    {/* Checkbox visual */}
-                    <div className={`
-                      flex items-center justify-center w-6 h-6 rounded-full border-2 
-                      ${product.isChecked 
-                        ? 'bg-green-500 border-green-500' 
-                        : 'border-gray-300'
-                      }
-                    `}>
-                      {product.isChecked && (
-                        <Check className="h-4 w-4 text-white" />
-                      )}
-                    </div>
-                    
                     {/* Product image */}
                     <img 
-                      src={product.image} 
+                      src={`https://images.unsplash.com/photo-1546548970-71785318a17b?w=80&h=80&fit=crop&q=80&auto=format&cs=tinysrgb&dpr=1&s=${encodeURIComponent(product.name)}`}
                       alt={product.name}
                       className="h-16 w-16 object-cover rounded-lg"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=64&h=64&fit=crop';
+                        target.src = `https://images.unsplash.com/photo-1546548970-71785318a17b?w=80&h=80&fit=crop&q=80&auto=format`;
                       }}
                     />
                     
