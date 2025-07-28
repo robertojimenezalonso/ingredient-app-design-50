@@ -256,7 +256,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       <div 
         ref={containerRef}
         data-recipe-card="true"
-        className="flex gap-3 items-center cursor-pointer mb-3 relative rounded-2xl bg-white w-full last:mb-4 transition-transform duration-200 py-2 h-20"
+        className="flex gap-3 items-center cursor-pointer relative rounded-2xl bg-white w-full transition-transform duration-200 h-20"
         style={{ transform: `translateX(${swipeX}px)` }}
         onClick={() => !isSwipeActive && !isSwiped && onClick(recipe)}
         onTouchStart={handleTouchStart}
