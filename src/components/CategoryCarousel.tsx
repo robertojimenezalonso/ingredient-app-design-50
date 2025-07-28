@@ -172,7 +172,7 @@ export const CategoryCarousel = ({
                 </button>
               </div>
             </div>
-            <div className="flex gap-3 pl-4 pr-4 overflow-x-auto scrollbar-hide"style={{paddingLeft: 0}}>
+            <div className="flex gap-3 pl-4 pr-4 py-2 overflow-x-auto scrollbar-hide" style={{paddingLeft: 0}}>
               {meals.filter(({
               recipe,
               meal
