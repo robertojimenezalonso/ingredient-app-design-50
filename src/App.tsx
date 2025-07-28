@@ -18,6 +18,7 @@ import CartPage from "./pages/CartPage";
 import ProfilePage from "./pages/ProfilePage";
 import AuthPage from "./pages/AuthPage";
 import SupermarketDetailPage from "./pages/SupermarketDetailPage";
+import { SimilarRecipesPage } from "./pages/SimilarRecipesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
             <Route path="/milista" element={<RecipeListPage />} />
             <Route path="/search-offers" element={<SearchOffersPage />} />
+            <Route path="/similar-recipes" element={<SimilarRecipesPage />} />
             <Route path="/supermarket/:supermarket" element={<SupermarketDetailPage />} />
             
             
