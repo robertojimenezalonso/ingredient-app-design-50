@@ -221,7 +221,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
   }
 
   return (
-    <div className={`relative overflow-visible h-26 ${isSwipeActive || isSwiped ? 'z-20' : 'z-10'}`}>
+    <div className={`relative overflow-visible h-20 ${isSwipeActive || isSwiped ? 'z-20' : 'z-10'}`}>
       {/* Delete background (swipe right) */}
       <div 
         className={`absolute inset-0 bg-red-500 rounded-2xl transition-opacity duration-200 ${
@@ -256,7 +256,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       <div 
         ref={containerRef}
         data-recipe-card="true"
-        className="flex gap-3 items-center cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200 py-3"
+        className="flex gap-3 items-center cursor-pointer mb-3 relative rounded-2xl bg-white mx-auto max-w-md last:mb-4 transition-transform duration-200 py-2"
         style={{ transform: `translateX(${swipeX}px)` }}
         onClick={() => !isSwipeActive && !isSwiped && onClick(recipe)}
         onTouchStart={handleTouchStart}
@@ -275,7 +275,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         />
       </div>
       
-      <div className="flex-1 flex flex-col justify-start pt-1 relative h-26">
+      <div className="flex-1 flex flex-col justify-center relative h-20">
         <h3 className="font-medium text-lg line-clamp-2 mb-0.5 leading-tight overflow-hidden mt-2">
           {recipe.title}
         </h3>
