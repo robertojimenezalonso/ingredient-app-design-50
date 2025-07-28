@@ -1,9 +1,7 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
-
 interface FloatingButtonProps {
   onClick?: () => void;
   className?: string;
@@ -12,7 +10,6 @@ interface FloatingButtonProps {
   totalPrice?: number;
   recipeCount?: number;
 }
-
 export const FloatingButton = ({
   onClick,
   className = "",
@@ -23,7 +20,6 @@ export const FloatingButton = ({
 }: FloatingButtonProps) => {
   const navigate = useNavigate();
   const [isAtBottom, setIsAtBottom] = useState(false);
-
   useEffect(() => {
     const handleScroll = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -39,7 +35,6 @@ export const FloatingButton = ({
 
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   const handleClick = () => {
     if (onClick) {
       onClick();
@@ -48,27 +43,16 @@ export const FloatingButton = ({
       navigate('/search-offers');
     }
   };
-
-  const buttonText = selectedCount !== undefined 
-    ? `Buscar súper · Ingredientes (${selectedCount})` 
-    : "Cambiar receta";
-  
+  const buttonText = selectedCount !== undefined ? `Buscar súper · Ingredientes (${selectedCount})` : "Cambiar receta";
   const containerClasses = "fixed bottom-0 left-0 right-0 z-40 flex justify-center";
-  
-  return (
-    <div className={containerClasses} style={{
-      paddingBottom: `calc(32px + env(safe-area-inset-bottom))`
-    }}>
-      <Button 
-        onClick={handleClick}
-        className={`h-12 text-base font-medium rounded-full px-6 shadow-lg ${className}`}
-        size="lg"
-      >
+  return <div className={containerClasses} style={{
+    paddingBottom: `calc(32px + env(safe-area-inset-bottom))`
+  }}>
+      <Button onClick={handleClick} className={`h-12 text-base font-medium rounded-full px-6 shadow-lg ${className}`} size="lg">
         <div className="flex items-center justify-center gap-2">
           <Search className="h-5 w-5" />
-          <span>Buscar oferta</span>
+          <span>Buscar supermercados</span>
         </div>
       </Button>
-    </div>
-  );
+    </div>;
 };
