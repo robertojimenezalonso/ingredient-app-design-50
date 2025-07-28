@@ -263,11 +263,11 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-      <div className="relative flex-shrink-0">
+      <div className="relative flex-shrink-0 ml-3">
         <ImageLoader
           src={recipe.image} 
           alt={recipe.title}
-          className="w-32 h-32 object-cover rounded-2xl"
+          className="w-24 h-24 object-cover rounded-2xl"
           fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=400"
           placeholder={
             <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
