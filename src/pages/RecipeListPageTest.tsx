@@ -190,14 +190,14 @@ const RecipeListPageTest = () => {
                       </button>
                     ) : (
                       <div className="w-full space-y-2">
-                        <div className="aspect-square rounded-md overflow-hidden bg-muted">
+                        <div className="aspect-square rounded-md overflow-hidden bg-muted -m-2 mb-0 mx-0">
                           <img
                             src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=400&q=60"
                             alt="Receta placeholder"
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <div className="space-y-1">
+                        <div className="space-y-1 px-2">
                           <h4 className="text-xs font-medium line-clamp-2 leading-tight">
                             Receta Saludable
                           </h4>
