@@ -217,8 +217,6 @@ export const CategoryCarousel = ({
                             <div className="flex items-center gap-3 text-xs text-muted-foreground">
                               <span>{recipe.time} min</span>
                               <span>•</span>
-                              <span>{recipe.servings} pers.</span>
-                              <span>•</span>
                               <span>{recipe.calories} cal</span>
                             </div>
                           </div>
