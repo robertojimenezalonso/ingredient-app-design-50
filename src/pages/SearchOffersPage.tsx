@@ -139,7 +139,7 @@ const SearchOffersPage = () => {
                     <div className="flex-1">
                       <h3 className="font-medium text-sm">{ingredient.name}</h3>
                       <p className="text-xs text-gray-600">
-                        {ingredient.displayAmount} · {ingredient.recipeCount} receta{ingredient.recipeCount > 1 ? 's' : ''}
+                        {ingredient.displayAmount} · Para {ingredient.recipeCount} receta{ingredient.recipeCount > 1 ? 's' : ''}
                       </p>
                     </div>
                   </div>
