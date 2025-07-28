@@ -182,12 +182,8 @@ export const CategoryCarousel = ({
               }).map(({
                 meal,
                 recipe
-              }) => (
-                <Card key={`${dateStr}-${meal}`} className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border">
-                  <CardContent className="px-4 pb-2 pt-2">
-                    {recipe && <RecipeCard recipe={recipe} onAdd={onAddRecipe} onClick={onRecipeClick} onDelete={recipe => handleDeleteRecipe(recipe, dateStr, meal)} onSubstitute={recipe => handleSubstituteRecipe(recipe, dateStr, meal)} onSwipeStateChange={handleSwipeStateChange} shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id} mealType={meal} />}
-                  </CardContent>
-                </Card>
+              }) => 
+                recipe && <RecipeCard key={`${dateStr}-${meal}`} recipe={recipe} onAdd={onAddRecipe} onClick={onRecipeClick} onDelete={recipe => handleDeleteRecipe(recipe, dateStr, meal)} onSubstitute={recipe => handleSubstituteRecipe(recipe, dateStr, meal)} onSwipeStateChange={handleSwipeStateChange} shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id} mealType={meal} />
               ))}
             </div>
           </div>)}
