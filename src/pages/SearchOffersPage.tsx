@@ -67,7 +67,7 @@ const SearchOffersPage = () => {
     }, {
       id: 'eroski',
       name: 'Eroski',
-      logo: '/lovable-uploads/1a119c40-7aac-4ada-b1c9-1a0c5f3492fd.png',
+      logo: '/lovable-uploads/7825fcc8-c2a8-4678-9edd-23e6a72bf209.png',
       multiplier: 0.90
     }, {
       id: 'lidl',
