@@ -43,7 +43,7 @@ export const SavedShoppingListCard = () => {
 
   return (
     <div className="mx-4 mb-6">
-      <h3 className="text-lg font-semibold text-foreground mb-3">Tu lista de la compra</h3>
+      <h3 className="text-lg font-semibold text-foreground mb-3">Tus últimos planes de compra</h3>
       <div 
         onClick={handleContinueShopping}
         className="bg-white rounded-2xl p-4 shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-all cursor-pointer border border-gray-200/50"
