@@ -201,11 +201,6 @@ const RecipeListPageTest = () => {
                           <h4 className="text-xs font-medium line-clamp-2 leading-tight">
                             Receta Saludable
                           </h4>
-                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <span>25 min</span>
-                            <span>•</span>
-                            <span>2 pers.</span>
-                          </div>
                         </div>
                       </div>
                     )}
