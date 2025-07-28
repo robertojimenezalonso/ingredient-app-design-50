@@ -48,7 +48,7 @@ export const FloatingButton = ({
   return <div className={containerClasses} style={{
     paddingBottom: `calc(32px + env(safe-area-inset-bottom))`
   }}>
-      <Button onClick={handleClick} className={`h-12 text-base font-medium rounded-full px-6 shadow-lg ${className}`} size="lg">
+      <Button onClick={handleClick} className={`h-12 text-base font-medium rounded-full px-6 shadow-lg bg-opacity-90 ${className}`} size="lg">
         <div className="flex items-center justify-center gap-2">
           <Search className="h-5 w-5" />
           <span>Buscar supermercados</span>
