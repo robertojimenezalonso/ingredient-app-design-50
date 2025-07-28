@@ -28,7 +28,7 @@ const InitialWelcomePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
       {/* Main welcome content */}
       <div className="p-6">
         <div className="text-center mb-8">
