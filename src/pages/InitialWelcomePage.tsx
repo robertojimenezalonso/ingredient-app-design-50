@@ -1,14 +1,13 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BottomNav } from '@/components/BottomNav';
 import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 
 const InitialWelcomePage = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('explore');
+  
   const { user, loading } = useAuth();
 
   useEffect(() => {
@@ -17,16 +16,6 @@ const InitialWelcomePage = () => {
     }
   }, [user, loading, navigate]);
 
-  const handleTabChange = (tab: 'explore' | 'cart' | 'recipes' | 'profile') => {
-    setActiveTab(tab);
-    if (tab === 'explore') {
-      navigate('/calendar-selection');
-    } else if (tab === 'profile') {
-      navigate('/profile');
-    } else if (tab === 'cart') {
-      navigate('/cart');
-    }
-  };
 
   if (loading) {
     return (
@@ -39,7 +28,7 @@ const InitialWelcomePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 pb-24">
+    <div className="min-h-screen bg-gray-100">
       {/* Main welcome content */}
       <div className="p-6">
         <div className="text-center mb-8">
@@ -73,11 +62,6 @@ const InitialWelcomePage = () => {
 
       {/* Saved Shopping List Card - now shows below the button */}
       <SavedShoppingListCard />
-
-      <BottomNav 
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
     </div>
   );
 };

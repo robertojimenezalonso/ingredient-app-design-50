@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, User, Settings, Heart, History, LogOut, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BottomNav } from '@/components/BottomNav';
+
 import { useCart } from '@/hooks/useCart';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/useAuth';
@@ -12,7 +12,7 @@ import { toast } from '@/hooks/use-toast';
 const ProfilePage = () => {
   const navigate = useNavigate();
   const { getTotalIngredients } = useCart();
-  const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('profile');
+  
   const { user, loading, signOut } = useAuth();
   const registry = useGlobalRecipeRegistry();
 
@@ -22,14 +22,6 @@ const ProfilePage = () => {
     }
   }, [user, loading, navigate]);
 
-  const handleTabChange = (tab: 'explore' | 'cart' | 'recipes' | 'profile') => {
-    setActiveTab(tab);
-    if (tab === 'explore') {
-      navigate('/');
-    } else if (tab === 'cart') {
-      navigate('/cart');
-    }
-  };
 
   const clearRecipes = () => {
     registry.clear();
@@ -62,7 +54,7 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background pb-24">
+    <div className="min-h-screen bg-background">
       <div className="flex items-center gap-3 px-4 py-3 border-b">
         <Button 
           variant="ghost" 
@@ -164,11 +156,6 @@ const ProfilePage = () => {
           </Card>
         </div>
       </div>
-
-      <BottomNav
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
     </div>
   );
 };
