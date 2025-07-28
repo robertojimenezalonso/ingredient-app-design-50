@@ -2,7 +2,6 @@ import { Heart, Plus, Trash2, RefreshCw } from 'lucide-react';
 import { Recipe, CATEGORIES } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { IngredientAvatars } from './IngredientAvatars';
 import { Badge } from './ui/badge';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
@@ -23,7 +22,6 @@ interface RecipeCardProps {
 export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onSwipeStateChange, shouldResetSwipe, mealType }: RecipeCardProps) => {
   const { config } = useUserConfig();
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [useTotalAbbreviation, setUseTotalAbbreviation] = useState(false);
   const [swipeX, setSwipeX] = useState(0);
   const [isSwipeActive, setIsSwipeActive] = useState(false);
@@ -212,13 +210,11 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
 
   const handleSubstitute = () => {
     setShowDeleteDialog(false);
-    // Navigate to similar recipes page with state
-    navigate('/similar-recipes', {
-      state: {
-        originalRecipe: recipe,
-        onReplace: onSubstitute
-      }
+    toast({
+      title: "Receta sustituida",
+      description: `Buscando una nueva receta para sustituir ${recipe.title}`,
     });
+    onSubstitute?.(recipe);
   };
 
   if (isDeleted) {
