@@ -252,11 +252,11 @@ export default function SupermarketDetailPage() {
         ) : (
           <div className="space-y-3">
             {products.map((product) => (
-              <Card 
+               <Card 
                 key={product.id}
                 className={`cursor-pointer transition-all duration-200 ${
                   product.isChecked 
-                    ? 'bg-green-50 border-green-200 opacity-75' 
+                    ? 'bg-gray-100 border-gray-300' 
                     : 'bg-white hover:shadow-md'
                 }`}
                 onClick={() => toggleProductCheck(product.id)}
