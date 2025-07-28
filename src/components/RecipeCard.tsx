@@ -221,7 +221,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
   }
 
   return (
-    <div className={`relative overflow-visible h-32 ${isSwipeActive || isSwiped ? 'z-20' : 'z-10'}`}>
+    <div className={`relative overflow-visible h-26 ${isSwipeActive || isSwiped ? 'z-20' : 'z-10'}`}>
       {/* Delete background (swipe right) */}
       <div 
         className={`absolute inset-0 bg-red-500 rounded-2xl transition-opacity duration-200 ${
@@ -263,11 +263,11 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-      <div className="relative flex-shrink-0">
+      <div className="relative flex-shrink-0 ml-3">
         <ImageLoader
           src={recipe.image} 
           alt={recipe.title}
-          className="w-32 h-32 object-cover rounded-2xl"
+          className="w-20 h-20 object-cover rounded-2xl"
           fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=400"
           placeholder={
             <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
@@ -275,7 +275,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         />
       </div>
       
-      <div className="flex-1 flex flex-col justify-start pt-1 relative h-32">
+      <div className="flex-1 flex flex-col justify-start pt-1 relative h-26">
         <h3 className="font-medium text-lg line-clamp-2 mb-0.5 leading-tight overflow-hidden mt-2">
           {recipe.title}
         </h3>
