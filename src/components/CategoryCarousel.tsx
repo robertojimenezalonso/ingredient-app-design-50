@@ -203,10 +203,19 @@ export const CategoryCarousel = ({
                           <h4 className="text-sm font-semibold leading-tight line-clamp-2 text-foreground">
                             {recipe.title}
                           </h4>
-                          <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                            <span>{recipe.time} min</span>
-                            <span>•</span>
-                            <span>{recipe.calories} cal</span>
+                          <div className="flex items-center gap-3 text-xs">
+                            <span className={`font-medium ${
+                              meal === 'Desayuno' ? 'text-orange-700' :
+                              meal === 'Almuerzo' ? 'text-blue-700' :
+                              meal === 'Cena' ? 'text-purple-700' :
+                              'text-green-700'
+                            }`}>
+                              {meal}
+                            </span>
+                            <span className="text-muted-foreground">•</span>
+                            <span className="text-muted-foreground">{recipe.time} min</span>
+                            <span className="text-muted-foreground">•</span>
+                            <span className="text-muted-foreground">{recipe.calories} cal</span>
                           </div>
                         </div>
                       </button>
