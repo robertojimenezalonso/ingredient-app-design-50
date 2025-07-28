@@ -284,11 +284,6 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
             {mealType}
           </span>
         )}
-        <div className="flex items-center gap-1 text-sm text-muted-foreground mb-1.5">
-          <span>{recipe.calories} kcal</span>
-          <span>·</span>
-          <span>{recipe.time} min</span>
-        </div>
         </div>
         
       </div>
