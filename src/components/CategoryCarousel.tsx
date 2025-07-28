@@ -171,10 +171,8 @@ export const CategoryCarousel = ({
                 </button>
               </div>
             </div>
-            <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border">
-              <CardContent className="px-4 pb-4 pt-4">
-                <div className="space-y-4">
-                  {meals.filter(({
+            <div className="space-y-3">
+              {meals.filter(({
                 recipe,
                 meal
               }) => {
@@ -184,15 +182,14 @@ export const CategoryCarousel = ({
               }).map(({
                 meal,
                 recipe
-              }, index, filteredMeals) => <div key={`${dateStr}-${meal}`}>
-                      {recipe && <RecipeCard recipe={recipe} onAdd={onAddRecipe} onClick={onRecipeClick} onDelete={recipe => handleDeleteRecipe(recipe, dateStr, meal)} onSubstitute={recipe => handleSubstituteRecipe(recipe, dateStr, meal)} onSwipeStateChange={handleSwipeStateChange} shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id} mealType={meal} />}
-                      {index < filteredMeals.length - 1 && <div className="mt-4 -mx-4">
-                          <Separator />
-                        </div>}
-                    </div>)}
-                </div>
-              </CardContent>
-            </Card>
+              }) => (
+                <Card key={`${dateStr}-${meal}`} className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border">
+                  <CardContent className="px-4 pb-4 pt-4">
+                    {recipe && <RecipeCard recipe={recipe} onAdd={onAddRecipe} onClick={onRecipeClick} onDelete={recipe => handleDeleteRecipe(recipe, dateStr, meal)} onSubstitute={recipe => handleSubstituteRecipe(recipe, dateStr, meal)} onSwipeStateChange={handleSwipeStateChange} shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id} mealType={meal} />}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>)}
       </div>
       
