@@ -97,7 +97,11 @@ export const AirbnbHeader = ({
       {/* Main Header - Always Visible */}
       <div className="flex items-center gap-3 p-4 bg-white">
         <button 
-          onClick={() => navigate('/')}
+          onClick={() => {
+            // Set flag to show saved config when returning to welcome page
+            localStorage.setItem('showSavedConfig', 'true');
+            navigate('/');
+          }}
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
         >
           <ArrowLeft className="h-5 w-5 text-black" />
