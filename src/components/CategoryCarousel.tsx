@@ -200,7 +200,7 @@ export const CategoryCarousel = ({
                           />
                         </div>
                         <div className="p-3 space-y-2">
-                          <h4 className="text-sm font-semibold leading-tight line-clamp-2 text-foreground">
+                          <h4 className="text-sm font-normal leading-tight line-clamp-2 text-foreground">
                             {recipe.title}
                           </h4>
                           <div className="flex items-center gap-3 text-xs">
