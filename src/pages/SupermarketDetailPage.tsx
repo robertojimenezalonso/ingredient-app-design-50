@@ -65,6 +65,7 @@ export default function SupermarketDetailPage() {
   const [products, setProducts] = useState<SupermarketProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [checkedCount, setCheckedCount] = useState(0);
+  const [calculatedTotalPrice, setCalculatedTotalPrice] = useState<string>('€0.00');
 
   const supermarketData = supermarket ? supermarketInfo[supermarket] : null;
 
@@ -118,10 +119,14 @@ export default function SupermarketDetailPage() {
       }
 
       if (data?.products) {
-        setProducts(data.products.map((product: any) => ({
+        const productsWithCheck = data.products.map((product: any) => ({
           ...product,
           isChecked: false
-        })));
+        }));
+        setProducts(productsWithCheck);
+        
+        // Calcular precio total basándose en los productos reales
+        calculateTotalPrice(productsWithCheck);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -133,6 +138,23 @@ export default function SupermarketDetailPage() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const calculateTotalPrice = (productList: SupermarketProduct[]) => {
+    let total = 0;
+    
+    productList.forEach(product => {
+      // Extraer precio numérico del string (€X.XX)
+      const priceMatch = product.price.match(/[\d,]+[.,]?\d*/);
+      if (priceMatch) {
+        const price = parseFloat(priceMatch[0].replace(',', '.'));
+        if (!isNaN(price)) {
+          total += price;
+        }
+      }
+    });
+    
+    setCalculatedTotalPrice(`€${total.toFixed(2)}`);
   };
 
   const toggleProductCheck = (productId: string) => {
@@ -182,7 +204,7 @@ export default function SupermarketDetailPage() {
           
           <div className="text-right">
             <p className="text-sm text-gray-600">Total</p>
-            <p className="font-bold text-lg">{supermarketData.totalPrice}</p>
+            <p className="font-bold text-lg">{calculatedTotalPrice}</p>
           </div>
         </div>
       </div>
@@ -312,7 +334,7 @@ export default function SupermarketDetailPage() {
             </p>
           </div>
           <div className="text-right">
-            <p className="text-lg font-bold">{supermarketData.totalPrice}</p>
+            <p className="text-lg font-bold">{calculatedTotalPrice}</p>
             <Button 
               className="mt-2"
               disabled={checkedCount === 0}
