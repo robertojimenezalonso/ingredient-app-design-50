@@ -246,17 +246,17 @@ export default function SupermarketDetailPage() {
                     
                     {/* Product info */}
                     <div className="flex-1 text-sm">
-                      <h3 className={`font-medium text-base ${product.isChecked ? 'line-through text-gray-500' : ''}`}>
+                      <h3 className={`font-medium text-sm ${product.isChecked ? 'line-through text-gray-500' : ''}`}>
                         {product.name}
                       </h3>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="text-xs text-gray-600 mt-1">
                         {product.originalIngredient}
                       </p>
                     </div>
                     
                     {/* Price */}
                     <div className="text-right">
-                      <p className={`font-bold text-sm ${product.isChecked ? 'line-through text-gray-500' : ''}`}>
+                      <p className={`font-bold text-xs ${product.isChecked ? 'line-through text-gray-500' : ''}`}>
                         {product.price}
                       </p>
                     </div>
