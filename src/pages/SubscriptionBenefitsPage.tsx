@@ -5,6 +5,7 @@ import { useUserConfig } from "@/contexts/UserConfigContext";
 import { useAIRecipes } from "@/hooks/useAIRecipes";
 import { useGlobalIngredients } from "@/hooks/useGlobalIngredients";
 import { useCart } from "@/hooks/useCart";
+import { supabase } from "@/integrations/supabase/client";
 
 const SubscriptionBenefitsPage = () => {
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ const SubscriptionBenefitsPage = () => {
         }
       }
       
-      // Generate all recipes in parallel
+      // Generate all recipes in parallel (but images will be generated sequentially)
       const aiRecipes = (await Promise.all(recipePromises)).filter(recipe => recipe !== null);
       
       console.log('SubscriptionBenefitsPage: AI generation completed. Recipes received:', aiRecipes.length);
@@ -53,9 +54,45 @@ const SubscriptionBenefitsPage = () => {
           addToCart(recipe, recipe.servings, selectedIngredients);
         });
 
-        // Store AI recipes in localStorage
+        // Store AI recipes in localStorage immediately (with fallback images)
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
         console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
+        
+        // Generate images for recipes one by one to respect rate limits
+        console.log('Starting sequential image generation to respect OpenAI rate limits...');
+        for (let i = 0; i < aiRecipes.length; i++) {
+          const recipe = aiRecipes[i];
+          try {
+            console.log(`Generating image ${i + 1}/${aiRecipes.length} for: ${recipe.title}`);
+            
+            // Wait 15 seconds between each image request to respect rate limits
+            if (i > 0) {
+              console.log('Waiting 15 seconds before next image generation...');
+              await new Promise(resolve => setTimeout(resolve, 15000));
+            }
+            
+            // Generate image for this specific recipe
+            const { data: imageData, error: imageError } = await supabase.functions.invoke(
+              'generate-recipe-image',
+              { body: { recipeName: recipe.title } }
+            );
+            
+            if (!imageError && imageData?.imageUrl) {
+              recipe.image = imageData.imageUrl;
+              console.log(`✅ Successfully generated image for: ${recipe.title}`);
+            } else {
+              console.log(`⚠️ Using fallback image for: ${recipe.title}`, imageError?.message);
+            }
+            
+            // Update localStorage with the new image
+            localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
+            
+          } catch (error) {
+            console.warn(`Failed to generate image for ${recipe.title}:`, error);
+          }
+        }
+        
+        console.log('✅ Image generation completed for all recipes');
       }
     } catch (error) {
       console.error('Error generating recipes in background:', error);
