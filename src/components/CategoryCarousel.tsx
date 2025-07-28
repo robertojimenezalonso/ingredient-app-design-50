@@ -192,7 +192,7 @@ export const CategoryCarousel = ({
                         onClick={() => onRecipeClick(recipe)}
                         className="w-full text-left"
                       >
-                        <div className="aspect-[4/3] overflow-hidden">
+                        <div className="aspect-square overflow-hidden">
                           <img
                             src={recipe.image}
                             alt={recipe.title}
