@@ -185,74 +185,78 @@ export const useAIRecipes = () => {
     
     // Add variety prompts to ensure different recipes
     const varietyPrompts = [
-      "Genera una receta completamente diferente y original",
-      "Crea una receta con ingredientes y estilo de cocina únicos", 
-      "Diseña una receta innovadora y creativa",
-      "Elabora una receta con técnicas culinarias distintas",
-      "Inventa una receta con sabores y texturas diferentes"
+      "Genera una receta mediterránea saludable",
+      "Crea una receta asiática con ingredientes frescos", 
+      "Diseña una receta mexicana auténtica",
+      "Elabora una receta italiana tradicional",
+      "Inventa una receta vegetariana nutritiva",
+      "Desarrolla una receta con proteínas magras",
+      "Crea una receta rica en fibra y vitaminas",
+      "Diseña una receta baja en carbohidratos",
+      "Elabora una receta con legumbres como protagonista",
+      "Inventa una receta de pescado al horno",
+      "Desarrolla una receta con quinoa o arroz integral",
+      "Crea una receta de pollo con verduras al vapor"
     ];
     
     // First, generate all recipes without images
     for (let i = 0; i < count; i++) {
       console.log(`Generating recipe ${i + 1} of ${count}`);
-      try {
-        // Add variety and uniqueness to each request
-        const enhancedRequest = {
-          ...request,
-          restrictions: [...(request.restrictions || []), varietyPrompts[i % varietyPrompts.length]]
-        };
-        
-        // Generate recipe text only
-        const { data: recipeData, error: recipeError } = await supabase.functions.invoke(
-          'generate-recipe',
-          {
-            body: enhancedRequest
-          }
-        );
-
-        if (recipeError) {
-          throw new Error(`Error generating recipe: ${recipeError.message}`);
-        }
-
-        const recipe = recipeData.recipe;
-        
-        if (recipe && !generatedTitles.has(recipe.title)) {
-          // Add recipe with default image for now
-          recipes.push({
-            ...recipe,
-            image: 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'
-          });
-          generatedTitles.add(recipe.title);
-          console.log(`Successfully generated recipe: ${recipe.title}`);
-        } else if (recipe && generatedTitles.has(recipe.title)) {
-          console.log(`Skipping duplicate recipe: ${recipe.title}`);
-          // Try again with more specific prompt
-          const retryRequest = {
+      
+      // Use multiple variety prompts for better uniqueness
+      const maxRetries = 3;
+      let recipeGenerated = false;
+      
+      for (let retry = 0; retry < maxRetries && !recipeGenerated; retry++) {
+        try {
+          // Add multiple variety prompts to ensure uniqueness
+          const currentVarietyPrompts = [
+            varietyPrompts[i % varietyPrompts.length],
+            varietyPrompts[(i + 3) % varietyPrompts.length],
+            `Evita absolutamente repetir estas recetas ya generadas: ${Array.from(generatedTitles).join(', ')}`
+          ];
+          
+          const enhancedRequest = {
             ...request,
-            restrictions: [...(request.restrictions || []), `Evita repetir estas recetas: ${Array.from(generatedTitles).join(', ')}`, varietyPrompts[(i + 2) % varietyPrompts.length]]
+            restrictions: [...(request.restrictions || []), ...currentVarietyPrompts]
           };
           
-          const { data: retryRecipeData, error: retryError } = await supabase.functions.invoke(
+          // Generate recipe text only
+          const { data: recipeData, error: recipeError } = await supabase.functions.invoke(
             'generate-recipe',
             {
-              body: retryRequest
+              body: enhancedRequest
             }
           );
 
-          if (!retryError && retryRecipeData?.recipe && !generatedTitles.has(retryRecipeData.recipe.title)) {
+          if (recipeError) {
+            throw new Error(`Error generating recipe: ${recipeError.message}`);
+          }
+
+          const recipe = recipeData.recipe;
+          
+          if (recipe && !generatedTitles.has(recipe.title)) {
+            // Add recipe with default image for now
             recipes.push({
-              ...retryRecipeData.recipe,
+              ...recipe,
               image: 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'
             });
-            generatedTitles.add(retryRecipeData.recipe.title);
-            console.log(`Successfully generated unique recipe on retry: ${retryRecipeData.recipe.title}`);
+            generatedTitles.add(recipe.title);
+            console.log(`Successfully generated unique recipe: ${recipe.title}`);
+            recipeGenerated = true;
+          } else if (recipe && generatedTitles.has(recipe.title)) {
+            console.log(`Duplicate recipe detected (${recipe.title}), retrying with different prompt...`);
+            // Will retry with different prompts
+          } else {
+            console.error(`Failed to generate valid recipe on attempt ${retry + 1}`);
           }
-        } else {
-          console.error(`Failed to generate recipe ${i + 1} - recipe is null`);
+        } catch (error) {
+          console.error(`Error generating recipe ${i + 1}, attempt ${retry + 1}:`, error);
         }
-      } catch (error) {
-        console.error(`Error generating recipe ${i + 1}:`, error);
-        // Continue with the next recipe instead of stopping
+      }
+      
+      if (!recipeGenerated) {
+        console.warn(`Failed to generate unique recipe ${i + 1} after ${maxRetries} attempts`);
       }
     }
     
