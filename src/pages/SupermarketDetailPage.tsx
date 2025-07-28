@@ -45,7 +45,7 @@ const supermarketInfo: Record<string, SupermarketData> = {
   },
   dia: {
     name: 'Dia',
-    logo: '/lovable-uploads/aaa38274-3981-4f1b-976f-6cc68b738160.png',
+    logo: '/lovable-uploads/eeddbd2d-b7e8-45f2-a498-8bca36687a55.png',
     totalPrice: '€48.95',
     deliveryFee: '€2.50'
   },
