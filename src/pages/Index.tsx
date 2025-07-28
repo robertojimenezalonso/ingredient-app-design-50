@@ -9,7 +9,7 @@ import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { IngredientsView } from '@/components/IngredientsView';
 import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useDateTabs } from '@/hooks/useDateTabs';
-
+import { BottomNav } from '@/components/BottomNav';
 import { Recipe, CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
 
@@ -18,7 +18,7 @@ const Index = () => {
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
-  
+  const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('explore');
   const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   
@@ -76,6 +76,14 @@ const Index = () => {
     navigate(`/category/${category}`);
   };
 
+  const handleTabChange = (tab: 'explore' | 'cart' | 'recipes' | 'profile') => {
+    setActiveTab(tab);
+    if (tab === 'profile') {
+      navigate('/profile');
+    } else if (tab === 'cart') {
+      navigate('/cart');
+    }
+  };
 
   const handleSearchInSupermarket = () => {
     if (selectedIngredientsCount > 0) {
@@ -89,7 +97,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 pb-24">
       <AirbnbHeader 
         showTabs={showTabs}
         activeTab={activeTabDate}
@@ -117,7 +125,7 @@ const Index = () => {
       </div>
 
       {/* Floating Button - Always visible */}
-      <div className="fixed bottom-4 left-4 right-4 z-40">
+      <div className="fixed bottom-4 left-4 right-4 z-40" style={{ bottom: '80px' }}>
         <button 
           onClick={handleSearchInSupermarket}
           className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
@@ -126,6 +134,11 @@ const Index = () => {
           {selectedIngredientsCount > 0 ? 'Continuar con Mi lista' : 'Buscar súper'} · Lista ({selectedIngredientsCount})
         </button>
       </div>
+
+      <BottomNav 
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
     </div>
   );
 };

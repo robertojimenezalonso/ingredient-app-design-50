@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, ShoppingCart, X, ChevronDown } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
@@ -17,8 +17,6 @@ const SearchOffersPage = () => {
   const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [sortBy, setSortBy] = useState<'price-low' | 'price-high' | 'name'>('price-low');
-  const [showSortDropdown, setShowSortDropdown] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Cargar recetas AI desde localStorage
@@ -96,17 +94,8 @@ const SearchOffersPage = () => {
       };
     });
 
-    // Ordenar según la opción seleccionada
-    switch (sortBy) {
-      case 'price-low':
-        return supermarketsWithPrices.sort((a, b) => parseFloat(a.totalPrice) - parseFloat(b.totalPrice));
-      case 'price-high':
-        return supermarketsWithPrices.sort((a, b) => parseFloat(b.totalPrice) - parseFloat(a.totalPrice));
-      case 'name':
-        return supermarketsWithPrices.sort((a, b) => a.name.localeCompare(b.name));
-      default:
-        return supermarketsWithPrices.sort((a, b) => parseFloat(a.totalPrice) - parseFloat(b.totalPrice));
-    }
+    // Ordenar por precio total (más barato primero)
+    return supermarketsWithPrices.sort((a, b) => parseFloat(a.totalPrice) - parseFloat(b.totalPrice));
   };
   const supermarketsWithPrices = calculateSupermarketPrices();
   const cheapestSupermarket = supermarketsWithPrices[0];
@@ -161,60 +150,7 @@ const SearchOffersPage = () => {
 
         {/* Lista de supermercados - Solo visible cuando no está expandido */}
         {!isExpanded && <div className="h-1/2 p-4 bg-white border-t border-gray-200">
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base font-medium text-gray-900">Supermercados disponibles</h2>
-              
-              {/* Dropdown de ordenamiento */}
-              <div className="relative">
-                <button
-                  onClick={() => setShowSortDropdown(!showSortDropdown)}
-                  className="flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Ordenar por
-                  <ChevronDown className="h-4 w-4" />
-                </button>
-                
-                {showSortDropdown && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                    <div className="py-1">
-                      <button
-                        onClick={() => {
-                          setSortBy('price-low');
-                          setShowSortDropdown(false);
-                        }}
-                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
-                          sortBy === 'price-low' ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
-                        }`}
-                      >
-                        Precio: menor a mayor
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSortBy('price-high');
-                          setShowSortDropdown(false);
-                        }}
-                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
-                          sortBy === 'price-high' ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
-                        }`}
-                      >
-                        Precio: mayor a menor
-                      </button>
-                      <button
-                        onClick={() => {
-                          setSortBy('name');
-                          setShowSortDropdown(false);
-                        }}
-                        className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 ${
-                          sortBy === 'name' ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
-                        }`}
-                      >
-                        Nombre (A-Z)
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            <h2 className="text-base font-medium mb-3 text-gray-900">Supermercados disponibles</h2>
             <div className="space-y-3 overflow-y-auto">
               {supermarketsWithPrices.map(supermarket => <Card key={supermarket.id} className={`cursor-pointer transition-all ${selectedSupermarket === supermarket.id ? 'border-black bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`} onClick={() => handleSupermarketClick(supermarket.id)}>
                   <CardContent className="p-4">

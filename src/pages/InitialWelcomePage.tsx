@@ -1,14 +1,14 @@
 
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Menu } from 'lucide-react';
+import { BottomNav } from '@/components/BottomNav';
 import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 
 const InitialWelcomePage = () => {
   const navigate = useNavigate();
-  
+  const [activeTab, setActiveTab] = useState<'explore' | 'cart' | 'recipes' | 'profile'>('explore');
   const { user, loading } = useAuth();
 
   useEffect(() => {
@@ -17,6 +17,16 @@ const InitialWelcomePage = () => {
     }
   }, [user, loading, navigate]);
 
+  const handleTabChange = (tab: 'explore' | 'cart' | 'recipes' | 'profile') => {
+    setActiveTab(tab);
+    if (tab === 'explore') {
+      navigate('/calendar-selection');
+    } else if (tab === 'profile') {
+      navigate('/profile');
+    } else if (tab === 'cart') {
+      navigate('/cart');
+    }
+  };
 
   if (loading) {
     return (
@@ -29,21 +39,9 @@ const InitialWelcomePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Header with menu */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200/30 shadow-sm" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
-        <div className="flex items-center gap-3 p-4">
-          <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-            <Menu className="h-5 w-5 text-black" />
-          </button>
-          <div className="flex-1 text-center">
-            <h1 className="font-semibold text-foreground">Tu asistente de compras</h1>
-          </div>
-          <div className="w-9"></div> {/* Spacer for centering */}
-        </div>
-      </div>
+    <div className="min-h-screen bg-gray-100 pb-24">
       {/* Main welcome content */}
-      <div className="flex flex-col justify-center min-h-screen p-6" style={{ paddingTop: '80px', paddingBottom: '80px' }}>
+      <div className="p-6">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             Bienvenido a tu asistente de compras
@@ -75,6 +73,11 @@ const InitialWelcomePage = () => {
 
       {/* Saved Shopping List Card - now shows below the button */}
       <SavedShoppingListCard />
+
+      <BottomNav 
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
     </div>
   );
 };
