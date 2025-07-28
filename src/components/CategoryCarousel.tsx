@@ -185,7 +185,7 @@ export const CategoryCarousel = ({
                 meal,
                 recipe
               }) => (
-                <div key={`${dateStr}-${meal}`} className="flex-shrink-0 w-44">
+                <div key={`${dateStr}-${meal}`} className="flex-shrink-0 w-36">
                   {recipe && (
                     <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md border border-border/50 hover:shadow-lg transition-shadow duration-200">
                       <button
