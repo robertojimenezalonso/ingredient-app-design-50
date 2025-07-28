@@ -16,7 +16,19 @@ export const SavedShoppingListCard = () => {
   const getSavedLists = () => {
     try {
       const saved = localStorage.getItem('savedShoppingLists');
-      return saved ? JSON.parse(saved) : [];
+      if (saved) {
+        const lists = JSON.parse(saved);
+        // Ensure all lists have recipeImages - add fallback if missing
+        return lists.map((list: any) => ({
+          ...list,
+          recipeImages: list.recipeImages || [
+            'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
+            'https://images.unsplash.com/photo-1582562124811-c09040d0a901', 
+            'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07'
+          ]
+        }));
+      }
+      return [];
     } catch {
       return [];
     }
@@ -69,6 +81,14 @@ export const SavedShoppingListCard = () => {
               
             const servingsText = `${list.servingsPerRecipe || 1} ración${(list.servingsPerRecipe || 1) > 1 ? 'es' : ''}`;
             
+            console.log('SavedShoppingListCard - List data:', {
+              listId: list.id,
+              name: list.name,
+              hasRecipeImages: !!list.recipeImages,
+              recipeImagesCount: list.recipeImages?.length || 0,
+              recipeImages: list.recipeImages
+            });
+            
             return (
               <div 
                 key={list.id || index}
@@ -93,18 +113,31 @@ export const SavedShoppingListCard = () => {
                     </div>
                   </div>
                   <div className="w-24 h-16 flex gap-1 overflow-hidden rounded-xl">
-                    {(list.recipeImages || [
-                      'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
-                      'https://images.unsplash.com/photo-1582562124811-c09040d0a901', 
-                      'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07'
-                    ]).slice(0, 3).map((imageUrl: string, imgIndex: number) => (
-                      <img 
-                        key={imgIndex}
-                        src={imageUrl} 
-                        alt={`Receta ${imgIndex + 1}`}
-                        className="w-8 h-16 object-cover rounded-sm"
-                      />
-                    ))}
+                    {(() => {
+                      const fallbackImages = [
+                        'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
+                        'https://images.unsplash.com/photo-1582562124811-c09040d0a901', 
+                        'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07'
+                      ];
+                      const imagesToShow = list.recipeImages && list.recipeImages.length > 0 
+                        ? list.recipeImages.slice(0, 3)
+                        : fallbackImages;
+                      
+                      console.log('Images to show for list', list.id, ':', imagesToShow);
+                      
+                      return imagesToShow.map((imageUrl: string, imgIndex: number) => (
+                        <img 
+                          key={imgIndex}
+                          src={imageUrl} 
+                          alt={`Receta ${imgIndex + 1}`}
+                          className="w-8 h-16 object-cover rounded-sm"
+                          onError={(e) => {
+                            console.error('Image failed to load:', imageUrl);
+                            (e.target as HTMLImageElement).src = fallbackImages[imgIndex] || fallbackImages[0];
+                          }}
+                        />
+                      ));
+                    })()}
                   </div>
                 </div>
               </div>
