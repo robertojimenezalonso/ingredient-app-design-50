@@ -43,7 +43,7 @@ const InitialWelcomePage = () => {
         </div>
       </div>
       {/* Main welcome content */}
-      <div className="p-6" style={{ paddingTop: '80px' }}>
+      <div className="flex flex-col justify-center min-h-screen p-6" style={{ paddingTop: '80px', paddingBottom: '80px' }}>
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             Bienvenido a tu asistente de compras
