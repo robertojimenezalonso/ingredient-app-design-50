@@ -186,7 +186,7 @@ export const CategoryCarousel = ({
                   meal,
                   recipe
                 }) => (
-                  <CarouselItem key={`${dateStr}-${meal}`} className="basis-64">
+                  <CarouselItem key={`${dateStr}-${meal}`} className="basis-52">
                     {recipe && (
                       <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md border border-border/50 hover:shadow-lg transition-shadow duration-200">
                         <button
