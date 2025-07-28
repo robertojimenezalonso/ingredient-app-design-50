@@ -231,6 +231,7 @@ export default function SupermarketDetailPage() {
 
       {/* Products list */}
       <div className="p-4 pb-24">
+        <h1 className="text-lg font-semibold mb-4 text-gray-900">Ingredientes de tus recetas</h1>
         {loading ? (
           <div className="space-y-4">
             {[...Array(6)].map((_, i) => (
@@ -288,22 +289,14 @@ export default function SupermarketDetailPage() {
                     
                     {/* Product info */}
                     <div className="flex-1">
-                      <h3 className={`font-medium text-sm ${
+                      <h3 className={`font-medium text-base ${
                         product.isChecked ? 'line-through text-gray-500' : ''
                       }`}>
                         {product.name}
                       </h3>
-                      <p className="text-xs text-gray-500 mt-1">
-                        Para: {product.originalIngredient}
+                      <p className="text-sm text-gray-600 mt-1">
+                        {product.originalIngredient}
                       </p>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge 
-                          variant={product.matchScore > 0.8 ? "default" : "secondary"}
-                          className="text-xs"
-                        >
-                          {Math.round(product.matchScore * 100)}% match
-                        </Badge>
-                      </div>
                     </div>
                     
                     {/* Price */}
