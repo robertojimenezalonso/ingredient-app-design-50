@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 const SubscriptionBenefitsPage = () => {
   const navigate = useNavigate();
-  const { updateConfig } = useUserConfig();
+  const { updateConfig, config } = useUserConfig();
   const { generateRecipe } = useAIRecipes();
   const { initializeIngredients } = useGlobalIngredients();
   const { addToCart } = useCart();
@@ -19,6 +19,37 @@ const SubscriptionBenefitsPage = () => {
   
   const items = ['Supermercados', 'Ingredientes', 'Nutrición', 'Recetas', 'Precios'];
   const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Comparando precios…'];
+
+  const saveCurrentPlanningSession = () => {
+    if (config.hasPlanningSession && config.selectedDates?.length) {
+      const existingSavedLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
+      
+      const newShoppingList = {
+        id: Date.now().toString(),
+        name: generatePlanName(),
+        selectedDates: config.selectedDates,
+        servingsPerRecipe: config.servingsPerRecipe || 2,
+        estimatedPrice: '15.90',
+        createdAt: new Date().toISOString()
+      };
+      
+      const updatedLists = [newShoppingList, ...existingSavedLists.slice(0, 9)];
+      localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+      console.log('Saved new shopping list:', newShoppingList);
+    }
+  };
+
+  const generatePlanName = () => {
+    const themes = [
+      'Menú semanal mediterráneo',
+      'Comidas saludables', 
+      'Menú familiar',
+      'Cocina tradicional',
+      'Menú vegetariano',
+      'Comidas rápidas'
+    ];
+    return themes[Math.floor(Math.random() * themes.length)];
+  };
 
   const generateRecipesInBackground = async (params: any) => {
     try {
@@ -119,6 +150,8 @@ const SubscriptionBenefitsPage = () => {
         setProgress(100);
         // Mark as having a planning session when complete
         updateConfig({ hasPlanningSession: true });
+        // Save current planning session before navigating
+        saveCurrentPlanningSession();
         // Navigate to milista after reaching 100%
         setTimeout(() => navigate('/milista'), 500);
         return;

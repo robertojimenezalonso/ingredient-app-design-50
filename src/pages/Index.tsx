@@ -4,12 +4,12 @@ import { Search } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
+import { useUserConfig } from '@/contexts/UserConfigContext';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { IngredientsView } from '@/components/IngredientsView';
 import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useDateTabs } from '@/hooks/useDateTabs';
-
 import { Recipe, CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
 
@@ -18,6 +18,7 @@ const Index = () => {
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
+  const { config } = useUserConfig();
   
   const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
@@ -79,6 +80,8 @@ const Index = () => {
 
   const handleSearchInSupermarket = () => {
     if (selectedIngredientsCount > 0) {
+      // Save current planning session before navigating
+      saveCurrentPlanningSession();
       navigate('/milista');
     } else {
       toast({
@@ -86,6 +89,51 @@ const Index = () => {
         description: "Función próximamente disponible"
       });
     }
+  };
+
+  const saveCurrentPlanningSession = () => {
+    if (config.hasPlanningSession && config.selectedDates?.length) {
+      const existingSavedLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
+      
+      // Create a new shopping list object
+      const newShoppingList = {
+        id: Date.now().toString(),
+        name: generatePlanName(),
+        selectedDates: config.selectedDates,
+        servingsPerRecipe: config.servingsPerRecipe || 2,
+        estimatedPrice: calculateEstimatedPrice(),
+        createdAt: new Date().toISOString(),
+        ingredients: explorationRecipes.flatMap(recipe => recipe.ingredients),
+        recipes: explorationRecipes
+      };
+      
+      // Add to beginning of array (most recent first)
+      const updatedLists = [newShoppingList, ...existingSavedLists.slice(0, 9)]; // Keep max 10 lists
+      
+      localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+      console.log('Saved new shopping list:', newShoppingList);
+    }
+  };
+
+  const generatePlanName = () => {
+    const themes = [
+      'Menú semanal mediterráneo',
+      'Comidas saludables',
+      'Menú familiar',
+      'Cocina tradicional',
+      'Menú vegetariano',
+      'Comidas rápidas'
+    ];
+    return themes[Math.floor(Math.random() * themes.length)];
+  };
+
+  const calculateEstimatedPrice = () => {
+    const basePrice = selectedIngredientsCount * 1.2;
+    const servingsMultiplier = config.servingsPerRecipe || 2;
+    const daysMultiplier = config.selectedDates?.length || 1;
+    
+    const estimatedPrice = (basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
+    return estimatedPrice;
   };
 
   return (

@@ -16,36 +16,7 @@ export const SavedShoppingListCard = () => {
   const getSavedLists = () => {
     try {
       const saved = localStorage.getItem('savedShoppingLists');
-      if (saved) {
-        return JSON.parse(saved);
-      }
-      // Return demo data if no saved lists
-      return [
-        {
-          id: '1',
-          name: 'Menú semanal mediterráneo',
-          selectedDates: ['2025-01-20', '2025-01-21', '2025-01-22'],
-          servingsPerRecipe: 2,
-          estimatedPrice: '12,50',
-          createdAt: '2025-01-19T10:00:00Z'
-        },
-        {
-          id: '2', 
-          name: 'Comidas saludables',
-          selectedDates: ['2025-01-15', '2025-01-16'],
-          servingsPerRecipe: 1,
-          estimatedPrice: '8,75',
-          createdAt: '2025-01-15T09:30:00Z'
-        },
-        {
-          id: '3',
-          name: 'Menú familiar fin de semana',
-          selectedDates: ['2025-01-25', '2025-01-26'],
-          servingsPerRecipe: 4,
-          estimatedPrice: '24,90',
-          createdAt: '2025-01-25T08:15:00Z'
-        }
-      ];
+      return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
     }
