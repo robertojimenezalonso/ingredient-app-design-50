@@ -263,21 +263,8 @@ export default function SupermarketDetailPage() {
               >
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
-                    {/* Checkbox visual */}
-                    <div className={`
-                      flex items-center justify-center w-6 h-6 rounded-full border-2 
-                      ${product.isChecked 
-                        ? 'bg-green-500 border-green-500' 
-                        : 'border-gray-300'
-                      }
-                    `}>
-                      {product.isChecked && (
-                        <Check className="h-4 w-4 text-white" />
-                      )}
-                    </div>
-                    
                     {/* Product image */}
-                    <img 
+                    <img
                       src={product.image} 
                       alt={product.name}
                       className="h-16 w-16 object-cover rounded-lg"
