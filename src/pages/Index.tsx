@@ -95,6 +95,9 @@ const Index = () => {
     if (config.hasPlanningSession && config.selectedDates?.length) {
       const existingSavedLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
       
+      // Get first 3 recipe images from current AI recipes
+      const recipeImages = explorationRecipes.slice(0, 3).map(recipe => recipe.image || 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9');
+      
       // Create a new shopping list object
       const newShoppingList = {
         id: Date.now().toString(),
@@ -104,7 +107,8 @@ const Index = () => {
         estimatedPrice: calculateEstimatedPrice(),
         createdAt: new Date().toISOString(),
         ingredients: explorationRecipes.flatMap(recipe => recipe.ingredients),
-        recipes: explorationRecipes
+        recipes: explorationRecipes,
+        recipeImages: recipeImages // Store recipe images
       };
       
       // Add to beginning of array (most recent first)

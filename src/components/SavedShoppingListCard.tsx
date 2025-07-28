@@ -93,21 +93,18 @@ export const SavedShoppingListCard = () => {
                     </div>
                   </div>
                   <div className="w-24 h-16 flex gap-1 overflow-hidden rounded-xl">
-                    <img 
-                      src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9" 
-                      alt="Receta 1"
-                      className="w-8 h-16 object-cover rounded-sm"
-                    />
-                    <img 
-                      src="https://images.unsplash.com/photo-1582562124811-c09040d0a901" 
-                      alt="Receta 2"
-                      className="w-8 h-16 object-cover rounded-sm"
-                    />
-                    <img 
-                      src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" 
-                      alt="Receta 3"
-                      className="w-8 h-16 object-cover rounded-sm"
-                    />
+                    {(list.recipeImages || [
+                      'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
+                      'https://images.unsplash.com/photo-1582562124811-c09040d0a901', 
+                      'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07'
+                    ]).slice(0, 3).map((imageUrl: string, imgIndex: number) => (
+                      <img 
+                        key={imgIndex}
+                        src={imageUrl} 
+                        alt={`Receta ${imgIndex + 1}`}
+                        className="w-8 h-16 object-cover rounded-sm"
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
