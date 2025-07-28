@@ -57,7 +57,7 @@ const SearchOffersPage = () => {
     }, {
       id: 'mercadona',
       name: 'Mercadona',
-      logo: '/lovable-uploads/a06f3ae9-f80a-48b6-bf55-8c1b736c79f8.png',
+      logo: '/lovable-uploads/2f62f477-2662-4cc5-adcc-6ddfaa085c50.png',
       multiplier: 0.85
     }, {
       id: 'dia',
