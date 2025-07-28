@@ -5,7 +5,6 @@ import { RecipeCard } from './RecipeCard';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Separator } from './ui/separator';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
-import { Carousel, CarouselContent, CarouselItem } from './ui/carousel';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
 import { format } from 'date-fns';
@@ -172,9 +171,10 @@ export const CategoryCarousel = ({
                 </button>
               </div>
             </div>
-            <div className="overflow-x-auto scrollbar-hide -mx-4 px-4">
-              <div className="flex gap-6 py-2 w-max">
-                {meals.filter(({
+            <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border">
+              <CardContent className="px-4 pb-4 pt-4">
+                <div className="space-y-4">
+                  {meals.filter(({
                 recipe,
                 meal
               }) => {
@@ -184,41 +184,15 @@ export const CategoryCarousel = ({
               }).map(({
                 meal,
                 recipe
-              }) => (
-                <div key={`${dateStr}-${meal}`} className="flex-shrink-0 w-36">
-                  {recipe && (
-                    <button
-                      onClick={() => onRecipeClick(recipe)}
-                      className="w-full text-left"
-                    >
-                      <div className="aspect-square overflow-hidden rounded-2xl">
-                        <img
-                          src={recipe.image}
-                          alt={recipe.title}
-                          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                        />
-                      </div>
-                      <div className="mt-2 space-y-1">
-                        <h4 className="text-sm font-normal leading-tight line-clamp-2 text-foreground">
-                          {recipe.title}
-                        </h4>
-                        <div className="flex items-center gap-3 text-xs">
-                          <span className={`font-medium ${
-                            meal === 'Desayuno' ? 'text-orange-700' :
-                            meal === 'Almuerzo' ? 'text-blue-700' :
-                            meal === 'Cena' ? 'text-purple-700' :
-                            'text-green-700'
-                          }`}>
-                            {meal}
-                          </span>
-                        </div>
-                      </div>
-                    </button>
-                  )}
+              }, index, filteredMeals) => <div key={`${dateStr}-${meal}`}>
+                      {recipe && <RecipeCard recipe={recipe} onAdd={onAddRecipe} onClick={onRecipeClick} onDelete={recipe => handleDeleteRecipe(recipe, dateStr, meal)} onSubstitute={recipe => handleSubstituteRecipe(recipe, dateStr, meal)} onSwipeStateChange={handleSwipeStateChange} shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id} mealType={meal} />}
+                      {index < filteredMeals.length - 1 && <div className="mt-4 -mx-4">
+                          <Separator />
+                        </div>}
+                    </div>)}
                 </div>
-              ))}
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>)}
       </div>
       
