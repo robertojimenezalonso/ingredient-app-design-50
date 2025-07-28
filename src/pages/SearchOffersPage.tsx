@@ -52,7 +52,7 @@ const SearchOffersPage = () => {
     const supermarkets = [{
       id: 'carrefour',
       name: 'Carrefour',
-      logo: '/lovable-uploads/62545d3b-2a8b-4a13-a64c-d485492f24c1.png',
+      logo: '/lovable-uploads/190fc1f3-4981-4c81-baa7-bef57932b8e5.png',
       multiplier: 1.0
     }, {
       id: 'mercadona',
