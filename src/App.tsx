@@ -17,6 +17,7 @@ import RecipeDetailPage from "./pages/RecipeDetailPage";
 import CartPage from "./pages/CartPage";
 import ProfilePage from "./pages/ProfilePage";
 import AuthPage from "./pages/AuthPage";
+import SupermarketDetailPage from "./pages/SupermarketDetailPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,6 +36,8 @@ const App = () => (
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
             <Route path="/milista" element={<RecipeListPage />} />
             <Route path="/search-offers" element={<SearchOffersPage />} />
+            <Route path="/supermarket/:supermarket" element={<SupermarketDetailPage />} />
+            
             
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/recipe/:id" element={<RecipeDetailPage />} />

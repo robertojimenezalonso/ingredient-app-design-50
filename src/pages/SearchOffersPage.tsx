@@ -110,6 +110,8 @@ const SearchOffersPage = () => {
 
   const handleSupermarketClick = (supermarketId: string) => {
     setSelectedSupermarket(supermarketId);
+    // Navegar a la página de detalle del supermercado
+    navigate(`/supermarket/${supermarketId}`);
   };
 
   const handleCollapse = () => {
@@ -217,7 +219,10 @@ const SearchOffersPage = () => {
       {/* Botón flotante del supermercado más económico - Solo visible cuando está expandido */}
       {isExpanded && cheapestSupermarket && (
         <div className="fixed bottom-6 left-4 right-4 animate-fade-in">
-          <Card className="shadow-lg border-2 border-green-500">
+          <Card 
+            className="shadow-lg border-2 border-green-500 cursor-pointer"
+            onClick={() => handleSupermarketClick(cheapestSupermarket.id)}
+          >
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -240,7 +245,10 @@ const SearchOffersPage = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={handleCollapse}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleCollapse();
+                    }}
                     className="rounded-full h-8 w-8"
                   >
                     <X className="h-4 w-4" />
