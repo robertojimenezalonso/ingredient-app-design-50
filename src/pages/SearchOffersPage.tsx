@@ -134,7 +134,7 @@ const SearchOffersPage = () => {
                 <CardContent className="p-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-100">
-                      <img src={`https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=100&h=100&fit=crop`} alt={ingredient.name} className="w-full h-full object-cover" />
+                      <img src={`https://images.unsplash.com/photo-1618160702438-9b02ab6515c9?w=100&h=100&fit=crop&q=${encodeURIComponent(ingredient.name)}`} alt={ingredient.name} className="w-full h-full object-cover" />
                     </div>
                     <div className="flex-1">
                       <h3 className="font-medium text-sm">{ingredient.name}</h3>
