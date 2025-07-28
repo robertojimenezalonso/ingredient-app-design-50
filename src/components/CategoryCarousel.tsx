@@ -79,14 +79,35 @@ export const CategoryCarousel = ({
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
 
-      // Si hay recetas de IA disponibles, asignar la receta correspondiente a esta combinación día+comida
+      // Si hay recetas de IA disponibles, buscar la receta específica para esta fecha y comida
       let selectedRecipe;
       if (recipes && recipes.length > 0) {
-        // Calcular el índice de la receta para esta combinación día+comida
-        // Orden: día1-comida1, día1-comida2, día2-comida1, día2-comida2, etc.
-        const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
-        selectedRecipe = recipes[recipeIndex] || recipes[0]; // Fallback a la primera si no hay suficientes
-        console.log(`CategoryCarousel: Using AI recipe for ${dateStr}-${meal} (index ${recipeIndex}): ${selectedRecipe.title}`);
+        // Buscar receta que contenga la fecha y el tipo de comida en su ID
+        const mealKeywords = {
+          'Desayuno': ['breakfast', 'desayuno'],
+          'Almuerzo': ['lunch', 'almuerzo'],
+          'Cena': ['dinner', 'cena'],
+          'Tentempié': ['snack', 'tentempie']
+        };
+        
+        const keywords = mealKeywords[meal] || [];
+        
+        // Buscar una receta que contenga tanto la fecha como el tipo de comida
+        selectedRecipe = recipes.find(recipe => {
+          const recipeId = recipe.id.toLowerCase();
+          const hasDate = recipeId.includes(dateStr);
+          const hasMeal = keywords.some(keyword => recipeId.includes(keyword));
+          return hasDate && hasMeal;
+        });
+
+        // Si no se encuentra una receta específica, usar la asignación por índice como fallback
+        if (!selectedRecipe) {
+          const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
+          selectedRecipe = recipes[recipeIndex] || recipes[recipeIndex % recipes.length];
+          console.log(`CategoryCarousel: No specific recipe found for ${dateStr}-${meal}, using index ${recipeIndex}: ${selectedRecipe?.title}`);
+        } else {
+          console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
+        }
       } else {
         // Fallback a recetas de ejemplo si no hay recetas de IA
         const categoryRecipes = getRecipesByCategory(categoryKey, 10);
