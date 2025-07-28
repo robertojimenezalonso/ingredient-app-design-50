@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, Heart, Plus, Minus, Clock, Flame, ChevronDown, ChevronRight, X, CheckCircle } from 'lucide-react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
@@ -27,6 +27,7 @@ const RecipeDetailPage = () => {
     id: string;
   }>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     toast
   } = useToast();
@@ -78,6 +79,11 @@ const RecipeDetailPage = () => {
 
   const recipe = getRecipeById(id!) || getAIRecipeById(id!);
   const [selectedCategory, setSelectedCategory] = useState(recipe?.category || 'lunch');
+
+  // Check if we're in change mode
+  const isChangeMode = searchParams.get('mode') === 'change';
+  const originalRecipeId = searchParams.get('originalId');
+  const originalRecipeTitle = searchParams.get('originalTitle');
 
   // Effect to handle recipe loading state
   useEffect(() => {
@@ -374,6 +380,24 @@ const RecipeDetailPage = () => {
     });
     navigate(-1);
   };
+
+  const handleSelectRecipe = () => {
+    // Navegar de vuelta a la lista con la receta seleccionada
+    navigate('/milista', { 
+      state: { 
+        replaceRecipe: {
+          originalId: originalRecipeId,
+          newRecipe: recipe
+        }
+      }
+    });
+    
+    toast({
+      title: "Receta cambiada",
+      description: `${originalRecipeTitle} ha sido sustituida por ${recipe.title}`,
+    });
+  };
+
   const handleTabChange = (tab: 'recipes' | 'cart' | 'profile') => {
     setActiveTab(tab);
     if (tab === 'cart') {
@@ -674,12 +698,23 @@ const RecipeDetailPage = () => {
         </TabsContent>
       </Tabs>
       
-
-      {selectedCount > 0 ? <FloatingButton onClick={handleAddToCart} selectedCount={selectedCount} totalPrice={totalPrice} className={optimizationOption && !isOptimized ? 'bg-green-500 hover:bg-green-600' : ''}>
-          {optimizationOption && !isOptimized ? 'Optimizar receta' : undefined}
-        </FloatingButton> : <FloatingButton onClick={() => navigate(-1)}>
-          Volver a recetas
-        </FloatingButton>}
+      
+      {/* Conditional floating button based on mode */}
+      {isChangeMode ? (
+        <FloatingButton onClick={handleSelectRecipe}>
+          Seleccionar receta
+        </FloatingButton>
+      ) : (
+        selectedCount > 0 ? (
+          <FloatingButton onClick={handleAddToCart} selectedCount={selectedCount} totalPrice={totalPrice} className={optimizationOption && !isOptimized ? 'bg-green-500 hover:bg-green-600' : ''}>
+            {optimizationOption && !isOptimized ? 'Optimizar receta' : undefined}
+          </FloatingButton>
+        ) : (
+          <FloatingButton onClick={() => navigate(-1)}>
+            Volver a recetas
+          </FloatingButton>
+        )
+      )}
     </div>;
 };
 export default RecipeDetailPage;

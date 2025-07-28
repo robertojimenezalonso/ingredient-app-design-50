@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 
 const RecipeListPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
@@ -43,6 +44,39 @@ const RecipeListPage = () => {
       console.log('RecipeListPage: No AI recipes found in localStorage');
     }
   }, []);
+
+  // Handle recipe replacement when coming from change mode
+  useEffect(() => {
+    const replaceRecipe = location.state?.replaceRecipe;
+    if (replaceRecipe) {
+      const { originalId, newRecipe } = replaceRecipe;
+      
+      // Update AI recipes in state
+      setAiRecipes(prevRecipes => 
+        prevRecipes.map(recipe => 
+          recipe.id === originalId ? newRecipe : recipe
+        )
+      );
+      
+      // Update localStorage
+      const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+      if (savedAiRecipes) {
+        try {
+          const parsedRecipes = JSON.parse(savedAiRecipes);
+          const updatedRecipes = parsedRecipes.map((recipe: Recipe) => 
+            recipe.id === originalId ? newRecipe : recipe
+          );
+          localStorage.setItem('aiGeneratedRecipes', JSON.stringify(updatedRecipes));
+        } catch (error) {
+          console.error('Error updating recipes in localStorage:', error);
+        }
+      }
+      
+      // Clear the state to prevent repeated replacements
+      navigate('/milista', { replace: true, state: {} });
+    }
+  }, [location.state, navigate]);
+  
   
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 

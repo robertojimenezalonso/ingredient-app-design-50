@@ -48,20 +48,8 @@ export const CambioRecetaPage = () => {
   }, [category, originalRecipeId, getRecipesByCategory, toast]);
 
   const handleRecipeSelect = (selectedRecipe: Recipe) => {
-    // Navegar de vuelta a la lista con la receta seleccionada
-    navigate('/milista', { 
-      state: { 
-        replaceRecipe: {
-          originalId: originalRecipeId,
-          newRecipe: selectedRecipe
-        }
-      }
-    });
-    
-    toast({
-      title: "Receta cambiada",
-      description: `${originalRecipeTitle} ha sido sustituida por ${selectedRecipe.title}`,
-    });
+    // Navegar a los detalles de la receta con parámetros especiales
+    navigate(`/recipe/${selectedRecipe.id}?mode=change&originalId=${originalRecipeId}&originalTitle=${encodeURIComponent(originalRecipeTitle || '')}`);
   };
 
   if (loading) {
