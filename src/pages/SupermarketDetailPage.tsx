@@ -223,10 +223,26 @@ export default function SupermarketDetailPage() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-4">
                     {/* Product image */}
-                    <img src={`https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=60&h=60&fit=crop&q=80&auto=format&cs=tinysrgb&dpr=1&s=${encodeURIComponent(product.name)}`} alt={product.name} className="h-12 w-12 object-cover rounded-lg" onError={e => {
-                const target = e.target as HTMLImageElement;
-                target.src = `https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=60&h=60&fit=crop&q=80&auto=format`;
-              }} />
+                    <img 
+                      src={`https://images.unsplash.com/photo-1${Math.floor(Math.random() * 1000000000)}-${Math.floor(Math.random() * 1000000000)}-${Math.floor(Math.random() * 1000000000)}-${Math.floor(Math.random() * 1000000000)}-${Math.floor(Math.random() * 1000000000)}?w=60&h=60&fit=crop&q=80&auto=format&cs=tinysrgb&dpr=1&sig=${product.id}`}
+                      alt={product.name} 
+                      className="h-12 w-12 object-cover rounded-lg" 
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        const productImages = [
+                          'https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=60&h=60&fit=crop', // bread
+                          'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=60&h=60&fit=crop', // milk
+                          'https://images.unsplash.com/photo-1573246123716-6b1782bfc499?w=60&h=60&fit=crop', // eggs
+                          'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=60&h=60&fit=crop', // bananas
+                          'https://images.unsplash.com/photo-1574226516831-e1dff420e562?w=60&h=60&fit=crop', // apples
+                          'https://images.unsplash.com/photo-1553979459-d2229ba7433a?w=60&h=60&fit=crop', // tomatoes
+                          'https://images.unsplash.com/photo-1542838132-92c53300491e?w=60&h=60&fit=crop', // cheese
+                          'https://images.unsplash.com/photo-1555820063-da1c2a54e1be?w=60&h=60&fit=crop', // pasta
+                        ];
+                        const randomIndex = Math.abs(product.id.charCodeAt(0)) % productImages.length;
+                        target.src = productImages[randomIndex];
+                      }} 
+                    />
                     
                     {/* Product info */}
                     <div className="flex-1 text-sm">
