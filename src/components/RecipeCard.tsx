@@ -263,7 +263,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-      <div className="relative flex-shrink-0 ml-3">
+      <div className="relative flex-shrink-0 ml-3 flex items-center">
         <ImageLoader
           src={recipe.image} 
           alt={recipe.title}
