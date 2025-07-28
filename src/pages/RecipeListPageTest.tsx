@@ -140,7 +140,6 @@ const RecipeListPageTest = () => {
         <div className="grid grid-cols-4 gap-2 max-w-full overflow-x-auto">
           {/* Header Row */}
           <div className="bg-muted p-3 rounded-lg">
-            <span className="text-sm font-medium text-muted-foreground">Fecha</span>
           </div>
           {mealTypes.map((mealType) => (
             <div key={mealType} className="bg-primary/10 p-3 rounded-lg text-center">
