@@ -172,75 +172,73 @@ export const CategoryCarousel = ({
                 </button>
               </div>
             </div>
-            <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border">
-              <CardContent className="px-0 pb-4 pt-4">
-                <Carousel className="w-full">
-                  <CarouselContent className="px-4">
-                    {meals.filter(({
-                    recipe,
-                    meal
-                  }) => {
-                    if (!recipe) return false;
-                    const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
-                    return !deletedRecipes.has(uniqueKey);
-                  }).map(({
-                    meal,
-                    recipe
-                  }) => (
-                    <CarouselItem key={`${dateStr}-${meal}`} className="basis-64">
-                      {recipe && (
-                        <div className="group relative bg-white rounded-2xl overflow-hidden shadow-sm border border-border/50 hover:shadow-md transition-shadow duration-200">
-                          <button
-                            onClick={() => onRecipeClick(recipe)}
-                            className="w-full text-left"
-                          >
-                            <div className="aspect-[4/3] overflow-hidden">
-                              <img
-                                src={recipe.image}
-                                alt={recipe.title}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              />
+            <div className="px-4">
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {meals.filter(({
+                  recipe,
+                  meal
+                }) => {
+                  if (!recipe) return false;
+                  const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+                  return !deletedRecipes.has(uniqueKey);
+                }).map(({
+                  meal,
+                  recipe
+                }) => (
+                  <CarouselItem key={`${dateStr}-${meal}`} className="basis-64">
+                    {recipe && (
+                      <div className="group relative bg-white rounded-2xl overflow-hidden shadow-md border border-border/50 hover:shadow-lg transition-shadow duration-200">
+                        <button
+                          onClick={() => onRecipeClick(recipe)}
+                          className="w-full text-left"
+                        >
+                          <div className="aspect-[4/3] overflow-hidden">
+                            <img
+                              src={recipe.image}
+                              alt={recipe.title}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                          <div className="p-3 space-y-2">
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                meal === 'Desayuno' ? 'bg-orange-100 text-orange-700' :
+                                meal === 'Almuerzo' ? 'bg-blue-100 text-blue-700' :
+                                meal === 'Cena' ? 'bg-purple-100 text-purple-700' :
+                                'bg-green-100 text-green-700'
+                              }`}>
+                                {meal}
+                              </span>
                             </div>
-                            <div className="p-3 space-y-2">
-                              <div className="flex items-center gap-2 mb-1">
-                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                  meal === 'Desayuno' ? 'bg-orange-100 text-orange-700' :
-                                  meal === 'Almuerzo' ? 'bg-blue-100 text-blue-700' :
-                                  meal === 'Cena' ? 'bg-purple-100 text-purple-700' :
-                                  'bg-green-100 text-green-700'
-                                }`}>
-                                  {meal}
-                                </span>
-                              </div>
-                              <h4 className="text-sm font-semibold leading-tight line-clamp-2 text-foreground">
-                                {recipe.title}
-                              </h4>
-                              <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                                <span>{recipe.time} min</span>
-                                <span>•</span>
-                                <span>{recipe.servings} pers.</span>
-                                <span>•</span>
-                                <span>{recipe.calories} cal</span>
-                              </div>
+                            <h4 className="text-sm font-semibold leading-tight line-clamp-2 text-foreground">
+                              {recipe.title}
+                            </h4>
+                            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                              <span>{recipe.time} min</span>
+                              <span>•</span>
+                              <span>{recipe.servings} pers.</span>
+                              <span>•</span>
+                              <span>{recipe.calories} cal</span>
                             </div>
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onAddRecipe(recipe);
-                            }}
-                            className="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary hover:bg-white transition-colors duration-200 shadow-sm"
-                          >
-                            <Plus size={16} />
-                          </button>
-                        </div>
-                      )}
-                    </CarouselItem>
-                  ))}
-                  </CarouselContent>
-                </Carousel>
-              </CardContent>
-            </Card>
+                          </div>
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onAddRecipe(recipe);
+                          }}
+                          className="absolute top-2 right-2 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-primary hover:bg-white transition-colors duration-200 shadow-sm"
+                        >
+                          <Plus size={16} />
+                        </button>
+                      </div>
+                    )}
+                  </CarouselItem>
+                ))}
+                </CarouselContent>
+              </Carousel>
+            </div>
           </div>)}
       </div>
       
