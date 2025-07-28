@@ -137,7 +137,7 @@ const RecipeListPageTest = () => {
 
       {/* Grid Container */}
       <div className="p-4">
-        <div className="grid grid-cols-4 gap-2 max-w-full overflow-x-auto">
+        <div className="grid gap-2 max-w-full overflow-x-auto" style={{ gridTemplateColumns: 'auto 1fr 1fr 1fr' }}>
           {/* Header Row */}
           <div className="bg-muted p-3 rounded-lg">
           </div>
