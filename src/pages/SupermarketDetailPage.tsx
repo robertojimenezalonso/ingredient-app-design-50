@@ -242,7 +242,7 @@ export default function SupermarketDetailPage() {
                     
                     {/* Price */}
                     <div className="text-right">
-                      <p className={`font-bold ${product.isChecked ? 'line-through text-gray-500' : ''}`}>
+                      <p className={`font-bold text-sm ${product.isChecked ? 'line-through text-gray-500' : ''}`}>
                         {product.price}
                       </p>
                     </div>
