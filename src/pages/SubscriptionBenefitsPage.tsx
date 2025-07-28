@@ -5,7 +5,6 @@ import { useUserConfig } from "@/contexts/UserConfigContext";
 import { useAIRecipes } from "@/hooks/useAIRecipes";
 import { useGlobalIngredients } from "@/hooks/useGlobalIngredients";
 import { useCart } from "@/hooks/useCart";
-import { supabase } from "@/integrations/supabase/client";
 
 const SubscriptionBenefitsPage = () => {
   const navigate = useNavigate();
@@ -16,17 +15,13 @@ const SubscriptionBenefitsPage = () => {
   const [progress, setProgress] = useState(1);
   const [checkedItems, setCheckedItems] = useState<boolean[]>([false, false, false, false, false]);
   const [isGeneratingRecipes, setIsGeneratingRecipes] = useState(false);
-  const [isGeneratingImages, setIsGeneratingImages] = useState(false);
-  const [recipesReady, setRecipesReady] = useState(false);
-  const [imagesReady, setImagesReady] = useState(false);
   
-  const items = ['Supermercados', 'Ingredientes', 'Nutrición', 'Recetas', 'Imágenes'];
-  const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Generando imágenes…'];
+  const items = ['Supermercados', 'Ingredientes', 'Nutrición', 'Recetas', 'Precios'];
+  const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Comparando precios…'];
 
   const generateRecipesInBackground = async (params: any) => {
     try {
       console.log('SubscriptionBenefitsPage: Starting recipe generation...');
-      setIsGeneratingRecipes(true);
       
       // Generate specific recipes for each day-meal combination
       const recipePromises = [];
@@ -47,56 +42,10 @@ const SubscriptionBenefitsPage = () => {
       // Generate all recipes in parallel
       const aiRecipes = (await Promise.all(recipePromises)).filter(recipe => recipe !== null);
       
-      console.log('SubscriptionBenefitsPage: Recipe text generation completed. Recipes received:', aiRecipes.length);
-      setRecipesReady(true);
+      console.log('SubscriptionBenefitsPage: AI generation completed. Recipes received:', aiRecipes.length);
       
+      // Initialize ingredients and add to cart
       if (aiRecipes.length > 0) {
-        // Start image generation in background
-        setIsGeneratingImages(true);
-        console.log('SubscriptionBenefitsPage: Starting image generation...');
-        
-        // Check for existing images
-        const recipesWithMissingImages = aiRecipes.filter(recipe => 
-          !recipe.image || recipe.image.includes('unsplash.com')
-        );
-        
-        if (recipesWithMissingImages.length > 0) {
-          // Generate images for recipes that need them
-          try {
-            console.log(`Generating images for ${recipesWithMissingImages.length} recipes`);
-            
-            // Generate images one by one with delays
-            for (const recipe of recipesWithMissingImages) {
-              try {
-                const { data: imageData, error: imageError } = await supabase.functions.invoke(
-                  'generate-recipe-image',
-                  {
-                    body: { recipeName: recipe.title }
-                  }
-                );
-
-                if (!imageError && imageData?.imageUrl) {
-                  recipe.image = imageData.imageUrl;
-                  console.log(`Generated image for: ${recipe.title}`);
-                } else {
-                  console.log(`Using fallback image for: ${recipe.title}`);
-                }
-                
-                // Delay between image generations to respect rate limits
-                await new Promise(resolve => setTimeout(resolve, 12000));
-              } catch (error) {
-                console.warn(`Failed to generate image for ${recipe.title}:`, error);
-              }
-            }
-          } catch (error) {
-            console.error('Error during image generation:', error);
-          }
-        }
-        
-        console.log('SubscriptionBenefitsPage: Image generation completed');
-        setImagesReady(true);
-        
-        // Initialize ingredients and add to cart
         initializeIngredients(aiRecipes);
         
         aiRecipes.forEach(recipe => {
@@ -106,19 +55,10 @@ const SubscriptionBenefitsPage = () => {
 
         // Store AI recipes in localStorage
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
-        console.log('SubscriptionBenefitsPage: Stored recipes with images in localStorage');
-      } else {
-        setImagesReady(true); // No recipes means no images needed
+        console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
       }
-      
-      setIsGeneratingRecipes(false);
-      setIsGeneratingImages(false);
     } catch (error) {
       console.error('Error generating recipes in background:', error);
-      setIsGeneratingRecipes(false);
-      setIsGeneratingImages(false);
-      setRecipesReady(true);
-      setImagesReady(true);
     }
   };
 
@@ -126,39 +66,19 @@ const SubscriptionBenefitsPage = () => {
     // Check if we should generate recipes
     const pendingGeneration = localStorage.getItem('pendingRecipeGeneration');
     if (pendingGeneration) {
+      setIsGeneratingRecipes(true);
       generateRecipesInBackground(JSON.parse(pendingGeneration));
       localStorage.removeItem('pendingRecipeGeneration');
-    } else {
-      // If no generation needed, mark as ready immediately
-      setRecipesReady(true);
-      setImagesReady(true);
     }
-  }, []);
 
-  useEffect(() => {
     const startTime = Date.now();
-    
-    // Determine if we need to wait for generation
-    const shouldWaitForGeneration = isGeneratingRecipes || isGeneratingImages;
-    const baseDuration = shouldWaitForGeneration ? 25000 : 3000; // Extended time for generation
+    const duration = isGeneratingRecipes ? 15000 : 2000; // Longer duration if generating recipes
     
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
+      const ratio = elapsed / duration;
       
-      // If we're generating, extend the duration and slow down near the end
-      let totalDuration = baseDuration;
-      if (shouldWaitForGeneration && !recipesReady) {
-        totalDuration = Math.max(baseDuration, elapsed + 5000); // Keep extending if not ready
-      } else if (shouldWaitForGeneration && !imagesReady) {
-        totalDuration = Math.max(baseDuration, elapsed + 8000); // Extra time for images
-      }
-      
-      const ratio = elapsed / totalDuration;
-      
-      // Check if everything is ready for navigation
-      const allReady = recipesReady && imagesReady;
-      
-      if (ratio >= 1 && allReady) {
+      if (ratio >= 1) {
         setProgress(100);
         // Mark as having a planning session when complete
         updateConfig({ hasPlanningSession: true });
@@ -184,15 +104,10 @@ const SubscriptionBenefitsPage = () => {
         newProgress = ratio * 70 / 0.7;
       }
       
-      // Don't go past 95% if we're still generating
-      if (shouldWaitForGeneration && !allReady) {
-        newProgress = Math.min(95, newProgress);
-      }
-      
       setProgress(Math.min(100, Math.max(1, newProgress)));
       
-      // Check items progressively based on progress and generation status
-      const itemThresholds = [15, 30, 50, recipesReady ? 70 : 60, imagesReady ? 90 : 75];
+      // Check items progressively based on progress
+      const itemThresholds = [20, 40, 60, 80, 95];
       const newCheckedItems = itemThresholds.map(threshold => newProgress >= threshold);
       setCheckedItems(newCheckedItems);
       
@@ -200,7 +115,7 @@ const SubscriptionBenefitsPage = () => {
     };
     
     requestAnimationFrame(updateProgress);
-  }, [navigate, recipesReady, imagesReady, isGeneratingRecipes, isGeneratingImages]);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
@@ -223,9 +138,6 @@ const SubscriptionBenefitsPage = () => {
         
         <p className="text-muted-foreground text-base mb-12">
           {(() => {
-            if (isGeneratingRecipes && !recipesReady) return 'Preparando recetas…';
-            if (isGeneratingImages && !imagesReady) return 'Generando imágenes…';
-            
             const currentItemIndex = checkedItems.findIndex((checked, index) => !checked && index < checkedItems.length);
             if (currentItemIndex === -1) return loadingMessages[loadingMessages.length - 1];
             return loadingMessages[currentItemIndex] || loadingMessages[0];
