@@ -152,7 +152,7 @@ const RecipeListPageTest = () => {
           {weekDates.map((date, dayIndex) => (
             <React.Fragment key={dayIndex}>
               {/* Date Cell */}
-              <div className="bg-muted p-3 rounded-lg flex flex-col justify-center">
+              <div className="bg-muted p-2 rounded-lg flex flex-col justify-center">
                 <div className="text-xs font-medium text-muted-foreground">
                   {format(date, 'EEE', { locale: es })}
                 </div>
