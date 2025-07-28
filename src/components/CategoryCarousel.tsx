@@ -156,21 +156,23 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <div className="flex items-center justify-between">
-              <h3 className="text-base text-muted-foreground font-semibold">
-                {format(date, "eee d", {
-              locale: es
-            }).toLowerCase()}
-              </h3>
-              <div className="flex items-center gap-2">
-                <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-gray-50">
-                  <MoreHorizontal size={16} />
-                </button>
-                <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-gray-50">
-                  <Plus size={16} />
-                </button>
+            <Card className="bg-cyan-50 border-cyan-200 p-3 mb-2">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base text-muted-foreground font-semibold">
+                  {format(date, "eee d", {
+                locale: es
+              }).toLowerCase()}
+                </h3>
+                <div className="flex items-center gap-2">
+                  <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-cyan-100">
+                    <MoreHorizontal size={16} />
+                  </button>
+                  <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-cyan-100">
+                    <Plus size={16} />
+                  </button>
+                </div>
               </div>
-            </div>
+            </Card>
             <div className="space-y-3">
               {meals.filter(({
                 recipe,
