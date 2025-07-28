@@ -212,10 +212,6 @@ export const CategoryCarousel = ({
                             }`}>
                               {meal}
                             </span>
-                            <span className="text-muted-foreground">•</span>
-                            <span className="text-muted-foreground">{recipe.time} min</span>
-                            <span className="text-muted-foreground">•</span>
-                            <span className="text-muted-foreground">{recipe.calories} cal</span>
                           </div>
                         </div>
                       </button>
