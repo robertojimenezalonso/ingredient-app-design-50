@@ -12,20 +12,64 @@ export const SavedShoppingListCard = () => {
   const selectedIngredientsCount = getTotalIngredients();
   const showSavedConfig = localStorage.getItem('showSavedConfig') === 'true';
   
+  // Get saved shopping lists from localStorage
+  const getSavedLists = () => {
+    try {
+      const saved = localStorage.getItem('savedShoppingLists');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+      // Return demo data if no saved lists
+      return [
+        {
+          id: '1',
+          name: 'Menú semanal mediterráneo',
+          selectedDates: ['2025-01-20', '2025-01-21', '2025-01-22'],
+          servingsPerRecipe: 2,
+          estimatedPrice: '12,50',
+          createdAt: '2025-01-19T10:00:00Z'
+        },
+        {
+          id: '2', 
+          name: 'Comidas saludables',
+          selectedDates: ['2025-01-15', '2025-01-16'],
+          servingsPerRecipe: 1,
+          estimatedPrice: '8,75',
+          createdAt: '2025-01-15T09:30:00Z'
+        },
+        {
+          id: '3',
+          name: 'Menú familiar fin de semana',
+          selectedDates: ['2025-01-25', '2025-01-26'],
+          servingsPerRecipe: 4,
+          estimatedPrice: '24,90',
+          createdAt: '2025-01-25T08:15:00Z'
+        }
+      ];
+    } catch {
+      return [];
+    }
+  };
+  
+  const savedLists = getSavedLists().sort((a: any, b: any) => 
+    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+  
   console.log('SavedShoppingListCard rendering', {
     selectedIngredientsCount,
     hasPlanningSession: config.hasPlanningSession,
     showSavedConfig,
+    savedLists: savedLists.length,
     localStorage: localStorage.getItem('showSavedConfig'),
     selectedDates: config.selectedDates,
     configComplete: config.hasPlanningSession && (config.selectedDates?.length || 0) > 0
   });
   
-  // Show if we have a completed planning session OR if the flag is set
-  const shouldShow = showSavedConfig || (config.hasPlanningSession && (config.selectedDates?.length || 0) > 0);
+  // Show if we have saved lists OR if we have a completed planning session OR if the flag is set
+  const shouldShow = savedLists.length > 0 || showSavedConfig || (config.hasPlanningSession && (config.selectedDates?.length || 0) > 0);
   
   if (!shouldShow) {
-    console.log('SavedShoppingListCard hidden - no planning session or flag');
+    console.log('SavedShoppingListCard hidden - no saved lists or planning session');
     return null;
   }
 
@@ -35,6 +79,75 @@ export const SavedShoppingListCard = () => {
     navigate('/milista');
   };
 
+  const handleListClick = (listId?: string) => {
+    // Clear the flag when user clicks to continue
+    localStorage.removeItem('showSavedConfig');
+    navigate('/milista');
+  };
+
+  // If we have saved lists, show them
+  if (savedLists.length > 0) {
+    return (
+      <div className="mx-4 mb-6">
+        <h3 className="text-lg font-semibold text-foreground mb-3">Tus últimos planes de compra</h3>
+        <div className="space-y-3">
+          {savedLists.map((list: any, index: number) => {
+            const daysText = list.selectedDates?.length 
+              ? `${list.selectedDates.length} día${list.selectedDates.length > 1 ? 's' : ''}`
+              : '0 días';
+              
+            const servingsText = `${list.servingsPerRecipe || 1} ración${(list.servingsPerRecipe || 1) > 1 ? 'es' : ''}`;
+            
+            return (
+              <div 
+                key={list.id || index}
+                onClick={() => handleListClick(list.id)}
+                className="bg-white rounded-2xl p-4 shadow-[0_4px_20px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_25px_rgba(0,0,0,0.15)] transition-all cursor-pointer border border-gray-200/50"
+              >
+                <div className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-foreground text-base mb-1">
+                      {list.name || `Menú semanal ${index + 1}`}
+                    </h4>
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                      <Calendar className="h-4 w-4" />
+                      <span>{daysText}</span>
+                      <span>•</span>
+                      <Users className="h-4 w-4" />
+                      <span>{servingsText}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm font-medium text-primary">
+                      <ShoppingCart className="h-4 w-4" />
+                      <span>Desde {list.estimatedPrice || '12,50'} €</span>
+                    </div>
+                  </div>
+                  <div className="w-24 h-16 flex gap-1 overflow-hidden rounded-xl">
+                    <img 
+                      src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9" 
+                      alt="Receta 1"
+                      className="w-8 h-16 object-cover rounded-sm"
+                    />
+                    <img 
+                      src="https://images.unsplash.com/photo-1582562124811-c09040d0a901" 
+                      alt="Receta 2"
+                      className="w-8 h-16 object-cover rounded-sm"
+                    />
+                    <img 
+                      src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" 
+                      alt="Receta 3"
+                      className="w-8 h-16 object-cover rounded-sm"
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback to current planning session
   const daysText = config.selectedDates?.length 
     ? `${config.selectedDates.length} día${config.selectedDates.length > 1 ? 's' : ''}`
     : '0 días';
