@@ -200,16 +200,6 @@ export const CategoryCarousel = ({
                           />
                         </div>
                         <div className="p-3 space-y-2">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                              meal === 'Desayuno' ? 'bg-orange-100 text-orange-700' :
-                              meal === 'Almuerzo' ? 'bg-blue-100 text-blue-700' :
-                              meal === 'Cena' ? 'bg-purple-100 text-purple-700' :
-                              'bg-green-100 text-green-700'
-                            }`}>
-                              {meal}
-                            </span>
-                          </div>
                           <h4 className="text-sm font-semibold leading-tight line-clamp-2 text-foreground">
                             {recipe.title}
                           </h4>
