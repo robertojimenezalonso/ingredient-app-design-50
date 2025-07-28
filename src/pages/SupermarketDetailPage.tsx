@@ -168,12 +168,10 @@ export default function SupermarketDetailPage() {
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="flex items-center justify-between p-4">
-          <button onClick={() => navigate('/search-offers')} className="flex items-center gap-2 text-gray-600">
-            <ArrowLeft className="h-5 w-5" />
-            <span>Buscar ofertas</span>
-          </button>
-          
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <button onClick={() => navigate('/search-offers')} className="text-gray-600">
+              <ArrowLeft className="h-5 w-5" />
+            </button>
             <img src={supermarketData.logo} alt={supermarketData.name} className="h-8 w-8 object-contain" />
             <span className="font-semibold">{supermarketData.name}</span>
           </div>
