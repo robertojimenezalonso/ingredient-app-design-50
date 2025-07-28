@@ -51,7 +51,7 @@ export const SavedShoppingListCard = () => {
         <div className="flex items-center gap-4">
           <div className="flex-1">
             <h4 className="font-semibold text-foreground text-base mb-1">
-              Lista de la semana del 20-26 enero
+              Menú semanal mediterráneo
             </h4>
             <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
               <Calendar className="h-4 w-4" />
