@@ -9,6 +9,7 @@ import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+
 interface CategoryCarouselProps {
   category: CategoryType;
   recipes: Recipe[];
@@ -19,12 +20,14 @@ interface CategoryCarouselProps {
     [key: string]: HTMLDivElement | null;
   }>;
 }
+
 const mealCategoryMap: Record<string, CategoryType> = {
   'Desayuno': 'breakfast',
   'Almuerzo': 'lunch',
   'Cena': 'dinner',
   'Tentempié': 'snacks'
 };
+
 export const CategoryCarousel = ({
   category,
   recipes,
@@ -156,7 +159,7 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#DFEFEF' }}>
+            <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#EFF6E0' }}>
               <div className="flex items-center w-full">
                 <h3 className="text-sm text-muted-foreground font-semibold">
                   {format(date, "eee d", {
