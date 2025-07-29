@@ -276,7 +276,8 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       <div 
         ref={containerRef}
         data-recipe-card="true"
-        className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-[120px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border p-2 mb-3"
+        className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-[120px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border p-2 mb-3"
+        style={{ borderColor: '#F8F8FC' }}
         onClick={() => onClick(recipe)}
       >
       <div className="relative flex-shrink-0">
