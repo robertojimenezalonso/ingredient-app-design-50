@@ -157,7 +157,7 @@ export const CategoryCarousel = ({
         }
       }} data-date={dateStr}>
             <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#DFEFEF' }}>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center w-full">
                 <h3 className="text-sm text-muted-foreground font-semibold">
                   {format(date, "eee d", {
                 locale: es
