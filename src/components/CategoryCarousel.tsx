@@ -246,9 +246,6 @@ export const CategoryCarousel = ({
                   <button className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
                     <MoreHorizontal size={14} />
                   </button>
-                  <button className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
-                    <Plus size={14} />
-                  </button>
                 </div>
               </div>
             </Card>
