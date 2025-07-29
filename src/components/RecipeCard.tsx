@@ -235,7 +235,7 @@ export const RecipeCard = ({
       <div className={`absolute inset-0 bg-blue-500 rounded-2xl transition-opacity duration-200 ${(isSwipeActive || isSwiped) && swipeDirection === 'left' ? 'opacity-100' : 'opacity-0'}`}>
         <div className="absolute right-0 top-0 w-20 h-full flex flex-col items-center justify-center text-white cursor-pointer" onClick={handleSubstitute}>
           <RefreshCw className="h-6 w-6 mb-1" />
-          <span className="text-xs font-medium">Cambiar</span>
+          <span className="text-base font-medium">Cambiar</span>
         </div>
       </div>
       
