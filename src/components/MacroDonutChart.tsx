@@ -232,7 +232,27 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
+      <div className="flex items-center justify-between px-1 mt-3 mb-1">
+        <h2 className="text-lg font-semibold text-foreground">Tu plan para comer saludable</h2>
+        <div className="flex items-center gap-4">
+          <img 
+            src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
+            alt="Anterior" 
+            className={`h-5 w-5 cursor-pointer transition-opacity ${
+              canGoPrevious ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
+            }`}
+            onClick={canGoPrevious ? handlePrevious : undefined}
+          />
+          <img 
+            src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
+            alt="Siguiente" 
+            className={`h-5 w-5 cursor-pointer transition-opacity ${
+              canGoNext ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
+            }`}
+            onClick={canGoNext ? handleNext : handleGenerate}
+          />
+        </div>
+      </div>
       <Card className="mb-3">
       <CardContent className="p-3">
         <div className="flex items-center gap-6">
