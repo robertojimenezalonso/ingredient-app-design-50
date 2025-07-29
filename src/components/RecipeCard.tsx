@@ -295,7 +295,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         <h3 className="font-medium text-lg line-clamp-2 mb-0.5 leading-tight overflow-hidden mt-2">
           {recipe.title}
         </h3>
-        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2 mb-2">
           {mealType && (
             <div className="flex items-center gap-1">
               {(() => {
