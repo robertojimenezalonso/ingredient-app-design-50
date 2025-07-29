@@ -242,7 +242,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
           }`}
           onClick={!isGenerating ? handleGenerate : undefined}
         >
-          {isGenerating ? 'Cambiando plan...' : 'Cambiar plan'}
+          {isGenerating ? 'Cambiando recetas...' : 'Cambiar recetas'}
         </span>
         <div className="flex items-center gap-2">
           <img 
