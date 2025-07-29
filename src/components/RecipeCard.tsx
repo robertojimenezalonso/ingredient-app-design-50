@@ -1,4 +1,4 @@
-import { Heart, Plus, Trash2, RefreshCw } from 'lucide-react';
+import { Heart, Plus, Trash2, RefreshCw, Coffee, Utensils, Moon, Apple } from 'lucide-react';
 import { Recipe, CATEGORIES } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useEffect, useState, useRef } from 'react';
@@ -59,6 +59,26 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         return 'bg-pink-100 text-pink-800 border-pink-200';
       default:
         return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
+
+  // Función para obtener el icono según el tipo de comida
+  const getMealTypeIcon = (meal: string) => {
+    switch (meal) {
+      case 'Desayuno':
+        return Coffee;
+      case 'Almuerzo':
+        return Utensils;
+      case 'Cena':
+        return Moon;
+      case 'Aperitivo':
+        return Apple;
+      case 'Snack':
+        return Apple;
+      case 'Merienda':
+        return Apple;
+      default:
+        return Utensils;
     }
   };
 
@@ -276,9 +296,15 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
           {recipe.title}
         </h3>
         {mealType && (
-          <span className="text-sm font-medium mb-2 block text-gray-500">
-            {mealType}
-          </span>
+          <div className="flex items-center gap-1 mb-2">
+            {(() => {
+              const IconComponent = getMealTypeIcon(mealType);
+              return <IconComponent className="h-4 w-4 text-gray-500" />;
+            })()}
+            <span className="text-sm font-medium text-gray-500">
+              {mealType}
+            </span>
+          </div>
         )}
         <span className="text-sm text-gray-400">
           {recipe.calories} cal · {recipe.time} min
