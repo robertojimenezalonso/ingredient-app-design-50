@@ -168,7 +168,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-foreground px-1 mt-3 mb-1">Tu plan: Comer saludable</h2>
+      <h2 className="text-lg font-semibold text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
       <Card className="mb-3">
       <CardContent className="p-3">
         <div className="flex items-center gap-6">
