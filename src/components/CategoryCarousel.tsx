@@ -219,9 +219,9 @@ export const CategoryCarousel = ({
             <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#F6F6F6' }}>
               <div className="flex items-center w-full" style={{ backgroundColor: '#F6F6F6' }}>
                 <h3 className="text-sm text-muted-foreground font-normal">
-                  {format(date, "eee d", {
+                  {format(date, "eee. d", {
                 locale: es
-              }).toLowerCase()}
+              })}
                 </h3>
                 <div className="flex items-center gap-1 ml-auto">
                   <button className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
