@@ -50,7 +50,7 @@ export const FloatingButton = ({
   }}>
       <Button onClick={handleClick} className={`h-14 text-base font-medium rounded-lg px-6 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating mx-4 w-full max-w-none ${className}`} size="lg">
         <div className="flex items-center justify-center gap-2">
-          <img src="/lovable-uploads/71eecaf2-ff51-47ff-beef-72570cb4f960.png" alt="search" className="h-4 w-4" />
+          <img src="/lovable-uploads/71eecaf2-ff51-47ff-beef-72570cb4f960.png" alt="search" className="h-6 w-6" />
           <span>Ingredientes desde {totalPrice ? `${totalPrice.toFixed(2)} €` : '64,76 €'}</span>
         </div>
       </Button>
