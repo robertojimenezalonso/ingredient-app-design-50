@@ -63,7 +63,24 @@ export const MacroDonutChart = ({ recipes }: MacroDonutChartProps) => {
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-foreground px-1 mt-3 mb-1">Tu plan de recetas</h2>
+      <div className="flex items-center justify-between px-1 mt-3 mb-1">
+        <h2 className="text-lg font-semibold text-foreground">Tu plan de recetas</h2>
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <img 
+              src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
+              alt="Anterior" 
+              className="h-5 w-5 cursor-pointer"
+            />
+            <img 
+              src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
+              alt="Siguiente" 
+              className="h-5 w-5 cursor-pointer"
+            />
+          </div>
+          <span className="text-sm font-medium text-foreground">Generar</span>
+        </div>
+      </div>
       <Card className="mb-3">
       <CardContent className="p-3">
         <div className="flex items-center gap-6">
