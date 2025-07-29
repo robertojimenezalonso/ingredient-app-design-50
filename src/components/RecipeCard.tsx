@@ -295,20 +295,22 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         <h3 className="font-medium text-lg line-clamp-2 mb-0.5 leading-tight overflow-hidden mt-2">
           {recipe.title}
         </h3>
-        {mealType && (
-          <div className="flex items-center gap-1 mb-2">
-            {(() => {
-              const IconComponent = getMealTypeIcon(mealType);
-              return <IconComponent className="h-4 w-4 text-gray-500" />;
-            })()}
-            <span className="text-sm font-medium text-gray-500">
-              {mealType}
-            </span>
-          </div>
-        )}
-        <span className="text-sm text-gray-400">
-          {recipe.calories} cal · {recipe.time} min
-        </span>
+        <div className="flex items-center justify-between mb-2">
+          {mealType && (
+            <div className="flex items-center gap-1">
+              {(() => {
+                const IconComponent = getMealTypeIcon(mealType);
+                return <IconComponent className="h-4 w-4 text-gray-500" />;
+              })()}
+              <span className="text-sm font-medium text-gray-500">
+                {mealType}
+              </span>
+            </div>
+          )}
+          <span className="text-sm text-gray-400">
+            {recipe.calories} cal · {recipe.time} min
+          </span>
+        </div>
         </div>
         
       </div>
