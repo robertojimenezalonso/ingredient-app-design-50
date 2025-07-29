@@ -59,6 +59,8 @@ const Index = () => {
     setAiRecipes(newRecipes);
     // Store in localStorage for persistence
     localStorage.setItem('aiGeneratedRecipes', JSON.stringify(newRecipes));
+    // Re-initialize ingredients for the new recipes to update price calculation
+    initializeIngredients(newRecipes);
     console.log('Updated AI recipes:', newRecipes.length, 'recipes');
   };
 
