@@ -294,11 +294,11 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       
       <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
         <div className="flex items-start gap-2 mb-2 relative">
-          <h3 className="font-medium text-lg leading-tight mt-2 max-w-[calc(100%-80px)] truncate whitespace-nowrap overflow-hidden">
+          <h3 className="font-medium text-lg leading-tight mt-2 max-w-[calc(100%-100px)] truncate whitespace-nowrap overflow-hidden pr-2">
             {recipe.title}
           </h3>
           {mealType && (
-            <Badge variant="secondary" className="text-black text-sm font-medium px-2 py-1 absolute right-0 top-1" style={{ backgroundColor: '#F8F8FC' }}>
+            <Badge variant="secondary" className="text-black text-sm font-medium px-2 py-1 absolute right-0 top-1 min-w-fit" style={{ backgroundColor: '#F8F8FC' }}>
               {mealType.length > 4 ? mealType.slice(0, 4) + '.' : mealType}
             </Badge>
           )}
