@@ -264,7 +264,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
         </div>
       </div>
       <Card className="mb-3 -mt-1">
-      <CardContent className="p-3">
+      <CardContent className="p-3 animate-fade-in">
         <div className="flex items-center gap-6 pointer-events-none">
           {/* Gráfico de rosco a la izquierda */}
           <div className="w-24 h-24 flex-shrink-0">
