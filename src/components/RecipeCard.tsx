@@ -292,21 +292,21 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       </div>
       
       <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
-        <h3 className="font-medium text-lg line-clamp-2 mb-1 leading-tight overflow-hidden mt-2">
-          {recipe.title}
-        </h3>
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-start justify-between gap-2 mb-1">
+          <h3 className="font-medium text-lg line-clamp-2 leading-tight overflow-hidden mt-2 flex-1">
+            {recipe.title}
+          </h3>
           {mealType && (
-            <div className="flex items-center gap-1">
+            <Badge variant="secondary" className={`${getMealTypeColor(mealType)} text-xs px-2 py-1 flex items-center gap-1 flex-shrink-0 mt-2`}>
               {(() => {
                 const IconComponent = getMealTypeIcon(mealType);
-                return <IconComponent className="h-4 w-4 text-gray-500" />;
+                return <IconComponent className="h-3 w-3" />;
               })()}
-              <span className="text-sm font-medium text-gray-500">
-                {mealType}
-              </span>
-            </div>
+              {mealType}
+            </Badge>
           )}
+        </div>
+        <div className="flex items-center gap-2 mb-2">
           <span className="text-sm text-gray-400">
             {recipe.calories} cal
           </span>
