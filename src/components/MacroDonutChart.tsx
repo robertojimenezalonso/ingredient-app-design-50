@@ -6,6 +6,14 @@ import { useState, useEffect } from 'react';
 interface MacroDonutChartProps {
   recipes: Recipe[];
   onRecipesChange?: (recipes: Recipe[]) => void;
+  onNavigationDataChange?: (data: {
+    canGoPrevious: boolean;
+    canGoNext: boolean;
+    isGenerating: boolean;
+    handlePrevious: () => void;
+    handleNext: () => void;
+    handleGenerate: () => void;
+  }) => void;
 }
 
 const MACRO_COLORS = {
@@ -26,7 +34,7 @@ const MACRO_LABELS = {
   fat: 'Grasas'
 };
 
-export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartProps) => {
+export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChange }: MacroDonutChartProps) => {
   const [planHistory, setPlanHistory] = useState<Recipe[][]>([recipes]);
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -166,6 +174,20 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
   const canGoPrevious = currentPlanIndex > 0;
   const canGoNext = currentPlanIndex < planHistory.length - 1;
 
+  // Enviar los datos de navegación al CategoryCarousel
+  useEffect(() => {
+    if (onNavigationDataChange) {
+      onNavigationDataChange({
+        canGoPrevious,
+        canGoNext,
+        isGenerating,
+        handlePrevious,
+        handleNext,
+        handleGenerate
+      });
+    }
+  }, [canGoPrevious, canGoNext, isGenerating, onNavigationDataChange]);
+
   return (
     <div>
       <h2 className="text-lg font-semibold text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
@@ -214,38 +236,6 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
         </div>
       </CardContent>
     </Card>
-    
-    {/* Controles de navegación y generación */}
-    <div className="flex items-center justify-between px-1 mb-1">
-      <div className="flex items-center gap-4">
-        <img 
-          src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
-          alt="Anterior" 
-          className={`h-7 w-7 cursor-pointer transition-opacity ${
-            canGoPrevious ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
-          }`}
-          onClick={canGoPrevious ? handlePrevious : undefined}
-        />
-        <img 
-          src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
-          alt="Siguiente" 
-          className={`h-7 w-7 cursor-pointer transition-opacity ${
-            canGoNext ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
-          }`}
-          onClick={canGoNext ? handleNext : undefined}
-        />
-      </div>
-      <span 
-        className={`text-sm font-medium cursor-pointer transition-colors ${
-          isGenerating 
-            ? 'text-muted-foreground cursor-not-allowed' 
-            : 'text-foreground hover:text-primary'
-        }`}
-        onClick={!isGenerating ? handleGenerate : undefined}
-      >
-        {isGenerating ? 'Generando...' : 'Generar'}
-      </span>
-    </div>
     </div>
   );
 };

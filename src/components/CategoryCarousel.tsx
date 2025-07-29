@@ -46,6 +46,14 @@ export const CategoryCarousel = ({
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
   const [currentRecipes, setCurrentRecipes] = useState<Recipe[]>(recipes);
+  const [navigationData, setNavigationData] = useState<{
+    canGoPrevious: boolean;
+    canGoNext: boolean;
+    isGenerating: boolean;
+    handlePrevious: () => void;
+    handleNext: () => void;
+    handleGenerate: () => void;
+  } | null>(null);
 
   // Update current recipes when prop changes
   useEffect(() => {
@@ -174,16 +182,53 @@ export const CategoryCarousel = ({
 
   return <div className="mb-4">
       <div className="fixed left-0 right-0 px-4 space-y-6 pb-32 overflow-y-auto h-screen z-0" style={{ top: 'calc(env(safe-area-inset-top) + 80px)', paddingTop: '16px', backgroundColor: 'white' }}>
-        <MacroDonutChart recipes={allVisibleRecipes} onRecipesChange={handleRecipesChange} />
+        <MacroDonutChart 
+          recipes={allVisibleRecipes} 
+          onRecipesChange={handleRecipesChange}
+          onNavigationDataChange={setNavigationData}
+        />
         {mealPlan.map(({
         date,
         dateStr,
         meals
-      }) => <div key={dateStr} className="space-y-2 -mt-12" ref={el => {
+      }, index) => <div key={dateStr} className="space-y-2 -mt-12" ref={el => {
         if (sectionRefs?.current) {
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
+            {/* Controles de navegación solo en el primer día */}
+            {index === 0 && navigationData && (
+              <div className="flex items-center justify-between px-1 mb-3">
+                <div className="flex items-center gap-4">
+                  <img 
+                    src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
+                    alt="Anterior" 
+                    className={`h-7 w-7 cursor-pointer transition-opacity ${
+                      navigationData.canGoPrevious ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
+                    }`}
+                    onClick={navigationData.canGoPrevious ? navigationData.handlePrevious : undefined}
+                  />
+                  <img 
+                    src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
+                    alt="Siguiente" 
+                    className={`h-7 w-7 cursor-pointer transition-opacity ${
+                      navigationData.canGoNext ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
+                    }`}
+                    onClick={navigationData.canGoNext ? navigationData.handleNext : undefined}
+                  />
+                </div>
+                <span 
+                  className={`text-sm font-medium cursor-pointer transition-colors ${
+                    navigationData.isGenerating 
+                      ? 'text-muted-foreground cursor-not-allowed' 
+                      : 'text-foreground hover:text-primary'
+                  }`}
+                  onClick={!navigationData.isGenerating ? navigationData.handleGenerate : undefined}
+                >
+                  {navigationData.isGenerating ? 'Generando...' : 'Generar'}
+                </span>
+              </div>
+            )}
             <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#F8F8FC' }}>
               <div className="flex items-center w-full" style={{ backgroundColor: '#F8F8FC' }}>
                 <h3 className="text-sm text-muted-foreground font-semibold">
