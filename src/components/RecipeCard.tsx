@@ -293,7 +293,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       
       <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
         <div className="flex items-start justify-between gap-2 mb-1">
-          <h3 className="font-medium text-lg line-clamp-2 leading-tight overflow-hidden mt-2 flex-1">
+          <h3 className="font-medium text-lg line-clamp-1 leading-tight overflow-hidden mt-2 max-w-[calc(100%-80px)] truncate">
             {recipe.title}
           </h3>
           {mealType && (
