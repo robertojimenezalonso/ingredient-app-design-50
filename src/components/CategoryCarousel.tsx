@@ -45,6 +45,18 @@ export const CategoryCarousel = ({
   } = useRecipes();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
+  const [currentRecipes, setCurrentRecipes] = useState<Recipe[]>(recipes);
+
+  // Update current recipes when prop changes
+  useEffect(() => {
+    setCurrentRecipes(recipes);
+  }, [recipes]);
+
+  const handleRecipesChange = (newRecipes: Recipe[]) => {
+    setCurrentRecipes(newRecipes);
+    // Clear deleted recipes when new recipes are generated
+    setDeletedRecipes(new Set());
+  };
 
   // Scroll and interaction effects
   useEffect(() => {
@@ -85,7 +97,7 @@ export const CategoryCarousel = ({
 
       // Si hay recetas de IA disponibles, buscar la receta específica para esta fecha y comida
       let selectedRecipe;
-      if (recipes && recipes.length > 0) {
+      if (currentRecipes && currentRecipes.length > 0) {
         // Buscar receta que contenga la fecha y el tipo de comida en su ID
         const mealKeywords = {
           'Desayuno': ['breakfast', 'desayuno'],
@@ -97,7 +109,7 @@ export const CategoryCarousel = ({
         const keywords = mealKeywords[meal] || [];
         
         // Buscar una receta que contenga tanto la fecha como el tipo de comida
-        selectedRecipe = recipes.find(recipe => {
+        selectedRecipe = currentRecipes.find(recipe => {
           const recipeId = recipe.id.toLowerCase();
           const hasDate = recipeId.includes(dateStr);
           const hasMeal = keywords.some(keyword => recipeId.includes(keyword));
@@ -107,7 +119,7 @@ export const CategoryCarousel = ({
         // Si no se encuentra una receta específica, usar la asignación por índice como fallback
         if (!selectedRecipe) {
           const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
-          selectedRecipe = recipes[recipeIndex] || recipes[recipeIndex % recipes.length];
+          selectedRecipe = currentRecipes[recipeIndex] || currentRecipes[recipeIndex % currentRecipes.length];
           console.log(`CategoryCarousel: No specific recipe found for ${dateStr}-${meal}, using index ${recipeIndex}: ${selectedRecipe?.title}`);
         } else {
           console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
@@ -162,7 +174,7 @@ export const CategoryCarousel = ({
 
   return <div className="mb-4">
       <div className="fixed left-0 right-0 px-4 space-y-6 pb-32 overflow-y-auto h-screen z-0" style={{ top: 'calc(env(safe-area-inset-top) + 80px)', paddingTop: '16px', backgroundColor: 'white' }}>
-        <MacroDonutChart recipes={allVisibleRecipes} />
+        <MacroDonutChart recipes={allVisibleRecipes} onRecipesChange={handleRecipesChange} />
         {mealPlan.map(({
         date,
         dateStr,
