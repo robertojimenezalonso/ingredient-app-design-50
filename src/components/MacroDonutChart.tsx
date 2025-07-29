@@ -246,9 +246,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
           <img 
             src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
             alt="Siguiente" 
-            className={`h-5 w-5 cursor-pointer transition-opacity ${
-              canGoNext ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
-            }`}
+            className="h-5 w-5 cursor-pointer transition-opacity opacity-100 hover:opacity-80"
             onClick={canGoNext ? handleNext : handleGenerate}
           />
         </div>
