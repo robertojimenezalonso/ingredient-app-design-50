@@ -292,12 +292,12 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       </div>
       
       <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
-        <div className="flex items-start justify-between gap-2 mb-1">
+        <div className="flex items-start gap-2 mb-1 relative">
           <h3 className="font-medium text-lg line-clamp-1 leading-tight overflow-hidden mt-2 max-w-[calc(100%-80px)] truncate">
             {recipe.title}
           </h3>
           {mealType && (
-            <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200 text-xs px-2 py-1 flex-shrink-0 mt-2">
+            <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200 text-xs px-2 py-1 absolute right-0 top-2">
               {mealType.length > 4 ? mealType.slice(0, 4) + '.' : mealType}
             </Badge>
           )}
