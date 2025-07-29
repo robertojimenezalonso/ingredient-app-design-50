@@ -276,14 +276,14 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       <div 
         ref={containerRef}
         data-recipe-card="true"
-        className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-[120px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border pr-4 py-2 mb-3"
+        className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-[120px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border p-2 mb-3"
         onClick={() => onClick(recipe)}
       >
       <div className="relative flex-shrink-0">
         <ImageLoader
           src={recipe.image} 
           alt={recipe.title}
-          className="w-[120px] h-[120px] object-cover rounded-l-xl"
+          className="w-[104px] h-[104px] object-cover rounded-lg"
           fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=400"
           placeholder={
             <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
