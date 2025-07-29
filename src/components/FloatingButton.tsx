@@ -51,7 +51,7 @@ export const FloatingButton = ({
       <Button onClick={handleClick} className={`h-12 text-base font-medium rounded-full px-6 shadow-lg bg-opacity-90 ${className}`} size="lg">
         <div className="flex items-center justify-center gap-2">
           <Search className="h-5 w-5" />
-          <span>Buscar supermercados</span>
+          <span>Ingredientes desde {totalPrice ? `${totalPrice.toFixed(2)} €` : '64,76 €'}</span>
         </div>
       </Button>
     </div>;
