@@ -18,6 +18,7 @@ interface CategoryCarouselProps {
   onRecipeClick: (recipe: Recipe) => void;
   onViewAll: (category: CategoryType) => void;
   onRecipesChange?: (recipes: Recipe[]) => void;
+  onNavigationDataChange?: (data: any) => void;
   sectionRefs?: React.MutableRefObject<{
     [key: string]: HTMLDivElement | null;
   }>;
@@ -37,6 +38,7 @@ export const CategoryCarousel = ({
   onRecipeClick,
   onViewAll,
   onRecipesChange,
+  onNavigationDataChange,
   sectionRefs
 }: CategoryCarouselProps) => {
   const {
@@ -191,7 +193,10 @@ export const CategoryCarousel = ({
         <MacroDonutChart 
           recipes={allVisibleRecipes} 
           onRecipesChange={handleRecipesChange}
-          onNavigationDataChange={setNavigationData}
+          onNavigationDataChange={(data) => {
+            setNavigationData(data);
+            onNavigationDataChange?.(data);
+          }}
         />
         {mealPlan.map(({
         date,
@@ -202,39 +207,6 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            {/* Controles de navegación solo en el primer día */}
-            {index === 0 && navigationData && (
-              <div className="flex items-center justify-between px-1 mb-3">
-                <span 
-                  className={`text-base font-medium cursor-pointer transition-colors ${
-                    navigationData.isGenerating 
-                      ? 'text-muted-foreground cursor-not-allowed' 
-                      : 'text-foreground hover:text-primary'
-                  }`}
-                  onClick={!navigationData.isGenerating ? navigationData.handleGenerate : undefined}
-                >
-                  {navigationData.isGenerating ? 'Cambiando plan...' : 'Cambiar plan'}
-                </span>
-                <div className="flex items-center gap-4">
-                  <img 
-                    src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
-                    alt="Anterior" 
-                    className={`h-7 w-7 cursor-pointer transition-opacity ${
-                      navigationData.canGoPrevious ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
-                    }`}
-                    onClick={navigationData.canGoPrevious ? navigationData.handlePrevious : undefined}
-                  />
-                  <img 
-                    src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
-                    alt="Siguiente" 
-                    className={`h-7 w-7 cursor-pointer transition-opacity ${
-                      navigationData.canGoNext ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
-                    }`}
-                    onClick={navigationData.canGoNext ? navigationData.handleNext : undefined}
-                  />
-                </div>
-              </div>
-            )}
             <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#F8F8FC' }}>
               <div className="flex items-center w-full" style={{ backgroundColor: '#F8F8FC' }}>
                 <h3 className="text-sm text-muted-foreground font-semibold">
