@@ -55,6 +55,13 @@ const Index = () => {
     }
   }, [explorationRecipes.length, initializeIngredients]);
   
+  const handleRecipesChange = (newRecipes: Recipe[]) => {
+    setAiRecipes(newRecipes);
+    // Store in localStorage for persistence
+    localStorage.setItem('aiGeneratedRecipes', JSON.stringify(newRecipes));
+    console.log('Updated AI recipes:', newRecipes.length, 'recipes');
+  };
+
   // Calculate selected ingredients count with memoization
   const selectedIngredientsCount = useMemo(() => {
     return getSelectedIngredientsCount(explorationRecipes);
@@ -162,6 +169,7 @@ const Index = () => {
             onRecipeClick={handleRecipeClick}
             onViewAll={handleViewAll}
             sectionRefs={sectionRefs}
+            onRecipesChange={handleRecipesChange}
           />
         ) : (
           <IngredientsView recipes={explorationRecipes} />

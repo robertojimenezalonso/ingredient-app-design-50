@@ -41,59 +41,101 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
 
   const currentRecipes = planHistory[currentPlanIndex] || recipes;
 
-  // Generar recetas de ejemplo para demostración
+  // Generar recetas completas para demostración
   const generateExampleRecipes = (): Recipe[] => {
     const exampleRecipes: Recipe[] = [
       {
-        id: `gen-${Date.now()}-1`,
-        title: 'Salmón a la plancha con verduras',
+        id: `gen-${Date.now()}-1-breakfast`,
+        title: 'Tostadas de aguacate y huevo',
+        image: 'https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=400',
+        calories: 380,
+        time: 15,
+        category: 'breakfast',
+        servings: 2,
+        macros: { protein: 22, carbs: 35, fat: 18 },
+        ingredients: [
+          { id: 'bread', name: 'Pan integral', amount: '4', unit: 'rebanadas', selected: true },
+          { id: 'avocado', name: 'Aguacate', amount: '2', unit: 'unidades', selected: true },
+          { id: 'eggs', name: 'Huevos', amount: '2', unit: 'unidades', selected: true },
+          { id: 'tomato', name: 'Tomate cherry', amount: '100', unit: 'g', selected: true }
+        ],
+        instructions: ['Tostar el pan', 'Machacar el aguacate', 'Freír los huevos', 'Montar las tostadas'],
+        nutrition: { calories: 380, protein: 22, carbs: 35, fat: 18, fiber: 8, sugar: 6 }
+      },
+      {
+        id: `gen-${Date.now()}-2-lunch`,
+        title: 'Pollo mediterráneo con quinoa',
+        image: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400',
+        calories: 420,
+        time: 30,
+        category: 'lunch',
+        servings: 2,
+        macros: { protein: 38, carbs: 28, fat: 15 },
+        ingredients: [
+          { id: 'chicken', name: 'Pechuga de pollo', amount: '300', unit: 'g', selected: true },
+          { id: 'quinoa', name: 'Quinoa', amount: '150', unit: 'g', selected: true },
+          { id: 'zucchini', name: 'Calabacín', amount: '1', unit: 'unidad', selected: true },
+          { id: 'olives', name: 'Aceitunas', amount: '50', unit: 'g', selected: true }
+        ],
+        instructions: ['Cocinar la quinoa', 'Saltear el pollo', 'Agregar verduras', 'Mezclar todo'],
+        nutrition: { calories: 420, protein: 38, carbs: 28, fat: 15, fiber: 6, sugar: 4 }
+      },
+      {
+        id: `gen-${Date.now()}-3-dinner`,
+        title: 'Salmón al horno con espárragos',
         image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400',
         calories: 350,
         time: 25,
         category: 'dinner',
         servings: 2,
-        macros: { protein: 35, carbs: 15, fat: 20 },
-        ingredients: [],
-        instructions: [],
-        nutrition: { calories: 350, protein: 35, carbs: 15, fat: 20, fiber: 5, sugar: 8 }
+        macros: { protein: 32, carbs: 12, fat: 22 },
+        ingredients: [
+          { id: 'salmon', name: 'Salmón', amount: '250', unit: 'g', selected: true },
+          { id: 'asparagus', name: 'Espárragos', amount: '200', unit: 'g', selected: true },
+          { id: 'lemon', name: 'Limón', amount: '1', unit: 'unidad', selected: true },
+          { id: 'garlic', name: 'Ajo', amount: '2', unit: 'dientes', selected: true }
+        ],
+        instructions: ['Precalentar horno', 'Preparar salmón', 'Hornear con espárragos', 'Servir con limón'],
+        nutrition: { calories: 350, protein: 32, carbs: 12, fat: 22, fiber: 4, sugar: 3 }
       },
       {
-        id: `gen-${Date.now()}-2`,
-        title: 'Ensalada de quinoa mediterránea',
-        image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400',
+        id: `gen-${Date.now()}-4-snack`,
+        title: 'Smoothie bowl de frutos rojos',
+        image: 'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?w=400',
         calories: 280,
-        time: 15,
-        category: 'lunch',
-        servings: 2,
-        macros: { protein: 12, carbs: 45, fat: 8 },
-        ingredients: [],
-        instructions: [],
-        nutrition: { calories: 280, protein: 12, carbs: 45, fat: 8, fiber: 7, sugar: 6 }
-      },
-      {
-        id: `gen-${Date.now()}-3`,
-        title: 'Avena con frutos rojos',
-        image: 'https://images.unsplash.com/photo-1571197119282-621c1ece75ac?w=400',
-        calories: 320,
         time: 10,
-        category: 'breakfast',
+        category: 'snacks',
         servings: 2,
-        macros: { protein: 18, carbs: 42, fat: 10 },
-        ingredients: [],
-        instructions: [],
-        nutrition: { calories: 320, protein: 18, carbs: 42, fat: 10, fiber: 6, sugar: 12 }
+        macros: { protein: 15, carbs: 42, fat: 8 },
+        ingredients: [
+          { id: 'berries', name: 'Frutos rojos', amount: '200', unit: 'g', selected: true },
+          { id: 'yogurt', name: 'Yogur griego', amount: '150', unit: 'g', selected: true },
+          { id: 'granola', name: 'Granola', amount: '50', unit: 'g', selected: true },
+          { id: 'honey', name: 'Miel', amount: '1', unit: 'cucharada', selected: true }
+        ],
+        instructions: ['Mezclar yogur y frutos', 'Servir en bowl', 'Agregar granola', 'Decorar con miel'],
+        nutrition: { calories: 280, protein: 15, carbs: 42, fat: 8, fiber: 6, sugar: 25 }
       }
     ];
     
-    // Variar un poco los macros para cada generación
+    // Variar un poco los macros y precios para cada generación
     const variation = Math.random() * 10 + 5;
+    const timeVariation = Math.floor(Math.random() * 10) - 5;
+    
     return exampleRecipes.map(recipe => ({
       ...recipe,
+      id: `gen-${Date.now()}-${Math.random().toString(36).substr(2, 9)}-${recipe.category}`,
+      time: Math.max(5, recipe.time + timeVariation),
+      calories: Math.round(recipe.calories + (Math.random() - 0.5) * 50),
       macros: {
         protein: Math.round(Math.max(10, recipe.macros.protein + (Math.random() - 0.5) * variation)),
         carbs: Math.round(Math.max(10, recipe.macros.carbs + (Math.random() - 0.5) * variation)),
         fat: Math.round(Math.max(5, recipe.macros.fat + (Math.random() - 0.5) * variation))
-      }
+      },
+      ingredients: recipe.ingredients.map(ing => ({
+        ...ing,
+        id: `${ing.id}-${Math.random().toString(36).substr(2, 5)}`
+      }))
     }));
   };
 

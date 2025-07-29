@@ -17,6 +17,7 @@ interface CategoryCarouselProps {
   onAddRecipe: (recipe: Recipe) => void;
   onRecipeClick: (recipe: Recipe) => void;
   onViewAll: (category: CategoryType) => void;
+  onRecipesChange?: (recipes: Recipe[]) => void;
   sectionRefs?: React.MutableRefObject<{
     [key: string]: HTMLDivElement | null;
   }>;
@@ -35,6 +36,7 @@ export const CategoryCarousel = ({
   onAddRecipe,
   onRecipeClick,
   onViewAll,
+  onRecipesChange,
   sectionRefs
 }: CategoryCarouselProps) => {
   const {
@@ -64,6 +66,10 @@ export const CategoryCarousel = ({
     setCurrentRecipes(newRecipes);
     // Clear deleted recipes when new recipes are generated
     setDeletedRecipes(new Set());
+    // Notify parent component about the recipe change
+    if (onRecipesChange) {
+      onRecipesChange(newRecipes);
+    }
   };
 
   // Scroll and interaction effects
