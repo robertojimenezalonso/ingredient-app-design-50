@@ -62,8 +62,8 @@ export const MacroDonutChart = ({ recipes }: MacroDonutChartProps) => {
   ];
 
   return (
-    <Card className="mb-4 mx-4">
-      <CardContent className="p-4">
+    <Card className="mb-3">
+      <CardContent className="p-3">
         <div className="flex items-center gap-6">
           {/* Gráfico de rosco a la izquierda */}
           <div className="w-24 h-24 flex-shrink-0">
