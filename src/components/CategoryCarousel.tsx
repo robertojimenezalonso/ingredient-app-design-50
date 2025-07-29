@@ -205,6 +205,16 @@ export const CategoryCarousel = ({
             {/* Controles de navegación solo en el primer día */}
             {index === 0 && navigationData && (
               <div className="flex items-center justify-between px-1 mb-3">
+                <span 
+                  className={`text-base font-medium cursor-pointer transition-colors ${
+                    navigationData.isGenerating 
+                      ? 'text-muted-foreground cursor-not-allowed' 
+                      : 'text-foreground hover:text-primary'
+                  }`}
+                  onClick={!navigationData.isGenerating ? navigationData.handleGenerate : undefined}
+                >
+                  {navigationData.isGenerating ? 'Cambiando plan...' : 'Cambiar plan'}
+                </span>
                 <div className="flex items-center gap-4">
                   <img 
                     src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
@@ -223,16 +233,6 @@ export const CategoryCarousel = ({
                     onClick={navigationData.canGoNext ? navigationData.handleNext : undefined}
                   />
                 </div>
-                <span 
-                  className={`text-base font-medium cursor-pointer transition-colors ${
-                    navigationData.isGenerating 
-                      ? 'text-muted-foreground cursor-not-allowed' 
-                      : 'text-foreground hover:text-primary'
-                  }`}
-                  onClick={!navigationData.isGenerating ? navigationData.handleGenerate : undefined}
-                >
-                  {navigationData.isGenerating ? 'Cambiando plan...' : 'Cambiar plan'}
-                </span>
               </div>
             )}
             <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#F8F8FC' }}>
