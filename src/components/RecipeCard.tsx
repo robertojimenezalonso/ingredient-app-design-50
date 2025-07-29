@@ -309,7 +309,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
-              <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+              <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
               <span className="text-sm text-gray-600 font-medium">{recipe.macros.protein}g</span>
             </div>
             <div className="flex items-center gap-1">
