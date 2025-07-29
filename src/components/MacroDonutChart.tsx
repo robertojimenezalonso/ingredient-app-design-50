@@ -216,7 +216,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
     </Card>
     
     {/* Controles de navegación y generación */}
-    <div className="flex items-center justify-between px-1 mb-3">
+    <div className="flex items-center justify-between px-1 mb-1">
       <div className="flex items-center gap-4">
         <img 
           src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
