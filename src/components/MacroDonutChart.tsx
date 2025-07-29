@@ -263,7 +263,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
           />
         </div>
       </div>
-      <Card className="mb-3 mt-1">
+      <Card className="mb-3 -mt-1">
       <CardContent className="p-3">
         <div className="flex items-center gap-6">
           {/* Gráfico de rosco a la izquierda */}
