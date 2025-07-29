@@ -163,12 +163,12 @@ export const CategoryCarousel = ({
                 locale: es
               }).toLowerCase()}
                 </h3>
-                <div className="flex items-center gap-1">
-                  <button className="w-5 h-5 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
-                    <MoreHorizontal size={12} />
+                <div className="flex items-center gap-1 ml-auto">
+                  <button className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
+                    <MoreHorizontal size={14} />
                   </button>
-                  <button className="w-5 h-5 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
-                    <Plus size={12} />
+                  <button className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
+                    <Plus size={14} />
                   </button>
                 </div>
               </div>
