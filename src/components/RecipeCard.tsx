@@ -308,7 +308,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
             </div>
           )}
           <span className="text-sm text-gray-400">
-            {recipe.calories} cal · {recipe.time} min
+            {recipe.calories} cal
           </span>
         </div>
         </div>
