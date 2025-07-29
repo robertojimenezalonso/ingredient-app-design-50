@@ -256,12 +256,14 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
           <img 
             src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
             alt="Siguiente" 
-            className="h-7 w-7 cursor-pointer transition-opacity opacity-100 hover:opacity-80"
-            onClick={canGoNext ? handleNext : handleGenerate}
+            className={`h-7 w-7 cursor-pointer transition-opacity ${
+              canGoNext ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
+            }`}
+            onClick={canGoNext ? handleNext : undefined}
           />
         </div>
       </div>
-      <Card className="mb-3">
+      <Card className="mb-3 mt-1">
       <CardContent className="p-3">
         <div className="flex items-center gap-6">
           {/* Gráfico de rosco a la izquierda */}
