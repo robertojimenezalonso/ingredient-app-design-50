@@ -66,7 +66,7 @@ export const MacroDonutChart = ({ recipes }: MacroDonutChartProps) => {
       <div className="flex items-center justify-between px-1 mt-3 mb-1">
         <h2 className="text-lg font-semibold text-foreground">Tu plan de recetas</h2>
         <div className="flex items-center gap-5">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-4">
             <img 
               src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
               alt="Anterior" 
