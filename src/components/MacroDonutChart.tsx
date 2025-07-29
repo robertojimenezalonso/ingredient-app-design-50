@@ -7,15 +7,15 @@ interface MacroDonutChartProps {
 }
 
 const MACRO_COLORS = {
-  protein: '#FF6B6B',
-  carbs: '#4ECDC4', 
-  fat: '#45B7D1'
+  protein: '#DE6968',
+  carbs: '#DE9A69', 
+  fat: '#6998DD'
 };
 
 const MACRO_ICONS = {
-  protein: '🥩',
-  carbs: '🍞',
-  fat: '🥑'
+  protein: '/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png',
+  carbs: '/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png',
+  fat: '/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png'
 };
 
 const MACRO_LABELS = {
@@ -91,19 +91,15 @@ export const MacroDonutChart = ({ recipes }: MacroDonutChartProps) => {
             {chartData.map((macro) => (
               <div key={macro.name} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <span className="text-base">
-                    {macro.name === 'Proteínas' ? MACRO_ICONS.protein : 
-                     macro.name === 'Carbohidratos' ? MACRO_ICONS.carbs : 
-                     MACRO_ICONS.fat}
-                  </span>
-                  <span className="text-sm text-muted-foreground">{macro.name}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div 
-                    className="w-3 h-3 rounded-full" 
-                    style={{ backgroundColor: macro.color }}
+                  <img 
+                    src={macro.name === 'Proteínas' ? MACRO_ICONS.protein : 
+                         macro.name === 'Carbohidratos' ? MACRO_ICONS.carbs : 
+                         MACRO_ICONS.fat}
+                    alt={macro.name.toLowerCase()}
+                    className="h-4 w-4"
                   />
                   <span className="text-sm font-medium">{macro.percentage}%</span>
+                  <span className="text-sm text-muted-foreground">{macro.name}</span>
                 </div>
               </div>
             ))}
