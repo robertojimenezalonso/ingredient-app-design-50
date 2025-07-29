@@ -39,10 +39,10 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
       {
         id: `gen-${Date.now()}-1`,
         title: 'Salmón a la plancha con verduras',
-        image: '/lovable-uploads/e959efca-f3da-43ea-96a2-ac6b262be062.png',
+        image: '/lovable-uploads/eeddbd2d-b7e8-45f2-a498-8bca36687a55.png',
         calories: 350,
         time: 25,
-        category: 'Cena',
+        category: 'dinner',
         servings: 2,
         macros: { protein: 35, carbs: 15, fat: 20 },
         ingredients: [],
@@ -52,10 +52,10 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
       {
         id: `gen-${Date.now()}-2`,
         title: 'Ensalada de quinoa mediterránea',
-        image: '/lovable-uploads/aaa38274-3981-4f1b-976f-6cc68b738160.png',
+        image: '/lovable-uploads/8f17d96b-3966-4959-b7ba-b9d53435740d.png',
         calories: 280,
         time: 15,
-        category: 'Almuerzo',
+        category: 'lunch',
         servings: 2,
         macros: { protein: 12, carbs: 45, fat: 8 },
         ingredients: [],
@@ -64,16 +64,16 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
       },
       {
         id: `gen-${Date.now()}-3`,
-        title: 'Pollo al curry con arroz integral',
-        image: '/lovable-uploads/62545d3b-2a8b-4a13-a64c-d485492f24c1.png',
-        calories: 420,
-        time: 40,
-        category: 'Cena',
+        title: 'Avena con frutos rojos',
+        image: '/lovable-uploads/8530d68e-8316-44b0-8389-d319fd405949.png',
+        calories: 320,
+        time: 10,
+        category: 'breakfast',
         servings: 2,
-        macros: { protein: 28, carbs: 35, fat: 12 },
+        macros: { protein: 18, carbs: 42, fat: 10 },
         ingredients: [],
         instructions: [],
-        nutrition: { calories: 420, protein: 28, carbs: 35, fat: 12, fiber: 4, sugar: 5 }
+        nutrition: { calories: 320, protein: 18, carbs: 42, fat: 10, fiber: 6, sugar: 12 }
       }
     ];
     
@@ -82,9 +82,9 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
     return exampleRecipes.map(recipe => ({
       ...recipe,
       macros: {
-        protein: Math.max(10, recipe.macros.protein + (Math.random() - 0.5) * variation),
-        carbs: Math.max(10, recipe.macros.carbs + (Math.random() - 0.5) * variation),
-        fat: Math.max(5, recipe.macros.fat + (Math.random() - 0.5) * variation)
+        protein: Math.round(Math.max(10, recipe.macros.protein + (Math.random() - 0.5) * variation)),
+        carbs: Math.round(Math.max(10, recipe.macros.carbs + (Math.random() - 0.5) * variation)),
+        fat: Math.round(Math.max(5, recipe.macros.fat + (Math.random() - 0.5) * variation))
       }
     }));
   };
