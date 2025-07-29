@@ -159,8 +159,8 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#F4F4ED' }}>
-              <div className="flex items-center w-full" style={{ backgroundColor: '#F4F4ED' }}>
+            <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#F8F8FC' }}>
+              <div className="flex items-center w-full" style={{ backgroundColor: '#F8F8FC' }}>
                 <h3 className="text-sm text-muted-foreground font-semibold">
                   {format(date, "eee d", {
                 locale: es
