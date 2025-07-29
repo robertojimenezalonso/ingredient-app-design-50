@@ -48,7 +48,7 @@ export const FloatingButton = ({
   return <div className={containerClasses} style={{
     paddingBottom: `calc(32px + env(safe-area-inset-bottom))`
   }}>
-      <Button onClick={handleClick} className={`h-12 text-base font-medium rounded-lg px-6 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating mx-4 w-full max-w-none ${className}`} size="lg">
+      <Button onClick={handleClick} className={`h-14 text-base font-medium rounded-lg px-6 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating mx-4 w-full max-w-none ${className}`} size="lg">
         <div className="flex items-center justify-center gap-2">
           <Search className="h-6 w-6" />
           <span>Ingredientes desde {totalPrice ? `${totalPrice.toFixed(2)} €` : '64,76 €'}</span>
