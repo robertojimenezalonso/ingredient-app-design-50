@@ -70,12 +70,12 @@ export const MacroDonutChart = ({ recipes }: MacroDonutChartProps) => {
             <img 
               src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
               alt="Anterior" 
-              className="h-5 w-5 cursor-pointer"
+              className="h-7 w-7 cursor-pointer"
             />
             <img 
               src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
               alt="Siguiente" 
-              className="h-5 w-5 cursor-pointer"
+              className="h-7 w-7 cursor-pointer"
             />
           </div>
           <span className="text-sm font-medium text-foreground">Generar</span>
