@@ -39,7 +39,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
       {
         id: `gen-${Date.now()}-1`,
         title: 'Salmón a la plancha con verduras',
-        image: '/lovable-uploads/62545d3b-2a8b-4a13-a64c-d485492f24c1.png',
+        image: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=400',
         calories: 350,
         time: 25,
         category: 'dinner',
@@ -52,7 +52,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
       {
         id: `gen-${Date.now()}-2`,
         title: 'Ensalada de quinoa mediterránea',
-        image: '/lovable-uploads/e959efca-f3da-43ea-96a2-ac6b262be062.png',
+        image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=400',
         calories: 280,
         time: 15,
         category: 'lunch',
@@ -65,7 +65,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange }: MacroDonutChartPro
       {
         id: `gen-${Date.now()}-3`,
         title: 'Avena con frutos rojos',
-        image: '/lovable-uploads/1a119c40-7aac-4ada-b1c9-1a0c5f3492fd.png',
+        image: 'https://images.unsplash.com/photo-1571197119282-621c1ece75ac?w=400',
         calories: 320,
         time: 10,
         category: 'breakfast',
