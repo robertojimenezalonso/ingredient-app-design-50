@@ -156,19 +156,19 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="bg-cyan-50 border-cyan-200 p-3 mb-2">
+            <Card className="border-none py-1 px-3 mb-2" style={{ backgroundColor: '#DFEFEF' }}>
               <div className="flex items-center justify-between">
-                <h3 className="text-base text-muted-foreground font-semibold">
+                <h3 className="text-sm text-muted-foreground font-semibold">
                   {format(date, "eee d", {
                 locale: es
               }).toLowerCase()}
                 </h3>
-                <div className="flex items-center gap-2">
-                  <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-cyan-100">
-                    <MoreHorizontal size={16} />
+                <div className="flex items-center gap-1">
+                  <button className="w-5 h-5 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
+                    <MoreHorizontal size={12} />
                   </button>
-                  <button className="w-8 h-8 rounded-full flex items-center justify-center text-muted-foreground hover:bg-cyan-100">
-                    <Plus size={16} />
+                  <button className="w-5 h-5 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
+                    <Plus size={12} />
                   </button>
                 </div>
               </div>
