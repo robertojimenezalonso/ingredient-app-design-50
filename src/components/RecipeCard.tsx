@@ -302,10 +302,25 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
             </Badge>
           )}
         </div>
-        <div className="flex items-center gap-2 mb-2">
-          <span className="text-sm text-gray-400">
-            {recipe.calories} cal
-          </span>
+        <div className="flex items-center gap-4 mb-2">
+          <div className="flex items-center gap-1">
+            <div className="w-4 h-4 bg-gray-800 rounded-full flex items-center justify-center">
+              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+            </div>
+            <span className="text-sm text-gray-600 font-medium">{recipe.calories} kcal</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+            <span className="text-sm text-gray-600 font-medium">{recipe.macros.protein}g</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
+            <span className="text-sm text-gray-600 font-medium">{recipe.macros.carbs}g</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="w-4 h-4 bg-blue-500 rounded-full"></div>
+            <span className="text-sm text-gray-600 font-medium">{recipe.macros.fat}g</span>
+          </div>
         </div>
         </div>
         
