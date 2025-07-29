@@ -105,7 +105,7 @@ export const AirbnbHeader = ({
         <div className="flex-1 rounded-lg transition-colors cursor-pointer" style={{ backgroundColor: '#F6F6F6' }}>
           <div className="px-6 py-2 relative">
             <div className="text-left">
-              <div className="font-semibold text-foreground">
+              <div className="font-medium text-foreground">
                 Mi lista de la compra
               </div>
               <div className="text-sm text-muted-foreground">
