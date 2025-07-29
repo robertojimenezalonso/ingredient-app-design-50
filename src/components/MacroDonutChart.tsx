@@ -62,7 +62,9 @@ export const MacroDonutChart = ({ recipes }: MacroDonutChartProps) => {
   ];
 
   return (
-    <Card className="mb-3">
+    <div>
+      <h2 className="text-lg font-semibold text-foreground px-1 mt-3 mb-1">Tu plan de recetas</h2>
+      <Card className="mb-3">
       <CardContent className="p-3">
         <div className="flex items-center gap-6">
           {/* Gráfico de rosco a la izquierda */}
@@ -107,5 +109,6 @@ export const MacroDonutChart = ({ recipes }: MacroDonutChartProps) => {
         </div>
       </CardContent>
     </Card>
+    </div>
   );
 };
