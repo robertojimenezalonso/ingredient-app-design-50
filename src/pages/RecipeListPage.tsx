@@ -113,14 +113,29 @@ const RecipeListPage = () => {
   
   // Calculate selected ingredients count - use useState for reactivity
   const [selectedIngredientsCount, setSelectedIngredientsCount] = useState(0);
+  const [totalPrice, setTotalPrice] = useState(64.76); // Default price
   
-  // Update count when selection changes
+  // Calculate estimated price based on ingredients and settings
+  const calculateEstimatedPrice = (ingredientsCount: number) => {
+    const basePrice = ingredientsCount * 1.2;
+    const servingsMultiplier = config.servingsPerRecipe || 2;
+    const daysMultiplier = config.selectedDates?.length || 1;
+    
+    return +(basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
+  };
+  
+  // Update count and price when selection changes
   useEffect(() => {
     console.log('RecipeListPage useEffect triggered - selectedIngredientIds length:', selectedIngredientIds.length);
     const count = getSelectedIngredientsCount(recommendedRecipes);
     console.log('RecipeListPage: Updated count:', count, 'from', recommendedRecipes.length, 'recipes');
     setSelectedIngredientsCount(count);
-  }, [selectedIngredientIds.join(','), recommendedRecipes, getSelectedIngredientsCount]);
+    
+    // Calculate and update price
+    const price = calculateEstimatedPrice(count);
+    setTotalPrice(price);
+    console.log('RecipeListPage: Updated price:', price);
+  }, [selectedIngredientIds.join(','), recommendedRecipes, getSelectedIngredientsCount, config.servingsPerRecipe, config.selectedDates?.length]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);
@@ -180,6 +195,7 @@ const RecipeListPage = () => {
         onClick={handleSearchOffers}
         selectedCount={selectedIngredientsCount}
         recipeCount={recommendedRecipes.length}
+        totalPrice={totalPrice}
       >
         Buscar mejor oferta
       </FloatingButton>
