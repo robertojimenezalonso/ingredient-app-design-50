@@ -232,7 +232,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
 
   return (
     <div>
-      <h2 className="text-lg font-semibold text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
+      <h2 className="text-xl font-medium text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
       <div className="flex items-center justify-between px-1 mb-3">
         <span 
           className={`text-sm font-normal cursor-pointer transition-colors ${
@@ -299,8 +299,8 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
                     alt={macro.name.toLowerCase()}
                     className="h-4 w-4"
                   />
-                  <span className="text-sm font-medium">{macro.percentage}%</span>
-                  <span className="text-sm text-muted-foreground">{macro.name}</span>
+                  <span className="text-sm font-normal">{macro.percentage}%</span>
+                  <span className="text-sm text-muted-foreground font-normal">{macro.name}</span>
                 </div>
               </div>
             ))}

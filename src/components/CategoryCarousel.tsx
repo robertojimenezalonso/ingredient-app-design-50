@@ -218,7 +218,7 @@ export const CategoryCarousel = ({
       }} data-date={dateStr}>
             <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#F8F8FC' }}>
               <div className="flex items-center w-full" style={{ backgroundColor: '#F8F8FC' }}>
-                <h3 className="text-sm text-muted-foreground font-semibold">
+                <h3 className="text-sm text-muted-foreground font-normal">
                   {format(date, "eee d", {
                 locale: es
               }).toLowerCase()}

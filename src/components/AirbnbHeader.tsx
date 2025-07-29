@@ -114,10 +114,10 @@ export const AirbnbHeader = ({
         <div className="flex-1 rounded-lg transition-colors cursor-pointer" style={{ backgroundColor: '#F6F6F6' }}>
           <div className="px-6 py-2 relative">
             <div className="text-left">
-              <div className="font-medium text-foreground">
+              <div className="font-medium text-base text-foreground">
                 Mi lista de la compra
               </div>
-              <div className="text-sm text-muted-foreground">
+              <div className="text-sm text-muted-foreground font-normal">
                 {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
               </div>
             </div>
@@ -143,7 +143,7 @@ export const AirbnbHeader = ({
                   key={dateStr}
                   data-tab={dateStr}
                   onClick={() => onTabChange?.(dateStr)}
-                  className={`flex-shrink-0 pb-3 pt-2 text-base font-medium relative ${
+                  className={`flex-shrink-0 pb-3 pt-2 text-sm font-normal relative ${
                     activeTab === dateStr
                       ? 'text-black'
                       : 'text-gray-500 hover:text-gray-700'
