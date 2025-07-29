@@ -162,8 +162,8 @@ export const CategoryCarousel = ({
 
   return <div className="mb-4">
       <div className="fixed left-0 right-0 px-4 space-y-6 pb-32 overflow-y-auto h-screen z-0" style={{ top: 'calc(env(safe-area-inset-top) + 80px)', paddingTop: '80px', backgroundColor: 'white' }}>
-        <MacroDonutChart recipes={allVisibleRecipes} />
         <h2 className="text-lg font-semibold text-foreground px-1 mb-2">Tu plan de recetas</h2>
+        <MacroDonutChart recipes={allVisibleRecipes} />
         {mealPlan.map(({
         date,
         dateStr,
