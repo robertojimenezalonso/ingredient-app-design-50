@@ -196,7 +196,7 @@ export const CategoryCarousel = ({
   ).filter(Boolean) as Recipe[];
 
   return <div className="mb-4">
-      <div className="px-4 space-y-6 pb-40" style={{ backgroundColor: 'white' }}>
+      <div className="px-4 space-y-6 pb-40 -mt-[100px]" style={{ backgroundColor: 'white' }}>
         <MacroDonutChart 
           recipes={allVisibleRecipes} 
           onRecipesChange={handleRecipesChange}
