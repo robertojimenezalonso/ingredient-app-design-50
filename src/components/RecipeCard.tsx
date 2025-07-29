@@ -297,12 +297,8 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
             {recipe.title}
           </h3>
           {mealType && (
-            <Badge variant="secondary" className={`${getMealTypeColor(mealType)} text-xs px-2 py-1 flex items-center gap-1 flex-shrink-0 mt-2`}>
-              {(() => {
-                const IconComponent = getMealTypeIcon(mealType);
-                return <IconComponent className="h-3 w-3" />;
-              })()}
-              {mealType}
+            <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200 text-xs px-2 py-1 flex-shrink-0 mt-2">
+              {mealType.length > 4 ? mealType.slice(0, 4) + '.' : mealType}
             </Badge>
           )}
         </div>
