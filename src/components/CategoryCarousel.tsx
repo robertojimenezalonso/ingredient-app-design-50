@@ -225,7 +225,7 @@ export const CategoryCarousel = ({
                   }`}
                   onClick={!navigationData.isGenerating ? navigationData.handleGenerate : undefined}
                 >
-                  {navigationData.isGenerating ? 'Generando...' : 'Cambiar plan'}
+                  {navigationData.isGenerating ? 'Cambiando plan...' : 'Cambiar plan'}
                 </span>
               </div>
             )}
