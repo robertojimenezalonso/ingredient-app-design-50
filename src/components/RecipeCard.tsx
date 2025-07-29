@@ -1,4 +1,4 @@
-import { Heart, Plus, Trash2, RefreshCw, Coffee, Utensils, Moon, Apple } from 'lucide-react';
+import { Heart, Plus, Trash2, RefreshCw, Coffee, Utensils, Moon, Apple, Flame } from 'lucide-react';
 import { Recipe, CATEGORIES } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useEffect, useState, useRef } from 'react';
@@ -304,9 +304,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         </div>
         <div className="mb-2">
           <div className="flex items-center gap-1 mb-1">
-            <div className="w-4 h-4 bg-gray-800 rounded-full flex items-center justify-center">
-              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-            </div>
+            <Flame className="h-4 w-4 text-orange-500" />
             <span className="text-sm text-gray-600 font-medium">{recipe.calories} kcal</span>
           </div>
           <div className="flex items-center gap-4">
