@@ -221,7 +221,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
   }
 
   return (
-    <div className={`relative overflow-visible h-30 ${isSwipeActive || isSwiped ? 'z-20' : 'z-10'}`}>
+    <div className={`relative overflow-visible h-[120px] ${isSwipeActive || isSwiped ? 'z-20' : 'z-10'}`}>
       {/* Delete background (swipe right) */}
       <div 
         className={`absolute inset-0 bg-red-500 rounded-2xl transition-opacity duration-200 ${
@@ -256,14 +256,14 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       <div 
         ref={containerRef}
         data-recipe-card="true"
-        className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-30 shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border pr-4 py-2 mb-3"
+        className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-[120px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border pr-4 py-2 mb-3"
         onClick={() => onClick(recipe)}
       >
       <div className="relative flex-shrink-0">
         <ImageLoader
           src={recipe.image} 
           alt={recipe.title}
-          className="w-30 h-30 object-cover rounded-l-xl"
+          className="w-[120px] h-[120px] object-cover rounded-l-xl"
           fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=400"
           placeholder={
             <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
@@ -271,7 +271,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         />
       </div>
       
-      <div className="flex-1 flex flex-col justify-center relative h-30">
+      <div className="flex-1 flex flex-col justify-center relative h-[120px]">
         <h3 className="font-medium text-lg line-clamp-2 mb-0.5 leading-tight overflow-hidden mt-2">
           {recipe.title}
         </h3>
