@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ChevronRight, Plus, Search, MoreHorizontal } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
+import { MacroDonutChart } from './MacroDonutChart';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Separator } from './ui/separator';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
@@ -148,8 +149,20 @@ export const CategoryCarousel = ({
     // Aquí puedes implementar la lógica de sustitución
     console.log('Sustituir receta:', recipe.title, 'en', dateStr, meal);
   };
+  // Calcular todas las recetas visibles para el gráfico de macros
+  const allVisibleRecipes = mealPlan.flatMap(day => 
+    day.meals
+      .filter(({ recipe, meal }) => {
+        if (!recipe) return false;
+        const uniqueKey = `${day.dateStr}-${meal}-${recipe.id}`;
+        return !deletedRecipes.has(uniqueKey);
+      })
+      .map(({ recipe }) => recipe)
+  ).filter(Boolean) as Recipe[];
+
   return <div className="mb-4">
       <div className="fixed left-0 right-0 px-4 space-y-6 pb-32 overflow-y-auto h-screen z-0" style={{ top: 'calc(env(safe-area-inset-top) + 80px)', paddingTop: '80px', backgroundColor: 'white' }}>
+        <MacroDonutChart recipes={allVisibleRecipes} />
         {mealPlan.map(({
         date,
         dateStr,
