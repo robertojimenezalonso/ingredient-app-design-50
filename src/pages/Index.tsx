@@ -9,7 +9,6 @@ import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { IngredientsView } from '@/components/IngredientsView';
 import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
-import { NavigationControls } from '@/components/NavigationControls';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { Recipe, CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
@@ -22,7 +21,6 @@ const Index = () => {
   const { config } = useUserConfig();
   
   const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
-  const [navigationData, setNavigationData] = useState<any>(null);
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   
   const categories: CategoryType[] = [
@@ -174,15 +172,11 @@ const Index = () => {
             onViewAll={handleViewAll}
             sectionRefs={sectionRefs}
             onRecipesChange={handleRecipesChange}
-            onNavigationDataChange={setNavigationData}
           />
         ) : (
           <IngredientsView recipes={explorationRecipes} />
         )}
       </div>
-
-      {/* Navigation Controls - Above Floating Button */}
-      <NavigationControls navigationData={navigationData} />
 
       {/* Floating Button - Always visible */}
       <div className="fixed bottom-4 left-4 right-4 z-40">
