@@ -173,7 +173,7 @@ export const CategoryCarousel = ({
                 </div>
               </div>
             </Card>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {meals.filter(({
                 recipe,
                 meal
