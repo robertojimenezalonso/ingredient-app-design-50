@@ -235,16 +235,16 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
       <h2 className="text-lg font-semibold text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
       <div className="flex items-center justify-between px-1 mb-3">
         <span 
-          className={`text-base font-medium cursor-pointer transition-colors ${
+          className={`text-sm font-medium cursor-pointer transition-colors ${
             isGenerating 
               ? 'text-muted-foreground cursor-not-allowed' 
               : 'text-foreground hover:text-primary'
           }`}
           onClick={!isGenerating ? handleGenerate : undefined}
         >
-          {isGenerating ? 'Generando otro plan...' : 'Generar otro plan'}
+          {isGenerating ? 'Cambiando plan...' : 'Cambiar plan'}
         </span>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <img 
             src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
             alt="Anterior" 
