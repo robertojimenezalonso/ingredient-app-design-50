@@ -292,7 +292,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
       </div>
       
       <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
-        <div className="flex items-start gap-2 mb-1 relative">
+        <div className="flex items-start gap-2 mb-1.5 relative">
           <h3 className="font-medium text-lg line-clamp-1 leading-tight overflow-hidden mt-2 max-w-[calc(100%-80px)] truncate">
             {recipe.title}
           </h3>
@@ -303,7 +303,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
           )}
         </div>
         <div className="mb-1.5">
-          <div className="flex items-center gap-1 mb-1">
+          <div className="flex items-center gap-1 mb-1.5">
             <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
             <span className="text-sm text-gray-600 font-medium">{recipe.calories} kcal</span>
           </div>
