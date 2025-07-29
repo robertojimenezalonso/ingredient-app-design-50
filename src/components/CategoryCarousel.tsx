@@ -218,14 +218,14 @@ export const CategoryCarousel = ({
                   />
                 </div>
                 <span 
-                  className={`text-sm font-medium cursor-pointer transition-colors ${
+                  className={`text-base font-medium cursor-pointer transition-colors ${
                     navigationData.isGenerating 
                       ? 'text-muted-foreground cursor-not-allowed' 
                       : 'text-foreground hover:text-primary'
                   }`}
                   onClick={!navigationData.isGenerating ? navigationData.handleGenerate : undefined}
                 >
-                  {navigationData.isGenerating ? 'Generando...' : 'Generar'}
+                  {navigationData.isGenerating ? 'Generando...' : 'Cambiar plan'}
                 </span>
               </div>
             )}
