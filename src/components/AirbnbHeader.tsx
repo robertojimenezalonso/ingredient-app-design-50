@@ -35,6 +35,14 @@ interface AirbnbHeaderProps {
   onTabChange?: (dateStr: string) => void;
   onFilterChange?: (filter: 'receta' | 'ingredientes') => void;
   currentFilter?: 'receta' | 'ingredientes';
+  navigationData?: {
+    canGoPrevious: boolean;
+    canGoNext: boolean;
+    isGenerating: boolean;
+    handlePrevious: () => void;
+    handleNext: () => void;
+    handleGenerate: () => void;
+  } | null;
 }
 
 export const AirbnbHeader = ({ 
@@ -43,7 +51,8 @@ export const AirbnbHeader = ({
   mealPlan = [], 
   onTabChange,
   onFilterChange,
-  currentFilter = 'receta'
+  currentFilter = 'receta',
+  navigationData
 }: AirbnbHeaderProps = {}) => {
   const { config } = useUserConfig();
   const navigate = useNavigate();
@@ -106,14 +115,33 @@ export const AirbnbHeader = ({
           <div className="px-6 py-2 relative">
             <div className="text-left">
               <div className="font-medium text-foreground">
-                Mi lista de la compra
+                Tu plan para comer saludable
               </div>
               <div className="text-sm text-muted-foreground">
                 {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
               </div>
             </div>
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              <img src="/lovable-uploads/8f17d96b-3966-4959-b7ba-b9d53435740d.png" alt="Filter" className="h-5 w-5" />
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-4">
+              {navigationData && (
+                <>
+                  <img 
+                    src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
+                    alt="Anterior" 
+                    className={`h-5 w-5 cursor-pointer transition-opacity ${
+                      navigationData.canGoPrevious ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
+                    }`}
+                    onClick={navigationData.canGoPrevious ? navigationData.handlePrevious : undefined}
+                  />
+                  <img 
+                    src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
+                    alt="Siguiente" 
+                    className={`h-5 w-5 cursor-pointer transition-opacity ${
+                      navigationData.canGoNext ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
+                    }`}
+                    onClick={navigationData.canGoNext ? navigationData.handleNext : navigationData.handleGenerate}
+                  />
+                </>
+              )}
             </div>
           </div>
         </div>

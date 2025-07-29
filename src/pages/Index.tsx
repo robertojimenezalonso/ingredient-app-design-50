@@ -30,6 +30,14 @@ const Index = () => {
 
   // Load AI recipes from localStorage if available
   const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
+  const [navigationData, setNavigationData] = useState<{
+    canGoPrevious: boolean;
+    canGoNext: boolean;
+    isGenerating: boolean;
+    handlePrevious: () => void;
+    handleNext: () => void;
+    handleGenerate: () => void;
+  } | null>(null);
   
   useEffect(() => {
     const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
@@ -157,6 +165,7 @@ const Index = () => {
         mealPlan={mealPlan}
         onTabChange={scrollToDate}
         onFilterChange={setSelectedFilter}
+        navigationData={navigationData}
       />
       
       <div style={{ paddingTop: '120px' }}>
@@ -172,6 +181,7 @@ const Index = () => {
             onViewAll={handleViewAll}
             sectionRefs={sectionRefs}
             onRecipesChange={handleRecipesChange}
+            onNavigationDataChange={setNavigationData}
           />
         ) : (
           <IngredientsView recipes={explorationRecipes} />
