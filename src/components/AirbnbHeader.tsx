@@ -112,11 +112,11 @@ export const AirbnbHeader = ({
                 {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
               </div>
             </div>
+            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+              <img src="/lovable-uploads/8f17d96b-3966-4959-b7ba-b9d53435740d.png" alt="Filter" className="h-5 w-5" />
+            </div>
           </div>
         </div>
-        <button className="p-2">
-          <img src="/lovable-uploads/8f17d96b-3966-4959-b7ba-b9d53435740d.png" alt="Filter" className="h-5 w-5" />
-        </button>
       </div>
       
 
