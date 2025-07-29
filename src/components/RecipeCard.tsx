@@ -306,7 +306,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         <div className="mb-1.5">
           <div className="flex items-center gap-1 mb-2">
             <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-            <span className="text-sm text-black font-medium">{recipe.calories} kcal</span>
+            <span className="text-sm text-black font-normal">{recipe.calories} kcal</span>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
