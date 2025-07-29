@@ -297,7 +297,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
             {recipe.title}
           </h3>
           {mealType && (
-            <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-gray-200 text-xs px-2 py-1 absolute right-0 top-2">
+            <Badge variant="secondary" className="bg-gray-100 text-gray-600 text-xs px-2 py-1 absolute right-0 top-2">
               {mealType.length > 4 ? mealType.slice(0, 4) + '.' : mealType}
             </Badge>
           )}
