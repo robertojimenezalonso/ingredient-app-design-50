@@ -257,11 +257,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         ref={containerRef}
         data-recipe-card="true"
         className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-20 shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-border pr-4 py-2 mb-3"
-        style={{ transform: `translateX(${swipeX}px)` }}
-        onClick={() => !isSwipeActive && !isSwiped && onClick(recipe)}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
+        onClick={() => onClick(recipe)}
       >
       <div className="relative flex-shrink-0">
         <ImageLoader
