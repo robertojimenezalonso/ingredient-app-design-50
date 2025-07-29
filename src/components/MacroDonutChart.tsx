@@ -238,7 +238,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
           <img 
             src="/lovable-uploads/4d196b4e-7430-45d5-9ea8-3c41447ec14c.png" 
             alt="Anterior" 
-            className={`h-8 w-8 cursor-pointer transition-opacity ${
+            className={`h-7 w-7 cursor-pointer transition-opacity ${
               canGoPrevious ? 'opacity-100 hover:opacity-80' : 'opacity-30 cursor-not-allowed'
             }`}
             onClick={canGoPrevious ? handlePrevious : undefined}
@@ -246,7 +246,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
           <img 
             src="/lovable-uploads/d3ec2ee8-42f5-4273-a17c-c7f05147048d.png" 
             alt="Siguiente" 
-            className="h-8 w-8 cursor-pointer transition-opacity opacity-100 hover:opacity-80"
+            className="h-7 w-7 cursor-pointer transition-opacity opacity-100 hover:opacity-80"
             onClick={canGoNext ? handleNext : handleGenerate}
           />
         </div>
