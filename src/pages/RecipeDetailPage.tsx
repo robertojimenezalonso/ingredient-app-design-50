@@ -697,24 +697,6 @@ const RecipeDetailPage = () => {
           </div>
         </TabsContent>
       </Tabs>
-      
-      
-      {/* Conditional floating button based on mode */}
-      {isChangeMode ? (
-        <FloatingButton onClick={handleSelectRecipe}>
-          Seleccionar receta
-        </FloatingButton>
-      ) : (
-        selectedCount > 0 ? (
-          <FloatingButton onClick={handleAddToCart} selectedCount={selectedCount} totalPrice={totalPrice} className={optimizationOption && !isOptimized ? 'bg-green-500 hover:bg-green-600' : ''}>
-            {optimizationOption && !isOptimized ? 'Optimizar receta' : undefined}
-          </FloatingButton>
-        ) : (
-          <FloatingButton onClick={() => navigate(-1)}>
-            Volver a recetas
-          </FloatingButton>
-        )
-      )}
     </div>;
 };
 export default RecipeDetailPage;
