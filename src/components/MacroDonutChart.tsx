@@ -38,7 +38,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
   const [planHistory, setPlanHistory] = useState<Recipe[][]>([recipes]);
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [shouldAnimate, setShouldAnimate] = useState(false);
+  const [animationProgress, setAnimationProgress] = useState(0);
 
   const currentRecipes = planHistory[currentPlanIndex] || recipes;
 
@@ -231,13 +231,25 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
     }
   }, [canGoPrevious, canGoNext, isGenerating, onNavigationDataChange]);
 
-  // Activar animación cuando se monta el componente o cambian las recetas
+  // Activar animación progresiva cuando se monta el componente o cambian las recetas
   useEffect(() => {
-    setShouldAnimate(false);
-    const timer = setTimeout(() => {
-      setShouldAnimate(true);
-    }, 100);
-    return () => clearTimeout(timer);
+    setAnimationProgress(0);
+    const duration = 1200; // Duración total de la animación
+    const steps = 60; // Número de pasos para una animación suave
+    const stepDuration = duration / steps;
+    
+    let step = 0;
+    const interval = setInterval(() => {
+      step++;
+      const progress = Math.min(step / steps, 1);
+      setAnimationProgress(progress * 360); // De 0 a 360 grados
+      
+      if (step >= steps) {
+        clearInterval(interval);
+      }
+    }, stepDuration);
+    
+    return () => clearInterval(interval);
   }, [currentRecipes]);
 
   return (
@@ -281,16 +293,18 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
             <ResponsiveContainer width="100%" height="100%">
               <PieChart key={`pie-chart-${currentRecipes.map(r => r.id).join('-')}`}>
                 <Pie
-                  data={shouldAnimate ? chartData : []}
+                  data={chartData}
                   cx="50%"
                   cy="50%"
                   innerRadius={25}
                   outerRadius={45}
                   paddingAngle={2}
                   dataKey="value"
+                  startAngle={90}
+                  endAngle={90 + animationProgress}
                   animationBegin={0}
-                  animationDuration={1000}
-                  isAnimationActive={true}
+                  animationDuration={0}
+                  isAnimationActive={false}
                 >
                   {chartData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
