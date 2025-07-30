@@ -111,7 +111,7 @@ const CalendarSelectionPage = () => {
             <button onClick={handleReset} className="text-foreground underline text-base font-medium">
               Restablecer
             </button>
-            <Button onClick={handleContinue} disabled={!canContinue} className="px-8 bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating/90 disabled:opacity-100 disabled:bg-[#81838B] disabled:text-white rounded-lg py-3 h-auto text-base font-semibold">
+            <Button onClick={handleContinue} disabled={!canContinue} className="px-8 bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating/90 disabled:opacity-100 disabled:bg-[#BAB9BC] disabled:text-white rounded-lg py-3 h-auto text-base font-semibold">
               Siguiente
             </Button>
           </div>
