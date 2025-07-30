@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 
 interface MacroDonutChartProps {
   recipes: Recipe[];
+  shouldAnimate?: boolean;
   onRecipesChange?: (recipes: Recipe[]) => void;
   onNavigationDataChange?: (data: {
     canGoPrevious: boolean;
@@ -34,7 +35,7 @@ const MACRO_LABELS = {
   fat: 'Grasas'
 };
 
-export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChange }: MacroDonutChartProps) => {
+export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChange, onNavigationDataChange }: MacroDonutChartProps) => {
   const [planHistory, setPlanHistory] = useState<Recipe[][]>([recipes]);
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -156,6 +157,25 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
     }
     
     setIsGenerating(false);
+    
+    // Activar animación después de generar nuevas recetas
+    setAnimationProgress(0);
+    setTimeout(() => {
+      const duration = 1200;
+      const steps = 60;
+      const stepDuration = duration / steps;
+      
+      let step = 0;
+      const interval = setInterval(() => {
+        step++;
+        const progress = Math.min(step / steps, 1);
+        setAnimationProgress(progress * 360);
+        
+        if (step >= steps) {
+          clearInterval(interval);
+        }
+      }, stepDuration);
+    }, 100);
   };
 
   const handlePrevious = () => {
@@ -231,8 +251,13 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
     }
   }, [canGoPrevious, canGoNext, isGenerating, onNavigationDataChange]);
 
-  // Activar animación progresiva cuando se monta el componente o cambian las recetas
+  // Activar animación progresiva solo cuando shouldAnimate es true
   useEffect(() => {
+    if (!shouldAnimate) {
+      setAnimationProgress(360); // Mostrar completo sin animación
+      return;
+    }
+
     setAnimationProgress(0);
     const duration = 1200; // Duración total de la animación
     const steps = 60; // Número de pasos para una animación suave
@@ -250,7 +275,36 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
     }, stepDuration);
     
     return () => clearInterval(interval);
-  }, [currentRecipes]);
+  }, [currentRecipes, shouldAnimate]);
+
+  // Activar animación cuando se presiona "Cambiar recetas"
+  useEffect(() => {
+    if (isGenerating) {
+      setAnimationProgress(0);
+      const timer = setTimeout(() => {
+        if (shouldAnimate) {
+          const duration = 1200;
+          const steps = 60;
+          const stepDuration = duration / steps;
+          
+          let step = 0;
+          const interval = setInterval(() => {
+            step++;
+            const progress = Math.min(step / steps, 1);
+            setAnimationProgress(progress * 360);
+            
+            if (step >= steps) {
+              clearInterval(interval);
+            }
+          }, stepDuration);
+        } else {
+          setAnimationProgress(360);
+        }
+      }, 1500); // Después de que termine la generación
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isGenerating, shouldAnimate]);
 
   return (
     <div>

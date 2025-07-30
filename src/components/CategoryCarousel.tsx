@@ -199,6 +199,7 @@ export const CategoryCarousel = ({
       <div className="px-4 space-y-6 pb-40 -mt-[76px]" style={{ backgroundColor: 'white' }}>
         <MacroDonutChart 
           recipes={allVisibleRecipes} 
+          shouldAnimate={config.shouldAnimateChart}
           onRecipesChange={handleRecipesChange}
           onNavigationDataChange={(data) => {
             setNavigationData(data);

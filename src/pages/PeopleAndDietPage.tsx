@@ -44,7 +44,8 @@ const PeopleAndDietPage = () => {
     // Update configuration
     updateConfig({
       servingsPerRecipe: peopleCount.adultos,
-      hasPlanningSession: true
+      hasPlanningSession: true,
+      shouldAnimateChart: true
     });
 
     // Store generation parameters in localStorage for the benefits page to handle

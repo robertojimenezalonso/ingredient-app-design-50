@@ -18,7 +18,7 @@ const Index = () => {
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
-  const { config } = useUserConfig();
+  const { config, updateConfig } = useUserConfig();
   
   const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
@@ -40,6 +40,9 @@ const Index = () => {
   } | null>(null);
   
   useEffect(() => {
+    // Reset chart animation when entering from welcome page
+    updateConfig({ shouldAnimateChart: false });
+    
     const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
     if (storedAiRecipes) {
       try {
@@ -50,7 +53,7 @@ const Index = () => {
         console.error('Error parsing stored AI recipes:', error);
       }
     }
-  }, []);
+  }, [updateConfig]);
 
   // Get all recipes for ingredient management - prioritize AI recipes
   const explorationRecipes = aiRecipes.length > 0 ? aiRecipes : categories.flatMap(category => getRecipesByCategory(category, 10));

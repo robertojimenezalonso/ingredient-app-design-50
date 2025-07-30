@@ -7,6 +7,7 @@ interface UserConfig {
   selectedDates?: string[];
   selectedMeals?: string[];
   hasPlanningSession?: boolean;
+  shouldAnimateChart?: boolean;
 }
 
 interface UserConfigContextType {
@@ -36,6 +37,7 @@ export const UserConfigProvider: React.FC<{ children: ReactNode }> = ({ children
       selectedDates: [],
       selectedMeals: [],
       hasPlanningSession: false,
+      shouldAnimateChart: false,
     };
   });
 
