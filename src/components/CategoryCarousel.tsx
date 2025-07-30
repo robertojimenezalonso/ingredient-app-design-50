@@ -300,7 +300,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#F6F6F6"
-                                    strokeWidth="6"
+                                    strokeWidth="3"
                                   />
                                   <path
                                     d="M18 2.0845
@@ -308,7 +308,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke={MACRO_COLORS.protein}
-                                    strokeWidth="6"
+                                    strokeWidth="3"
                                     strokeDasharray={`${proteinPercent}, 100`}
                                   />
                                 </svg>
@@ -330,7 +330,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#F6F6F6"
-                                    strokeWidth="6"
+                                    strokeWidth="3"
                                   />
                                   <path
                                     d="M18 2.0845
@@ -338,7 +338,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke={MACRO_COLORS.carbs}
-                                    strokeWidth="6"
+                                    strokeWidth="3"
                                     strokeDasharray={`${carbsPercent}, 100`}
                                   />
                                 </svg>
@@ -360,7 +360,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#F6F6F6"
-                                    strokeWidth="6"
+                                    strokeWidth="3"
                                   />
                                   <path
                                     d="M18 2.0845
@@ -368,7 +368,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke={MACRO_COLORS.fat}
-                                    strokeWidth="6"
+                                    strokeWidth="3"
                                     strokeDasharray={`${fatPercent}, 100`}
                                   />
                                 </svg>
