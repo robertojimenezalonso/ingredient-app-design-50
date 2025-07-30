@@ -209,10 +209,10 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none px-3 py-2 mb-3 flex items-center" style={{
+            <Card className="border-none px-3 py-2 mb-3" style={{
           backgroundColor: '#F6F6F6'
         }}>
-              <div className="flex items-center justify-between w-full" style={{
+              <div className="space-y-2" style={{
             backgroundColor: '#F6F6F6'
           }}>
                 <h3 className="text-sm text-black capitalize font-semibold underline underline-offset-4">
@@ -235,38 +235,41 @@ export const CategoryCarousel = ({
               const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
               const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
               const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
-              return dayRecipes.length > 0 ? <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" style={{
-                    filter: 'brightness(0) saturate(100%) invert(38%) sepia(0%) saturate(0%) hue-rotate(176deg) brightness(95%) contrast(90%)'
-                  }} />
-                        <span className="text-sm font-normal" style={{
-                    color: '#6C6C6C'
-                  }}>{totalCalories} kcal</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" style={{
-                    filter: 'grayscale(100%) brightness(0.5)'
-                  }} />
-                        <span className="text-sm font-normal" style={{
-                    color: '#6C6C6C'
-                  }}>{totalProtein}g</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" style={{
-                    filter: 'grayscale(100%) brightness(0.5)'
-                  }} />
-                        <span className="text-sm font-normal" style={{
-                    color: '#6C6C6C'
-                  }}>{totalCarbs}g</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" style={{
-                    filter: 'grayscale(100%) brightness(0.5)'
-                  }} />
-                        <span className="text-sm font-normal" style={{
-                    color: '#6C6C6C'
-                  }}>{totalFat}g</span>
+              return dayRecipes.length > 0 ? <div className="space-y-1">
+                      <span className="text-xs font-medium" style={{ color: '#6C6C6C' }}>Total día/ración:</span>
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-1">
+                          <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" style={{
+                      filter: 'brightness(0) saturate(100%) invert(38%) sepia(0%) saturate(0%) hue-rotate(176deg) brightness(95%) contrast(90%)'
+                    }} />
+                          <span className="text-sm font-normal" style={{
+                      color: '#6C6C6C'
+                    }}>{totalCalories} kcal</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" style={{
+                      filter: 'grayscale(100%) brightness(0.5)'
+                    }} />
+                          <span className="text-sm font-normal" style={{
+                      color: '#6C6C6C'
+                    }}>{totalProtein}g</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" style={{
+                      filter: 'grayscale(100%) brightness(0.5)'
+                    }} />
+                          <span className="text-sm font-normal" style={{
+                      color: '#6C6C6C'
+                    }}>{totalCarbs}g</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" style={{
+                      filter: 'grayscale(100%) brightness(0.5)'
+                    }} />
+                          <span className="text-sm font-normal" style={{
+                      color: '#6C6C6C'
+                    }}>{totalFat}g</span>
+                        </div>
                       </div>
                     </div> : null;
             })()}
