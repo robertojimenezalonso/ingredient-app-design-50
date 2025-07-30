@@ -209,10 +209,9 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none px-3 py-2 mb-3 flex items-center relative" style={{
+            <Card className="border-none px-3 py-2 mb-3 flex items-center" style={{
           backgroundColor: '#F6F6F6'
         }}>
-              <Plus className="absolute top-2 right-2 h-4 w-4 text-gray-400" />
               <div className="flex items-center justify-between w-full" style={{
             backgroundColor: '#F6F6F6'
           }}>
@@ -239,7 +238,7 @@ export const CategoryCarousel = ({
               return dayRecipes.length > 0 ? <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" style={{
-                    filter: 'grayscale(100%) brightness(0.5)'
+                    filter: 'brightness(0) saturate(100%) invert(38%) sepia(0%) saturate(0%) hue-rotate(176deg) brightness(95%) contrast(90%)'
                   }} />
                         <span className="text-sm font-normal" style={{
                     color: '#6C6C6C'
