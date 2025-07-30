@@ -1,7 +1,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { Card, CardContent } from './ui/card';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface MacroDonutChartProps {
   recipes: Recipe[];
@@ -245,17 +245,25 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     requestAnimationFrame(animate);
   }, [currentRecipes]);
 
-  // Calcular micronutrientes por persona
-  const micronutrients = currentRecipes.reduce((acc, recipe) => {
-    const servings = recipe.servings || 1;
-    acc.fiber += Math.round((recipe.nutrition?.fiber || 0) / servings);
-    acc.sugar += Math.round((recipe.nutrition?.sugar || 0) / servings);
-    acc.vitaminC += Math.round(Math.random() * 80 + 20); // Estimación
-    acc.calcium += Math.round(Math.random() * 200 + 100); // Estimación
-    acc.iron += Math.round(Math.random() * 10 + 5); // Estimación
-    acc.sodium += Math.round(Math.random() * 500 + 200); // Estimación
-    return acc;
-  }, { fiber: 0, sugar: 0, vitaminC: 0, calcium: 0, iron: 0, sodium: 0 });
+  // Calcular micronutrientes por persona - usando useMemo para evitar que cambien constantemente
+  const micronutrients = useMemo(() => {
+    const recipeIds = currentRecipes.map(r => r.id).join(',');
+    // Crear un seed basado en los IDs de las recetas para valores consistentes
+    const seed = recipeIds.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+    
+    return currentRecipes.reduce((acc, recipe) => {
+      const servings = recipe.servings || 1;
+      const recipeSeed = seed + recipe.id.length;
+      
+      acc.fiber += Math.round((recipe.nutrition?.fiber || 0) / servings);
+      acc.sugar += Math.round((recipe.nutrition?.sugar || 0) / servings);
+      acc.vitaminC += Math.round((recipeSeed % 60) + 20); // Estimación basada en seed
+      acc.calcium += Math.round((recipeSeed % 150) + 100); // Estimación basada en seed
+      acc.iron += Math.round((recipeSeed % 8) + 5); // Estimación basada en seed
+      acc.sodium += Math.round((recipeSeed % 400) + 200); // Estimación basada en seed
+      return acc;
+    }, { fiber: 0, sugar: 0, vitaminC: 0, calcium: 0, iron: 0, sodium: 0 });
+  }, [currentRecipes]);
 
   const handleCardSwipe = (direction: 'left' | 'right') => {
     if (direction === 'right' && currentCardIndex < 1) {
@@ -298,92 +306,28 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
           />
         </div>
       </div>
-      <div className="relative">
-        <Card className="mb-3 -mt-1">
-          <CardContent className="p-3">
-            {currentCardIndex === 0 ? (
-              // Card 1: Macronutrientes
-              <div className="flex items-center gap-6">
-                {/* Pie Chart a la izquierda */}
-                <div className="w-24 h-24 flex-shrink-0">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={chartData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={25}
-                        outerRadius={45}
-                        paddingAngle={2}
-                        dataKey="value"
-                        startAngle={90}
-                        endAngle={90 + animationProgress}
-                      >
-                        {chartData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-
-                {/* Indicadores a la derecha */}
-                <div className="flex-1 space-y-2">
-                  {chartData.map((macro) => (
-                    <div key={macro.name} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <img 
-                          src={macro.name === 'Proteínas' ? MACRO_ICONS.protein : 
-                               macro.name === 'Carbohidratos' ? MACRO_ICONS.carbs : 
-                               MACRO_ICONS.fat}
-                          alt={macro.name.toLowerCase()}
-                          className="h-4 w-4"
-                        />
-                        <span className="text-sm font-normal">{macro.percentage}%</span>
-                        <span className="text-sm text-muted-foreground font-normal">{macro.name}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              // Card 2: Micronutrientes por persona
-              <div>
-                <h3 className="text-base font-medium text-foreground mb-3">Micronutrientes por persona</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Fibra</span>
-                    <span className="text-sm font-normal">{micronutrients.fiber}g</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Azúcar</span>
-                    <span className="text-sm font-normal">{micronutrients.sugar}g</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Vitamina C</span>
-                    <span className="text-sm font-normal">{micronutrients.vitaminC}mg</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Calcio</span>
-                    <span className="text-sm font-normal">{micronutrients.calcium}mg</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Hierro</span>
-                    <span className="text-sm font-normal">{micronutrients.iron}mg</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Sodio</span>
-                    <span className="text-sm font-normal">{micronutrients.sodium}mg</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Navegación táctil invisible */}
-        <div 
-          className="absolute inset-0 flex"
+      <Card className="mb-3 -mt-1 relative">
+        <CardContent 
+          className="p-3"
+          onTouchStart={(e) => {
+            const startX = e.touches[0].clientX;
+            const handleTouchEnd = (endEvent: TouchEvent) => {
+              const endX = endEvent.changedTouches[0].clientX;
+              const diff = startX - endX;
+              
+              if (Math.abs(diff) > 50) { // Mínimo desplazamiento para activar swipe
+                if (diff > 0) {
+                  handleCardSwipe('right');
+                } else {
+                  handleCardSwipe('left');
+                }
+              }
+              
+              document.removeEventListener('touchend', handleTouchEnd);
+            };
+            
+            document.addEventListener('touchend', handleTouchEnd);
+          }}
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
@@ -395,24 +339,108 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
               handleCardSwipe('left');
             }
           }}
-        />
+        >
+          {currentCardIndex === 0 ? (
+            // Card 1: Macronutrientes
+            <div className="flex items-center gap-6">
+              {/* Pie Chart a la izquierda */}
+              <div className="w-24 h-24 flex-shrink-0">
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={chartData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={25}
+                      outerRadius={45}
+                      paddingAngle={2}
+                      dataKey="value"
+                      startAngle={90}
+                      endAngle={90 + animationProgress}
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
 
-        {/* Indicadores circulares */}
-        <div className="flex justify-center gap-2 mt-2">
+              {/* Indicadores a la derecha */}
+              <div className="flex-1 space-y-2">
+                {chartData.map((macro) => (
+                  <div key={macro.name} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <img 
+                        src={macro.name === 'Proteínas' ? MACRO_ICONS.protein : 
+                             macro.name === 'Carbohidratos' ? MACRO_ICONS.carbs : 
+                             MACRO_ICONS.fat}
+                        alt={macro.name.toLowerCase()}
+                        className="h-4 w-4"
+                      />
+                      <span className="text-sm font-normal">{macro.percentage}%</span>
+                      <span className="text-sm text-muted-foreground font-normal">{macro.name}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            // Card 2: Micronutrientes por persona
+            <div>
+              <h3 className="text-base font-medium text-foreground mb-3">Micronutrientes por persona</h3>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Fibra</span>
+                  <span className="text-sm font-normal">{micronutrients.fiber}g</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Azúcar</span>
+                  <span className="text-sm font-normal">{micronutrients.sugar}g</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Vitamina C</span>
+                  <span className="text-sm font-normal">{micronutrients.vitaminC}mg</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Calcio</span>
+                  <span className="text-sm font-normal">{micronutrients.calcium}mg</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Hierro</span>
+                  <span className="text-sm font-normal">{micronutrients.iron}mg</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-muted-foreground">Sodio</span>
+                  <span className="text-sm font-normal">{micronutrients.sodium}mg</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </CardContent>
+        
+        {/* Indicadores circulares dentro de la card */}
+        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
           <div 
-            className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
+            className={`w-1.5 h-1.5 rounded-full transition-colors cursor-pointer ${
               currentCardIndex === 0 ? 'bg-primary' : 'bg-muted-foreground/30'
             }`}
-            onClick={() => setCurrentCardIndex(0)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentCardIndex(0);
+            }}
           />
           <div 
-            className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
+            className={`w-1.5 h-1.5 rounded-full transition-colors cursor-pointer ${
               currentCardIndex === 1 ? 'bg-primary' : 'bg-muted-foreground/30'
             }`}
-            onClick={() => setCurrentCardIndex(1)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setCurrentCardIndex(1);
+            }}
           />
         </div>
-      </div>
+      </Card>
     </div>
   );
 };
