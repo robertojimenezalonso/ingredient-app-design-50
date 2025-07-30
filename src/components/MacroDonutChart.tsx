@@ -269,7 +269,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
           {/* Gráfico de rosco a la izquierda */}
           <div className="w-24 h-24 flex-shrink-0">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
+              <PieChart key={`pie-chart-${currentRecipes.map(r => r.id).join('-')}`}>
                 <Pie
                   data={chartData}
                   cx="50%"
