@@ -237,51 +237,7 @@ export const CategoryCarousel = ({
               const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
               const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
               const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
-              const totalCaloriesFromMacros = (totalProtein * 4) + (totalCarbs * 4) + (totalFat * 9);
-              const proteinPercentage = totalCaloriesFromMacros > 0 ? Math.round((totalProtein * 4) / totalCaloriesFromMacros * 100) : 0;
-              const carbsPercentage = totalCaloriesFromMacros > 0 ? Math.round((totalCarbs * 4) / totalCaloriesFromMacros * 100) : 0;
-              const fatPercentage = totalCaloriesFromMacros > 0 ? Math.round((totalFat * 9) / totalCaloriesFromMacros * 100) : 0;
-              
-              return dayRecipes.length > 0 ? <div className="mb-3 p-2 bg-white rounded-md">
-                        <div className="flex items-center gap-4">
-                          <div className="flex items-center gap-1">
-                            <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" style={{
-                        filter: 'brightness(0) saturate(100%) invert(38%) sepia(0%) saturate(0%) hue-rotate(176deg) brightness(95%) contrast(90%)'
-                      }} />
-                            <span className="text-sm font-normal" style={{
-                        color: '#6C6C6C'
-                      }}>{totalCalories} kcal</span>
-                          </div>
-                          <div className="flex-1 relative">
-                            <div className="flex h-6 bg-gray-200 rounded-full overflow-hidden">
-                              <div 
-                                className="h-full bg-red-500 flex items-center justify-center relative" 
-                                style={{ width: `${proteinPercentage}%` }}
-                              >
-                                {proteinPercentage > 15 && (
-                                  <span className="text-xs font-medium text-white">{totalProtein}g</span>
-                                )}
-                              </div>
-                              <div 
-                                className="h-full bg-yellow-500 flex items-center justify-center relative" 
-                                style={{ width: `${carbsPercentage}%` }}
-                              >
-                                {carbsPercentage > 15 && (
-                                  <span className="text-xs font-medium text-white">{totalCarbs}g</span>
-                                )}
-                              </div>
-                              <div 
-                                className="h-full bg-blue-500 flex items-center justify-center relative" 
-                                style={{ width: `${fatPercentage}%` }}
-                              >
-                                {fatPercentage > 15 && (
-                                  <span className="text-xs font-medium text-white">{totalFat}g</span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div> : null;
+              return null;
             })()}
             <div className="space-y-3">
               {meals.filter(({
