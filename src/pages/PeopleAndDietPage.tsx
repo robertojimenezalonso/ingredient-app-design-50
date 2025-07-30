@@ -163,7 +163,7 @@ const PeopleAndDietPage = () => {
             <Button 
               onClick={handleGeneratePlan} 
               disabled={!canContinue || isGenerating} 
-              className="w-full bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating/90 disabled:opacity-100 disabled:bg-[hsl(346,20%,90%)] disabled:text-white rounded-lg py-3 h-auto text-base font-semibold"
+              className="w-full bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating/90 disabled:opacity-100 disabled:bg-[#e5e7eb] disabled:text-white rounded-lg py-3 h-auto text-base font-semibold"
             >
               <div className="flex items-center justify-center gap-3">
                 <span>{isGenerating ? 'Generando recetas con IA...' : 'Generar plan'}</span>
