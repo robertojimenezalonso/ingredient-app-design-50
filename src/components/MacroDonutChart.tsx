@@ -251,23 +251,23 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     }
   }, [canGoPrevious, canGoNext, isGenerating, onNavigationDataChange]);
 
-  // Activar animación progresiva solo cuando shouldAnimate es true
+  // Activar animación única y optimizada
   useEffect(() => {
-    if (!shouldAnimate) {
-      setAnimationProgress(360); // Mostrar completo sin animación
+    if (!shouldAnimate || isGenerating) {
+      setAnimationProgress(360);
       return;
     }
 
     setAnimationProgress(0);
-    const duration = 1200; // Duración total de la animación
-    const steps = 60; // Número de pasos para una animación suave
+    const duration = 800; // Duración más corta para mejor rendimiento
+    const steps = 30; // Menos pasos para reducir carga
     const stepDuration = duration / steps;
     
     let step = 0;
     const interval = setInterval(() => {
       step++;
       const progress = Math.min(step / steps, 1);
-      setAnimationProgress(progress * 360); // De 0 a 360 grados
+      setAnimationProgress(progress * 360);
       
       if (step >= steps) {
         clearInterval(interval);
@@ -275,36 +275,7 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     }, stepDuration);
     
     return () => clearInterval(interval);
-  }, [currentRecipes, shouldAnimate]);
-
-  // Activar animación cuando se presiona "Cambiar recetas"
-  useEffect(() => {
-    if (isGenerating) {
-      setAnimationProgress(0);
-      const timer = setTimeout(() => {
-        if (shouldAnimate) {
-          const duration = 1200;
-          const steps = 60;
-          const stepDuration = duration / steps;
-          
-          let step = 0;
-          const interval = setInterval(() => {
-            step++;
-            const progress = Math.min(step / steps, 1);
-            setAnimationProgress(progress * 360);
-            
-            if (step >= steps) {
-              clearInterval(interval);
-            }
-          }, stepDuration);
-        } else {
-          setAnimationProgress(360);
-        }
-      }, 1500); // Después de que termine la generación
-      
-      return () => clearTimeout(timer);
-    }
-  }, [isGenerating, shouldAnimate]);
+  }, [currentRecipes, shouldAnimate, isGenerating]);
 
   return (
     <div>
