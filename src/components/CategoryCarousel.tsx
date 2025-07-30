@@ -237,6 +237,11 @@ export const CategoryCarousel = ({
               const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
               const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
               const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
+              const totalCaloriesFromMacros = (totalProtein * 4) + (totalCarbs * 4) + (totalFat * 9);
+              const proteinPercentage = totalCaloriesFromMacros > 0 ? Math.round((totalProtein * 4) / totalCaloriesFromMacros * 100) : 0;
+              const carbsPercentage = totalCaloriesFromMacros > 0 ? Math.round((totalCarbs * 4) / totalCaloriesFromMacros * 100) : 0;
+              const fatPercentage = totalCaloriesFromMacros > 0 ? Math.round((totalFat * 9) / totalCaloriesFromMacros * 100) : 0;
+              
               return dayRecipes.length > 0 ? <div className="mb-3 p-2 bg-white rounded-md">
                         <div className="flex items-center gap-4">
                           <div className="flex items-center gap-1">
@@ -247,29 +252,29 @@ export const CategoryCarousel = ({
                         color: '#6C6C6C'
                       }}>{totalCalories} kcal</span>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" style={{
-                        filter: 'grayscale(100%) brightness(0.5)'
-                      }} />
-                            <span className="text-sm font-normal" style={{
-                        color: '#6C6C6C'
-                      }}>{totalProtein}g</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" style={{
-                        filter: 'grayscale(100%) brightness(0.5)'
-                      }} />
-                            <span className="text-sm font-normal" style={{
-                        color: '#6C6C6C'
-                      }}>{totalCarbs}g</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" style={{
-                        filter: 'grayscale(100%) brightness(0.5)'
-                      }} />
-                            <span className="text-sm font-normal" style={{
-                        color: '#6C6C6C'
-                      }}>{totalFat}g</span>
+                          <div className="flex-1 flex items-center gap-2">
+                            <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden flex">
+                              <div 
+                                className="h-full bg-red-500" 
+                                style={{ width: `${proteinPercentage}%` }}
+                                title={`Proteínas: ${proteinPercentage}%`}
+                              />
+                              <div 
+                                className="h-full bg-yellow-500" 
+                                style={{ width: `${carbsPercentage}%` }}
+                                title={`Carbohidratos: ${carbsPercentage}%`}
+                              />
+                              <div 
+                                className="h-full bg-blue-500" 
+                                style={{ width: `${fatPercentage}%` }}
+                                title={`Grasas: ${fatPercentage}%`}
+                              />
+                            </div>
+                            <div className="flex items-center gap-2 text-xs">
+                              <span style={{ color: '#ef4444' }}>{proteinPercentage}%</span>
+                              <span style={{ color: '#eab308' }}>{carbsPercentage}%</span>
+                              <span style={{ color: '#3b82f6' }}>{fatPercentage}%</span>
+                            </div>
                           </div>
                         </div>
                       </div> : null;
