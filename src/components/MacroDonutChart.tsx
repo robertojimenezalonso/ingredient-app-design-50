@@ -29,21 +29,13 @@ const MACRO_ICONS = {
   fat: '/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png'
 };
 
-const MACRO_LABELS = {
-  protein: 'Proteínas',
-  carbs: 'Carbohidratos',
-  fat: 'Grasas'
-};
-
 export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChange, onNavigationDataChange }: MacroDonutChartProps) => {
   const [planHistory, setPlanHistory] = useState<Recipe[][]>([recipes]);
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [animationProgress, setAnimationProgress] = useState(0);
 
   const currentRecipes = planHistory[currentPlanIndex] || recipes;
 
-  // Generar recetas completas para demostración
   const generateExampleRecipes = (): Recipe[] => {
     const exampleRecipes: Recipe[] = [
       {
@@ -120,7 +112,6 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
       }
     ];
     
-    // Variar un poco los macros y precios para cada generación
     const variation = Math.random() * 10 + 5;
     const timeVariation = Math.floor(Math.random() * 10) - 5;
     
@@ -143,8 +134,6 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
 
   const handleGenerate = async () => {
     setIsGenerating(true);
-    
-    // Simular tiempo de generación
     await new Promise(resolve => setTimeout(resolve, 1500));
     
     const newRecipes = generateExampleRecipes();
@@ -157,25 +146,6 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     }
     
     setIsGenerating(false);
-    
-    // Activar animación después de generar nuevas recetas
-    setAnimationProgress(0);
-    setTimeout(() => {
-      const duration = 1200;
-      const steps = 60;
-      const stepDuration = duration / steps;
-      
-      let step = 0;
-      const interval = setInterval(() => {
-        step++;
-        const progress = Math.min(step / steps, 1);
-        setAnimationProgress(progress * 360);
-        
-        if (step >= steps) {
-          clearInterval(interval);
-        }
-      }, stepDuration);
-    }, 100);
   };
 
   const handlePrevious = () => {
@@ -251,32 +221,6 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     }
   }, [canGoPrevious, canGoNext, isGenerating, onNavigationDataChange]);
 
-  // Activar animación única y optimizada
-  useEffect(() => {
-    if (!shouldAnimate || isGenerating) {
-      setAnimationProgress(360);
-      return;
-    }
-
-    setAnimationProgress(0);
-    const duration = 800; // Duración más corta para mejor rendimiento
-    const steps = 30; // Menos pasos para reducir carga
-    const stepDuration = duration / steps;
-    
-    let step = 0;
-    const interval = setInterval(() => {
-      step++;
-      const progress = Math.min(step / steps, 1);
-      setAnimationProgress(progress * 360);
-      
-      if (step >= steps) {
-        clearInterval(interval);
-      }
-    }, stepDuration);
-    
-    return () => clearInterval(interval);
-  }, [currentRecipes, shouldAnimate, isGenerating]);
-
   return (
     <div>
       <h2 className="text-xl font-medium text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
@@ -311,13 +255,12 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
         </div>
       </div>
       <Card className="mb-3 -mt-1">
-      <CardContent className="p-3">
-        <div className="flex items-center gap-6 pointer-events-none">
-          {/* Gráfico de rosco a la izquierda */}
-          <div className="w-24 h-24 flex-shrink-0 relative">
-            {!isGenerating && (
+        <CardContent className="p-3">
+          <div className="flex items-center gap-6">
+            {/* Gráfico de rosco a la izquierda */}
+            <div className="w-24 h-24 flex-shrink-0">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart key={`chart-${currentPlanIndex}-${currentRecipes.length}`}>
+                <PieChart>
                   <Pie
                     data={chartData}
                     cx="50%"
@@ -326,11 +269,8 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
                     outerRadius={45}
                     paddingAngle={2}
                     dataKey="value"
-                    startAngle={270}
-                    endAngle={270 + animationProgress}
-                    animationBegin={0}
-                    animationDuration={0}
-                    isAnimationActive={false}
+                    startAngle={90}
+                    endAngle={450}
                   >
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
@@ -338,30 +278,29 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
                   </Pie>
                 </PieChart>
               </ResponsiveContainer>
-            )}
-          </div>
+            </div>
 
-          {/* Detalles a la derecha */}
-          <div className="flex-1 space-y-2">
-            {chartData.map((macro) => (
-              <div key={macro.name} className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <img 
-                    src={macro.name === 'Proteínas' ? MACRO_ICONS.protein : 
-                         macro.name === 'Carbohidratos' ? MACRO_ICONS.carbs : 
-                         MACRO_ICONS.fat}
-                    alt={macro.name.toLowerCase()}
-                    className="h-4 w-4"
-                  />
-                  <span className="text-sm font-normal">{macro.percentage}%</span>
-                  <span className="text-sm text-muted-foreground font-normal">{macro.name}</span>
+            {/* Detalles a la derecha */}
+            <div className="flex-1 space-y-2">
+              {chartData.map((macro) => (
+                <div key={macro.name} className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <img 
+                      src={macro.name === 'Proteínas' ? MACRO_ICONS.protein : 
+                           macro.name === 'Carbohidratos' ? MACRO_ICONS.carbs : 
+                           MACRO_ICONS.fat}
+                      alt={macro.name.toLowerCase()}
+                      className="h-4 w-4"
+                    />
+                    <span className="text-sm font-normal">{macro.percentage}%</span>
+                    <span className="text-sm text-muted-foreground font-normal">{macro.name}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
-      </CardContent>
-    </Card>
+        </CardContent>
+      </Card>
     </div>
   );
 };
