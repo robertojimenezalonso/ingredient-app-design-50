@@ -212,7 +212,7 @@ export const CategoryCarousel = ({
             <Card className="border-none px-3 py-2 mb-3" style={{
           backgroundColor: '#F6F6F6'
         }}>
-              <div style={{
+              <div className="flex items-center justify-between" style={{
             backgroundColor: '#F6F6F6'
           }}>
                 <h3 className="text-sm text-black capitalize font-semibold underline underline-offset-4">
@@ -220,6 +220,9 @@ export const CategoryCarousel = ({
                 locale: es
               }).toLowerCase()}
                 </h3>
+                <button className="text-gray-600 hover:text-gray-800 transition-colors">
+                  <Plus size={20} />
+                </button>
               </div>
             </Card>
             {(() => {
