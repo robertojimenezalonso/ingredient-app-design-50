@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Plus, Search, MoreHorizontal, Beef, Wheat, Droplet } from 'lucide-react';
+import { ChevronRight, Plus, Search, MoreHorizontal } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
 import { MacroDonutChart } from './MacroDonutChart';
@@ -34,6 +34,18 @@ const mealCategoryMap: Record<string, CategoryType> = {
   'Almuerzo': 'lunch',
   'Cena': 'dinner',
   'Tentempié': 'snacks'
+};
+
+const MACRO_COLORS = {
+  protein: '#DE6968',
+  carbs: '#DE9A69', 
+  fat: '#6998DD'
+};
+
+const MACRO_ICONS = {
+  protein: '/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png',
+  carbs: '/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png',
+  fat: '/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png'
 };
 export const CategoryCarousel = ({
   category,
@@ -287,7 +299,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 31.831
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
-                                    stroke="#fee2e2"
+                                    stroke="#F6F6F6"
                                     strokeWidth="6"
                                   />
                                   <path
@@ -295,13 +307,13 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 31.831
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
-                                    stroke="#ef4444"
+                                    stroke={MACRO_COLORS.protein}
                                     strokeWidth="6"
                                     strokeDasharray={`${proteinPercent}, 100`}
                                   />
                                 </svg>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                  <Beef size={16} className="text-red-500" />
+                                  <img src={MACRO_ICONS.protein} alt="Proteínas" className="w-4 h-4" />
                                 </div>
                               </div>
                             </Card>
@@ -317,7 +329,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 31.831
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
-                                    stroke="#fed7aa"
+                                    stroke="#F6F6F6"
                                     strokeWidth="6"
                                   />
                                   <path
@@ -325,13 +337,13 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 31.831
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
-                                    stroke="#f97316"
+                                    stroke={MACRO_COLORS.carbs}
                                     strokeWidth="6"
                                     strokeDasharray={`${carbsPercent}, 100`}
                                   />
                                 </svg>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                  <Wheat size={16} className="text-orange-500" />
+                                  <img src={MACRO_ICONS.carbs} alt="Carbohidratos" className="w-4 h-4" />
                                 </div>
                               </div>
                             </Card>
@@ -347,7 +359,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 31.831
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
-                                    stroke="#dbeafe"
+                                    stroke="#F6F6F6"
                                     strokeWidth="6"
                                   />
                                   <path
@@ -355,13 +367,13 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 31.831
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
-                                    stroke="#3b82f6"
+                                    stroke={MACRO_COLORS.fat}
                                     strokeWidth="6"
                                     strokeDasharray={`${fatPercent}, 100`}
                                   />
                                 </svg>
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                  <Droplet size={16} className="text-blue-500" />
+                                  <img src={MACRO_ICONS.fat} alt="Grasas" className="w-4 h-4" />
                                 </div>
                               </div>
                             </Card>
