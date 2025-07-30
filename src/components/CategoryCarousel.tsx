@@ -277,9 +277,9 @@ export const CategoryCarousel = ({
                         return (
                           <>
                             {/* Proteínas */}
-                            <Card className="p-3 text-center">
-                              <div className="text-sm font-semibold">{totalProtein}g</div>
-                              <div className="text-xs text-gray-600 mb-2">Proteínas</div>
+                            <Card className="p-3">
+                              <div className="text-sm font-semibold text-left">{totalProtein}g</div>
+                              <div className="text-xs text-gray-600 mb-2 text-left">Proteínas</div>
                               <div className="relative w-12 h-12 mx-auto">
                                 <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
                                   <path
@@ -288,7 +288,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#fee2e2"
-                                    strokeWidth="3"
+                                    strokeWidth="6"
                                   />
                                   <path
                                     d="M18 2.0845
@@ -296,7 +296,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#ef4444"
-                                    strokeWidth="3"
+                                    strokeWidth="6"
                                     strokeDasharray={`${proteinPercent}, 100`}
                                   />
                                 </svg>
@@ -304,9 +304,9 @@ export const CategoryCarousel = ({
                             </Card>
                             
                             {/* Carbohidratos */}
-                            <Card className="p-3 text-center">
-                              <div className="text-sm font-semibold">{totalCarbs}g</div>
-                              <div className="text-xs text-gray-600 mb-2">Carbohidratos</div>
+                            <Card className="p-3">
+                              <div className="text-sm font-semibold text-left">{totalCarbs}g</div>
+                              <div className="text-xs text-gray-600 mb-2 text-left">Carbohidratos</div>
                               <div className="relative w-12 h-12 mx-auto">
                                 <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
                                   <path
@@ -315,7 +315,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#fed7aa"
-                                    strokeWidth="3"
+                                    strokeWidth="6"
                                   />
                                   <path
                                     d="M18 2.0845
@@ -323,7 +323,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#f97316"
-                                    strokeWidth="3"
+                                    strokeWidth="6"
                                     strokeDasharray={`${carbsPercent}, 100`}
                                   />
                                 </svg>
@@ -331,9 +331,9 @@ export const CategoryCarousel = ({
                             </Card>
                             
                             {/* Grasas */}
-                            <Card className="p-3 text-center">
-                              <div className="text-sm font-semibold">{totalFat}g</div>
-                              <div className="text-xs text-gray-600 mb-2">Grasas</div>
+                            <Card className="p-3">
+                              <div className="text-sm font-semibold text-left">{totalFat}g</div>
+                              <div className="text-xs text-gray-600 mb-2 text-left">Grasas</div>
                               <div className="relative w-12 h-12 mx-auto">
                                 <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
                                   <path
@@ -342,7 +342,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#dbeafe"
-                                    strokeWidth="3"
+                                    strokeWidth="6"
                                   />
                                   <path
                                     d="M18 2.0845
@@ -350,7 +350,7 @@ export const CategoryCarousel = ({
                                       a 15.9155 15.9155 0 0 1 0 -31.831"
                                     fill="none"
                                     stroke="#3b82f6"
-                                    strokeWidth="3"
+                                    strokeWidth="6"
                                     strokeDasharray={`${fatPercent}, 100`}
                                   />
                                 </svg>
