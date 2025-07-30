@@ -388,37 +388,42 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
           </CardContent>
           
           {/* Indicadores circulares dentro de la card */}
-          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex justify-center gap-1">
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex justify-center gap-1.5 z-10">
             <div 
-              className={`w-1.5 h-1.5 rounded-full transition-colors cursor-pointer ${
-                currentCardIndex === 0 ? 'bg-primary' : 'bg-muted-foreground/30'
+              className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
+                currentCardIndex === 0 ? 'bg-primary' : 'bg-muted-foreground/40'
               }`}
               onClick={() => setCurrentCardIndex(0)}
             />
             <div 
-              className={`w-1.5 h-1.5 rounded-full transition-colors cursor-pointer ${
-                currentCardIndex === 1 ? 'bg-primary' : 'bg-muted-foreground/30'
+              className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
+                currentCardIndex === 1 ? 'bg-primary' : 'bg-muted-foreground/40'
               }`}
               onClick={() => setCurrentCardIndex(1)}
             />
           </div>
-        </Card>
 
-        {/* Navegación táctil invisible - ajustada para no cubrir los indicadores */}
-        <div 
-          className="absolute inset-0 flex pb-6"
-          onClick={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const width = rect.width;
-            
-            if (clickX > width / 2) {
-              handleCardSwipe('right');
-            } else {
-              handleCardSwipe('left');
-            }
-          }}
-        />
+          {/* Navegación táctil solo dentro de la card */}
+          <div 
+            className="absolute inset-0 cursor-pointer"
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              const clickX = e.clientX - rect.left;
+              const clickY = e.clientY - rect.top;
+              const width = rect.width;
+              const height = rect.height;
+              
+              // Solo si el click no es en los indicadores (bottom 20px)
+              if (clickY < height - 20) {
+                if (clickX > width / 2) {
+                  handleCardSwipe('right');
+                } else {
+                  handleCardSwipe('left');
+                }
+              }
+            }}
+          />
+        </Card>
       </div>
     </div>
   );
