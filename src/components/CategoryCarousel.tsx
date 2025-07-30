@@ -238,7 +238,7 @@ export const CategoryCarousel = ({
               const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
               const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
               return dayRecipes.length > 0 ? <Card className="mb-3">
-                      <CardContent className="p-3">
+                      <CardContent className="p-2">
                         <div className="space-y-2">
                           <span className="text-xs font-medium" style={{ color: '#6C6C6C' }}>Día/persona:</span>
                           <div className="flex items-center gap-4">
