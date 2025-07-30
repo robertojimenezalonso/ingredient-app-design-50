@@ -240,7 +240,7 @@ export const CategoryCarousel = ({
               return dayRecipes.length > 0 ? <Card className="mb-3">
                       <CardContent className="p-3">
                         <div className="space-y-2">
-                          <span className="text-xs font-medium" style={{ color: '#6C6C6C' }}>Total día/ración:</span>
+                          <span className="text-xs font-medium" style={{ color: '#6C6C6C' }}>Día/persona:</span>
                           <div className="flex items-center gap-4">
                             <div className="flex items-center gap-1">
                               <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" style={{
