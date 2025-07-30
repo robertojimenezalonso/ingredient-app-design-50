@@ -1,3 +1,4 @@
+import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { Card, CardContent } from './ui/card';
 import { useState, useEffect } from 'react';
@@ -256,7 +257,30 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
       <Card className="mb-3 -mt-1">
         <CardContent className="p-3">
           <div className="flex items-center gap-6">
-            {/* Detalles */}
+            {/* Pie Chart a la izquierda */}
+            <div className="w-24 h-24 flex-shrink-0">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={25}
+                    outerRadius={45}
+                    paddingAngle={2}
+                    dataKey="value"
+                    startAngle={90}
+                    endAngle={450}
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Indicadores a la derecha */}
             <div className="flex-1 space-y-2">
               {chartData.map((macro) => (
                 <div key={macro.name} className="flex items-center justify-between">
