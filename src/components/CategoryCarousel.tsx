@@ -209,9 +209,10 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none px-3 py-2 mb-3 flex items-center" style={{
+            <Card className="border-none px-3 py-2 mb-3 flex items-center relative" style={{
           backgroundColor: '#F6F6F6'
         }}>
+              <Plus className="absolute top-2 right-2 h-4 w-4 text-gray-400" />
               <div className="flex items-center justify-between w-full" style={{
             backgroundColor: '#F6F6F6'
           }}>
