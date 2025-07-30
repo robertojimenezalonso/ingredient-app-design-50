@@ -1,7 +1,7 @@
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { Card, CardContent } from './ui/card';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 interface MacroDonutChartProps {
   recipes: Recipe[];
@@ -245,17 +245,24 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     requestAnimationFrame(animate);
   }, [currentRecipes]);
 
-  // Calcular micronutrientes por persona
-  const micronutrients = currentRecipes.reduce((acc, recipe) => {
-    const servings = recipe.servings || 1;
-    acc.fiber += Math.round((recipe.nutrition?.fiber || 0) / servings);
-    acc.sugar += Math.round((recipe.nutrition?.sugar || 0) / servings);
-    acc.vitaminC += Math.round(Math.random() * 80 + 20); // Estimación
-    acc.calcium += Math.round(Math.random() * 200 + 100); // Estimación
-    acc.iron += Math.round(Math.random() * 10 + 5); // Estimación
-    acc.sodium += Math.round(Math.random() * 500 + 200); // Estimación
-    return acc;
-  }, { fiber: 0, sugar: 0, vitaminC: 0, calcium: 0, iron: 0, sodium: 0 });
+  // Calcular micronutrientes por persona - usando useMemo para valores estables
+  const micronutrients = useMemo(() => {
+    return currentRecipes.reduce((acc, recipe) => {
+      const servings = recipe.servings || 1;
+      acc.fiber += Math.round((recipe.nutrition?.fiber || 0) / servings);
+      acc.sugar += Math.round((recipe.nutrition?.sugar || 0) / servings);
+      // Usar valores basados en el ID de la receta para consistencia
+      const recipeHash = recipe.id.split('').reduce((a, b) => {
+        a = ((a << 5) - a) + b.charCodeAt(0);
+        return a & a;
+      }, 0);
+      acc.vitaminC += Math.round(Math.abs(recipeHash % 60) + 20);
+      acc.calcium += Math.round(Math.abs((recipeHash * 2) % 150) + 100);
+      acc.iron += Math.round(Math.abs((recipeHash * 3) % 8) + 5);
+      acc.sodium += Math.round(Math.abs((recipeHash * 4) % 400) + 200);
+      return acc;
+    }, { fiber: 0, sugar: 0, vitaminC: 0, calcium: 0, iron: 0, sodium: 0 });
+  }, [currentRecipes]);
 
   const handleCardSwipe = (direction: 'left' | 'right') => {
     if (direction === 'right' && currentCardIndex < 1) {
@@ -299,7 +306,7 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
         </div>
       </div>
       <div className="relative">
-        <Card className="mb-3 -mt-1">
+        <Card className="mb-3 -mt-1 relative">
           <CardContent className="p-3">
             {currentCardIndex === 0 ? (
               // Card 1: Macronutrientes
@@ -379,11 +386,27 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
               </div>
             )}
           </CardContent>
+          
+          {/* Indicadores circulares dentro de la card */}
+          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex justify-center gap-1">
+            <div 
+              className={`w-1.5 h-1.5 rounded-full transition-colors cursor-pointer ${
+                currentCardIndex === 0 ? 'bg-primary' : 'bg-muted-foreground/30'
+              }`}
+              onClick={() => setCurrentCardIndex(0)}
+            />
+            <div 
+              className={`w-1.5 h-1.5 rounded-full transition-colors cursor-pointer ${
+                currentCardIndex === 1 ? 'bg-primary' : 'bg-muted-foreground/30'
+              }`}
+              onClick={() => setCurrentCardIndex(1)}
+            />
+          </div>
         </Card>
 
-        {/* Navegación táctil invisible */}
+        {/* Navegación táctil invisible - ajustada para no cubrir los indicadores */}
         <div 
-          className="absolute inset-0 flex"
+          className="absolute inset-0 flex pb-6"
           onClick={(e) => {
             const rect = e.currentTarget.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
@@ -396,22 +419,6 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
             }
           }}
         />
-
-        {/* Indicadores circulares */}
-        <div className="flex justify-center gap-2 mt-2">
-          <div 
-            className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
-              currentCardIndex === 0 ? 'bg-primary' : 'bg-muted-foreground/30'
-            }`}
-            onClick={() => setCurrentCardIndex(0)}
-          />
-          <div 
-            className={`w-2 h-2 rounded-full transition-colors cursor-pointer ${
-              currentCardIndex === 1 ? 'bg-primary' : 'bg-muted-foreground/30'
-            }`}
-            onClick={() => setCurrentCardIndex(1)}
-          />
-        </div>
       </div>
     </div>
   );
