@@ -261,93 +261,104 @@ export const CategoryCarousel = ({
                 return (
                   <div className="mt-4 space-y-4" style={{ backgroundColor: '#F6F6F6' }}>
                     {/* Calorías */}
-                    <div className="text-center">
+                    <Card className="p-4 text-center">
                       <div className="text-2xl font-bold text-black">{totalCalories}</div>
-                      <div className="text-sm text-gray-600">Calories total</div>
-                    </div>
+                      <div className="text-sm text-gray-600">Calorías totales</div>
+                    </Card>
                     
                     {/* Macros con gráficos circulares pequeños */}
-                    <div className="grid grid-cols-3 gap-4">
-                      {/* Proteínas */}
-                      <div className="text-center">
-                        <div className="relative w-12 h-12 mx-auto mb-2">
-                          <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
-                            <path
-                              d="M18 2.0845
-                                a 15.9155 15.9155 0 0 1 0 31.831
-                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                              fill="none"
-                              stroke="#fee2e2"
-                              strokeWidth="3"
-                            />
-                            <path
-                              d="M18 2.0845
-                                a 15.9155 15.9155 0 0 1 0 31.831
-                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                              fill="none"
-                              stroke="#ef4444"
-                              strokeWidth="3"
-                              strokeDasharray={`${Math.min(totalProtein / 2, 100)}, 100`}
-                            />
-                          </svg>
-                        </div>
-                        <div className="text-xs font-semibold">{totalProtein}g</div>
-                        <div className="text-xs text-gray-600">Protein</div>
-                      </div>
-                      
-                      {/* Carbohidratos */}
-                      <div className="text-center">
-                        <div className="relative w-12 h-12 mx-auto mb-2">
-                          <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
-                            <path
-                              d="M18 2.0845
-                                a 15.9155 15.9155 0 0 1 0 31.831
-                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                              fill="none"
-                              stroke="#fed7aa"
-                              strokeWidth="3"
-                            />
-                            <path
-                              d="M18 2.0845
-                                a 15.9155 15.9155 0 0 1 0 31.831
-                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                              fill="none"
-                              stroke="#f97316"
-                              strokeWidth="3"
-                              strokeDasharray={`${Math.min(totalCarbs / 3, 100)}, 100`}
-                            />
-                          </svg>
-                        </div>
-                        <div className="text-xs font-semibold">{totalCarbs}g</div>
-                        <div className="text-xs text-gray-600">Carbs</div>
-                      </div>
-                      
-                      {/* Grasas */}
-                      <div className="text-center">
-                        <div className="relative w-12 h-12 mx-auto mb-2">
-                          <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
-                            <path
-                              d="M18 2.0845
-                                a 15.9155 15.9155 0 0 1 0 31.831
-                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                              fill="none"
-                              stroke="#dbeafe"
-                              strokeWidth="3"
-                            />
-                            <path
-                              d="M18 2.0845
-                                a 15.9155 15.9155 0 0 1 0 31.831
-                                a 15.9155 15.9155 0 0 1 0 -31.831"
-                              fill="none"
-                              stroke="#3b82f6"
-                              strokeWidth="3"
-                              strokeDasharray={`${Math.min(totalFat / 1.5, 100)}, 100`}
-                            />
-                          </svg>
-                        </div>
-                        <div className="text-xs font-semibold">{totalFat}g</div>
-                        <div className="text-xs text-gray-600">Fats</div>
-                      </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      {(() => {
+                        const totalMacros = totalProtein + totalCarbs + totalFat;
+                        const proteinPercent = totalMacros > 0 ? (totalProtein / totalMacros) * 100 : 0;
+                        const carbsPercent = totalMacros > 0 ? (totalCarbs / totalMacros) * 100 : 0;
+                        const fatPercent = totalMacros > 0 ? (totalFat / totalMacros) * 100 : 0;
+                        
+                        return (
+                          <>
+                            {/* Proteínas */}
+                            <Card className="p-3 text-center">
+                              <div className="text-sm font-semibold">{totalProtein}g</div>
+                              <div className="text-xs text-gray-600 mb-2">Proteínas</div>
+                              <div className="relative w-12 h-12 mx-auto">
+                                <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#fee2e2"
+                                    strokeWidth="3"
+                                  />
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#ef4444"
+                                    strokeWidth="3"
+                                    strokeDasharray={`${proteinPercent}, 100`}
+                                  />
+                                </svg>
+                              </div>
+                            </Card>
+                            
+                            {/* Carbohidratos */}
+                            <Card className="p-3 text-center">
+                              <div className="text-sm font-semibold">{totalCarbs}g</div>
+                              <div className="text-xs text-gray-600 mb-2">Carbohidratos</div>
+                              <div className="relative w-12 h-12 mx-auto">
+                                <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#fed7aa"
+                                    strokeWidth="3"
+                                  />
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#f97316"
+                                    strokeWidth="3"
+                                    strokeDasharray={`${carbsPercent}, 100`}
+                                  />
+                                </svg>
+                              </div>
+                            </Card>
+                            
+                            {/* Grasas */}
+                            <Card className="p-3 text-center">
+                              <div className="text-sm font-semibold">{totalFat}g</div>
+                              <div className="text-xs text-gray-600 mb-2">Grasas</div>
+                              <div className="relative w-12 h-12 mx-auto">
+                                <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#dbeafe"
+                                    strokeWidth="3"
+                                  />
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#3b82f6"
+                                    strokeWidth="3"
+                                    strokeDasharray={`${fatPercent}, 100`}
+                                  />
+                                </svg>
+                              </div>
+                            </Card>
+                          </>
+                        );
+                      })()}
                     </div>
                   </div>
                 );
