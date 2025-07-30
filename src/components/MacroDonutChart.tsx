@@ -419,8 +419,8 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
           )}
         </CardContent>
         
-        {/* Indicadores circulares dentro de la card */}
-        <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+        {/* Indicadores circulares arriba a la derecha de la card */}
+        <div className="absolute top-2 right-2 flex gap-1">
           <div 
             className={`w-1.5 h-1.5 rounded-full transition-colors cursor-pointer ${
               currentCardIndex === 0 ? 'bg-primary' : 'bg-muted-foreground/30'
