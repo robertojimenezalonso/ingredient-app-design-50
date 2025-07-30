@@ -252,28 +252,32 @@ export const CategoryCarousel = ({
                         color: '#6C6C6C'
                       }}>{totalCalories} kcal</span>
                           </div>
-                          <div className="flex-1 flex items-center gap-2">
-                            <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden flex">
+                          <div className="flex-1 relative">
+                            <div className="flex h-6 bg-gray-200 rounded-full overflow-hidden">
                               <div 
-                                className="h-full bg-red-500" 
+                                className="h-full bg-red-500 flex items-center justify-center relative" 
                                 style={{ width: `${proteinPercentage}%` }}
-                                title={`Proteínas: ${proteinPercentage}%`}
-                              />
+                              >
+                                {proteinPercentage > 15 && (
+                                  <span className="text-xs font-medium text-white">{totalProtein}g</span>
+                                )}
+                              </div>
                               <div 
-                                className="h-full bg-yellow-500" 
+                                className="h-full bg-yellow-500 flex items-center justify-center relative" 
                                 style={{ width: `${carbsPercentage}%` }}
-                                title={`Carbohidratos: ${carbsPercentage}%`}
-                              />
+                              >
+                                {carbsPercentage > 15 && (
+                                  <span className="text-xs font-medium text-white">{totalCarbs}g</span>
+                                )}
+                              </div>
                               <div 
-                                className="h-full bg-blue-500" 
+                                className="h-full bg-blue-500 flex items-center justify-center relative" 
                                 style={{ width: `${fatPercentage}%` }}
-                                title={`Grasas: ${fatPercentage}%`}
-                              />
-                            </div>
-                            <div className="flex items-center gap-2 text-xs">
-                              <span style={{ color: '#ef4444' }}>{proteinPercentage}%</span>
-                              <span style={{ color: '#eab308' }}>{carbsPercentage}%</span>
-                              <span style={{ color: '#3b82f6' }}>{fatPercentage}%</span>
+                              >
+                                {fatPercentage > 15 && (
+                                  <span className="text-xs font-medium text-white">{totalFat}g</span>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
