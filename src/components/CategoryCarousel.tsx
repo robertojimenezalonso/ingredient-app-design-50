@@ -217,33 +217,26 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none px-3 mb-3 flex flex-col" style={{ backgroundColor: '#F6F6F6' }}>
-              <div className="flex items-center w-full py-2" style={{ backgroundColor: '#F6F6F6' }}>
+            <Card className="border-none px-3 py-2 mb-3 flex items-center" style={{ backgroundColor: '#F6F6F6' }}>
+              <div className="flex items-center justify-between w-full" style={{ backgroundColor: '#F6F6F6' }}>
                 <h3 className="text-sm text-black font-normal capitalize">
                   {format(date, "eee. d", {
                 locale: es
               }).toLowerCase()}
                 </h3>
-                <div className="flex items-center gap-1 ml-auto">
-                  <button className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
-                    <MoreHorizontal size={14} />
-                  </button>
-                </div>
-              </div>
-              {(() => {
-                const dayRecipes = meals.filter(({recipe, meal}) => {
-                  if (!recipe) return false;
-                  const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
-                  return !deletedRecipes.has(uniqueKey);
-                }).map(({recipe}) => recipe);
-                
-                const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
-                const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
-                const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
-                const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
-                
-                return dayRecipes.length > 0 ? (
-                  <div className="pb-2">
+                {(() => {
+                  const dayRecipes = meals.filter(({recipe, meal}) => {
+                    if (!recipe) return false;
+                    const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+                    return !deletedRecipes.has(uniqueKey);
+                  }).map(({recipe}) => recipe);
+                  
+                  const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
+                  const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
+                  const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
+                  const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
+                  
+                  return dayRecipes.length > 0 ? (
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-1">
                         <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" style={{ filter: 'grayscale(100%) brightness(0.5)' }} />
@@ -262,9 +255,14 @@ export const CategoryCarousel = ({
                         <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalFat}g</span>
                       </div>
                     </div>
-                  </div>
-                ) : null;
-              })()}
+                  ) : null;
+                })()}
+                <div className="flex items-center gap-1 ml-auto">
+                  <button className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
+                    <MoreHorizontal size={14} />
+                  </button>
+                </div>
+              </div>
             </Card>
             <div className="space-y-3">
               {meals.filter(({
