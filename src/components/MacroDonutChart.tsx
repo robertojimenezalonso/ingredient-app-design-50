@@ -1,4 +1,3 @@
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { Card, CardContent } from './ui/card';
 import { useState, useEffect } from 'react';
