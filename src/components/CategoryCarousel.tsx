@@ -244,11 +244,11 @@ export const CategoryCarousel = ({
                 
                 return dayRecipes.length > 0 ? (
                   <div className="pb-2">
-                    <div className="flex items-center gap-1 mb-2">
-                      <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-                      <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalCalories} kcal</span>
-                    </div>
                     <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1">
+                        <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                        <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalCalories} kcal</span>
+                      </div>
                       <div className="flex items-center gap-1">
                         <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
                         <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalProtein}g</span>
