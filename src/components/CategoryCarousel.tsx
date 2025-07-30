@@ -237,8 +237,7 @@ export const CategoryCarousel = ({
               const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
               const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
               const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
-              return dayRecipes.length > 0 ? <Card className="mb-3">
-                      <CardContent className="p-2">
+              return dayRecipes.length > 0 ? <div className="mb-3 p-2 bg-white rounded-md">
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-medium" style={{ color: '#6C6C6C' }}>Día/persona:</span>
                           <div className="flex items-center gap-4">
@@ -276,8 +275,7 @@ export const CategoryCarousel = ({
                             </div>
                           </div>
                         </div>
-                      </CardContent>
-                    </Card> : null;
+                      </div> : null;
             })()}
             <div className="space-y-3">
               {meals.filter(({
