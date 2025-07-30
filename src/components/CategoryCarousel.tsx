@@ -257,11 +257,6 @@ export const CategoryCarousel = ({
                     </div>
                   ) : null;
                 })()}
-                <div className="flex items-center gap-1 ml-auto">
-                  <button className="w-6 h-6 rounded-full flex items-center justify-center text-muted-foreground hover:bg-black/10">
-                    <MoreHorizontal size={14} />
-                  </button>
-                </div>
               </div>
             </Card>
             <div className="space-y-3">
