@@ -215,7 +215,7 @@ export const CategoryCarousel = ({
               <div className="flex items-center justify-between w-full" style={{
             backgroundColor: '#F6F6F6'
           }}>
-                <h3 className="text-sm text-black capitalize font-semibold underline underline-offset-2">
+                <h3 className="text-sm text-black capitalize font-semibold underline underline-offset-4">
                   {format(date, "eee. d", {
                 locale: es
               }).toLowerCase()}
