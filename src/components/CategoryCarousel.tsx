@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Plus, Search, MoreHorizontal } from 'lucide-react';
+import { ChevronRight, Plus, Search, MoreHorizontal, Beef, Wheat, Droplet } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
 import { MacroDonutChart } from './MacroDonutChart';
@@ -300,6 +300,9 @@ export const CategoryCarousel = ({
                                     strokeDasharray={`${proteinPercent}, 100`}
                                   />
                                 </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <Beef size={16} className="text-red-500" />
+                                </div>
                               </div>
                             </Card>
                             
@@ -327,6 +330,9 @@ export const CategoryCarousel = ({
                                     strokeDasharray={`${carbsPercent}, 100`}
                                   />
                                 </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <Wheat size={16} className="text-orange-500" />
+                                </div>
                               </div>
                             </Card>
                             
@@ -354,6 +360,9 @@ export const CategoryCarousel = ({
                                     strokeDasharray={`${fatPercent}, 100`}
                                   />
                                 </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <Droplet size={16} className="text-blue-500" />
+                                </div>
                               </div>
                             </Card>
                           </>
