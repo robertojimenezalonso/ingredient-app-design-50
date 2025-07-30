@@ -311,32 +311,34 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
         </div>
       </div>
       <Card className="mb-3 -mt-1">
-      <CardContent className="p-3 animate-fade-in">
+      <CardContent className="p-3">
         <div className="flex items-center gap-6 pointer-events-none">
           {/* Gráfico de rosco a la izquierda */}
-          <div className="w-24 h-24 flex-shrink-0">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart key={`pie-chart-${currentRecipes.map(r => r.id).join('-')}`}>
-                <Pie
-                  data={chartData}
-                  cx="50%"
-                  cy="50%"
-                  innerRadius={25}
-                  outerRadius={45}
-                  paddingAngle={2}
-                  dataKey="value"
-                  startAngle={90}
-                  endAngle={90 + animationProgress}
-                  animationBegin={0}
-                  animationDuration={0}
-                  isAnimationActive={false}
-                >
-                  {chartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
+          <div className="w-24 h-24 flex-shrink-0 relative">
+            {!isGenerating && (
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart key={`chart-${currentPlanIndex}-${currentRecipes.length}`}>
+                  <Pie
+                    data={chartData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={25}
+                    outerRadius={45}
+                    paddingAngle={2}
+                    dataKey="value"
+                    startAngle={270}
+                    endAngle={270 + animationProgress}
+                    animationBegin={0}
+                    animationDuration={0}
+                    isAnimationActive={false}
+                  >
+                    {chartData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                </PieChart>
+              </ResponsiveContainer>
+            )}
           </div>
 
           {/* Detalles a la derecha */}
