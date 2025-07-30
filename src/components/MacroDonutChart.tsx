@@ -38,6 +38,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
   const [planHistory, setPlanHistory] = useState<Recipe[][]>([recipes]);
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [shouldAnimate, setShouldAnimate] = useState(false);
 
   const currentRecipes = planHistory[currentPlanIndex] || recipes;
 
@@ -230,6 +231,15 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
     }
   }, [canGoPrevious, canGoNext, isGenerating, onNavigationDataChange]);
 
+  // Activar animación cuando se monta el componente o cambian las recetas
+  useEffect(() => {
+    setShouldAnimate(false);
+    const timer = setTimeout(() => {
+      setShouldAnimate(true);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [currentRecipes]);
+
   return (
     <div>
       <h2 className="text-xl font-medium text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
@@ -271,7 +281,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
             <ResponsiveContainer width="100%" height="100%">
               <PieChart key={`pie-chart-${currentRecipes.map(r => r.id).join('-')}`}>
                 <Pie
-                  data={chartData}
+                  data={shouldAnimate ? chartData : []}
                   cx="50%"
                   cy="50%"
                   innerRadius={25}
@@ -279,7 +289,7 @@ export const MacroDonutChart = ({ recipes, onRecipesChange, onNavigationDataChan
                   paddingAngle={2}
                   dataKey="value"
                   animationBegin={0}
-                  animationDuration={800}
+                  animationDuration={1000}
                   isAnimationActive={true}
                 >
                   {chartData.map((entry, index) => (
