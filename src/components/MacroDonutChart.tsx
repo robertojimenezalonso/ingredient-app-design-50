@@ -33,6 +33,7 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
   const [planHistory, setPlanHistory] = useState<Recipe[][]>([recipes]);
   const [currentPlanIndex, setCurrentPlanIndex] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [animationProgress, setAnimationProgress] = useState(0);
 
   const currentRecipes = planHistory[currentPlanIndex] || recipes;
 
@@ -221,6 +222,27 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     }
   }, [canGoPrevious, canGoNext, isGenerating, onNavigationDataChange]);
 
+  // Animación de carga del pie chart
+  useEffect(() => {
+    setAnimationProgress(0);
+    const duration = 1000;
+    const steps = 30;
+    const stepDuration = duration / steps;
+    
+    let step = 0;
+    const interval = setInterval(() => {
+      step++;
+      const progress = Math.min(step / steps, 1);
+      setAnimationProgress(progress * 360);
+      
+      if (step >= steps) {
+        clearInterval(interval);
+      }
+    }, stepDuration);
+    
+    return () => clearInterval(interval);
+  }, [currentRecipes]);
+
   return (
     <div>
       <h2 className="text-xl font-medium text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
@@ -270,7 +292,7 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
                     paddingAngle={2}
                     dataKey="value"
                     startAngle={90}
-                    endAngle={450}
+                    endAngle={90 + animationProgress}
                   >
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
