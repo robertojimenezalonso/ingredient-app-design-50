@@ -217,8 +217,8 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none h-8 px-3 mb-3 flex items-center" style={{ backgroundColor: '#F6F6F6' }}>
-              <div className="flex items-center w-full" style={{ backgroundColor: '#F6F6F6' }}>
+            <Card className="border-none px-3 mb-3 flex flex-col" style={{ backgroundColor: '#F6F6F6' }}>
+              <div className="flex items-center w-full py-2" style={{ backgroundColor: '#F6F6F6' }}>
                 <h3 className="text-sm text-black font-normal capitalize">
                   {format(date, "eee. d", {
                 locale: es
@@ -230,6 +230,41 @@ export const CategoryCarousel = ({
                   </button>
                 </div>
               </div>
+              {(() => {
+                const dayRecipes = meals.filter(({recipe, meal}) => {
+                  if (!recipe) return false;
+                  const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+                  return !deletedRecipes.has(uniqueKey);
+                }).map(({recipe}) => recipe);
+                
+                const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
+                const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
+                const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
+                const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
+                
+                return dayRecipes.length > 0 ? (
+                  <div className="pb-2">
+                    <div className="flex items-center gap-1 mb-2">
+                      <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                      <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalCalories} kcal</span>
+                    </div>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1">
+                        <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                        <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalProtein}g</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                        <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalCarbs}g</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                        <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalFat}g</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : null;
+              })()}
             </Card>
             <div className="space-y-3">
               {meals.filter(({
