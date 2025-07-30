@@ -245,7 +245,6 @@ export const CategoryCarousel = ({
                 return dayRecipes.length > 0 ? (
                   <div className="pb-2">
                     <div className="flex items-center gap-4">
-                      <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>Total por ración {dayRecipes.length} recetas:</span>
                       <div className="flex items-center gap-1">
                         <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
                         <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalCalories} kcal</span>
