@@ -289,7 +289,7 @@ export const CategoryCarousel = ({
                         return (
                           <>
                             {/* Proteínas */}
-                            <Card className="p-3">
+                            <Card className="p-3 bg-transparent shadow-none border-none">
                               <div className="text-sm font-semibold text-left">{totalProtein}g</div>
                               <div className="text-xs text-gray-600 mb-2 text-left">Proteínas</div>
                               <div className="relative w-12 h-12 mx-auto">
@@ -319,7 +319,7 @@ export const CategoryCarousel = ({
                             </Card>
                             
                             {/* Carbohidratos */}
-                            <Card className="p-3">
+                            <Card className="p-3 bg-transparent shadow-none border-none">
                               <div className="text-sm font-semibold text-left">{totalCarbs}g</div>
                               <div className="text-xs text-gray-600 mb-2 text-left">Carbohidratos</div>
                               <div className="relative w-12 h-12 mx-auto">
@@ -349,7 +349,7 @@ export const CategoryCarousel = ({
                             </Card>
                             
                             {/* Grasas */}
-                            <Card className="p-3">
+                            <Card className="p-3 bg-transparent shadow-none border-none">
                               <div className="text-sm font-semibold text-left">{totalFat}g</div>
                               <div className="text-xs text-gray-600 mb-2 text-left">Grasas</div>
                               <div className="relative w-12 h-12 mx-auto">
