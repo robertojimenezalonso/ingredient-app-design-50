@@ -62,6 +62,7 @@ export const CategoryCarousel = ({
     handleNext: () => void;
     handleGenerate: () => void;
   } | null>(null);
+  const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
 
   // Update current recipes when prop changes
   useEffect(() => {
@@ -179,6 +180,18 @@ export const CategoryCarousel = ({
     // Aquí puedes implementar la lógica de sustitución
     console.log('Sustituir receta:', recipe.title, 'en', dateStr, meal);
   };
+
+  const handleToggleDay = (dateStr: string) => {
+    setExpandedDays(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(dateStr)) {
+        newSet.delete(dateStr);
+      } else {
+        newSet.add(dateStr);
+      }
+      return newSet;
+    });
+  };
   // Calcular todas las recetas visibles para el gráfico de macros
   const allVisibleRecipes = mealPlan.flatMap(day => day.meals.filter(({
     recipe,
@@ -209,9 +222,11 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none px-3 py-2 mb-3" style={{
-          backgroundColor: '#F6F6F6'
-        }}>
+            <Card 
+              className="border-none px-3 py-2 mb-3 cursor-pointer" 
+              style={{ backgroundColor: '#F6F6F6' }}
+              onClick={() => handleToggleDay(dateStr)}
+            >
               <div className="flex items-center justify-between" style={{
             backgroundColor: '#F6F6F6'
           }}>
@@ -220,10 +235,123 @@ export const CategoryCarousel = ({
                 locale: es
               }).toLowerCase()}
                 </h3>
-                <button className="text-gray-600 hover:text-gray-800 transition-colors">
+                <button 
+                  className="text-gray-600 hover:text-gray-800 transition-colors"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    console.log('Añadir receta para', dateStr);
+                  }}
+                >
                   <Plus size={20} />
                 </button>
               </div>
+              
+              {expandedDays.has(dateStr) && (() => {
+                const dayRecipes = meals.filter(({ recipe, meal }) => {
+                  if (!recipe) return false;
+                  const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+                  return !deletedRecipes.has(uniqueKey);
+                }).map(({ recipe }) => recipe);
+                
+                const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
+                const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
+                const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
+                const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
+                
+                return (
+                  <div className="mt-4 space-y-4" style={{ backgroundColor: '#F6F6F6' }}>
+                    {/* Calorías */}
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-black">{totalCalories}</div>
+                      <div className="text-sm text-gray-600">Calories total</div>
+                    </div>
+                    
+                    {/* Macros con gráficos circulares pequeños */}
+                    <div className="grid grid-cols-3 gap-4">
+                      {/* Proteínas */}
+                      <div className="text-center">
+                        <div className="relative w-12 h-12 mx-auto mb-2">
+                          <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                            <path
+                              d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                              fill="none"
+                              stroke="#fee2e2"
+                              strokeWidth="3"
+                            />
+                            <path
+                              d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                              fill="none"
+                              stroke="#ef4444"
+                              strokeWidth="3"
+                              strokeDasharray={`${Math.min(totalProtein / 2, 100)}, 100`}
+                            />
+                          </svg>
+                        </div>
+                        <div className="text-xs font-semibold">{totalProtein}g</div>
+                        <div className="text-xs text-gray-600">Protein</div>
+                      </div>
+                      
+                      {/* Carbohidratos */}
+                      <div className="text-center">
+                        <div className="relative w-12 h-12 mx-auto mb-2">
+                          <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                            <path
+                              d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                              fill="none"
+                              stroke="#fed7aa"
+                              strokeWidth="3"
+                            />
+                            <path
+                              d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                              fill="none"
+                              stroke="#f97316"
+                              strokeWidth="3"
+                              strokeDasharray={`${Math.min(totalCarbs / 3, 100)}, 100`}
+                            />
+                          </svg>
+                        </div>
+                        <div className="text-xs font-semibold">{totalCarbs}g</div>
+                        <div className="text-xs text-gray-600">Carbs</div>
+                      </div>
+                      
+                      {/* Grasas */}
+                      <div className="text-center">
+                        <div className="relative w-12 h-12 mx-auto mb-2">
+                          <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                            <path
+                              d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                              fill="none"
+                              stroke="#dbeafe"
+                              strokeWidth="3"
+                            />
+                            <path
+                              d="M18 2.0845
+                                a 15.9155 15.9155 0 0 1 0 31.831
+                                a 15.9155 15.9155 0 0 1 0 -31.831"
+                              fill="none"
+                              stroke="#3b82f6"
+                              strokeWidth="3"
+                              strokeDasharray={`${Math.min(totalFat / 1.5, 100)}, 100`}
+                            />
+                          </svg>
+                        </div>
+                        <div className="text-xs font-semibold">{totalFat}g</div>
+                        <div className="text-xs text-gray-600">Fats</div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
             </Card>
             {(() => {
               const dayRecipes = meals.filter(({
