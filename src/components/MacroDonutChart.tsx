@@ -222,25 +222,26 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     }
   }, [canGoPrevious, canGoNext, isGenerating, onNavigationDataChange]);
 
-  // Animación de carga del pie chart
+  // Animación de carga del pie chart suave
   useEffect(() => {
     setAnimationProgress(0);
-    const duration = 1000;
-    const steps = 30;
-    const stepDuration = duration / steps;
+    const duration = 1200; // Duración en milisegundos
+    const startTime = Date.now();
     
-    let step = 0;
-    const interval = setInterval(() => {
-      step++;
-      const progress = Math.min(step / steps, 1);
-      setAnimationProgress(progress * 360);
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
       
-      if (step >= steps) {
-        clearInterval(interval);
+      // Función de easing para suavizar la animación
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+      setAnimationProgress(easeOutQuart * 360);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
       }
-    }, stepDuration);
+    };
     
-    return () => clearInterval(interval);
+    requestAnimationFrame(animate);
   }, [currentRecipes]);
 
   return (
