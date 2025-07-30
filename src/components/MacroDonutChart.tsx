@@ -294,6 +294,8 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
                     dataKey="value"
                     startAngle={90}
                     endAngle={90 + animationProgress}
+                    isAnimationActive={true}
+                    style={{ pointerEvents: 'none' }}
                   >
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
