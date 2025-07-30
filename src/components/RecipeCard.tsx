@@ -305,21 +305,21 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
         </div>
         <div className="mb-1.5">
           <div className="flex items-center gap-1 mb-2">
-            <Flame className="h-4 w-4 text-black" />
-            <span className="text-base text-black font-medium">{recipe.calories} kcal</span>
+            <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+            <span className="text-sm text-black font-normal">{recipe.calories} kcal</span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="flex items-center gap-1">
               <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
-              <span className="text-sm text-black font-medium">{recipe.macros.protein}g</span>
+              <span className="text-sm text-black font-normal">{recipe.macros.protein}g</span>
             </div>
             <div className="flex items-center gap-1">
               <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
-              <span className="text-sm text-black font-medium">{recipe.macros.carbs}g</span>
+              <span className="text-sm text-black font-normal">{recipe.macros.carbs}g</span>
             </div>
             <div className="flex items-center gap-1">
               <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
-              <span className="text-sm text-black font-medium">{recipe.macros.fat}g</span>
+              <span className="text-sm text-black font-normal">{recipe.macros.fat}g</span>
             </div>
           </div>
         </div>
