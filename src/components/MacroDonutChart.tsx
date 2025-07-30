@@ -354,8 +354,8 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
                   outerRadius={45}
                   paddingAngle={2}
                   dataKey="value"
-                  startAngle={-90}
-                  endAngle={-90 + animationProgress}
+                  startAngle={270}
+                  endAngle={270 + animationProgress}
                   animationBegin={0}
                   animationDuration={0}
                   isAnimationActive={false}
