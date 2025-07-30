@@ -10,7 +10,6 @@ import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-
 interface CategoryCarouselProps {
   category: CategoryType;
   recipes: Recipe[];
@@ -30,14 +29,12 @@ interface CategoryCarouselProps {
     [key: string]: HTMLDivElement | null;
   }>;
 }
-
 const mealCategoryMap: Record<string, CategoryType> = {
   'Desayuno': 'breakfast',
   'Almuerzo': 'lunch',
   'Cena': 'dinner',
   'Tentempié': 'snacks'
 };
-
 export const CategoryCarousel = ({
   category,
   recipes,
@@ -70,7 +67,6 @@ export const CategoryCarousel = ({
   useEffect(() => {
     setCurrentRecipes(recipes);
   }, [recipes]);
-
   const handleRecipesChange = (newRecipes: Recipe[]) => {
     setCurrentRecipes(newRecipes);
     // Clear deleted recipes when new recipes are generated
@@ -128,9 +124,8 @@ export const CategoryCarousel = ({
           'Cena': ['dinner', 'cena'],
           'Tentempié': ['snack', 'tentempie']
         };
-        
         const keywords = mealKeywords[meal] || [];
-        
+
         // Buscar una receta que contenga tanto la fecha como el tipo de comida
         selectedRecipe = currentRecipes.find(recipe => {
           const recipeId = recipe.id.toLowerCase();
@@ -185,29 +180,26 @@ export const CategoryCarousel = ({
     console.log('Sustituir receta:', recipe.title, 'en', dateStr, meal);
   };
   // Calcular todas las recetas visibles para el gráfico de macros
-  const allVisibleRecipes = mealPlan.flatMap(day => 
-    day.meals
-      .filter(({ recipe, meal }) => {
-        if (!recipe) return false;
-        const uniqueKey = `${day.dateStr}-${meal}-${recipe.id}`;
-        return !deletedRecipes.has(uniqueKey);
-      })
-      .map(({ recipe }) => recipe)
-  ).filter(Boolean) as Recipe[];
-
+  const allVisibleRecipes = mealPlan.flatMap(day => day.meals.filter(({
+    recipe,
+    meal
+  }) => {
+    if (!recipe) return false;
+    const uniqueKey = `${day.dateStr}-${meal}-${recipe.id}`;
+    return !deletedRecipes.has(uniqueKey);
+  }).map(({
+    recipe
+  }) => recipe)).filter(Boolean) as Recipe[];
   return <div className="mb-4">
-      <div className="px-4 space-y-6 pb-40 -mt-[76px]" style={{ backgroundColor: 'white' }}>
-        <MacroDonutChart 
-          recipes={allVisibleRecipes} 
-          shouldAnimate={config.shouldAnimateChart}
-          onRecipesChange={handleRecipesChange}
-          onNavigationDataChange={(data) => {
-            setNavigationData(data);
-            if (onNavigationDataChange) {
-              onNavigationDataChange(data);
-            }
-          }}
-        />
+      <div className="px-4 space-y-6 pb-40 -mt-[76px]" style={{
+      backgroundColor: 'white'
+    }}>
+        <MacroDonutChart recipes={allVisibleRecipes} shouldAnimate={config.shouldAnimateChart} onRecipesChange={handleRecipesChange} onNavigationDataChange={data => {
+        setNavigationData(data);
+        if (onNavigationDataChange) {
+          onNavigationDataChange(data);
+        }
+      }} />
         {mealPlan.map(({
         date,
         dateStr,
@@ -217,50 +209,19 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card className="border-none px-3 py-2 mb-3 flex items-center" style={{ backgroundColor: '#F6F6F6' }}>
-              <div className="flex items-center justify-between w-full" style={{ backgroundColor: '#F6F6F6' }}>
-                <h3 className="text-sm text-black font-normal capitalize">
+            <Card className="border-none px-3 py-2 mb-3 flex items-center" style={{
+          backgroundColor: '#F6F6F6'
+        }}>
+              <div className="flex items-center justify-between w-full" style={{
+            backgroundColor: '#F6F6F6'
+          }}>
+                <h3 className="text-sm text-black capitalize font-semibold">
                   {format(date, "eee. d", {
                 locale: es
               }).toLowerCase()}
                 </h3>
                 {(() => {
-                  const dayRecipes = meals.filter(({recipe, meal}) => {
-                    if (!recipe) return false;
-                    const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
-                    return !deletedRecipes.has(uniqueKey);
-                  }).map(({recipe}) => recipe);
-                  
-                  const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
-                  const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
-                  const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
-                  const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
-                  
-                  return dayRecipes.length > 0 ? (
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" style={{ filter: 'grayscale(100%) brightness(0.5)' }} />
-                        <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalCalories} kcal</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" style={{ filter: 'grayscale(100%) brightness(0.5)' }} />
-                        <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalProtein}g</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" style={{ filter: 'grayscale(100%) brightness(0.5)' }} />
-                        <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalCarbs}g</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" style={{ filter: 'grayscale(100%) brightness(0.5)' }} />
-                        <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{totalFat}g</span>
-                      </div>
-                    </div>
-                  ) : null;
-                })()}
-              </div>
-            </Card>
-            <div className="space-y-3">
-              {meals.filter(({
+              const dayRecipes = meals.filter(({
                 recipe,
                 meal
               }) => {
@@ -268,11 +229,61 @@ export const CategoryCarousel = ({
                 const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
                 return !deletedRecipes.has(uniqueKey);
               }).map(({
-                meal,
                 recipe
-              }) => (
-                recipe && <RecipeCard key={`${dateStr}-${meal}`} recipe={recipe} onAdd={onAddRecipe} onClick={onRecipeClick} onDelete={recipe => handleDeleteRecipe(recipe, dateStr, meal)} onSubstitute={recipe => handleSubstituteRecipe(recipe, dateStr, meal)} onSwipeStateChange={handleSwipeStateChange} shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id} mealType={meal} />
-              ))}
+              }) => recipe);
+              const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
+              const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
+              const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
+              const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
+              return dayRecipes.length > 0 ? <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1">
+                        <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" style={{
+                    filter: 'grayscale(100%) brightness(0.5)'
+                  }} />
+                        <span className="text-sm font-normal" style={{
+                    color: '#6C6C6C'
+                  }}>{totalCalories} kcal</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" style={{
+                    filter: 'grayscale(100%) brightness(0.5)'
+                  }} />
+                        <span className="text-sm font-normal" style={{
+                    color: '#6C6C6C'
+                  }}>{totalProtein}g</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" style={{
+                    filter: 'grayscale(100%) brightness(0.5)'
+                  }} />
+                        <span className="text-sm font-normal" style={{
+                    color: '#6C6C6C'
+                  }}>{totalCarbs}g</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" style={{
+                    filter: 'grayscale(100%) brightness(0.5)'
+                  }} />
+                        <span className="text-sm font-normal" style={{
+                    color: '#6C6C6C'
+                  }}>{totalFat}g</span>
+                      </div>
+                    </div> : null;
+            })()}
+              </div>
+            </Card>
+            <div className="space-y-3">
+              {meals.filter(({
+            recipe,
+            meal
+          }) => {
+            if (!recipe) return false;
+            const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+            return !deletedRecipes.has(uniqueKey);
+          }).map(({
+            meal,
+            recipe
+          }) => recipe && <RecipeCard key={`${dateStr}-${meal}`} recipe={recipe} onAdd={onAddRecipe} onClick={onRecipeClick} onDelete={recipe => handleDeleteRecipe(recipe, dateStr, meal)} onSubstitute={recipe => handleSubstituteRecipe(recipe, dateStr, meal)} onSwipeStateChange={handleSwipeStateChange} shouldResetSwipe={activeSwipedRecipe !== null && activeSwipedRecipe !== recipe.id} mealType={meal} />)}
             </div>
           </div>)}
       </div>
