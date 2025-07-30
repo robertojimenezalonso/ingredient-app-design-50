@@ -43,7 +43,7 @@ const InitialWelcomePage = () => {
         <div className="mt-8 space-y-3">
           <button 
             onClick={() => navigate('/calendar-selection')}
-            className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors"
+            className="w-full bg-btn-floating text-btn-floating-foreground py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-btn-floating/90 transition-colors"
           >
             Comenzar planificación
           </button>
