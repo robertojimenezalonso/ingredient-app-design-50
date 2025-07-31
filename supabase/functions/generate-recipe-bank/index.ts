@@ -70,7 +70,8 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Starting recipe bank generation with DALL-E images...');
+    const { category } = await req.json().catch(() => ({}));
+    console.log('Starting recipe bank generation with DALL-E images...', category ? `for category: ${category}` : 'for all categories');
     
     if (!openAIApiKey) {
       throw new Error('OpenAI API key not configured');
@@ -83,7 +84,7 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     // Complete recipe plan - 39 recipes total
-    const recipePlan = [
+    const allCategories = [
       { category: 'desayuno', count: 10 },
       { category: 'comida', count: 10 },
       { category: 'cena', count: 10 },
@@ -91,6 +92,11 @@ serve(async (req) => {
       { category: 'aperitivo', count: 3 },
       { category: 'merienda', count: 3 }
     ];
+
+    // Filter recipe plan based on category parameter
+    const recipePlan = category 
+      ? allCategories.filter(plan => plan.category === category)
+      : allCategories;
 
     const allGeneratedRecipes = [];
     let totalProcessed = 0;

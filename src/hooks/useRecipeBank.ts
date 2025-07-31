@@ -65,11 +65,13 @@ export const useRecipeBank = () => {
     }
   };
 
-  const generateRecipeBank = async () => {
+  const generateRecipeBank = async (category?: string) => {
     try {
       setIsGenerating(true);
       
-      const { data, error } = await supabase.functions.invoke('generate-recipe-bank');
+      const { data, error } = await supabase.functions.invoke('generate-recipe-bank', {
+        body: { category }
+      });
       
       if (error) {
         throw error;

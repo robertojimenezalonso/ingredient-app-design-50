@@ -18,17 +18,22 @@ export const RecipeBankManager = () => {
   const { toast } = useToast();
   const [showDetails, setShowDetails] = useState(false);
 
-  const handleGenerateBank = async () => {
+  const handleGenerateBank = async (category?: string) => {
     try {
-      await generateRecipeBank();
+      await generateRecipeBank(category);
+      const categoryName = category ? 
+        (category.charAt(0).toUpperCase() + category.slice(1)) : 
+        "Banco completo";
       toast({
-        title: "¡Banco de recetas generado!",
-        description: "Se han creado 39 recetas únicas con sus imágenes.",
+        title: `¡${categoryName} generado!`,
+        description: category ? 
+          `Se han creado recetas de ${categoryName.toLowerCase()} con sus imágenes.` :
+          "Se han creado 39 recetas únicas con sus imágenes.",
       });
     } catch (error) {
       toast({
         title: "Error al generar recetas",
-        description: "Hubo un problema generando el banco de recetas. Inténtalo de nuevo.",
+        description: "Hubo un problema generando las recetas. Inténtalo de nuevo.",
         variant: "destructive",
       });
     }
@@ -74,42 +79,95 @@ export const RecipeBankManager = () => {
             </Badge>
           </div>
 
-          <div className="flex gap-2">
-            <Button 
-              onClick={handleGenerateBank}
-              disabled={isGenerating || isLoading}
-              size="sm"
-            >
-              {isGenerating ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generando...
-                </>
-              ) : (
-                <>
-                  <ChefHat className="mr-2 h-4 w-4" />
-                  {totalRecipes === 0 ? 'Generar Banco' : 'Agregar Recetas'}
-                </>
-              )}
-            </Button>
-            
-            <Button 
-              variant="outline" 
-              onClick={loadRecipes}
-              disabled={isLoading}
-              size="sm"
-            >
-              <RefreshCw className="mr-2 h-4 w-4" />
-              Actualizar
-            </Button>
+          <div className="space-y-3">
+            <div className="flex gap-2 flex-wrap">
+              <Button 
+                onClick={() => handleGenerateBank()}
+                disabled={isGenerating || isLoading}
+                size="sm"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generando...
+                  </>
+                ) : (
+                  <>
+                    <ChefHat className="mr-2 h-4 w-4" />
+                    Generar Todo
+                  </>
+                )}
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                onClick={loadRecipes}
+                disabled={isLoading}
+                size="sm"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Actualizar
+              </Button>
 
-            <Button 
-              variant="ghost" 
-              onClick={() => setShowDetails(!showDetails)}
-              size="sm"
-            >
-              {showDetails ? 'Ocultar' : 'Ver'} Detalles
-            </Button>
+              <Button 
+                variant="ghost" 
+                onClick={() => setShowDetails(!showDetails)}
+                size="sm"
+              >
+                {showDetails ? 'Ocultar' : 'Ver'} Detalles
+              </Button>
+            </div>
+
+            <div className="flex gap-2 flex-wrap">
+              <Button 
+                onClick={() => handleGenerateBank('desayuno')}
+                disabled={isGenerating || isLoading}
+                size="sm"
+                variant="secondary"
+              >
+                Generar Desayunos
+              </Button>
+              <Button 
+                onClick={() => handleGenerateBank('comida')}
+                disabled={isGenerating || isLoading}
+                size="sm"
+                variant="secondary"
+              >
+                Generar Almuerzos
+              </Button>
+              <Button 
+                onClick={() => handleGenerateBank('cena')}
+                disabled={isGenerating || isLoading}
+                size="sm"
+                variant="secondary"
+              >
+                Generar Cenas
+              </Button>
+              <Button 
+                onClick={() => handleGenerateBank('snack')}
+                disabled={isGenerating || isLoading}
+                size="sm"
+                variant="secondary"
+              >
+                Generar Snacks
+              </Button>
+              <Button 
+                onClick={() => handleGenerateBank('aperitivo')}
+                disabled={isGenerating || isLoading}
+                size="sm"
+                variant="secondary"
+              >
+                Generar Aperitivos
+              </Button>
+              <Button 
+                onClick={() => handleGenerateBank('merienda')}
+                disabled={isGenerating || isLoading}
+                size="sm"
+                variant="secondary"
+              >
+                Generar Meriendas
+              </Button>
+            </div>
           </div>
 
           {showDetails && (
