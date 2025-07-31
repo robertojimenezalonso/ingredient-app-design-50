@@ -50,6 +50,7 @@ export const useRecipeBank = () => {
 
       if (error) {
         console.error('Error loading recipe bank:', error);
+        setIsLoading(false); // IMPORTANTE: Set loading to false even on error
         return;
       }
 
