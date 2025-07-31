@@ -166,39 +166,15 @@ export const CategoryCarousel = ({
         };
       }
 
-      // Si hay recetas de IA disponibles, buscar la receta específica para esta fecha y comida
+      // Si hay recetas pasadas como props (desde useDateTabs/base de datos), usar esas
       let selectedRecipe;
       if (currentRecipes && currentRecipes.length > 0) {
-        // Buscar receta que contenga la fecha y el tipo de comida en su ID
-        const mealKeywords = {
-          'Desayuno': ['breakfast', 'desayuno'],
-          'Almuerzo': ['lunch', 'almuerzo'],
-          'Cena': ['dinner', 'cena'],
-          'Tentempié': ['snack', 'tentempie'],
-          'Aperitivo': ['appetizer', 'aperitivo'],
-          'Snack': ['snack'],
-          'Merienda': ['snack', 'merienda']
-        };
-        const keywords = mealKeywords[meal] || [];
-
-        // Buscar una receta que contenga tanto la fecha como el tipo de comida
-        selectedRecipe = currentRecipes.find(recipe => {
-          const recipeId = recipe.id.toLowerCase();
-          const hasDate = recipeId.includes(dateStr);
-          const hasMeal = keywords.some(keyword => recipeId.includes(keyword));
-          return hasDate && hasMeal;
-        });
-
-        // Si no se encuentra una receta específica, usar la asignación por índice como fallback
-        if (!selectedRecipe) {
-          const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
-          selectedRecipe = currentRecipes[recipeIndex] || currentRecipes[recipeIndex % currentRecipes.length];
-          console.log(`CategoryCarousel: No specific recipe found for ${dateStr}-${meal}, using index ${recipeIndex}: ${selectedRecipe?.title}`);
-        } else {
-          console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
-        }
+        // Calcular el índice de la receta basado en día y comida
+        const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
+        selectedRecipe = currentRecipes[recipeIndex % currentRecipes.length];
+        console.log(`CategoryCarousel: Using database recipe for ${dateStr}-${meal}: ${selectedRecipe?.title}`);
       } else {
-        // Fallback a recetas de ejemplo si no hay recetas de IA
+        // Fallback a recetas de ejemplo si no hay recetas de la base de datos
         const categoryRecipes = getRecipesByCategory(categoryKey, 10);
         selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
         console.log('CategoryCarousel: Using example recipe for', meal, ':', selectedRecipe?.title);
