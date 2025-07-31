@@ -285,7 +285,7 @@ export const RecipeCard = ({ recipe, onAdd, onClick, onDelete, onSubstitute, onS
           src={recipe.image} 
           alt={recipe.title}
           className="w-[104px] h-[104px] object-cover rounded-lg"
-          fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=400"
+          category={recipe.category}
           placeholder={
             <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
           }
