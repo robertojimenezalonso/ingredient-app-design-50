@@ -143,12 +143,10 @@ export const CategoryCarousel = ({
     return null;
   }
 
-  // Generar el plan de comidas basado en dailyMeals
+  // Generar el plan de comidas
   const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
     const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
-    const selectedMealsForDay = dailyMeals[dateStr] || [];
-    
-    const dayMeals = selectedMealsForDay.map((meal, mealIndex) => {
+    const dayMeals = config.selectedMeals!.map((meal, mealIndex) => {
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
 
@@ -160,9 +158,7 @@ export const CategoryCarousel = ({
           'Desayuno': ['breakfast', 'desayuno'],
           'Almuerzo': ['lunch', 'almuerzo'],
           'Cena': ['dinner', 'cena'],
-          'Aperitivo': ['snack', 'aperitivo'],
-          'Snack': ['snack'],
-          'Merienda': ['snack', 'merienda']
+          'Tentempié': ['snack', 'tentempie']
         };
         const keywords = mealKeywords[meal] || [];
 
@@ -176,8 +172,8 @@ export const CategoryCarousel = ({
 
         // Si no se encuentra una receta específica, usar la asignación por índice como fallback
         if (!selectedRecipe) {
-          const recipeIndex = (dayIndex * selectedMealsForDay.length + mealIndex) % currentRecipes.length;
-          selectedRecipe = currentRecipes[recipeIndex];
+          const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
+          selectedRecipe = currentRecipes[recipeIndex] || currentRecipes[recipeIndex % currentRecipes.length];
           console.log(`CategoryCarousel: No specific recipe found for ${dateStr}-${meal}, using index ${recipeIndex}: ${selectedRecipe?.title}`);
         } else {
           console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
@@ -185,7 +181,7 @@ export const CategoryCarousel = ({
       } else {
         // Fallback a recetas de ejemplo si no hay recetas de IA
         const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-        selectedRecipe = categoryRecipes[mealIndex % categoryRecipes.length]; // Rotar por las recetas disponibles
+        selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
         console.log('CategoryCarousel: Using example recipe for', meal, ':', selectedRecipe?.title);
       }
       return {
@@ -193,7 +189,6 @@ export const CategoryCarousel = ({
         recipe: selectedRecipe
       };
     }).filter(Boolean);
-    
     return {
       date,
       dateStr,
@@ -320,14 +315,10 @@ export const CategoryCarousel = ({
                   className="text-gray-600 hover:text-gray-800 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleToggleDay(dateStr);
+                    console.log('Añadir receta para', dateStr);
                   }}
                 >
-                  {expandedDays.has(dateStr) ? (
-                    <X size={20} />
-                  ) : (
-                    <Plus size={20} />
-                  )}
+                  <Plus size={20} />
                 </button>
               </div>
               
@@ -337,20 +328,18 @@ export const CategoryCarousel = ({
                     {ALL_MEAL_TYPES.map((mealType) => {
                       const isSelected = dailyMeals[dateStr]?.includes(mealType) || false;
                       return (
-                        <button
+                        <Badge
                           key={mealType}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                          variant={isSelected ? "default" : "outline"}
+                          className={`cursor-pointer transition-colors ${
                             isSelected 
-                              ? "bg-black text-white" 
-                              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
+                              ? "bg-black text-white hover:bg-gray-800" 
+                              : "bg-white text-black border-gray-300 hover:bg-gray-50"
                           }`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleMealToggle(dateStr, mealType);
-                          }}
+                          onClick={() => handleMealToggle(dateStr, mealType)}
                         >
                           {mealType}
-                        </button>
+                        </Badge>
                       );
                     })}
                   </div>
