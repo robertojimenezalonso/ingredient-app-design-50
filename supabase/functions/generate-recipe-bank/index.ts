@@ -104,10 +104,28 @@ serve(async (req) => {
           totalProcessed++;
           console.log(`\n[${totalProcessed}/${totalToGenerate}] Generating recipe ${i + 1}/${plan.count} for ${plan.category}`);
           
-          // Generate recipe text
-          const recipePrompt = `Crea una receta de ${plan.category} para 1 persona.
+          // Generate recipe text with variety enforcement
+          const categoryInstructions = {
+            'desayuno': 'Crea recetas variadas como: smoothie bowls, tortillas, huevos revueltos, avena, yogur con granola, pancakes, etc. EVITA repetir tostadas.',
+            'comida': 'Crea recetas variadas como: ensaladas, sopas, pasta, arroz, pollo, pescado, legumbres, verduras salteadas, etc.',
+            'cena': 'Crea recetas variadas como: cremas, carnes magras, pescados, verduras al horno, ensaladas tibias, sopas ligeras, etc.',
+            'snack': 'Crea snacks saludables como: frutos secos, yogur, frutas, barritas caseras, etc.',
+            'aperitivo': 'Crea aperitivos como: hummus con vegetales, rollos de verduras, bruschettas variadas, etc.',
+            'merienda': 'Crea meriendas como: batidos, frutas con frutos secos, galletas caseras, etc.'
+          };
+
+          const recipePrompt = `Crea una receta ÚNICA y VARIADA de ${plan.category} para 1 persona.
+
+IMPORTANTE: ${categoryInstructions[plan.category] || 'Crea una receta original y variada.'}
+
+Cada receta debe ser completamente diferente en:
+- Tipo de preparación (NO solo tostadas)
+- Ingredientes principales
+- Técnica de cocción
+- Estilo culinario
+
 Incluye:
-• Título atractivo de la receta
+• Título atractivo y específico de la receta
 • Descripción breve y apetecible
 • Ingredientes con cantidades exactas para 1 persona
 • Pasos numerados para preparar la receta
@@ -118,7 +136,7 @@ Incluye:
 
 Responde en formato JSON con esta estructura exacta:
 {
-  "title": "Nombre de la receta",
+  "title": "Nombre específico de la receta",
   "description": "Descripción breve",
   "ingredients": [{"name": "ingrediente", "amount": "cantidad", "unit": "unidad"}],
   "instructions": ["paso 1", "paso 2"],
@@ -128,7 +146,7 @@ Responde en formato JSON con esta estructura exacta:
   "micronutrients": {"vitamina_c": "valor mg", "calcio": "valor mg", "hierro": "valor mg"}
 }
 
-La receta debe ser original, deliciosa y diferente de las anteriores.`;
+RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostada.`;
 
           console.log('Calling OpenAI for recipe generation...');
           const recipeResponse = await rateLimitedFetch('https://api.openai.com/v1/chat/completions', {
