@@ -101,7 +101,10 @@ export const DayMealSelector = ({
                   ? "bg-foreground/15 border-2 border-foreground text-foreground"
                   : "bg-white border-2 border-gray-300 text-foreground hover:bg-muted/50"
               )}
-              onClick={() => toggleMeal(meal)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMeal(meal);
+              }}
             >
               {meal}
             </Badge>
@@ -120,7 +123,10 @@ export const DayMealSelector = ({
                   ? "bg-foreground/15 border-2 border-foreground text-foreground"
                   : "bg-white border-2 border-gray-300 text-foreground hover:bg-muted/50"
               )}
-              onClick={() => toggleMeal(meal)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMeal(meal);
+              }}
             >
               {meal}
             </Badge>
