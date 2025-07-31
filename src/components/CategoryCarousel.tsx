@@ -138,9 +138,23 @@ export const CategoryCarousel = ({
   // Generar el plan de comidas
   const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
     const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
-    const dayMeals = config.selectedMeals!.map((meal, mealIndex) => {
+    
+    // Use day-specific meals if available, otherwise fall back to global config
+    const dayMeals = dayMealsConfig[dateStr] || config.selectedMeals!;
+    
+    const mealsForDay = dayMeals.map((meal, mealIndex) => {
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
+
+      // First check for day-specific recipes
+      const dayRecipeKey = `${dateStr}-${meal}`;
+      if (dayRecipes[dayRecipeKey]) {
+        console.log(`CategoryCarousel: Using day-specific recipe for ${dateStr}-${meal}: ${dayRecipes[dayRecipeKey].title}`);
+        return {
+          meal,
+          recipe: dayRecipes[dayRecipeKey]
+        };
+      }
 
       // Si hay recetas de IA disponibles, buscar la receta específica para esta fecha y comida
       let selectedRecipe;
@@ -150,7 +164,10 @@ export const CategoryCarousel = ({
           'Desayuno': ['breakfast', 'desayuno'],
           'Almuerzo': ['lunch', 'almuerzo'],
           'Cena': ['dinner', 'cena'],
-          'Tentempié': ['snack', 'tentempie']
+          'Tentempié': ['snack', 'tentempie'],
+          'Aperitivo': ['appetizer', 'aperitivo'],
+          'Snack': ['snack'],
+          'Merienda': ['snack', 'merienda']
         };
         const keywords = mealKeywords[meal] || [];
 
@@ -181,10 +198,11 @@ export const CategoryCarousel = ({
         recipe: selectedRecipe
       };
     }).filter(Boolean);
+    
     return {
       date,
       dateStr,
-      meals: dayMeals
+      meals: mealsForDay
     };
   });
   const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
@@ -241,6 +259,15 @@ export const CategoryCarousel = ({
         newDayRecipes[key] = recipe;
       });
       setDayRecipes(newDayRecipes);
+      
+      // Also add to current recipes array for immediate display
+      const updatedRecipes = [...currentRecipes, ...newRecipes];
+      setCurrentRecipes(updatedRecipes);
+      
+      // Notify parent component about the recipe change
+      if (onRecipesChange) {
+        onRecipesChange(updatedRecipes);
+      }
     }
   };
 
