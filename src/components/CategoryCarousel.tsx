@@ -1,13 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Plus, Search, MoreHorizontal, X } from 'lucide-react';
+import { ChevronRight, Plus, Search, MoreHorizontal } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
 import { MacroDonutChart } from './MacroDonutChart';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Separator } from './ui/separator';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
-import { Badge } from './ui/badge';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from './ui/alert-dialog';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
 import { format } from 'date-fns';
@@ -35,12 +33,8 @@ const mealCategoryMap: Record<string, CategoryType> = {
   'Desayuno': 'breakfast',
   'Almuerzo': 'lunch',
   'Cena': 'dinner',
-  'Aperitivo': 'snacks',
-  'Snack': 'snacks',
-  'Merienda': 'snacks'
+  'Tentempié': 'snacks'
 };
-
-const ALL_MEAL_TYPES = ['Desayuno', 'Almuerzo', 'Cena', 'Aperitivo', 'Snack', 'Merienda'];
 
 const MACRO_COLORS = {
   protein: '#DE6968',
@@ -81,23 +75,6 @@ export const CategoryCarousel = ({
     handleGenerate: () => void;
   } | null>(null);
   const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
-  const [dailyMeals, setDailyMeals] = useState<Record<string, string[]>>({});
-  const [confirmDelete, setConfirmDelete] = useState<{
-    isOpen: boolean;
-    dateStr: string;
-    mealType: string;
-  }>({ isOpen: false, dateStr: '', mealType: '' });
-
-  // Initialize daily meals from user config
-  useEffect(() => {
-    if (config.selectedDates && config.selectedMeals) {
-      const initialDailyMeals: Record<string, string[]> = {};
-      config.selectedDates.forEach(dateStr => {
-        initialDailyMeals[dateStr] = [...config.selectedMeals!];
-      });
-      setDailyMeals(initialDailyMeals);
-    }
-  }, [config.selectedDates, config.selectedMeals]);
 
   // Update current recipes when prop changes
   useEffect(() => {
@@ -227,47 +204,6 @@ export const CategoryCarousel = ({
       return newSet;
     });
   };
-
-  const handleMealToggle = (dateStr: string, mealType: string) => {
-    const currentMeals = dailyMeals[dateStr] || [];
-    
-    if (currentMeals.includes(mealType)) {
-      // Si la comida está seleccionada, mostrar popup de confirmación
-      setConfirmDelete({
-        isOpen: true,
-        dateStr,
-        mealType
-      });
-    } else {
-      // Si no está seleccionada, añadirla y generar una nueva receta
-      setDailyMeals(prev => ({
-        ...prev,
-        [dateStr]: [...currentMeals, mealType]
-      }));
-      
-      // Generar una nueva receta para esta comida
-      // Por ahora usamos una receta de ejemplo, en el futuro se conectará con IA
-      const categoryKey = mealCategoryMap[mealType];
-      if (categoryKey) {
-        const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-        const newRecipe = categoryRecipes[Math.floor(Math.random() * categoryRecipes.length)];
-        console.log(`Generated new recipe for ${mealType} on ${dateStr}:`, newRecipe?.title);
-      }
-    }
-  };
-
-  const confirmDeleteMeal = () => {
-    const { dateStr, mealType } = confirmDelete;
-    setDailyMeals(prev => ({
-      ...prev,
-      [dateStr]: prev[dateStr]?.filter(meal => meal !== mealType) || []
-    }));
-    setConfirmDelete({ isOpen: false, dateStr: '', mealType: '' });
-  };
-
-  const cancelDeleteMeal = () => {
-    setConfirmDelete({ isOpen: false, dateStr: '', mealType: '' });
-  };
   // Calcular todas las recetas visibles para el gráfico de macros
   const allVisibleRecipes = mealPlan.flatMap(day => day.meals.filter(({
     recipe,
@@ -322,29 +258,132 @@ export const CategoryCarousel = ({
                 </button>
               </div>
               
-              {expandedDays.has(dateStr) && (
-                <div className="mt-4 space-y-4" style={{ backgroundColor: '#F6F6F6' }}>
-                  <div className="flex flex-wrap gap-2">
-                    {ALL_MEAL_TYPES.map((mealType) => {
-                      const isSelected = dailyMeals[dateStr]?.includes(mealType) || false;
-                      return (
-                        <Badge
-                          key={mealType}
-                          variant={isSelected ? "default" : "outline"}
-                          className={`cursor-pointer transition-colors ${
-                            isSelected 
-                              ? "bg-black text-white hover:bg-gray-800" 
-                              : "bg-white text-black border-gray-300 hover:bg-gray-50"
-                          }`}
-                          onClick={() => handleMealToggle(dateStr, mealType)}
-                        >
-                          {mealType}
-                        </Badge>
-                      );
-                    })}
+              {expandedDays.has(dateStr) && (() => {
+                const dayRecipes = meals.filter(({ recipe, meal }) => {
+                  if (!recipe) return false;
+                  const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+                  return !deletedRecipes.has(uniqueKey);
+                }).map(({ recipe }) => recipe);
+                
+                const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
+                const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
+                const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
+                const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
+                
+                return (
+                  <div className="mt-4 space-y-4" style={{ backgroundColor: '#F6F6F6' }}>
+                    {/* Calorías */}
+                    <Card className="p-4 text-center">
+                      <div className="text-2xl font-bold text-black">{totalCalories}</div>
+                      <div className="text-sm text-gray-600">Calorías totales</div>
+                    </Card>
+                    
+                    {/* Macros con gráficos circulares pequeños */}
+                    <div className="grid grid-cols-3 gap-3">
+                      {(() => {
+                        const totalMacros = totalProtein + totalCarbs + totalFat;
+                        const proteinPercent = totalMacros > 0 ? (totalProtein / totalMacros) * 100 : 0;
+                        const carbsPercent = totalMacros > 0 ? (totalCarbs / totalMacros) * 100 : 0;
+                        const fatPercent = totalMacros > 0 ? (totalFat / totalMacros) * 100 : 0;
+                        
+                        return (
+                          <>
+                            {/* Proteínas */}
+                            <Card className="p-3 bg-transparent shadow-none border-none">
+                              <div className="text-sm font-semibold text-left">{totalProtein}g</div>
+                              <div className="text-xs text-gray-600 mb-2 text-left">Proteínas</div>
+                              <div className="relative w-12 h-12 mx-auto">
+                                <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#F6F6F6"
+                                    strokeWidth="3"
+                                  />
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke={MACRO_COLORS.protein}
+                                    strokeWidth="3"
+                                    strokeDasharray={`${proteinPercent}, 100`}
+                                  />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <img src={MACRO_ICONS.protein} alt="Proteínas" className="w-4 h-4" />
+                                </div>
+                              </div>
+                            </Card>
+                            
+                            {/* Carbohidratos */}
+                            <Card className="p-3 bg-transparent shadow-none border-none">
+                              <div className="text-sm font-semibold text-left">{totalCarbs}g</div>
+                              <div className="text-xs text-gray-600 mb-2 text-left">Carbohidratos</div>
+                              <div className="relative w-12 h-12 mx-auto">
+                                <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#F6F6F6"
+                                    strokeWidth="3"
+                                  />
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke={MACRO_COLORS.carbs}
+                                    strokeWidth="3"
+                                    strokeDasharray={`${carbsPercent}, 100`}
+                                  />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <img src={MACRO_ICONS.carbs} alt="Carbohidratos" className="w-4 h-4" />
+                                </div>
+                              </div>
+                            </Card>
+                            
+                            {/* Grasas */}
+                            <Card className="p-3 bg-transparent shadow-none border-none">
+                              <div className="text-sm font-semibold text-left">{totalFat}g</div>
+                              <div className="text-xs text-gray-600 mb-2 text-left">Grasas</div>
+                              <div className="relative w-12 h-12 mx-auto">
+                                <svg className="w-12 h-12 transform -rotate-90" viewBox="0 0 36 36">
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke="#F6F6F6"
+                                    strokeWidth="3"
+                                  />
+                                  <path
+                                    d="M18 2.0845
+                                      a 15.9155 15.9155 0 0 1 0 31.831
+                                      a 15.9155 15.9155 0 0 1 0 -31.831"
+                                    fill="none"
+                                    stroke={MACRO_COLORS.fat}
+                                    strokeWidth="3"
+                                    strokeDasharray={`${fatPercent}, 100`}
+                                  />
+                                </svg>
+                                <div className="absolute inset-0 flex items-center justify-center">
+                                  <img src={MACRO_ICONS.fat} alt="Grasas" className="w-4 h-4" />
+                                </div>
+                              </div>
+                            </Card>
+                          </>
+                        );
+                      })()}
+                    </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
             </Card>
             {(() => {
               const dayRecipes = meals.filter(({
@@ -370,8 +409,7 @@ export const CategoryCarousel = ({
           }) => {
             if (!recipe) return false;
             const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
-            const isSelectedMeal = dailyMeals[dateStr]?.includes(meal) || false;
-            return !deletedRecipes.has(uniqueKey) && isSelectedMeal;
+            return !deletedRecipes.has(uniqueKey);
           }).map(({
             meal,
             recipe
@@ -380,20 +418,5 @@ export const CategoryCarousel = ({
           </div>)}
       </div>
       
-      {/* Popup de confirmación */}
-      <AlertDialog open={confirmDelete.isOpen} onOpenChange={cancelDeleteMeal}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Eliminar comida</AlertDialogTitle>
-            <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar la receta de {confirmDelete.mealType} para este día?
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={cancelDeleteMeal}>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteMeal}>Eliminar</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>;
 };
