@@ -114,9 +114,10 @@ serve(async (req) => {
             'merienda': 'Crea meriendas como: batidos, frutas con frutos secos, galletas caseras, etc.'
           };
 
-          const recipePrompt = `Crea una receta ÚNICA y VARIADA de ${plan.category} para 1 persona.
+          const currentCategory = plan.category;
+          const recipePrompt = `Crea una receta ÚNICA y VARIADA de ${currentCategory} para 1 persona.
 
-IMPORTANTE: ${categoryInstructions[plan.category] || 'Crea una receta original y variada.'}
+IMPORTANTE: ${categoryInstructions[currentCategory] || 'Crea una receta original y variada.'}
 
 Cada receta debe ser completamente diferente en:
 - Tipo de preparación (NO solo tostadas)
@@ -200,12 +201,13 @@ RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostad
 
           // Save to database
           console.log('Saving to database...');
+          console.log(`Saving recipe "${recipe.title}" with category: ${currentCategory}`);
           const { error: insertError } = await supabase
             .from('recipe_bank')
             .insert({
               title: recipe.title,
               description: recipe.description,
-              category: plan.category,
+              category: currentCategory,
               image_url: imageUrl,
               preparation_time: recipe.preparationTime,
               calories: recipe.calories,
@@ -223,7 +225,7 @@ RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostad
 
           allGeneratedRecipes.push({
             title: recipe.title,
-            category: plan.category,
+            category: currentCategory,
             imageUrl
           });
 
