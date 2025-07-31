@@ -20,9 +20,9 @@ interface RecipeData {
   preparationTime: number;
   calories: number;
   macronutrients: {
-    protein: number;
-    fat: number;
-    carbs: number;
+    protein: { grams: number; percentage: number };
+    fat: { grams: number; percentage: number };
+    carbs: { grams: number; percentage: number };
   };
   micronutrients: Record<string, string>;
 }
@@ -132,8 +132,13 @@ Incluye:
 • Pasos numerados para preparar la receta
 • Tiempo estimado de preparación (en minutos)
 • Calorías aproximadas
-• Macronutrientes (proteínas, grasas, carbohidratos, en gramos)
+• Macronutrientes en gramos Y en porcentaje del aporte calórico total
 • Micronutrientes (al menos vitaminas y minerales principales)
+
+IMPORTANTE para macronutrientes:
+- Proporciona los valores en gramos por ración
+- Calcula también el porcentaje del aporte calórico total de cada macro
+- Recuerda: 1g proteína = 4 kcal, 1g carbohidratos = 4 kcal, 1g grasa = 9 kcal
 
 Responde en formato JSON con esta estructura exacta:
 {
@@ -143,7 +148,11 @@ Responde en formato JSON con esta estructura exacta:
   "instructions": ["paso 1", "paso 2"],
   "preparationTime": número_en_minutos,
   "calories": número_calorías,
-  "macronutrients": {"protein": gramos, "fat": gramos, "carbs": gramos},
+  "macronutrients": {
+    "protein": {"grams": gramos, "percentage": porcentaje_calorico},
+    "fat": {"grams": gramos, "percentage": porcentaje_calorico},
+    "carbs": {"grams": gramos, "percentage": porcentaje_calorico}
+  },
   "micronutrients": {"vitamina_c": "valor mg", "calcio": "valor mg", "hierro": "valor mg"}
 }
 
