@@ -28,6 +28,12 @@ export const useDateTabs = () => {
     console.log('useDateTabs: config.selectedMeals =', config.selectedMeals);
     console.log('useDateTabs: isLoading =', isLoading);
     console.log('useDateTabs: recipes.length =', recipes.length);
+    console.log('useDateTabs: Condition check:', {
+      hasSelectedDates: !!config.selectedDates,
+      hasSelectedMeals: !!config.selectedMeals,
+      notLoading: !isLoading,
+      hasRecipes: recipes.length > 0
+    });
     
     if (config.selectedDates && config.selectedMeals && !isLoading && recipes.length > 0) {
       console.log('useDateTabs: Generating meal plan...');
