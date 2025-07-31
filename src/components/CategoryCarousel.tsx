@@ -384,7 +384,7 @@ export const CategoryCarousel = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar de mi plan</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar este {confirmDelete.mealType.toLowerCase()} del {format(new Date(confirmDelete.dateStr + 'T12:00:00'), "eeee d", { locale: es })}?
+              ¿Estás seguro de que quieres eliminar este {confirmDelete.mealType.toLowerCase()}{confirmDelete.dateStr ? ` del ${format(new Date(confirmDelete.dateStr + 'T12:00:00'), "eeee d", { locale: es })}` : ''}?
             </AlertDialogDescription>
           </AlertDialogHeader>
           
