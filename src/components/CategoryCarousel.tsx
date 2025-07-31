@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { ChevronRight, Plus, Search, MoreHorizontal } from 'lucide-react';
+import { ChevronRight, Plus, Minus, Search, MoreHorizontal } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
 import { MacroDonutChart } from './MacroDonutChart';
@@ -8,6 +8,8 @@ import { Separator } from './ui/separator';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
+import { DayMealSelector } from './DayMealSelector';
+import { DeleteRecipeDialog } from './DeleteRecipeDialog';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 interface CategoryCarouselProps {
@@ -75,6 +77,19 @@ export const CategoryCarousel = ({
     handleGenerate: () => void;
   } | null>(null);
   const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
+  const [dayMealsConfig, setDayMealsConfig] = useState<{[dateStr: string]: string[]}>({});
+  const [dayRecipes, setDayRecipes] = useState<{[key: string]: Recipe}>({});
+  const [deleteDialog, setDeleteDialog] = useState<{
+    isOpen: boolean;
+    recipe: Recipe | null;
+    dateStr: string;
+    mealType: string;
+  }>({
+    isOpen: false,
+    recipe: null,
+    dateStr: '',
+    mealType: ''
+  });
 
   // Update current recipes when prop changes
   useEffect(() => {
@@ -200,8 +215,80 @@ export const CategoryCarousel = ({
         newSet.delete(dateStr);
       } else {
         newSet.add(dateStr);
+        // Initialize day meals config with current user meals
+        if (!dayMealsConfig[dateStr]) {
+          setDayMealsConfig(prev => ({
+            ...prev,
+            [dateStr]: config.selectedMeals || []
+          }));
+        }
       }
       return newSet;
+    });
+  };
+
+  const handleDayMealsChange = (dateStr: string, meals: string[], newRecipes?: Recipe[]) => {
+    setDayMealsConfig(prev => ({
+      ...prev,
+      [dateStr]: meals
+    }));
+
+    if (newRecipes) {
+      const newDayRecipes = { ...dayRecipes };
+      newRecipes.forEach(recipe => {
+        const mealType = recipe.id.split('-')[1]; // Extract meal type from ID
+        const key = `${dateStr}-${mealType}`;
+        newDayRecipes[key] = recipe;
+      });
+      setDayRecipes(newDayRecipes);
+    }
+  };
+
+  const handleShowDeleteConfirmation = (recipe: Recipe, dateStr: string, meal: string) => {
+    setDeleteDialog({
+      isOpen: true,
+      recipe,
+      dateStr,
+      mealType: meal
+    });
+  };
+
+  const handleConfirmDelete = () => {
+    if (deleteDialog.recipe && deleteDialog.dateStr && deleteDialog.mealType) {
+      const uniqueKey = `${deleteDialog.dateStr}-${deleteDialog.mealType}-${deleteDialog.recipe.id}`;
+      setDeletedRecipes(prev => new Set([...prev, uniqueKey]));
+
+      // Update day meals config to remove the meal type
+      const currentDayMeals = dayMealsConfig[deleteDialog.dateStr] || config.selectedMeals || [];
+      const updatedMeals = currentDayMeals.filter(meal => meal !== deleteDialog.mealType);
+      setDayMealsConfig(prev => ({
+        ...prev,
+        [deleteDialog.dateStr]: updatedMeals
+      }));
+
+      // Remove from dayRecipes
+      const key = `${deleteDialog.dateStr}-${deleteDialog.mealType}`;
+      setDayRecipes(prev => {
+        const newDayRecipes = { ...prev };
+        delete newDayRecipes[key];
+        return newDayRecipes;
+      });
+    }
+
+    setDeleteDialog({
+      isOpen: false,
+      recipe: null,
+      dateStr: '',
+      mealType: ''
+    });
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialog({
+      isOpen: false,
+      recipe: null,
+      dateStr: '',
+      mealType: ''
     });
   };
   // Calcular todas las recetas visibles para el gráfico de macros
@@ -251,10 +338,10 @@ export const CategoryCarousel = ({
                   className="text-gray-600 hover:text-gray-800 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
-                    console.log('Añadir receta para', dateStr);
+                    handleToggleDay(dateStr);
                   }}
                 >
-                  <Plus size={20} />
+                  {expandedDays.has(dateStr) ? <Minus size={20} /> : <Plus size={20} />}
                 </button>
               </div>
               
@@ -290,6 +377,33 @@ export const CategoryCarousel = ({
               const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
               return null;
             })()}
+            {/* Meal selector when day is expanded */}
+            {expandedDays.has(dateStr) && (
+              <div className="mb-4">
+                <DayMealSelector
+                  dateStr={dateStr}
+                  currentMeals={dayMealsConfig[dateStr] || config.selectedMeals || []}
+                  onMealsChange={handleDayMealsChange}
+                  onShowDeleteConfirmation={handleShowDeleteConfirmation}
+                  currentRecipes={(() => {
+                    const recipesMap: { [key: string]: Recipe } = {};
+                    meals.forEach(({ meal, recipe }) => {
+                      if (recipe) {
+                        recipesMap[`${dateStr}-${meal}`] = recipe;
+                      }
+                    });
+                    // Add any recipes from dayRecipes that might be new
+                    Object.entries(dayRecipes).forEach(([key, recipe]) => {
+                      if (key.startsWith(dateStr)) {
+                        recipesMap[key] = recipe;
+                      }
+                    });
+                    return recipesMap;
+                  })()}
+                />
+              </div>
+            )}
+
             <div className="space-y-3">
               {meals.filter(({
             recipe,
@@ -306,5 +420,14 @@ export const CategoryCarousel = ({
           </div>)}
       </div>
       
+      {/* Delete Recipe Dialog */}
+      <DeleteRecipeDialog
+        isOpen={deleteDialog.isOpen}
+        onClose={handleCloseDeleteDialog}
+        onConfirm={handleConfirmDelete}
+        recipe={deleteDialog.recipe}
+        dateStr={deleteDialog.dateStr}
+        mealType={deleteDialog.mealType}
+      />
     </div>;
 };
