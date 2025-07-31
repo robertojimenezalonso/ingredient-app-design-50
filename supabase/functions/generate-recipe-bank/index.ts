@@ -155,7 +155,7 @@ La receta debe ser original, deliciosa y diferente de las anteriores.`;
 
           // Generate detailed, realistic image prompt based on actual ingredients
           const ingredientsList = recipe.ingredients.map(ing => ing.name).join(', ');
-          const imagePrompt = `Fotografía profesional ultra realista de ${recipe.title}, plato servido en una mesa de madera rústica, ángulo lateral ligeramente elevado (3/4), luz natural cálida y suave, colores ricos y vibrantes. Ingredientes visibles: ${ingredientsList}. Ambiente acogedor de restaurante, profundidad de campo, textura detallada de los alimentos, presentación elegante pero casera, sombras naturales, colores saturados pero naturales, estilo photography gastronómica profesional, alta definición, sin texto ni logotipos`;
+          const imagePrompt = `Fotografía profesional ultra realista de ${recipe.title}, servidas en una mesa de madera rústica, ángulo lateral ligeramente elevado (3/4), luz natural cálida y suave, colores ricos y vibrantes. Ingredientes claramente visibles y enfocados: ${ingredientsList}. Ambiente acogedor de restaurante, textura y detalles de los alimentos en primer plano, presentación elegante pero casera, sombras naturales, colores saturados pero realistas, estilo de fotografía gastronómica profesional, alta definición. Sin texto, logotipos, personas, cubiertos ni objetos ajenos a la comida.`;
 
           console.log('Calling DALL-E for realistic image generation...');
           console.log('Image prompt:', imagePrompt);
