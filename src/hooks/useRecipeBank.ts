@@ -111,6 +111,8 @@ export const useRecipeBank = () => {
   const getRandomRecipesByCategory = (category: string, count: number = 1): RecipeBankItem[] => {
     const categoryRecipes = getRecipesByCategory(category);
     console.log(`useRecipeBank: getRandomRecipesByCategory(${category}) found ${categoryRecipes.length} total recipes`);
+    console.log(`useRecipeBank: Total recipes in state: ${recipes.length}`);
+    console.log(`useRecipeBank: Available categories:`, recipes.map(r => r.category));
     
     // Si no hay recetas en esta categoría, retornar array vacío
     if (categoryRecipes.length === 0) {
