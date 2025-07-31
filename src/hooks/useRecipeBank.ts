@@ -105,6 +105,21 @@ export const useRecipeBank = () => {
   const convertToRecipe = (bankItem: RecipeBankItem, servings: number = 1): Recipe => {
     const servingMultiplier = servings / bankItem.servings;
     
+    // Helper function to extract numeric value from macro data
+    const extractMacroValue = (macroData: any): number => {
+      if (typeof macroData === 'number') {
+        return macroData;
+      }
+      if (typeof macroData === 'object' && macroData !== null) {
+        return macroData.grams || macroData.value || 0;
+      }
+      return 0;
+    };
+    
+    const carbs = extractMacroValue(bankItem.macronutrients.carbs);
+    const protein = extractMacroValue(bankItem.macronutrients.protein);
+    const fat = extractMacroValue(bankItem.macronutrients.fat);
+    
     return {
       id: bankItem.id,
       title: bankItem.title,
@@ -114,9 +129,9 @@ export const useRecipeBank = () => {
       category: bankItem.category,
       servings: servings,
       macros: {
-        carbs: Math.round(bankItem.macronutrients.carbs * servingMultiplier),
-        protein: Math.round(bankItem.macronutrients.protein * servingMultiplier),
-        fat: Math.round(bankItem.macronutrients.fat * servingMultiplier),
+        carbs: Math.round(carbs * servingMultiplier),
+        protein: Math.round(protein * servingMultiplier),
+        fat: Math.round(fat * servingMultiplier),
       },
       ingredients: bankItem.ingredients.map(ingredient => ({
         id: `${bankItem.id}-${ingredient.name}`,
@@ -128,9 +143,9 @@ export const useRecipeBank = () => {
       instructions: bankItem.instructions,
       nutrition: {
         calories: Math.round(bankItem.calories * servingMultiplier),
-        protein: Math.round(bankItem.macronutrients.protein * servingMultiplier),
-        carbs: Math.round(bankItem.macronutrients.carbs * servingMultiplier),
-        fat: Math.round(bankItem.macronutrients.fat * servingMultiplier),
+        protein: Math.round(protein * servingMultiplier),
+        carbs: Math.round(carbs * servingMultiplier),
+        fat: Math.round(fat * servingMultiplier),
         fiber: 0, // Not available in bank data
         sugar: 0, // Not available in bank data
       }
