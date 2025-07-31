@@ -148,6 +148,9 @@ export const CategoryCarousel = ({
   }
 
   // Usar el mealPlan de la base de datos si está disponible, sino generar uno vacío
+  console.log('CategoryCarousel: propMealPlan =', propMealPlan);
+  console.log('CategoryCarousel: propMealPlan?.length =', propMealPlan?.length);
+  
   const mealPlan = propMealPlan && propMealPlan.length > 0 
     ? propMealPlan
     : config.selectedDates?.map((dateStr, dayIndex) => ({
@@ -155,6 +158,9 @@ export const CategoryCarousel = ({
         dateStr,
         meals: []
       })) || [];
+      
+  console.log('CategoryCarousel: Final mealPlan used =', mealPlan);
+  console.log('CategoryCarousel: mealPlan.length =', mealPlan.length);
   const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
     console.log('Swipe state change:', recipeId, isSwiped ? 'swipeado' : 'normal');
     if (isSwiped) {
