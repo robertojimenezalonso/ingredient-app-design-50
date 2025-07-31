@@ -332,8 +332,7 @@ export const CategoryCarousel = ({
               </div>
               
               {expandedDays.has(dateStr) && (
-                <div className="mt-6 space-y-4" style={{ backgroundColor: '#F6F6F6' }}>
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Añade/Elimina</h4>
+                <div className="mt-4 space-y-4" style={{ backgroundColor: '#F6F6F6' }}>
                   <div className="flex flex-wrap gap-2">
                     {ALL_MEAL_TYPES.map((mealType) => {
                       const isSelected = dailyMeals[dateStr]?.includes(mealType) || false;
