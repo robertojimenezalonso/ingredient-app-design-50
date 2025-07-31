@@ -41,6 +41,57 @@ export type Database = {
         }
         Relationships: []
       }
+      recipe_bank: {
+        Row: {
+          calories: number
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string
+          ingredients: Json
+          instructions: string[]
+          macronutrients: Json
+          micronutrients: Json | null
+          preparation_time: number
+          servings: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          calories: number
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url: string
+          ingredients: Json
+          instructions: string[]
+          macronutrients: Json
+          micronutrients?: Json | null
+          preparation_time: number
+          servings?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          calories?: number
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string
+          ingredients?: Json
+          instructions?: string[]
+          macronutrients?: Json
+          micronutrients?: Json | null
+          preparation_time?: number
+          servings?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
