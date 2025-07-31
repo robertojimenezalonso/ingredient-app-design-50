@@ -320,10 +320,14 @@ export const CategoryCarousel = ({
                   className="text-gray-600 hover:text-gray-800 transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
-                    console.log('Añadir receta para', dateStr);
+                    handleToggleDay(dateStr);
                   }}
                 >
-                  <Plus size={20} />
+                  {expandedDays.has(dateStr) ? (
+                    <X size={20} />
+                  ) : (
+                    <Plus size={20} />
+                  )}
                 </button>
               </div>
               
