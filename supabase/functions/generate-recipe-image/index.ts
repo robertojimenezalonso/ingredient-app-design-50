@@ -1,8 +1,13 @@
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,6 +17,53 @@ const corsHeaders = {
 interface ImageRequest {
   recipeName?: string; // For single recipe (backward compatibility)
   recipeNames?: string[]; // For batch processing (up to 5)
+}
+
+// Function to download image from URL and upload to Supabase Storage
+async function downloadAndUploadImage(imageUrl: string, fileName: string): Promise<string> {
+  console.log('Downloading image from OpenAI URL:', imageUrl);
+  
+  // Download the image from OpenAI
+  const imageResponse = await fetch(imageUrl);
+  if (!imageResponse.ok) {
+    throw new Error(`Failed to download image: ${imageResponse.status}`);
+  }
+  
+  const imageBlob = await imageResponse.blob();
+  const imageBuffer = await imageBlob.arrayBuffer();
+  
+  console.log('Image downloaded, size:', imageBuffer.byteLength, 'bytes');
+  
+  // Generate unique filename
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const uniqueFileName = `${timestamp}-${fileName.replace(/[^a-zA-Z0-9]/g, '-')}.png`;
+  
+  console.log('Uploading to Supabase Storage with filename:', uniqueFileName);
+  
+  // Upload to Supabase Storage
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from('recipe-images')
+    .upload(uniqueFileName, imageBuffer, {
+      contentType: 'image/png',
+      upsert: false
+    });
+    
+  if (uploadError) {
+    console.error('Error uploading to Supabase Storage:', uploadError);
+    throw new Error(`Failed to upload image: ${uploadError.message}`);
+  }
+  
+  console.log('Successfully uploaded to Storage:', uploadData.path);
+  
+  // Get the public URL
+  const { data: publicUrlData } = supabase.storage
+    .from('recipe-images')
+    .getPublicUrl(uploadData.path);
+    
+  const publicUrl = publicUrlData.publicUrl;
+  console.log('Public URL:', publicUrl);
+  
+  return publicUrl;
 }
 
 serve(async (req) => {
@@ -68,9 +120,16 @@ serve(async (req) => {
             }
 
             const data = await response.json();
+            
+            // Download and upload the image to Supabase Storage
+            const permanentImageUrl = await downloadAndUploadImage(
+              data.data[0].url, 
+              recipesToProcess[index]
+            );
+            
             return {
               recipeName: recipesToProcess[index],
-              imageUrl: data.data[0].url,
+              imageUrl: permanentImageUrl,
               success: true
             };
           } catch (error) {
@@ -138,7 +197,10 @@ serve(async (req) => {
 
       console.log('Successfully generated image URL:', imageUrl);
 
-      return new Response(JSON.stringify({ imageUrl }), {
+      // Download and upload the image to Supabase Storage
+      const permanentImageUrl = await downloadAndUploadImage(imageUrl, recipesToProcess[0]);
+
+      return new Response(JSON.stringify({ imageUrl: permanentImageUrl }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
