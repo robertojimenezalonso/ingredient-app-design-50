@@ -143,10 +143,12 @@ export const CategoryCarousel = ({
     return null;
   }
 
-  // Generar el plan de comidas
+  // Generar el plan de comidas basado en dailyMeals
   const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
     const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
-    const dayMeals = config.selectedMeals!.map((meal, mealIndex) => {
+    const selectedMealsForDay = dailyMeals[dateStr] || [];
+    
+    const dayMeals = selectedMealsForDay.map((meal, mealIndex) => {
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
 
@@ -158,7 +160,9 @@ export const CategoryCarousel = ({
           'Desayuno': ['breakfast', 'desayuno'],
           'Almuerzo': ['lunch', 'almuerzo'],
           'Cena': ['dinner', 'cena'],
-          'Tentempié': ['snack', 'tentempie']
+          'Aperitivo': ['snack', 'aperitivo'],
+          'Snack': ['snack'],
+          'Merienda': ['snack', 'merienda']
         };
         const keywords = mealKeywords[meal] || [];
 
@@ -172,8 +176,8 @@ export const CategoryCarousel = ({
 
         // Si no se encuentra una receta específica, usar la asignación por índice como fallback
         if (!selectedRecipe) {
-          const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
-          selectedRecipe = currentRecipes[recipeIndex] || currentRecipes[recipeIndex % currentRecipes.length];
+          const recipeIndex = (dayIndex * selectedMealsForDay.length + mealIndex) % currentRecipes.length;
+          selectedRecipe = currentRecipes[recipeIndex];
           console.log(`CategoryCarousel: No specific recipe found for ${dateStr}-${meal}, using index ${recipeIndex}: ${selectedRecipe?.title}`);
         } else {
           console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
@@ -181,7 +185,7 @@ export const CategoryCarousel = ({
       } else {
         // Fallback a recetas de ejemplo si no hay recetas de IA
         const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-        selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
+        selectedRecipe = categoryRecipes[mealIndex % categoryRecipes.length]; // Rotar por las recetas disponibles
         console.log('CategoryCarousel: Using example recipe for', meal, ':', selectedRecipe?.title);
       }
       return {
@@ -189,6 +193,7 @@ export const CategoryCarousel = ({
         recipe: selectedRecipe
       };
     }).filter(Boolean);
+    
     return {
       date,
       dateStr,
@@ -328,18 +333,20 @@ export const CategoryCarousel = ({
                     {ALL_MEAL_TYPES.map((mealType) => {
                       const isSelected = dailyMeals[dateStr]?.includes(mealType) || false;
                       return (
-                        <Badge
+                        <button
                           key={mealType}
-                          variant={isSelected ? "default" : "outline"}
-                          className={`cursor-pointer transition-colors ${
+                          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                             isSelected 
-                              ? "bg-black text-white hover:bg-gray-800" 
-                              : "bg-white text-black border-gray-300 hover:bg-gray-50"
+                              ? "bg-black text-white" 
+                              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
                           }`}
-                          onClick={() => handleMealToggle(dateStr, mealType)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleMealToggle(dateStr, mealType);
+                          }}
                         >
                           {mealType}
-                        </Badge>
+                        </button>
                       );
                     })}
                   </div>
