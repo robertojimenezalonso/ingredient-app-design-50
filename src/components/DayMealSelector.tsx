@@ -65,14 +65,15 @@ export const DayMealSelector = ({
       // Generar receta de ejemplo para este tipo de comida
       const categoryKey = mealCategoryMap[meal];
       if (categoryKey) {
-        const categoryRecipes = getRecipesByCategory(categoryKey as any, 1);
+        const categoryRecipes = getRecipesByCategory(categoryKey as any, 10);
         const newRecipe = categoryRecipes[0];
         
         if (newRecipe) {
-          // Crear una nueva receta con ID único para este día y comida
+          // Crear una nueva receta con ID único que incluya timestamp para evitar conflictos
+          const timestamp = Date.now();
           const uniqueRecipe = {
             ...newRecipe,
-            id: `${dateStr}-${meal}-${newRecipe.id}`
+            id: `${dateStr}-${meal}-${timestamp}-${newRecipe.id}`
           };
           
           onMealsChange(dateStr, updatedMeals, [uniqueRecipe]);
