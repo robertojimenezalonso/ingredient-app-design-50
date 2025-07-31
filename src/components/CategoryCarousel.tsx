@@ -263,14 +263,7 @@ export const CategoryCarousel = ({
       });
       setDayRecipes(newDayRecipes);
       
-      // Also add to current recipes array for immediate display
-      const updatedRecipes = [...currentRecipes, ...newRecipes];
-      setCurrentRecipes(updatedRecipes);
-      
-      // Notify parent component about the recipe change
-      if (onRecipesChange) {
-        onRecipesChange(updatedRecipes);
-      }
+      // NO modificar currentRecipes global - solo mantener las recetas específicas del día
     }
   };
 
