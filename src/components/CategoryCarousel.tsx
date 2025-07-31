@@ -8,6 +8,7 @@ import { Separator } from './ui/separator';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipes } from '@/hooks/useRecipes';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { DayMealSelector } from './DayMealSelector';
 import { DeleteRecipeDialog } from './DeleteRecipeDialog';
 import { format } from 'date-fns';
@@ -68,6 +69,11 @@ export const CategoryCarousel = ({
   const {
     getRecipesByCategory
   } = useRecipes();
+  const { 
+    recipes: bankRecipes, 
+    getRandomRecipesByCategory, 
+    convertToRecipe 
+  } = useRecipeBank();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
   const [deletedRecipes, setDeletedRecipes] = useState<Set<string>>(new Set());
   const [currentRecipes, setCurrentRecipes] = useState<Recipe[]>(recipes);
@@ -198,10 +204,29 @@ export const CategoryCarousel = ({
           console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
         }
       } else {
-        // Fallback a recetas de ejemplo si no hay recetas de IA
-        const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-        selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
-        console.log('CategoryCarousel: Using example recipe for', meal, ':', selectedRecipe?.title);
+        // Use database recipes instead of example recipes
+        const dbCategoryMap = {
+          'Desayuno': 'desayuno',
+          'Almuerzo': 'comida', 
+          'Cena': 'cena',
+          'Tentempié': 'snack',
+          'Aperitivo': 'aperitivo',
+          'Snack': 'snack',
+          'Merienda': 'merienda'
+        };
+        
+        const dbCategory = dbCategoryMap[meal] || meal.toLowerCase();
+        const randomBankRecipe = getRandomRecipesByCategory(dbCategory, 1)[0];
+        
+        if (randomBankRecipe) {
+          selectedRecipe = convertToRecipe(randomBankRecipe, config.servingsPerRecipe || 2);
+          console.log('CategoryCarousel: Using database recipe for', meal, ':', selectedRecipe?.title);
+        } else {
+          // Fallback to example recipes only if no database recipes exist
+          const categoryRecipes = getRecipesByCategory(categoryKey, 10);
+          selectedRecipe = categoryRecipes[0];
+          console.log('CategoryCarousel: No database recipes available, using example recipe for', meal, ':', selectedRecipe?.title);
+        }
       }
       return {
         meal,
