@@ -110,38 +110,37 @@ export const useRecipeBank = () => {
     // Filtrar recetas no usadas
     const availableRecipes = categoryRecipes.filter(recipe => !usedSet.has(recipe.id));
     
-    // Si no hay recetas disponibles, resetear las usadas para esta categoría
-    if (availableRecipes.length === 0) {
-      console.log(`Todas las recetas de ${category} han sido usadas, reseteando...`);
-      setUsedRecipes(prev => ({
-        ...prev,
-        [category]: new Set()
-      }));
-      
-      // Usar todas las recetas de la categoría como disponibles
-      const shuffled = [...categoryRecipes].sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, count);
-      
-      // Marcar las seleccionadas como usadas
-      setUsedRecipes(prev => ({
-        ...prev,
-        [category]: new Set(selected.map(r => r.id))
-      }));
-      
-      return selected;
-    }
+    // Si no hay recetas disponibles, usar todas las recetas (reset implícito)
+    const recipesToUse = availableRecipes.length === 0 ? categoryRecipes : availableRecipes;
     
-    // Mezclar y seleccionar de las recetas disponibles
-    const shuffled = [...availableRecipes].sort(() => 0.5 - Math.random());
+    // Mezclar y seleccionar
+    const shuffled = [...recipesToUse].sort(() => 0.5 - Math.random());
     const selected = shuffled.slice(0, count);
     
-    // Marcar las recetas seleccionadas como usadas
-    setUsedRecipes(prev => ({
-      ...prev,
-      [category]: new Set([...usedSet, ...selected.map(r => r.id)])
-    }));
-    
     return selected;
+  };
+
+  // Función separada para marcar recetas como usadas
+  const markRecipesAsUsed = (category: string, recipeIds: string[]) => {
+    setUsedRecipes(prev => {
+      const currentUsed = prev[category] || new Set();
+      const newUsedSet = new Set([...currentUsed, ...recipeIds]);
+      
+      // Si hemos usado todas las recetas de esta categoría, resetear
+      const totalRecipes = getRecipesByCategory(category).length;
+      if (newUsedSet.size >= totalRecipes) {
+        console.log(`Todas las recetas de ${category} han sido usadas, reseteando...`);
+        return {
+          ...prev,
+          [category]: new Set(recipeIds) // Solo las recetas actuales
+        };
+      }
+      
+      return {
+        ...prev,
+        [category]: newUsedSet
+      };
+    });
   };
 
   // Convert RecipeBankItem to Recipe format for compatibility
@@ -203,6 +202,11 @@ export const useRecipeBank = () => {
         const category = categoryMap[meal] || meal.toLowerCase();
         const randomRecipes = getRandomRecipesByCategory(category, 1);
         
+        // Marcar las recetas como usadas
+        if (randomRecipes.length > 0) {
+          markRecipesAsUsed(category, randomRecipes.map(r => r.id));
+        }
+        
         plan[day][meal] = randomRecipes.map(recipe => 
           convertToRecipe(recipe, people)
         );
@@ -231,6 +235,7 @@ export const useRecipeBank = () => {
     getRandomRecipesByCategory,
     convertToRecipe,
     getRecipesForPlan,
+    markRecipesAsUsed,
     resetUsedRecipes
   };
 };
