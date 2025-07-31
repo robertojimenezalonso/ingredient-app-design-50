@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { ChevronRight, Plus, Minus, Search, MoreHorizontal } from 'lucide-react';
 import { Recipe, CategoryType, CATEGORIES } from '@/types/recipe';
 import { RecipeCard } from './RecipeCard';
@@ -71,7 +71,7 @@ export const CategoryCarousel = ({
   } = useRecipes();
   const { 
     recipes: bankRecipes, 
-    getRandomRecipesByCategory, 
+    getRecipesByCategory: getBankRecipesByCategory, 
     convertToRecipe 
   } = useRecipeBank();
   const [activeSwipedRecipe, setActiveSwipedRecipe] = useState<string | null>(null);
@@ -151,95 +151,139 @@ export const CategoryCarousel = ({
     return null;
   }
 
-  // Generar el plan de comidas
-  const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
-    const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
+  // Helper function for deterministic recipe selection 
+  const getDeterministicRecipeByCategory = (category: CategoryType, dateStr: string, meal: string) => {
+    const categoryRecipes = getRecipesByCategory(category, 10);
+    if (categoryRecipes.length === 0) return null;
     
-    // Use day-specific meals if available, otherwise fall back to global config
-    const dayMeals = dayMealsConfig[dateStr] || config.selectedMeals!;
+    // Create a simple hash from dateStr + meal to ensure consistency
+    const seed = dateStr + meal;
+    let hash = 0;
+    for (let i = 0; i < seed.length; i++) {
+      const char = seed.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
     
-    const mealsForDay = dayMeals.map((meal, mealIndex) => {
-      const categoryKey = mealCategoryMap[meal];
-      if (!categoryKey) return null;
+    const index = Math.abs(hash) % categoryRecipes.length;
+    return categoryRecipes[index];
+  };
 
-      // First check for day-specific recipes
-      const dayRecipeKey = `${dateStr}-${meal}`;
-      if (dayRecipes[dayRecipeKey]) {
-        console.log(`CategoryCarousel: Using day-specific recipe for ${dateStr}-${meal}: ${dayRecipes[dayRecipeKey].title}`);
+  // Memoize the meal plan generation to prevent infinite re-renders
+  const mealPlan = useMemo(() => {
+    if (!config.selectedDates || !config.selectedMeals) return [];
+    
+    return config.selectedDates.map((dateStr, dayIndex) => {
+      const date = new Date(dateStr + 'T12:00:00');
+      
+      // Use day-specific meals if available, otherwise fall back to global config
+      const dayMeals = dayMealsConfig[dateStr] || config.selectedMeals!;
+      
+      const mealsForDay = dayMeals.map((meal, mealIndex) => {
+        const categoryKey = mealCategoryMap[meal];
+        if (!categoryKey) return null;
+
+        // First check for day-specific recipes
+        const dayRecipeKey = `${dateStr}-${meal}`;
+        if (dayRecipes[dayRecipeKey]) {
+          console.log(`CategoryCarousel: Using day-specific recipe for ${dateStr}-${meal}: ${dayRecipes[dayRecipeKey].title}`);
+          return {
+            meal,
+            recipe: dayRecipes[dayRecipeKey]
+          };
+        }
+
+        // Si hay recetas de IA disponibles, buscar la receta específica para esta fecha y comida
+        let selectedRecipe;
+        if (currentRecipes && currentRecipes.length > 0) {
+          // Buscar receta que contenga la fecha y el tipo de comida en su ID
+          const mealKeywords = {
+            'Desayuno': ['breakfast', 'desayuno'],
+            'Almuerzo': ['lunch', 'almuerzo'],
+            'Cena': ['dinner', 'cena'],
+            'Tentempié': ['snack', 'tentempie'],
+            'Aperitivo': ['appetizer', 'aperitivo'],
+            'Snack': ['snack'],
+            'Merienda': ['snack', 'merienda']
+          };
+          const keywords = mealKeywords[meal] || [];
+
+          // Buscar una receta que contenga tanto la fecha como el tipo de comida
+          selectedRecipe = currentRecipes.find(recipe => {
+            const recipeId = recipe.id.toLowerCase();
+            const hasDate = recipeId.includes(dateStr);
+            const hasMeal = keywords.some(keyword => recipeId.includes(keyword));
+            return hasDate && hasMeal;
+          });
+
+          // Si no se encuentra una receta específica, usar la asignación por índice como fallback
+          if (!selectedRecipe) {
+            const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
+            selectedRecipe = currentRecipes[recipeIndex] || currentRecipes[recipeIndex % currentRecipes.length];
+            console.log(`CategoryCarousel: No specific recipe found for ${dateStr}-${meal}, using index ${recipeIndex}: ${selectedRecipe?.title}`);
+          } else {
+            console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
+          }
+        } else {
+          // Use database recipes with deterministic selection
+          const dbCategoryMap = {
+            'Desayuno': 'desayuno',
+            'Almuerzo': 'comida', 
+            'Cena': 'cena',
+            'Tentempié': 'snack',
+            'Aperitivo': 'aperitivo',
+            'Snack': 'snack',
+            'Merienda': 'merienda'
+          };
+          
+          const dbCategory = dbCategoryMap[meal] || meal.toLowerCase();
+          const bankCategoryRecipes = getBankRecipesByCategory(dbCategory);
+          
+          if (bankCategoryRecipes.length > 0) {
+            // Use deterministic selection instead of random
+            const seed = dateStr + meal;
+            let hash = 0;
+            for (let i = 0; i < seed.length; i++) {
+              const char = seed.charCodeAt(i);
+              hash = ((hash << 5) - hash) + char;
+              hash = hash & hash;
+            }
+            const index = Math.abs(hash) % bankCategoryRecipes.length;
+            const selectedBankRecipe = bankCategoryRecipes[index];
+            
+            selectedRecipe = convertToRecipe(selectedBankRecipe, config.servingsPerRecipe || 2);
+            console.log('CategoryCarousel: Using database recipe for', meal, ':', selectedRecipe?.title);
+          } else {
+            // Fallback to example recipes only if no database recipes exist
+            selectedRecipe = getDeterministicRecipeByCategory(categoryKey, dateStr, meal);
+            console.log('CategoryCarousel: No database recipes available, using example recipe for', meal, ':', selectedRecipe?.title);
+          }
+        }
+        
         return {
           meal,
-          recipe: dayRecipes[dayRecipeKey]
+          recipe: selectedRecipe
         };
-      }
-
-      // Si hay recetas de IA disponibles, buscar la receta específica para esta fecha y comida
-      let selectedRecipe;
-      if (currentRecipes && currentRecipes.length > 0) {
-        // Buscar receta que contenga la fecha y el tipo de comida en su ID
-        const mealKeywords = {
-          'Desayuno': ['breakfast', 'desayuno'],
-          'Almuerzo': ['lunch', 'almuerzo'],
-          'Cena': ['dinner', 'cena'],
-          'Tentempié': ['snack', 'tentempie'],
-          'Aperitivo': ['appetizer', 'aperitivo'],
-          'Snack': ['snack'],
-          'Merienda': ['snack', 'merienda']
-        };
-        const keywords = mealKeywords[meal] || [];
-
-        // Buscar una receta que contenga tanto la fecha como el tipo de comida
-        selectedRecipe = currentRecipes.find(recipe => {
-          const recipeId = recipe.id.toLowerCase();
-          const hasDate = recipeId.includes(dateStr);
-          const hasMeal = keywords.some(keyword => recipeId.includes(keyword));
-          return hasDate && hasMeal;
-        });
-
-        // Si no se encuentra una receta específica, usar la asignación por índice como fallback
-        if (!selectedRecipe) {
-          const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
-          selectedRecipe = currentRecipes[recipeIndex] || currentRecipes[recipeIndex % currentRecipes.length];
-          console.log(`CategoryCarousel: No specific recipe found for ${dateStr}-${meal}, using index ${recipeIndex}: ${selectedRecipe?.title}`);
-        } else {
-          console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
-        }
-      } else {
-        // Use database recipes instead of example recipes
-        const dbCategoryMap = {
-          'Desayuno': 'desayuno',
-          'Almuerzo': 'comida', 
-          'Cena': 'cena',
-          'Tentempié': 'snack',
-          'Aperitivo': 'aperitivo',
-          'Snack': 'snack',
-          'Merienda': 'merienda'
-        };
-        
-        const dbCategory = dbCategoryMap[meal] || meal.toLowerCase();
-        const randomBankRecipe = getRandomRecipesByCategory(dbCategory, 1)[0];
-        
-        if (randomBankRecipe) {
-          selectedRecipe = convertToRecipe(randomBankRecipe, config.servingsPerRecipe || 2);
-          console.log('CategoryCarousel: Using database recipe for', meal, ':', selectedRecipe?.title);
-        } else {
-          // Fallback to example recipes only if no database recipes exist
-          const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-          selectedRecipe = categoryRecipes[0];
-          console.log('CategoryCarousel: No database recipes available, using example recipe for', meal, ':', selectedRecipe?.title);
-        }
-      }
+      }).filter(Boolean);
+      
       return {
-        meal,
-        recipe: selectedRecipe
+        date,
+        dateStr,
+        meals: mealsForDay
       };
-    }).filter(Boolean);
-    
-    return {
-      date,
-      dateStr,
-      meals: mealsForDay
-    };
-  });
+    });
+  }, [
+    config.selectedDates, 
+    config.selectedMeals, 
+    config.servingsPerRecipe,
+    dayMealsConfig, 
+    dayRecipes, 
+    currentRecipes,
+    bankRecipes,
+    getRecipesByCategory,
+    getBankRecipesByCategory,
+    convertToRecipe
+  ]);
   const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
     console.log('Swipe state change:', recipeId, isSwiped ? 'swipeado' : 'normal');
     if (isSwiped) {
