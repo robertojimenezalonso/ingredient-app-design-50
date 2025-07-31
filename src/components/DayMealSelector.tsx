@@ -86,7 +86,7 @@ export const DayMealSelector = ({
 
   return (
     <div className="space-y-3">
-      <h4 className="text-lg font-semibold text-neutral-950">Tipos de comida seleccionado</h4>
+      <h4 className="text-sm font-medium text-neutral-950">Tipos de comida seleccionado</h4>
       
       <div className="space-y-2">
         {/* Main meals */}
