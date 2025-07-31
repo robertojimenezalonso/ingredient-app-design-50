@@ -34,12 +34,25 @@ export const ImageLoader = ({
   const finalFallbackSrc = fallbackSrc || defaultFallback;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState(src);
+  const [currentSrc, setCurrentSrc] = useState('');
+
+  // Function to add cache-busting parameters to URLs
+  const addCacheBuster = (url: string): string => {
+    if (!url) return url;
+    
+    // Only add cache buster to Supabase storage URLs
+    if (url.includes('supabase.co') && url.includes('recipe-images')) {
+      const separator = url.includes('?') ? '&' : '?';
+      return `${url}${separator}t=${Date.now()}&cache=no-cache`;
+    }
+    
+    return url;
+  };
 
   useEffect(() => {
     setIsLoading(true);
     setError(false);
-    setCurrentSrc(src);
+    setCurrentSrc(addCacheBuster(src));
   }, [src]);
 
   const handleLoad = () => {
@@ -51,7 +64,7 @@ export const ImageLoader = ({
     setError(true);
     setIsLoading(false);
     if (currentSrc !== finalFallbackSrc) {
-      setCurrentSrc(finalFallbackSrc);
+      setCurrentSrc(addCacheBuster(finalFallbackSrc));
       setIsLoading(true);
       setError(false);
     }
@@ -83,6 +96,8 @@ export const ImageLoader = ({
         onLoad={handleLoad}
         onError={handleError}
         loading="lazy"
+        crossOrigin="anonymous"
+        referrerPolicy="no-referrer"
       />
     </div>
   );
