@@ -380,10 +380,10 @@ export const CategoryCarousel = ({
       
       {/* Popup de confirmación */}
       <AlertDialog open={confirmDelete.isOpen} onOpenChange={cancelDeleteMeal}>
-        <AlertDialogContent className="mx-4 bg-white">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Eliminar de mi plan</AlertDialogTitle>
-            <AlertDialogDescription>
+        <AlertDialogContent className="mx-6 max-w-md w-full bg-white/95 backdrop-blur-sm border border-gray-200 rounded-xl shadow-lg">
+          <AlertDialogHeader className="text-center space-y-2">
+            <AlertDialogTitle className="text-lg font-semibold text-gray-900">Eliminar de mi plan</AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-gray-600">
               ¿Estás seguro de que quieres eliminar este {confirmDelete.mealType.toLowerCase()}{confirmDelete.dateStr ? ` del ${format(new Date(confirmDelete.dateStr + 'T12:00:00'), "eeee d", { locale: es })}` : ''}?
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -396,22 +396,28 @@ export const CategoryCarousel = ({
             
             if (recipe) {
               return (
-                <div className="my-4 pointer-events-none border border-gray-200 rounded-lg overflow-hidden">
-                  <RecipeCard 
-                    recipe={recipe} 
-                    onAdd={() => {}} 
-                    onClick={() => {}} 
-                    mealType={confirmDelete.mealType}
-                  />
+                <div className="my-4 mx-auto w-full max-w-sm">
+                  <div className="pointer-events-none border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                    <RecipeCard 
+                      recipe={recipe} 
+                      onAdd={() => {}} 
+                      onClick={() => {}} 
+                      mealType={confirmDelete.mealType}
+                    />
+                  </div>
                 </div>
               );
             }
             return null;
           })()}
           
-          <AlertDialogFooter className="flex-row gap-2 space-y-0">
-            <AlertDialogCancel onClick={cancelDeleteMeal} className="flex-1">Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteMeal} className="flex-1">Eliminar</AlertDialogAction>
+          <AlertDialogFooter className="flex flex-row gap-3 space-y-0 mt-6">
+            <AlertDialogCancel onClick={cancelDeleteMeal} className="flex-1 h-12 font-medium border-gray-300">
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteMeal} className="flex-1 h-12 font-medium bg-red-600 hover:bg-red-700">
+              Eliminar
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
