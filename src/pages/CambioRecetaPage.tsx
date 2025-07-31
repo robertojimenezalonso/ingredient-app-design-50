@@ -5,6 +5,7 @@ import { Recipe } from '@/types/recipe';
 import { ImageLoader } from '@/components/ui/image-loader';
 import { Button } from '@/components/ui/button';
 import { useRecipes } from '@/hooks/useRecipes';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { useToast } from '@/hooks/use-toast';
 
 export const CambioRecetaPage = () => {
@@ -12,6 +13,7 @@ export const CambioRecetaPage = () => {
   const [searchParams] = useSearchParams();
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
+  const { getRecipesByCategory: getBankRecipesByCategory, convertToRecipe } = useRecipeBank();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -23,15 +25,51 @@ export const CambioRecetaPage = () => {
     const loadRecipes = async () => {
       try {
         setLoading(true);
-        // Obtener recetas de la misma categoría
-        const categoryRecipes = getRecipesByCategory(category as any);
         
-        // Filtrar la receta original y tomar solo 10
-        const filteredRecipes = categoryRecipes
-          .filter(recipe => recipe.id !== originalRecipeId)
-          .slice(0, 10);
+        // Mapear categorías a las del recipe bank
+        const categoryMap: { [key: string]: string } = {
+          'breakfast': 'desayuno',
+          'lunch': 'comida', 
+          'dinner': 'cena',
+          'snacks': 'snack',
+          'appetizer': 'aperitivo',
+          'desserts': 'postre'
+        };
         
-        setRecipes(filteredRecipes);
+        // Obtener recetas normales de la misma categoría
+        const normalRecipes = getRecipesByCategory(category as any)
+          .filter(recipe => recipe.id !== originalRecipeId);
+        
+        // Obtener recetas del banco si es necesario
+        const bankCategory = categoryMap[category] || category.toLowerCase();
+        const bankRecipes = getBankRecipesByCategory(bankCategory)
+          .filter(bankRecipe => bankRecipe.id !== originalRecipeId)
+          .map(bankRecipe => convertToRecipe(bankRecipe, 2)); // Convertir a formato Recipe
+        
+        // Combinar ambas fuentes
+        const allRecipes = [...normalRecipes, ...bankRecipes];
+        
+        // Si tenemos menos de 10, permitir repeticiones del banco
+        let finalRecipes = allRecipes.slice(0, 10);
+        
+        if (finalRecipes.length < 10 && bankRecipes.length > 0) {
+          const needed = 10 - finalRecipes.length;
+          const additionalRecipes = [];
+          
+          // Repetir recetas del banco hasta completar 10
+          for (let i = 0; i < needed; i++) {
+            const recipeIndex = i % bankRecipes.length;
+            const duplicatedRecipe = {
+              ...bankRecipes[recipeIndex],
+              id: `${bankRecipes[recipeIndex].id}-duplicate-${i}` // ID único para evitar problemas de keys
+            };
+            additionalRecipes.push(duplicatedRecipe);
+          }
+          
+          finalRecipes = [...finalRecipes, ...additionalRecipes];
+        }
+        
+        setRecipes(finalRecipes);
       } catch (error) {
         console.error('Error loading recipes:', error);
         toast({
@@ -45,7 +83,7 @@ export const CambioRecetaPage = () => {
     };
 
     loadRecipes();
-  }, [category, originalRecipeId, getRecipesByCategory, toast]);
+  }, [category, originalRecipeId, getRecipesByCategory, getBankRecipesByCategory, convertToRecipe, toast]);
 
   const handleRecipeSelect = (selectedRecipe: Recipe) => {
     // Navegar a los detalles de la receta con parámetros especiales
