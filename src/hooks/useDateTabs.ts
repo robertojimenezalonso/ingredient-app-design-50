@@ -58,6 +58,7 @@ export const useDateTabs = () => {
 
   console.log('useDateTabs: Final mealPlan =', mealPlan);
   console.log('useDateTabs: mealPlan.length =', mealPlan.length);
+  console.log('useDateTabs: First meal plan item:', mealPlan[0]);
   useEffect(() => {
     if (mealPlan.length > 0 && !activeTab) {
       setActiveTab(mealPlan[0].dateStr);
