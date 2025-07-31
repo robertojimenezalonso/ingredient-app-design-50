@@ -196,7 +196,13 @@ const Index = () => {
           /* Use meal plan from database, fallback to AI recipes */
           <CategoryCarousel
             category="trending"
-            recipes={mealPlan.length > 0 ? mealPlan.flatMap(day => day.meals.map(m => m.recipe).filter(Boolean)) : explorationRecipes}
+            recipes={(() => {
+              const dbRecipes = mealPlan.length > 0 ? mealPlan.flatMap(day => day.meals.map(m => m.recipe).filter(Boolean)) : [];
+              console.log('Index: mealPlan.length =', mealPlan.length);
+              console.log('Index: dbRecipes =', dbRecipes);
+              console.log('Index: explorationRecipes =', explorationRecipes);
+              return dbRecipes.length > 0 ? dbRecipes : explorationRecipes;
+            })()}
             onAddRecipe={handleAddRecipe}
             onRecipeClick={handleRecipeClick}
             onViewAll={handleViewAll}

@@ -6,7 +6,10 @@ const mealCategoryMap: Record<string, string> = {
   'Desayuno': 'desayuno',
   'Almuerzo': 'comida', 
   'Cena': 'cena',
-  'Tentempié': 'snack'
+  'Tentempié': 'snack',
+  'Aperitivo': 'aperitivo',
+  'Snack': 'snack',
+  'Merienda': 'merienda'
 };
 
 export const useDateTabs = () => {
