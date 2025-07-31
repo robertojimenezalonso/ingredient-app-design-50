@@ -1,36 +1,40 @@
 import { useState, useEffect, useRef } from 'react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
-import { useRecipes } from '@/hooks/useRecipes';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
 
-const mealCategoryMap: Record<string, any> = {
-  'Desayuno': 'breakfast',
-  'Almuerzo': 'lunch', 
-  'Cena': 'dinner',
-  'Tentempié': 'snacks'
+const mealCategoryMap: Record<string, string> = {
+  'Desayuno': 'desayuno',
+  'Almuerzo': 'comida', 
+  'Cena': 'cena',
+  'Tentempié': 'snack'
 };
 
 export const useDateTabs = () => {
   const { config } = useUserConfig();
-  const { getRecipesByCategory } = useRecipes();
+  const { getRandomRecipesByCategory, convertToRecipe, isLoading } = useRecipeBank();
   const [showTabs, setShowTabs] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('');
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const lastScrollY = useRef(0);
 
-  // Generar el plan de comidas
-  const mealPlan = config.selectedDates && config.selectedMeals 
+  // Generar el plan de comidas usando el banco de recetas
+  const mealPlan = config.selectedDates && config.selectedMeals && !isLoading
     ? config.selectedDates.map(dateStr => {
         const date = new Date(dateStr + 'T12:00:00');
         const dayMeals = config.selectedMeals!.map(meal => {
           const categoryKey = mealCategoryMap[meal];
           if (!categoryKey) return null;
           
-          const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-          const selectedRecipe = categoryRecipes[0];
+          // Obtener una receta aleatoria del banco que no se haya usado
+          const bankRecipes = getRandomRecipesByCategory(categoryKey, 1);
+          if (bankRecipes.length === 0) return null;
+          
+          // Convertir a formato Recipe
+          const recipe = convertToRecipe(bankRecipes[0], config.servingsPerRecipe || 1);
           
           return {
             meal,
-            recipe: selectedRecipe
+            recipe
           };
         }).filter(Boolean);
         
