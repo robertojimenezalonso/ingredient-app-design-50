@@ -365,20 +365,31 @@ export const CategoryCarousel = ({
                 </button>
               </div>
               
-              {expandedDays.has(dateStr) && (() => {
-                const dayRecipes = meals.filter(({ recipe, meal }) => {
-                  if (!recipe) return false;
-                  const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
-                  return !deletedRecipes.has(uniqueKey);
-                }).map(({ recipe }) => recipe);
-                
-                const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
-                const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
-                const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
-                const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
-                
-                return null;
-              })()}
+              {expandedDays.has(dateStr) && (
+                <div className="mt-4 pt-3 border-t border-gray-300">
+                  <DayMealSelector
+                    dateStr={dateStr}
+                    currentMeals={dayMealsConfig[dateStr] || config.selectedMeals || []}
+                    onMealsChange={handleDayMealsChange}
+                    onShowDeleteConfirmation={handleShowDeleteConfirmation}
+                    currentRecipes={(() => {
+                      const recipesMap: { [key: string]: Recipe } = {};
+                      meals.forEach(({ meal, recipe }) => {
+                        if (recipe) {
+                          recipesMap[`${dateStr}-${meal}`] = recipe;
+                        }
+                      });
+                      // Add any recipes from dayRecipes that might be new
+                      Object.entries(dayRecipes).forEach(([key, recipe]) => {
+                        if (key.startsWith(dateStr)) {
+                          recipesMap[key] = recipe;
+                        }
+                      });
+                      return recipesMap;
+                    })()}
+                  />
+                </div>
+              )}
             </Card>
             {(() => {
               const dayRecipes = meals.filter(({
@@ -397,33 +408,6 @@ export const CategoryCarousel = ({
               const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
               return null;
             })()}
-            {/* Meal selector when day is expanded */}
-            {expandedDays.has(dateStr) && (
-              <div className="mb-4">
-                <DayMealSelector
-                  dateStr={dateStr}
-                  currentMeals={dayMealsConfig[dateStr] || config.selectedMeals || []}
-                  onMealsChange={handleDayMealsChange}
-                  onShowDeleteConfirmation={handleShowDeleteConfirmation}
-                  currentRecipes={(() => {
-                    const recipesMap: { [key: string]: Recipe } = {};
-                    meals.forEach(({ meal, recipe }) => {
-                      if (recipe) {
-                        recipesMap[`${dateStr}-${meal}`] = recipe;
-                      }
-                    });
-                    // Add any recipes from dayRecipes that might be new
-                    Object.entries(dayRecipes).forEach(([key, recipe]) => {
-                      if (key.startsWith(dateStr)) {
-                        recipesMap[key] = recipe;
-                      }
-                    });
-                    return recipesMap;
-                  })()}
-                />
-              </div>
-            )}
-
             <div className="space-y-3">
               {meals.filter(({
             recipe,
