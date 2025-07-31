@@ -35,7 +35,10 @@ const mealCategoryMap: Record<string, CategoryType> = {
   'Desayuno': 'breakfast',
   'Almuerzo': 'lunch',
   'Cena': 'dinner',
-  'Tentempié': 'snacks'
+  'Tentempié': 'snacks',
+  'Aperitivo': 'appetizer',
+  'Snack': 'snacks',
+  'Merienda': 'snacks'
 };
 
 const MACRO_COLORS = {
@@ -77,7 +80,14 @@ export const CategoryCarousel = ({
     handleGenerate: () => void;
   } | null>(null);
   const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
-  const [dayMealsConfig, setDayMealsConfig] = useState<{[dateStr: string]: string[]}>({});
+  const [dayMealsConfig, setDayMealsConfig] = useState<{[dateStr: string]: string[]}>(() => {
+    // Initialize with the global selected meals for all dates
+    const initialConfig: {[dateStr: string]: string[]} = {};
+    config.selectedDates?.forEach(dateStr => {
+      initialConfig[dateStr] = [...(config.selectedMeals || [])];
+    });
+    return initialConfig;
+  });
   const [dayRecipes, setDayRecipes] = useState<{[key: string]: Recipe}>({});
   const [deleteDialog, setDeleteDialog] = useState<{
     isOpen: boolean;
@@ -233,13 +243,6 @@ export const CategoryCarousel = ({
         newSet.delete(dateStr);
       } else {
         newSet.add(dateStr);
-        // Initialize day meals config with current user meals
-        if (!dayMealsConfig[dateStr]) {
-          setDayMealsConfig(prev => ({
-            ...prev,
-            [dateStr]: config.selectedMeals || []
-          }));
-        }
       }
       return newSet;
     });
