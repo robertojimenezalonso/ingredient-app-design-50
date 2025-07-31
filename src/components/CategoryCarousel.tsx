@@ -147,12 +147,6 @@ export const CategoryCarousel = ({
   // Generar el plan de comidas basado en dailyMeals
   const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
     const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
-    
-    // Validar que la fecha sea válida
-    if (isNaN(date.getTime())) {
-      console.error(`Invalid date string: ${dateStr}`);
-      return null;
-    }
     const selectedMealsForDay = dailyMeals[dateStr] || [];
     const dayMeals = selectedMealsForDay.map((meal, mealIndex) => {
       const categoryKey = mealCategoryMap[meal];
@@ -204,7 +198,7 @@ export const CategoryCarousel = ({
       dateStr,
       meals: dayMeals
     };
-  }).filter(Boolean);
+  });
   const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
     console.log('Swipe state change:', recipeId, isSwiped ? 'swipeado' : 'normal');
     if (isSwiped) {
@@ -386,41 +380,16 @@ export const CategoryCarousel = ({
       
       {/* Popup de confirmación */}
       <AlertDialog open={confirmDelete.isOpen} onOpenChange={cancelDeleteMeal}>
-        <AlertDialogContent className="mx-4 bg-white">
+        <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Eliminar de mi plan</AlertDialogTitle>
+            <AlertDialogTitle>Eliminar comida</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar este {confirmDelete.mealType.toLowerCase()} del {(() => {
-                const confirmDate = new Date(confirmDelete.dateStr + 'T12:00:00');
-                return isNaN(confirmDate.getTime()) ? confirmDelete.dateStr : format(confirmDate, "eeee d", { locale: es });
-              })()}?
+              ¿Estás seguro de que quieres eliminar la receta de {confirmDelete.mealType} para este día?
             </AlertDialogDescription>
           </AlertDialogHeader>
-          
-          {/* Mostrar la receta que se va a eliminar */}
-          {(() => {
-            const day = mealPlan.find(d => d.dateStr === confirmDelete.dateStr);
-            const mealData = day?.meals.find(m => m.meal === confirmDelete.mealType);
-            const recipe = mealData?.recipe;
-            
-            if (recipe) {
-              return (
-                <div className="my-4 pointer-events-none border border-gray-200 rounded-lg overflow-hidden">
-                  <RecipeCard 
-                    recipe={recipe} 
-                    onAdd={() => {}} 
-                    onClick={() => {}} 
-                    mealType={confirmDelete.mealType}
-                  />
-                </div>
-              );
-            }
-            return null;
-          })()}
-          
-          <AlertDialogFooter className="flex-row gap-2 space-y-0">
-            <AlertDialogCancel onClick={cancelDeleteMeal} className="flex-1">Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteMeal} className="flex-1">Eliminar</AlertDialogAction>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={cancelDeleteMeal}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteMeal}>Eliminar</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
