@@ -279,16 +279,16 @@ export const CategoryCarousel = ({
     });
   };
   // Calcular todas las recetas visibles para el gráfico de macros
-  const allVisibleRecipes = mealPlan.flatMap(day => day.meals.filter(({
-    recipe,
-    meal
-  }) => {
-    if (!recipe) return false;
-    const uniqueKey = `${day.dateStr}-${meal}-${recipe.id}`;
-    return !deletedRecipes.has(uniqueKey);
-  }).map(({
-    recipe
-  }) => recipe)).filter(Boolean) as Recipe[];
+  const allVisibleRecipes = mealPlan.flatMap(day => 
+    day.meals.filter(({ recipe, meal }) => {
+      if (!recipe) return false;
+      const uniqueKey = `${day.dateStr}-${meal}-${recipe.id}`;
+      const isSelectedMeal = dailyMeals[day.dateStr]?.includes(meal) || false;
+      return !deletedRecipes.has(uniqueKey) && isSelectedMeal;
+    }).map(({ recipe }) => recipe)
+  ).filter(Boolean) as Recipe[];
+
+  console.log('CategoryCarousel: allVisibleRecipes para MacroChart:', allVisibleRecipes.length, allVisibleRecipes.map(r => r.title));
   return <div className="mb-4">
       <div className="px-4 space-y-6 pb-40 -mt-[76px]" style={{
       backgroundColor: 'white'
