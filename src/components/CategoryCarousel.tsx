@@ -15,6 +15,7 @@ import { es } from 'date-fns/locale';
 interface CategoryCarouselProps {
   category: CategoryType;
   recipes: Recipe[];
+  mealPlan?: any[]; // Add mealPlan prop for database recipes
   onAddRecipe: (recipe: Recipe) => void;
   onRecipeClick: (recipe: Recipe) => void;
   onViewAll: (category: CategoryType) => void;
@@ -55,6 +56,7 @@ const MACRO_ICONS = {
 export const CategoryCarousel = ({
   category,
   recipes,
+  mealPlan: propMealPlan,
   onAddRecipe,
   onRecipeClick,
   onViewAll,
@@ -145,47 +147,14 @@ export const CategoryCarousel = ({
     return null;
   }
 
-  // Generar el plan de comidas usando SOLO las recetas de la base de datos
-  const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
-    const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
-    
-    // Use day-specific meals if available, otherwise fall back to global config
-    const dayMeals = dayMealsConfig[dateStr] || config.selectedMeals!;
-    
-    const mealsForDay = dayMeals.map((meal, mealIndex) => {
-      // First check for day-specific recipes
-      const dayRecipeKey = `${dateStr}-${meal}`;
-      if (dayRecipes[dayRecipeKey]) {
-        console.log(`CategoryCarousel: Using day-specific recipe for ${dateStr}-${meal}: ${dayRecipes[dayRecipeKey].title}`);
-        return {
-          meal,
-          recipe: dayRecipes[dayRecipeKey]
-        };
-      }
-
-      // SOLO usar recetas de la base de datos (sin fallback a recetas de ejemplo)
-      if (currentRecipes && currentRecipes.length > 0) {
-        // Calcular el índice de la receta basado en día y comida
-        const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
-        const selectedRecipe = currentRecipes[recipeIndex % currentRecipes.length];
-        console.log(`CategoryCarousel: Using database recipe for ${dateStr}-${meal}: ${selectedRecipe?.title}`);
-        return {
-          meal,
-          recipe: selectedRecipe
-        };
-      }
-
-      // Si no hay recetas de la base de datos, no mostrar nada
-      console.log(`CategoryCarousel: No database recipes available for ${dateStr}-${meal}`);
-      return null;
-    }).filter(Boolean);
-    
-    return {
-      date,
-      dateStr,
-      meals: mealsForDay
-    };
-  });
+  // Usar el mealPlan de la base de datos si está disponible, sino generar uno vacío
+  const mealPlan = propMealPlan && propMealPlan.length > 0 
+    ? propMealPlan
+    : config.selectedDates?.map((dateStr, dayIndex) => ({
+        date: new Date(dateStr + 'T12:00:00'),
+        dateStr,
+        meals: []
+      })) || [];
   const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
     console.log('Swipe state change:', recipeId, isSwiped ? 'swipeado' : 'normal');
     if (isSwiped) {

@@ -193,16 +193,11 @@ const Index = () => {
         <SavedShoppingListCard />
         
         {selectedFilter === 'receta' ? (
-          /* Use meal plan from database, fallback to AI recipes */
+          /* Pass the structured meal plan to CategoryCarousel */
           <CategoryCarousel
             category="trending"
-            recipes={(() => {
-              const dbRecipes = mealPlan.length > 0 ? mealPlan.flatMap(day => day.meals.map(m => m.recipe).filter(Boolean)) : [];
-              console.log('Index: mealPlan.length =', mealPlan.length);
-              console.log('Index: dbRecipes =', dbRecipes);
-              console.log('Index: explorationRecipes =', explorationRecipes);
-              return dbRecipes.length > 0 ? dbRecipes : explorationRecipes;
-            })()}
+            recipes={[]}
+            mealPlan={mealPlan}
             onAddRecipe={handleAddRecipe}
             onRecipeClick={handleRecipeClick}
             onViewAll={handleViewAll}
