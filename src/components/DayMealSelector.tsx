@@ -85,8 +85,8 @@ export const DayMealSelector = ({
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
 
   return (
-    <div className="space-y-4 p-4 bg-white rounded-lg border border-gray-200">
-      <h4 className="font-semibold text-lg text-neutral-950">Tipos de comida</h4>
+    <div className="space-y-3">
+      <h4 className="text-lg font-semibold text-neutral-950">Tipos de comida seleccionado</h4>
       
       <div className="space-y-2">
         {/* Main meals */}
