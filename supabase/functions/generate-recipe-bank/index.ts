@@ -27,6 +27,36 @@ interface RecipeData {
   micronutrients: Record<string, string>;
 }
 
+// Rate limiting helper
+async function rateLimitedFetch(url: string, options: any, maxRetries = 3) {
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      
+      if (response.status === 429) {
+        const retryAfter = parseInt(response.headers.get('retry-after') || '60');
+        console.log(`Rate limited. Waiting ${retryAfter} seconds before retry ${attempt}/${maxRetries}`);
+        
+        if (attempt < maxRetries) {
+          await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
+          continue;
+        }
+      }
+      
+      return response;
+    } catch (error) {
+      console.log(`Attempt ${attempt} failed:`, error.message);
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, 10000)); // 10 second delay
+      } else {
+        throw error;
+      }
+    }
+  }
+  
+  throw new Error('Max retries exceeded');
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -45,14 +75,14 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Define categories and their counts
+    // Generate fewer recipes at a time to avoid rate limiting
     const recipePlan = [
-      { category: 'desayuno', count: 10 },
-      { category: 'comida', count: 10 },
-      { category: 'cena', count: 10 },
-      { category: 'snack', count: 3 },
-      { category: 'aperitivo', count: 3 },
-      { category: 'merienda', count: 3 }
+      { category: 'desayuno', count: 2 },
+      { category: 'comida', count: 2 },
+      { category: 'cena', count: 2 },
+      { category: 'snack', count: 1 },
+      { category: 'aperitivo', count: 1 },
+      { category: 'merienda', count: 1 }
     ];
 
     const allGeneratedRecipes = [];
@@ -64,7 +94,7 @@ serve(async (req) => {
         try {
           console.log(`Generating recipe ${i + 1}/${plan.count} for ${plan.category}`);
           
-          // Generate recipe text
+          // Generate recipe text with improved retry logic
           const recipePrompt = `Crea una receta de ${plan.category} para 1 persona.
 Incluye:
 • Título atractivo de la receta
@@ -74,7 +104,7 @@ Incluye:
 • Tiempo estimado de preparación (en minutos)
 • Calorías aproximadas
 • Macronutrientes (proteínas, grasas, carbohidratos, en gramos)
-• Micronutrientes (al menos vitaminas y minerales principales, ejemplo: calcio, hierro, vitamina C, vitamina B12, etc.)
+• Micronutrientes (al menos vitaminas y minerales principales)
 
 Responde en formato JSON con esta estructura exacta:
 {
@@ -85,12 +115,12 @@ Responde en formato JSON con esta estructura exacta:
   "preparationTime": número_en_minutos,
   "calories": número_calorías,
   "macronutrients": {"protein": gramos, "fat": gramos, "carbs": gramos},
-  "micronutrients": {"vitamina_c": "valor mg", "calcio": "valor mg", "hierro": "valor mg", "vitamina_b12": "valor mcg"}
+  "micronutrients": {"vitamina_c": "valor mg", "calcio": "valor mg", "hierro": "valor mg"}
 }
 
 La receta debe ser original y diferente de las anteriores.`;
 
-          const recipeResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+          const recipeResponse = await rateLimitedFetch('https://api.openai.com/v1/chat/completions', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${openAIApiKey}`,
@@ -116,10 +146,10 @@ La receta debe ser original y diferente de las anteriores.`;
           
           console.log(`Generated recipe: ${recipe.title}`);
 
-          // Generate image
+          // Generate image with improved retry logic
           const imagePrompt = `Foto hiperrealista de ${recipe.title}, preparada y servida en un plato, vista cenital, fondo claro y luminoso, ingredientes principales visibles, estilo food photography profesional, alta calidad, iluminación natural, sin texto ni marcas de agua`;
 
-          const imageResponse = await fetch('https://api.openai.com/v1/images/generations', {
+          const imageResponse = await rateLimitedFetch('https://api.openai.com/v1/images/generations', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${openAIApiKey}`,
@@ -174,14 +204,25 @@ La receta debe ser original y diferente de las anteriores.`;
 
           console.log(`Successfully saved recipe: ${recipe.title}`);
           
-          // Small delay to avoid rate limiting
-          await new Promise(resolve => setTimeout(resolve, 2000));
+          // Longer delay between requests to avoid rate limiting
+          await new Promise(resolve => setTimeout(resolve, 15000)); // 15 seconds
 
         } catch (error) {
           console.error(`Error generating recipe ${i + 1} for ${plan.category}:`, error);
+          
+          // If rate limited, wait longer before continuing
+          if (error.message.includes('429')) {
+            console.log('Rate limited, waiting 2 minutes before continuing...');
+            await new Promise(resolve => setTimeout(resolve, 120000)); // 2 minutes
+          }
+          
           // Continue with next recipe
         }
       }
+      
+      // Delay between categories
+      console.log(`Completed ${plan.category}, waiting before next category...`);
+      await new Promise(resolve => setTimeout(resolve, 30000)); // 30 seconds
     }
 
     console.log(`Recipe bank generation completed. Generated ${allGeneratedRecipes.length} recipes.`);

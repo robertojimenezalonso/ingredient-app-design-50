@@ -125,6 +125,30 @@ export const RecipeBankManager = () => {
                   </div>
                 ))}
               </div>
+              
+              {recipes.length > 0 && (
+                <div className="mt-4">
+                  <h4 className="font-medium mb-2">Recetas almacenadas ({recipes.length}):</h4>
+                  <div className="max-h-60 overflow-y-auto space-y-2">
+                    {recipes.map((recipe, index) => (
+                      <div key={recipe.id} className="flex items-center gap-3 p-2 bg-background border rounded text-sm">
+                        <span className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center text-xs font-medium">
+                          {index + 1}
+                        </span>
+                        <div className="flex-1">
+                          <div className="font-medium">{recipe.title}</div>
+                          <div className="text-muted-foreground text-xs">
+                            {recipe.category} • {recipe.calories} cal • {recipe.preparation_time} min
+                          </div>
+                        </div>
+                        <Badge variant="outline" className="text-xs">
+                          {recipe.category}
+                        </Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
