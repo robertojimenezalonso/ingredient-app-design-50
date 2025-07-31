@@ -193,10 +193,10 @@ const Index = () => {
         <SavedShoppingListCard />
         
         {selectedFilter === 'receta' ? (
-          /* All recipes mixed together */
+          /* Use meal plan from database, fallback to AI recipes */
           <CategoryCarousel
             category="trending"
-            recipes={explorationRecipes}
+            recipes={mealPlan.length > 0 ? mealPlan.flatMap(day => day.meals.map(m => m.recipe).filter(Boolean)) : explorationRecipes}
             onAddRecipe={handleAddRecipe}
             onRecipeClick={handleRecipeClick}
             onViewAll={handleViewAll}
@@ -205,7 +205,7 @@ const Index = () => {
             onNavigationDataChange={setNavigationData}
           />
         ) : (
-          <IngredientsView recipes={explorationRecipes} />
+          <IngredientsView recipes={mealPlan.length > 0 ? mealPlan.flatMap(day => day.meals.map(m => m.recipe).filter(Boolean)) : explorationRecipes} />
         )}
       </div>
 
