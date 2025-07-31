@@ -95,14 +95,14 @@ serve(async (req) => {
 
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Recipe plan - no limits, generate as many as needed
+    // Recipe plan - reduced to 5 recipes per category for efficient quota usage
     const allCategories = [
-      { category: 'desayuno', count: 50 },
-      { category: 'comida', count: 50 },
-      { category: 'cena', count: 50 },
-      { category: 'snack', count: 25 },
-      { category: 'aperitivo', count: 25 },
-      { category: 'merienda', count: 25 }
+      { category: 'desayuno', count: 5 },
+      { category: 'comida', count: 5 },
+      { category: 'cena', count: 5 },
+      { category: 'snack', count: 5 },
+      { category: 'aperitivo', count: 5 },
+      { category: 'merienda', count: 5 }
     ];
 
     // Filter recipe plan based on category parameter
