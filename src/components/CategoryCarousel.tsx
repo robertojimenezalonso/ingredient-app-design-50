@@ -15,7 +15,6 @@ import { es } from 'date-fns/locale';
 interface CategoryCarouselProps {
   category: CategoryType;
   recipes: Recipe[];
-  mealPlan?: any[]; // Add mealPlan prop for database recipes
   onAddRecipe: (recipe: Recipe) => void;
   onRecipeClick: (recipe: Recipe) => void;
   onViewAll: (category: CategoryType) => void;
@@ -56,7 +55,6 @@ const MACRO_ICONS = {
 export const CategoryCarousel = ({
   category,
   recipes,
-  mealPlan: propMealPlan,
   onAddRecipe,
   onRecipeClick,
   onViewAll,
@@ -147,20 +145,76 @@ export const CategoryCarousel = ({
     return null;
   }
 
-  // Usar el mealPlan de la base de datos si está disponible, sino generar uno vacío
-  console.log('CategoryCarousel: propMealPlan =', propMealPlan);
-  console.log('CategoryCarousel: propMealPlan?.length =', propMealPlan?.length);
-  
-  const mealPlan = propMealPlan && propMealPlan.length > 0 
-    ? propMealPlan
-    : config.selectedDates?.map((dateStr, dayIndex) => ({
-        date: new Date(dateStr + 'T12:00:00'),
-        dateStr,
-        meals: []
-      })) || [];
-      
-  console.log('CategoryCarousel: Final mealPlan used =', mealPlan);
-  console.log('CategoryCarousel: mealPlan.length =', mealPlan.length);
+  // Generar el plan de comidas
+  const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
+    const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
+    
+    // Use day-specific meals if available, otherwise fall back to global config
+    const dayMeals = dayMealsConfig[dateStr] || config.selectedMeals!;
+    
+    const mealsForDay = dayMeals.map((meal, mealIndex) => {
+      const categoryKey = mealCategoryMap[meal];
+      if (!categoryKey) return null;
+
+      // First check for day-specific recipes
+      const dayRecipeKey = `${dateStr}-${meal}`;
+      if (dayRecipes[dayRecipeKey]) {
+        console.log(`CategoryCarousel: Using day-specific recipe for ${dateStr}-${meal}: ${dayRecipes[dayRecipeKey].title}`);
+        return {
+          meal,
+          recipe: dayRecipes[dayRecipeKey]
+        };
+      }
+
+      // Si hay recetas de IA disponibles, buscar la receta específica para esta fecha y comida
+      let selectedRecipe;
+      if (currentRecipes && currentRecipes.length > 0) {
+        // Buscar receta que contenga la fecha y el tipo de comida en su ID
+        const mealKeywords = {
+          'Desayuno': ['breakfast', 'desayuno'],
+          'Almuerzo': ['lunch', 'almuerzo'],
+          'Cena': ['dinner', 'cena'],
+          'Tentempié': ['snack', 'tentempie'],
+          'Aperitivo': ['appetizer', 'aperitivo'],
+          'Snack': ['snack'],
+          'Merienda': ['snack', 'merienda']
+        };
+        const keywords = mealKeywords[meal] || [];
+
+        // Buscar una receta que contenga tanto la fecha como el tipo de comida
+        selectedRecipe = currentRecipes.find(recipe => {
+          const recipeId = recipe.id.toLowerCase();
+          const hasDate = recipeId.includes(dateStr);
+          const hasMeal = keywords.some(keyword => recipeId.includes(keyword));
+          return hasDate && hasMeal;
+        });
+
+        // Si no se encuentra una receta específica, usar la asignación por índice como fallback
+        if (!selectedRecipe) {
+          const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
+          selectedRecipe = currentRecipes[recipeIndex] || currentRecipes[recipeIndex % currentRecipes.length];
+          console.log(`CategoryCarousel: No specific recipe found for ${dateStr}-${meal}, using index ${recipeIndex}: ${selectedRecipe?.title}`);
+        } else {
+          console.log(`CategoryCarousel: Found specific AI recipe for ${dateStr}-${meal}: ${selectedRecipe.title}`);
+        }
+      } else {
+        // Fallback a recetas de ejemplo si no hay recetas de IA
+        const categoryRecipes = getRecipesByCategory(categoryKey, 10);
+        selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
+        console.log('CategoryCarousel: Using example recipe for', meal, ':', selectedRecipe?.title);
+      }
+      return {
+        meal,
+        recipe: selectedRecipe
+      };
+    }).filter(Boolean);
+    
+    return {
+      date,
+      dateStr,
+      meals: mealsForDay
+    };
+  });
   const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
     console.log('Swipe state change:', recipeId, isSwiped ? 'swipeado' : 'normal');
     if (isSwiped) {

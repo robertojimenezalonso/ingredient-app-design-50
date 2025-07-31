@@ -30,27 +30,18 @@ export const useRecipeBank = () => {
   const [recipes, setRecipes] = useState<RecipeBankItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
-  
-  // Estado para tracking de recetas usadas por categoría
-  const [usedRecipes, setUsedRecipes] = useState<Record<string, Set<string>>>({});
 
   const loadRecipes = async () => {
-    console.log('useRecipeBank: Starting loadRecipes...');
     try {
       setIsLoading(true);
-      console.log('useRecipeBank: Making supabase query...');
       const { data, error } = await supabase
         .from('recipe_bank')
         .select('*')
         .order('category', { ascending: true })
         .order('created_at', { ascending: true });
 
-      console.log('useRecipeBank: Query completed. Data:', data);
-      console.log('useRecipeBank: Query error:', error);
-
       if (error) {
         console.error('Error loading recipe bank:', error);
-        setIsLoading(false); // IMPORTANTE: Set loading to false even on error
         return;
       }
 
@@ -66,12 +57,10 @@ export const useRecipeBank = () => {
         micronutrients: item.micronutrients as Record<string, string>
       }));
 
-      console.log('useRecipeBank: Loaded', transformedData.length, 'recipes from bank');
       setRecipes(transformedData);
     } catch (error) {
       console.error('Error loading recipe bank:', error);
     } finally {
-      console.log('useRecipeBank: Setting isLoading to false');
       setIsLoading(false);
     }
   };
@@ -103,60 +92,13 @@ export const useRecipeBank = () => {
   };
 
   const getRecipesByCategory = (category: string): RecipeBankItem[] => {
-    const filtered = recipes.filter(recipe => recipe.category === category);
-    console.log(`useRecipeBank: getRecipesByCategory(${category}) - total recipes: ${recipes.length}, filtered: ${filtered.length}`);
-    return filtered;
+    return recipes.filter(recipe => recipe.category === category);
   };
 
   const getRandomRecipesByCategory = (category: string, count: number = 1): RecipeBankItem[] => {
     const categoryRecipes = getRecipesByCategory(category);
-    console.log(`useRecipeBank: getRandomRecipesByCategory(${category}) found ${categoryRecipes.length} total recipes`);
-    console.log(`useRecipeBank: Total recipes in state: ${recipes.length}`);
-    console.log(`useRecipeBank: Available categories:`, recipes.map(r => r.category));
-    
-    // Si no hay recetas en esta categoría, retornar array vacío
-    if (categoryRecipes.length === 0) {
-      console.log(`useRecipeBank: No recipes found for category ${category}`);
-      return [];
-    }
-    
-    // Obtener recetas ya usadas para esta categoría
-    const usedSet = usedRecipes[category] || new Set();
-    
-    // Filtrar recetas no usadas
-    const availableRecipes = categoryRecipes.filter(recipe => !usedSet.has(recipe.id));
-    
-    // Si no hay recetas disponibles, usar todas las recetas (reset implícito)
-    const recipesToUse = availableRecipes.length === 0 ? categoryRecipes : availableRecipes;
-    
-    // Mezclar y seleccionar
-    const shuffled = [...recipesToUse].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, count);
-    
-    return selected;
-  };
-
-  // Función separada para marcar recetas como usadas
-  const markRecipesAsUsed = (category: string, recipeIds: string[]) => {
-    setUsedRecipes(prev => {
-      const currentUsed = prev[category] || new Set();
-      const newUsedSet = new Set([...currentUsed, ...recipeIds]);
-      
-      // Si hemos usado todas las recetas de esta categoría, resetear
-      const totalRecipes = getRecipesByCategory(category).length;
-      if (newUsedSet.size >= totalRecipes) {
-        console.log(`Todas las recetas de ${category} han sido usadas, reseteando...`);
-        return {
-          ...prev,
-          [category]: new Set(recipeIds) // Solo las recetas actuales
-        };
-      }
-      
-      return {
-        ...prev,
-        [category]: newUsedSet
-      };
-    });
+    const shuffled = [...categoryRecipes].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
   };
 
   // Convert RecipeBankItem to Recipe format for compatibility
@@ -218,11 +160,6 @@ export const useRecipeBank = () => {
         const category = categoryMap[meal] || meal.toLowerCase();
         const randomRecipes = getRandomRecipesByCategory(category, 1);
         
-        // Marcar las recetas como usadas
-        if (randomRecipes.length > 0) {
-          markRecipesAsUsed(category, randomRecipes.map(r => r.id));
-        }
-        
         plan[day][meal] = randomRecipes.map(recipe => 
           convertToRecipe(recipe, people)
         );
@@ -230,11 +167,6 @@ export const useRecipeBank = () => {
     });
     
     return plan;
-  };
-
-  // Función para resetear las recetas usadas (útil para nuevos planes)
-  const resetUsedRecipes = () => {
-    setUsedRecipes({});
   };
 
   useEffect(() => {
@@ -250,8 +182,6 @@ export const useRecipeBank = () => {
     getRecipesByCategory,
     getRandomRecipesByCategory,
     convertToRecipe,
-    getRecipesForPlan,
-    markRecipesAsUsed,
-    resetUsedRecipes
+    getRecipesForPlan
   };
 };

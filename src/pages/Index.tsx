@@ -55,26 +55,8 @@ const Index = () => {
     }
   }, [updateConfig]);
 
-  // Extraer recetas del mealPlan del banco de datos
-  const mealPlanRecipes = mealPlan.flatMap(day => 
-    day.meals.map(meal => meal.recipe).filter(Boolean)
-  );
-
-  // Debugging logs
-  console.log('Index.tsx Debug:');
-  console.log('- mealPlan:', mealPlan);
-  console.log('- mealPlanRecipes:', mealPlanRecipes.length, 'recipes');
-  console.log('- aiRecipes:', aiRecipes.length, 'recipes');
-
-  // Get all recipes for ingredient management - prioritize bank recipes from mealPlan, then AI recipes, then examples
-  const explorationRecipes = mealPlanRecipes.length > 0 
-    ? mealPlanRecipes 
-    : aiRecipes.length > 0 
-      ? aiRecipes 
-      : categories.flatMap(category => getRecipesByCategory(category, 10));
-  
-  console.log('- explorationRecipes source:', mealPlanRecipes.length > 0 ? 'mealPlan (bank)' : aiRecipes.length > 0 ? 'aiRecipes (localStorage)' : 'examples');
-  console.log('- explorationRecipes count:', explorationRecipes.length);
+  // Get all recipes for ingredient management - prioritize AI recipes
+  const explorationRecipes = aiRecipes.length > 0 ? aiRecipes : categories.flatMap(category => getRecipesByCategory(category, 10));
   const { getGroupedIngredients, getSelectedIngredientsCount, initializeIngredients } = useGlobalIngredients();
   
   // Initialize ingredients when recipes load
@@ -193,11 +175,10 @@ const Index = () => {
         <SavedShoppingListCard />
         
         {selectedFilter === 'receta' ? (
-          /* Pass the structured meal plan to CategoryCarousel */
+          /* All recipes mixed together */
           <CategoryCarousel
             category="trending"
-            recipes={[]}
-            mealPlan={mealPlan}
+            recipes={explorationRecipes}
             onAddRecipe={handleAddRecipe}
             onRecipeClick={handleRecipeClick}
             onViewAll={handleViewAll}
@@ -206,7 +187,7 @@ const Index = () => {
             onNavigationDataChange={setNavigationData}
           />
         ) : (
-          <IngredientsView recipes={mealPlan.length > 0 ? mealPlan.flatMap(day => day.meals.map(m => m.recipe).filter(Boolean)) : explorationRecipes} />
+          <IngredientsView recipes={explorationRecipes} />
         )}
       </div>
 

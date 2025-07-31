@@ -1,61 +1,36 @@
 import { useState, useEffect, useRef } from 'react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
-import { useRecipeBank } from '@/hooks/useRecipeBank';
+import { useRecipes } from '@/hooks/useRecipes';
 
-const mealCategoryMap: Record<string, string> = {
-  'Desayuno': 'desayuno',
-  'Almuerzo': 'comida', 
-  'Cena': 'cena',
-  'Tentempié': 'snack',
-  'Aperitivo': 'aperitivo',
-  'Snack': 'snack',
-  'Merienda': 'merienda'
+const mealCategoryMap: Record<string, any> = {
+  'Desayuno': 'breakfast',
+  'Almuerzo': 'lunch', 
+  'Cena': 'dinner',
+  'Tentempié': 'snacks'
 };
 
 export const useDateTabs = () => {
   const { config } = useUserConfig();
-  const { getRandomRecipesByCategory, convertToRecipe, isLoading, recipes } = useRecipeBank();
+  const { getRecipesByCategory } = useRecipes();
   const [showTabs, setShowTabs] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('');
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const lastScrollY = useRef(0);
-  const [mealPlan, setMealPlan] = useState<any[]>([]);
 
-  // Generar el plan de comidas cuando las recetas estén cargadas
-  useEffect(() => {
-    console.log('useDateTabs: useEffect triggered');
-    console.log('useDateTabs: config.selectedDates =', config.selectedDates);
-    console.log('useDateTabs: config.selectedMeals =', config.selectedMeals);
-    console.log('useDateTabs: isLoading =', isLoading);
-    console.log('useDateTabs: recipes.length =', recipes.length);
-    console.log('useDateTabs: Condition check:', {
-      hasSelectedDates: !!config.selectedDates,
-      hasSelectedMeals: !!config.selectedMeals,
-      notLoading: !isLoading,
-      hasRecipes: recipes.length > 0
-    });
-    
-    if (config.selectedDates && config.selectedMeals && !isLoading && recipes.length > 0) {
-      console.log('useDateTabs: Generating meal plan...');
-      const newMealPlan = config.selectedDates.map(dateStr => {
+  // Generar el plan de comidas
+  const mealPlan = config.selectedDates && config.selectedMeals 
+    ? config.selectedDates.map(dateStr => {
         const date = new Date(dateStr + 'T12:00:00');
         const dayMeals = config.selectedMeals!.map(meal => {
           const categoryKey = mealCategoryMap[meal];
           if (!categoryKey) return null;
           
-          // Obtener una receta aleatoria del banco que no se haya usado
-          console.log(`useDateTabs: Getting recipes for ${meal} (${categoryKey})`);
-          const bankRecipes = getRandomRecipesByCategory(categoryKey, 1);
-          console.log(`useDateTabs: Found ${bankRecipes.length} recipes for ${categoryKey}`);
-          if (bankRecipes.length === 0) return null;
-          
-          // Convertir a formato Recipe
-          const recipe = convertToRecipe(bankRecipes[0], config.servingsPerRecipe || 1);
-          console.log(`useDateTabs: Converted recipe: ${recipe.title}`);
+          const categoryRecipes = getRecipesByCategory(categoryKey, 10);
+          const selectedRecipe = categoryRecipes[0];
           
           return {
             meal,
-            recipe
+            recipe: selectedRecipe
           };
         }).filter(Boolean);
         
@@ -64,18 +39,10 @@ export const useDateTabs = () => {
           dateStr,
           meals: dayMeals
         };
-      });
-      
-      console.log('useDateTabs: Generated meal plan:', newMealPlan);
-      setMealPlan(newMealPlan);
-    } else {
-      console.log('useDateTabs: Conditions not met for meal plan generation');
-      setMealPlan([]);
-    }
-  }, [config.selectedDates, config.selectedMeals, isLoading, recipes.length]); // Dependencies importantes
+      })
+    : [];
 
-  console.log('useDateTabs: Final mealPlan =', mealPlan);
-  console.log('useDateTabs: mealPlan.length =', mealPlan.length);
+  // Inicializar el primer tab como activo
   useEffect(() => {
     if (mealPlan.length > 0 && !activeTab) {
       setActiveTab(mealPlan[0].dateStr);
