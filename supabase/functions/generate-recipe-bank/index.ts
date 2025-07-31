@@ -27,6 +27,53 @@ interface RecipeData {
   micronutrients: Record<string, string>;
 }
 
+// Function to download image from URL and upload to Supabase Storage
+async function downloadAndUploadImage(supabase: any, imageUrl: string, fileName: string): Promise<string> {
+  console.log('Downloading image from OpenAI URL:', imageUrl);
+  
+  // Download the image from OpenAI
+  const imageResponse = await fetch(imageUrl);
+  if (!imageResponse.ok) {
+    throw new Error(`Failed to download image: ${imageResponse.status}`);
+  }
+  
+  const imageBlob = await imageResponse.blob();
+  const imageBuffer = await imageBlob.arrayBuffer();
+  
+  console.log('Image downloaded, size:', imageBuffer.byteLength, 'bytes');
+  
+  // Generate unique filename
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const uniqueFileName = `${timestamp}-${fileName.replace(/[^a-zA-Z0-9]/g, '-')}.png`;
+  
+  console.log('Uploading to Supabase Storage with filename:', uniqueFileName);
+  
+  // Upload to Supabase Storage
+  const { data: uploadData, error: uploadError } = await supabase.storage
+    .from('recipe-images')
+    .upload(uniqueFileName, imageBuffer, {
+      contentType: 'image/png',
+      upsert: false
+    });
+    
+  if (uploadError) {
+    console.error('Error uploading to Supabase Storage:', uploadError);
+    throw new Error(`Failed to upload image: ${uploadError.message}`);
+  }
+  
+  console.log('Successfully uploaded to Storage:', uploadData.path);
+  
+  // Get the public URL
+  const { data: publicUrlData } = supabase.storage
+    .from('recipe-images')
+    .getPublicUrl(uploadData.path);
+    
+  const publicUrl = publicUrlData.publicUrl;
+  console.log('Public URL:', publicUrl);
+  
+  return publicUrl;
+}
+
 // Rate limiting helper with exponential backoff
 async function rateLimitedFetch(url: string, options: any, maxRetries = 3) {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
@@ -222,11 +269,16 @@ RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostad
           });
 
           const imageData = await imageResponse.json();
-          const imageUrl = imageData.data[0].url;
+          const temporaryImageUrl = imageData.data[0].url;
           
-          console.log(`✓ Generated image for: "${recipe.title}"`);
+          console.log(`✓ Generated temporary image for: "${recipe.title}"`);
 
-          // Save to database
+          // Download and upload the image to Supabase Storage for permanent storage
+          console.log('Downloading and uploading image to Supabase Storage...');
+          const permanentImageUrl = await downloadAndUploadImage(supabase, temporaryImageUrl, recipe.title);
+          console.log(`✓ Image permanently stored: ${permanentImageUrl}`);
+
+          // Save to database with permanent image URL
           console.log('Saving to database...');
           console.log(`Saving recipe "${recipe.title}" with category: ${currentCategory}`);
           const { error: insertError } = await supabase
@@ -235,7 +287,7 @@ RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostad
               title: recipe.title,
               description: recipe.description,
               category: currentCategory,
-              image_url: imageUrl,
+              image_url: permanentImageUrl,
               preparation_time: recipe.preparationTime,
               calories: recipe.calories,
               servings: 1,
@@ -253,7 +305,7 @@ RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostad
           allGeneratedRecipes.push({
             title: recipe.title,
             category: currentCategory,
-            imageUrl
+            imageUrl: permanentImageUrl
           });
 
           console.log(`✓ Successfully saved recipe: "${recipe.title}"`);
