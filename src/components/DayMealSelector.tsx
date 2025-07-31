@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Plus, Minus } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
@@ -26,6 +26,11 @@ export const DayMealSelector = ({
   const { config } = useUserConfig();
   const { getRecipesByCategory } = useRecipes();
   const [selectedMeals, setSelectedMeals] = useState<string[]>(currentMeals);
+
+  // Sincronizar el estado local cuando cambien las comidas desde el componente padre
+  useEffect(() => {
+    setSelectedMeals(currentMeals);
+  }, [currentMeals]);
 
   const mealCategoryMap: Record<string, string> = {
     'Desayuno': 'breakfast',
