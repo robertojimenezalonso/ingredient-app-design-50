@@ -70,7 +70,19 @@ serve(async (req) => {
   }
 
   try {
-    const { category } = await req.json().catch(() => ({}));
+    let category = null;
+    
+    // Try to parse request body if it exists
+    try {
+      const body = await req.text();
+      if (body) {
+        const parsed = JSON.parse(body);
+        category = parsed.category;
+      }
+    } catch (e) {
+      // No body or invalid JSON, use default (all categories)
+    }
+    
     console.log('Starting recipe bank generation with DALL-E images...', category ? `for category: ${category}` : 'for all categories');
     
     if (!openAIApiKey) {
