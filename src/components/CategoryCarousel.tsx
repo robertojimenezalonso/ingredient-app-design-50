@@ -147,6 +147,12 @@ export const CategoryCarousel = ({
   // Generar el plan de comidas basado en dailyMeals
   const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
     const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
+    
+    // Validar que la fecha sea válida
+    if (isNaN(date.getTime())) {
+      console.error(`Invalid date string: ${dateStr}`);
+      return null;
+    }
     const selectedMealsForDay = dailyMeals[dateStr] || [];
     const dayMeals = selectedMealsForDay.map((meal, mealIndex) => {
       const categoryKey = mealCategoryMap[meal];
@@ -198,7 +204,7 @@ export const CategoryCarousel = ({
       dateStr,
       meals: dayMeals
     };
-  });
+  }).filter(Boolean);
   const handleSwipeStateChange = (recipeId: string, isSwiped: boolean) => {
     console.log('Swipe state change:', recipeId, isSwiped ? 'swipeado' : 'normal');
     if (isSwiped) {
@@ -384,7 +390,10 @@ export const CategoryCarousel = ({
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar de mi plan</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar este {confirmDelete.mealType.toLowerCase()} del {format(new Date(confirmDelete.dateStr + 'T12:00:00'), "eeee d", { locale: es })}?
+              ¿Estás seguro de que quieres eliminar este {confirmDelete.mealType.toLowerCase()} del {(() => {
+                const confirmDate = new Date(confirmDelete.dateStr + 'T12:00:00');
+                return isNaN(confirmDate.getTime()) ? confirmDelete.dateStr : format(confirmDate, "eeee d", { locale: es });
+              })()}?
             </AlertDialogDescription>
           </AlertDialogHeader>
           
