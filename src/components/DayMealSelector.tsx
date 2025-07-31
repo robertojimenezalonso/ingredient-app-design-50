@@ -69,11 +69,10 @@ export const DayMealSelector = ({
         const newRecipe = categoryRecipes[0];
         
         if (newRecipe) {
-          // Crear una nueva receta con ID único que incluya timestamp para evitar conflictos
-          const timestamp = Date.now();
+          // Crear una receta con ID consistente (siempre el mismo para este día+comida)
           const uniqueRecipe = {
             ...newRecipe,
-            id: `${dateStr}-${meal}-${timestamp}-${newRecipe.id}`
+            id: `${dateStr}-${meal}-${newRecipe.id}`
           };
           
           onMealsChange(dateStr, updatedMeals, [uniqueRecipe]);

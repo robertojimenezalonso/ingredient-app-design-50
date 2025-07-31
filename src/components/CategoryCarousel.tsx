@@ -278,9 +278,6 @@ export const CategoryCarousel = ({
 
   const handleConfirmDelete = () => {
     if (deleteDialog.recipe && deleteDialog.dateStr && deleteDialog.mealType) {
-      const uniqueKey = `${deleteDialog.dateStr}-${deleteDialog.mealType}-${deleteDialog.recipe.id}`;
-      setDeletedRecipes(prev => new Set([...prev, uniqueKey]));
-
       // Update day meals config to remove the meal type
       const currentDayMeals = dayMealsConfig[deleteDialog.dateStr] || config.selectedMeals || [];
       const updatedMeals = currentDayMeals.filter(meal => meal !== deleteDialog.mealType);
@@ -289,7 +286,7 @@ export const CategoryCarousel = ({
         [deleteDialog.dateStr]: updatedMeals
       }));
 
-      // Remove from dayRecipes
+      // Remove from dayRecipes (pero no añadir a deletedRecipes permanentemente)
       const key = `${deleteDialog.dateStr}-${deleteDialog.mealType}`;
       setDayRecipes(prev => {
         const newDayRecipes = { ...prev };
