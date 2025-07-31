@@ -6,6 +6,7 @@ import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { useCarrefourAPI } from '@/hooks/useCarrefourAPI';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -36,6 +37,10 @@ const RecipeDetailPage = () => {
     favorites,
     toggleFavorite
   } = useRecipes();
+  const {
+    recipes: recipeBankRecipes,
+    convertToRecipe
+  } = useRecipeBank();
   const {
     config
   } = useUserConfig();
@@ -77,7 +82,26 @@ const RecipeDetailPage = () => {
     return null;
   };
 
-  const recipe = getRecipeById(id!) || getAIRecipeById(id!);
+  // Get recipe from different sources
+  const getRecipe = () => {
+    // First try normal recipes
+    const normalRecipe = getRecipeById(id!);
+    if (normalRecipe) return normalRecipe;
+    
+    // Then try AI recipes
+    const aiRecipe = getAIRecipeById(id!);
+    if (aiRecipe) return aiRecipe;
+    
+    // Finally try recipe bank
+    const bankRecipe = recipeBankRecipes.find(r => r.id === id!);
+    if (bankRecipe) {
+      return convertToRecipe(bankRecipe, config.servingsPerRecipe || 2);
+    }
+    
+    return null;
+  };
+  
+  const recipe = getRecipe();
   const [selectedCategory, setSelectedCategory] = useState(recipe?.category || 'lunch');
 
   // Check if we're in change mode
