@@ -145,7 +145,7 @@ export const CategoryCarousel = ({
     return null;
   }
 
-  // Generar el plan de comidas
+  // Generar el plan de comidas usando SOLO las recetas de la base de datos
   const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
     const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
     
@@ -153,9 +153,6 @@ export const CategoryCarousel = ({
     const dayMeals = dayMealsConfig[dateStr] || config.selectedMeals!;
     
     const mealsForDay = dayMeals.map((meal, mealIndex) => {
-      const categoryKey = mealCategoryMap[meal];
-      if (!categoryKey) return null;
-
       // First check for day-specific recipes
       const dayRecipeKey = `${dateStr}-${meal}`;
       if (dayRecipes[dayRecipeKey]) {
@@ -166,23 +163,21 @@ export const CategoryCarousel = ({
         };
       }
 
-      // Si hay recetas pasadas como props (desde useDateTabs/base de datos), usar esas
-      let selectedRecipe;
+      // SOLO usar recetas de la base de datos (sin fallback a recetas de ejemplo)
       if (currentRecipes && currentRecipes.length > 0) {
         // Calcular el índice de la receta basado en día y comida
         const recipeIndex = dayIndex * config.selectedMeals!.length + mealIndex;
-        selectedRecipe = currentRecipes[recipeIndex % currentRecipes.length];
+        const selectedRecipe = currentRecipes[recipeIndex % currentRecipes.length];
         console.log(`CategoryCarousel: Using database recipe for ${dateStr}-${meal}: ${selectedRecipe?.title}`);
-      } else {
-        // Fallback a recetas de ejemplo si no hay recetas de la base de datos
-        const categoryRecipes = getRecipesByCategory(categoryKey, 10);
-        selectedRecipe = categoryRecipes[0]; // Solo una receta por comida
-        console.log('CategoryCarousel: Using example recipe for', meal, ':', selectedRecipe?.title);
+        return {
+          meal,
+          recipe: selectedRecipe
+        };
       }
-      return {
-        meal,
-        recipe: selectedRecipe
-      };
+
+      // Si no hay recetas de la base de datos, no mostrar nada
+      console.log(`CategoryCarousel: No database recipes available for ${dateStr}-${meal}`);
+      return null;
     }).filter(Boolean);
     
     return {
