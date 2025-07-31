@@ -18,6 +18,10 @@ export const useDateTabs = () => {
   const lastScrollY = useRef(0);
 
   // Generar el plan de comidas usando el banco de recetas
+  console.log('useDateTabs: config.selectedDates =', config.selectedDates);
+  console.log('useDateTabs: config.selectedMeals =', config.selectedMeals);
+  console.log('useDateTabs: isLoading =', isLoading);
+  
   const mealPlan = config.selectedDates && config.selectedMeals && !isLoading
     ? config.selectedDates.map(dateStr => {
         const date = new Date(dateStr + 'T12:00:00');
@@ -26,11 +30,14 @@ export const useDateTabs = () => {
           if (!categoryKey) return null;
           
           // Obtener una receta aleatoria del banco que no se haya usado
+          console.log(`useDateTabs: Getting recipes for ${meal} (${categoryKey})`);
           const bankRecipes = getRandomRecipesByCategory(categoryKey, 1);
+          console.log(`useDateTabs: Found ${bankRecipes.length} recipes for ${categoryKey}`);
           if (bankRecipes.length === 0) return null;
           
           // Convertir a formato Recipe
           const recipe = convertToRecipe(bankRecipes[0], config.servingsPerRecipe || 1);
+          console.log(`useDateTabs: Converted recipe: ${recipe.title}`);
           
           return {
             meal,
@@ -46,7 +53,8 @@ export const useDateTabs = () => {
       })
     : [];
 
-  // Inicializar el primer tab como activo
+  console.log('useDateTabs: Final mealPlan =', mealPlan);
+  console.log('useDateTabs: mealPlan.length =', mealPlan.length);
   useEffect(() => {
     if (mealPlan.length > 0 && !activeTab) {
       setActiveTab(mealPlan[0].dateStr);

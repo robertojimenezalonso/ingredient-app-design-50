@@ -35,6 +35,7 @@ export const useRecipeBank = () => {
   const [usedRecipes, setUsedRecipes] = useState<Record<string, Set<string>>>({});
 
   const loadRecipes = async () => {
+    console.log('useRecipeBank: Starting loadRecipes...');
     try {
       setIsLoading(true);
       const { data, error } = await supabase
@@ -60,10 +61,12 @@ export const useRecipeBank = () => {
         micronutrients: item.micronutrients as Record<string, string>
       }));
 
+      console.log('useRecipeBank: Loaded', transformedData.length, 'recipes from bank');
       setRecipes(transformedData);
     } catch (error) {
       console.error('Error loading recipe bank:', error);
     } finally {
+      console.log('useRecipeBank: Setting isLoading to false');
       setIsLoading(false);
     }
   };
@@ -100,9 +103,13 @@ export const useRecipeBank = () => {
 
   const getRandomRecipesByCategory = (category: string, count: number = 1): RecipeBankItem[] => {
     const categoryRecipes = getRecipesByCategory(category);
+    console.log(`useRecipeBank: getRandomRecipesByCategory(${category}) found ${categoryRecipes.length} total recipes`);
     
     // Si no hay recetas en esta categoría, retornar array vacío
-    if (categoryRecipes.length === 0) return [];
+    if (categoryRecipes.length === 0) {
+      console.log(`useRecipeBank: No recipes found for category ${category}`);
+      return [];
+    }
     
     // Obtener recetas ya usadas para esta categoría
     const usedSet = usedRecipes[category] || new Set();
