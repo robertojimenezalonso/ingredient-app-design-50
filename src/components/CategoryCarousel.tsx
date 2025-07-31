@@ -380,7 +380,7 @@ export const CategoryCarousel = ({
       
       {/* Popup de confirmación */}
       <AlertDialog open={confirmDelete.isOpen} onOpenChange={cancelDeleteMeal}>
-        <AlertDialogContent className="mx-4">
+        <AlertDialogContent className="mx-4 bg-white">
           <AlertDialogHeader>
             <AlertDialogTitle>Eliminar de mi plan</AlertDialogTitle>
             <AlertDialogDescription>
@@ -396,7 +396,7 @@ export const CategoryCarousel = ({
             
             if (recipe) {
               return (
-                <div className="my-4 pointer-events-none opacity-75">
+                <div className="my-4 pointer-events-none border border-gray-200 rounded-lg overflow-hidden">
                   <RecipeCard 
                     recipe={recipe} 
                     onAdd={() => {}} 
