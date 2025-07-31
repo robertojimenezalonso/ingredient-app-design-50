@@ -153,10 +153,12 @@ La receta debe ser original, deliciosa y diferente de las anteriores.`;
           
           console.log(`✓ Generated recipe: "${recipe.title}"`);
 
-          // Generate image with DALL-E
-          const imagePrompt = `Foto hiperrealista de ${recipe.title}, preparada y servida en un plato, vista cenital, fondo claro y luminoso, ingredientes principales visibles, estilo food photography profesional, alta calidad, iluminación natural, sin texto ni marcas de agua`;
+          // Generate detailed, realistic image prompt based on actual ingredients
+          const ingredientsList = recipe.ingredients.map(ing => ing.name).join(', ');
+          const imagePrompt = `Fotografía profesional ultra realista de ${recipe.title}, plato servido en una mesa de madera rústica, ángulo lateral ligeramente elevado (3/4), luz natural cálida y suave, colores ricos y vibrantes. Ingredientes visibles: ${ingredientsList}. Ambiente acogedor de restaurante, profundidad de campo, textura detallada de los alimentos, presentación elegante pero casera, sombras naturales, colores saturados pero naturales, estilo photography gastronómica profesional, alta definición, sin texto ni logotipos`;
 
-          console.log('Calling DALL-E for image generation...');
+          console.log('Calling DALL-E for realistic image generation...');
+          console.log('Image prompt:', imagePrompt);
           const imageResponse = await rateLimitedFetch('https://api.openai.com/v1/images/generations', {
             method: 'POST',
             headers: {
