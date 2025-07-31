@@ -39,15 +39,12 @@ const mealCategoryMap: Record<string, CategoryType> = {
   'Snack': 'snacks',
   'Merienda': 'snacks'
 };
-
 const ALL_MEAL_TYPES = ['Desayuno', 'Almuerzo', 'Cena', 'Aperitivo', 'Snack', 'Merienda'];
-
 const MACRO_COLORS = {
   protein: '#DE6968',
-  carbs: '#DE9A69', 
+  carbs: '#DE9A69',
   fat: '#6998DD'
 };
-
 const MACRO_ICONS = {
   protein: '/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png',
   carbs: '/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png',
@@ -86,7 +83,11 @@ export const CategoryCarousel = ({
     isOpen: boolean;
     dateStr: string;
     mealType: string;
-  }>({ isOpen: false, dateStr: '', mealType: '' });
+  }>({
+    isOpen: false,
+    dateStr: '',
+    mealType: ''
+  });
 
   // Initialize daily meals from user config
   useEffect(() => {
@@ -147,7 +148,6 @@ export const CategoryCarousel = ({
   const mealPlan = config.selectedDates.map((dateStr, dayIndex) => {
     const date = new Date(dateStr + 'T12:00:00'); // Agregar hora del mediodía para evitar problemas de zona horaria
     const selectedMealsForDay = dailyMeals[dateStr] || [];
-    
     const dayMeals = selectedMealsForDay.map((meal, mealIndex) => {
       const categoryKey = mealCategoryMap[meal];
       if (!categoryKey) return null;
@@ -193,7 +193,6 @@ export const CategoryCarousel = ({
         recipe: selectedRecipe
       };
     }).filter(Boolean);
-    
     return {
       date,
       dateStr,
@@ -220,7 +219,6 @@ export const CategoryCarousel = ({
     // Aquí puedes implementar la lógica de sustitución
     console.log('Sustituir receta:', recipe.title, 'en', dateStr, meal);
   };
-
   const handleToggleDay = (dateStr: string) => {
     setExpandedDays(prev => {
       const newSet = new Set(prev);
@@ -232,10 +230,8 @@ export const CategoryCarousel = ({
       return newSet;
     });
   };
-
   const handleMealToggle = (dateStr: string, mealType: string) => {
     const currentMeals = dailyMeals[dateStr] || [];
-    
     if (currentMeals.includes(mealType)) {
       // Si la comida está seleccionada, mostrar popup de confirmación
       setConfirmDelete({
@@ -249,7 +245,7 @@ export const CategoryCarousel = ({
         ...prev,
         [dateStr]: [...currentMeals, mealType]
       }));
-      
+
       // Generar una nueva receta para esta comida
       // Por ahora usamos una receta de ejemplo, en el futuro se conectará con IA
       const categoryKey = mealCategoryMap[mealType];
@@ -260,18 +256,27 @@ export const CategoryCarousel = ({
       }
     }
   };
-
   const confirmDeleteMeal = () => {
-    const { dateStr, mealType } = confirmDelete;
+    const {
+      dateStr,
+      mealType
+    } = confirmDelete;
     setDailyMeals(prev => ({
       ...prev,
       [dateStr]: prev[dateStr]?.filter(meal => meal !== mealType) || []
     }));
-    setConfirmDelete({ isOpen: false, dateStr: '', mealType: '' });
+    setConfirmDelete({
+      isOpen: false,
+      dateStr: '',
+      mealType: ''
+    });
   };
-
   const cancelDeleteMeal = () => {
-    setConfirmDelete({ isOpen: false, dateStr: '', mealType: '' });
+    setConfirmDelete({
+      isOpen: false,
+      dateStr: '',
+      mealType: ''
+    });
   };
   // Calcular todas las recetas visibles para el gráfico de macros
   const allVisibleRecipes = mealPlan.flatMap(day => day.meals.filter(({
@@ -303,11 +308,9 @@ export const CategoryCarousel = ({
           sectionRefs.current[dateStr] = el;
         }
       }} data-date={dateStr}>
-            <Card 
-              className="border-none px-3 py-2 mb-3 cursor-pointer" 
-              style={{ backgroundColor: '#F6F6F6' }}
-              onClick={() => handleToggleDay(dateStr)}
-            >
+            <Card className="border-none px-3 py-2 mb-3 cursor-pointer" style={{
+          backgroundColor: '#F6F6F6'
+        }} onClick={() => handleToggleDay(dateStr)}>
               <div className="flex items-center justify-between" style={{
             backgroundColor: '#F6F6F6'
           }}>
@@ -316,65 +319,48 @@ export const CategoryCarousel = ({
                 locale: es
               }).toLowerCase()}
                 </h3>
-                <button 
-                  className="text-gray-600 hover:text-gray-800 transition-colors"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleToggleDay(dateStr);
-                  }}
-                >
-                  {expandedDays.has(dateStr) ? (
-                    <X size={20} />
-                  ) : (
-                    <Plus size={20} />
-                  )}
+                <button className="text-gray-600 hover:text-gray-800 transition-colors" onClick={e => {
+              e.stopPropagation();
+              handleToggleDay(dateStr);
+            }}>
+                  {expandedDays.has(dateStr) ? <X size={20} /> : <Plus size={20} />}
                 </button>
               </div>
               
-              {expandedDays.has(dateStr) && (
-                <div className="mt-6 space-y-4" style={{ backgroundColor: '#F6F6F6' }}>
-                  <h4 className="text-sm font-medium text-gray-700 mb-3">Añade/Elimina</h4>
+              {expandedDays.has(dateStr) && <div className="mt-6 space-y-4" style={{
+            backgroundColor: '#F6F6F6'
+          }}>
+                  <h4 className="text-sm font-medium text-gray-700 mb-3">Añade o elimina</h4>
                   <div className="flex flex-wrap gap-2">
-                    {ALL_MEAL_TYPES.map((mealType) => {
-                      const isSelected = dailyMeals[dateStr]?.includes(mealType) || false;
-                      return (
-                        <button
-                          key={mealType}
-                          className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                            isSelected 
-                              ? "bg-black text-white" 
-                              : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-                          }`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleMealToggle(dateStr, mealType);
-                          }}
-                        >
+                    {ALL_MEAL_TYPES.map(mealType => {
+                const isSelected = dailyMeals[dateStr]?.includes(mealType) || false;
+                return <button key={mealType} className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${isSelected ? "bg-black text-white" : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"}`} onClick={e => {
+                  e.stopPropagation();
+                  handleMealToggle(dateStr, mealType);
+                }}>
                           {mealType}
-                        </button>
-                      );
-                    })}
+                        </button>;
+              })}
                   </div>
-                </div>
-              )}
+                </div>}
             </Card>
             {(() => {
-              const dayRecipes = meals.filter(({
-                recipe,
-                meal
-              }) => {
-                if (!recipe) return false;
-                const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
-                return !deletedRecipes.has(uniqueKey);
-              }).map(({
-                recipe
-              }) => recipe);
-              const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
-              const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
-              const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
-              const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
-              return null;
-            })()}
+          const dayRecipes = meals.filter(({
+            recipe,
+            meal
+          }) => {
+            if (!recipe) return false;
+            const uniqueKey = `${dateStr}-${meal}-${recipe.id}`;
+            return !deletedRecipes.has(uniqueKey);
+          }).map(({
+            recipe
+          }) => recipe);
+          const totalCalories = dayRecipes.reduce((sum, recipe) => sum + recipe.calories, 0);
+          const totalProtein = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.protein, 0);
+          const totalCarbs = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.carbs, 0);
+          const totalFat = dayRecipes.reduce((sum, recipe) => sum + recipe.macros.fat, 0);
+          return null;
+        })()}
             <div className="space-y-3">
               {meals.filter(({
             recipe,
