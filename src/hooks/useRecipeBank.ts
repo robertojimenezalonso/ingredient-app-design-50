@@ -38,11 +38,15 @@ export const useRecipeBank = () => {
     console.log('useRecipeBank: Starting loadRecipes...');
     try {
       setIsLoading(true);
+      console.log('useRecipeBank: Making supabase query...');
       const { data, error } = await supabase
         .from('recipe_bank')
         .select('*')
         .order('category', { ascending: true })
         .order('created_at', { ascending: true });
+
+      console.log('useRecipeBank: Query completed. Data:', data);
+      console.log('useRecipeBank: Query error:', error);
 
       if (error) {
         console.error('Error loading recipe bank:', error);
@@ -98,7 +102,9 @@ export const useRecipeBank = () => {
   };
 
   const getRecipesByCategory = (category: string): RecipeBankItem[] => {
-    return recipes.filter(recipe => recipe.category === category);
+    const filtered = recipes.filter(recipe => recipe.category === category);
+    console.log(`useRecipeBank: getRecipesByCategory(${category}) - total recipes: ${recipes.length}, filtered: ${filtered.length}`);
+    return filtered;
   };
 
   const getRandomRecipesByCategory = (category: string, count: number = 1): RecipeBankItem[] => {
