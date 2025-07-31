@@ -380,16 +380,38 @@ export const CategoryCarousel = ({
       
       {/* Popup de confirmación */}
       <AlertDialog open={confirmDelete.isOpen} onOpenChange={cancelDeleteMeal}>
-        <AlertDialogContent>
+        <AlertDialogContent className="mx-4">
           <AlertDialogHeader>
-            <AlertDialogTitle>Eliminar comida</AlertDialogTitle>
+            <AlertDialogTitle>Eliminar de mi plan</AlertDialogTitle>
             <AlertDialogDescription>
-              ¿Estás seguro de que quieres eliminar la receta de {confirmDelete.mealType} para este día?
+              ¿Estás seguro de que quieres eliminar este {confirmDelete.mealType.toLowerCase()} del día {format(new Date(confirmDelete.dateStr + 'T12:00:00'), "d", { locale: es })}?
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={cancelDeleteMeal}>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDeleteMeal}>Eliminar</AlertDialogAction>
+          
+          {/* Mostrar la receta que se va a eliminar */}
+          {(() => {
+            const day = mealPlan.find(d => d.dateStr === confirmDelete.dateStr);
+            const mealData = day?.meals.find(m => m.meal === confirmDelete.mealType);
+            const recipe = mealData?.recipe;
+            
+            if (recipe) {
+              return (
+                <div className="my-4 pointer-events-none opacity-75">
+                  <RecipeCard 
+                    recipe={recipe} 
+                    onAdd={() => {}} 
+                    onClick={() => {}} 
+                    mealType={confirmDelete.mealType}
+                  />
+                </div>
+              );
+            }
+            return null;
+          })()}
+          
+          <AlertDialogFooter className="flex-row gap-2 space-y-0">
+            <AlertDialogCancel onClick={cancelDeleteMeal} className="flex-1">Cancelar</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeleteMeal} className="flex-1">Eliminar</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
