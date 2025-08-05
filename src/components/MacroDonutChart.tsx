@@ -246,7 +246,7 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
 
   return (
     <div>
-      <h2 className="text-xl font-medium text-foreground px-1 mt-3 mb-1">Tu plan para comer saludable</h2>
+      <h2 className="text-xl font-medium text-foreground px-1 mt-3 mb-4">Tu plan para comer saludable</h2>
       <Card className="mb-3 -mt-1">
         <CardContent className="p-3">
           <div className="flex items-center gap-6">
