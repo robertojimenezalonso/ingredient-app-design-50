@@ -39,58 +39,27 @@ const Index = () => {
     handleGenerate: () => void;
   } | null>(null);
   
-  // Get all recipes for ingredient management - prioritize AI recipes
-  const explorationRecipes = aiRecipes.length > 0 ? aiRecipes : categories.flatMap(category => getRecipesByCategory(category, 10));
-  const { getGroupedIngredients, getSelectedIngredientsCount, initializeIngredients } = useGlobalIngredients();
-
   useEffect(() => {
     // Reset chart animation when entering from welcome page
     updateConfig({ shouldAnimateChart: false });
     
-    // Clear any old recipe data to ensure fresh load
-    const isFromSupabase = localStorage.getItem('recipesFromSupabase');
     const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-    
-    if (storedAiRecipes && isFromSupabase) {
+    if (storedAiRecipes) {
       try {
         const parsedRecipes = JSON.parse(storedAiRecipes);
         setAiRecipes(parsedRecipes);
-        console.log('Loaded', parsedRecipes.length, 'AI recipes from Supabase via localStorage');
-        
-        // Clear the flag to prevent confusion pero mantener las recetas
-        localStorage.removeItem('recipesFromSupabase');
-        
-        // Force re-initialization of ingredients to ensure they're properly set
-        if (parsedRecipes.length > 0) {
-          setTimeout(() => {
-            initializeIngredients(parsedRecipes);
-          }, 100);
-        }
+        console.log('Loaded', parsedRecipes.length, 'AI recipes from localStorage');
       } catch (error) {
         console.error('Error parsing stored AI recipes:', error);
-        // Clear corrupted data
-        localStorage.removeItem('aiGeneratedRecipes');
-        localStorage.removeItem('recipesFromSupabase');
       }
-    } else if (storedAiRecipes) {
-      // Hay recetas pero no están marcadas como de Supabase, usar con precaución
-      try {
-        const parsedRecipes = JSON.parse(storedAiRecipes);
-        setAiRecipes(parsedRecipes);
-        console.log('Loaded', parsedRecipes.length, 'AI recipes from localStorage (legacy)');
-      } catch (error) {
-        console.error('Error parsing stored AI recipes:', error);
-        localStorage.removeItem('aiGeneratedRecipes');
-      }
-    } else {
-      // If no valid recipes, clear any stale data
-      console.log('No valid recipes found, clearing stale data');
-      setAiRecipes([]);
-      localStorage.removeItem('aiGeneratedRecipes');
     }
-  }, [updateConfig, initializeIngredients]);
+  }, [updateConfig]);
 
-  // Initialize ingredients when recipes load (separate effect to avoid dependencies issues)
+  // Get all recipes for ingredient management - prioritize AI recipes
+  const explorationRecipes = aiRecipes.length > 0 ? aiRecipes : categories.flatMap(category => getRecipesByCategory(category, 10));
+  const { getGroupedIngredients, getSelectedIngredientsCount, initializeIngredients } = useGlobalIngredients();
+  
+  // Initialize ingredients when recipes load
   useEffect(() => {
     if (explorationRecipes.length > 0) {
       initializeIngredients(explorationRecipes);

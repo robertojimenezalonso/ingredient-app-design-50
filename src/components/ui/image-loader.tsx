@@ -33,6 +33,12 @@ export const ImageLoader = ({
   const defaultFallback = getCategoryFallback(category);
   const finalFallbackSrc = fallbackSrc || defaultFallback;
   
+  // Check if images are preloaded to skip loading state
+  const areImagesPreloaded = localStorage.getItem('recipeImagesPreloaded') === 'true';
+  const isSupabaseImage = src?.includes('supabase.co') && src?.includes('recipe-images');
+  const shouldSkipLoading = areImagesPreloaded && isSupabaseImage;
+  
+  const [isLoading, setIsLoading] = useState(!shouldSkipLoading);
   const [error, setError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState('');
 
@@ -50,27 +56,61 @@ export const ImageLoader = ({
   };
 
   useEffect(() => {
-    setCurrentSrc(addCacheBuster(src));
+    // If images are preloaded and this is a Supabase recipe image, skip loading
+    if (shouldSkipLoading) {
+      setIsLoading(false);
+      setCurrentSrc(src);
+    } else {
+      setIsLoading(true);
+      setCurrentSrc(addCacheBuster(src));
+    }
     setError(false);
-  }, [src]);
+  }, [src, shouldSkipLoading]);
+
+  const handleLoad = () => {
+    setIsLoading(false);
+    setError(false);
+  };
 
   const handleError = () => {
     setError(true);
+    setIsLoading(false);
     if (currentSrc !== finalFallbackSrc) {
       setCurrentSrc(addCacheBuster(finalFallbackSrc));
+      setIsLoading(true);
       setError(false);
     }
   };
 
   return (
-    <img
-      src={currentSrc}
-      alt={alt}
-      className={className}
-      onError={handleError}
-      loading="lazy"
-      crossOrigin="anonymous"
-      referrerPolicy="no-referrer"
-    />
+    <div className={cn("relative overflow-hidden", className)}>
+      {/* Loading skeleton */}
+      {isLoading && (
+        <div className={cn(
+          "absolute inset-0 bg-muted animate-pulse flex items-center justify-center",
+          className
+        )}>
+          {placeholder || (
+            <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+          )}
+        </div>
+      )}
+      
+      {/* Actual image */}
+      <img
+        src={currentSrc}
+        alt={alt}
+        className={cn(
+          "transition-opacity duration-300",
+          isLoading ? "opacity-0" : "opacity-100",
+          className
+        )}
+        onLoad={handleLoad}
+        onError={handleError}
+        loading="lazy"
+        crossOrigin="anonymous"
+        referrerPolicy="no-referrer"
+      />
+    </div>
   );
 };

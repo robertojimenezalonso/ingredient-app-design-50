@@ -15,7 +15,6 @@ const SubscriptionBenefitsPage = () => {
   const [progress, setProgress] = useState(1);
   const [checkedItems, setCheckedItems] = useState<boolean[]>([false, false, false, false, false]);
   const [isGeneratingRecipes, setIsGeneratingRecipes] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
   
   const items = ['Supermercados', 'Ingredientes', 'Nutrición', 'Recetas', 'Precios'];
   const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Comparando precios…'];
@@ -61,14 +60,8 @@ const SubscriptionBenefitsPage = () => {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        console.log(`✅ Image loaded: ${src}`);
-        resolve();
-      };
-      img.onerror = () => {
-        console.warn(`❌ Failed to load image: ${src}`);
-        reject(new Error(`Failed to load image: ${src}`));
-      };
+      img.onload = () => resolve();
+      img.onerror = () => reject();
       img.src = src;
     });
   };
@@ -84,8 +77,6 @@ const SubscriptionBenefitsPage = () => {
         params.people
       );
       
-      console.log('Recipe plan received:', recipePlan);
-      
       // Flatten recipes from the plan
       const recipes = [];
       for (const day of Object.keys(recipePlan)) {
@@ -95,7 +86,6 @@ const SubscriptionBenefitsPage = () => {
       }
       
       console.log('SubscriptionBenefitsPage: Loaded recipes from bank:', recipes.length);
-      console.log('Recipe titles:', recipes.map(r => r.title));
       
       // Initialize ingredients and add to cart
       if (recipes.length > 0) {
@@ -106,48 +96,28 @@ const SubscriptionBenefitsPage = () => {
           addToCart(recipe, recipe.servings, selectedIngredients);
         });
 
-        // Clear any existing AI recipes and store new ones
-        localStorage.removeItem('aiGeneratedRecipes');
+        // Store recipes in localStorage for compatibility
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
-        localStorage.setItem('recipesFromSupabase', 'true'); // Marcar que vienen de Supabase
         console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
         
-        // Preload ALL recipe images and wait for them to complete
-        console.log('🔄 Preloading all recipe images...');
-        const imagesToLoad = recipes
-          .filter(recipe => recipe.image)
-          .map(recipe => recipe.image);
+        // Preload all recipe images from Supabase
+        console.log('🔄 Preloading recipe images from Supabase...');
+        const preloadPromises = recipes
+          .filter(recipe => recipe.image && recipe.image.includes('supabase.co'))
+          .map(recipe => preloadImage(recipe.image));
         
-        console.log(`Found ${imagesToLoad.length} images to preload:`, imagesToLoad);
-        
-        // Load images one by one to show progress
-        let loadedCount = 0;
-        for (const imageUrl of imagesToLoad) {
-          try {
-            await preloadImage(imageUrl);
-            loadedCount++;
-            console.log(`Progress: ${loadedCount}/${imagesToLoad.length} images loaded`);
-          } catch (error) {
-            console.warn(`Failed to preload image, but continuing: ${imageUrl}`, error);
-            loadedCount++; // Count failed images as "loaded" to continue
-          }
+        try {
+          await Promise.all(preloadPromises);
+          console.log('✅ All recipe images successfully preloaded');
+        } catch (error) {
+          console.warn('Some images failed to preload, but continuing...', error);
         }
-        
-        console.log('✅ All recipe images preloading completed');
-        console.log('Setting imagesLoaded to true');
-        setImagesLoaded(true);
         
         // Mark images as preloaded in localStorage
         localStorage.setItem('recipeImagesPreloaded', 'true');
-      } else {
-        console.log('No recipes found, setting imagesLoaded to true anyway');
-        setImagesLoaded(true);
       }
     } catch (error) {
       console.error('Error loading recipes from recipe bank:', error);
-      // Even if there's an error, mark as loaded to prevent infinite loading
-      console.log('Error occurred, setting imagesLoaded to true anyway');
-      setImagesLoaded(true);
     }
   };
 
@@ -159,41 +129,16 @@ const SubscriptionBenefitsPage = () => {
       generateRecipesInBackground(JSON.parse(pendingGeneration));
       localStorage.removeItem('pendingRecipeGeneration');
     }
-  }, []); // Solo ejecutar una vez al montar
 
-  useEffect(() => {
     const startTime = Date.now();
-    const minDuration = 3000; // Minimum 3 seconds to show the loading screen
-    let animationId: number;
-    let hasNavigated = false;
-    let hasReached100 = false; // Nueva variable para controlar que no baje del 100%
+    const duration = isGeneratingRecipes ? 3000 : 2000; // Shorter duration since no AI generation
     
     const updateProgress = () => {
-      if (hasNavigated) return; // Prevenir múltiples navegaciones
-
       const elapsed = Date.now() - startTime;
-      const ratio = elapsed / minDuration;
+      const ratio = elapsed / duration;
       
-      // Una vez que llega al 100%, no permitir que baje
-      if (hasReached100) {
+      if (ratio >= 1) {
         setProgress(100);
-        if (!hasNavigated) {
-          hasNavigated = true;
-          // Mark as having a planning session when complete
-          updateConfig({ hasPlanningSession: true });
-          // Save current planning session before navigating
-          saveCurrentPlanningSession();
-          // Navigate to milista after reaching 100%
-          setTimeout(() => navigate('/milista'), 500);
-        }
-        return;
-      }
-      
-      // Only proceed to 100% if images are loaded AND minimum time has passed
-      if (ratio >= 1 && imagesLoaded && !hasNavigated) {
-        hasReached100 = true; // Marcar que llegó al 100%
-        setProgress(100);
-        hasNavigated = true;
         // Mark as having a planning session when complete
         updateConfig({ hasPlanningSession: true });
         // Save current planning session before navigating
@@ -203,34 +148,35 @@ const SubscriptionBenefitsPage = () => {
         return;
       }
       
-      // Calculate progress based on both time and image loading
-      let timeProgress = Math.min(ratio, 1) * 85; // Time contributes up to 85%
-      let imageProgress = imagesLoaded ? 15 : 0; // Images contribute final 15%
-      let newProgress = timeProgress + imageProgress;
-      
-      // Solo actualizar progreso si no ha llegado al 100%
-      if (!hasReached100) {
-        setProgress(Math.min(100, Math.max(1, newProgress)));
-        
-        // Check items progressively based on progress
-        const itemThresholds = [20, 40, 60, 80, 95];
-        const newCheckedItems = itemThresholds.map(threshold => newProgress >= threshold);
-        setCheckedItems(newCheckedItems);
+      // Progressive slowdown: fast start, very slow last 15%
+      let newProgress;
+      if (ratio > 0.85) {
+        // Much slower progression for the last 15% (85%-100%)
+        const lastPhaseRatio = (ratio - 0.85) / 0.15;
+        const slowedRatio = Math.pow(lastPhaseRatio, 4); // Much slower with power of 4
+        newProgress = 85 + (15 * slowedRatio);
+      } else if (ratio > 0.7) {
+        // Medium slow for 70%-85%
+        const midPhaseRatio = (ratio - 0.7) / 0.15;
+        const slowedRatio = Math.pow(midPhaseRatio, 1.5);
+        newProgress = 70 + (15 * slowedRatio);
+      } else {
+        // Fast progression for first 70%
+        newProgress = ratio * 70 / 0.7;
       }
       
-      if (!hasNavigated) {
-        animationId = requestAnimationFrame(updateProgress);
-      }
+      setProgress(Math.min(100, Math.max(1, newProgress)));
+      
+      // Check items progressively based on progress
+      const itemThresholds = [20, 40, 60, 80, 95];
+      const newCheckedItems = itemThresholds.map(threshold => newProgress >= threshold);
+      setCheckedItems(newCheckedItems);
+      
+      requestAnimationFrame(updateProgress);
     };
     
-    animationId = requestAnimationFrame(updateProgress);
-    
-    return () => {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-    };
-  }, [imagesLoaded, navigate, updateConfig]); // Dependencias específicas
+    requestAnimationFrame(updateProgress);
+  }, [navigate]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
