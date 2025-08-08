@@ -57,6 +57,16 @@ const SubscriptionBenefitsPage = () => {
     return themes[Math.floor(Math.random() * themes.length)];
   };
 
+  const preloadImage = (src: string): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => resolve();
+      img.onerror = () => reject();
+      img.src = src;
+    });
+  };
+
   const generateRecipesInBackground = async (params: any) => {
     try {
       console.log('SubscriptionBenefitsPage: Starting recipe generation...');
@@ -130,6 +140,22 @@ const SubscriptionBenefitsPage = () => {
         }
         
         console.log('✅ Image generation completed for all recipes');
+        
+        // Preload all recipe images to ensure they're cached
+        console.log('🔄 Preloading all recipe images...');
+        const preloadPromises = aiRecipes
+          .filter(recipe => recipe.image && !recipe.image.includes('unsplash.com'))
+          .map(recipe => preloadImage(recipe.image));
+        
+        try {
+          await Promise.all(preloadPromises);
+          console.log('✅ All recipe images successfully preloaded');
+        } catch (error) {
+          console.warn('Some images failed to preload, but continuing...', error);
+        }
+        
+        // Mark images as preloaded in localStorage
+        localStorage.setItem('recipeImagesPreloaded', 'true');
       }
     } catch (error) {
       console.error('Error generating recipes in background:', error);

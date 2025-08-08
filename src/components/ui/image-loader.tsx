@@ -32,7 +32,13 @@ export const ImageLoader = ({
 }: ImageLoaderProps) => {
   const defaultFallback = getCategoryFallback(category);
   const finalFallbackSrc = fallbackSrc || defaultFallback;
-  const [isLoading, setIsLoading] = useState(true);
+  
+  // Check if images are preloaded to skip loading state
+  const areImagesPreloaded = localStorage.getItem('recipeImagesPreloaded') === 'true';
+  const isSupabaseImage = src?.includes('supabase.co') && src?.includes('recipe-images');
+  const shouldSkipLoading = areImagesPreloaded && isSupabaseImage;
+  
+  const [isLoading, setIsLoading] = useState(!shouldSkipLoading);
   const [error, setError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState('');
 
@@ -50,10 +56,16 @@ export const ImageLoader = ({
   };
 
   useEffect(() => {
-    setIsLoading(true);
+    // If images are preloaded and this is a Supabase recipe image, skip loading
+    if (shouldSkipLoading) {
+      setIsLoading(false);
+      setCurrentSrc(src);
+    } else {
+      setIsLoading(true);
+      setCurrentSrc(addCacheBuster(src));
+    }
     setError(false);
-    setCurrentSrc(addCacheBuster(src));
-  }, [src]);
+  }, [src, shouldSkipLoading]);
 
   const handleLoad = () => {
     setIsLoading(false);
