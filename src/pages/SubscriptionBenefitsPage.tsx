@@ -2,15 +2,14 @@ import { useNavigate } from "react-router-dom";
 import { Check } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useUserConfig } from "@/contexts/UserConfigContext";
-import { useAIRecipes } from "@/hooks/useAIRecipes";
+import { useRecipeBank } from "@/hooks/useRecipeBank";
 import { useGlobalIngredients } from "@/hooks/useGlobalIngredients";
 import { useCart } from "@/hooks/useCart";
-import { supabase } from "@/integrations/supabase/client";
 
 const SubscriptionBenefitsPage = () => {
   const navigate = useNavigate();
   const { updateConfig, config } = useUserConfig();
-  const { generateRecipe } = useAIRecipes();
+  const { getRecipesForPlan, convertToRecipe } = useRecipeBank();
   const { initializeIngredients } = useGlobalIngredients();
   const { addToCart } = useCart();
   const [progress, setProgress] = useState(1);
@@ -69,82 +68,42 @@ const SubscriptionBenefitsPage = () => {
 
   const generateRecipesInBackground = async (params: any) => {
     try {
-      console.log('SubscriptionBenefitsPage: Starting recipe generation...');
+      console.log('SubscriptionBenefitsPage: Loading recipes from recipe bank...');
       
-      // Generate specific recipes for each day-meal combination
-      const recipePromises = [];
-      for (const date of params.selectedDates) {
-        for (const meal of params.selectedMeals) {
-          console.log(`Generating recipe for ${date} - ${meal}`);
-          recipePromises.push(
-            generateRecipe({
-              people: params.people,
-              days: [date],
-              meals: [meal],
-              restrictions: params.restrictions
-            }, false) // Don't show toasts during generation
-          );
+      // Use recipe bank to get recipes for the selected plan
+      const recipePlan = getRecipesForPlan(
+        params.selectedDates,
+        params.selectedMeals,
+        params.people
+      );
+      
+      // Flatten recipes from the plan
+      const recipes = [];
+      for (const day of Object.keys(recipePlan)) {
+        for (const meal of Object.keys(recipePlan[day])) {
+          recipes.push(...recipePlan[day][meal]);
         }
       }
       
-      // Generate all recipes in parallel (but images will be generated sequentially)
-      const aiRecipes = (await Promise.all(recipePromises)).filter(recipe => recipe !== null);
-      
-      console.log('SubscriptionBenefitsPage: AI generation completed. Recipes received:', aiRecipes.length);
+      console.log('SubscriptionBenefitsPage: Loaded recipes from bank:', recipes.length);
       
       // Initialize ingredients and add to cart
-      if (aiRecipes.length > 0) {
-        initializeIngredients(aiRecipes);
+      if (recipes.length > 0) {
+        initializeIngredients(recipes);
         
-        aiRecipes.forEach(recipe => {
+        recipes.forEach(recipe => {
           const selectedIngredients = recipe.ingredients.map(ing => ing.id);
           addToCart(recipe, recipe.servings, selectedIngredients);
         });
 
-        // Store AI recipes in localStorage immediately (with fallback images)
-        localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
+        // Store recipes in localStorage for compatibility
+        localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
         console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
         
-        // Generate images for recipes one by one to respect rate limits
-        console.log('Starting sequential image generation to respect OpenAI rate limits...');
-        for (let i = 0; i < aiRecipes.length; i++) {
-          const recipe = aiRecipes[i];
-          try {
-            console.log(`Generating image ${i + 1}/${aiRecipes.length} for: ${recipe.title}`);
-            
-            // Wait 15 seconds between each image request to respect rate limits
-            if (i > 0) {
-              console.log('Waiting 15 seconds before next image generation...');
-              await new Promise(resolve => setTimeout(resolve, 15000));
-            }
-            
-            // Generate image for this specific recipe
-            const { data: imageData, error: imageError } = await supabase.functions.invoke(
-              'generate-recipe-image',
-              { body: { recipeName: recipe.title } }
-            );
-            
-            if (!imageError && imageData?.imageUrl) {
-              recipe.image = imageData.imageUrl;
-              console.log(`✅ Successfully generated image for: ${recipe.title}`);
-            } else {
-              console.log(`⚠️ Using fallback image for: ${recipe.title}`, imageError?.message);
-            }
-            
-            // Update localStorage with the new image
-            localStorage.setItem('aiGeneratedRecipes', JSON.stringify(aiRecipes));
-            
-          } catch (error) {
-            console.warn(`Failed to generate image for ${recipe.title}:`, error);
-          }
-        }
-        
-        console.log('✅ Image generation completed for all recipes');
-        
-        // Preload all recipe images to ensure they're cached
-        console.log('🔄 Preloading all recipe images...');
-        const preloadPromises = aiRecipes
-          .filter(recipe => recipe.image && !recipe.image.includes('unsplash.com'))
+        // Preload all recipe images from Supabase
+        console.log('🔄 Preloading recipe images from Supabase...');
+        const preloadPromises = recipes
+          .filter(recipe => recipe.image && recipe.image.includes('supabase.co'))
           .map(recipe => preloadImage(recipe.image));
         
         try {
@@ -158,12 +117,12 @@ const SubscriptionBenefitsPage = () => {
         localStorage.setItem('recipeImagesPreloaded', 'true');
       }
     } catch (error) {
-      console.error('Error generating recipes in background:', error);
+      console.error('Error loading recipes from recipe bank:', error);
     }
   };
 
   useEffect(() => {
-    // Check if we should generate recipes
+    // Check if we should load recipes from recipe bank
     const pendingGeneration = localStorage.getItem('pendingRecipeGeneration');
     if (pendingGeneration) {
       setIsGeneratingRecipes(true);
@@ -172,7 +131,7 @@ const SubscriptionBenefitsPage = () => {
     }
 
     const startTime = Date.now();
-    const duration = isGeneratingRecipes ? 15000 : 2000; // Longer duration if generating recipes
+    const duration = isGeneratingRecipes ? 3000 : 2000; // Shorter duration since no AI generation
     
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
