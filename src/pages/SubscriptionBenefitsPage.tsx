@@ -84,6 +84,8 @@ const SubscriptionBenefitsPage = () => {
         params.people
       );
       
+      console.log('Recipe plan received:', recipePlan);
+      
       // Flatten recipes from the plan
       const recipes = [];
       for (const day of Object.keys(recipePlan)) {
@@ -93,6 +95,7 @@ const SubscriptionBenefitsPage = () => {
       }
       
       console.log('SubscriptionBenefitsPage: Loaded recipes from bank:', recipes.length);
+      console.log('Recipe titles:', recipes.map(r => r.title));
       
       // Initialize ingredients and add to cart
       if (recipes.length > 0) {
@@ -113,7 +116,7 @@ const SubscriptionBenefitsPage = () => {
           .filter(recipe => recipe.image)
           .map(recipe => recipe.image);
         
-        console.log(`Found ${imagesToLoad.length} images to preload`);
+        console.log(`Found ${imagesToLoad.length} images to preload:`, imagesToLoad);
         
         // Load images one by one to show progress
         let loadedCount = 0;
@@ -129,14 +132,19 @@ const SubscriptionBenefitsPage = () => {
         }
         
         console.log('✅ All recipe images preloading completed');
+        console.log('Setting imagesLoaded to true');
         setImagesLoaded(true);
         
         // Mark images as preloaded in localStorage
         localStorage.setItem('recipeImagesPreloaded', 'true');
+      } else {
+        console.log('No recipes found, setting imagesLoaded to true anyway');
+        setImagesLoaded(true);
       }
     } catch (error) {
       console.error('Error loading recipes from recipe bank:', error);
       // Even if there's an error, mark as loaded to prevent infinite loading
+      console.log('Error occurred, setting imagesLoaded to true anyway');
       setImagesLoaded(true);
     }
   };
