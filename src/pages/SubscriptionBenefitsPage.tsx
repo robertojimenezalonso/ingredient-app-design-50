@@ -106,8 +106,10 @@ const SubscriptionBenefitsPage = () => {
           addToCart(recipe, recipe.servings, selectedIngredients);
         });
 
-        // Store recipes in localStorage for compatibility
+        // Clear any existing AI recipes and store new ones
+        localStorage.removeItem('aiGeneratedRecipes');
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
+        localStorage.setItem('recipesFromSupabase', 'true'); // Marcar que vienen de Supabase
         console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
         
         // Preload ALL recipe images and wait for them to complete
@@ -157,16 +159,23 @@ const SubscriptionBenefitsPage = () => {
       generateRecipesInBackground(JSON.parse(pendingGeneration));
       localStorage.removeItem('pendingRecipeGeneration');
     }
+  }, []); // Solo ejecutar una vez al montar
 
+  useEffect(() => {
     const startTime = Date.now();
     const minDuration = 3000; // Minimum 3 seconds to show the loading screen
+    let animationId: number;
+    let hasNavigated = false;
     
     const updateProgress = () => {
+      if (hasNavigated) return; // Prevenir múltiples navegaciones
+
       const elapsed = Date.now() - startTime;
       const ratio = elapsed / minDuration;
       
       // Only proceed to 100% if images are loaded AND minimum time has passed
-      if (ratio >= 1 && imagesLoaded) {
+      if (ratio >= 1 && imagesLoaded && !hasNavigated) {
+        hasNavigated = true;
         setProgress(100);
         // Mark as having a planning session when complete
         updateConfig({ hasPlanningSession: true });
@@ -188,11 +197,19 @@ const SubscriptionBenefitsPage = () => {
       const newCheckedItems = itemThresholds.map(threshold => newProgress >= threshold);
       setCheckedItems(newCheckedItems);
       
-      requestAnimationFrame(updateProgress);
+      if (!hasNavigated) {
+        animationId = requestAnimationFrame(updateProgress);
+      }
     };
     
-    requestAnimationFrame(updateProgress);
-  }, [navigate, imagesLoaded]);
+    animationId = requestAnimationFrame(updateProgress);
+    
+    return () => {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+      }
+    };
+  }, [imagesLoaded, navigate, updateConfig]); // Dependencias específicas
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">

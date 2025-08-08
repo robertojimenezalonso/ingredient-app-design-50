@@ -43,15 +43,29 @@ const Index = () => {
     // Reset chart animation when entering from welcome page
     updateConfig({ shouldAnimateChart: false });
     
+    // Clear any old recipe data to ensure fresh load
+    const isFromSupabase = localStorage.getItem('recipesFromSupabase');
     const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-    if (storedAiRecipes) {
+    
+    if (storedAiRecipes && isFromSupabase) {
       try {
         const parsedRecipes = JSON.parse(storedAiRecipes);
         setAiRecipes(parsedRecipes);
-        console.log('Loaded', parsedRecipes.length, 'AI recipes from localStorage');
+        console.log('Loaded', parsedRecipes.length, 'AI recipes from Supabase via localStorage');
+        
+        // Clear the flag to prevent confusion
+        localStorage.removeItem('recipesFromSupabase');
       } catch (error) {
         console.error('Error parsing stored AI recipes:', error);
+        // Clear corrupted data
+        localStorage.removeItem('aiGeneratedRecipes');
+        localStorage.removeItem('recipesFromSupabase');
       }
+    } else {
+      // If no valid Supabase recipes, clear any stale data
+      console.log('No valid Supabase recipes found, clearing stale data');
+      setAiRecipes([]);
+      localStorage.removeItem('aiGeneratedRecipes');
     }
   }, [updateConfig]);
 
