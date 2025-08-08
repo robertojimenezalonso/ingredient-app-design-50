@@ -15,6 +15,7 @@ const SubscriptionBenefitsPage = () => {
   const [progress, setProgress] = useState(1);
   const [checkedItems, setCheckedItems] = useState<boolean[]>([false, false, false, false, false]);
   const [isGeneratingRecipes, setIsGeneratingRecipes] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
   
   const items = ['Supermercados', 'Ingredientes', 'Nutrición', 'Recetas', 'Precios'];
   const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Comparando precios…'];
@@ -60,8 +61,14 @@ const SubscriptionBenefitsPage = () => {
     return new Promise((resolve, reject) => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      img.onload = () => resolve();
-      img.onerror = () => reject();
+      img.onload = () => {
+        console.log(`✅ Image loaded: ${src}`);
+        resolve();
+      };
+      img.onerror = () => {
+        console.warn(`❌ Failed to load image: ${src}`);
+        reject(new Error(`Failed to load image: ${src}`));
+      };
       img.src = src;
     });
   };
@@ -100,24 +107,37 @@ const SubscriptionBenefitsPage = () => {
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
         console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
         
-        // Preload all recipe images from Supabase
-        console.log('🔄 Preloading recipe images from Supabase...');
-        const preloadPromises = recipes
-          .filter(recipe => recipe.image && recipe.image.includes('supabase.co'))
-          .map(recipe => preloadImage(recipe.image));
+        // Preload ALL recipe images and wait for them to complete
+        console.log('🔄 Preloading all recipe images...');
+        const imagesToLoad = recipes
+          .filter(recipe => recipe.image)
+          .map(recipe => recipe.image);
         
-        try {
-          await Promise.all(preloadPromises);
-          console.log('✅ All recipe images successfully preloaded');
-        } catch (error) {
-          console.warn('Some images failed to preload, but continuing...', error);
+        console.log(`Found ${imagesToLoad.length} images to preload`);
+        
+        // Load images one by one to show progress
+        let loadedCount = 0;
+        for (const imageUrl of imagesToLoad) {
+          try {
+            await preloadImage(imageUrl);
+            loadedCount++;
+            console.log(`Progress: ${loadedCount}/${imagesToLoad.length} images loaded`);
+          } catch (error) {
+            console.warn(`Failed to preload image, but continuing: ${imageUrl}`, error);
+            loadedCount++; // Count failed images as "loaded" to continue
+          }
         }
+        
+        console.log('✅ All recipe images preloading completed');
+        setImagesLoaded(true);
         
         // Mark images as preloaded in localStorage
         localStorage.setItem('recipeImagesPreloaded', 'true');
       }
     } catch (error) {
       console.error('Error loading recipes from recipe bank:', error);
+      // Even if there's an error, mark as loaded to prevent infinite loading
+      setImagesLoaded(true);
     }
   };
 
@@ -131,13 +151,14 @@ const SubscriptionBenefitsPage = () => {
     }
 
     const startTime = Date.now();
-    const duration = isGeneratingRecipes ? 3000 : 2000; // Shorter duration since no AI generation
+    const minDuration = 3000; // Minimum 3 seconds to show the loading screen
     
     const updateProgress = () => {
       const elapsed = Date.now() - startTime;
-      const ratio = elapsed / duration;
+      const ratio = elapsed / minDuration;
       
-      if (ratio >= 1) {
+      // Only proceed to 100% if images are loaded AND minimum time has passed
+      if (ratio >= 1 && imagesLoaded) {
         setProgress(100);
         // Mark as having a planning session when complete
         updateConfig({ hasPlanningSession: true });
@@ -148,23 +169,10 @@ const SubscriptionBenefitsPage = () => {
         return;
       }
       
-      // Progressive slowdown: fast start, very slow last 15%
-      let newProgress;
-      if (ratio > 0.85) {
-        // Much slower progression for the last 15% (85%-100%)
-        const lastPhaseRatio = (ratio - 0.85) / 0.15;
-        const slowedRatio = Math.pow(lastPhaseRatio, 4); // Much slower with power of 4
-        newProgress = 85 + (15 * slowedRatio);
-      } else if (ratio > 0.7) {
-        // Medium slow for 70%-85%
-        const midPhaseRatio = (ratio - 0.7) / 0.15;
-        const slowedRatio = Math.pow(midPhaseRatio, 1.5);
-        newProgress = 70 + (15 * slowedRatio);
-      } else {
-        // Fast progression for first 70%
-        newProgress = ratio * 70 / 0.7;
-      }
-      
+      // Calculate progress based on both time and image loading
+      let timeProgress = Math.min(ratio, 1) * 85; // Time contributes up to 85%
+      let imageProgress = imagesLoaded ? 15 : 0; // Images contribute final 15%
+      let newProgress = timeProgress + imageProgress;
       setProgress(Math.min(100, Math.max(1, newProgress)));
       
       // Check items progressively based on progress
@@ -176,7 +184,7 @@ const SubscriptionBenefitsPage = () => {
     };
     
     requestAnimationFrame(updateProgress);
-  }, [navigate]);
+  }, [navigate, imagesLoaded]);
 
   return (
     <div className="min-h-screen bg-background flex flex-col items-center justify-center p-6">
