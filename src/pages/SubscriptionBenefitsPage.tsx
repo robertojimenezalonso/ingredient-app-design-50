@@ -166,6 +166,7 @@ const SubscriptionBenefitsPage = () => {
     const minDuration = 3000; // Minimum 3 seconds to show the loading screen
     let animationId: number;
     let hasNavigated = false;
+    let hasReached100 = false; // Nueva variable para controlar que no baje del 100%
     
     const updateProgress = () => {
       if (hasNavigated) return; // Prevenir múltiples navegaciones
@@ -173,10 +174,26 @@ const SubscriptionBenefitsPage = () => {
       const elapsed = Date.now() - startTime;
       const ratio = elapsed / minDuration;
       
+      // Una vez que llega al 100%, no permitir que baje
+      if (hasReached100) {
+        setProgress(100);
+        if (!hasNavigated) {
+          hasNavigated = true;
+          // Mark as having a planning session when complete
+          updateConfig({ hasPlanningSession: true });
+          // Save current planning session before navigating
+          saveCurrentPlanningSession();
+          // Navigate to milista after reaching 100%
+          setTimeout(() => navigate('/milista'), 500);
+        }
+        return;
+      }
+      
       // Only proceed to 100% if images are loaded AND minimum time has passed
       if (ratio >= 1 && imagesLoaded && !hasNavigated) {
-        hasNavigated = true;
+        hasReached100 = true; // Marcar que llegó al 100%
         setProgress(100);
+        hasNavigated = true;
         // Mark as having a planning session when complete
         updateConfig({ hasPlanningSession: true });
         // Save current planning session before navigating
@@ -190,12 +207,16 @@ const SubscriptionBenefitsPage = () => {
       let timeProgress = Math.min(ratio, 1) * 85; // Time contributes up to 85%
       let imageProgress = imagesLoaded ? 15 : 0; // Images contribute final 15%
       let newProgress = timeProgress + imageProgress;
-      setProgress(Math.min(100, Math.max(1, newProgress)));
       
-      // Check items progressively based on progress
-      const itemThresholds = [20, 40, 60, 80, 95];
-      const newCheckedItems = itemThresholds.map(threshold => newProgress >= threshold);
-      setCheckedItems(newCheckedItems);
+      // Solo actualizar progreso si no ha llegado al 100%
+      if (!hasReached100) {
+        setProgress(Math.min(100, Math.max(1, newProgress)));
+        
+        // Check items progressively based on progress
+        const itemThresholds = [20, 40, 60, 80, 95];
+        const newCheckedItems = itemThresholds.map(threshold => newProgress >= threshold);
+        setCheckedItems(newCheckedItems);
+      }
       
       if (!hasNavigated) {
         animationId = requestAnimationFrame(updateProgress);
