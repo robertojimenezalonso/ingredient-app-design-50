@@ -201,9 +201,10 @@ export const DailySummaryPage = () => {
                       <React.Fragment key={dayPlan.dateStr}>
                         {/* Fila de encabezado del día con funcionalidad de /milista */}
                         <tr className="bg-[#F6F6F6] border-b">
-                          <td colSpan={5} className="p-0">
+                          <td colSpan={5} className="p-0 sticky left-0 right-0">
                             <div 
-                              className="flex items-center justify-between p-4 cursor-pointer"
+                              className="flex items-center justify-between p-4 cursor-pointer w-screen max-w-full"
+                              style={{ width: '100vw', maxWidth: 'calc(100vw - 2rem)' }}
                               onClick={() => handleToggleDay(dayPlan.dateStr)}
                             >
                               <h3 className="text-sm text-black capitalize font-semibold underline underline-offset-4">
@@ -221,7 +222,10 @@ export const DailySummaryPage = () => {
                             </div>
                             
                             {expandedDays.has(dayPlan.dateStr) && (
-                              <div className="px-4 pb-4 border-t border-gray-300">
+                              <div 
+                                className="px-4 pb-4 border-t border-gray-300"
+                                style={{ width: '100vw', maxWidth: 'calc(100vw - 2rem)' }}
+                              >
                                 <DayMealSelector
                                   dateStr={dayPlan.dateStr}
                                   currentMeals={config.selectedMeals || []}
