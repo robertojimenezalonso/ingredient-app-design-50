@@ -4,7 +4,6 @@ import { ArrowLeft, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
@@ -146,50 +145,14 @@ export const DailySummaryPage = () => {
       </div>
 
       <div className="p-4 space-y-6">
-        {/* Gráfico y objetivo */}
-        {chartData.length > 0 && (
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-6 mb-4">
-                <div className="w-20 h-20 flex-shrink-0">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={chartData}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={20}
-                        outerRadius={40}
-                        paddingAngle={2}
-                        dataKey="value"
-                      >
-                        {chartData.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-
-                <div className="flex-1 space-y-1">
-                  {chartData.map((macro) => (
-                    <div key={macro.name} className="flex items-center gap-2">
-                      <div 
-                        className="w-3 h-3 rounded-full" 
-                        style={{ backgroundColor: macro.color }}
-                      />
-                      <span className="text-sm">{macro.percentage}% {macro.name}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <p className="text-sm text-muted-foreground text-center">
-                {getObjectiveText()}
-              </p>
-            </CardContent>
-          </Card>
-        )}
+        {/* Solo el texto del objetivo */}
+        <Card>
+          <CardContent className="p-4">
+            <p className="text-sm text-muted-foreground text-center">
+              {getObjectiveText()}
+            </p>
+          </CardContent>
+        </Card>
 
         {/* Tabla estilo Excel */}
         <Card>
