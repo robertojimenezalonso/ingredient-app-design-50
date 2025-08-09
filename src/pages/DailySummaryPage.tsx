@@ -180,7 +180,6 @@ export const DailySummaryPage = () => {
               <table className="w-full">
                 <thead className="bg-muted/50">
                   <tr className="border-b">
-                    <th className="text-left p-3 font-medium w-24">Comida</th>
                     <th className="text-left p-3 font-medium">Receta</th>
                     <th className="text-center p-3 font-medium w-16">Cal</th>
                     <th className="text-center p-3 font-medium w-16">Prot</th>
@@ -202,7 +201,7 @@ export const DailySummaryPage = () => {
                       <React.Fragment key={dayPlan.dateStr}>
                         {/* Fila de encabezado del día con funcionalidad de /milista */}
                         <tr className="bg-[#F6F6F6] border-b">
-                          <td colSpan={6} className="p-0">
+                          <td colSpan={5} className="p-0">
                             <div 
                               className="flex items-center justify-between p-4 cursor-pointer"
                               onClick={() => handleToggleDay(dayPlan.dateStr)}
@@ -238,23 +237,18 @@ export const DailySummaryPage = () => {
                         {/* Recetas del día */}
                         {dayRecipes.length === 0 ? (
                           <tr className="border-b hover:bg-muted/25">
-                            <td className="p-3 text-muted-foreground text-center" colSpan={6}>
+                            <td className="p-3 text-muted-foreground text-center" colSpan={5}>
                               No hay recetas para este día
                             </td>
                           </tr>
                         ) : (
                           dayRecipes.map((recipe, recipeIndex) => (
                             <tr key={recipe.id} className="border-b hover:bg-muted/25">
-                            <td className="p-3 w-24">
-                              <span className="text-sm font-medium capitalize">
-                                {recipe.mealType}
-                              </span>
-                            </td>
-                            <td className="p-3">
-                              <div className="flex items-center gap-3">
-                                <img
-                                  src={recipe.image}
-                                  alt={recipe.title}
+                              <td className="p-3">
+                                <div className="flex items-center gap-3">
+                                  <img
+                                    src={recipe.image}
+                                    alt={recipe.title}
                                   className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
                                   onClick={() => navigate(`/recipe/${recipe.id}`)}
                                 />
@@ -267,13 +261,7 @@ export const DailySummaryPage = () => {
                                     {recipe.title}
                                   </span>
                                   <span className="inline-flex items-center rounded-full bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground flex-shrink-0">
-                                    {recipe.category === 'breakfast' ? 'Desayuno' :
-                                     recipe.category === 'lunch' ? 'Almuerzo' :
-                                     recipe.category === 'dinner' ? 'Cena' :
-                                     recipe.category === 'snacks' ? 'Snack' :
-                                     recipe.category === 'appetizer' ? 'Aperitivo' :
-                                     recipe.category === 'desserts' ? 'Postre' : 
-                                     recipe.category}
+                                    {recipe.mealType}
                                   </span>
                                 </div>
                               </div>
@@ -289,8 +277,7 @@ export const DailySummaryPage = () => {
                         {/* Fila de totales del día */}
                         {dayRecipes.length > 0 && (
                           <tr className="border-b-2 border-primary/20 bg-muted/50">
-                            <td className="p-3 font-semibold w-24">TOTAL DÍA</td>
-                            <td className="p-3"></td>
+                            <td className="p-3 font-semibold">Total por día por persona</td>
                             <td className="p-3 text-center font-semibold w-16">{dayTotals.calories}</td>
                             <td className="p-3 text-center font-semibold text-[#DE6968] w-16">{dayTotals.protein}g</td>
                             <td className="p-3 text-center font-semibold text-[#DE9A69] w-16">{dayTotals.carbs}g</td>
