@@ -161,7 +161,7 @@ export const DailySummaryPage = () => {
               <table className="w-full">
                 <thead className="bg-muted/50">
                   <tr className="border-b">
-                    <th className="text-left p-3 font-medium">Receta</th>
+                    <th className="text-left p-3 font-medium w-40">Receta</th>
                     <th className="text-center p-3 font-medium w-28">kcal</th>
                     <th className="text-center p-3 font-medium w-16">Prot</th>
                     <th className="text-center p-3 font-medium w-16">Carb</th>
