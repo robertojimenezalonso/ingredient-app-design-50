@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeft, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +8,9 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useDateTabs } from '@/hooks/useDateTabs';
+import { DayMealSelector } from '@/components/DayMealSelector';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const MACRO_COLORS = {
   protein: '#DE6968',
@@ -19,6 +22,7 @@ export const DailySummaryPage = () => {
   const navigate = useNavigate();
   const { config } = useUserConfig();
   const { mealPlan } = useDateTabs(); // Usar la misma lógica que /milista
+  const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
 
   // Extraer todas las recetas del meal plan
   const recipes = mealPlan.flatMap(dayPlan => 
@@ -86,6 +90,18 @@ export const DailySummaryPage = () => {
 
   const getObjectiveText = () => {
     return `Con estas recetas estás cumpliendo tu objetivo de perder peso`;
+  };
+
+  const handleToggleDay = (dateStr: string) => {
+    setExpandedDays(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(dateStr)) {
+        newSet.delete(dateStr);
+      } else {
+        newSet.add(dateStr);
+      }
+      return newSet;
+    });
   };
 
   const handleAddRecipe = (date: Date) => {
@@ -184,10 +200,38 @@ export const DailySummaryPage = () => {
 
                     return (
                       <React.Fragment key={dayPlan.dateStr}>
-                        {/* Fila de encabezado del día */}
-                        <tr className="bg-primary/10 border-b-2 border-primary/20">
-                          <td colSpan={6} className="p-4 font-bold text-lg capitalize">
-                            {formattedDate}
+                        {/* Fila de encabezado del día con funcionalidad de /milista */}
+                        <tr className="bg-[#F6F6F6] border-b">
+                          <td colSpan={6} className="p-0">
+                            <div 
+                              className="flex items-center justify-between p-4 cursor-pointer"
+                              onClick={() => handleToggleDay(dayPlan.dateStr)}
+                            >
+                              <h3 className="text-sm text-black capitalize font-semibold underline underline-offset-4">
+                                {format(dayPlan.date, "eee. d", { locale: es }).toLowerCase()}
+                              </h3>
+                              <button 
+                                className="text-gray-600 hover:text-gray-800 transition-colors"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleToggleDay(dayPlan.dateStr);
+                                }}
+                              >
+                                {expandedDays.has(dayPlan.dateStr) ? <Minus size={20} /> : <Plus size={20} />}
+                              </button>
+                            </div>
+                            
+                            {expandedDays.has(dayPlan.dateStr) && (
+                              <div className="px-4 pb-4 border-t border-gray-300">
+                                <DayMealSelector
+                                  dateStr={dayPlan.dateStr}
+                                  currentMeals={config.selectedMeals || []}
+                                  onMealsChange={() => {}} // Por ahora vacío
+                                  onShowDeleteConfirmation={() => {}} // Por ahora vacío
+                                  currentRecipes={{}}
+                                />
+                              </div>
+                            )}
                           </td>
                         </tr>
 
