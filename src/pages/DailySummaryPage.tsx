@@ -162,7 +162,7 @@ export const DailySummaryPage = () => {
                 <thead className="bg-muted/50">
                   <tr className="border-b">
                     <th className="text-left p-3 font-medium">Receta</th>
-                    <th className="text-center p-3 font-medium w-16">Cal</th>
+                    <th className="text-center p-3 font-medium w-20">Cal</th>
                     <th className="text-center p-3 font-medium w-16">Prot</th>
                     <th className="text-center p-3 font-medium w-16">Carb</th>
                     <th className="text-center p-3 font-medium w-16">Gras</th>
@@ -236,7 +236,7 @@ export const DailySummaryPage = () => {
                                   />
                                   <div className="flex flex-col min-w-0 flex-1">
                                     <span 
-                                      className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block w-[120px]"
+                                      className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block w-[100px]"
                                       onClick={() => navigate(`/recipe/${recipe.id}`)}
                                       title={recipe.title}
                                     >
@@ -248,7 +248,7 @@ export const DailySummaryPage = () => {
                                   </div>
                                 </div>
                               </td>
-                              <td className="p-3 text-center w-16">{recipe.calories}</td>
+                              <td className="p-3 text-center w-20">{recipe.calories}</td>
                               <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
                               <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
                               <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
@@ -260,7 +260,7 @@ export const DailySummaryPage = () => {
                         {dayRecipes.length > 0 && (
                           <tr className="border-b-2 border-primary/20 bg-muted/50">
                             <td className="p-3 font-semibold">Total por día por persona</td>
-                            <td className="p-3 text-center font-semibold w-16">{dayTotals.calories}</td>
+                            <td className="p-3 text-center font-semibold w-20">{dayTotals.calories}</td>
                             <td className="p-3 text-center font-semibold text-[#DE6968] w-16">{dayTotals.protein}g</td>
                             <td className="p-3 text-center font-semibold text-[#DE9A69] w-16">{dayTotals.carbs}g</td>
                             <td className="p-3 text-center font-semibold text-[#6998DD] w-16">{dayTotals.fat}g</td>
