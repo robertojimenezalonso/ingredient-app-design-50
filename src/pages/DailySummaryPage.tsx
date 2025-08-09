@@ -226,7 +226,7 @@ export const DailySummaryPage = () => {
                         ) : (
                           dayRecipes.map((recipe, recipeIndex) => (
                             <tr key={recipe.id} className="border-b hover:bg-muted/25">
-                              <td className="p-3 w-28">
+                              <td className="p-3 w-40">
                                 <div className="flex items-center gap-3">
                                   <img
                                     src={recipe.image}
@@ -236,7 +236,7 @@ export const DailySummaryPage = () => {
                                   />
                                   <div className="flex flex-col min-w-0 flex-1">
                                     <span 
-                                      className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block"
+                                      className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block w-[100px]"
                                       onClick={() => navigate(`/recipe/${recipe.id}`)}
                                       title={recipe.title}
                                     >
