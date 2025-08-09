@@ -170,7 +170,6 @@ export const DailySummaryPage = () => {
                     <th className="text-center p-3 font-medium">Prot</th>
                     <th className="text-center p-3 font-medium">Carb</th>
                     <th className="text-center p-3 font-medium">Gras</th>
-                    <th className="text-center p-3 font-medium w-16">+</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -190,22 +189,12 @@ export const DailySummaryPage = () => {
                           <td colSpan={6} className="p-4 font-bold text-lg capitalize">
                             {formattedDate}
                           </td>
-                          <td className="p-4 text-center">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleAddRecipe(dayPlan.date)}
-                              className="h-8 w-8 p-0"
-                            >
-                              <Plus className="h-4 w-4" />
-                            </Button>
-                          </td>
                         </tr>
 
                         {/* Recetas del día */}
                         {dayRecipes.length === 0 ? (
                           <tr className="border-b hover:bg-muted/25">
-                            <td className="p-3 text-muted-foreground text-center" colSpan={7}>
+                            <td className="p-3 text-muted-foreground text-center" colSpan={6}>
                               No hay recetas para este día
                             </td>
                           </tr>
@@ -237,7 +226,6 @@ export const DailySummaryPage = () => {
                               <td className="p-3 text-center text-[#DE6968]">{recipe.macros.protein}g</td>
                               <td className="p-3 text-center text-[#DE9A69]">{recipe.macros.carbs}g</td>
                               <td className="p-3 text-center text-[#6998DD]">{recipe.macros.fat}g</td>
-                              <td className="p-3"></td>
                             </tr>
                           ))
                         )}
@@ -251,7 +239,6 @@ export const DailySummaryPage = () => {
                             <td className="p-3 text-center font-semibold text-[#DE6968]">{dayTotals.protein}g</td>
                             <td className="p-3 text-center font-semibold text-[#DE9A69]">{dayTotals.carbs}g</td>
                             <td className="p-3 text-center font-semibold text-[#6998DD]">{dayTotals.fat}g</td>
-                            <td className="p-3"></td>
                           </tr>
                         )}
                       </React.Fragment>
