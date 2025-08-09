@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
-import { useDateTabs } from '@/hooks/useDateTabs';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { DayMealSelector } from '@/components/DayMealSelector';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -21,47 +21,40 @@ const MACRO_COLORS = {
 export const DailySummaryPage = () => {
   const navigate = useNavigate();
   const { config } = useUserConfig();
+  const { getRecipesForPlan } = useRecipeBank();
   const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
 
-  // Cargar las mismas recetas AI que aparecen en /milista
-  const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
-  
-  useEffect(() => {
-    const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-    if (storedAiRecipes) {
-      try {
-        const parsedRecipes = JSON.parse(storedAiRecipes);
-        setAiRecipes(parsedRecipes);
-      } catch (error) {
-        console.error('Error parsing stored AI recipes:', error);
-      }
-    }
-  }, []);
-
-  // Usar las mismas recetas que en /milista
-  const recipes = aiRecipes;
-
-  // Agrupar recetas por fecha usando las fechas seleccionadas
-  const recipesByDate = useMemo(() => {
-    if (!config.selectedDates || !config.selectedMeals || aiRecipes.length === 0) {
+  // Obtener el plan de recetas usando las fechas y comidas seleccionadas
+  const recipePlan = useMemo(() => {
+    if (!config.selectedDates || !config.selectedMeals) {
       return {};
     }
+    return getRecipesForPlan(config.selectedDates, config.selectedMeals, config.servingsPerRecipe || 1);
+  }, [config.selectedDates, config.selectedMeals, config.servingsPerRecipe, getRecipesForPlan]);
 
-    return config.selectedDates.reduce((acc, dateStr) => {
-      // Asignar recetas de manera distribuida entre las comidas del día
-      const dayRecipes = config.selectedMeals!.map((meal, index) => {
-        const recipeIndex = (config.selectedDates!.indexOf(dateStr) * config.selectedMeals!.length + index) % aiRecipes.length;
-        const recipe = aiRecipes[recipeIndex];
-        return recipe ? {
-          ...recipe,
-          mealType: meal
-        } : null;
-      }).filter(Boolean);
-      
-      acc[dateStr] = dayRecipes;
-      return acc;
-    }, {} as Record<string, (Recipe & { mealType: string })[]>);
-  }, [config.selectedDates, config.selectedMeals, aiRecipes]);
+  // Convertir el plan a formato de recetas agrupadas por fecha
+  const recipesByDate = useMemo(() => {
+    const result: Record<string, (Recipe & { mealType: string })[]> = {};
+    
+    Object.entries(recipePlan).forEach(([dateStr, dayMeals]) => {
+      result[dateStr] = [];
+      Object.entries(dayMeals).forEach(([meal, recipes]) => {
+        recipes.forEach(recipe => {
+          result[dateStr].push({
+            ...recipe,
+            mealType: meal
+          });
+        });
+      });
+    });
+    
+    return result;
+  }, [recipePlan]);
+
+  // Extraer todas las recetas para los cálculos generales
+  const recipes = useMemo(() => {
+    return Object.values(recipesByDate).flat();
+  }, [recipesByDate]);
 
   // Calcular totales por día
   const getDayTotals = (dayRecipes: (Recipe & { mealType: string })[]) => {
