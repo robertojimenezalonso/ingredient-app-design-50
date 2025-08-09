@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { useUserConfig } from '@/contexts/UserConfigContext';
+import { useDateTabs } from '@/hooks/useDateTabs';
 
 const MACRO_COLORS = {
   protein: '#DE6968',
@@ -17,36 +18,24 @@ const MACRO_COLORS = {
 export const DailySummaryPage = () => {
   const navigate = useNavigate();
   const { config } = useUserConfig();
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const { mealPlan } = useDateTabs(); // Usar la misma lógica que /milista
 
-  useEffect(() => {
-    // Get recipes from the same source as /milista
-    const savedRecipes = localStorage.getItem('user-recipes');
-    if (savedRecipes) {
-      const parsedRecipes = JSON.parse(savedRecipes);
-      setRecipes(parsedRecipes);
-    }
+  // Extraer todas las recetas del meal plan
+  const recipes = mealPlan.flatMap(dayPlan => 
+    dayPlan.meals.map(meal => meal.recipe).filter(Boolean)
+  );
 
-    // Get selected dates from user config
-    if (config.selectedDates) {
-      const dates = config.selectedDates.map(dateStr => new Date(dateStr + 'T12:00:00'));
-      setSelectedDates(dates);
-    }
-  }, [config]);
-
-  // Agrupar recetas por fecha
-  const recipesByDate = selectedDates.reduce((acc, date) => {
-    const dateStr = date.toISOString().split('T')[0];
-    acc[dateStr] = recipes.filter(recipe => {
-      const savedDate = localStorage.getItem(`recipe-${recipe.id}-date`);
-      return savedDate === dateStr;
-    });
+  // Agrupar recetas por fecha usando el mismo formato que useDateTabs
+  const recipesByDate = mealPlan.reduce((acc, dayPlan) => {
+    acc[dayPlan.dateStr] = dayPlan.meals.map(meal => ({
+      ...meal.recipe,
+      mealType: meal.meal // Agregar el tipo de comida para mostrar en la tabla
+    })).filter(Boolean);
     return acc;
-  }, {} as Record<string, Recipe[]>);
+  }, {} as Record<string, (Recipe & { mealType: string })[]>);
 
   // Calcular totales por día
-  const getDayTotals = (dayRecipes: Recipe[]) => {
+  const getDayTotals = (dayRecipes: (Recipe & { mealType: string })[]) => {
     return dayRecipes.reduce((acc, recipe) => {
       acc.calories += recipe.calories;
       acc.protein += recipe.macros.protein;
@@ -100,9 +89,8 @@ export const DailySummaryPage = () => {
   };
 
   const handleAddRecipe = (date: Date) => {
-    const dateStr = date.toISOString().split('T')[0];
-    localStorage.setItem('selected-date-for-recipe', dateStr);
-    navigate('/');
+    // Navegar a /milista donde puede añadir recetas
+    navigate('/milista');
   };
 
   return (
@@ -177,7 +165,7 @@ export const DailySummaryPage = () => {
                 <thead className="bg-muted/50">
                   <tr className="border-b">
                     <th className="text-left p-3 font-medium">Día</th>
-                    <th className="text-left p-3 font-medium w-16"></th>
+                    <th className="text-left p-3 font-medium">Comida</th>
                     <th className="text-left p-3 font-medium">Receta</th>
                     <th className="text-center p-3 font-medium">Cal</th>
                     <th className="text-center p-3 font-medium">Prot</th>
@@ -187,17 +175,20 @@ export const DailySummaryPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {selectedDates.map((date, dateIndex) => {
-                    const dateStr = date.toISOString().split('T')[0];
-                    const dayRecipes = recipesByDate[dateStr] || [];
+                  {mealPlan.map((dayPlan, dateIndex) => {
+                    const dayRecipes = dayPlan.meals.map(meal => ({
+                      ...meal.recipe,
+                      mealType: meal.meal
+                    })).filter(recipe => recipe.id); // Solo recetas válidas
+                    
                     const dayTotals = getDayTotals(dayRecipes);
-                    const formattedDate = formatDate(date);
+                    const formattedDate = formatDate(dayPlan.date);
 
                     if (dayRecipes.length === 0) {
                       return (
-                        <tr key={dateStr} className="border-b hover:bg-muted/25">
+                        <tr key={dayPlan.dateStr} className="border-b hover:bg-muted/25">
                           <td className="p-3 font-medium capitalize">{formattedDate}</td>
-                          <td className="p-3"></td>
+                          <td className="p-3 text-muted-foreground">-</td>
                           <td className="p-3 text-muted-foreground">No hay recetas</td>
                           <td className="p-3 text-center">-</td>
                           <td className="p-3 text-center">-</td>
@@ -207,7 +198,7 @@ export const DailySummaryPage = () => {
                             <Button
                               variant="ghost"
                               size="sm"
-                              onClick={() => handleAddRecipe(date)}
+                              onClick={() => handleAddRecipe(dayPlan.date)}
                               className="h-8 w-8 p-0"
                             >
                               <Plus className="h-4 w-4" />
@@ -218,7 +209,7 @@ export const DailySummaryPage = () => {
                     }
 
                     return (
-                      <React.Fragment key={dateStr}>
+                      <React.Fragment key={dayPlan.dateStr}>
                         {dayRecipes.map((recipe, recipeIndex) => (
                           <tr key={recipe.id} className="border-b hover:bg-muted/25">
                             {recipeIndex === 0 && (
@@ -227,20 +218,25 @@ export const DailySummaryPage = () => {
                               </td>
                             )}
                             <td className="p-3">
-                              <img
-                                src={recipe.image}
-                                alt={recipe.title}
-                                className="w-10 h-10 rounded object-cover cursor-pointer"
-                                onClick={() => navigate(`/recipe/${recipe.id}`)}
-                              />
+                              <span className="text-sm font-medium capitalize">
+                                {recipe.mealType}
+                              </span>
                             </td>
                             <td className="p-3">
-                              <span 
-                                className="cursor-pointer hover:text-primary hover:underline"
-                                onClick={() => navigate(`/recipe/${recipe.id}`)}
-                              >
-                                {recipe.title}
-                              </span>
+                              <div className="flex items-center gap-3">
+                                <img
+                                  src={recipe.image}
+                                  alt={recipe.title}
+                                  className="w-10 h-10 rounded object-cover cursor-pointer"
+                                  onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                />
+                                <span 
+                                  className="cursor-pointer hover:text-primary hover:underline"
+                                  onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                >
+                                  {recipe.title}
+                                </span>
+                              </div>
                             </td>
                             <td className="p-3 text-center">{recipe.calories}</td>
                             <td className="p-3 text-center text-[#DE6968]">{recipe.macros.protein}g</td>
@@ -251,7 +247,7 @@ export const DailySummaryPage = () => {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  onClick={() => handleAddRecipe(date)}
+                                  onClick={() => handleAddRecipe(dayPlan.date)}
                                   className="h-8 w-8 p-0"
                                 >
                                   <Plus className="h-4 w-4" />
@@ -263,7 +259,7 @@ export const DailySummaryPage = () => {
                         {/* Fila de totales */}
                         <tr className="border-b-2 border-primary/20 bg-muted/50">
                           <td className="p-3">
-                            <img className="w-10 h-10 opacity-0" alt="" />
+                            <span className="text-xs opacity-0">placeholder</span>
                           </td>
                           <td className="p-3 font-semibold">TOTAL DÍA</td>
                           <td className="p-3 text-center font-semibold">{dayTotals.calories}</td>
