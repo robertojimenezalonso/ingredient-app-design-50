@@ -234,7 +234,7 @@ export const DailySummaryPage = () => {
                                     className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
                                     onClick={() => navigate(`/recipe/${recipe.id}`)}
                                   />
-                                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                                  <div className="flex flex-col min-w-0 flex-1">
                                     <span 
                                       className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block w-[120px]"
                                       onClick={() => navigate(`/recipe/${recipe.id}`)}
@@ -242,7 +242,7 @@ export const DailySummaryPage = () => {
                                     >
                                       {recipe.title}
                                     </span>
-                                    <span className="inline-flex items-center rounded-full bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground flex-shrink-0 w-16 justify-center">
+                                    <span className="text-xs text-muted-foreground">
                                       {recipe.mealType}
                                     </span>
                                   </div>
