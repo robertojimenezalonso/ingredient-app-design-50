@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -21,22 +21,47 @@ const MACRO_COLORS = {
 export const DailySummaryPage = () => {
   const navigate = useNavigate();
   const { config } = useUserConfig();
-  const { mealPlan } = useDateTabs(); // Usar la misma lógica que /milista
   const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
 
-  // Extraer todas las recetas del meal plan
-  const recipes = mealPlan.flatMap(dayPlan => 
-    dayPlan.meals.map(meal => meal.recipe).filter(Boolean)
-  );
+  // Cargar las mismas recetas AI que aparecen en /milista
+  const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
+  
+  useEffect(() => {
+    const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+    if (storedAiRecipes) {
+      try {
+        const parsedRecipes = JSON.parse(storedAiRecipes);
+        setAiRecipes(parsedRecipes);
+      } catch (error) {
+        console.error('Error parsing stored AI recipes:', error);
+      }
+    }
+  }, []);
 
-  // Agrupar recetas por fecha usando el mismo formato que useDateTabs
-  const recipesByDate = mealPlan.reduce((acc, dayPlan) => {
-    acc[dayPlan.dateStr] = dayPlan.meals.map(meal => ({
-      ...meal.recipe,
-      mealType: meal.meal // Agregar el tipo de comida para mostrar en la tabla
-    })).filter(Boolean);
-    return acc;
-  }, {} as Record<string, (Recipe & { mealType: string })[]>);
+  // Usar las mismas recetas que en /milista
+  const recipes = aiRecipes;
+
+  // Agrupar recetas por fecha usando las fechas seleccionadas
+  const recipesByDate = useMemo(() => {
+    if (!config.selectedDates || !config.selectedMeals || aiRecipes.length === 0) {
+      return {};
+    }
+
+    return config.selectedDates.reduce((acc, dateStr) => {
+      // Asignar recetas de manera distribuida entre las comidas del día
+      const dayRecipes = config.selectedMeals!.map((meal, index) => {
+        const recipeIndex = (config.selectedDates!.indexOf(dateStr) * config.selectedMeals!.length + index) % aiRecipes.length;
+        const recipe = aiRecipes[recipeIndex];
+        return recipe ? {
+          ...recipe,
+          mealType: meal
+        } : null;
+      }).filter(Boolean);
+      
+      acc[dateStr] = dayRecipes;
+      return acc;
+    }, {} as Record<string, (Recipe & { mealType: string })[]>);
+  }, [config.selectedDates, config.selectedMeals, aiRecipes]);
 
   // Calcular totales por día
   const getDayTotals = (dayRecipes: (Recipe & { mealType: string })[]) => {
@@ -188,46 +213,43 @@ export const DailySummaryPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {mealPlan.map((dayPlan, dateIndex) => {
-                    const dayRecipes = dayPlan.meals.map(meal => ({
-                      ...meal.recipe,
-                      mealType: meal.meal
-                    })).filter(recipe => recipe.id); // Solo recetas válidas
-                    
+                  {config.selectedDates?.map((dateStr, dateIndex) => {
+                    const date = new Date(dateStr + 'T12:00:00');
+                    const dayRecipes = recipesByDate[dateStr] || [];
                     const dayTotals = getDayTotals(dayRecipes);
-                    const formattedDate = formatDate(dayPlan.date);
+                    const formattedDate = formatDate(date);
 
                     return (
-                      <React.Fragment key={dayPlan.dateStr}>
+                      <React.Fragment key={dateStr}>
                         {/* Fila de encabezado del día con funcionalidad de /milista */}
                         <tr className="bg-[#F6F6F6] border-b">
-                          <td colSpan={5} className="p-0 sticky left-0 right-0">
+                          <td colSpan={4} className="p-0 sticky left-0 right-0">
                             <div 
                               className="flex items-center justify-between p-4 cursor-pointer w-screen max-w-full"
                               style={{ width: '100vw', maxWidth: 'calc(100vw - 2rem)' }}
-                              onClick={() => handleToggleDay(dayPlan.dateStr)}
+                              onClick={() => handleToggleDay(dateStr)}
                             >
                               <h3 className="text-sm text-black capitalize font-semibold underline underline-offset-4">
-                                {format(dayPlan.date, "eee. d", { locale: es }).toLowerCase()}
+                                {format(date, "eee. d", { locale: es }).toLowerCase()}
                               </h3>
                               <button 
                                 className="text-gray-600 hover:text-gray-800 transition-colors"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleToggleDay(dayPlan.dateStr);
+                                  handleToggleDay(dateStr);
                                 }}
                               >
-                                {expandedDays.has(dayPlan.dateStr) ? <Minus size={20} /> : <Plus size={20} />}
+                                {expandedDays.has(dateStr) ? <Minus size={20} /> : <Plus size={20} />}
                               </button>
                             </div>
                             
-                            {expandedDays.has(dayPlan.dateStr) && (
+                            {expandedDays.has(dateStr) && (
                               <div 
                                 className="px-4 pb-4 border-t border-gray-300"
                                 style={{ width: '100vw', maxWidth: 'calc(100vw - 2rem)' }}
                               >
                                 <DayMealSelector
-                                  dateStr={dayPlan.dateStr}
+                                  dateStr={dateStr}
                                   currentMeals={config.selectedMeals || []}
                                   onMealsChange={() => {}} // Por ahora vacío
                                   onShowDeleteConfirmation={() => {}} // Por ahora vacío
@@ -241,7 +263,7 @@ export const DailySummaryPage = () => {
                         {/* Recetas del día */}
                         {dayRecipes.length === 0 ? (
                           <tr className="border-b hover:bg-muted/25">
-                            <td className="p-3 text-muted-foreground text-center" colSpan={5}>
+                            <td className="p-3 text-muted-foreground text-center" colSpan={4}>
                               No hay recetas para este día
                             </td>
                           </tr>
@@ -290,7 +312,7 @@ export const DailySummaryPage = () => {
                         )}
                       </React.Fragment>
                     );
-                  })}
+                  }) || []}
                 </tbody>
               </table>
             </div>
