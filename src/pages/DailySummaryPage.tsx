@@ -216,7 +216,7 @@ export const DailySummaryPage = () => {
                       <React.Fragment key={dateStr}>
                         {/* Fila de encabezado del día con funcionalidad de /milista */}
                         <tr className="bg-[#F6F6F6] border-b">
-                          <td colSpan={4} className="p-0 sticky left-0 right-0">
+                          <td colSpan={5} className="p-0 sticky left-0 right-0">
                             <div 
                               className="flex items-center justify-between p-4 cursor-pointer w-screen max-w-full"
                               style={{ width: '100vw', maxWidth: 'calc(100vw - 2rem)' }}
@@ -256,7 +256,7 @@ export const DailySummaryPage = () => {
                         {/* Recetas del día */}
                         {dayRecipes.length === 0 ? (
                           <tr className="border-b hover:bg-muted/25">
-                            <td className="p-3 text-muted-foreground text-center" colSpan={4}>
+                            <td className="p-3 text-muted-foreground text-center" colSpan={5}>
                               No hay recetas para este día
                             </td>
                           </tr>
@@ -268,27 +268,28 @@ export const DailySummaryPage = () => {
                                   <img
                                     src={recipe.image}
                                     alt={recipe.title}
-                                  className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
-                                  onClick={() => navigate(`/recipe/${recipe.id}`)}
-                                />
-                                <div className="flex items-center gap-2 min-w-0 flex-1">
-                                  <span 
-                                    className="cursor-pointer hover:text-primary hover:underline truncate"
+                                    className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
                                     onClick={() => navigate(`/recipe/${recipe.id}`)}
-                                    title={recipe.title}
-                                  >
-                                    {recipe.title}
-                                  </span>
-                                  <span className="inline-flex items-center rounded-full bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground flex-shrink-0">
-                                    {recipe.mealType}
-                                  </span>
+                                  />
+                                  <div className="flex items-center gap-2 min-w-0 flex-1">
+                                    <span 
+                                      className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap"
+                                      style={{ width: '60px' }}
+                                      onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                      title={recipe.title}
+                                    >
+                                      {recipe.title}
+                                    </span>
+                                    <span className="inline-flex items-center rounded-full bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground flex-shrink-0 w-16 justify-center">
+                                      {recipe.mealType}
+                                    </span>
+                                  </div>
                                 </div>
-                              </div>
-                            </td>
-                            <td className="p-3 text-center w-16">{recipe.calories}</td>
-                            <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
-                            <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
-                            <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
+                              </td>
+                              <td className="p-3 text-center w-16">{recipe.calories}</td>
+                              <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
+                              <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
+                              <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
                             </tr>
                           ))
                         )}
