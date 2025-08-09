@@ -162,10 +162,10 @@ export const DailySummaryPage = () => {
                 <thead className="bg-muted/50">
                   <tr className="border-b">
                     <th className="text-left p-3 font-medium">Receta</th>
-                    <th className="text-center p-3 font-medium w-28">kcal</th>
-                    <th className="text-center p-3 font-medium w-16">Prot</th>
-                    <th className="text-center p-3 font-medium w-16">Carb</th>
-                    <th className="text-center p-3 font-medium w-16">Gras</th>
+                    <th className="text-center p-3 font-medium">kcal</th>
+                    <th className="text-center p-3 font-medium">Prot</th>
+                    <th className="text-center p-3 font-medium">Carb</th>
+                    <th className="text-center p-3 font-medium">Gras</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -226,7 +226,7 @@ export const DailySummaryPage = () => {
                         ) : (
                           dayRecipes.map((recipe, recipeIndex) => (
                             <tr key={recipe.id} className="border-b hover:bg-muted/25">
-                              <td className="p-3">
+                              <td className="p-3 max-w-[80px]">
                                 <div className="flex items-center gap-3">
                                   <img
                                     src={recipe.image}
@@ -248,10 +248,10 @@ export const DailySummaryPage = () => {
                                   </div>
                                 </div>
                               </td>
-                              <td className="p-3 text-center w-28">{recipe.calories} kcal</td>
-                              <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
-                              <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
-                              <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
+                              <td className="p-3 text-center">{recipe.calories} kcal</td>
+                              <td className="p-3 text-center text-[#DE6968]">{recipe.macros.protein}g</td>
+                              <td className="p-3 text-center text-[#DE9A69]">{recipe.macros.carbs}g</td>
+                              <td className="p-3 text-center text-[#6998DD]">{recipe.macros.fat}g</td>
                             </tr>
                           ))
                         )}
@@ -259,11 +259,11 @@ export const DailySummaryPage = () => {
                         {/* Fila de totales del día */}
                         {dayRecipes.length > 0 && (
                           <tr className="border-b-2 border-primary/20 bg-muted/50">
-                            <td className="p-3 font-semibold">Total por día por persona</td>
-                            <td className="p-3 text-center font-semibold w-28">{dayTotals.calories} kcal</td>
-                            <td className="p-3 text-center font-semibold text-[#DE6968] w-16">{dayTotals.protein}g</td>
-                            <td className="p-3 text-center font-semibold text-[#DE9A69] w-16">{dayTotals.carbs}g</td>
-                            <td className="p-3 text-center font-semibold text-[#6998DD] w-16">{dayTotals.fat}g</td>
+                            <td className="p-3 font-semibold max-w-[80px]">Total por día por persona</td>
+                            <td className="p-3 text-center font-semibold">{dayTotals.calories} kcal</td>
+                            <td className="p-3 text-center font-semibold text-[#DE6968]">{dayTotals.protein}g</td>
+                            <td className="p-3 text-center font-semibold text-[#DE9A69]">{dayTotals.carbs}g</td>
+                            <td className="p-3 text-center font-semibold text-[#6998DD]">{dayTotals.fat}g</td>
                           </tr>
                         )}
                       </React.Fragment>
