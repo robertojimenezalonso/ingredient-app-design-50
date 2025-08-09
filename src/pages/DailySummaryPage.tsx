@@ -236,7 +236,7 @@ export const DailySummaryPage = () => {
                                   />
                                   <div className="flex flex-col min-w-0 flex-1">
                                     <span 
-                                      className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block w-[100px]"
+                                      className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block"
                                       onClick={() => navigate(`/recipe/${recipe.id}`)}
                                       title={recipe.title}
                                     >
