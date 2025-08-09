@@ -180,12 +180,12 @@ export const DailySummaryPage = () => {
               <table className="w-full">
                 <thead className="bg-muted/50">
                   <tr className="border-b">
-                    <th className="text-left p-3 font-medium">Comida</th>
+                    <th className="text-left p-3 font-medium w-24">Comida</th>
                     <th className="text-left p-3 font-medium">Receta</th>
-                    <th className="text-center p-3 font-medium">Cal</th>
-                    <th className="text-center p-3 font-medium">Prot</th>
-                    <th className="text-center p-3 font-medium">Carb</th>
-                    <th className="text-center p-3 font-medium">Gras</th>
+                    <th className="text-center p-3 font-medium w-16">Cal</th>
+                    <th className="text-center p-3 font-medium w-16">Prot</th>
+                    <th className="text-center p-3 font-medium w-16">Carb</th>
+                    <th className="text-center p-3 font-medium w-16">Gras</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -245,31 +245,43 @@ export const DailySummaryPage = () => {
                         ) : (
                           dayRecipes.map((recipe, recipeIndex) => (
                             <tr key={recipe.id} className="border-b hover:bg-muted/25">
-                              <td className="p-3">
-                                <span className="text-sm font-medium capitalize">
-                                  {recipe.mealType}
-                                </span>
-                              </td>
-                              <td className="p-3">
-                                <div className="flex items-center gap-3">
-                                  <img
-                                    src={recipe.image}
-                                    alt={recipe.title}
-                                    className="w-10 h-10 rounded object-cover cursor-pointer"
-                                    onClick={() => navigate(`/recipe/${recipe.id}`)}
-                                  />
+                            <td className="p-3 w-24">
+                              <span className="text-sm font-medium capitalize">
+                                {recipe.mealType}
+                              </span>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex items-center gap-3">
+                                <img
+                                  src={recipe.image}
+                                  alt={recipe.title}
+                                  className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
+                                  onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                />
+                                <div className="flex items-center gap-2 min-w-0 flex-1">
                                   <span 
-                                    className="cursor-pointer hover:text-primary hover:underline"
+                                    className="cursor-pointer hover:text-primary hover:underline truncate"
                                     onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                    title={recipe.title}
                                   >
                                     {recipe.title}
                                   </span>
+                                  <span className="inline-flex items-center rounded-full bg-secondary px-2 py-1 text-xs font-medium text-secondary-foreground flex-shrink-0">
+                                    {recipe.category === 'breakfast' ? 'Desayuno' :
+                                     recipe.category === 'lunch' ? 'Almuerzo' :
+                                     recipe.category === 'dinner' ? 'Cena' :
+                                     recipe.category === 'snacks' ? 'Snack' :
+                                     recipe.category === 'appetizer' ? 'Aperitivo' :
+                                     recipe.category === 'desserts' ? 'Postre' : 
+                                     recipe.category}
+                                  </span>
                                 </div>
-                              </td>
-                              <td className="p-3 text-center">{recipe.calories}</td>
-                              <td className="p-3 text-center text-[#DE6968]">{recipe.macros.protein}g</td>
-                              <td className="p-3 text-center text-[#DE9A69]">{recipe.macros.carbs}g</td>
-                              <td className="p-3 text-center text-[#6998DD]">{recipe.macros.fat}g</td>
+                              </div>
+                            </td>
+                            <td className="p-3 text-center w-16">{recipe.calories}</td>
+                            <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
+                            <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
+                            <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
                             </tr>
                           ))
                         )}
@@ -277,12 +289,12 @@ export const DailySummaryPage = () => {
                         {/* Fila de totales del día */}
                         {dayRecipes.length > 0 && (
                           <tr className="border-b-2 border-primary/20 bg-muted/50">
-                            <td className="p-3 font-semibold">TOTAL DÍA</td>
+                            <td className="p-3 font-semibold w-24">TOTAL DÍA</td>
                             <td className="p-3"></td>
-                            <td className="p-3 text-center font-semibold">{dayTotals.calories}</td>
-                            <td className="p-3 text-center font-semibold text-[#DE6968]">{dayTotals.protein}g</td>
-                            <td className="p-3 text-center font-semibold text-[#DE9A69]">{dayTotals.carbs}g</td>
-                            <td className="p-3 text-center font-semibold text-[#6998DD]">{dayTotals.fat}g</td>
+                            <td className="p-3 text-center font-semibold w-16">{dayTotals.calories}</td>
+                            <td className="p-3 text-center font-semibold text-[#DE6968] w-16">{dayTotals.protein}g</td>
+                            <td className="p-3 text-center font-semibold text-[#DE9A69] w-16">{dayTotals.carbs}g</td>
+                            <td className="p-3 text-center font-semibold text-[#6998DD] w-16">{dayTotals.fat}g</td>
                           </tr>
                         )}
                       </React.Fragment>
