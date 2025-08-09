@@ -2,6 +2,7 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { Recipe } from '@/types/recipe';
 import { Card, CardContent } from './ui/card';
 import { useState, useEffect } from 'react';
+import { List } from 'lucide-react';
 
 interface MacroDonutChartProps {
   recipes: Recipe[];
@@ -248,8 +249,11 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     <div>
       <h2 className="text-xl font-medium text-foreground px-1 mt-3 mb-4">Tu plan para comer saludable</h2>
       <Card className="mb-3 -mt-1">
-        <CardContent className="p-3">
-          <div className="flex items-center gap-6">
+        <CardContent className="p-3 cursor-pointer" onClick={() => window.location.href = '/daily-summary'}>
+          <div className="flex items-center gap-6 relative">
+            <div className="absolute top-0 right-0">
+              <List className="h-5 w-5 text-muted-foreground" />
+            </div>
             {/* Pie Chart a la izquierda */}
             <div className="w-24 h-24 flex-shrink-0">
               <ResponsiveContainer width="100%" height="100%">

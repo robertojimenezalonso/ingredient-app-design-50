@@ -20,6 +20,7 @@ import AuthPage from "./pages/AuthPage";
 import SupermarketDetailPage from "./pages/SupermarketDetailPage";
 import { CambioRecetaPage } from "./pages/CambioRecetaPage";
 import RecipeBankAdminPage from "./pages/RecipeBankAdminPage";
+import { DailySummaryPage } from "./pages/DailySummaryPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/cambioReceta" element={<CambioRecetaPage />} />
             <Route path="/recipe-bank-admin" element={<RecipeBankAdminPage />} />
+            <Route path="/daily-summary" element={<DailySummaryPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
