@@ -249,7 +249,7 @@ export const MacroDonutChart = ({ recipes, shouldAnimate = false, onRecipesChang
     <div>
       <h2 className="text-xl font-medium text-foreground px-1 mt-3 mb-4">Tu plan para comer saludable</h2>
       <Card className="mb-3 -mt-1">
-        <CardContent className="p-3 cursor-pointer" onClick={() => window.location.href = '/daily-summary'}>
+        <CardContent className="p-3 cursor-pointer" onClick={() => window.location.href = '/recipe-table'}>
           <div className="flex items-center gap-6 relative">
             <div className="absolute top-0 right-0">
               <List className="h-5 w-5 text-muted-foreground" />

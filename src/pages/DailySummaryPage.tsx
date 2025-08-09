@@ -21,20 +21,19 @@ export const DailySummaryPage = () => {
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
 
   useEffect(() => {
-    const savedRecipes = localStorage.getItem('daily-recipes');
+    // Get recipes from the same source as /milista
+    const savedRecipes = localStorage.getItem('user-recipes');
     if (savedRecipes) {
-      setRecipes(JSON.parse(savedRecipes));
+      const parsedRecipes = JSON.parse(savedRecipes);
+      setRecipes(parsedRecipes);
     }
 
-    // Get dates from the past 7 days
-    const dates = [];
-    for (let i = 0; i < 7; i++) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      dates.push(date);
+    // Get selected dates from user config
+    if (config.selectedDates) {
+      const dates = config.selectedDates.map(dateStr => new Date(dateStr + 'T12:00:00'));
+      setSelectedDates(dates);
     }
-    setSelectedDates(dates);
-  }, []);
+  }, [config]);
 
   // Agrupar recetas por fecha
   const recipesByDate = selectedDates.reduce((acc, date) => {
@@ -119,7 +118,7 @@ export const DailySummaryPage = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Resumen diario</h1>
+          <h1 className="text-lg font-semibold">Tabla de recetas</h1>
           <div className="w-9" />
         </div>
       </div>
@@ -170,98 +169,116 @@ export const DailySummaryPage = () => {
           </Card>
         )}
 
-        {/* Resumen por días */}
-        {selectedDates.map((date) => {
-          const dateStr = date.toISOString().split('T')[0];
-          const dayRecipes = recipesByDate[dateStr] || [];
-          const dayTotals = getDayTotals(dayRecipes);
+        {/* Tabla estilo Excel */}
+        <Card>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-muted/50">
+                  <tr className="border-b">
+                    <th className="text-left p-3 font-medium">Día</th>
+                    <th className="text-left p-3 font-medium w-16"></th>
+                    <th className="text-left p-3 font-medium">Receta</th>
+                    <th className="text-center p-3 font-medium">Cal</th>
+                    <th className="text-center p-3 font-medium">Prot</th>
+                    <th className="text-center p-3 font-medium">Carb</th>
+                    <th className="text-center p-3 font-medium">Gras</th>
+                    <th className="text-center p-3 font-medium w-16">+</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedDates.map((date, dateIndex) => {
+                    const dateStr = date.toISOString().split('T')[0];
+                    const dayRecipes = recipesByDate[dateStr] || [];
+                    const dayTotals = getDayTotals(dayRecipes);
+                    const formattedDate = formatDate(date);
 
-          return (
-            <Card key={dateStr}>
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between">
-                  <CardTitle className="text-lg capitalize">
-                    {formatDate(date)}
-                  </CardTitle>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleAddRecipe(date)}
-                    className="h-8 px-3"
-                  >
-                    <Plus className="h-4 w-4 mr-1" />
-                    Añadir
-                  </Button>
-                </div>
-              </CardHeader>
-              
-              <CardContent className="space-y-3">
-                {dayRecipes.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-4">
-                    No hay recetas para este día
-                  </p>
-                ) : (
-                  <>
-                    {/* Lista de recetas */}
-                    <div className="space-y-2">
-                      {dayRecipes.map((recipe) => (
-                        <div 
-                          key={recipe.id}
-                          className="flex items-center gap-3 p-2 rounded-lg border bg-card hover:bg-accent/50 cursor-pointer transition-colors"
-                          onClick={() => navigate(`/recipe/${recipe.id}`)}
-                        >
-                          <img
-                            src={recipe.image}
-                            alt={recipe.title}
-                            className="w-12 h-12 rounded-lg object-cover"
-                          />
-                          <div className="flex-1 min-w-0">
-                            <h4 className="font-medium text-sm truncate">{recipe.title}</h4>
-                            <div className="flex gap-2 mt-1">
-                              <Badge variant="secondary" className="text-xs">
-                                {recipe.calories} cal
-                              </Badge>
-                              <Badge variant="outline" className="text-xs">
-                                {recipe.time} min
-                              </Badge>
-                            </div>
-                          </div>
-                          <div className="text-right text-xs text-muted-foreground">
-                            <div>P: {recipe.macros.protein}g</div>
-                            <div>C: {recipe.macros.carbs}g</div>
-                            <div>G: {recipe.macros.fat}g</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                    if (dayRecipes.length === 0) {
+                      return (
+                        <tr key={dateStr} className="border-b hover:bg-muted/25">
+                          <td className="p-3 font-medium capitalize">{formattedDate}</td>
+                          <td className="p-3"></td>
+                          <td className="p-3 text-muted-foreground">No hay recetas</td>
+                          <td className="p-3 text-center">-</td>
+                          <td className="p-3 text-center">-</td>
+                          <td className="p-3 text-center">-</td>
+                          <td className="p-3 text-center">-</td>
+                          <td className="p-3 text-center">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleAddRecipe(date)}
+                              className="h-8 w-8 p-0"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </Button>
+                          </td>
+                        </tr>
+                      );
+                    }
 
-                    {/* Totales del día */}
-                    <div className="border-t pt-3">
-                      <div className="grid grid-cols-4 gap-4 text-center">
-                        <div>
-                          <div className="text-lg font-semibold">{dayTotals.calories}</div>
-                          <div className="text-xs text-muted-foreground">Calorías</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-semibold text-[#DE6968]">{dayTotals.protein}g</div>
-                          <div className="text-xs text-muted-foreground">Proteínas</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-semibold text-[#DE9A69]">{dayTotals.carbs}g</div>
-                          <div className="text-xs text-muted-foreground">Carbohidratos</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-semibold text-[#6998DD]">{dayTotals.fat}g</div>
-                          <div className="text-xs text-muted-foreground">Grasas</div>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          );
-        })}
+                    return (
+                      <React.Fragment key={dateStr}>
+                        {dayRecipes.map((recipe, recipeIndex) => (
+                          <tr key={recipe.id} className="border-b hover:bg-muted/25">
+                            {recipeIndex === 0 && (
+                              <td rowSpan={dayRecipes.length + 1} className="p-3 font-medium capitalize border-r bg-muted/25">
+                                {formattedDate}
+                              </td>
+                            )}
+                            <td className="p-3">
+                              <img
+                                src={recipe.image}
+                                alt={recipe.title}
+                                className="w-10 h-10 rounded object-cover cursor-pointer"
+                                onClick={() => navigate(`/recipe/${recipe.id}`)}
+                              />
+                            </td>
+                            <td className="p-3">
+                              <span 
+                                className="cursor-pointer hover:text-primary hover:underline"
+                                onClick={() => navigate(`/recipe/${recipe.id}`)}
+                              >
+                                {recipe.title}
+                              </span>
+                            </td>
+                            <td className="p-3 text-center">{recipe.calories}</td>
+                            <td className="p-3 text-center text-[#DE6968]">{recipe.macros.protein}g</td>
+                            <td className="p-3 text-center text-[#DE9A69]">{recipe.macros.carbs}g</td>
+                            <td className="p-3 text-center text-[#6998DD]">{recipe.macros.fat}g</td>
+                            {recipeIndex === 0 && (
+                              <td rowSpan={dayRecipes.length + 1} className="p-3 text-center border-l bg-muted/25">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleAddRecipe(date)}
+                                  className="h-8 w-8 p-0"
+                                >
+                                  <Plus className="h-4 w-4" />
+                                </Button>
+                              </td>
+                            )}
+                          </tr>
+                        ))}
+                        {/* Fila de totales */}
+                        <tr className="border-b-2 border-primary/20 bg-muted/50">
+                          <td className="p-3">
+                            <img className="w-10 h-10 opacity-0" alt="" />
+                          </td>
+                          <td className="p-3 font-semibold">TOTAL DÍA</td>
+                          <td className="p-3 text-center font-semibold">{dayTotals.calories}</td>
+                          <td className="p-3 text-center font-semibold text-[#DE6968]">{dayTotals.protein}g</td>
+                          <td className="p-3 text-center font-semibold text-[#DE9A69]">{dayTotals.carbs}g</td>
+                          <td className="p-3 text-center font-semibold text-[#6998DD]">{dayTotals.fat}g</td>
+                        </tr>
+                      </React.Fragment>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

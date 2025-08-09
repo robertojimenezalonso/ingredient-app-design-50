@@ -49,7 +49,7 @@ const App = () => (
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/cambioReceta" element={<CambioRecetaPage />} />
             <Route path="/recipe-bank-admin" element={<RecipeBankAdminPage />} />
-            <Route path="/daily-summary" element={<DailySummaryPage />} />
+            <Route path="/recipe-table" element={<DailySummaryPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
