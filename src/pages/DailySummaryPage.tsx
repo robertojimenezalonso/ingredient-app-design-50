@@ -226,7 +226,7 @@ export const DailySummaryPage = () => {
                         ) : (
                           dayRecipes.map((recipe, recipeIndex) => (
                             <tr key={recipe.id} className="border-b hover:bg-muted/25">
-                              <td className="p-3">
+                              <td className="p-3 w-40">
                                 <div className="flex items-center gap-3">
                                   <img
                                     src={recipe.image}
