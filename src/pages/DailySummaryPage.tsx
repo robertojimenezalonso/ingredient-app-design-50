@@ -15,29 +15,32 @@ const MACRO_COLORS = {
 
 export const DailySummaryPage = () => {
   const navigate = useNavigate();
-  const { getRandomRecipesByCategory, convertToRecipe } = useRecipeBank();
-  const [expandedMealTypes, setExpandedMealTypes] = useState<Set<string>>(new Set());
+  const { getRandomRecipesByCategory, convertToRecipe, recipes: bankRecipes } = useRecipeBank();
+  const [expandedMealTypes, setExpandedMealTypes] = useState<Set<string>>(new Set(['cena'])); // Expandir 'cena' por defecto
 
-  // Definir los tipos de comida que queremos mostrar
-  const mealTypes = ['desayuno', 'comida', 'cena'];
+  // Obtener las categorías disponibles en lugar de usar una lista fija
+  const availableCategories = useMemo(() => {
+    const categories = [...new Set(bankRecipes.map(recipe => recipe.category))];
+    return categories;
+  }, [bankRecipes]);
   
-  // Obtener 3 recetas aleatorias por cada tipo de comida
+  // Obtener 3 recetas aleatorias por cada categoría disponible
   const recipesByMealType = useMemo(() => {
     const result: Record<string, (Recipe & { mealType: string })[]> = {};
     
-    mealTypes.forEach(mealType => {
-      const bankRecipes = getRandomRecipesByCategory(mealType, 3);
-      result[mealType] = bankRecipes.map(bankRecipe => ({
+    availableCategories.forEach(category => {
+      const bankRecipes = getRandomRecipesByCategory(category, 3);
+      result[category] = bankRecipes.map(bankRecipe => ({
         ...convertToRecipe(bankRecipe, 1),
-        mealType
+        mealType: category
       }));
     });
     
     return result;
-  }, [getRandomRecipesByCategory, convertToRecipe]);
+  }, [getRandomRecipesByCategory, convertToRecipe, availableCategories]);
 
   // Extraer todas las recetas para los cálculos generales
-  const recipes = useMemo(() => {
+  const allRecipes = useMemo(() => {
     return Object.values(recipesByMealType).flat();
   }, [recipesByMealType]);
 
@@ -53,7 +56,7 @@ export const DailySummaryPage = () => {
   };
 
   // Calcular totales generales
-  const allTotals = recipes.reduce((acc, recipe) => {
+  const allTotals = allRecipes.reduce((acc, recipe) => {
     acc.protein += recipe.macros.protein;
     acc.carbs += recipe.macros.carbs;
     acc.fat += recipe.macros.fat;
@@ -144,7 +147,7 @@ export const DailySummaryPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {mealTypes.map((mealType) => {
+                  {availableCategories.map((mealType) => {
                     const mealRecipes = recipesByMealType[mealType] || [];
                     const mealTotals = getMealTypeTotals(mealRecipes);
                     
