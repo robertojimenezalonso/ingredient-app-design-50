@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronRight } from "lucide-react";
+import { RecipeCard } from "@/components/RecipeCard";
+import { Recipe } from "@/types/recipe";
 
 const NewExplorePage = () => {
   const navigate = useNavigate();
-  const { recipes, isLoading, getRecipesByCategory } = useRecipeBank();
+  const { recipes, isLoading, getRecipesByCategory, convertToRecipe } = useRecipeBank();
 
   const categories = [
     { key: "desayuno", name: "Desayuno", icon: "🌅" },
@@ -18,10 +20,22 @@ const NewExplorePage = () => {
     { key: "postre", name: "Postres", icon: "🍰" }
   ];
 
-  const getRandomRecipes = (category: string, count: number = 3) => {
+  const getRandomRecipes = (category: string, count: number = 3): Recipe[] => {
     const categoryRecipes = getRecipesByCategory(category);
     const shuffled = [...categoryRecipes].sort(() => 0.5 - Math.random());
-    return shuffled.slice(0, count);
+    const selectedBankItems = shuffled.slice(0, count);
+    
+    // Convert RecipeBankItem to Recipe format
+    return selectedBankItems.map(bankItem => convertToRecipe(bankItem));
+  };
+
+  const handleRecipeClick = (recipe: Recipe) => {
+    navigate(`/recipe/${recipe.id}`);
+  };
+
+  const handleAddRecipe = (recipe: Recipe) => {
+    // Handle add recipe logic if needed
+    console.log("Add recipe:", recipe);
   };
 
   if (isLoading) {
@@ -81,27 +95,15 @@ const NewExplorePage = () => {
                 </CardHeader>
                 <CardContent>
                   {categoryRecipes.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-0">
                       {categoryRecipes.map((recipe) => (
-                        <div
+                        <RecipeCard
                           key={recipe.id}
-                          className="group cursor-pointer"
-                          onClick={() => navigate(`/recipe/${recipe.id}`)}
-                        >
-                          <div className="aspect-video rounded-lg overflow-hidden mb-3">
-                            <img
-                              src={recipe.image_url || "/placeholder.svg"}
-                              alt={recipe.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
-                          </div>
-                          <h3 className="font-medium text-foreground group-hover:text-primary transition-colors line-clamp-2">
-                            {recipe.title}
-                          </h3>
-                          <p className="text-sm text-muted-foreground mt-1">
-                            {recipe.preparation_time} min • {recipe.servings} porciones
-                          </p>
-                        </div>
+                          recipe={recipe}
+                          onAdd={handleAddRecipe}
+                          onClick={handleRecipeClick}
+                          mealType={category.name}
+                        />
                       ))}
                     </div>
                   ) : (
