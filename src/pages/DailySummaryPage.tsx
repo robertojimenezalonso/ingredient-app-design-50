@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Minus } from 'lucide-react';
@@ -6,7 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Recipe } from '@/types/recipe';
+import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
+import { DayMealSelector } from '@/components/DayMealSelector';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const MACRO_COLORS = {
   protein: '#DE6968',
@@ -16,67 +19,45 @@ const MACRO_COLORS = {
 
 export const DailySummaryPage = () => {
   const navigate = useNavigate();
-  const { getRandomRecipesByCategory, convertToRecipe, recipes: bankRecipes, isLoading } = useRecipeBank();
-  const [expandedMealTypes, setExpandedMealTypes] = useState<Set<string>>(new Set(['cena'])); // Expandir 'cena' por defecto
+  const { config } = useUserConfig();
+  const { getRecipesForPlan } = useRecipeBank();
+  const [expandedDays, setExpandedDays] = useState<Set<string>>(new Set());
 
-  // Definir categorías fijas para asegurar que siempre se muestren
-  const defaultCategories = ['desayuno', 'comida', 'cena', 'snack', 'aperitivo', 'merienda'];
-  
-  // Obtener las categorías disponibles, pero siempre usar las por defecto como base
-  const availableCategories = useMemo(() => {
-    if (bankRecipes.length === 0) {
-      console.log('No hay recetas en bankRecipes, usando categorías por defecto');
-      return defaultCategories;
+  // Obtener el plan de recetas usando las fechas y comidas seleccionadas
+  const recipePlan = useMemo(() => {
+    if (!config.selectedDates || !config.selectedMeals) {
+      return {};
     }
-    
-    const categoriesFromDB = [...new Set(bankRecipes.map(recipe => recipe.category))];
-    console.log('Categorías encontradas en la BD:', categoriesFromDB);
-    
-    // Combinar categorías por defecto con las de la BD, priorizando las que tienen recetas
-    const allCategories = [...new Set([...categoriesFromDB, ...defaultCategories])];
-    console.log('Categorías finales:', allCategories);
-    
-    return allCategories;
-  }, [bankRecipes]);
-  
-  // Obtener 3 recetas aleatorias por cada categoría disponible
-  const recipesByMealType = useMemo(() => {
-    console.log('Generando recetas por tipo de comida...');
+    return getRecipesForPlan(config.selectedDates, config.selectedMeals, config.servingsPerRecipe || 1);
+  }, [config.selectedDates, config.selectedMeals, config.servingsPerRecipe, getRecipesForPlan]);
+
+  // Convertir el plan a formato de recetas agrupadas por fecha
+  const recipesByDate = useMemo(() => {
     const result: Record<string, (Recipe & { mealType: string })[]> = {};
     
-    availableCategories.forEach(category => {
-      console.log(`Obteniendo recetas para categoría: ${category}`);
-      const bankRecipes = getRandomRecipesByCategory(category, 3);
-      console.log(`Recetas encontradas para ${category}:`, bankRecipes.length);
-      
-      result[category] = bankRecipes.map(bankRecipe => ({
-        ...convertToRecipe(bankRecipe, 1),
-        mealType: category
-      }));
+    Object.entries(recipePlan).forEach(([dateStr, dayMeals]) => {
+      result[dateStr] = [];
+      Object.entries(dayMeals).forEach(([meal, recipes]) => {
+        recipes.forEach(recipe => {
+          result[dateStr].push({
+            ...recipe,
+            mealType: meal
+          });
+        });
+      });
     });
     
-    console.log('Resultado final recipesByMealType:', result);
     return result;
-  }, [getRandomRecipesByCategory, convertToRecipe, availableCategories]);
+  }, [recipePlan]);
 
   // Extraer todas las recetas para los cálculos generales
-  const allRecipes = useMemo(() => {
-    return Object.values(recipesByMealType).flat();
-  }, [recipesByMealType]);
+  const recipes = useMemo(() => {
+    return Object.values(recipesByDate).flat();
+  }, [recipesByDate]);
 
-  // Debug: Log estado actual
-  useEffect(() => {
-    console.log('Estado actual:');
-    console.log('- isLoading:', isLoading);
-    console.log('- bankRecipes.length:', bankRecipes.length);
-    console.log('- availableCategories:', availableCategories);
-    console.log('- allRecipes.length:', allRecipes.length);
-    console.log('- recipesByMealType:', recipesByMealType);
-  }, [isLoading, bankRecipes.length, availableCategories, allRecipes.length, recipesByMealType]);
-
-  // Calcular totales por tipo de comida
-  const getMealTypeTotals = (mealRecipes: (Recipe & { mealType: string })[]) => {
-    return mealRecipes.reduce((acc, recipe) => {
+  // Calcular totales por día
+  const getDayTotals = (dayRecipes: (Recipe & { mealType: string })[]) => {
+    return dayRecipes.reduce((acc, recipe) => {
       acc.calories += recipe.calories;
       acc.protein += recipe.macros.protein;
       acc.carbs += recipe.macros.carbs;
@@ -86,7 +67,7 @@ export const DailySummaryPage = () => {
   };
 
   // Calcular totales generales
-  const allTotals = allRecipes.reduce((acc, recipe) => {
+  const allTotals = recipes.reduce((acc, recipe) => {
     acc.protein += recipe.macros.protein;
     acc.carbs += recipe.macros.carbs;
     acc.fat += recipe.macros.fat;
@@ -116,47 +97,34 @@ export const DailySummaryPage = () => {
     }
   ] : [];
 
-
-  const getObjectiveText = () => {
-    return `Explora nuestras recetas organizadas por tipo de comida`;
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long'
+    });
   };
 
-  const handleToggleMealType = (mealType: string) => {
-    setExpandedMealTypes(prev => {
+  const getObjectiveText = () => {
+    return `Con estas recetas estás cumpliendo tu objetivo de perder peso`;
+  };
+
+  const handleToggleDay = (dateStr: string) => {
+    setExpandedDays(prev => {
       const newSet = new Set(prev);
-      if (newSet.has(mealType)) {
-        newSet.delete(mealType);
+      if (newSet.has(dateStr)) {
+        newSet.delete(dateStr);
       } else {
-        newSet.add(mealType);
+        newSet.add(dateStr);
       }
       return newSet;
     });
   };
 
-  // Mostrar loading si está cargando
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background pb-20">
-        <div className="sticky top-0 z-50 bg-background border-b border-border px-4 py-3">
-          <div className="flex items-center justify-between">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(-1)}
-              className="p-2"
-            >
-              <ArrowLeft className="h-5 w-5" />
-            </Button>
-            <h1 className="text-lg font-semibold">Explorador de recetas</h1>
-            <div className="w-9" />
-          </div>
-        </div>
-        <div className="p-4">
-          <p className="text-center text-muted-foreground">Cargando recetas...</p>
-        </div>
-      </div>
-    );
-  }
+  const handleAddRecipe = (date: Date) => {
+    // Navegar a /milista donde puede añadir recetas
+    navigate('/milista');
+  };
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -171,7 +139,7 @@ export const DailySummaryPage = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Explorador de recetas</h1>
+          <h1 className="text-lg font-semibold">Tabla de recetas</h1>
           <div className="w-9" />
         </div>
       </div>
@@ -185,17 +153,6 @@ export const DailySummaryPage = () => {
             </p>
           </CardContent>
         </Card>
-
-        {/* Debug info */}
-        {availableCategories.length === 0 && (
-          <Card>
-            <CardContent className="p-4">
-              <p className="text-sm text-red-500 text-center">
-                No hay categorías disponibles. Total recetas en BD: {bankRecipes.length}
-              </p>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Tabla estilo Excel */}
         <Card>
@@ -212,103 +169,106 @@ export const DailySummaryPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {availableCategories.map((mealType) => {
-                    const mealRecipes = recipesByMealType[mealType] || [];
-                    const mealTotals = getMealTypeTotals(mealRecipes);
-                    
-                    // Mapear los nombres de comidas al español
-                    const mealTypeNames: Record<string, string> = {
-                      'desayuno': 'Desayuno',
-                      'comida': 'Comida', 
-                      'cena': 'Cena',
-                      'merienda': 'Merienda',
-                      'snack': 'Snack',
-                      'aperitivo': 'Aperitivo'
-                    };
+                  {config.selectedDates?.map((dateStr, dateIndex) => {
+                    const date = new Date(dateStr + 'T12:00:00');
+                    const dayRecipes = recipesByDate[dateStr] || [];
+                    const dayTotals = getDayTotals(dayRecipes);
+                    const formattedDate = formatDate(date);
 
                     return (
-                      <React.Fragment key={mealType}>
-                        {/* Fila de encabezado del tipo de comida */}
+                      <React.Fragment key={dateStr}>
+                        {/* Fila de encabezado del día con funcionalidad de /milista */}
                         <tr className="bg-[#F6F6F6] border-b">
                           <td colSpan={5} className="p-0 sticky left-0 right-0">
                             <div 
                               className="flex items-center justify-between p-4 cursor-pointer w-screen max-w-full"
                               style={{ width: '100vw', maxWidth: 'calc(100vw - 2rem)' }}
-                              onClick={() => handleToggleMealType(mealType)}
+                              onClick={() => handleToggleDay(dateStr)}
                             >
                               <h3 className="text-sm text-black capitalize font-semibold underline underline-offset-4">
-                                {mealTypeNames[mealType] || mealType} ({mealRecipes.length} recetas)
+                                {format(date, "eee. d", { locale: es }).toLowerCase()}
                               </h3>
                               <button 
                                 className="text-gray-600 hover:text-gray-800 transition-colors"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleToggleMealType(mealType);
+                                  handleToggleDay(dateStr);
                                 }}
                               >
-                                {expandedMealTypes.has(mealType) ? <Minus size={20} /> : <Plus size={20} />}
+                                {expandedDays.has(dateStr) ? <Minus size={20} /> : <Plus size={20} />}
                               </button>
                             </div>
+                            
+                            {expandedDays.has(dateStr) && (
+                              <div 
+                                className="px-4 pb-4 border-t border-gray-300"
+                                style={{ width: '100vw', maxWidth: 'calc(100vw - 2rem)' }}
+                              >
+                                <DayMealSelector
+                                  dateStr={dateStr}
+                                  currentMeals={config.selectedMeals || []}
+                                  onMealsChange={() => {}} // Por ahora vacío
+                                  onShowDeleteConfirmation={() => {}} // Por ahora vacío
+                                  currentRecipes={{}}
+                                />
+                              </div>
+                            )}
                           </td>
                         </tr>
 
-                        {/* Recetas del tipo de comida (mostrar solo si está expandido) */}
-                        {expandedMealTypes.has(mealType) && (
-                          <>
-                            {mealRecipes.length > 0 ? (
-                              mealRecipes.map((recipe, recipeIndex) => (
-                                <tr key={recipe.id} className="border-b hover:bg-muted/25">
-                                  <td className="p-3 w-40">
-                                    <div className="flex items-center gap-3">
-                                      <img
-                                        src={recipe.image}
-                                        alt={recipe.title}
-                                        className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
-                                        onClick={() => navigate(`/recipe/${recipe.id}`)}
-                                      />
-                                      <div className="flex flex-col min-w-0 flex-1">
-                                        <span 
-                                          className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block w-[100px]"
-                                          onClick={() => navigate(`/recipe/${recipe.id}`)}
-                                          title={recipe.title}
-                                        >
-                                          {recipe.title}
-                                        </span>
-                                        <span className="text-xs text-muted-foreground">
-                                          {mealTypeNames[recipe.mealType] || recipe.mealType}
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td className="p-3 text-center w-28">{recipe.calories} kcal</td>
-                                  <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
-                                  <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
-                                  <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
-                                </tr>
-                              ))
-                            ) : (
-                              <tr className="border-b">
-                                <td colSpan={5} className="p-4 text-center text-muted-foreground text-sm">
-                                  No hay recetas disponibles para {mealTypeNames[mealType] || mealType}
-                                </td>
-                              </tr>
-                            )}
+                        {/* Recetas del día */}
+                        {dayRecipes.length === 0 ? (
+                          <tr className="border-b hover:bg-muted/25">
+                            <td className="p-3 text-muted-foreground text-center" colSpan={5}>
+                              No hay recetas para este día
+                            </td>
+                          </tr>
+                        ) : (
+                          dayRecipes.map((recipe, recipeIndex) => (
+                            <tr key={recipe.id} className="border-b hover:bg-muted/25">
+                              <td className="p-3 w-28">
+                                <div className="flex items-center gap-3">
+                                  <img
+                                    src={recipe.image}
+                                    alt={recipe.title}
+                                    className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
+                                    onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                  />
+                                  <div className="flex flex-col min-w-0 flex-1">
+                                    <span 
+                                      className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block"
+                                      onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                      title={recipe.title}
+                                    >
+                                      {recipe.title}
+                                    </span>
+                                    <span className="text-xs text-muted-foreground">
+                                      {recipe.mealType}
+                                    </span>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="p-3 text-center w-28">{recipe.calories} kcal</td>
+                              <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
+                              <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
+                              <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
+                            </tr>
+                          ))
+                        )}
 
-                            {/* Fila de totales del tipo de comida */}
-                            {mealRecipes.length > 0 && (
-                              <tr className="border-b-2 border-primary/20 bg-muted/50">
-                                <td className="p-3 font-semibold">Total {mealTypeNames[mealType] || mealType}</td>
-                                <td className="p-3 text-center font-semibold w-28">{mealTotals.calories} kcal</td>
-                                <td className="p-3 text-center font-semibold text-[#DE6968] w-16">{mealTotals.protein}g</td>
-                                <td className="p-3 text-center font-semibold text-[#DE9A69] w-16">{mealTotals.carbs}g</td>
-                                <td className="p-3 text-center font-semibold text-[#6998DD] w-16">{mealTotals.fat}g</td>
-                              </tr>
-                            )}
-                          </>
+                        {/* Fila de totales del día */}
+                        {dayRecipes.length > 0 && (
+                          <tr className="border-b-2 border-primary/20 bg-muted/50">
+                            <td className="p-3 font-semibold">Total por día por persona</td>
+                            <td className="p-3 text-center font-semibold w-28">{dayTotals.calories} kcal</td>
+                            <td className="p-3 text-center font-semibold text-[#DE6968] w-16">{dayTotals.protein}g</td>
+                            <td className="p-3 text-center font-semibold text-[#DE9A69] w-16">{dayTotals.carbs}g</td>
+                            <td className="p-3 text-center font-semibold text-[#6998DD] w-16">{dayTotals.fat}g</td>
+                          </tr>
                         )}
                       </React.Fragment>
                     );
-                  })}
+                  }) || []}
                 </tbody>
               </table>
             </div>

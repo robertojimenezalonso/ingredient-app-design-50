@@ -21,7 +21,6 @@ import SupermarketDetailPage from "./pages/SupermarketDetailPage";
 import { CambioRecetaPage } from "./pages/CambioRecetaPage";
 import RecipeBankAdminPage from "./pages/RecipeBankAdminPage";
 import { DailySummaryPage } from "./pages/DailySummaryPage";
-import NewExplorePage from "./pages/NewExplorePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,8 +37,7 @@ const App = () => (
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
-            <Route path="/explore" element={<NewExplorePage />} />
-            {/* <Route path="/milista" element={<RecipeListPage />} /> */}
+            <Route path="/milista" element={<RecipeListPage />} />
             <Route path="/search-offers" element={<SearchOffersPage />} />
             <Route path="/supermarket/:supermarket" element={<SupermarketDetailPage />} />
             
