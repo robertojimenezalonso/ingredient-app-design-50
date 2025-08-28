@@ -5,11 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Recipe } from '@/types/recipe';
-import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
-import { DayMealSelector } from '@/components/DayMealSelector';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
 
 const MACRO_COLORS = {
   protein: '#DE6968',
@@ -19,38 +15,26 @@ const MACRO_COLORS = {
 
 export const DailySummaryPage = () => {
   const navigate = useNavigate();
-  const { config } = useUserConfig();
-  const { getRecipesForPlan } = useRecipeBank();
+  const { getRandomRecipesByCategory, convertToRecipe } = useRecipeBank();
   const [expandedMealTypes, setExpandedMealTypes] = useState<Set<string>>(new Set());
 
-  // Obtener el plan de recetas usando las fechas y comidas seleccionadas
-  const recipePlan = useMemo(() => {
-    if (!config.selectedDates || !config.selectedMeals) {
-      return {};
-    }
-    return getRecipesForPlan(config.selectedDates, config.selectedMeals, config.servingsPerRecipe || 1);
-  }, [config.selectedDates, config.selectedMeals, config.servingsPerRecipe, getRecipesForPlan]);
-
-  // Convertir el plan a formato de recetas agrupadas por tipo de comida
+  // Definir los tipos de comida que queremos mostrar
+  const mealTypes = ['desayuno', 'comida', 'cena'];
+  
+  // Obtener 3 recetas aleatorias por cada tipo de comida
   const recipesByMealType = useMemo(() => {
     const result: Record<string, (Recipe & { mealType: string })[]> = {};
     
-    Object.entries(recipePlan).forEach(([dateStr, dayMeals]) => {
-      Object.entries(dayMeals).forEach(([meal, recipes]) => {
-        if (!result[meal]) {
-          result[meal] = [];
-        }
-        recipes.forEach(recipe => {
-          result[meal].push({
-            ...recipe,
-            mealType: meal
-          });
-        });
-      });
+    mealTypes.forEach(mealType => {
+      const bankRecipes = getRandomRecipesByCategory(mealType, 3);
+      result[mealType] = bankRecipes.map(bankRecipe => ({
+        ...convertToRecipe(bankRecipe, 1),
+        mealType
+      }));
     });
     
     return result;
-  }, [recipePlan]);
+  }, [getRandomRecipesByCategory, convertToRecipe]);
 
   // Extraer todas las recetas para los cálculos generales
   const recipes = useMemo(() => {
@@ -99,16 +83,9 @@ export const DailySummaryPage = () => {
     }
   ] : [];
 
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('es-ES', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long'
-    });
-  };
 
   const getObjectiveText = () => {
-    return `Con estas recetas estás cumpliendo tu objetivo de perder peso`;
+    return `Explora nuestras recetas organizadas por tipo de comida`;
   };
 
   const handleToggleMealType = (mealType: string) => {
@@ -123,10 +100,6 @@ export const DailySummaryPage = () => {
     });
   };
 
-  const handleAddRecipe = (date: Date) => {
-    // Navegar a /milista donde puede añadir recetas
-    navigate('/milista');
-  };
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -141,7 +114,7 @@ export const DailySummaryPage = () => {
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-semibold">Tabla de recetas</h1>
+          <h1 className="text-lg font-semibold">Explorador de recetas</h1>
           <div className="w-9" />
         </div>
       </div>
@@ -171,7 +144,8 @@ export const DailySummaryPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(recipesByMealType).map(([mealType, mealRecipes]) => {
+                  {mealTypes.map((mealType) => {
+                    const mealRecipes = recipesByMealType[mealType] || [];
                     const mealTotals = getMealTypeTotals(mealRecipes);
                     
                     // Mapear los nombres de comidas al español
@@ -241,7 +215,7 @@ export const DailySummaryPage = () => {
                         ))}
 
                         {/* Fila de totales del tipo de comida */}
-                        {mealRecipes.length > 0 && (
+                        {mealRecipes.length > 0 && expandedMealTypes.has(mealType) && (
                           <tr className="border-b-2 border-primary/20 bg-muted/50">
                             <td className="p-3 font-semibold">Total {mealTypeNames[mealType] || mealType}</td>
                             <td className="p-3 text-center font-semibold w-28">{mealTotals.calories} kcal</td>
