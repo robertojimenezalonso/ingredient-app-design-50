@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Minus } from 'lucide-react';
@@ -15,27 +16,46 @@ const MACRO_COLORS = {
 
 export const DailySummaryPage = () => {
   const navigate = useNavigate();
-  const { getRandomRecipesByCategory, convertToRecipe, recipes: bankRecipes } = useRecipeBank();
+  const { getRandomRecipesByCategory, convertToRecipe, recipes: bankRecipes, isLoading } = useRecipeBank();
   const [expandedMealTypes, setExpandedMealTypes] = useState<Set<string>>(new Set(['cena'])); // Expandir 'cena' por defecto
 
-  // Obtener las categorías disponibles en lugar de usar una lista fija
+  // Definir categorías fijas para asegurar que siempre se muestren
+  const defaultCategories = ['desayuno', 'comida', 'cena', 'snack', 'aperitivo', 'merienda'];
+  
+  // Obtener las categorías disponibles, pero siempre usar las por defecto como base
   const availableCategories = useMemo(() => {
-    const categories = [...new Set(bankRecipes.map(recipe => recipe.category))];
-    return categories;
+    if (bankRecipes.length === 0) {
+      console.log('No hay recetas en bankRecipes, usando categorías por defecto');
+      return defaultCategories;
+    }
+    
+    const categoriesFromDB = [...new Set(bankRecipes.map(recipe => recipe.category))];
+    console.log('Categorías encontradas en la BD:', categoriesFromDB);
+    
+    // Combinar categorías por defecto con las de la BD, priorizando las que tienen recetas
+    const allCategories = [...new Set([...categoriesFromDB, ...defaultCategories])];
+    console.log('Categorías finales:', allCategories);
+    
+    return allCategories;
   }, [bankRecipes]);
   
   // Obtener 3 recetas aleatorias por cada categoría disponible
   const recipesByMealType = useMemo(() => {
+    console.log('Generando recetas por tipo de comida...');
     const result: Record<string, (Recipe & { mealType: string })[]> = {};
     
     availableCategories.forEach(category => {
+      console.log(`Obteniendo recetas para categoría: ${category}`);
       const bankRecipes = getRandomRecipesByCategory(category, 3);
+      console.log(`Recetas encontradas para ${category}:`, bankRecipes.length);
+      
       result[category] = bankRecipes.map(bankRecipe => ({
         ...convertToRecipe(bankRecipe, 1),
         mealType: category
       }));
     });
     
+    console.log('Resultado final recipesByMealType:', result);
     return result;
   }, [getRandomRecipesByCategory, convertToRecipe, availableCategories]);
 
@@ -43,6 +63,16 @@ export const DailySummaryPage = () => {
   const allRecipes = useMemo(() => {
     return Object.values(recipesByMealType).flat();
   }, [recipesByMealType]);
+
+  // Debug: Log estado actual
+  useEffect(() => {
+    console.log('Estado actual:');
+    console.log('- isLoading:', isLoading);
+    console.log('- bankRecipes.length:', bankRecipes.length);
+    console.log('- availableCategories:', availableCategories);
+    console.log('- allRecipes.length:', allRecipes.length);
+    console.log('- recipesByMealType:', recipesByMealType);
+  }, [isLoading, bankRecipes.length, availableCategories, allRecipes.length, recipesByMealType]);
 
   // Calcular totales por tipo de comida
   const getMealTypeTotals = (mealRecipes: (Recipe & { mealType: string })[]) => {
@@ -103,6 +133,30 @@ export const DailySummaryPage = () => {
     });
   };
 
+  // Mostrar loading si está cargando
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background pb-20">
+        <div className="sticky top-0 z-50 bg-background border-b border-border px-4 py-3">
+          <div className="flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate(-1)}
+              className="p-2"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <h1 className="text-lg font-semibold">Explorador de recetas</h1>
+            <div className="w-9" />
+          </div>
+        </div>
+        <div className="p-4">
+          <p className="text-center text-muted-foreground">Cargando recetas...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -132,6 +186,17 @@ export const DailySummaryPage = () => {
           </CardContent>
         </Card>
 
+        {/* Debug info */}
+        {availableCategories.length === 0 && (
+          <Card>
+            <CardContent className="p-4">
+              <p className="text-sm text-red-500 text-center">
+                No hay categorías disponibles. Total recetas en BD: {bankRecipes.length}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Tabla estilo Excel */}
         <Card>
           <CardContent className="p-0">
@@ -156,7 +221,9 @@ export const DailySummaryPage = () => {
                       'desayuno': 'Desayuno',
                       'comida': 'Comida', 
                       'cena': 'Cena',
-                      'merienda': 'Merienda'
+                      'merienda': 'Merienda',
+                      'snack': 'Snack',
+                      'aperitivo': 'Aperitivo'
                     };
 
                     return (
@@ -186,46 +253,58 @@ export const DailySummaryPage = () => {
                         </tr>
 
                         {/* Recetas del tipo de comida (mostrar solo si está expandido) */}
-                        {expandedMealTypes.has(mealType) && mealRecipes.map((recipe, recipeIndex) => (
-                          <tr key={recipe.id} className="border-b hover:bg-muted/25">
-                            <td className="p-3 w-40">
-                              <div className="flex items-center gap-3">
-                                <img
-                                  src={recipe.image}
-                                  alt={recipe.title}
-                                  className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
-                                  onClick={() => navigate(`/recipe/${recipe.id}`)}
-                                />
-                                <div className="flex flex-col min-w-0 flex-1">
-                                  <span 
-                                    className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block w-[100px]"
-                                    onClick={() => navigate(`/recipe/${recipe.id}`)}
-                                    title={recipe.title}
-                                  >
-                                    {recipe.title}
-                                  </span>
-                                  <span className="text-xs text-muted-foreground">
-                                    {mealTypeNames[recipe.mealType] || recipe.mealType}
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-                            <td className="p-3 text-center w-28">{recipe.calories} kcal</td>
-                            <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
-                            <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
-                            <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
-                          </tr>
-                        ))}
+                        {expandedMealTypes.has(mealType) && (
+                          <>
+                            {mealRecipes.length > 0 ? (
+                              mealRecipes.map((recipe, recipeIndex) => (
+                                <tr key={recipe.id} className="border-b hover:bg-muted/25">
+                                  <td className="p-3 w-40">
+                                    <div className="flex items-center gap-3">
+                                      <img
+                                        src={recipe.image}
+                                        alt={recipe.title}
+                                        className="w-10 h-10 rounded object-cover cursor-pointer flex-shrink-0"
+                                        onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                      />
+                                      <div className="flex flex-col min-w-0 flex-1">
+                                        <span 
+                                          className="cursor-pointer hover:text-primary hover:underline text-ellipsis overflow-hidden whitespace-nowrap block w-[100px]"
+                                          onClick={() => navigate(`/recipe/${recipe.id}`)}
+                                          title={recipe.title}
+                                        >
+                                          {recipe.title}
+                                        </span>
+                                        <span className="text-xs text-muted-foreground">
+                                          {mealTypeNames[recipe.mealType] || recipe.mealType}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="p-3 text-center w-28">{recipe.calories} kcal</td>
+                                  <td className="p-3 text-center text-[#DE6968] w-16">{recipe.macros.protein}g</td>
+                                  <td className="p-3 text-center text-[#DE9A69] w-16">{recipe.macros.carbs}g</td>
+                                  <td className="p-3 text-center text-[#6998DD] w-16">{recipe.macros.fat}g</td>
+                                </tr>
+                              ))
+                            ) : (
+                              <tr className="border-b">
+                                <td colSpan={5} className="p-4 text-center text-muted-foreground text-sm">
+                                  No hay recetas disponibles para {mealTypeNames[mealType] || mealType}
+                                </td>
+                              </tr>
+                            )}
 
-                        {/* Fila de totales del tipo de comida */}
-                        {mealRecipes.length > 0 && expandedMealTypes.has(mealType) && (
-                          <tr className="border-b-2 border-primary/20 bg-muted/50">
-                            <td className="p-3 font-semibold">Total {mealTypeNames[mealType] || mealType}</td>
-                            <td className="p-3 text-center font-semibold w-28">{mealTotals.calories} kcal</td>
-                            <td className="p-3 text-center font-semibold text-[#DE6968] w-16">{mealTotals.protein}g</td>
-                            <td className="p-3 text-center font-semibold text-[#DE9A69] w-16">{mealTotals.carbs}g</td>
-                            <td className="p-3 text-center font-semibold text-[#6998DD] w-16">{mealTotals.fat}g</td>
-                          </tr>
+                            {/* Fila de totales del tipo de comida */}
+                            {mealRecipes.length > 0 && (
+                              <tr className="border-b-2 border-primary/20 bg-muted/50">
+                                <td className="p-3 font-semibold">Total {mealTypeNames[mealType] || mealType}</td>
+                                <td className="p-3 text-center font-semibold w-28">{mealTotals.calories} kcal</td>
+                                <td className="p-3 text-center font-semibold text-[#DE6968] w-16">{mealTotals.protein}g</td>
+                                <td className="p-3 text-center font-semibold text-[#DE9A69] w-16">{mealTotals.carbs}g</td>
+                                <td className="p-3 text-center font-semibold text-[#6998DD] w-16">{mealTotals.fat}g</td>
+                              </tr>
+                            )}
+                          </>
                         )}
                       </React.Fragment>
                     );
