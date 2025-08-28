@@ -42,7 +42,7 @@ const InitialWelcomePage = () => {
 
         <div className="mt-8 space-y-3">
           <button 
-            onClick={() => navigate('/calendar-selection')}
+            onClick={() => navigate('/subscription-benefits')}
             className="w-full bg-btnFloating text-btnFloating-foreground py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-btnFloating/90 transition-colors"
           >
             Comenzar planificación
