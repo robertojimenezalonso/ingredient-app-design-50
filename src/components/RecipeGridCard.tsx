@@ -38,7 +38,7 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
           {truncateTitle(title)}
         </h3>
         <p className="text-sm font-semibold text-foreground">
-          desde {price} / ración
+          Desde {price}
         </p>
       </div>
     </div>
