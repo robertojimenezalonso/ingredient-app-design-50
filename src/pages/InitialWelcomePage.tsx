@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useAuth } from '@/hooks/useAuth';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
+import { RecipeGridCard } from '@/components/RecipeGridCard';
 import { Button } from '@/components/ui/button';
 
 const InitialWelcomePage = () => {
   const navigate = useNavigate();
-  
   const { user, loading } = useAuth();
+  const { recipes, isLoading: recipesLoading } = useRecipeBank();
 
   useEffect(() => {
     if (!loading && !user) {
@@ -16,8 +18,18 @@ const InitialWelcomePage = () => {
     }
   }, [user, loading, navigate]);
 
+  const handleAddRecipe = (recipeId: string) => {
+    console.log('Adding recipe:', recipeId);
+    // TODO: Add to cart/list functionality
+  };
 
-  if (loading) {
+  const generateRandomPrice = () => {
+    const price = (Math.random() * 15 + 5).toFixed(2);
+    return `${price.replace('.', ',')} €`;
+  };
+
+
+  if (loading || recipesLoading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <div className="text-center">
@@ -28,40 +40,27 @@ const InitialWelcomePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center items-center">
-      {/* Main welcome content */}
-      <div className="p-6">
-        <div className="text-center mb-8">
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Bienvenido a tu asistente de compras
-          </h1>
-          <p className="text-gray-600">
-            Planifica tus comidas y genera tu lista de la compra automáticamente
-          </p>
-        </div>
-
-        <div className="mt-8 space-y-3">
-          <button 
-            onClick={() => navigate('/calendar-selection')}
-            className="w-full bg-btnFloating text-btnFloating-foreground py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-btnFloating/90 transition-colors"
-          >
-            Comenzar planificación
-          </button>
-          
-          {!user && (
-            <Button 
-              variant="outline"
-              onClick={() => navigate('/auth')}
-              className="w-full"
-            >
-              Iniciar Sesión
-            </Button>
-          )}
+    <div className="min-h-screen bg-gray-100">
+      {/* Recipe Grid */}
+      <div className="px-4 pt-6">
+        <div className="grid grid-cols-2 gap-4">
+          {recipes.slice(0, 20).map((recipe) => (
+            <RecipeGridCard
+              key={recipe.id}
+              id={recipe.id}
+              title={recipe.title}
+              image={recipe.image_url}
+              price={generateRandomPrice()}
+              onAdd={handleAddRecipe}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Saved Shopping List Card - now shows below the button */}
-      <SavedShoppingListCard />
+      {/* Saved Shopping List Card */}
+      <div className="mt-8">
+        <SavedShoppingListCard />
+      </div>
     </div>
   );
 };
