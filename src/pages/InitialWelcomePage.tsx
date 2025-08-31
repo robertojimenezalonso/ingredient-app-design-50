@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useAuth } from '@/hooks/useAuth';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
@@ -9,8 +9,11 @@ import { Button } from '@/components/ui/button';
 
 const InitialWelcomePage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { user, loading } = useAuth();
   const { recipes, isLoading: recipesLoading } = useRecipeBank();
+  
+  const supermarketName = searchParams.get('supermarket');
 
   useEffect(() => {
     if (!loading && !user) {
@@ -41,6 +44,15 @@ const InitialWelcomePage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Supermarket Header */}
+      {supermarketName && (
+        <div className="bg-primary text-primary-foreground px-4 py-3">
+          <h1 className="text-lg font-semibold text-center">
+            {supermarketName}
+          </h1>
+        </div>
+      )}
+      
       {/* Recipe Grid */}
       <div className="px-4 pt-6">
         <div className="grid grid-cols-2 gap-4">

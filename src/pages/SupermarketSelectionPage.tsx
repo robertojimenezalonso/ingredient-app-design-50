@@ -52,9 +52,9 @@ const supermarkets: Supermarket[] = [
 const SupermarketSelectionPage = () => {
   const navigate = useNavigate();
 
-  const handleSupermarketSelect = (supermarketId: string) => {
-    // Navigate to the main page or next step
-    navigate('/calendar-selection');
+  const handleSupermarketSelect = (supermarket: Supermarket) => {
+    // Navigate to welcome page with supermarket info
+    navigate(`/welcome?supermarket=${encodeURIComponent(supermarket.name)}`);
   };
 
   return (
@@ -68,7 +68,7 @@ const SupermarketSelectionPage = () => {
           {supermarkets.map((supermarket) => (
             <button
               key={supermarket.id}
-              onClick={() => handleSupermarketSelect(supermarket.id)}
+              onClick={() => handleSupermarketSelect(supermarket)}
               className="flex flex-col items-center p-4 bg-card rounded-lg border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
             >
               <div className="w-12 h-12 mb-2 flex items-center justify-center">
