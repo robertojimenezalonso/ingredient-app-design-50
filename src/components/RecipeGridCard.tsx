@@ -15,7 +15,7 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
   };
 
   return (
-    <div className="overflow-hidden mb-6">
+    <div className="overflow-hidden mb-4">
       <div className="relative aspect-square mb-3">
         <img 
           src={image} 
@@ -34,7 +34,7 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
       </div>
       
       <div>
-        <h3 className="text-sm leading-tight text-foreground line-clamp-2 mb-2">
+        <h3 className="text-sm leading-tight text-foreground line-clamp-2 mb-1">
           {truncateTitle(title)}
         </h3>
         <p className="text-sm font-semibold text-foreground">
