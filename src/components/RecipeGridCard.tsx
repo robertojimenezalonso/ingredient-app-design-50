@@ -14,13 +14,16 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
     return text.substring(0, maxLength) + '...';
   };
 
+  const originalPrice = parseFloat(price.replace(',', '.').replace(' €', ''));
+  const discountedPrice = (originalPrice * 1.1).toFixed(2).replace('.', ',');
+
   return (
-    <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-      <div className="relative aspect-square">
+    <div className="overflow-hidden">
+      <div className="relative aspect-square mb-3">
         <img 
           src={image} 
           alt={title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-xl"
           onError={(e) => {
             e.currentTarget.src = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=400';
           }}
@@ -33,13 +36,18 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
         </button>
       </div>
       
-      <div className="p-3">
-        <h3 className="font-medium text-sm leading-tight text-foreground line-clamp-2 mb-2">
+      <div>
+        <h3 className="text-sm leading-tight text-foreground line-clamp-2 mb-2">
           {truncateTitle(title)}
         </h3>
-        <p className="text-sm font-semibold text-foreground">
-          {price}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-semibold text-foreground">
+            {price}
+          </p>
+          <p className="text-sm text-muted-foreground line-through">
+            {discountedPrice} €
+          </p>
+        </div>
       </div>
     </div>
   );

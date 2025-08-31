@@ -40,7 +40,7 @@ const InitialWelcomePage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
       {/* Recipe Grid */}
       <div className="px-4 pt-6">
         <div className="grid grid-cols-2 gap-4">
