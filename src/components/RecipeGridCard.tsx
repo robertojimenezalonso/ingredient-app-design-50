@@ -15,7 +15,7 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
   };
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden mb-6">
       <div className="relative aspect-square mb-3">
         <img 
           src={image} 
