@@ -53,8 +53,8 @@ const SupermarketSelectionPage = () => {
   const navigate = useNavigate();
 
   const handleSupermarketSelect = (supermarket: Supermarket) => {
-    // Navigate to welcome page with supermarket info
-    navigate(`/welcome?supermarket=${encodeURIComponent(supermarket.name)}`);
+    // Navigate to calendar selection
+    navigate('/calendar-selection');
   };
 
   return (
