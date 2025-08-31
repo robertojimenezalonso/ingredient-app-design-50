@@ -69,18 +69,13 @@ const SupermarketSelectionPage = () => {
             <button
               key={supermarket.id}
               onClick={() => handleSupermarketSelect(supermarket)}
-              className="flex flex-col items-center p-4 bg-card rounded-lg border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
+              className="aspect-square flex items-center justify-center p-4 bg-card rounded-lg border border-border hover:bg-accent hover:text-accent-foreground transition-colors"
             >
-              <div className="w-12 h-12 mb-2 flex items-center justify-center">
-                <img
-                  src={supermarket.logo}
-                  alt={supermarket.name}
-                  className="max-w-full max-h-full object-contain"
-                />
-              </div>
-              <span className="text-xs text-center font-medium">
-                {supermarket.name}
-              </span>
+              <img
+                src={supermarket.logo}
+                alt={supermarket.name}
+                className="max-w-full max-h-full object-contain"
+              />
             </button>
           ))}
         </div>
