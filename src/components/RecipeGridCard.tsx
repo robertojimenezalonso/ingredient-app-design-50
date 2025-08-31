@@ -42,7 +42,7 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
         </h3>
         <div className="flex items-center gap-2">
           <p className="text-sm font-semibold text-foreground">
-            {price}
+            desde {price}
           </p>
           <p className="text-sm text-muted-foreground line-through">
             {discountedPrice} €

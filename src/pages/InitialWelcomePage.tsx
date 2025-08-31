@@ -43,7 +43,7 @@ const InitialWelcomePage = () => {
     <div className="min-h-screen bg-white">
       {/* Recipe Grid */}
       <div className="px-4 pt-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {recipes.slice(0, 20).map((recipe) => (
             <RecipeGridCard
               key={recipe.id}
