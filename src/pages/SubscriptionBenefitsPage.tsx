@@ -143,8 +143,8 @@ const SubscriptionBenefitsPage = () => {
         updateConfig({ hasPlanningSession: true });
         // Save current planning session before navigating
         saveCurrentPlanningSession();
-        // Navigate to welcome after reaching 100%
-        setTimeout(() => navigate('/welcome'), 500);
+        // Navigate to milista after reaching 100%
+        setTimeout(() => navigate('/milista'), 500);
         return;
       }
       

@@ -53,10 +53,8 @@ const SupermarketSelectionPage = () => {
   const navigate = useNavigate();
 
   const handleSupermarketSelect = (supermarket: Supermarket) => {
-    // Store selected supermarket in localStorage
-    localStorage.setItem('selectedSupermarket', JSON.stringify(supermarket));
-    // Navigate to people and diet page
-    navigate('/people-and-diet');
+    // Navigate to calendar selection
+    navigate('/calendar-selection');
   };
 
   return (
