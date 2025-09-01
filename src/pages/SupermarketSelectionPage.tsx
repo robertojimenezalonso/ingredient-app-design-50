@@ -53,8 +53,8 @@ const SupermarketSelectionPage = () => {
   const navigate = useNavigate();
 
   const handleSupermarketSelect = (supermarket: Supermarket) => {
-    // Navigate to calendar selection
-    navigate('/calendar-selection');
+    // Navigate to people and diet page
+    navigate('/people-and-diet');
   };
 
   return (
