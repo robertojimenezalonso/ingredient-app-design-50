@@ -179,7 +179,7 @@ const PeopleAndDietPage = () => {
               className="w-full bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating/90 disabled:opacity-100 disabled:bg-[#BAB9BC] disabled:text-white rounded-lg py-3 h-auto text-base font-semibold"
             >
               <div className="flex items-center justify-center gap-3">
-                <span>{isGenerating ? 'Generando recetas con IA...' : 'Generar plan'}</span>
+                <span>{isGenerating ? 'Creando lista...' : 'Crear lista'}</span>
                 {isGenerating ? (
                   <Sparkles className="h-5 w-5 animate-pulse" />
                 ) : (
