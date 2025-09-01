@@ -22,14 +22,10 @@ const PeopleAndDietPage = () => {
   const { initializeIngredients } = useGlobalIngredients();
   const { toast } = useToast();
   const [peopleCount, setPeopleCount] = useState({
-    adultos: 0
+    adultos: 1
   });
   const [showAllOptions, setShowAllOptions] = useState(false);
-  const [listName, setListName] = useState(() => {
-    // Get existing lists count from localStorage to generate auto-numbered name
-    const existingLists = JSON.parse(localStorage.getItem('savedLists') || '[]');
-    return `Mi lista ${existingLists.length + 1}`;
-  });
+  const [listName, setListName] = useState('');
   const dietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Cantidades', 'Macros', 'Nutrientes', 'Ingredientes Bio'];
   const handlePersonChange = (type: keyof typeof peopleCount, delta: number) => {
     setPeopleCount(prev => ({
@@ -67,29 +63,28 @@ const PeopleAndDietPage = () => {
     navigate('/subscription-benefits');
   };
   const totalPeople = peopleCount.adultos;
-  const canContinue = totalPeople > 0;
+  const canContinue = totalPeople > 0 && listName.trim().length > 0;
   return <div className="min-h-screen bg-gray-100 overflow-y-auto">
       {/* Main content */}
       <div className="flex flex-col min-h-screen pb-24">
-        {/* Header with back button */}
-        <div className="flex items-center p-4">
-          <button onClick={() => navigate('/supermarket-selection')} className="flex items-center justify-center w-10 h-10 rounded-full bg-white mr-4">
+        {/* Header with back button and crear lista */}
+        <div className="flex items-center justify-between p-4">
+          <button onClick={() => navigate('/supermarket-selection')} className="flex items-center justify-center w-10 h-10 rounded-full bg-white">
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </button>
+          <h1 className="text-lg font-semibold text-foreground">Crear lista</h1>
+          <div className="w-10 h-10"></div> {/* Spacer for centering */}
         </div>
 
         {/* List Name Section */}
         <div className="px-4 mb-4">
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-            <CardHeader className="pb-3 px-4">
-              <CardTitle className="text-2xl font-semibold text-neutral-950">Nombre de la lista</CardTitle>
-            </CardHeader>
-            <CardContent className="px-4 pb-4">
+            <CardContent className="px-4 py-4">
               <Input
                 value={listName}
                 onChange={(e) => setListName(e.target.value)}
                 className="text-base font-medium"
-                placeholder="Mi lista 1"
+                placeholder="Nombre de la lista"
               />
             </CardContent>
           </Card>
