@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Plus, Minus, ChevronRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -13,6 +13,12 @@ import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useToast } from '@/hooks/use-toast';
 
 import { cn } from '@/lib/utils';
+interface Supermarket {
+  id: string;
+  name: string;
+  logo: string;
+}
+
 const PeopleAndDietPage = () => {
   const navigate = useNavigate();
   const { config, updateConfig } = useUserConfig();
@@ -26,6 +32,14 @@ const PeopleAndDietPage = () => {
   });
   const [showAllOptions, setShowAllOptions] = useState(false);
   const [listName, setListName] = useState('');
+  const [selectedSupermarket, setSelectedSupermarket] = useState<Supermarket | null>(null);
+
+  useEffect(() => {
+    const storedSupermarket = localStorage.getItem('selectedSupermarket');
+    if (storedSupermarket) {
+      setSelectedSupermarket(JSON.parse(storedSupermarket));
+    }
+  }, []);
   const dietOptions = ['Objetivos', 'Dieta', 'Alergias/Intolerancias', 'Calorías', 'Cantidades', 'Macros', 'Nutrientes', 'Ingredientes Bio'];
   const handlePersonChange = (type: keyof typeof peopleCount, delta: number) => {
     setPeopleCount(prev => ({
@@ -67,19 +81,27 @@ const PeopleAndDietPage = () => {
   return <div className="min-h-screen bg-gray-100 overflow-y-auto">
       {/* Main content */}
       <div className="flex flex-col min-h-screen pb-24">
-        {/* Header with back button and crear lista */}
+        {/* Header with back button and supermarket info */}
         <div className="flex items-center justify-between p-4">
           <button onClick={() => navigate('/supermarket-selection')} className="flex items-center justify-center w-10 h-10 rounded-full bg-white">
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </button>
-          <h1 className="text-lg font-semibold text-foreground">Crear lista</h1>
+          {selectedSupermarket && (
+            <div className="flex items-center gap-2">
+              <img src={selectedSupermarket.logo} alt={selectedSupermarket.name} className="h-8 w-8 object-contain" />
+              <h1 className="text-lg font-semibold text-foreground">{selectedSupermarket.name}</h1>
+            </div>
+          )}
           <div className="w-10 h-10"></div> {/* Spacer for centering */}
         </div>
 
         {/* List Name Section */}
         <div className="px-4 mb-4">
           <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-            <CardContent className="px-4 py-4">
+            <CardHeader className="pb-3 px-4">
+              <CardTitle className="text-2xl font-semibold text-neutral-950">Crear lista</CardTitle>
+            </CardHeader>
+            <CardContent className="px-4 pb-4">
               <Input
                 value={listName}
                 onChange={(e) => setListName(e.target.value)}
