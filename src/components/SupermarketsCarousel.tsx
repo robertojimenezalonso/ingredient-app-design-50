@@ -63,7 +63,7 @@ export const SupermarketsCarousel = ({ selectedSupermarket, onSupermarketChange 
   const displaySupermarkets = supermarkets.slice(0, 3); // Solo mostrar 3 logos
 
   return (
-    <div className="px-4 mb-4">
+    <div className="mx-4 mb-4 px-3 py-2 bg-gray-100 rounded-lg">
       <div className="flex items-center justify-between">
         <span className="text-sm text-muted-foreground flex-1">
           Comparamos precios en {totalSupermarkets} supermercados
