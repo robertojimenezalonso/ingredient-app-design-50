@@ -31,8 +31,8 @@ export const MealTypesCarousel = ({ selectedTypes, onTypeToggle }: MealTypesCaro
               onClick={() => onTypeToggle(type.id)}
               className="flex-none cursor-pointer transition-all"
             >
-              <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 ring-2 transition-all ${
-                selectedTypes.includes(type.id) ? 'ring-primary ring-offset-2' : 'ring-primary/30'
+              <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 transition-all ${
+                selectedTypes.includes(type.id) ? 'opacity-100' : 'opacity-70'
               }`}>
                 <img 
                   src={type.image} 
