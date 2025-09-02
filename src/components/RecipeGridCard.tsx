@@ -1,6 +1,7 @@
 import { Plus } from 'lucide-react';
 import { Recipe } from '@/types/recipe';
 import { ImageLoader } from './ui/image-loader';
+import { Button } from './ui/button';
 
 interface RecipeGridCardProps {
   recipe: Recipe;
@@ -42,13 +43,13 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
         </div>
         
         <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
-          <div className="flex items-start justify-between mb-2 relative mr-3">
-            <h3 className="font-normal text-base leading-tight mt-2 w-[140px] truncate whitespace-nowrap overflow-hidden">
+          <div className="flex items-start justify-between mb-2 relative">
+            <h3 className="font-normal text-base leading-tight mt-2 flex-1 truncate whitespace-nowrap overflow-hidden mr-4">
               {recipe.title}
             </h3>
-            <span className="font-normal text-base leading-tight mt-2 ml-2">{price} €</span>
+            <span className="font-normal text-base leading-tight mt-2 whitespace-nowrap">{price} €</span>
           </div>
-          <div className="mb-1.5">
+          <div className="mb-1.5 flex-1">
             <div className="flex items-center gap-1 mb-2">
               <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
               <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
@@ -67,6 +68,16 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
                 <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.fat}g</span>
               </div>
             </div>
+          </div>
+          <div className="flex justify-end items-end mt-auto">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleAddClick}
+              className="h-8 w-8 p-0 rounded-full"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
           </div>
         </div>
       </div>
