@@ -14,8 +14,11 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
     return text.substring(0, maxLength) + '...';
   };
 
+  const originalPrice = parseFloat(price.replace(',', '.').replace(' €', ''));
+  const discountedPrice = (originalPrice * 1.1).toFixed(2).replace('.', ',');
+
   return (
-    <div className="overflow-hidden mb-4">
+    <div className="overflow-hidden">
       <div className="relative aspect-square mb-3">
         <img 
           src={image} 
@@ -34,12 +37,17 @@ export const RecipeGridCard = ({ id, title, image, price, onAdd }: RecipeGridCar
       </div>
       
       <div>
-        <h3 className="text-sm leading-tight text-foreground line-clamp-2 mb-1">
+        <h3 className="text-sm leading-tight text-foreground line-clamp-2 mb-2">
           {truncateTitle(title)}
         </h3>
-        <p className="text-sm font-semibold text-foreground">
-          Desde {price}
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-sm font-semibold text-foreground">
+            {price}
+          </p>
+          <p className="text-sm text-muted-foreground line-through">
+            {discountedPrice} €
+          </p>
+        </div>
       </div>
     </div>
   );

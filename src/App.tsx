@@ -21,7 +21,6 @@ import SupermarketDetailPage from "./pages/SupermarketDetailPage";
 import { CambioRecetaPage } from "./pages/CambioRecetaPage";
 import RecipeBankAdminPage from "./pages/RecipeBankAdminPage";
 import { DailySummaryPage } from "./pages/DailySummaryPage";
-import SupermarketSelectionPage from "./pages/SupermarketSelectionPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -35,7 +34,6 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<InitialWelcomePage />} />
-            <Route path="/supermarket-selection" element={<SupermarketSelectionPage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
