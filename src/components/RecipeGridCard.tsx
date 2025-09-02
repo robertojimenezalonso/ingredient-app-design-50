@@ -44,6 +44,9 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
             {recipe.title}
           </h3>
         </div>
+        <div className="mb-2">
+          <span className="text-sm font-medium text-foreground">Desde 36,48 €</span>
+        </div>
         <div className="mb-1.5">
           <div className="flex items-center gap-1 mb-2">
             <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
