@@ -42,12 +42,12 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
           />
         </div>
         
-        <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
-          <div className="flex items-start justify-between mb-2 relative">
-            <h3 className="font-normal text-base leading-tight mt-2 flex-1 truncate whitespace-nowrap overflow-hidden mr-4">
+        <div className="flex-1 flex flex-col justify-start relative h-[120px]">
+          <div className="flex items-start mb-2 relative">
+            <h3 className="font-normal text-base leading-tight flex-1 line-clamp-2 pr-4" style={{ marginRight: '60px' }}>
               {recipe.title}
             </h3>
-            <span className="font-normal text-base leading-tight mt-2 whitespace-nowrap">{price} €</span>
+            <span className="font-normal text-base leading-tight whitespace-nowrap absolute right-0 top-0">{price} €</span>
           </div>
           <div className="mb-1.5 flex-1">
             <div className="flex items-center gap-1 mb-2">
