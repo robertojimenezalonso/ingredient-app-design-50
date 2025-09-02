@@ -64,16 +64,16 @@ const Index = () => {
       />
       
       <div className="pt-16 pb-20">
-        {/* Supermarkets Carousel */}
-        <SupermarketsCarousel 
-          selectedSupermarket={selectedSupermarket}
-          onSupermarketChange={setSelectedSupermarket}
-        />
-        
         {/* Meal Types Carousel */}
         <MealTypesCarousel 
           selectedTypes={selectedMealTypes}
           onTypeToggle={handleMealTypeToggle}
+        />
+        
+        {/* Supermarkets Info */}
+        <SupermarketsCarousel 
+          selectedSupermarket={selectedSupermarket}
+          onSupermarketChange={setSelectedSupermarket}
         />
         
         {/* Recipes Grid */}
