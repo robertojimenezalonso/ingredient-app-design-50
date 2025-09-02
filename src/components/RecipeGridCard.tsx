@@ -69,16 +69,6 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
               </div>
             </div>
           </div>
-          <div className="flex justify-end items-end mt-auto">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleAddClick}
-              className="h-8 w-8 p-0 rounded-full"
-            >
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
         </div>
       </div>
       <div className="h-px bg-gray-200 mx-0"></div>
