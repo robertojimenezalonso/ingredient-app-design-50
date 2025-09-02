@@ -22,7 +22,7 @@ const mealTypes: MealType[] = [
 
 export const MealTypesCarousel = ({ selectedTypes, onTypeToggle }: MealTypesCarouselProps) => {
   return (
-    <div className="px-4 mb-4">
+    <div className="px-4 mb-4 mt-6">
       <ScrollArea className="w-full whitespace-nowrap">
         <div className="flex gap-4 pb-2">
           {mealTypes.map((type) => (
