@@ -39,21 +39,16 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
       </div>
       
       <div className="flex-1 flex flex-col justify-start relative h-[150px] pt-2 pr-2">
-        <div className="flex items-start gap-2 mb-2 relative">
-          <h3 className="font-medium text-base leading-tight mt-1 w-[140px] truncate whitespace-nowrap overflow-hidden">
+        <div className="flex items-start justify-between mb-3 relative">
+          <h3 className="font-medium text-base leading-tight mt-1 flex-1 truncate whitespace-nowrap overflow-hidden pr-2">
             {recipe.title}
           </h3>
-        </div>
-        
-        {/* Precio debajo del título */}
-        <div className="mb-3">
-          <span className="font-medium text-sm text-black">
+          <span className="font-medium text-base text-black whitespace-nowrap">
             {(() => {
               const basePrice = Math.random() * 15 + 10;
               const discountPrice = basePrice * 0.85;
               return discountPrice.toFixed(2).replace('.', ',') + ' €';
             })()}
-            <span className="text-xs font-normal text-gray-500 ml-1">precio medio por porción</span>
           </span>
         </div>
         
