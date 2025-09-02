@@ -60,9 +60,9 @@ const supermarkets: Supermarket[] = [
 
 export const SupermarketsCarousel = ({ selectedSupermarket, onSupermarketChange }: SupermarketsCarouselProps) => {
   return (
-    <div className="px-4 mb-4">
-      <ScrollArea className="w-full whitespace-nowrap">
-        <div className="flex gap-3 pb-2 pr-4">
+    <div className="px-4 mb-4 mt-6">
+      <div className="overflow-x-auto scrollbar-hide">
+        <div className="flex gap-3 pb-2 pr-4 min-w-max">
           {supermarkets.map((supermarket) => (
             <div
               key={supermarket.id}
@@ -84,7 +84,7 @@ export const SupermarketsCarousel = ({ selectedSupermarket, onSupermarketChange 
             </div>
           ))}
         </div>
-      </ScrollArea>
+      </div>
     </div>
   );
 };

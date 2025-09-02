@@ -22,7 +22,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
   }, []);
 
   return (
-    <div className={`fixed top-0 left-0 right-0 z-50 bg-background border-b transition-all duration-300 ${
+    <div className={`fixed top-0 left-0 right-0 z-50 bg-background transition-all duration-300 ${
       isScrolled ? 'py-2' : 'py-4'
     }`}>
       <div className="px-4">
