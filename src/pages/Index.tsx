@@ -14,7 +14,7 @@ const Index = () => {
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   
-  const [selectedMealType, setSelectedMealType] = useState<string>('');
+  const [selectedMealTypes, setSelectedMealTypes] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   
   const categories: CategoryType[] = [
@@ -27,7 +27,7 @@ const Index = () => {
   
   // Filter recipes based on selected filters
   const filteredRecipes = allRecipes.filter(recipe => {
-    const matchesMealType = selectedMealType === '' || recipe.category === selectedMealType;
+    const matchesMealType = selectedMealTypes.length === 0 || selectedMealTypes.includes(recipe.category);
     const matchesSearch = searchQuery === '' || 
       recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       recipe.ingredients.some(ing => ing.name.toLowerCase().includes(searchQuery.toLowerCase()));
@@ -37,6 +37,14 @@ const Index = () => {
 
   const handleRecipeClick = (recipe: Recipe) => {
     navigate(`/recipe/${recipe.id}`);
+  };
+
+  const handleMealTypeToggle = (type: string) => {
+    setSelectedMealTypes(prev => 
+      prev.includes(type) 
+        ? prev.filter(t => t !== type)
+        : [...prev, type]
+    );
   };
 
   const handleAddRecipe = (recipe: Recipe) => {
@@ -56,8 +64,8 @@ const Index = () => {
       <div className="pt-20 pb-20">
         {/* Meal Types Carousel */}
         <MealTypesCarousel 
-          selectedType={selectedMealType}
-          onTypeChange={setSelectedMealType}
+          selectedTypes={selectedMealTypes}
+          onTypeToggle={handleMealTypeToggle}
         />
         
         {/* Recipes Grid */}

@@ -7,8 +7,8 @@ interface MealType {
 }
 
 interface MealTypesCarouselProps {
-  selectedType: string;
-  onTypeChange: (type: string) => void;
+  selectedTypes: string[];
+  onTypeToggle: (type: string) => void;
 }
 
 const mealTypes: MealType[] = [
@@ -20,7 +20,7 @@ const mealTypes: MealType[] = [
   { id: 'desserts', name: 'Postre', image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307' },
 ];
 
-export const MealTypesCarousel = ({ selectedType, onTypeChange }: MealTypesCarouselProps) => {
+export const MealTypesCarousel = ({ selectedTypes, onTypeToggle }: MealTypesCarouselProps) => {
   return (
     <div className="px-4 mb-4">
       <ScrollArea className="w-full whitespace-nowrap">
@@ -28,13 +28,11 @@ export const MealTypesCarousel = ({ selectedType, onTypeChange }: MealTypesCarou
           {mealTypes.map((type) => (
             <div
               key={type.id}
-              onClick={() => onTypeChange(type.id)}
-              className={`flex-none cursor-pointer transition-all ${
-                selectedType === type.id ? 'opacity-100' : 'opacity-70'
-              }`}
+              onClick={() => onTypeToggle(type.id)}
+              className="flex-none cursor-pointer transition-all"
             >
               <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 ring-2 transition-all ${
-                selectedType === type.id ? 'ring-primary' : 'ring-transparent'
+                selectedTypes.includes(type.id) ? 'ring-primary ring-offset-2' : 'ring-primary/30'
               }`}>
                 <img 
                   src={type.image} 
@@ -42,7 +40,9 @@ export const MealTypesCarousel = ({ selectedType, onTypeChange }: MealTypesCarou
                   className="w-full h-full object-cover"
                 />
               </div>
-              <p className="text-xs text-center font-medium">{type.name}</p>
+              <p className={`text-xs text-center font-medium transition-colors ${
+                selectedTypes.includes(type.id) ? 'text-primary' : 'text-foreground'
+              }`}>{type.name}</p>
             </div>
           ))}
         </div>
