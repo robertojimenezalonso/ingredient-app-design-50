@@ -7,8 +7,6 @@ import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { ScrollableHeader } from '@/components/ScrollableHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
-import { IngredientsView } from '@/components/IngredientsView';
-import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { Recipe, CategoryType } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
