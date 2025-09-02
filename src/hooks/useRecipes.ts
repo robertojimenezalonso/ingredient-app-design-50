@@ -68,8 +68,8 @@ export const useRecipes = () => {
       });
 
       setRecipes(transformedRecipes);
-      console.log('Loaded recipes from Supabase:', transformedRecipes.length);
-      console.log('First recipe image URL:', transformedRecipes[0]?.image);
+      console.log('🍽️ [useRecipes] Loaded recipes from Supabase:', transformedRecipes.length);
+      console.log('🖼️ [useRecipes] Sample image URLs:', transformedRecipes.slice(0,3).map(r => r.image));
     } catch (error) {
       console.error('Error in fetchRecipes:', error);
     } finally {

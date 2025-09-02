@@ -1,8 +1,7 @@
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Search, List, User } from 'lucide-react';
 
 export const BottomNav = () => {
-  const navigate = useNavigate();
   const location = useLocation();
 
   const tabs = [
@@ -10,10 +9,6 @@ export const BottomNav = () => {
     { id: 'lists', label: 'Listas', icon: List, path: '/milista' },
     { id: 'profile', label: 'Perfil', icon: User, path: '/profile' },
   ];
-
-  const handleTabClick = (path: string) => {
-    navigate(path);
-  };
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50">
@@ -23,9 +18,9 @@ export const BottomNav = () => {
           const isActive = location.pathname === tab.path;
           
           return (
-            <button
+            <Link
               key={tab.id}
-              onClick={() => handleTabClick(tab.path)}
+              to={tab.path}
               className={`flex flex-col items-center py-2 px-4 transition-colors ${
                 isActive 
                   ? 'text-primary' 
@@ -34,7 +29,7 @@ export const BottomNav = () => {
             >
               <Icon className="h-5 w-5 mb-1" />
               <span className="text-xs font-medium">{tab.label}</span>
-            </button>
+            </Link>
           );
         })}
       </div>

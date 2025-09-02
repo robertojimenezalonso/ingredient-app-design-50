@@ -33,51 +33,34 @@ export const ImageLoader = ({
   const defaultFallback = getCategoryFallback(category);
   const finalFallbackSrc = fallbackSrc || defaultFallback;
   
-  // Check if images are preloaded to skip loading state
-  const areImagesPreloaded = localStorage.getItem('recipeImagesPreloaded') === 'true';
-  const isSupabaseImage = src?.includes('supabase.co') && src?.includes('recipe-images');
-  const shouldSkipLoading = areImagesPreloaded && isSupabaseImage;
-  
-  const [isLoading, setIsLoading] = useState(!shouldSkipLoading);
+  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
   const [currentSrc, setCurrentSrc] = useState('');
 
-  // Function to add cache-busting parameters to URLs
-  const addCacheBuster = (url: string): string => {
-    if (!url) return url;
-    
-    // Only add cache buster to Supabase storage URLs
-    if (url.includes('supabase.co') && url.includes('recipe-images')) {
-      const separator = url.includes('?') ? '&' : '?';
-      return `${url}${separator}t=${Date.now()}&cache=no-cache`;
-    }
-    
-    return url;
-  };
-
   useEffect(() => {
-    console.log('ImageLoader: Loading image with src =', src);
+    console.log('🖼️ [ImageLoader] Loading image:', src);
     setIsLoading(true);
     setError(false);
-    setCurrentSrc(src); // Usar la URL directamente sin cache-busting
+    setCurrentSrc(src);
   }, [src]);
 
   const handleLoad = () => {
+    console.log('✅ [ImageLoader] Image loaded successfully:', currentSrc);
     setIsLoading(false);
     setError(false);
   };
 
   const handleError = () => {
-    console.log('ImageLoader: Failed to load image:', currentSrc);
+    console.log('❌ [ImageLoader] Failed to load image:', currentSrc);
     setError(true);
     setIsLoading(false);
     if (currentSrc !== finalFallbackSrc) {
-      console.log('ImageLoader: Using fallback image:', finalFallbackSrc);
+      console.log('🔄 [ImageLoader] Using fallback image:', finalFallbackSrc);
       setCurrentSrc(finalFallbackSrc);
       setIsLoading(true);
       setError(false);
     } else {
-      console.log('ImageLoader: Fallback also failed');
+      console.log('💥 [ImageLoader] Fallback also failed');
     }
   };
 
@@ -106,8 +89,7 @@ export const ImageLoader = ({
         )}
         onLoad={handleLoad}
         onError={handleError}
-        loading="lazy"
-        crossOrigin="anonymous"
+        loading="eager"
       />
     </div>
   );
