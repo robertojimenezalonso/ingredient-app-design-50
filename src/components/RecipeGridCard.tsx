@@ -42,7 +42,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
           />
         </div>
         
-        <div className="flex-1 flex flex-col justify-start relative h-[120px]">
+        <div className="flex-1 flex flex-col justify-center relative h-[120px]">
           <div className="flex items-start mb-2 relative">
             <h3 className="font-normal text-base leading-tight flex-1 line-clamp-2 pr-4" style={{ marginRight: '60px' }}>
               {recipe.title}
