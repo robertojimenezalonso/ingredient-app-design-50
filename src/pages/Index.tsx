@@ -5,7 +5,7 @@ import { useRecipes } from '@/hooks/useRecipes';
 import { Recipe, CategoryType } from '@/types/recipe';
 import { ScrollableHeader } from '@/components/ScrollableHeader';
 import { MealTypesCarousel } from '@/components/MealTypesCarousel';
-import { DietsCarousel } from '@/components/DietsCarousel';
+
 import { RecipeGridCard } from '@/components/RecipeGridCard';
 import { useToast } from '@/hooks/use-toast';
 
@@ -15,7 +15,6 @@ const Index = () => {
   const { getRecipesByCategory } = useRecipes();
   
   const [selectedMealType, setSelectedMealType] = useState<string>('all');
-  const [selectedDiet, setSelectedDiet] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
   
   const categories: CategoryType[] = [
@@ -54,21 +53,15 @@ const Index = () => {
         onSearchChange={setSearchQuery}
       />
       
-      <div className="pt-32 pb-20">
+      <div className="pt-20 pb-20">
         {/* Meal Types Carousel */}
         <MealTypesCarousel 
           selectedType={selectedMealType}
           onTypeChange={setSelectedMealType}
         />
         
-        {/* Diets Carousel */}
-        <DietsCarousel 
-          selectedDiet={selectedDiet}
-          onDietChange={setSelectedDiet}
-        />
-        
         {/* Recipes Grid */}
-        <div className="px-4 mt-6">
+        <div className="px-4 mt-2">
           <div className="grid grid-cols-1 gap-4">
             {filteredRecipes.map((recipe) => (
               <RecipeGridCard
