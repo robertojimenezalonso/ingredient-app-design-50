@@ -56,6 +56,10 @@ export const ImageLoader = ({
   };
 
   useEffect(() => {
+    console.log('ImageLoader: src =', src);
+    console.log('ImageLoader: isSupabaseImage =', isSupabaseImage);
+    console.log('ImageLoader: shouldSkipLoading =', shouldSkipLoading);
+    
     // If images are preloaded and this is a Supabase recipe image, skip loading
     if (shouldSkipLoading) {
       setIsLoading(false);
@@ -73,9 +77,11 @@ export const ImageLoader = ({
   };
 
   const handleError = () => {
+    console.log('ImageLoader: Error loading image:', currentSrc);
     setError(true);
     setIsLoading(false);
     if (currentSrc !== finalFallbackSrc) {
+      console.log('ImageLoader: Switching to fallback:', finalFallbackSrc);
       setCurrentSrc(addCacheBuster(finalFallbackSrc));
       setIsLoading(true);
       setError(false);
