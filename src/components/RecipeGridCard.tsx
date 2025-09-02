@@ -44,13 +44,26 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
             {recipe.title}
           </h3>
         </div>
+        
+        {/* Precio debajo del título */}
+        <div className="mb-3">
+          <span className="font-medium text-sm text-black">
+            {(() => {
+              const basePrice = Math.random() * 15 + 10;
+              const discountPrice = basePrice * 0.85;
+              return discountPrice.toFixed(2).replace('.', ',') + ' €';
+            })()}
+            <span className="text-xs font-normal text-gray-500 ml-1">precio medio por porción</span>
+          </span>
+        </div>
+        
         <div className="flex-1 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-1 mb-2">
               <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
               <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
             </div>
-            <div className="flex items-center gap-4 mb-2">
+            <div className="flex items-center gap-4">
               <div className="flex items-center gap-1">
                 <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
                 <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.protein}g</span>
@@ -63,30 +76,6 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
                 <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
                 <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.fat}g</span>
               </div>
-            </div>
-          </div>
-          
-          <div className="mt-auto">
-            {/* Precio principal */}
-            <div className="mb-1">
-              <span className="font-medium text-sm text-black">
-                {(() => {
-                  const basePrice = Math.random() * 15 + 10;
-                  const discountPrice = basePrice * 0.85;
-                  return discountPrice.toFixed(2).replace('.', ',') + ' €';
-                })()}
-                <span className="text-xs font-normal text-gray-500 ml-1">/porción</span>
-              </span>
-            </div>
-            
-            {/* Precio medio */}
-            <div>
-              <span className="text-xs" style={{ color: '#6C6C6C' }}>
-                Precio medio para esta receta {(() => {
-                  const basePrice = Math.random() * 15 + 10;
-                  return basePrice.toFixed(2).replace('.', ',') + ' €';
-                })()}
-              </span>
             </div>
           </div>
         </div>
