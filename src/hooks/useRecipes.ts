@@ -29,28 +29,40 @@ export const useRecipes = () => {
       const transformedRecipes: Recipe[] = data.map(recipe => {
         const macronutrients = recipe.macronutrients as any;
         
+        // Map Spanish categories to English
+        const categoryMap: { [key: string]: CategoryType } = {
+          'desayuno': 'breakfast',
+          'almuerzo': 'lunch', 
+          'comida': 'lunch',
+          'cena': 'dinner',
+          'aperitivo': 'appetizer',
+          'snack': 'snacks',
+          'tentempie': 'snacks',
+          'postre': 'desserts'
+        };
+        
         return {
           id: recipe.id,
           title: recipe.title,
           image: recipe.image_url,
           calories: recipe.calories,
           time: recipe.preparation_time,
-          category: recipe.category as CategoryType,
+          category: categoryMap[recipe.category.toLowerCase()] || 'lunch',
           servings: recipe.servings,
           macros: {
-            carbs: macronutrients?.carbs || 0,
-            protein: macronutrients?.protein || 0,
-            fat: macronutrients?.fat || 0
+            carbs: macronutrients?.carbs?.grams || macronutrients?.carbs || 0,
+            protein: macronutrients?.protein?.grams || macronutrients?.protein || 0,
+            fat: macronutrients?.fat?.grams || macronutrients?.fat || 0
           },
           ingredients: recipe.ingredients as any[] || [],
           instructions: recipe.instructions || [],
           nutrition: {
             calories: recipe.calories,
-            protein: macronutrients?.protein || 0,
-            carbs: macronutrients?.carbs || 0,
-            fat: macronutrients?.fat || 0,
-            fiber: macronutrients?.fiber || 0,
-            sugar: macronutrients?.sugar || 0
+            protein: macronutrients?.protein?.grams || macronutrients?.protein || 0,
+            carbs: macronutrients?.carbs?.grams || macronutrients?.carbs || 0,
+            fat: macronutrients?.fat?.grams || macronutrients?.fat || 0,
+            fiber: macronutrients?.fiber?.grams || macronutrients?.fiber || 0,
+            sugar: macronutrients?.sugar?.grams || macronutrients?.sugar || 0
           }
         };
       });
