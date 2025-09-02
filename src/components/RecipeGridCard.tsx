@@ -22,7 +22,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
 
   return (
     <div 
-      className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-[120px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border p-2 mb-3"
+      className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-[140px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border p-2 mb-3"
       style={{ borderColor: '#F8F8FC' }}
       onClick={handleClick}
     >
@@ -38,24 +38,18 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
         />
       </div>
       
-      <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
+      <div className="flex-1 flex flex-col justify-start relative h-[140px] pt-3">
         <div className="flex items-start gap-2 mb-2 relative">
           <h3 className="font-medium text-base leading-tight mt-2 w-[140px] truncate whitespace-nowrap overflow-hidden">
             {recipe.title}
           </h3>
-          <button 
-            onClick={handleAddClick}
-            className="absolute right-0 top-0 w-6 h-6 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
-          >
-            <Plus className="h-3 w-3 text-white" />
-          </button>
         </div>
         <div className="mb-1.5">
           <div className="flex items-center gap-1 mb-2">
             <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
             <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
           </div>
-          <div className="flex items-center gap-4 mb-2">
+          <div className="flex items-center gap-4 mb-3">
             <div className="flex items-center gap-1">
               <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
               <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.protein}g</span>
@@ -70,29 +64,25 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
             </div>
           </div>
           
-          {/* Línea separadora */}
-          <div className="w-full h-px bg-gray-200 mb-2"></div>
+          {/* Precio principal */}
+          <div className="mb-1">
+            <span className="font-medium text-base text-black">
+              DESDE {(() => {
+                const basePrice = Math.random() * 15 + 10;
+                const discountPrice = basePrice * 0.85;
+                return discountPrice.toFixed(2).replace('.', ',') + ' €';
+              })()}
+            </span>
+          </div>
           
-          {/* Sección de precios */}
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-xs" style={{ color: '#6C6C6C' }}>
-                Precio medio {(() => {
-                  const basePrice = Math.random() * 15 + 10;
-                  return basePrice.toFixed(2).replace('.', ',') + ' €';
-                })()}
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span className="text-xs font-bold text-black">desde</span>
-              <span className="text-xs font-bold text-black">
-                {(() => {
-                  const basePrice = Math.random() * 15 + 10;
-                  const discountPrice = basePrice * 0.85;
-                  return discountPrice.toFixed(2).replace('.', ',') + ' €';
-                })()}
-              </span>
-            </div>
+          {/* Precio medio */}
+          <div>
+            <span className="text-xs" style={{ color: '#6C6C6C' }}>
+              Precio medio para esta receta {(() => {
+                const basePrice = Math.random() * 15 + 10;
+                return basePrice.toFixed(2).replace('.', ',') + ' €';
+              })()}
+            </span>
           </div>
         </div>
       </div>
