@@ -26,7 +26,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
       style={{ borderColor: '#F8F8FC' }}
       onClick={handleClick}
     >
-      <div className="relative flex-shrink-0">
+      <div className="flex-shrink-0">
         <ImageLoader
           src={recipe.image} 
           alt={recipe.title}
@@ -36,12 +36,6 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
             <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
           }
         />
-        <button 
-          onClick={handleAddClick}
-          className="absolute bottom-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
-        >
-          <Plus className="h-3 w-3 text-foreground" />
-        </button>
       </div>
       
       <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
