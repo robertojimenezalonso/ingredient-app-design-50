@@ -36,12 +36,6 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
             <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
           }
         />
-        <button 
-          onClick={handleAddClick}
-          className="absolute bottom-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
-        >
-          <Plus className="h-3 w-3 text-foreground" />
-        </button>
       </div>
       
       <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
@@ -49,13 +43,19 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
           <h3 className="font-medium text-base leading-tight mt-2 w-[140px] truncate whitespace-nowrap overflow-hidden">
             {recipe.title}
           </h3>
+          <button 
+            onClick={handleAddClick}
+            className="absolute right-0 top-0 w-6 h-6 bg-black rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+          >
+            <Plus className="h-3 w-3 text-white" />
+          </button>
         </div>
         <div className="mb-1.5">
           <div className="flex items-center gap-1 mb-2">
             <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
             <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-2">
             <div className="flex items-center gap-1">
               <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
               <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.protein}g</span>
@@ -67,6 +67,31 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
             <div className="flex items-center gap-1">
               <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
               <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.fat}g</span>
+            </div>
+          </div>
+          
+          {/* Línea separadora */}
+          <div className="w-full h-px bg-gray-200 mb-2"></div>
+          
+          {/* Sección de precios */}
+          <div className="flex items-center justify-between">
+            <div>
+              <span className="text-xs" style={{ color: '#6C6C6C' }}>
+                Precio medio {(() => {
+                  const basePrice = Math.random() * 15 + 10;
+                  return basePrice.toFixed(2).replace('.', ',') + ' €';
+                })()}
+              </span>
+            </div>
+            <div className="flex items-center gap-1">
+              <span className="text-xs font-bold text-black">desde</span>
+              <span className="text-xs font-bold text-black">
+                {(() => {
+                  const basePrice = Math.random() * 15 + 10;
+                  const discountPrice = basePrice * 0.85;
+                  return discountPrice.toFixed(2).replace('.', ',') + ' €';
+                })()}
+              </span>
             </div>
           </div>
         </div>
