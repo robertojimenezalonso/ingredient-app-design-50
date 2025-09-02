@@ -64,11 +64,11 @@ export const SupermarketsCarousel = ({ selectedSupermarket, onSupermarketChange 
 
   return (
     <div className="px-4 mb-4">
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-muted-foreground">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-muted-foreground flex-1">
           Comparamos precios en {totalSupermarkets} supermercados
         </span>
-        <div className="flex items-center">
+        <div className="flex items-center flex-shrink-0">
           {displaySupermarkets.map((supermarket, index) => (
             <div
               key={supermarket.id}
