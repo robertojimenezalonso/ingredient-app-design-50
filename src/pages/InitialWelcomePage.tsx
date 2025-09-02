@@ -5,6 +5,7 @@ import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useAuth } from '@/hooks/useAuth';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { RecipeGridCard } from '@/components/RecipeGridCard';
+import { Recipe } from '@/types/recipe';
 import { Button } from '@/components/ui/button';
 
 const InitialWelcomePage = () => {
@@ -18,14 +19,13 @@ const InitialWelcomePage = () => {
     }
   }, [user, loading, navigate]);
 
-  const handleAddRecipe = (recipeId: string) => {
-    console.log('Adding recipe:', recipeId);
+  const handleAddRecipe = (recipe: Recipe) => {
+    console.log('Adding recipe:', recipe.id);
     // TODO: Add to cart/list functionality
   };
 
-  const generateRandomPrice = () => {
-    const price = (Math.random() * 15 + 5).toFixed(2);
-    return `${price.replace('.', ',')} €`;
+  const handleRecipeClick = (recipe: Recipe) => {
+    navigate(`/recipe/${recipe.id}`);
   };
 
 
@@ -47,11 +47,29 @@ const InitialWelcomePage = () => {
           {recipes.slice(0, 20).map((recipe) => (
             <RecipeGridCard
               key={recipe.id}
-              id={recipe.id}
-              title={recipe.title}
-              image={recipe.image_url}
-              price={generateRandomPrice()}
+              recipe={{
+                ...recipe,
+                image: recipe.image_url,
+                macros: {
+                  protein: Math.floor(Math.random() * 30) + 10,
+                  carbs: Math.floor(Math.random() * 50) + 20,
+                  fat: Math.floor(Math.random() * 20) + 5
+                },
+                time: Math.floor(Math.random() * 45) + 15,
+                servings: 2,
+                ingredients: [],
+                instructions: [],
+                nutrition: {
+                  calories: recipe.calories || 300,
+                  protein: Math.floor(Math.random() * 30) + 10,
+                  carbs: Math.floor(Math.random() * 50) + 20,
+                  fat: Math.floor(Math.random() * 20) + 5,
+                  fiber: Math.floor(Math.random() * 10) + 2,
+                  sugar: Math.floor(Math.random() * 15) + 5
+                }
+              }}
               onAdd={handleAddRecipe}
+              onClick={handleRecipeClick}
             />
           ))}
         </div>
