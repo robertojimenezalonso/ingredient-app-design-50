@@ -14,7 +14,7 @@ const Index = () => {
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   
-  const [selectedMealType, setSelectedMealType] = useState<string>('all');
+  const [selectedMealType, setSelectedMealType] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   
   const categories: CategoryType[] = [
@@ -27,7 +27,7 @@ const Index = () => {
   
   // Filter recipes based on selected filters
   const filteredRecipes = allRecipes.filter(recipe => {
-    const matchesMealType = selectedMealType === 'all' || recipe.category === selectedMealType;
+    const matchesMealType = selectedMealType === '' || recipe.category === selectedMealType;
     const matchesSearch = searchQuery === '' || 
       recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       recipe.ingredients.some(ing => ing.name.toLowerCase().includes(searchQuery.toLowerCase()));
