@@ -46,7 +46,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
           <h3 className="font-medium text-base leading-tight mt-2 w-[140px] truncate whitespace-nowrap overflow-hidden">
             {recipe.title}
           </h3>
-          <span className="font-normal text-base leading-tight mt-2 ml-2">{price} €</span>
+          <span className="font-medium text-base leading-tight mt-2 ml-2">{price} €</span>
         </div>
         <div className="mb-1.5">
           <div className="flex items-center gap-1 mb-2">
