@@ -12,7 +12,7 @@ interface MealTypesCarouselProps {
 }
 
 const mealTypes: MealType[] = [
-  { id: 'breakfast', name: 'Desayuno', image: 'https://images.unsplash.com/photo-1525351326368-efbb5cb6e397' },
+  { id: 'breakfast', name: 'Desayuno', image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=400&fit=crop' },
   { id: 'appetizer', name: 'Aperitivo', image: 'https://images.unsplash.com/photo-1544025162-d76694265947' },
   { id: 'lunch', name: 'Comida', image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445' },
   { id: 'snacks', name: 'Snack', image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729' },
@@ -31,9 +31,7 @@ export const MealTypesCarousel = ({ selectedTypes, onTypeToggle }: MealTypesCaro
               onClick={() => onTypeToggle(type.id)}
               className="flex-none cursor-pointer transition-all"
             >
-              <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 transition-all ${
-                selectedTypes.includes(type.id) ? 'opacity-100' : 'opacity-70'
-              }`}>
+              <div className="w-16 h-16 rounded-full overflow-hidden mb-2 transition-all">
                 <img 
                   src={type.image} 
                   alt={type.name}
