@@ -33,7 +33,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
           <ImageLoader
             src={recipe.image} 
             alt={recipe.title}
-            className="w-[112px] h-[112px] object-cover rounded-lg"
+            className="w-[120px] h-[120px] object-cover rounded-lg"
             category={recipe.category}
             placeholder={
               <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
