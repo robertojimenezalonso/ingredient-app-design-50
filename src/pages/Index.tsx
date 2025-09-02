@@ -5,7 +5,7 @@ import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
-import { AirbnbHeader } from '@/components/AirbnbHeader';
+import { ScrollableHeader } from '@/components/ScrollableHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { IngredientsView } from '@/components/IngredientsView';
 import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
@@ -20,7 +20,9 @@ const Index = () => {
   const { addToCart } = useCart();
   const { config, updateConfig } = useUserConfig();
   
-  const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
+  const [searchValue, setSearchValue] = useState('');
+  const [selectedMealType, setSelectedMealType] = useState<string | null>(null);
+  const [selectedDiet, setSelectedDiet] = useState<string | null>(null);
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   
   const categories: CategoryType[] = [
@@ -56,7 +58,20 @@ const Index = () => {
   }, [updateConfig]);
 
   // Get all recipes for ingredient management - prioritize AI recipes
-  const explorationRecipes = aiRecipes.length > 0 ? aiRecipes : categories.flatMap(category => getRecipesByCategory(category, 10));
+  const allRecipes = aiRecipes.length > 0 ? aiRecipes : categories.flatMap(category => getRecipesByCategory(category, 10));
+  
+  // Filter recipes based on search, meal type, and diet
+  const filteredRecipes = useMemo(() => {
+    return allRecipes.filter(recipe => {
+      const matchesSearch = !searchValue || recipe.title.toLowerCase().includes(searchValue.toLowerCase());
+      const matchesMealType = !selectedMealType || recipe.category === selectedMealType;
+      const matchesDiet = !selectedDiet; // We'll add diet filtering logic here later
+      
+      return matchesSearch && matchesMealType && matchesDiet;
+    });
+  }, [allRecipes, searchValue, selectedMealType, selectedDiet]);
+  
+  const explorationRecipes = filteredRecipes;
   const { getGroupedIngredients, getSelectedIngredientsCount, initializeIngredients } = useGlobalIngredients();
   
   // Initialize ingredients when recipes load
@@ -95,6 +110,18 @@ const Index = () => {
 
   const handleViewAll = (category: CategoryType) => {
     navigate(`/category/${category}`);
+  };
+
+  const handleFilterClick = () => {
+    // TODO: Implement filter dialog
+    toast({
+      title: "Filtros",
+      description: "Función próximamente disponible"
+    });
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
   };
 
 
@@ -161,41 +188,36 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <AirbnbHeader 
-        showTabs={showTabs}
-        activeTab={activeTabDate}
-        mealPlan={mealPlan}
-        onTabChange={scrollToDate}
-        onFilterChange={setSelectedFilter}
-        navigationData={navigationData}
+    <div className="min-h-screen bg-background">
+      <ScrollableHeader
+        searchValue={searchValue}
+        onSearchChange={setSearchValue}
+        onFilterClick={handleFilterClick}
+        onProfileClick={handleProfileClick}
+        selectedMealType={selectedMealType}
+        onMealTypeSelect={setSelectedMealType}
+        selectedDiet={selectedDiet}
+        onDietSelect={setSelectedDiet}
       />
       
-      <div style={{ paddingTop: '120px' }}>
-        <SavedShoppingListCard />
-        
-        {selectedFilter === 'receta' ? (
-          /* All recipes mixed together */
-          <CategoryCarousel
-            category="trending"
-            recipes={explorationRecipes}
-            onAddRecipe={handleAddRecipe}
-            onRecipeClick={handleRecipeClick}
-            onViewAll={handleViewAll}
-            sectionRefs={sectionRefs}
-            onRecipesChange={handleRecipesChange}
-            onNavigationDataChange={setNavigationData}
-          />
-        ) : (
-          <IngredientsView recipes={explorationRecipes} />
-        )}
+      <div style={{ paddingTop: '280px', paddingBottom: '100px' }}>
+        <CategoryCarousel
+          category="trending"
+          recipes={explorationRecipes}
+          onAddRecipe={handleAddRecipe}
+          onRecipeClick={handleRecipeClick}
+          onViewAll={handleViewAll}
+          sectionRefs={sectionRefs}
+          onRecipesChange={handleRecipesChange}
+          onNavigationDataChange={setNavigationData}
+        />
       </div>
 
       {/* Floating Button - Always visible */}
-      <div className="fixed bottom-4 left-4 right-4 z-40">
+      <div className="fixed bottom-20 left-4 right-4 z-40">
         <button 
           onClick={handleSearchInSupermarket}
-          className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
+          className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3"
         >
           <Search className="h-5 w-5" />
           {selectedIngredientsCount > 0 ? 'Continuar con Mi lista' : 'Buscar súper'} · Lista ({selectedIngredientsCount})
