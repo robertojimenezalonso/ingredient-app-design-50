@@ -72,7 +72,7 @@ export const SupermarketsCarousel = ({ selectedSupermarket, onSupermarketChange 
           {displaySupermarkets.map((supermarket, index) => (
             <div
               key={supermarket.id}
-              className="w-7 h-7 rounded-full border-2 border-background flex items-center justify-center text-sm"
+              className="w-6 h-6 rounded-full border-2 border-background flex items-center justify-center text-xs"
               style={{
                 backgroundColor: supermarket.bgColor,
                 color: supermarket.color,
