@@ -9,6 +9,9 @@ interface RecipeGridCardProps {
 }
 
 export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) => {
+  // Generate random price between 3-12 euros
+  const price = (Math.random() * 9 + 3).toFixed(2).replace('.', ',');
+
   const handleClick = () => {
     if (onClick) {
       onClick(recipe);
@@ -39,13 +42,11 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
       </div>
       
       <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
-        <div className="flex items-start gap-2 mb-2 relative">
-          <h3 className="font-medium text-base leading-tight mt-2 w-[140px] truncate whitespace-nowrap overflow-hidden">
+        <div className="flex items-start justify-between mb-2 relative">
+          <h3 className="font-medium text-base leading-tight mt-2 flex-1 truncate whitespace-nowrap overflow-hidden">
             {recipe.title}
           </h3>
-        </div>
-        <div className="mb-2">
-          <span className="text-sm font-medium text-foreground">Desde 36,48 €</span>
+          <span className="font-medium text-base leading-tight mt-2 ml-2">{price} €</span>
         </div>
         <div className="mb-1.5">
           <div className="flex items-center gap-1 mb-2">
