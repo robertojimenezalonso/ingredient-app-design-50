@@ -35,7 +35,7 @@ export const ImageLoader = ({
   
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [currentSrc, setCurrentSrc] = useState('');
+  const [currentSrc, setCurrentSrc] = useState(src);
 
   useEffect(() => {
     console.log('🖼️ [ImageLoader] Loading image:', src);
@@ -89,7 +89,6 @@ export const ImageLoader = ({
         )}
         onLoad={handleLoad}
         onError={handleError}
-        loading="eager"
       />
     </div>
   );
