@@ -107,6 +107,7 @@ export const ImageLoader = ({
         onLoad={handleLoad}
         onError={handleError}
         loading="lazy"
+        crossOrigin="anonymous"
       />
     </div>
   );
