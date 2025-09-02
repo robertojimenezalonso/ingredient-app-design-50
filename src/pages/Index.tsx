@@ -171,9 +171,7 @@ const Index = () => {
         navigationData={navigationData}
       />
       
-      <div style={{ paddingTop: '120px' }}>
-        <SavedShoppingListCard />
-        
+      <div style={{ paddingTop: '120px' }}>        
         {selectedFilter === 'receta' ? (
           /* All recipes mixed together */
           <CategoryCarousel
