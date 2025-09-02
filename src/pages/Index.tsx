@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Filter } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { Recipe, CategoryType } from '@/types/recipe';
+import { SupermarketsCarousel } from '@/components/SupermarketsCarousel';
 import { ScrollableHeader } from '@/components/ScrollableHeader';
-import { MealTypesCarousel } from '@/components/MealTypesCarousel';
 
+import { MealTypesCarousel } from '@/components/MealTypesCarousel';
 import { RecipeGridCard } from '@/components/RecipeGridCard';
 import { useToast } from '@/hooks/use-toast';
 
@@ -15,6 +16,7 @@ const Index = () => {
   const { getRecipesByCategory } = useRecipes();
   
   const [selectedMealTypes, setSelectedMealTypes] = useState<string[]>([]);
+  const [selectedSupermarket, setSelectedSupermarket] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   
   const categories: CategoryType[] = [
@@ -61,7 +63,13 @@ const Index = () => {
         onSearchChange={setSearchQuery}
       />
       
-      <div className="pt-20 pb-20">
+      <div className="pt-16 pb-20">
+        {/* Supermarkets Carousel */}
+        <SupermarketsCarousel 
+          selectedSupermarket={selectedSupermarket}
+          onSupermarketChange={setSelectedSupermarket}
+        />
+        
         {/* Meal Types Carousel */}
         <MealTypesCarousel 
           selectedTypes={selectedMealTypes}
