@@ -22,16 +22,18 @@ const mealTypes: MealType[] = [
 
 export const MealTypesCarousel = ({ selectedTypes, onTypeToggle }: MealTypesCarouselProps) => {
   return (
-    <div className="px-4 mb-4">
+    <div className="mb-4">
       <div className="overflow-x-auto scrollbar-hide">
-        <div className="flex gap-4 pb-2 pr-4 min-w-max">
-          {mealTypes.map((type) => (
+        <div className="flex gap-4 pb-2 pl-4 min-w-max">
+          {mealTypes.map((type, index) => (
             <div
               key={type.id}
               onClick={() => onTypeToggle(type.id)}
               className="flex-none cursor-pointer transition-all"
             >
-              <div className="w-16 h-16 rounded-full overflow-hidden mb-2 transition-all">
+              <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 transition-all ${
+                index === mealTypes.length - 1 ? 'mr-4' : ''
+              }`}>
                 <img 
                   src={type.image} 
                   alt={type.name}
