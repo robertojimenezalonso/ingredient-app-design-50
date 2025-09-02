@@ -56,20 +56,11 @@ export const ImageLoader = ({
   };
 
   useEffect(() => {
-    console.log('ImageLoader: src =', src);
-    console.log('ImageLoader: isSupabaseImage =', isSupabaseImage);
-    console.log('ImageLoader: shouldSkipLoading =', shouldSkipLoading);
-    
-    // If images are preloaded and this is a Supabase recipe image, skip loading
-    if (shouldSkipLoading) {
-      setIsLoading(false);
-      setCurrentSrc(src);
-    } else {
-      setIsLoading(true);
-      setCurrentSrc(addCacheBuster(src));
-    }
+    console.log('ImageLoader: Loading image with src =', src);
+    setIsLoading(true);
     setError(false);
-  }, [src, shouldSkipLoading]);
+    setCurrentSrc(src); // Usar la URL directamente sin cache-busting
+  }, [src]);
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -77,14 +68,16 @@ export const ImageLoader = ({
   };
 
   const handleError = () => {
-    console.log('ImageLoader: Error loading image:', currentSrc);
+    console.log('ImageLoader: Failed to load image:', currentSrc);
     setError(true);
     setIsLoading(false);
     if (currentSrc !== finalFallbackSrc) {
-      console.log('ImageLoader: Switching to fallback:', finalFallbackSrc);
-      setCurrentSrc(addCacheBuster(finalFallbackSrc));
+      console.log('ImageLoader: Using fallback image:', finalFallbackSrc);
+      setCurrentSrc(finalFallbackSrc);
       setIsLoading(true);
       setError(false);
+    } else {
+      console.log('ImageLoader: Fallback also failed');
     }
   };
 
@@ -114,8 +107,6 @@ export const ImageLoader = ({
         onLoad={handleLoad}
         onError={handleError}
         loading="lazy"
-        crossOrigin="anonymous"
-        referrerPolicy="no-referrer"
       />
     </div>
   );
