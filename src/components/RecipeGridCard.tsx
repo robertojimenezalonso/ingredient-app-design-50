@@ -1,4 +1,4 @@
-import { Plus, Clock } from 'lucide-react';
+import { Plus } from 'lucide-react';
 import { Recipe } from '@/types/recipe';
 import { ImageLoader } from './ui/image-loader';
 
@@ -9,11 +9,6 @@ interface RecipeGridCardProps {
 }
 
 export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) => {
-  const truncateTitle = (text: string, maxLength: number = 50) => {
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
-  };
-
   const handleClick = () => {
     if (onClick) {
       onClick(recipe);
@@ -27,52 +22,52 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
 
   return (
     <div 
-      className="overflow-hidden cursor-pointer"
+      className="flex gap-3 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 h-[120px] shadow-[0_4px_20px_rgba(0,0,0,0.1)] border p-2 mb-3"
+      style={{ borderColor: '#F8F8FC' }}
       onClick={handleClick}
     >
-      <div className="relative aspect-square mb-3">
+      <div className="relative flex-shrink-0">
         <ImageLoader
-          src={recipe.image}
+          src={recipe.image} 
           alt={recipe.title}
-          className="w-full h-full object-cover rounded-xl"
-          fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=400"
+          className="w-[104px] h-[104px] object-cover rounded-lg"
+          category={recipe.category}
+          placeholder={
+            <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
+          }
         />
         <button 
           onClick={handleAddClick}
-          className="absolute bottom-3 right-3 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
+          className="absolute bottom-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform"
         >
-          <Plus className="h-4 w-4 text-foreground" />
+          <Plus className="h-3 w-3 text-foreground" />
         </button>
       </div>
       
-      <div>
-        <h3 className="text-sm leading-tight text-foreground line-clamp-2 mb-2">
-          {truncateTitle(recipe.title)}
-        </h3>
-        
-        {/* Nutrition info similar to RecipeCard */}
-        <div className="flex items-center gap-3 mb-2">
-          <div className="flex items-center gap-1">
-            <Clock className="h-3 w-3 text-muted-foreground" />
-            <span className="text-xs text-muted-foreground">{recipe.time}min</span>
-          </div>
-          <span className="text-xs text-muted-foreground">•</span>
-          <span className="text-xs text-muted-foreground">{recipe.calories} kcal</span>
+      <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
+        <div className="flex items-start gap-2 mb-2 relative">
+          <h3 className="font-medium text-base leading-tight mt-2 w-[140px] truncate whitespace-nowrap overflow-hidden">
+            {recipe.title}
+          </h3>
         </div>
-        
-        {/* Macros similar to RecipeCard */}
-        <div className="flex items-center gap-2 text-xs">
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-[#DE6968]"></div>
-            <span className="text-muted-foreground">{recipe.macros.protein}g</span>
+        <div className="mb-1.5">
+          <div className="flex items-center gap-1 mb-2">
+            <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+            <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-[#DE9A69]"></div>
-            <span className="text-muted-foreground">{recipe.macros.carbs}g</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <div className="w-2 h-2 rounded-full bg-[#6998DD]"></div>
-            <span className="text-muted-foreground">{recipe.macros.fat}g</span>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1">
+              <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+              <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.protein}g</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+              <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.carbs}g</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+              <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.macros.fat}g</span>
+            </div>
           </div>
         </div>
       </div>
