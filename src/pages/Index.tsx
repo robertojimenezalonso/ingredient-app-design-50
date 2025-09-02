@@ -1,203 +1,85 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search } from 'lucide-react';
+import { Search, Filter } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
-import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
-import { useCart } from '@/hooks/useCart';
-import { useUserConfig } from '@/contexts/UserConfigContext';
-import { AirbnbHeader } from '@/components/AirbnbHeader';
-import { CategoryCarousel } from '@/components/CategoryCarousel';
-import { IngredientsView } from '@/components/IngredientsView';
-import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
-import { useDateTabs } from '@/hooks/useDateTabs';
 import { Recipe, CategoryType } from '@/types/recipe';
+import { ScrollableHeader } from '@/components/ScrollableHeader';
+import { MealTypesCarousel } from '@/components/MealTypesCarousel';
+import { DietsCarousel } from '@/components/DietsCarousel';
+import { RecipeGridCard } from '@/components/RecipeGridCard';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
-  const { addToCart } = useCart();
-  const { config, updateConfig } = useUserConfig();
   
-  const [selectedFilter, setSelectedFilter] = useState<'receta' | 'ingredientes'>('receta');
-  const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
+  const [selectedMealType, setSelectedMealType] = useState<string>('all');
+  const [selectedDiet, setSelectedDiet] = useState<string>('all');
+  const [searchQuery, setSearchQuery] = useState('');
   
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 
-    'appetizer', 'snacks', 'desserts', 'favorites'
+    'appetizer', 'snacks', 'desserts'
   ];
 
-  // Load AI recipes from localStorage if available
-  const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
-  const [navigationData, setNavigationData] = useState<{
-    canGoPrevious: boolean;
-    canGoNext: boolean;
-    isGenerating: boolean;
-    handlePrevious: () => void;
-    handleNext: () => void;
-    handleGenerate: () => void;
-  } | null>(null);
+  // Get all recipes
+  const allRecipes = categories.flatMap(category => getRecipesByCategory(category, 20));
   
-  useEffect(() => {
-    // Reset chart animation when entering from welcome page
-    updateConfig({ shouldAnimateChart: false });
+  // Filter recipes based on selected filters
+  const filteredRecipes = allRecipes.filter(recipe => {
+    const matchesMealType = selectedMealType === 'all' || recipe.category === selectedMealType;
+    const matchesSearch = searchQuery === '' || 
+      recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      recipe.ingredients.some(ing => ing.name.toLowerCase().includes(searchQuery.toLowerCase()));
     
-    const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-    if (storedAiRecipes) {
-      try {
-        const parsedRecipes = JSON.parse(storedAiRecipes);
-        setAiRecipes(parsedRecipes);
-        console.log('Loaded', parsedRecipes.length, 'AI recipes from localStorage');
-      } catch (error) {
-        console.error('Error parsing stored AI recipes:', error);
-      }
-    }
-  }, [updateConfig]);
+    return matchesMealType && matchesSearch;
+  });
 
-  // Get all recipes for ingredient management - prioritize AI recipes
-  const explorationRecipes = aiRecipes.length > 0 ? aiRecipes : categories.flatMap(category => getRecipesByCategory(category, 10));
-  const { getGroupedIngredients, getSelectedIngredientsCount, initializeIngredients } = useGlobalIngredients();
-  
-  // Initialize ingredients when recipes load
-  useEffect(() => {
-    if (explorationRecipes.length > 0) {
-      initializeIngredients(explorationRecipes);
-    }
-  }, [explorationRecipes.length, initializeIngredients]);
-  
-  const handleRecipesChange = (newRecipes: Recipe[]) => {
-    setAiRecipes(newRecipes);
-    // Store in localStorage for persistence
-    localStorage.setItem('aiGeneratedRecipes', JSON.stringify(newRecipes));
-    // Re-initialize ingredients for the new recipes to update price calculation
-    initializeIngredients(newRecipes);
-    console.log('Updated AI recipes:', newRecipes.length, 'recipes');
+  const handleRecipeClick = (recipe: Recipe) => {
+    navigate(`/recipe/${recipe.id}`);
   };
 
-  // Calculate selected ingredients count with memoization
-  const selectedIngredientsCount = useMemo(() => {
-    return getSelectedIngredientsCount(explorationRecipes);
-  }, [getSelectedIngredientsCount, explorationRecipes]);
-
   const handleAddRecipe = (recipe: Recipe) => {
-    const selectedIngredients = recipe.ingredients.map(ing => ing.id);
-    addToCart(recipe, recipe.servings, selectedIngredients);
     toast({
       title: "Receta añadida",
       description: `${recipe.title} añadida a favoritos`
     });
   };
 
-  const handleRecipeClick = (recipe: Recipe) => {
-    navigate(`/recipe/${recipe.id}`);
-  };
-
-  const handleViewAll = (category: CategoryType) => {
-    navigate(`/category/${category}`);
-  };
-
-
-  const handleSearchInSupermarket = () => {
-    if (selectedIngredientsCount > 0) {
-      // Save current planning session before navigating
-      saveCurrentPlanningSession();
-      navigate('/milista');
-    } else {
-      toast({
-        title: "Buscar en supermercado",
-        description: "Función próximamente disponible"
-      });
-    }
-  };
-
-  const saveCurrentPlanningSession = () => {
-    if (config.hasPlanningSession && config.selectedDates?.length) {
-      const existingSavedLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
-      
-      // Get first 3 recipe images from current AI recipes
-      const recipeImages = explorationRecipes.slice(0, 3).map(recipe => recipe.image || 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9');
-      
-      // Create a new shopping list object
-      const newShoppingList = {
-        id: Date.now().toString(),
-        name: generatePlanName(),
-        selectedDates: config.selectedDates,
-        servingsPerRecipe: config.servingsPerRecipe || 2,
-        estimatedPrice: calculateEstimatedPrice(),
-        createdAt: new Date().toISOString(),
-        ingredients: explorationRecipes.flatMap(recipe => recipe.ingredients),
-        recipes: explorationRecipes,
-        recipeImages: recipeImages // Store recipe images
-      };
-      
-      // Add to beginning of array (most recent first)
-      const updatedLists = [newShoppingList, ...existingSavedLists.slice(0, 9)]; // Keep max 10 lists
-      
-      localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
-      console.log('Saved new shopping list:', newShoppingList);
-    }
-  };
-
-  const generatePlanName = () => {
-    const themes = [
-      'Menú semanal mediterráneo',
-      'Comidas saludables',
-      'Menú familiar',
-      'Cocina tradicional',
-      'Menú vegetariano',
-      'Comidas rápidas'
-    ];
-    return themes[Math.floor(Math.random() * themes.length)];
-  };
-
-  const calculateEstimatedPrice = () => {
-    const basePrice = selectedIngredientsCount * 1.2;
-    const servingsMultiplier = config.servingsPerRecipe || 2;
-    const daysMultiplier = config.selectedDates?.length || 1;
-    
-    const estimatedPrice = (basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
-    return estimatedPrice;
-  };
-
   return (
-    <div className="min-h-screen bg-gray-100">
-      <AirbnbHeader 
-        showTabs={showTabs}
-        activeTab={activeTabDate}
-        mealPlan={mealPlan}
-        onTabChange={scrollToDate}
-        onFilterChange={setSelectedFilter}
-        navigationData={navigationData}
+    <div className="min-h-screen bg-background">
+      <ScrollableHeader 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
       />
       
-      <div style={{ paddingTop: '120px' }}>        
-        {selectedFilter === 'receta' ? (
-          /* All recipes mixed together */
-          <CategoryCarousel
-            category="trending"
-            recipes={explorationRecipes}
-            onAddRecipe={handleAddRecipe}
-            onRecipeClick={handleRecipeClick}
-            onViewAll={handleViewAll}
-            sectionRefs={sectionRefs}
-            onRecipesChange={handleRecipesChange}
-            onNavigationDataChange={setNavigationData}
-          />
-        ) : (
-          <IngredientsView recipes={explorationRecipes} />
-        )}
-      </div>
-
-      {/* Floating Button - Always visible */}
-      <div className="fixed bottom-4 left-4 right-4 z-40">
-        <button 
-          onClick={handleSearchInSupermarket}
-          className="w-full bg-black text-white py-4 px-6 rounded-2xl font-medium text-base shadow-lg hover:bg-gray-800 transition-colors flex items-center justify-center gap-3 mb-4"
-        >
-          <Search className="h-5 w-5" />
-          {selectedIngredientsCount > 0 ? 'Continuar con Mi lista' : 'Buscar súper'} · Lista ({selectedIngredientsCount})
-        </button>
+      <div className="pt-32 pb-20">
+        {/* Meal Types Carousel */}
+        <MealTypesCarousel 
+          selectedType={selectedMealType}
+          onTypeChange={setSelectedMealType}
+        />
+        
+        {/* Diets Carousel */}
+        <DietsCarousel 
+          selectedDiet={selectedDiet}
+          onDietChange={setSelectedDiet}
+        />
+        
+        {/* Recipes Grid */}
+        <div className="px-4 mt-6">
+          <div className="grid grid-cols-1 gap-4">
+            {filteredRecipes.map((recipe) => (
+              <RecipeGridCard
+                key={recipe.id}
+                recipe={recipe}
+                onClick={() => handleRecipeClick(recipe)}
+                onAdd={() => handleAddRecipe(recipe)}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

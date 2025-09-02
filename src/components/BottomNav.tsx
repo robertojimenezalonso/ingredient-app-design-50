@@ -1,56 +1,42 @@
-import { Search, Store, ChefHat, User, Plus } from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Search, List, User } from 'lucide-react';
 
-interface BottomNavProps {
-  activeTab: 'explore' | 'cart' | 'recipes' | 'profile';
-  onTabChange: (tab: 'explore' | 'cart' | 'recipes' | 'profile') => void;
-}
+export const BottomNav = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-export const BottomNav = ({ activeTab, onTabChange }: BottomNavProps) => {
   const tabs = [
-    { id: 'explore' as const, icon: Search, label: 'Explorar' },
-    { id: 'cart' as const, icon: Store, label: 'Super' }
+    { id: 'explore', label: 'Explorar', icon: Search, path: '/' },
+    { id: 'lists', label: 'Listas', icon: List, path: '/milista' },
+    { id: 'profile', label: 'Perfil', icon: User, path: '/profile' },
   ];
 
-  const tabsRight = [
-    { id: 'recipes' as const, icon: ChefHat, label: 'Cocina' },
-    { id: 'profile' as const, icon: User, label: 'Perfil' }
-  ];
+  const handleTabClick = (path: string) => {
+    navigate(path);
+  };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50">
-      <div className="bg-background border-t" style={{ height: '80px' }}>
-        <div className="flex items-center justify-around h-full">
-          {tabs.map(({ id, icon: Icon, label }) => (
-            <button
-              key={id}
-              onClick={() => onTabChange(id)}
-              className={`flex flex-col items-center justify-start pt-3 gap-1 flex-1 h-full transition-colors ${
-                activeTab === id 
-                  ? 'text-black' 
-                  : 'text-muted-foreground'
-              }`}
-            >
-              <Icon className="h-5 w-5" />
-              <span className="text-xs font-medium">{label}</span>
-            </button>
-          ))}
+    <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50">
+      <div className="flex items-center justify-around py-2">
+        {tabs.map((tab) => {
+          const Icon = tab.icon;
+          const isActive = location.pathname === tab.path;
           
-
-          {tabsRight.map(({ id, icon: Icon, label }) => (
+          return (
             <button
-              key={id}
-              onClick={() => onTabChange(id)}
-              className={`flex flex-col items-center justify-start pt-3 gap-1 flex-1 h-full transition-colors ${
-                activeTab === id 
-                  ? 'text-black' 
-                  : 'text-muted-foreground'
+              key={tab.id}
+              onClick={() => handleTabClick(tab.path)}
+              className={`flex flex-col items-center py-2 px-4 transition-colors ${
+                isActive 
+                  ? 'text-primary' 
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
-              <Icon className="h-5 w-5" />
-              <span className="text-xs font-medium">{label}</span>
+              <Icon className="h-5 w-5 mb-1" />
+              <span className="text-xs font-medium">{tab.label}</span>
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
   );
