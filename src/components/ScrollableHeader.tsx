@@ -64,11 +64,10 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Buscar"
+              placeholder="Buscar recetas o ingredientes"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-12 pr-4 py-4 rounded-full border-0 bg-white shadow-md text-base font-medium placeholder:font-normal placeholder:text-muted-foreground"
-              style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1), 0 -2px 8px rgba(0, 0, 0, 0.05)' }}
+              className="pl-12 pr-4 py-4 rounded-full border border-gray-300 bg-white text-base font-medium placeholder:font-normal placeholder:text-gray-500"
             />
           </div>
           <Button variant="ghost" size="icon" className="rounded-full bg-transparent border-0 h-12 w-12 hover:bg-gray-100">
