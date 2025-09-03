@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Filter } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { Recipe, CategoryType } from '@/types/recipe';
-import { SupermarketsCarousel } from '@/components/SupermarketsCarousel';
+
 import { ScrollableHeader } from '@/components/ScrollableHeader';
 
 import { MealTypesCarousel } from '@/components/MealTypesCarousel';
@@ -70,11 +70,6 @@ const Index = () => {
           onTypeToggle={handleMealTypeToggle}
         />
         
-        {/* Supermarkets Info */}
-        <SupermarketsCarousel 
-          selectedSupermarket={selectedSupermarket}
-          onSupermarketChange={setSelectedSupermarket}
-        />
         
         {/* Recipes Grid */}
         <div className="px-4 mt-2">
