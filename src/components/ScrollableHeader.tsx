@@ -67,11 +67,12 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
               placeholder="Buscar"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-12 pr-4 py-4 rounded-full border-0 bg-white shadow-lg text-base font-medium placeholder:font-normal placeholder:text-muted-foreground"
+              className="pl-12 pr-4 py-4 rounded-full border-0 bg-white shadow-md text-base font-medium placeholder:font-normal placeholder:text-muted-foreground"
+              style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1), 0 -2px 8px rgba(0, 0, 0, 0.05)' }}
             />
           </div>
-          <Button variant="ghost" size="icon" className="rounded-full bg-white shadow-lg border-0 h-12 w-12 hover:bg-gray-50">
-            <Filter className="h-5 w-5" />
+          <Button variant="ghost" size="icon" className="rounded-full bg-transparent border-0 h-12 w-12 hover:bg-gray-100">
+            <Filter className="h-5 w-5 text-gray-600" />
           </Button>
         </div>
       </div>
