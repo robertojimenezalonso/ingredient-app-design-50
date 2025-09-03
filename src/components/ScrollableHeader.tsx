@@ -67,7 +67,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
               placeholder="Buscar recetas o ingredientes"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-12 pr-4 py-4 rounded-3xl border border-gray-200 bg-white text-sm placeholder:text-sm placeholder:text-muted-foreground"
+              className="pl-12 pr-4 py-4 rounded-full border border-gray-800 bg-white text-sm placeholder:text-sm placeholder:text-muted-foreground"
             />
           </div>
           <Button variant="ghost" size="icon" className="rounded-full bg-transparent border-0 h-12 w-12 hover:bg-gray-100">
