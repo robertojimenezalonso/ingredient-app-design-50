@@ -29,7 +29,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
 
   return (
     <div className={`fixed top-0 left-0 right-0 z-50 bg-background transition-all duration-300 ${
-      isScrolled ? 'py-2' : 'py-4'
+      isScrolled ? 'py-2 pb-4' : 'py-4 pb-6'
     }`}>
       <div className="px-4">
         {/* Title */}
@@ -44,7 +44,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
             {supermarkets.map((supermarket, index) => (
               <div
                 key={supermarket.id}
-                className={`${index === 0 ? 'w-5 h-5' : 'w-6 h-6'} rounded-full flex items-center justify-center bg-white border border-gray-200`}
+                className={`${index === 0 ? 'w-4 h-4' : 'w-6 h-6'} rounded-full flex items-center justify-center bg-white border border-gray-200`}
                 style={{
                   marginLeft: index > 0 ? '-8px' : '0',
                   zIndex: supermarkets.length - index
@@ -78,12 +78,12 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-gray-100 rounded-lg p-1">
-          <button className="flex-1 py-2 px-4 rounded-md bg-white text-gray-900 font-medium text-sm">
+        <div className="flex bg-gray-100 rounded-lg p-0.5">
+          <button className="flex-1 py-1.5 px-3 rounded-md bg-white text-gray-900 font-medium text-sm">
             Recetas
           </button>
-          <button className="flex-1 py-2 px-4 rounded-md text-gray-600 font-medium text-sm">
-            Productos e ingredientes
+          <button className="flex-1 py-1.5 px-3 rounded-md text-gray-600 font-medium text-sm">
+            Artículos
           </button>
         </div>
       </div>
