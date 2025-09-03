@@ -33,7 +33,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
     }`}>
       <div className="px-4">
         {/* Title */}
-        <h1 className="text-xl font-bold mb-2">Mejores precios</h1>
+        <h1 className="text-2xl font-semibold mb-1">Mejores precios</h1>
         
         {/* Subtitle with supermarket circles */}
         <div className="flex items-center justify-between mb-4">
