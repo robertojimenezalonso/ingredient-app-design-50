@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Filter } from 'lucide-react';
+import { Search, SlidersHorizontal } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
@@ -72,7 +72,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
             />
           </div>
           <Button variant="ghost" size="icon" className="rounded-full bg-transparent border-0 h-12 w-12 hover:bg-gray-100">
-            <Filter className="h-5 w-5 text-gray-600" />
+            <SlidersHorizontal className="h-5 w-5 text-gray-600" />
           </Button>
         </div>
       </div>
