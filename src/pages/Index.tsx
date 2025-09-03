@@ -63,7 +63,7 @@ const Index = () => {
         onSearchChange={setSearchQuery}
       />
       
-      <div className="pt-32 pb-20">
+      <div className="pt-40 pb-20">
         {/* Meal Types Carousel */}
         <MealTypesCarousel 
           selectedTypes={selectedMealTypes}
