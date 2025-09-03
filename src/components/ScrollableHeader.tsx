@@ -22,9 +22,9 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
   }, []);
 
   const supermarkets = [
-    { id: 'carrefour', logo: '🛒', color: '#0066CC', bgColor: '#E6F3FF' },
-    { id: 'mercadona', logo: '🏪', color: '#FF6B35', bgColor: '#FFF2EE' },
-    { id: 'dia', logo: '🛍️', color: '#D70026', bgColor: '#FCE6EA' }
+    { id: 'carrefour', logo: '/lovable-uploads/1b721c65-ba26-440f-8448-f20a3a8cb7f4.png', color: '#0066CC', bgColor: '#E6F3FF' },
+    { id: 'lidl', logo: '/lovable-uploads/23674cbe-32da-424b-97e0-adf545eb6907.png', color: '#FF6B35', bgColor: '#FFF2EE' },
+    { id: 'mercadona', logo: '/lovable-uploads/36486e80-a4a9-40e3-af96-2438bf906343.png', color: '#D70026', bgColor: '#FCE6EA' }
   ];
 
   return (
@@ -44,15 +44,17 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
             {supermarkets.map((supermarket, index) => (
               <div
                 key={supermarket.id}
-                className="w-6 h-6 rounded-full flex items-center justify-center text-xs"
+                className="w-6 h-6 rounded-full flex items-center justify-center bg-white border border-gray-200"
                 style={{
-                  backgroundColor: supermarket.bgColor,
-                  color: supermarket.color,
                   marginLeft: index > 0 ? '-8px' : '0',
                   zIndex: supermarkets.length - index
                 }}
               >
-                {supermarket.logo}
+                <img 
+                  src={supermarket.logo} 
+                  alt={supermarket.id} 
+                  className="w-4 h-4 object-contain"
+                />
               </div>
             ))}
           </div>
