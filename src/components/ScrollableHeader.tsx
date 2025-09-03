@@ -61,17 +61,17 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
         {/* Search bar and filter */}
         <div className="flex items-center gap-3">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
             <Input
               type="text"
-              placeholder="Buscar recetas..."
+              placeholder="Buscar"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-xl border-input"
+              className="pl-12 pr-4 py-4 rounded-full border-0 bg-white shadow-lg text-base font-medium placeholder:font-normal placeholder:text-muted-foreground"
             />
           </div>
-          <Button variant="outline" size="icon" className="rounded-xl">
-            <Filter className="h-4 w-4" />
+          <Button variant="ghost" size="icon" className="rounded-full bg-white shadow-lg border-0 h-12 w-12 hover:bg-gray-50">
+            <Filter className="h-5 w-5" />
           </Button>
         </div>
       </div>
