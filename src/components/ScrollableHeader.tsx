@@ -72,7 +72,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
             />
           </div>
           <Button variant="ghost" size="icon" className="rounded-full bg-transparent border-0 h-12 w-12 hover:bg-gray-100">
-            <SlidersHorizontal className="h-5 w-5 text-gray-600" />
+            <img src="/lovable-uploads/51c4cf08-2a95-4bd7-8d5d-11ab41946a15.png" alt="Filtro" className="h-5 w-5" />
           </Button>
         </div>
       </div>
