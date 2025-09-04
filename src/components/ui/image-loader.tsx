@@ -66,7 +66,20 @@ export const ImageLoader = ({
 
   return (
     <div className={cn("relative overflow-hidden", className)}>
-      {/* Loading skeleton */}
+      {/* Actual image */}
+      <img
+        src={currentSrc}
+        alt={alt}
+        className={cn(
+          "transition-opacity duration-300 w-full h-full object-cover",
+          isLoading ? "opacity-0" : "opacity-100",
+          className
+        )}
+        onLoad={handleLoad}
+        onError={handleError}
+      />
+      
+      {/* Loading skeleton overlay */}
       {isLoading && (
         <div className={cn(
           "absolute inset-0 bg-muted animate-pulse flex items-center justify-center",
@@ -77,19 +90,6 @@ export const ImageLoader = ({
           )}
         </div>
       )}
-      
-      {/* Actual image */}
-      <img
-        src={currentSrc}
-        alt={alt}
-        className={cn(
-          "transition-opacity duration-300",
-          isLoading ? "opacity-0" : "opacity-100",
-          className
-        )}
-        onLoad={handleLoad}
-        onError={handleError}
-      />
     </div>
   );
 };
