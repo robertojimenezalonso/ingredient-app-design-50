@@ -488,7 +488,7 @@ const RecipeDetailPage = () => {
         {/* Ingredientes Tab */}
         <TabsContent value="ingredientes" className="px-4 mb-8">
 
-          <h2 className="text-lg font-semibold mb-4">{selectedCount} Ingredientes</h2>
+          <h2 className="text-lg font-semibold mb-4">{recipe.ingredients.length} Ingredientes</h2>
 
 
 
@@ -497,108 +497,41 @@ const RecipeDetailPage = () => {
                 <p className="text-sm text-muted-foreground">Cargando precios del supermercado...</p>
               </div>}
             <div className="space-y-0">
-              {getCurrentValidIngredients().map((validIngredient, displayIndex) => {
-              const {
-                ingredient,
-                carrefourProduct
-              } = validIngredient;
-              const adjustedAmount = (parseFloat(ingredient.amount) * servings / recipe.servings).toFixed(1);
-              const displayAmount = adjustedAmount.endsWith('.0') ? adjustedAmount.slice(0, -2) : adjustedAmount;
+              {recipe.ingredients.map((ingredient, displayIndex) => {
+                const adjustedAmount = (parseFloat(ingredient.amount) * servings / recipe.servings).toFixed(1);
+                const displayAmount = adjustedAmount.endsWith('.0') ? adjustedAmount.slice(0, -2) : adjustedAmount;
 
-              // Calculate quantity and usage percentage using helper function
-              const getQuantityData = () => {
-                const extractQuantityFromTitle = (title: string) => {
-                  const patterns = [/(\d+(?:[.,]\d+)?)\s*(kg|g|l|cl|ml|ud|unidades?|rebanadas?|latas?|botes?)/i, /(\d+(?:[.,]\d+)?)\s*(aprox)/i];
-                  for (const pattern of patterns) {
-                    const match = title.match(pattern);
-                    if (match) {
-                      const quantity = parseFloat(match[1].replace(',', '.'));
-                      let unit = match[2].toLowerCase();
-                      if (unit === 'aprox') {
-                        const kgMatch = title.match(/(\d+(?:[.,]\d+)?)\s*kg/i);
-                        if (kgMatch) {
-                          return {
-                            quantity: parseFloat(kgMatch[1].replace(',', '.')),
-                            unit: 'kg'
-                          };
-                        }
-                      }
-                      return {
-                        quantity,
-                        unit
-                      };
-                    }
-                  }
-                  return null;
-                };
-                const titleQuantity = carrefourProduct ? extractQuantityFromTitle(carrefourProduct.name) : null;
-                let seedValue = 0;
-                for (let i = 0; i < ingredient.id.length; i++) {
-                  seedValue += ingredient.id.charCodeAt(i);
-                }
-                const discountPercentage = seedValue % 25;
-                if (titleQuantity) {
-                  const baseQuantity = titleQuantity.quantity;
-                  const unit = titleQuantity.unit.toLowerCase();
-                  const shouldUseIncrements = !['ud', 'unidad', 'unidades', 'kg', 'l'].includes(unit);
-                  let discountedQuantity: number;
-                  if (shouldUseIncrements) {
-                    const maxReduction = Math.floor(baseQuantity * 0.24);
-                    const reductionOptions = [];
-                    for (let i = 10; i <= maxReduction && i < baseQuantity; i += 10) {
-                      reductionOptions.push(baseQuantity - i);
-                    }
-                    if (reductionOptions.length === 0) {
-                      discountedQuantity = baseQuantity * ((100 - discountPercentage) / 100);
-                    } else {
-                      const optionIndex = (seedValue + baseQuantity) % reductionOptions.length;
-                      discountedQuantity = reductionOptions[optionIndex];
-                    }
-                  } else {
-                    discountedQuantity = baseQuantity * ((100 - discountPercentage) / 100);
-                  }
-                  const usagePercentage = Math.round(discountedQuantity / baseQuantity * 100);
-                  const finalDisplayAmount = discountedQuantity % 1 === 0 ? discountedQuantity.toString() : discountedQuantity.toFixed(1).replace(/\.0$/, '');
-                  return {
-                    finalDisplayAmount,
-                    finalUnit: titleQuantity.unit,
-                    usagePercentage
-                  };
-                } else {
-                  const usagePercentage = 100 - discountPercentage;
-                  const discountedAmount = (parseFloat(displayAmount) * (usagePercentage / 100)).toFixed(1);
-                  const finalDisplayAmount = discountedAmount.endsWith('.0') ? discountedAmount.slice(0, -2) : discountedAmount;
-                  return {
-                    finalDisplayAmount,
-                    finalUnit: abbreviateUnit(ingredient.unit),
-                    usagePercentage
-                  };
-                }
-              };
-              const {
-                finalDisplayAmount,
-                finalUnit,
-                usagePercentage
-              } = getQuantityData();
-              return <div key={ingredient.id}>
-                    <div className="flex items-center gap-3 py-3">
-                      <div className="relative">
-                        <img src={`https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=100`} alt={ingredient.name} className="w-16 h-16 rounded-lg object-cover border" />
-                       </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium line-clamp-5">
-                            {ingredient.name}
-                          </span>
-                        </div>
-                        <p className="text-xs text-muted-foreground mb-1">
-                          {finalDisplayAmount} {finalUnit}
-                        </p>
-                      </div>
+                return <div key={ingredient.id}>
+                  <div className="flex items-center gap-3 py-3">
+                    <div className="relative">
+                      <img 
+                        src={`https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=100`} 
+                        alt={ingredient.name} 
+                        className="w-16 h-16 rounded-lg object-cover border" 
+                      />
                     </div>
-                    {displayIndex < getCurrentValidIngredients().length - 1 && <div className="border-b border-border"></div>}
-                  </div>;
-            })}
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="font-medium line-clamp-2">
+                          {ingredient.name}
+                        </span>
+                      </div>
+                      <p className="text-xs text-muted-foreground mb-1">
+                        {displayAmount} {abbreviateUnit(ingredient.unit)}
+                      </p>
+                    </div>
+                    <div className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={isIngredientSelected(ingredient.id)}
+                        onChange={() => handleIngredientToggle(ingredient.id)}
+                        className="w-5 h-5 rounded border-2 border-gray-300 checked:bg-primary checked:border-primary"
+                      />
+                    </div>
+                  </div>
+                  {displayIndex < recipe.ingredients.length - 1 && <div className="border-b border-border"></div>}
+                </div>;
+              })}
             </div>
           </div>
 
@@ -634,7 +567,7 @@ const RecipeDetailPage = () => {
                   </div>
                   <span className="font-medium">Calorías</span>
                 </div>
-                <span className="font-bold">{recipe.nutrition.calories} kcal</span>
+                <span className="font-bold">{adjustedCalories} kcal</span>
               </div>
               
               <div className="flex justify-between items-center py-3 border-b-2 border-muted">
@@ -644,7 +577,7 @@ const RecipeDetailPage = () => {
                   </div>
                   <span className="font-medium">Hidratos</span>
                 </div>
-                <span className="font-bold">{recipe.nutrition.carbs} g</span>
+                <span className="font-bold">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</span>
               </div>
               
               <div className="text-sm text-muted-foreground ml-9 space-y-2 pb-3 border-b-2 border-muted">
@@ -655,11 +588,11 @@ const RecipeDetailPage = () => {
                     </div>
                     <span>Fibra</span>
                   </div>
-                  <span>{recipe.nutrition.fiber} g</span>
+                  <span>2 g</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="ml-8">Azúcares</span>
-                  <span>{recipe.nutrition.sugar} g</span>
+                  <span>3 g</span>
                 </div>
               </div>
               
@@ -670,7 +603,7 @@ const RecipeDetailPage = () => {
                   </div>
                   <span className="font-medium">Proteínas</span>
                 </div>
-                <span className="font-bold">{recipe.nutrition.protein} g</span>
+                <span className="font-bold">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</span>
               </div>
               
               <div className="border-b-2 border-muted pb-3">
@@ -681,7 +614,7 @@ const RecipeDetailPage = () => {
                     </div>
                     <span className="font-medium">Grasas</span>
                   </div>
-                  <span className="font-bold">{recipe.nutrition.fat} g</span>
+                  <span className="font-bold">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</span>
                 </div>
                 
                 <div className="text-sm text-muted-foreground ml-9 space-y-2 mt-2">
