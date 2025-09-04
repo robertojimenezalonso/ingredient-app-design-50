@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Filter } from 'lucide-react';
-import { useRecipes } from '@/hooks/useRecipes';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { Recipe, CategoryType } from '@/types/recipe';
 
 import { ScrollableHeader } from '@/components/ScrollableHeader';
@@ -13,19 +13,22 @@ import { useToast } from '@/hooks/use-toast';
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { getRecipesByCategory } = useRecipes();
+  const { recipes, getRecipesByCategory, convertToRecipe, isLoading } = useRecipeBank();
   
   const [selectedMealTypes, setSelectedMealTypes] = useState<string[]>([]);
   const [selectedSupermarket, setSelectedSupermarket] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState('');
   
-  const categories: CategoryType[] = [
-    'breakfast', 'lunch', 'dinner', 
-    'appetizer', 'snacks', 'desserts'
+  // Database categories (Spanish)
+  const dbCategories = [
+    'desayuno', 'comida', 'cena', 
+    'aperitivo', 'tentempié', 'postre'
   ];
 
-  // Get all recipes
-  const allRecipes = categories.flatMap(category => getRecipesByCategory(category, 20));
+  // Get all recipes from database and convert them
+  const allRecipes: Recipe[] = dbCategories.flatMap(category => 
+    getRecipesByCategory(category).map(bankItem => convertToRecipe(bankItem))
+  );
   
   // Filter recipes based on selected filters
   const filteredRecipes = allRecipes.filter(recipe => {
