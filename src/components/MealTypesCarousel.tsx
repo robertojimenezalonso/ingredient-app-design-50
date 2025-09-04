@@ -23,7 +23,7 @@ const mealTypes: MealType[] = [
 
 export const MealTypesCarousel = ({ selectedTypes, onTypeToggle }: MealTypesCarouselProps) => {
   return (
-    <div className="mb-4 mt-32">
+    <div className="mb-4 mt-4">
       <div className="overflow-x-auto scrollbar-hide">
         <div className="flex gap-4 pb-2 pl-4 min-w-max">
           {mealTypes.map((type, index) => (
