@@ -29,7 +29,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
 
   return (
     <div className={`fixed top-0 left-0 right-0 z-50 bg-background transition-all duration-300 ${
-      isScrolled ? 'py-2 pb-4' : 'py-4 pb-6'
+      isScrolled ? 'py-2 pb-2' : 'py-4 pb-3'
     }`}>
       <div className="px-4">
         {/* Title */}
@@ -53,7 +53,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
                 <img 
                   src={supermarket.logo} 
                   alt={supermarket.id} 
-                  className="w-full h-full object-cover rounded-full"
+                  className={`${index === 0 ? 'w-3 h-3' : 'w-full h-full'} object-cover rounded-full`}
                 />
               </div>
             ))}
@@ -69,7 +69,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
               placeholder="Buscar recetas o ingredientes"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-12 pr-4 py-4 rounded-xl border border-gray-800 bg-white text-sm placeholder:text-sm placeholder:text-muted-foreground"
+              className="pl-12 pr-4 py-4 rounded-xl border border-gray-600 bg-white text-sm placeholder:text-sm placeholder:text-muted-foreground"
             />
           </div>
           <Button variant="ghost" size="icon" className="rounded-full bg-transparent border-0 h-12 w-12 hover:bg-gray-100">

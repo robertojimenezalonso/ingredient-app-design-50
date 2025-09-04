@@ -42,7 +42,18 @@ export const ImageLoader = ({
     setIsLoading(true);
     setError(false);
     setCurrentSrc(src);
-  }, [src]);
+    
+    // Pre-load the image to check if it's accessible
+    const img = new Image();
+    img.onload = () => {
+      console.log('✅ [ImageLoader] Pre-check successful for:', src);
+    };
+    img.onerror = () => {
+      console.log('❌ [ImageLoader] Pre-check failed for:', src, 'Will use fallback');
+      setCurrentSrc(finalFallbackSrc);
+    };
+    img.src = src;
+  }, [src, finalFallbackSrc]);
 
   const handleLoad = () => {
     console.log('✅ [ImageLoader] Image loaded successfully:', currentSrc);
