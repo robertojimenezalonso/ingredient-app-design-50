@@ -32,7 +32,7 @@ export const MealTypesCarousel = ({ selectedTypes, onTypeToggle }: MealTypesCaro
               onClick={() => onTypeToggle(type.id)}
               className="flex-none cursor-pointer transition-all"
             >
-              <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 transition-all ${
+              <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 transition-all flex items-center justify-center ${
                 index === mealTypes.length - 1 ? 'mr-4' : ''
               }`}>
                 <img 

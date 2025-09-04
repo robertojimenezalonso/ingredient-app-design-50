@@ -29,14 +29,14 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
 
   return (
     <div className={`fixed top-0 left-0 right-0 z-50 bg-background transition-all duration-300 ${
-      isScrolled ? 'py-2 pb-2' : 'py-4 pb-3'
+      isScrolled ? 'py-2 pb-1' : 'py-4 pb-2'
     }`}>
       <div className="px-4">
         {/* Title */}
         <h1 className="text-2xl font-semibold mb-1">Mejores precios</h1>
         
         {/* Subtitle with supermarket circles */}
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center justify-between mb-3">
           <span className="text-sm text-muted-foreground">
             Comparamos precios en 6 supermercados
           </span>
@@ -44,7 +44,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
             {supermarkets.map((supermarket, index) => (
               <div
                 key={supermarket.id}
-                className={`${index === 0 ? 'w-4 h-4' : 'w-6 h-6'} rounded-full flex items-center justify-center bg-white border border-gray-200`}
+                className="w-6 h-6 rounded-full flex items-center justify-center bg-white border border-gray-200"
                 style={{
                   marginLeft: index > 0 ? '-8px' : '0',
                   zIndex: supermarkets.length - index
@@ -53,7 +53,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
                 <img 
                   src={supermarket.logo} 
                   alt={supermarket.id} 
-                  className={`${index === 0 ? 'w-3 h-3' : 'w-full h-full'} object-cover rounded-full`}
+                  className={`${index === 0 ? 'w-4 h-4' : 'w-full h-full'} object-cover rounded-full`}
                 />
               </div>
             ))}
@@ -61,19 +61,19 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
         </div>
 
         {/* Search bar and filter */}
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-3 mb-2">
           <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-500" />
             <Input
               type="text"
               placeholder="Buscar recetas o ingredientes"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-12 pr-4 py-4 rounded-xl border border-gray-600 bg-white text-sm placeholder:text-sm placeholder:text-muted-foreground"
+              className="pl-12 pr-4 py-4 rounded-xl border border-gray-500 bg-white text-sm placeholder:text-sm placeholder:text-muted-foreground"
             />
           </div>
           <Button variant="ghost" size="icon" className="rounded-full bg-transparent border-0 h-12 w-12 hover:bg-gray-100">
-            <img src="/lovable-uploads/51c4cf08-2a95-4bd7-8d5d-11ab41946a15.png" alt="Filtro" className="h-5 w-5" />
+            <SlidersHorizontal className="h-5 w-5 text-gray-600" />
           </Button>
         </div>
 
