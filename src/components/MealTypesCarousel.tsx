@@ -12,6 +12,7 @@ interface MealTypesCarouselProps {
 }
 
 const mealTypes: MealType[] = [
+  { id: 'supermarket', name: 'Supermercado', image: '/lovable-uploads/1b721c65-ba26-440f-8448-f20a3a8cb7f4.png' },
   { id: 'breakfast', name: 'Desayuno', image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=400&fit=crop' },
   { id: 'appetizer', name: 'Aperitivo', image: 'https://images.unsplash.com/photo-1544025162-d76694265947' },
   { id: 'lunch', name: 'Comida', image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445' },

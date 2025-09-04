@@ -77,15 +77,6 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
           </Button>
         </div>
 
-        {/* Tabs */}
-        <div className="flex bg-gray-100 rounded-lg p-0.5">
-          <button className="flex-1 py-1.5 px-3 rounded-md bg-white text-gray-900 font-medium text-sm">
-            Recetas
-          </button>
-          <button className="flex-1 py-1.5 px-3 rounded-md text-gray-600 font-medium text-sm">
-            Artículos
-          </button>
-        </div>
       </div>
     </div>
   );
