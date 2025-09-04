@@ -29,6 +29,10 @@ const Index = () => {
     getRandomRecipesByCategory(category, 20).map(item => convertToRecipe(item))
   );
   
+  console.log('🔍 [Index] Total recipes loaded:', allRecipes.length);
+  console.log('🔍 [Index] Selected meal types:', selectedMealTypes);
+  console.log('🔍 [Index] Search query:', searchQuery);
+  
   // Filter recipes based on selected filters
   const filteredRecipes = allRecipes.filter(recipe => {
     const matchesMealType = selectedMealTypes.length === 0 || selectedMealTypes.includes(recipe.category);
@@ -38,6 +42,8 @@ const Index = () => {
     
     return matchesMealType && matchesSearch;
   });
+
+  console.log('🔍 [Index] Filtered recipes:', filteredRecipes.length);
 
   const handleRecipeClick = (recipe: Recipe) => {
     navigate(`/recipe/${recipe.id}`);
