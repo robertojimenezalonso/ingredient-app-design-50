@@ -53,7 +53,7 @@ export const ScrollableHeader = ({ searchQuery, onSearchChange }: ScrollableHead
                 <img 
                   src={supermarket.logo} 
                   alt={supermarket.id} 
-                  className={`${index === 0 ? 'w-4 h-4' : 'w-full h-full'} object-cover rounded-full`}
+                  className={`${index === 0 ? 'w-3 h-3' : 'w-full h-full'} object-cover rounded-full`}
                 />
               </div>
             ))}
