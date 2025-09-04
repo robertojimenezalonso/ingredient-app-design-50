@@ -33,7 +33,6 @@ const RecipeDetailPage = () => {
     toast
   } = useToast();
   const {
-    getRecipeById,
     favorites,
     toggleFavorite
   } = useRecipes();
@@ -84,19 +83,15 @@ const RecipeDetailPage = () => {
 
   // Get recipe from different sources
   const getRecipe = () => {
-    // First try normal recipes
-    const normalRecipe = getRecipeById(id!);
-    if (normalRecipe) return normalRecipe;
-    
-    // Then try AI recipes
-    const aiRecipe = getAIRecipeById(id!);
-    if (aiRecipe) return aiRecipe;
-    
-    // Finally try recipe bank
+    // First try recipe bank (real data)
     const bankRecipe = recipeBankRecipes.find(r => r.id === id!);
     if (bankRecipe) {
       return convertToRecipe(bankRecipe, config.servingsPerRecipe || 2);
     }
+    
+    // Then try AI recipes
+    const aiRecipe = getAIRecipeById(id!);
+    if (aiRecipe) return aiRecipe;
     
     return null;
   };
