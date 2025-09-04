@@ -39,32 +39,10 @@ export const ImageLoader = ({
 
   useEffect(() => {
     console.log('🖼️ [ImageLoader] Loading image:', src);
-    console.log('🔧 [ImageLoader] Image type:', typeof src);
-    console.log('🔧 [ImageLoader] Image value:', src ? src : 'NO SRC PROVIDED');
-    
-    if (!src || src === '') {
-      console.log('❌ [ImageLoader] No src provided, using fallback immediately');
-      setCurrentSrc(finalFallbackSrc);
-      setIsLoading(true);
-      setError(false);
-      return;
-    }
-    
     setIsLoading(true);
     setError(false);
     setCurrentSrc(src);
-    
-    // Pre-load the image to check if it's accessible
-    const img = new Image();
-    img.onload = () => {
-      console.log('✅ [ImageLoader] Pre-check successful for:', src);
-    };
-    img.onerror = () => {
-      console.log('❌ [ImageLoader] Pre-check failed for:', src, 'Will use fallback');
-      setCurrentSrc(finalFallbackSrc);
-    };
-    img.src = src;
-  }, [src, finalFallbackSrc]);
+  }, [src]);
 
   const handleLoad = () => {
     console.log('✅ [ImageLoader] Image loaded successfully:', currentSrc);

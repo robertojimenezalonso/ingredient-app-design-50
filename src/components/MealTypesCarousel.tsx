@@ -12,7 +12,6 @@ interface MealTypesCarouselProps {
 }
 
 const mealTypes: MealType[] = [
-  { id: 'supermarket', name: 'Supermercado', image: '/lovable-uploads/94cb6ab6-c51b-4e8e-abd6-99be9c687723.png' },
   { id: 'breakfast', name: 'Desayuno', image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&h=400&fit=crop' },
   { id: 'appetizer', name: 'Aperitivo', image: 'https://images.unsplash.com/photo-1544025162-d76694265947' },
   { id: 'lunch', name: 'Comida', image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445' },
@@ -23,16 +22,16 @@ const mealTypes: MealType[] = [
 
 export const MealTypesCarousel = ({ selectedTypes, onTypeToggle }: MealTypesCarouselProps) => {
   return (
-    <div className="mb-4 mt-4">
+    <div className="mb-4 mt-8">
       <div className="overflow-x-auto scrollbar-hide">
         <div className="flex gap-4 pb-2 pl-4 min-w-max">
           {mealTypes.map((type, index) => (
             <div
               key={type.id}
               onClick={() => onTypeToggle(type.id)}
-              className="flex-none cursor-pointer transition-all flex flex-col items-center"
+              className="flex-none cursor-pointer transition-all"
             >
-              <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 transition-all flex items-center justify-center ${
+              <div className={`w-16 h-16 rounded-full overflow-hidden mb-2 transition-all ${
                 index === mealTypes.length - 1 ? 'mr-4' : ''
               }`}>
                 <img 
