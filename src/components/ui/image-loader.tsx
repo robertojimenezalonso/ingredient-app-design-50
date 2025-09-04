@@ -39,6 +39,17 @@ export const ImageLoader = ({
 
   useEffect(() => {
     console.log('🖼️ [ImageLoader] Loading image:', src);
+    console.log('🔧 [ImageLoader] Image type:', typeof src);
+    console.log('🔧 [ImageLoader] Image value:', src ? src : 'NO SRC PROVIDED');
+    
+    if (!src || src === '') {
+      console.log('❌ [ImageLoader] No src provided, using fallback immediately');
+      setCurrentSrc(finalFallbackSrc);
+      setIsLoading(true);
+      setError(false);
+      return;
+    }
+    
     setIsLoading(true);
     setError(false);
     setCurrentSrc(src);
