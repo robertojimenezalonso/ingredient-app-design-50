@@ -490,6 +490,7 @@ const RecipeDetailPage = () => {
         <TabsContent value="ingredientes" className="px-4 mb-8">
           <MercadonaIngredientsView 
             recipe={recipe}
+            servings={servings}
             onSelectionChange={(selectedIds, totalCost) => {
               console.log('🛒 Ingredientes selection:', selectedIds.length, 'ingredients, cost:', totalCost.toFixed(2), '€');
             }}

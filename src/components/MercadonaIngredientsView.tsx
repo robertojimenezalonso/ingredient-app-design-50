@@ -19,12 +19,13 @@ interface SupermarketIngredient {
 
 interface MercadonaIngredientsViewProps {
   recipe: Recipe;
+  servings: number;
   onSelectionChange?: (selectedIngredients: string[], totalCost: number) => void;
 }
 
 type SupermarketType = 'Mercadona' | 'Lidl' | 'Carrefour';
 
-export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: MercadonaIngredientsViewProps) => {
+export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }: MercadonaIngredientsViewProps) => {
   const [supermarketIngredients, setSupermarketIngredients] = useState<SupermarketIngredient[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
   const [selectedSupermarket, setSelectedSupermarket] = useState<SupermarketType>('Mercadona');
@@ -107,7 +108,7 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     });
   };
 
-  // Calcular porcentaje de uso y cantidad usada
+  // Calcular porcentaje de uso y cantidad usada basado en las raciones actuales
   const calculateUsage = (supermarketIngredient: SupermarketIngredient) => {
     const recipeIngredient = findMatchingRecipeIngredient(supermarketIngredient.product_name);
     
@@ -115,11 +116,18 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
       return { 
         percentage: 0, 
         recipeAmount: 'No usado',
-        productAmount: `${supermarketIngredient.quantity} ${abbreviateUnit(supermarketIngredient.unit_type)}`
+        productAmount: `${supermarketIngredient.quantity} ${abbreviateUnit(supermarketIngredient.unit_type)}`,
+        unitsNeeded: 1,
+        totalPrice: supermarketIngredient.price,
+        unitPrice: supermarketIngredient.price
       };
     }
 
-    let recipeQuantity = parseFloat(recipeIngredient.amount);
+    // Calcular la cantidad necesaria para las raciones actuales
+    const baseRecipeAmount = parseFloat(recipeIngredient.amount);
+    const neededAmount = (baseRecipeAmount * servings) / recipe.servings;
+    
+    let recipeQuantity = neededAmount;
     let supermarketQuantity = supermarketIngredient.quantity;
     
     // Normalizar unidades para el cálculo
@@ -136,12 +144,20 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
       recipeQuantity = recipeQuantity * 0.015;
     }
     
-    const percentage = Math.min((recipeQuantity / supermarketQuantity) * 100, 100);
+    // Calcular cuántos productos necesitamos
+    const unitsNeeded = Math.max(1, Math.ceil(recipeQuantity / supermarketQuantity));
+    
+    // Calcular porcentaje de uso del último producto
+    const totalAvailable = supermarketQuantity * unitsNeeded;
+    const percentage = Math.min((recipeQuantity / totalAvailable) * 100, 100);
     
     return {
       percentage: Math.round(percentage),
-      recipeAmount: `${recipeIngredient.amount} ${abbreviateUnit(recipeIngredient.unit)}`,
-      productAmount: `${supermarketQuantity} ${abbreviateUnit(supermarketUnit)}`
+      recipeAmount: `${neededAmount.toFixed(1)} ${abbreviateUnit(recipeIngredient.unit)}`,
+      productAmount: `${supermarketQuantity} ${abbreviateUnit(supermarketUnit)}`,
+      unitsNeeded,
+      totalPrice: supermarketIngredient.price * unitsNeeded,
+      unitPrice: supermarketIngredient.price
     };
   };
 
@@ -164,7 +180,10 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     // Calcular costo total de ingredientes seleccionados
     const totalCost = supermarketIngredients
       .filter(ingredient => newSelected.has(ingredient.id))
-      .reduce((total, ingredient) => total + ingredient.price, 0);
+      .reduce((total, ingredient) => {
+        const usage = calculateUsage(ingredient);
+        return total + usage.totalPrice;
+      }, 0);
 
     onSelectionChange?.(Array.from(newSelected), totalCost);
   };
@@ -194,7 +213,10 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
 
   const totalSelectedCost = supermarketIngredients
     .filter(ingredient => selectedIngredients.has(ingredient.id))
-    .reduce((total, ingredient) => total + ingredient.price, 0);
+    .reduce((total, ingredient) => {
+      const usage = calculateUsage(ingredient);
+      return total + usage.totalPrice;
+    }, 0);
 
   // Precios de ejemplo para otros supermercados
   const getSupermarketPrice = (supermarket: SupermarketType): number => {
@@ -248,7 +270,7 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
           const percentageColor = getPercentageColor(usage.percentage);
 
           return (
-            <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-primary shadow-sm' : 'hover:shadow-sm'}`}>
+            <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-gray-400 shadow-sm' : 'hover:shadow-sm'}`}>
               <CardContent className="p-3">
                 <div className="flex gap-3">
                   <div className="w-16 h-16 flex-shrink-0">
@@ -265,9 +287,19 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
                       <h4 className="font-medium text-base line-clamp-3 text-left leading-tight">
                         {ingredient.product_name} {usage.productAmount}
                       </h4>
-                      <span className="font-medium text-base ml-3">
-                        {ingredient.price.toFixed(2)}€
-                      </span>
+                      <div className="text-right ml-3">
+                        {usage.unitsNeeded > 1 && (
+                          <div className="text-xs text-muted-foreground">
+                            {usage.unitsNeeded}X
+                          </div>
+                        )}
+                        <span className="font-medium text-base">
+                          {usage.totalPrice.toFixed(2)}€
+                        </span>
+                        <div className="text-xs text-muted-foreground">
+                          {usage.unitPrice.toFixed(2)}€/ud
+                        </div>
+                      </div>
                     </div>
                     
                     {usage.recipeAmount !== 'No usado' && (
