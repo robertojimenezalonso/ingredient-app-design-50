@@ -246,9 +246,10 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       </div>
       
       {/* Selector de supermercados con precios */}
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-2">
         {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
           const price = getSupermarketPrice(supermarket);
+          const isSelected = selectedSupermarket === supermarket;
           const getPriceColor = () => {
             switch (supermarket) {
               case 'Mercadona': return 'bg-green-100 text-green-700';
@@ -261,10 +262,14 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
           return (
             <Button
               key={supermarket}
-              variant={selectedSupermarket === supermarket ? "default" : "outline"}
+              variant="outline"
               size="sm"
               onClick={() => setSelectedSupermarket(supermarket)}
-              className="text-xs bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 rounded-full gap-2"
+              className={`text-xs rounded-full gap-2 transition-all ${
+                isSelected 
+                  ? 'bg-gray-800 text-white border-gray-800 hover:bg-gray-900' 
+                  : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
+              }`}
             >
               <span>{supermarket}</span>
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriceColor()}`}>
@@ -273,6 +278,17 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             </Button>
           );
         })}
+      </div>
+      
+      {/* Información de precio por ración y comparación */}
+      <div className="text-center text-sm text-muted-foreground">
+        <span className="font-medium">{totalSelectedCost.toFixed(2)}€</span> para {servings} {servings === 1 ? 'ración' : 'raciones'}
+        {selectedSupermarket !== 'Mercadona' && (
+          <span className="block text-xs">
+            {((getSupermarketPrice('Mercadona') - totalSelectedCost) * -1).toFixed(2)}€ 
+            {getSupermarketPrice('Mercadona') < totalSelectedCost ? ' más caro' : ' más barato'} que Mercadona
+          </span>
+        )}
       </div>
       
       <div className="grid gap-2">

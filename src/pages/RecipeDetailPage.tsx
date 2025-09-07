@@ -185,6 +185,14 @@ const RecipeDetailPage = () => {
     initializeIngredients([recipe]);
   }, [recipe?.id, productsLoading, initializeIngredients]);
 
+  // Sync servings with recipe's database value
+  useEffect(() => {
+    if (recipe?.servings && recipe.servings !== servings) {
+      setServings(recipe.servings);
+      setServingsInput(recipe.servings.toString());
+    }
+  }, [recipe?.servings]);
+
   // Scroll to top when component mounts or recipe changes
   useEffect(() => {
     window.scrollTo(0, 0);
