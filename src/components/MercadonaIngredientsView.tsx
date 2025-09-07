@@ -249,15 +249,27 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       <div className="flex gap-2 justify-center">
         {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
           const price = getSupermarketPrice(supermarket);
+          const getPriceColor = () => {
+            switch (supermarket) {
+              case 'Mercadona': return 'bg-green-100 text-green-700';
+              case 'Lidl': return 'bg-orange-100 text-orange-700';
+              case 'Carrefour': return 'bg-red-100 text-red-700';
+              default: return 'bg-gray-100 text-gray-700';
+            }
+          };
+          
           return (
             <Button
               key={supermarket}
               variant={selectedSupermarket === supermarket ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedSupermarket(supermarket)}
-              className="text-xs"
+              className="text-xs bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200 rounded-full gap-2"
             >
-              {supermarket} {price.toFixed(2)}€
+              <span>{supermarket}</span>
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriceColor()}`}>
+                {price.toFixed(2)}€
+              </span>
             </Button>
           );
         })}
