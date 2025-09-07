@@ -196,6 +196,16 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     .filter(ingredient => selectedIngredients.has(ingredient.id))
     .reduce((total, ingredient) => total + ingredient.price, 0);
 
+  // Precios de ejemplo para otros supermercados
+  const getSupermarketPrice = (supermarket: SupermarketType): number => {
+    switch (supermarket) {
+      case 'Mercadona': return totalSelectedCost;
+      case 'Lidl': return totalSelectedCost * 0.85; // 15% más barato
+      case 'Carrefour': return totalSelectedCost * 1.1; // 10% más caro
+      default: return totalSelectedCost;
+    }
+  };
+
   // Separar ingredientes seleccionados y no seleccionados
   const selectedIngredientsList = supermarketIngredients.filter(ingredient => 
     selectedIngredients.has(ingredient.id)
@@ -209,26 +219,26 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-center">
         <h3 className="text-lg font-semibold">Ingredientes</h3>
-        <Badge variant="secondary" className="text-lg font-bold">
-          Total: {totalSelectedCost.toFixed(2)}€
-        </Badge>
       </div>
       
-      {/* Selector de supermercados */}
+      {/* Selector de supermercados con precios */}
       <div className="flex gap-2 justify-center">
-        {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => (
-          <Button
-            key={supermarket}
-            variant={selectedSupermarket === supermarket ? "default" : "outline"}
-            size="sm"
-            onClick={() => setSelectedSupermarket(supermarket)}
-            className="text-xs"
-          >
-            {supermarket}
-          </Button>
-        ))}
+        {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
+          const price = getSupermarketPrice(supermarket);
+          return (
+            <Button
+              key={supermarket}
+              variant={selectedSupermarket === supermarket ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedSupermarket(supermarket)}
+              className="text-xs"
+            >
+              {supermarket} {price.toFixed(2)}€
+            </Button>
+          );
+        })}
       </div>
       
       <div className="grid gap-2">
@@ -240,7 +250,7 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
           return (
             <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-primary shadow-sm' : 'hover:shadow-sm'}`}>
               <CardContent className="p-3">
-                <div className="flex items-center gap-3">
+                <div className="flex gap-3">
                   <div className="w-16 h-16 flex-shrink-0">
                     <ImageLoader
                       src={ingredient.image_url}
@@ -251,29 +261,31 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-1">
+                    <div className="flex justify-between items-start mb-2">
                       <h4 className="font-medium text-base line-clamp-3 text-left leading-tight">
                         {ingredient.product_name} {usage.productAmount}
                       </h4>
-                      <div className="flex items-center gap-3 ml-2">
-                        <span className="font-medium text-base">
-                          {ingredient.price.toFixed(2)}€
-                        </span>
-                        <Checkbox
-                          checked={isSelected}
-                          onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                        />
-                      </div>
+                      <span className="font-medium text-base ml-3">
+                        {ingredient.price.toFixed(2)}€
+                      </span>
                     </div>
                     
                     {usage.recipeAmount !== 'No usado' && (
-                      <div className="flex justify-between items-center text-xs text-muted-foreground">
-                        <span>uso en receta {usage.recipeAmount}</span>
+                      <div className="text-xs text-muted-foreground">
+                        <span>Uso en receta {usage.recipeAmount} · </span>
                         <span className={`font-normal ${percentageColor}`}>
                           {usage.percentage}%
                         </span>
                       </div>
                     )}
+                  </div>
+                  
+                  <div className="flex items-center self-center">
+                    <Checkbox
+                      checked={isSelected}
+                      onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                      className="border-gray-300"
+                    />
                   </div>
                 </div>
               </CardContent>
