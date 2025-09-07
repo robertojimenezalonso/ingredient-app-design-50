@@ -21,6 +21,7 @@ import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { RecipeSkeleton } from '@/components/ui/recipe-skeleton';
 import { ImageLoader } from '@/components/ui/image-loader';
+import { MercadonaIngredientsView } from '@/components/MercadonaIngredientsView';
 const RecipeDetailPage = () => {
   const {
     id
@@ -478,12 +479,23 @@ const RecipeDetailPage = () => {
       <div className="w-full h-2 bg-muted/50"></div>
 
       {/* Tabs */}
-      <Tabs defaultValue="ingredientes" className="w-full">
-        <TabsList className="grid grid-cols-3 mx-4 mt-4 mb-4">
+      <Tabs defaultValue="mercadona" className="w-full">
+        <TabsList className="grid grid-cols-4 mx-4 mt-4 mb-4">
+          <TabsTrigger value="mercadona">Mercadona</TabsTrigger>
           <TabsTrigger value="ingredientes">Ingredientes</TabsTrigger>
           <TabsTrigger value="instrucciones">Pasos</TabsTrigger>
           <TabsTrigger value="nutricion">Nutrición</TabsTrigger>
         </TabsList>
+
+        {/* Mercadona Tab */}
+        <TabsContent value="mercadona" className="px-4 mb-8">
+          <MercadonaIngredientsView 
+            recipe={recipe}
+            onSelectionChange={(selectedIds, totalCost) => {
+              console.log('🛒 Mercadona selection:', selectedIds.length, 'ingredients, cost:', totalCost.toFixed(2), '€');
+            }}
+          />
+        </TabsContent>
 
         {/* Ingredientes Tab */}
         <TabsContent value="ingredientes" className="px-4 mb-8">
