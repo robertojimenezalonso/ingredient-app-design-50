@@ -42,8 +42,12 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
             alt={recipe.title}
             className="w-[120px] h-[120px] object-cover rounded-lg"
             category={recipe.category}
+            priority={true} // Prioridad alta para imágenes de recetas
             placeholder={
-              <div className="w-6 h-6 border-2 border-muted-foreground/30 border-t-primary rounded-full animate-spin" />
+              <div className="text-center">
+                <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-1" />
+                <div className="text-xs opacity-70">Cargando...</div>
+              </div>
             }
           />
         </div>

@@ -5,12 +5,19 @@ import { Recipe } from '@/types/recipe';
 import { RecipeGridCard } from '@/components/RecipeGridCard';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useImagePreloader } from '@/hooks/useImagePreloader';
 
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { convertToRecipe, recipes, isLoading } = useRecipeBank();
   const [allRecipes, setAllRecipes] = useState<Recipe[]>([]);
+
+  // Precargar las primeras imágenes para una carga más rápida
+  useImagePreloader(
+    allRecipes.slice(0, 5).map(recipe => recipe.image), 
+    true // Alta prioridad
+  );
 
   useEffect(() => {
     if (!isLoading && recipes.length > 0) {
