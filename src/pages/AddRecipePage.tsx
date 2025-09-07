@@ -144,9 +144,15 @@ const AddRecipePage = () => {
     setIsLoading(true);
 
     try {
-      // Generar imagen
-      toast.info('Generando imagen de la receta...');
-      const imageUrl = await generateRecipeImage(formData.title, ingredients);
+      // Intentar generar imagen (opcional)
+      let imageUrl = '';
+      try {
+        toast.info('Generando imagen de la receta...');
+        imageUrl = await generateRecipeImage(formData.title, ingredients);
+      } catch (imageError) {
+        console.warn('Error generating image, proceeding without it:', imageError);
+        toast.warning('No se pudo generar la imagen, pero la receta se guardará');
+      }
 
       // Preparar datos para guardar
       const recipeData = {
@@ -233,12 +239,12 @@ const AddRecipePage = () => {
                       <SelectValue placeholder="Seleccionar" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="breakfast">Desayuno</SelectItem>
-                      <SelectItem value="lunch">Almuerzo</SelectItem>
-                      <SelectItem value="dinner">Cena</SelectItem>
-                      <SelectItem value="appetizer">Aperitivo</SelectItem>
-                      <SelectItem value="snacks">Tentempié</SelectItem>
-                      <SelectItem value="desserts">Postres</SelectItem>
+                      <SelectItem value="desayuno">Desayuno</SelectItem>
+                      <SelectItem value="comida">Comida</SelectItem>
+                      <SelectItem value="cena">Cena</SelectItem>
+                      <SelectItem value="aperitivo">Aperitivo</SelectItem>
+                      <SelectItem value="snack">Snack</SelectItem>
+                      <SelectItem value="merienda">Merienda</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
