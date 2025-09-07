@@ -69,6 +69,23 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     }
   };
 
+  // Función para abreviar unidades
+  const abbreviateUnit = (unit: string): string => {
+    const abbreviations: { [key: string]: string } = {
+      'gramos': 'g',
+      'kilogramos': 'kg', 
+      'litros': 'L',
+      'mililitros': 'ml',
+      'unidad': 'U',
+      'unidades': 'U',
+      'cucharadas': 'cdas',
+      'cucharada': 'cda',
+      'cucharaditas': 'cdtas',
+      'cucharadita': 'cdta'
+    };
+    return abbreviations[unit.toLowerCase()] || unit;
+  };
+
   // Buscar el ingrediente de la receta que coincida con el producto de Mercadona
   const findMatchingRecipeIngredient = (productName: string) => {
     return recipe.ingredients.find(ingredient => {
@@ -98,7 +115,7 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
       return { 
         percentage: 0, 
         recipeAmount: 'No usado',
-        productAmount: `${supermarketIngredient.quantity} ${supermarketIngredient.unit_type}`
+        productAmount: `${supermarketIngredient.quantity} ${abbreviateUnit(supermarketIngredient.unit_type)}`
       };
     }
 
@@ -123,8 +140,8 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     
     return {
       percentage: Math.round(percentage),
-      recipeAmount: `${recipeIngredient.amount} ${recipeIngredient.unit}`,
-      productAmount: `${supermarketQuantity} ${supermarketUnit}`
+      recipeAmount: `${recipeIngredient.amount} ${abbreviateUnit(recipeIngredient.unit)}`,
+      productAmount: `${supermarketQuantity} ${abbreviateUnit(supermarketUnit)}`
     };
   };
 
@@ -235,34 +252,28 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-1">
-                      <h4 className="font-medium text-sm line-clamp-2 text-left">
-                        {ingredient.product_name}
+                      <h4 className="font-medium text-base line-clamp-3 text-left leading-tight">
+                        {ingredient.product_name} {usage.productAmount}
                       </h4>
-                      <span className="font-bold text-black ml-2">
-                        {ingredient.price.toFixed(2)}€
-                      </span>
-                    </div>
-                    
-                    <div className="flex justify-between items-center text-xs text-muted-foreground">
-                      <span>{usage.productAmount}</span>
-                      <div className="flex items-center gap-2">
-                        {usage.recipeAmount !== 'No usado' && (
-                          <>
-                            <span>uso en receta {usage.recipeAmount}</span>
-                            <span className={`font-bold ${percentageColor}`}>
-                              {usage.percentage}%
-                            </span>
-                          </>
-                        )}
+                      <div className="flex items-center gap-3 ml-2">
+                        <span className="font-medium text-base">
+                          {ingredient.price.toFixed(2)}€
+                        </span>
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                        />
                       </div>
                     </div>
-                  </div>
-                  
-                  <div className="flex items-center">
-                    <Checkbox
-                      checked={isSelected}
-                      onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                    />
+                    
+                    {usage.recipeAmount !== 'No usado' && (
+                      <div className="flex justify-between items-center text-xs text-muted-foreground">
+                        <span>uso en receta {usage.recipeAmount}</span>
+                        <span className={`font-normal ${percentageColor}`}>
+                          {usage.percentage}%
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
