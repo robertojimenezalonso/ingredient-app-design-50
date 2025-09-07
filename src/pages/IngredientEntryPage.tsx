@@ -16,7 +16,7 @@ const IngredientEntryPage = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
-    supermarket: '',
+    supermarket: 'Mercadona',
     section_department: '',
     product_name: '',
     quantity: '',
