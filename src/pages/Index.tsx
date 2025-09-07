@@ -41,28 +41,17 @@ const Index = () => {
         <div className="max-w-md w-full space-y-8 text-center">
           <div>
             <h1 className="text-4xl font-bold text-foreground mb-4">
-              Gestión de Ingredientes
+              Recetas Disponibles
             </h1>
             <p className="text-muted-foreground mb-8">
-              Añade y gestiona los ingredientes de los supermercados
+              Explora las recetas del banco de datos
             </p>
           </div>
           
+          {/* Display recipes */}
           <div className="space-y-4">
-            <Button 
-              onClick={() => navigate('/add-ingredient')}
-              className="w-full h-12 text-lg"
-              size="lg"
-            >
-              Añadir Nuevo Ingrediente
-            </Button>
-          </div>
-          
-          {/* Display recent recipes */}
-          <div className="mt-12 space-y-4">
-            <h2 className="text-xl font-semibold">Recetas Disponibles</h2>
             <div className="grid grid-cols-1 gap-4">
-              {allRecipes.slice(0, 3).map((recipe) => (
+              {allRecipes.slice(0, 6).map((recipe) => (
                 <RecipeGridCard
                   key={recipe.id}
                   recipe={recipe}

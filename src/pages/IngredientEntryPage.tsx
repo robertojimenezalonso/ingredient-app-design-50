@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Upload, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,6 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 const IngredientEntryPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     supermarket: '',
@@ -25,6 +26,8 @@ const IngredientEntryPage = () => {
   });
   
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
 
   const supermarkets = [
     'Mercadona',
@@ -54,6 +57,41 @@ const IngredientEntryPage = () => {
     }));
   };
 
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+    }
+  };
+
+  const handleRemoveImage = () => {
+    setSelectedFile(null);
+    setImagePreview('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const uploadImageToSupabase = async (file: File): Promise<string> => {
+    const fileName = `${Date.now()}-${file.name}`;
+    const { data, error } = await supabase.storage
+      .from('recipe-images')
+      .upload(fileName, file);
+
+    if (error) {
+      console.error('Error uploading image:', error);
+      throw new Error('Error al subir la imagen');
+    }
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('recipe-images')
+      .getPublicUrl(data.path);
+
+    return publicUrl;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -71,6 +109,12 @@ const IngredientEntryPage = () => {
     setIsSubmitting(true);
 
     try {
+      let imageUrl = '';
+      
+      // Upload image if selected
+      if (selectedFile) {
+        imageUrl = await uploadImageToSupabase(selectedFile);
+      }
       const { error } = await supabase
         .from('supermarket_ingredients')
         .insert({
@@ -80,7 +124,7 @@ const IngredientEntryPage = () => {
           quantity: parseFloat(formData.quantity),
           unit_type: formData.unit_type,
           price: parseFloat(formData.price),
-          image_url: formData.image_url || null
+          image_url: imageUrl || null
         });
 
       if (error) {
@@ -108,6 +152,11 @@ const IngredientEntryPage = () => {
         price: '',
         image_url: ''
       });
+      setSelectedFile(null);
+      setImagePreview('');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
 
     } catch (error) {
       console.error('Error:', error);
@@ -228,16 +277,52 @@ const IngredientEntryPage = () => {
                 />
               </div>
 
-              {/* Image URL */}
+              {/* Image Upload */}
               <div className="space-y-2">
-                <Label htmlFor="image_url">URL de la Imagen (opcional)</Label>
-                <Input
-                  id="image_url"
-                  type="url"
-                  value={formData.image_url}
-                  onChange={(e) => handleInputChange('image_url', e.target.value)}
-                  placeholder="https://ejemplo.com/imagen.jpg"
-                />
+                <Label>Imagen del Producto</Label>
+                <div className="border-2 border-dashed border-border rounded-lg p-6">
+                  {imagePreview ? (
+                    <div className="relative">
+                      <img 
+                        src={imagePreview} 
+                        alt="Preview" 
+                        className="w-full h-48 object-cover rounded-lg"
+                      />
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="absolute top-2 right-2"
+                        onClick={handleRemoveImage}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <Upload className="mx-auto h-12 w-12 text-muted-foreground" />
+                      <div className="mt-4">
+                        <Button 
+                          type="button" 
+                          variant="secondary"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          Seleccionar Imagen
+                        </Button>
+                        <p className="mt-2 text-sm text-muted-foreground">
+                          PNG, JPG, WEBP hasta 10MB
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </div>
               </div>
 
               <Button 
