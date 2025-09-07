@@ -284,32 +284,39 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start mb-2">
-                      <h4 className="font-medium text-base line-clamp-3 text-left leading-tight">
-                        {ingredient.product_name} {usage.productAmount}
-                      </h4>
-                      <div className="text-right ml-3">
-                        {usage.unitsNeeded > 1 && (
-                          <div className="text-xs text-muted-foreground">
-                            {usage.unitsNeeded}X
+                      <div className="flex-1 mr-3">
+                        <div className="flex items-start gap-2 mb-1">
+                          {usage.unitsNeeded > 1 && (
+                            <Badge variant="secondary" className="text-xs font-bold bg-orange-100 text-orange-800 px-2 py-1">
+                              {usage.unitsNeeded}X
+                            </Badge>
+                          )}
+                          <h4 className="font-medium text-base line-clamp-3 text-left leading-tight">
+                            {ingredient.product_name} {usage.productAmount}
+                          </h4>
+                        </div>
+                        
+                        {usage.recipeAmount !== 'No usado' && (
+                          <div className="text-xs text-muted-foreground mt-1">
+                            <span>Uso en receta {usage.recipeAmount} · </span>
+                            <span className={`font-normal ${percentageColor}`}>
+                              {usage.percentage}%
+                            </span>
                           </div>
                         )}
+                      </div>
+                      
+                      <div className="text-right">
                         <span className="font-medium text-base">
                           {usage.totalPrice.toFixed(2)}€
                         </span>
-                        <div className="text-xs text-muted-foreground">
-                          {usage.unitPrice.toFixed(2)}€/ud
-                        </div>
+                        {usage.unitsNeeded > 1 && (
+                          <div className="text-xs text-muted-foreground">
+                            {usage.unitPrice.toFixed(2)}€/ud
+                          </div>
+                        )}
                       </div>
                     </div>
-                    
-                    {usage.recipeAmount !== 'No usado' && (
-                      <div className="text-xs text-muted-foreground">
-                        <span>Uso en receta {usage.recipeAmount} · </span>
-                        <span className={`font-normal ${percentageColor}`}>
-                          {usage.percentage}%
-                        </span>
-                      </div>
-                    )}
                   </div>
                   
                   <div className="flex items-center self-center">
