@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { UserConfigProvider } from "./contexts/UserConfigContext";
-import { BottomNav } from "./components/BottomNav";
+
 import InitialWelcomePage from "./pages/InitialWelcomePage";
 import RecipeListPage from "./pages/RecipeListPage";
 import SearchOffersPage from "./pages/SearchOffersPage";
@@ -22,6 +22,7 @@ import SupermarketDetailPage from "./pages/SupermarketDetailPage";
 import { CambioRecetaPage } from "./pages/CambioRecetaPage";
 import RecipeBankAdminPage from "./pages/RecipeBankAdminPage";
 import { DailySummaryPage } from "./pages/DailySummaryPage";
+import IngredientEntryPage from "./pages/IngredientEntryPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -51,10 +52,10 @@ const App = () => (
             <Route path="/cambioReceta" element={<CambioRecetaPage />} />
             <Route path="/recipe-bank-admin" element={<RecipeBankAdminPage />} />
             <Route path="/recipe-table" element={<DailySummaryPage />} />
+            <Route path="/add-ingredient" element={<IngredientEntryPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <BottomNav />
         </BrowserRouter>
       </TooltipProvider>
     </UserConfigProvider>

@@ -1,23 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Filter } from 'lucide-react';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
-import { Recipe, CategoryType } from '@/types/recipe';
-
-import { ScrollableHeader } from '@/components/ScrollableHeader';
-
-import { MealTypesCarousel } from '@/components/MealTypesCarousel';
+import { Recipe } from '@/types/recipe';
 import { RecipeGridCard } from '@/components/RecipeGridCard';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
 
 const Index = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { getRandomRecipesByCategory, convertToRecipe } = useRecipeBank();
-  
-  const [selectedMealTypes, setSelectedMealTypes] = useState<string[]>([]);
-  const [selectedSupermarket, setSelectedSupermarket] = useState<string>('');
-  const [searchQuery, setSearchQuery] = useState('');
   
   const categories = [
     'desayuno', 'comida', 'cena', 
@@ -30,32 +22,11 @@ const Index = () => {
   );
   
   console.log('🔍 [Index] Total recipes loaded:', allRecipes.length);
-  console.log('🔍 [Index] Selected meal types:', selectedMealTypes);
-  console.log('🔍 [Index] Search query:', searchQuery);
-  
-  // Filter recipes based on selected filters
-  const filteredRecipes = allRecipes.filter(recipe => {
-    const matchesMealType = selectedMealTypes.length === 0 || selectedMealTypes.includes(recipe.category);
-    const matchesSearch = searchQuery === '' || 
-      recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      recipe.ingredients.some(ing => ing.name.toLowerCase().includes(searchQuery.toLowerCase()));
-    
-    return matchesMealType && matchesSearch;
-  });
-
-  console.log('🔍 [Index] Filtered recipes:', filteredRecipes.length);
 
   const handleRecipeClick = (recipe: Recipe) => {
     navigate(`/recipe/${recipe.id}`);
   };
 
-  const handleMealTypeToggle = (type: string) => {
-    setSelectedMealTypes(prev => 
-      prev.includes(type) 
-        ? prev.filter(t => t !== type)
-        : [...prev, type]
-    );
-  };
 
   const handleAddRecipe = (recipe: Recipe) => {
     toast({
@@ -66,30 +37,40 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <ScrollableHeader 
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
-      />
-      
-      <div className="pt-32 pb-20">
-        {/* Meal Types Carousel */}
-        <MealTypesCarousel 
-          selectedTypes={selectedMealTypes}
-          onTypeToggle={handleMealTypeToggle}
-        />
-        
-        
-        {/* Recipes Grid */}
-        <div className="px-4 mt-2">
-          <div className="grid grid-cols-1 gap-4">
-            {filteredRecipes.map((recipe) => (
-              <RecipeGridCard
-                key={recipe.id}
-                recipe={recipe}
-                onClick={() => handleRecipeClick(recipe)}
-                onAdd={() => handleAddRecipe(recipe)}
-              />
-            ))}
+      <div className="flex flex-col items-center justify-center min-h-screen px-4">
+        <div className="max-w-md w-full space-y-8 text-center">
+          <div>
+            <h1 className="text-4xl font-bold text-foreground mb-4">
+              Gestión de Ingredientes
+            </h1>
+            <p className="text-muted-foreground mb-8">
+              Añade y gestiona los ingredientes de los supermercados
+            </p>
+          </div>
+          
+          <div className="space-y-4">
+            <Button 
+              onClick={() => navigate('/add-ingredient')}
+              className="w-full h-12 text-lg"
+              size="lg"
+            >
+              Añadir Nuevo Ingrediente
+            </Button>
+          </div>
+          
+          {/* Display recent recipes */}
+          <div className="mt-12 space-y-4">
+            <h2 className="text-xl font-semibold">Recetas Disponibles</h2>
+            <div className="grid grid-cols-1 gap-4">
+              {allRecipes.slice(0, 3).map((recipe) => (
+                <RecipeGridCard
+                  key={recipe.id}
+                  recipe={recipe}
+                  onClick={() => handleRecipeClick(recipe)}
+                  onAdd={() => handleAddRecipe(recipe)}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
