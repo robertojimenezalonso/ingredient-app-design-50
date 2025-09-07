@@ -5,7 +5,7 @@ import { ImageLoader } from './ui/image-loader';
 import { Checkbox } from './ui/checkbox';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-import { Progress } from './ui/progress';
+import { Button } from './ui/button';
 
 interface SupermarketIngredient {
   id: string;
@@ -22,21 +22,24 @@ interface MercadonaIngredientsViewProps {
   onSelectionChange?: (selectedIngredients: string[], totalCost: number) => void;
 }
 
+type SupermarketType = 'Mercadona' | 'Lidl' | 'Carrefour';
+
 export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: MercadonaIngredientsViewProps) => {
   const [supermarketIngredients, setSupermarketIngredients] = useState<SupermarketIngredient[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
+  const [selectedSupermarket, setSelectedSupermarket] = useState<SupermarketType>('Mercadona');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadMercadonaIngredients();
-  }, []);
+    loadIngredients();
+  }, [selectedSupermarket]);
 
-  const loadMercadonaIngredients = async () => {
+  const loadIngredients = async () => {
     try {
       const { data, error } = await supabase
         .from('supermarket_ingredients')
         .select('*')
-        .eq('supermarket', 'Mercadona')
+        .eq('supermarket', selectedSupermarket)
         .order('product_name', { ascending: true });
 
       if (error) throw error;
@@ -125,6 +128,13 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     };
   };
 
+  // Obtener color del porcentaje según el rango
+  const getPercentageColor = (percentage: number): string => {
+    if (percentage >= 90) return 'text-green-600';
+    if (percentage >= 70) return 'text-orange-600';
+    return 'text-red-600';
+  };
+
   const handleSelectionChange = (ingredientId: string, checked: boolean) => {
     const newSelected = new Set(selectedIngredients);
     if (checked) {
@@ -183,21 +193,37 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-semibold">Ingredientes de Mercadona</h3>
+        <h3 className="text-lg font-semibold">Ingredientes</h3>
         <Badge variant="secondary" className="text-lg font-bold">
           Total: {totalSelectedCost.toFixed(2)}€
         </Badge>
+      </div>
+      
+      {/* Selector de supermercados */}
+      <div className="flex gap-2 justify-center">
+        {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => (
+          <Button
+            key={supermarket}
+            variant={selectedSupermarket === supermarket ? "default" : "outline"}
+            size="sm"
+            onClick={() => setSelectedSupermarket(supermarket)}
+            className="text-xs"
+          >
+            {supermarket}
+          </Button>
+        ))}
       </div>
       
       <div className="grid gap-2">
         {sortedIngredients.map((ingredient) => {
           const usage = calculateUsage(ingredient);
           const isSelected = selectedIngredients.has(ingredient.id);
+          const percentageColor = getPercentageColor(usage.percentage);
 
           return (
             <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-primary shadow-sm' : 'hover:shadow-sm'}`}>
               <CardContent className="p-3">
-                <div className="flex items-start gap-3">
+                <div className="flex items-center gap-3">
                   <div className="w-16 h-16 flex-shrink-0">
                     <ImageLoader
                       src={ingredient.image_url}
@@ -208,38 +234,35 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex-1">
-                        <div className="font-medium text-sm line-clamp-1 text-left mb-1">
-                          {usage.productAmount}
-                        </div>
-                        
+                    <div className="flex justify-between items-start mb-1">
+                      <h4 className="font-medium text-sm line-clamp-2 text-left">
+                        {ingredient.product_name}
+                      </h4>
+                      <span className="font-bold text-black ml-2">
+                        {ingredient.price.toFixed(2)}€
+                      </span>
+                    </div>
+                    
+                    <div className="flex justify-between items-center text-xs text-muted-foreground">
+                      <span>{usage.productAmount}</span>
+                      <div className="flex items-center gap-2">
                         {usage.recipeAmount !== 'No usado' && (
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          <>
                             <span>uso en receta {usage.recipeAmount}</span>
-                            <div className="h-1 bg-muted rounded-full flex-1 max-w-[60px]">
-                              <div 
-                                className="h-full bg-orange-500 rounded-full transition-all" 
-                                style={{ width: `${usage.percentage}%` }}
-                              />
-                            </div>
-                            <span className="font-medium text-orange-600">
+                            <span className={`font-bold ${percentageColor}`}>
                               {usage.percentage}%
                             </span>
-                          </div>
+                          </>
                         )}
                       </div>
-                      
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-black">
-                          {ingredient.price.toFixed(2)}€
-                        </span>
-                        <Checkbox
-                          checked={isSelected}
-                          onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                        />
-                      </div>
                     </div>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <Checkbox
+                      checked={isSelected}
+                      onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                    />
                   </div>
                 </div>
               </CardContent>
