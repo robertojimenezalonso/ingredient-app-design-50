@@ -88,7 +88,7 @@ serve(async (req) => {
     if (isMultiple && recipesToProcess.length > 1) {
       // Batch processing: generate multiple images in one API call
       const prompts = recipesToProcess.map(name => 
-        `Foto realista de ${name}, preparada y servida en un plato, vista cenital, ingredientes principales visibles, estilo food photography profesional, alta calidad, iluminación natural`
+        `Ultra-realistic, professional food photography of ${name}. Perfect golden-brown texture, beautifully melted cheese visible, fresh spinach leaves and sautéed mushrooms clearly shown. Served on elegant white ceramic plate, shot from slight angle to show thickness and layers. Restaurant-quality presentation with natural lighting, shallow depth of field, macro details showing appetizing textures. Photorealistic, award-winning culinary photography style, 8K resolution quality.`
       );
 
       console.log('Making batch request to OpenAI with prompts:', prompts);
@@ -151,7 +151,7 @@ serve(async (req) => {
       });
     } else {
       // Single recipe processing (backward compatibility)
-      const prompt = `Foto realista de ${recipesToProcess[0]}, preparada y servida en un plato, vista cenital, ingredientes principales visibles, estilo food photography profesional, alta calidad, iluminación natural`;
+      const prompt = `Ultra-realistic, professional food photography of ${recipesToProcess[0]}. Perfect golden-brown texture, beautifully melted cheese visible, fresh spinach leaves and sautéed mushrooms clearly shown. Served on elegant white ceramic plate, shot from slight angle to show thickness and layers. Restaurant-quality presentation with natural lighting, shallow depth of field, macro details showing appetizing textures. Photorealistic, award-winning culinary photography style, 8K resolution quality.`;
 
       console.log('Making single request to OpenAI with prompt:', prompt);
 
