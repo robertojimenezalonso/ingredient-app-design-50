@@ -488,54 +488,12 @@ const RecipeDetailPage = () => {
 
         {/* Ingredientes Tab */}
         <TabsContent value="ingredientes" className="px-4 mb-8">
-
-          <h2 className="text-lg font-semibold mb-4">{recipe.ingredients.length} Ingredientes</h2>
-
-
-
-          <div className="mb-4">
-            {productsLoading && <div className="text-center py-4">
-                <p className="text-sm text-muted-foreground">Cargando precios del supermercado...</p>
-              </div>}
-            <div className="space-y-0">
-              {recipe.ingredients.map((ingredient, displayIndex) => {
-                const adjustedAmount = (parseFloat(ingredient.amount) * servings / recipe.servings).toFixed(1);
-                const displayAmount = adjustedAmount.endsWith('.0') ? adjustedAmount.slice(0, -2) : adjustedAmount;
-
-                return <div key={ingredient.id}>
-                  <div className="flex items-center gap-3 py-3">
-                    <div className="relative">
-                      <img 
-                        src={`https://images.unsplash.com/photo-1506368249639-73a05d6f6488?w=100`} 
-                        alt={ingredient.name} 
-                        className="w-16 h-16 rounded-lg object-cover border" 
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="font-medium line-clamp-2">
-                          {ingredient.name}
-                        </span>
-                      </div>
-                      <p className="text-xs text-muted-foreground mb-1">
-                        {displayAmount} {abbreviateUnit(ingredient.unit)}
-                      </p>
-                    </div>
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={isIngredientSelected(ingredient.id)}
-                        onChange={() => handleIngredientToggle(ingredient.id)}
-                        className="w-5 h-5 rounded border-2 border-gray-300 checked:bg-primary checked:border-primary"
-                      />
-                    </div>
-                  </div>
-                  {displayIndex < recipe.ingredients.length - 1 && <div className="border-b border-border"></div>}
-                </div>;
-              })}
-            </div>
-          </div>
-
+          <MercadonaIngredientsView 
+            recipe={recipe}
+            onSelectionChange={(selectedIds, totalCost) => {
+              console.log('🛒 Ingredientes selection:', selectedIds.length, 'ingredients, cost:', totalCost.toFixed(2), '€');
+            }}
+          />
         </TabsContent>
 
         {/* Instrucciones Tab */}
