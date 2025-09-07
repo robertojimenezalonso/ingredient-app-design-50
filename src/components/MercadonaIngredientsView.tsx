@@ -5,6 +5,7 @@ import { ImageLoader } from './ui/image-loader';
 import { Checkbox } from './ui/checkbox';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
+import { Progress } from './ui/progress';
 
 interface SupermarketIngredient {
   id: string;
@@ -36,7 +37,7 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
         .from('supermarket_ingredients')
         .select('*')
         .eq('supermarket', 'Mercadona')
-        .order('section_department', { ascending: true });
+        .order('product_name', { ascending: true });
 
       if (error) throw error;
 
@@ -46,7 +47,13 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
       const autoSelected = new Set<string>();
       data?.forEach(ingredient => {
         const name = ingredient.product_name.toLowerCase();
+        // Seleccionar todos los ingredientes EXCEPTO sal, pimienta y aceite
+        // PERO incluir el tomate que debe estar seleccionado por defecto
         if (!name.includes('sal') && !name.includes('pimienta') && !name.includes('aceite')) {
+          autoSelected.add(ingredient.id);
+        }
+        // Forzar selección del tomate
+        if (name.includes('tomate')) {
           autoSelected.add(ingredient.id);
         }
       });
@@ -80,12 +87,16 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     });
   };
 
-  // Calcular porcentaje de uso y costo proporcional
+  // Calcular porcentaje de uso y cantidad usada
   const calculateUsage = (supermarketIngredient: SupermarketIngredient) => {
     const recipeIngredient = findMatchingRecipeIngredient(supermarketIngredient.product_name);
     
     if (!recipeIngredient) {
-      return { percentage: 0, proportionalCost: 0, recipeAmount: 'No usado' };
+      return { 
+        percentage: 0, 
+        recipeAmount: 'No usado',
+        productAmount: `${supermarketIngredient.quantity} ${supermarketIngredient.unit_type}`
+      };
     }
 
     let recipeQuantity = parseFloat(recipeIngredient.amount);
@@ -106,13 +117,11 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     }
     
     const percentage = Math.min((recipeQuantity / supermarketQuantity) * 100, 100);
-    const proportionalCost = (supermarketIngredient.price * percentage) / 100;
     
     return {
-      percentage: percentage,
-      proportionalCost: proportionalCost,
+      percentage: Math.round(percentage),
       recipeAmount: `${recipeIngredient.amount} ${recipeIngredient.unit}`,
-      supermarketAmount: `${supermarketQuantity} ${supermarketUnit}`
+      productAmount: `${supermarketQuantity} ${supermarketUnit}`
     };
   };
 
@@ -128,10 +137,7 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     // Calcular costo total de ingredientes seleccionados
     const totalCost = supermarketIngredients
       .filter(ingredient => newSelected.has(ingredient.id))
-      .reduce((total, ingredient) => {
-        const usage = calculateUsage(ingredient);
-        return total + usage.proportionalCost;
-      }, 0);
+      .reduce((total, ingredient) => total + ingredient.price, 0);
 
     onSelectionChange?.(Array.from(newSelected), totalCost);
   };
@@ -140,16 +146,15 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
     return (
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Ingredientes de Mercadona</h3>
-        <div className="grid gap-4">
+        <div className="grid gap-3">
           {[...Array(6)].map((_, i) => (
             <Card key={i} className="animate-pulse">
-              <CardContent className="p-4">
-                <div className="flex gap-4">
-                  <div className="w-20 h-20 bg-muted rounded-lg" />
+              <CardContent className="p-3">
+                <div className="flex gap-3">
+                  <div className="w-16 h-16 bg-muted rounded-lg" />
                   <div className="flex-1 space-y-2">
                     <div className="h-4 bg-muted rounded w-3/4" />
                     <div className="h-3 bg-muted rounded w-1/2" />
-                    <div className="h-3 bg-muted rounded w-1/4" />
                   </div>
                 </div>
               </CardContent>
@@ -162,10 +167,18 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
 
   const totalSelectedCost = supermarketIngredients
     .filter(ingredient => selectedIngredients.has(ingredient.id))
-    .reduce((total, ingredient) => {
-      const usage = calculateUsage(ingredient);
-      return total + usage.proportionalCost;
-    }, 0);
+    .reduce((total, ingredient) => total + ingredient.price, 0);
+
+  // Separar ingredientes seleccionados y no seleccionados
+  const selectedIngredientsList = supermarketIngredients.filter(ingredient => 
+    selectedIngredients.has(ingredient.id)
+  );
+  const unselectedIngredientsList = supermarketIngredients.filter(ingredient => 
+    !selectedIngredients.has(ingredient.id)
+  );
+
+  // Combinar listas: seleccionados primero
+  const sortedIngredients = [...selectedIngredientsList, ...unselectedIngredientsList];
 
   return (
     <div className="space-y-4">
@@ -176,24 +189,15 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
         </Badge>
       </div>
       
-      <div className="grid gap-3">
-        {supermarketIngredients.map((ingredient) => {
+      <div className="grid gap-2">
+        {sortedIngredients.map((ingredient) => {
           const usage = calculateUsage(ingredient);
           const isSelected = selectedIngredients.has(ingredient.id);
-          const isBasicIngredient = ['sal', 'pimienta', 'aceite'].some(basic => 
-            ingredient.product_name.toLowerCase().includes(basic)
-          );
 
           return (
-            <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-2 ring-primary shadow-md' : 'hover:shadow-sm'}`}>
+            <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-primary shadow-sm' : 'hover:shadow-sm'}`}>
               <CardContent className="p-3">
                 <div className="flex items-start gap-3">
-                  <Checkbox
-                    checked={isSelected}
-                    onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                    className="mt-1"
-                  />
-                  
                   <div className="w-16 h-16 flex-shrink-0">
                     <ImageLoader
                       src={ingredient.image_url}
@@ -204,52 +208,38 @@ export const MercadonaIngredientsView = ({ recipe, onSelectionChange }: Mercadon
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-sm line-clamp-2 text-left">
-                      {ingredient.product_name}
-                    </h4>
-                    
-                    <div className="mt-2 space-y-1">
-                      <div className="flex justify-between items-center text-xs">
-                        <span className="text-muted-foreground">Producto:</span>
-                        <span className="font-medium">
-                          {ingredient.quantity} {ingredient.unit_type}
-                        </span>
-                      </div>
-                      
-                      {usage.recipeAmount !== 'No usado' && (
-                        <>
-                          <div className="flex justify-between items-center text-xs">
-                            <span className="text-muted-foreground">Receta:</span>
-                            <span className="font-medium">{usage.recipeAmount}</span>
-                          </div>
-                          
-                          <div className="flex justify-between items-center text-xs">
-                            <span className="text-muted-foreground">Uso:</span>
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="flex-1">
+                        <div className="font-medium text-sm line-clamp-1 text-left mb-1">
+                          {usage.productAmount}
+                        </div>
+                        
+                        {usage.recipeAmount !== 'No usado' && (
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span>uso en receta {usage.recipeAmount}</span>
+                            <div className="h-1 bg-muted rounded-full flex-1 max-w-[60px]">
+                              <div 
+                                className="h-full bg-orange-500 rounded-full transition-all" 
+                                style={{ width: `${usage.percentage}%` }}
+                              />
+                            </div>
                             <span className="font-medium text-orange-600">
-                              {usage.percentage.toFixed(1)}%
+                              {usage.percentage}%
                             </span>
                           </div>
-                        </>
-                      )}
+                        )}
+                      </div>
                       
-                      <div className="flex justify-between items-center text-xs pt-1 border-t">
-                        <span className="text-muted-foreground">Precio:</span>
-                        <div className="text-right">
-                          <div className="text-muted-foreground line-through">
-                            {ingredient.price.toFixed(2)}€
-                          </div>
-                          {usage.recipeAmount !== 'No usado' && (
-                            <div className="font-bold text-green-600">
-                              {usage.proportionalCost.toFixed(2)}€
-                            </div>
-                          )}
-                        </div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-black">
+                          {ingredient.price.toFixed(2)}€
+                        </span>
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                        />
                       </div>
                     </div>
-                    
-                    <Badge variant="outline" className="mt-2 text-xs">
-                      {ingredient.section_department}
-                    </Badge>
                   </div>
                 </div>
               </CardContent>
