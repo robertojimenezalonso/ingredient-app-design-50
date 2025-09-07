@@ -39,7 +39,7 @@ const AddRecipePage = () => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
-    category: '',
+    category: 'comida',
     servings: 1,
     preparation_time: 0,
     calories: 0,
@@ -128,6 +128,11 @@ const AddRecipePage = () => {
     
     if (!formData.title.trim()) {
       toast.error('El título es obligatorio');
+      return;
+    }
+
+    if (!formData.category) {
+      toast.error('La categoría es obligatoria');
       return;
     }
 
