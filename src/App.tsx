@@ -23,6 +23,7 @@ import { CambioRecetaPage } from "./pages/CambioRecetaPage";
 import RecipeBankAdminPage from "./pages/RecipeBankAdminPage";
 import { DailySummaryPage } from "./pages/DailySummaryPage";
 import IngredientEntryPage from "./pages/IngredientEntryPage";
+import AddRecipePage from "./pages/AddRecipePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -53,6 +54,7 @@ const App = () => (
             <Route path="/recipe-bank-admin" element={<RecipeBankAdminPage />} />
             <Route path="/recipe-table" element={<DailySummaryPage />} />
             <Route path="/add-ingredient" element={<IngredientEntryPage />} />
+            <Route path="/add-recipe" element={<AddRecipePage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
