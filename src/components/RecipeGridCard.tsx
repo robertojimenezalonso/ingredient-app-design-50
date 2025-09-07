@@ -10,8 +10,14 @@ interface RecipeGridCardProps {
 }
 
 export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) => {
-  // Generate random price between 3-12 euros
-  const price = (Math.random() * 9 + 3).toFixed(2).replace('.', ',');
+  // Generate consistent price based on recipe ID to avoid constant changes
+  const generateConsistentPrice = (id: string): string => {
+    const hash = id.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    const price = (hash % 8 + 4).toFixed(2); // Price between 4.00 - 11.99
+    return price.replace('.', ',');
+  };
+  
+  const price = generateConsistentPrice(recipe.id);
 
   const handleClick = () => {
     if (onClick) {
@@ -44,7 +50,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
         
         <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
           <div className="flex items-start relative">
-            <h3 className="font-normal text-base leading-tight flex-1 line-clamp-2 pr-4" style={{ marginRight: '60px' }}>
+            <h3 className="font-normal text-base leading-tight flex-1 line-clamp-2 pr-4 text-left" style={{ marginRight: "60px" }}>
               {recipe.title}
             </h3>
             <span className="font-normal text-base leading-tight whitespace-nowrap absolute right-0 top-0">{price} €</span>
