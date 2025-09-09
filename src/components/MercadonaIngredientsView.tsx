@@ -6,6 +6,20 @@ import { Checkbox } from './ui/checkbox';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
+import { 
+  Apple, 
+  Beef, 
+  Carrot, 
+  Egg, 
+  Fish, 
+  Grape, 
+  Milk, 
+  Wheat, 
+  ChefHat,
+  Salad,
+  Cookie,
+  Coffee
+} from 'lucide-react';
 
 interface SupermarketIngredient {
   id: string;
@@ -168,6 +182,25 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
     return 'text-red-600';
   };
 
+  // Obtener icono para el ingrediente de la receta
+  const getIngredientIcon = (ingredientName: string) => {
+    const name = ingredientName.toLowerCase();
+    if (name.includes('huevo')) return Egg;
+    if (name.includes('cebolla')) return Apple; // Usando Apple como representación de vegetales redondos
+    if (name.includes('tomate')) return Apple;
+    if (name.includes('champiñón')) return Salad;
+    if (name.includes('espinaca')) return Salad;
+    if (name.includes('queso')) return Milk;
+    if (name.includes('aceite')) return Coffee; // Como líquido
+    if (name.includes('sal') || name.includes('pimienta')) return ChefHat;
+    if (name.includes('carne') || name.includes('pollo')) return Beef;
+    if (name.includes('pescado')) return Fish;
+    if (name.includes('zanahoria')) return Carrot;
+    if (name.includes('pan') || name.includes('harina')) return Wheat;
+    if (name.includes('fruta')) return Grape;
+    return ChefHat; // Icono por defecto
+  };
+
   const handleSelectionChange = (ingredientId: string, checked: boolean) => {
     const newSelected = new Set(selectedIngredients);
     if (checked) {
@@ -297,67 +330,93 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
           const isSelected = selectedIngredients.has(ingredient.id);
           const percentageColor = getPercentageColor(usage.percentage);
 
-          return (
-            <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-gray-400 shadow-sm' : 'hover:shadow-sm'}`}>
-              <CardContent className="p-3">
-                <div className="flex gap-3">
-                  <div className="w-16 h-16 flex-shrink-0">
-                    <ImageLoader
-                      src={ingredient.image_url}
-                      alt={ingredient.product_name}
-                      className="w-full h-full rounded-lg object-cover"
-                      priority={true}
-                    />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex-1 mr-3">
-                        <div className="flex items-start gap-2 mb-1">
-                          {usage.unitsNeeded > 1 && (
-                            <Badge variant="secondary" className="text-xs font-bold bg-orange-100 text-orange-800 px-2 py-1">
-                              {usage.unitsNeeded}X
-                            </Badge>
-                          )}
-                          <h4 className="font-medium text-base line-clamp-3 text-left leading-tight">
-                            {ingredient.product_name} {usage.productAmount}
-                          </h4>
-                        </div>
-                        
-                        {usage.recipeAmount !== 'No usado' && (
-                          <div className="text-xs text-muted-foreground mt-1">
-                            <span>Uso en receta {usage.recipeAmount} · </span>
-                            <span className={`font-normal ${percentageColor}`}>
-                              {usage.percentage}%
-                            </span>
-                          </div>
-                        )}
+          {
+            const recipeIngredient = findMatchingRecipeIngredient(ingredient.product_name);
+            const IconComponent = recipeIngredient ? getIngredientIcon(recipeIngredient.name) : ChefHat;
+            
+            return (
+              <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-gray-400 shadow-sm' : 'hover:shadow-sm'}`}>
+                <CardContent className="p-3">
+                  {/* Mitad superior: Ingrediente de la receta */}
+                  {recipeIngredient && (
+                    <div className="flex items-center gap-3 pb-2 border-b border-gray-200 mb-2">
+                      <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-full">
+                        <IconComponent size={16} className="text-gray-600" />
                       </div>
-                      
-                      <div className="text-right">
-                        <span className="font-medium text-base">
-                          {usage.totalPrice.toFixed(2)}€
-                        </span>
-                        {usage.unitsNeeded > 1 && (
-                          <div className="text-xs text-muted-foreground">
-                            {usage.unitPrice.toFixed(2)}€/ud
-                          </div>
-                        )}
+                      <div className="flex-1 min-w-0">
+                        <div className="text-sm font-medium text-gray-800">
+                          {recipeIngredient.name}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Necesitas: {usage.recipeAmount}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
                   
-                  <div className="flex items-center self-center">
-                    <Checkbox
-                      checked={isSelected}
-                      onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                      className="border-gray-300"
-                    />
+                  {/* Mitad inferior: Producto del supermercado */}
+                  <div className="flex gap-3">
+                    <div className="w-12 h-12 flex-shrink-0">
+                      <ImageLoader
+                        src={ingredient.image_url}
+                        alt={ingredient.product_name}
+                        className="w-full h-full rounded-lg object-cover"
+                        priority={true}
+                      />
+                    </div>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start mb-1">
+                        <div className="flex-1 mr-3">
+                          <div className="flex items-start gap-2 mb-1">
+                            {usage.unitsNeeded > 1 && (
+                              <Badge variant="secondary" className="text-xs font-bold bg-orange-100 text-orange-800 px-1 py-0.5">
+                                {usage.unitsNeeded}X
+                              </Badge>
+                            )}
+                            <h4 className="font-medium text-sm line-clamp-2 text-left leading-tight">
+                              {ingredient.product_name}
+                            </h4>
+                          </div>
+                          
+                          <div className="text-xs text-muted-foreground">
+                            {usage.productAmount}
+                            {usage.recipeAmount !== 'No usado' && (
+                              <>
+                                <span> · </span>
+                                <span className={`font-normal ${percentageColor}`}>
+                                  {usage.percentage}% usado
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="text-right">
+                          <span className="font-medium text-sm">
+                            {usage.totalPrice.toFixed(2)}€
+                          </span>
+                          {usage.unitsNeeded > 1 && (
+                            <div className="text-xs text-muted-foreground">
+                              {usage.unitPrice.toFixed(2)}€/ud
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center self-center">
+                      <Checkbox
+                        checked={isSelected}
+                        onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                        className="border-gray-300"
+                      />
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
+                </CardContent>
+              </Card>
+            );
+          }
         })}
       </div>
       
