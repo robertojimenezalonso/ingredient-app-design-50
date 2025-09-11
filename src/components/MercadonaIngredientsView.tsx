@@ -299,6 +299,12 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
               return 'text-orange-600';
             };
             
+            const getPriceTagColor = () => {
+              if (price === minPrice) return 'bg-green-100 text-green-700';
+              if (price === maxPrice) return 'bg-red-100 text-red-700';
+              return 'bg-orange-100 text-orange-700';
+            };
+            
             const getSupermarketLogo = () => {
               switch (supermarket) {
                 case 'Mercadona': return '/lovable-uploads/b8883c4e-84a6-4389-ba4a-ca0ca802b6fb.png';
@@ -325,7 +331,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 </div>
                 <div className="flex flex-col items-start gap-1 flex-1">
                   <span className="text-lg font-semibold">{supermarket}</span>
-                  <span className={`text-xs font-medium ${getPriceColor()}`}>
+                  <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPriceTagColor()}`}>
                     {price.toFixed(2)}€/ración
                   </span>
                 </div>
