@@ -302,10 +302,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         })}
       </div>
       
-      <div className="flex justify-start mb-4">
-        <h3 className="text-lg font-semibold">Ingredientes</h3>
-      </div>
-      
       {/* Título y selector de raciones */}
       <div className="mb-4">
         <h2 className="text-lg font-semibold mb-3">{recipe.title}</h2>
@@ -316,6 +312,10 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             <div className="text-xs text-muted-foreground">Raciones</div>
           </div>
         </div>
+      </div>
+      
+      <div className="flex justify-start mb-4">
+        <h3 className="text-lg font-semibold">Ingredientes</h3>
       </div>
       <div className="space-y-0">
         {supermarketIngredients.map((ingredient, index) => {
