@@ -1,6 +1,5 @@
 import { Plus } from 'lucide-react';
 import { Recipe } from '@/types/recipe';
-import { ImageLoader } from './ui/image-loader';
 import { Button } from './ui/button';
 
 interface RecipeGridCardProps {
