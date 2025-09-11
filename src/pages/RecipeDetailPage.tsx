@@ -438,15 +438,6 @@ const RecipeDetailPage = () => {
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="relative">
-        <ImageLoader
-          src={recipe.image} 
-          alt={recipe.title} 
-          className="w-full h-64 object-cover"
-          fallbackSrc="https://images.unsplash.com/photo-1546548970-71785318a17b?w=800&h=600&fit=crop"
-          placeholder={
-            <div className="w-8 h-8 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          }
-        />
         <div className="absolute top-4 left-4 right-4 flex justify-between">
           <Button variant="secondary" size="icon" onClick={() => navigate(-1)} className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
