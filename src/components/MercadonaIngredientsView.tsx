@@ -309,32 +309,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             return (
               <div key={ingredient.id}>
                 <div className="py-4">
-                  {/* Sección superior: Ingrediente original de la receta */}
-                  {recipeIngredient && (
-                    <div className="flex items-center justify-between px-3 pb-3">
-                      <div className="flex items-center gap-2">
-                        <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-full">
-                          <IconComponent size={12} className="text-gray-600" />
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <h4 className="text-sm text-gray-800">
-                            {recipeIngredient.name}
-                          </h4>
-                          <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                            {usage.recipeAmount}
-                          </Badge>
-                        </div>
-                      </div>
-                      
-                      <div className="flex items-center">
-                        <Checkbox
-                          checked={isSelected}
-                          onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                          className="border-gray-300 data-[state=checked]:border-0"
-                        />
-                      </div>
-                    </div>
-                  )}
                   
                   {/* Sección inferior: Producto del supermercado */}
                   <div className="bg-[#FAFAFA] p-3 rounded-lg">
@@ -368,15 +342,14 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                         <div className="flex items-center justify-between">
                           <div className="text-xs text-gray-500">
                             {usage.recipeAmount !== 'No usado' && (
-                              <span>{usage.percentage}% usado</span>
+                              <span>{usage.percentage}% usado ({usage.recipeAmount})</span>
                             )}
                           </div>
-                          <button className="flex items-center gap-1 text-xs text-gray-500">
-                            <span className="font-medium">+2</span>
-                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </button>
+                          <Checkbox
+                            checked={isSelected}
+                            onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                            className="border-gray-300 data-[state=checked]:border-0"
+                          />
                         </div>
                         
                         {usage.unitsNeeded > 1 && (
