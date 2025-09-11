@@ -30,9 +30,16 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
     return ingredients;
   }, [getGroupedIngredients, recipes, selectedIngredientIds]);
   
-  const filteredIngredients = groupedIngredients.filter(ingredient =>
-    ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredIngredients = groupedIngredients
+    .sort((a, b) => {
+      // Selected ingredients go first, then non-selected
+      if (a.isSelected && !b.isSelected) return -1;
+      if (!a.isSelected && b.isSelected) return 1;
+      return 0;
+    })
+    .filter(ingredient =>
+      ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   const handleAddIngredient = () => {
     toast({
