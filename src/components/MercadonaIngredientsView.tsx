@@ -395,7 +395,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-1">
+                        <div className="flex items-start justify-between mb-1 gap-4">
                           <div className="flex-1 mr-2">
                             {usage.unitsNeeded > 1 && (
                               <Badge variant="secondary" className="text-xs font-bold bg-orange-100 text-orange-800 px-1 py-0.5 mb-1">
