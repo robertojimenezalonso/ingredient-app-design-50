@@ -287,7 +287,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       </div>
       
       {/* Floating card with supermarket info and pricing */}
-      <div className="bg-white rounded-xl shadow-[0_0_20px_rgba(0,0,0,0.1)] p-4 border border-gray-100">
+      <div className="bg-white rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.08)] p-4 border border-gray-100">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-white flex items-center justify-center">
