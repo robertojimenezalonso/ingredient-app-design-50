@@ -297,9 +297,9 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 className="w-8 h-8 object-contain" 
               />
             </div>
-            <span className="font-semibold text-lg">Mercadona</span>
+            <span className="font-medium text-base">Mercadona</span>
           </div>
-          <div className="text-xl font-bold">
+          <div className="text-base font-medium">
             {totalSelectedCost.toFixed(2)}€
           </div>
         </div>
