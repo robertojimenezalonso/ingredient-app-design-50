@@ -283,17 +283,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
     <div className="space-y-4">
       {/* Título y selector de raciones */}
       <div className="mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-            <ImageLoader
-              src={recipe.image || ''}
-              alt={recipe.title}
-              className="w-full h-full object-cover"
-              priority={true}
-            />
-          </div>
-          <h2 className="text-lg font-semibold">{recipe.title}</h2>
-        </div>
+        <h2 className="text-lg font-semibold">{recipe.title}</h2>
       </div>
       
       {/* Floating card with supermarket info and pricing */}
