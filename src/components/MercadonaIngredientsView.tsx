@@ -104,15 +104,20 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
   // Buscar el ingrediente de la receta que coincida con el producto de Mercadona
   const findMatchingRecipeIngredient = (productName: string) => {
     return recipe.ingredients.find(ingredient => {
-      const recipeIngredient = ingredient.name.toLowerCase();
-      const product = productName.toLowerCase();
+      const recipeIngredient = ingredient.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      const product = productName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
       
-      // Lógica de matching inteligente
-      if (product.includes('huevo') && recipeIngredient.includes('huevo')) return true;
-      if (product.includes('espinaca') && recipeIngredient.includes('espinaca')) return true;
-      if (product.includes('champiñón') && recipeIngredient.includes('champiñón')) return true;
-      if (product.includes('cebolla') && recipeIngredient.includes('cebolla')) return true;
-      if (product.includes('tomate') && recipeIngredient.includes('tomate')) return true;
+      // Lógica de matching inteligente - normaliza acentos y compara variaciones
+      if ((product.includes('huevo') || product.includes('huevos')) && 
+          (recipeIngredient.includes('huevo') || recipeIngredient.includes('huevos'))) return true;
+      if ((product.includes('espinaca') || product.includes('espinacas')) && 
+          (recipeIngredient.includes('espinaca') || recipeIngredient.includes('espinacas'))) return true;
+      if ((product.includes('champinon') || product.includes('champinones')) && 
+          (recipeIngredient.includes('champinon') || recipeIngredient.includes('champinones'))) return true;
+      if ((product.includes('cebolla') || product.includes('cebollas')) && 
+          (recipeIngredient.includes('cebolla') || recipeIngredient.includes('cebollas'))) return true;
+      if ((product.includes('tomate') || product.includes('tomates')) && 
+          (recipeIngredient.includes('tomate') || recipeIngredient.includes('tomates'))) return true;
       if (product.includes('queso') && recipeIngredient.includes('queso')) return true;
       if (product.includes('aceite') && recipeIngredient.includes('aceite')) return true;
       if (product.includes('sal') && recipeIngredient.includes('sal')) return true;
