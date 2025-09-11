@@ -437,7 +437,7 @@ const RecipeDetailPage = () => {
   return (
     <div className="min-h-screen bg-background pb-24">
       {/* Header */}
-      <div className="relative">
+      <div className="relative h-16 bg-background">
         <div className="absolute top-4 left-4 right-4 flex justify-between">
           <Button variant="secondary" size="icon" onClick={() => navigate(-1)} className="rounded-full">
             <ArrowLeft className="h-5 w-5" />
@@ -445,7 +445,7 @@ const RecipeDetailPage = () => {
         </div>
       </div>
 
-      <div className="px-4 mt-4 relative z-10">
+      <div className="px-4 mt-2 relative z-10">
         {/* Título con imagen de la receta */}
         <div className="flex items-center gap-3 mb-4">
           <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
