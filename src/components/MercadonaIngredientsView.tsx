@@ -270,6 +270,23 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
 
   return (
     <div className="space-y-4">
+      {/* Título y selector de raciones */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-semibold">{recipe.title}</h2>
+          <div className="bg-muted/50 px-3 py-2 rounded-xl text-center">
+            <div className="text-xl">{servings}</div>
+            <div className="text-xs text-muted-foreground">Raciones</div>
+          </div>
+        </div>
+        <div className="text-sm text-muted-foreground mb-3">
+          {Math.round((recipe.calories * servings) / recipe.servings)} kcal • {Math.round((recipe.macros.protein * servings) / recipe.servings)}P • {Math.round((recipe.macros.fat * servings) / recipe.servings)}F • {Math.round((recipe.macros.carbs * servings) / recipe.servings)}C
+        </div>
+        <div className="flex items-center justify-start">
+          <div className="text-lg font-medium">{(totalSelectedCost / servings).toFixed(2)}€</div>
+        </div>
+      </div>
+      
       {/* Selector de supermercados con precios */}
       <div className="flex gap-2">
         {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
@@ -316,23 +333,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             </Button>
           );
         })}
-      </div>
-      
-      {/* Título y selector de raciones */}
-      <div className="mb-4">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-semibold">{recipe.title}</h2>
-          <div className="bg-muted/50 px-3 py-2 rounded-xl text-center">
-            <div className="text-xl">{servings}</div>
-            <div className="text-xs text-muted-foreground">Raciones</div>
-          </div>
-        </div>
-        <div className="text-sm text-muted-foreground mb-3">
-          {Math.round((recipe.calories * servings) / recipe.servings)} kcal • {Math.round((recipe.macros.protein * servings) / recipe.servings)}P • {Math.round((recipe.macros.fat * servings) / recipe.servings)}F • {Math.round((recipe.macros.carbs * servings) / recipe.servings)}C
-        </div>
-        <div className="flex items-center justify-start">
-          <div className="text-lg font-medium">{(totalSelectedCost / servings).toFixed(2)}€</div>
-        </div>
       </div>
       
       <div className="flex justify-start mb-4">
