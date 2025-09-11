@@ -61,7 +61,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
 
       setSupermarketIngredients(data || []);
       
-      // Auto-seleccionar todos excepto sal, pimienta y aceite
+      // Auto-seleccionar todos excepto sal, pimienta y aceite (pero incluir tomate)
       const autoSelected = new Set<string>();
       data?.forEach(ingredient => {
         const name = ingredient.product_name.toLowerCase();
@@ -69,7 +69,10 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         if (!name.includes('sal') && !name.includes('pimienta') && !name.includes('aceite')) {
           autoSelected.add(ingredient.id);
         }
-        // Los ingredientes sal, pimienta y aceite aparecerán en la lista pero no estarán pre-seleccionados
+        // Forzar selección del tomate
+        if (name.includes('tomate')) {
+          autoSelected.add(ingredient.id);
+        }
       });
       setSelectedIngredients(autoSelected);
       
@@ -359,7 +362,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                         <Checkbox
                           checked={isSelected}
                           onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                          className="border-0 data-[state=checked]:border-0"
+                          className="border-gray-300 data-[state=checked]:border-0"
                         />
                       </div>
                     </div>
