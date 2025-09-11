@@ -298,6 +298,12 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             return 'text-orange-600';
           };
           
+          const getBackgroundColor = () => {
+            if (price === minPrice) return 'bg-green-50 border-green-200';
+            if (price === maxPrice) return 'bg-red-50 border-red-200';
+            return 'bg-orange-50 border-orange-200';
+          };
+          
           const getSupermarketLogo = () => {
             switch (supermarket) {
               case 'Mercadona': return '/lovable-uploads/b8883c4e-84a6-4389-ba4a-ca0ca802b6fb.png';
@@ -315,8 +321,8 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
               onClick={() => setSelectedSupermarket(supermarket)}
               className={`rounded-lg px-3 py-2 h-auto flex flex-col items-start gap-1 transition-all ${
                 isSelected 
-                  ? 'border border-black bg-white text-black hover:bg-gray-50' 
-                  : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                  ? `border-2 border-black ${getBackgroundColor()} text-black hover:opacity-90` 
+                  : `${getBackgroundColor()} text-gray-700 hover:opacity-80`
               }`}
             >
               <div className="flex items-center gap-2">
