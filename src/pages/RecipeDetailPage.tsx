@@ -460,13 +460,8 @@ const RecipeDetailPage = () => {
             <h1 className="text-xl font-semibold">{recipe.title}</h1>
           </div>
 
-          {/* Servings and Category selector */}
+          {/* Category selector */}
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3 bg-muted px-4 py-3 rounded-lg">
-              <input type="number" inputMode="numeric" min="0" max="10" value={servingsInput} onChange={handleServingsInputChange} onBlur={handleServingsInputBlur} className="w-8 text-lg font-bold text-center bg-transparent border-none focus:outline-none" />
-              <span className="text-base font-medium">{servings === 1 ? 'Ración' : 'Raciones'}</span>
-            </div>
-            
             <div className="flex items-center gap-3 bg-muted px-4 py-3 rounded-lg cursor-pointer">
               <span className="text-base font-medium">Desayuno</span>
               <ChevronDown className="h-4 w-4" />

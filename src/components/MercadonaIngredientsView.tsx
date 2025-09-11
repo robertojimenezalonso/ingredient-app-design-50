@@ -302,6 +302,14 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         })}
       </div>
       
+      {/* Selector de raciones */}
+      <div className="flex justify-start mb-4">
+        <div className="flex items-center gap-3 bg-muted px-4 py-3 rounded-lg">
+          <input type="number" inputMode="numeric" min="0" max="10" value={servings} className="w-8 text-lg font-bold text-center bg-transparent border-none focus:outline-none" readOnly />
+          <span className="text-base font-medium">{servings === 1 ? 'Ración' : 'Raciones'}</span>
+        </div>
+      </div>
+      
       {/* Información de precio por ración y comparación */}
       <div className="text-center text-sm text-muted-foreground">
         <span className="font-medium">{totalSelectedCost.toFixed(2)}€</span> para {servings} {servings === 1 ? 'ración' : 'raciones'}
