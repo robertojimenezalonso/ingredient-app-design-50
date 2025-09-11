@@ -311,6 +311,56 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         <span className="font-medium text-sm">por {(totalSelectedCost / servings).toFixed(2)}€</span>
       </div>
       
+      {/* Información nutricional */}
+      <div className="bg-muted/50 rounded-xl p-4 mb-4">
+        <div className="grid grid-cols-4 gap-4">
+          {/* Calorías */}
+          <div className="text-center">
+            <div className="text-xs text-muted-foreground mb-1">Calorías</div>
+            <div className="text-sm font-semibold">{Math.round((recipe.calories * servings) / recipe.servings)}</div>
+          </div>
+          
+          {/* Proteínas */}
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <img 
+                src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png"
+                alt="proteínas"
+                className="h-4 w-4"
+              />
+            </div>
+            <div className="text-xs text-muted-foreground mb-1">Proteínas</div>
+            <div className="text-sm font-semibold">{Math.round((recipe.macros.protein * servings) / recipe.servings)}g</div>
+          </div>
+          
+          {/* Carbohidratos */}
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <img 
+                src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png"
+                alt="carbohidratos"
+                className="h-4 w-4"
+              />
+            </div>
+            <div className="text-xs text-muted-foreground mb-1">Hidratos</div>
+            <div className="text-sm font-semibold">{Math.round((recipe.macros.carbs * servings) / recipe.servings)}g</div>
+          </div>
+          
+          {/* Grasas */}
+          <div className="text-center">
+            <div className="flex items-center justify-center mb-1">
+              <img 
+                src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png"
+                alt="grasas"
+                className="h-4 w-4"
+              />
+            </div>
+            <div className="text-xs text-muted-foreground mb-1">Grasas</div>
+            <div className="text-sm font-semibold">{Math.round((recipe.macros.fat * servings) / recipe.servings)}g</div>
+          </div>
+        </div>
+      </div>
+      
       <div className="space-y-0">
         {supermarketIngredients.map((ingredient, index) => {
           const usage = calculateUsage(ingredient);
