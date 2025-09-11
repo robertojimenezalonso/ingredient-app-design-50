@@ -300,7 +300,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             <span className="font-medium text-base">Mercadona</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-400 line-through">
+            <span className="text-base text-gray-400 line-through">
               {(totalSelectedCost * 1.2).toFixed(2)}€
             </span>
             <span className="text-base font-medium">
