@@ -320,7 +320,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 variant="ghost"
                 size="sm"
                 onClick={() => setSelectedSupermarket(supermarket)}
-                className={`rounded-none pl-3 pr-6 py-2 h-auto flex items-start gap-3 transition-all min-w-48 border-b-2 justify-start ${
+                className={`rounded-none pl-3 pr-6 py-2 h-auto flex items-center gap-3 transition-all min-w-48 border-b-2 justify-start ${
                   isSelected 
                     ? 'border-b-black bg-white text-black' 
                     : 'border-b-transparent bg-white text-gray-700 hover:bg-gray-50'
