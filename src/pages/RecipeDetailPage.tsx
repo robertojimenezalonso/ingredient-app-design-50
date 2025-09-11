@@ -457,28 +457,10 @@ const RecipeDetailPage = () => {
       <div className="px-4 mt-4 relative z-10">
           {/* Title and Description */}
           <div className="mb-6">
-            <h1 className="text-xl font-semibold">{recipe.title}</h1>
+            <h1 className="text-xl font-semibold">{recipe.title} en {recipe.time} minutos</h1>
           </div>
 
 
-          {/* Calories, time and category */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
-                <Flame className="h-5 w-5 text-black" />
-                <span className="text-base font-medium">{adjustedCalories} kcal</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-black" />
-                <span className="text-base font-medium">{recipe.time} min.</span>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <span className="text-base font-medium">Comida</span>
-              <ChevronDown className="h-4 w-4" />
-            </div>
-          </div>
       </div>
 
       {/* Separator */}
