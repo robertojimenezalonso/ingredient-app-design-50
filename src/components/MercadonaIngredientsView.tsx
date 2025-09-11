@@ -363,7 +363,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                         <Checkbox
                           checked={isSelected}
                           onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                          className="border-gray-300"
+                          className="border-0 data-[state=checked]:border-0"
                         />
                       </div>
                     </div>
