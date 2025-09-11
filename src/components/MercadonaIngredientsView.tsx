@@ -302,17 +302,17 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
               variant="outline"
               size="sm"
               onClick={() => setSelectedSupermarket(supermarket)}
-              className={`rounded-lg px-3 py-2 h-auto flex flex-col items-center gap-1 transition-all ${
+              className={`rounded-lg px-3 py-2 h-auto flex flex-col items-start gap-1 transition-all ${
                 isSelected 
-                  ? 'border-2 border-black bg-white text-black hover:bg-gray-50' 
+                  ? 'border border-black bg-white text-black hover:bg-gray-50' 
                   : 'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
               }`}
             >
               <div className="flex items-center gap-2">
-                <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-5 h-5 object-contain" />
+                <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-6 h-6 object-contain" />
                 <span className="text-sm font-medium">{supermarket}</span>
               </div>
-              <span className={`text-sm ${getPriceColor()}`}>desde {price.toFixed(2)}€/ración</span>
+              <span className="text-sm text-muted-foreground">DESDE {price.toFixed(2)}€/ración</span>
             </Button>
           );
         })}
