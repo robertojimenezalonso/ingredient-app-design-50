@@ -286,13 +286,13 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       
       
       <div className="flex gap-2 mb-4">
-        <button className="px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium">
+        <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">
           Ingredientes
         </button>
-        <button className="px-4 py-2 bg-muted text-muted-foreground rounded-full text-sm">
+        <button className="px-4 py-2 bg-muted text-muted-foreground rounded-lg text-sm">
           Nutrición
         </button>
-        <button className="px-4 py-2 bg-muted text-muted-foreground rounded-full text-sm">
+        <button className="px-4 py-2 bg-muted text-muted-foreground rounded-lg text-sm">
           Pasos
         </button>
       </div>
