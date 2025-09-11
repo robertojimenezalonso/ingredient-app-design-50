@@ -339,7 +339,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <CardContent className="p-3">
                   {/* Sección superior: Ingrediente original de la receta */}
                   {recipeIngredient && (
-                    <div className="flex items-center justify-between pb-2 border-b border-gray-200 mb-2">
+                    <div className="flex items-center justify-between p-3">
                       <div className="flex items-center gap-2">
                         <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-full">
                           <IconComponent size={12} className="text-gray-600" />
@@ -349,12 +349,15 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                             {recipeIngredient.name}
                           </h4>
                           <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                            {recipeIngredient.unit}
+                            {usage.recipeAmount}
                           </Badge>
                         </div>
                       </div>
                       
-                      <div className="flex items-center">
+                      <div className="flex items-center gap-3">
+                        <span className="font-medium text-sm">
+                          {usage.totalPrice.toFixed(2)}€
+                        </span>
                         <Checkbox
                           checked={isSelected}
                           onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
@@ -365,7 +368,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                   )}
                   
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="bg-gray-50 rounded-lg p-3">
+                  <div className="bg-gray-50 -mx-3 -mb-3 p-3 rounded-b-lg">
                     <div className="flex gap-3">
                       <div className="flex items-center">
                         <button className="flex items-center gap-1 text-xs text-gray-500 mr-2">
