@@ -20,6 +20,9 @@ import {
   Cookie,
   Coffee
 } from 'lucide-react';
+import mercadonaLogo from '@/assets/mercadona-logo.png';
+import lidlLogo from '@/assets/lidl-logo.png';
+import carrefourLogo from '@/assets/carrefour-logo.png';
 
 interface SupermarketIngredient {
   id: string;
@@ -281,6 +284,15 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             }
           };
           
+          const getSupermarketLogo = () => {
+            switch (supermarket) {
+              case 'Mercadona': return mercadonaLogo;
+              case 'Lidl': return lidlLogo;
+              case 'Carrefour': return carrefourLogo;
+              default: return null;
+            }
+          };
+          
           return (
             <Button
               key={supermarket}
@@ -293,6 +305,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                   : 'bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200'
               }`}
             >
+              <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-4 h-4 object-contain" />
               <span>{supermarket}</span>
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getPriceColor()}`}>
                 {price.toFixed(2)}€
