@@ -434,7 +434,8 @@ const RecipeDetailPage = () => {
     }
   };
   const adjustedCalories = Math.round(recipe.calories * servings / recipe.servings);
-  return <div className="min-h-screen bg-background pb-24">
+  return (
+    <div className="min-h-screen bg-background pb-24">
       {/* Header */}
       <div className="relative">
         <ImageLoader
@@ -454,30 +455,36 @@ const RecipeDetailPage = () => {
       </div>
 
       <div className="px-4 mt-4 relative z-10">
-          {/* Title */}
-          <div className="mb-4">
-            <h1 className="text-2xl font-bold mb-4">{recipe.title}</h1>
+          {/* Title and Description */}
+          <div className="mb-6">
+            <h1 className="text-2xl font-bold mb-2">{recipe.title}</h1>
+            <p className="text-muted-foreground text-base">Una deliciosa receta que te encantará.</p>
           </div>
 
-
-
-          {/* Servings selector */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <input type="number" inputMode="numeric" min="0" max="10" value={servingsInput} onChange={handleServingsInputChange} onBlur={handleServingsInputBlur} className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center text-lg font-bold text-center border-none focus:outline-none focus:ring-2 focus:ring-gray-400" />
+          {/* Servings and Category selector */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3 bg-muted px-4 py-3 rounded-lg">
+              <input type="number" inputMode="numeric" min="0" max="10" value={servingsInput} onChange={handleServingsInputChange} onBlur={handleServingsInputBlur} className="w-8 text-lg font-bold text-center bg-transparent border-none focus:outline-none" />
               <span className="text-base font-medium">{servings === 1 ? 'Ración' : 'Raciones'}</span>
             </div>
-            {/* Calories and time */}
-            <div className="flex items-center gap-6">
-              <div className="flex items-center gap-2">
-                <Flame className="h-5 w-5 text-black" />
-                <span className="text-base font-medium">{adjustedCalories} kcal</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-black" />
-                <span className="text-base font-medium">{recipe.time} min.</span>
-              </div>
+            
+            <div className="flex items-center gap-3 bg-muted px-4 py-3 rounded-lg cursor-pointer">
+              <span className="text-base font-medium">Desayuno</span>
+              <ChevronDown className="h-4 w-4" />
             </div>
+          </div>
+
+          {/* Calories and time */}
+          <div className="flex items-center gap-6 mb-6">
+            <div className="flex items-center gap-2">
+              <Flame className="h-5 w-5 text-black" />
+              <span className="text-base font-bold">{adjustedCalories} kcal</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="h-5 w-5 text-black" />
+              <span className="text-base font-bold">{recipe.time} min.</span>
+            </div>
+          </div>
           </div>
 
       </div>
@@ -619,6 +626,7 @@ const RecipeDetailPage = () => {
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
 export default RecipeDetailPage;
