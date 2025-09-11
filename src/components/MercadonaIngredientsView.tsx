@@ -275,13 +275,16 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
           const price = getSupermarketPrice(supermarket);
           const isSelected = selectedSupermarket === supermarket;
+          
+          // Calcular colores según precio relativo
+          const allPrices = (['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map(s => getSupermarketPrice(s));
+          const minPrice = Math.min(...allPrices);
+          const maxPrice = Math.max(...allPrices);
+          
           const getPriceColor = () => {
-            switch (supermarket) {
-              case 'Mercadona': return 'bg-green-100 text-green-700';
-              case 'Lidl': return 'bg-orange-100 text-orange-700';
-              case 'Carrefour': return 'bg-red-100 text-red-700';
-              default: return 'bg-gray-100 text-gray-700';
-            }
+            if (price === minPrice) return 'text-green-600';
+            if (price === maxPrice) return 'text-red-600';
+            return 'text-orange-600';
           };
           
           const getSupermarketLogo = () => {
@@ -307,9 +310,9 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             >
               <div className="flex items-center gap-2">
                 <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-5 h-5 object-contain" />
-                <span className="text-xs font-medium">{supermarket}</span>
+                <span className="text-sm font-medium">{supermarket}</span>
               </div>
-              <span className="text-xs text-gray-500">desde {price.toFixed(2)}€</span>
+              <span className={`text-sm ${getPriceColor()}`}>desde {price.toFixed(2)}€/ración</span>
             </Button>
           );
         })}
