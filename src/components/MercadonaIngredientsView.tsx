@@ -311,52 +311,97 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         <span className="font-medium text-sm">por {(totalSelectedCost / servings).toFixed(2)}€</span>
       </div>
       
-      {/* Información nutricional */}
-      <div className="bg-muted/50 rounded-xl p-4 mb-4">
-        <div className="grid grid-cols-4 gap-4">
-          {/* Calorías */}
+      {/* Calorías arriba */}
+      <div className="text-center mb-4">
+        <div className="text-2xl font-bold">{Math.round((recipe.calories * servings) / recipe.servings)}</div>
+        <div className="text-sm text-muted-foreground">Calorías</div>
+      </div>
+      
+      {/* Información nutricional con círculos */}
+      <div className="bg-muted/50 rounded-xl p-6 mb-4">
+        <div className="grid grid-cols-3 gap-6">
+          {/* Hidratos */}
           <div className="text-center">
-            <div className="text-xs text-muted-foreground mb-1">Calorías</div>
-            <div className="text-sm font-semibold">{Math.round((recipe.calories * servings) / recipe.servings)}</div>
+            <div className="relative w-20 h-20 mx-auto mb-3">
+              <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+                {/* Círculo de fondo */}
+                <path
+                  d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+                  fill="none"
+                  stroke="#e5e7eb"
+                  strokeWidth="3"
+                />
+                {/* Círculo de progreso */}
+                <path
+                  d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+                  fill="none"
+                  stroke="#DE9A69"
+                  strokeWidth="3"
+                  strokeDasharray={`${Math.round((recipe.macros.carbs * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}, 100`}
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-lg font-bold">{Math.round((recipe.macros.carbs * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
+              </div>
+            </div>
+            <div className="text-sm font-medium mb-1">Hidratos</div>
+            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</div>
           </div>
           
           {/* Proteínas */}
           <div className="text-center">
-            <div className="flex items-center justify-center mb-1">
-              <img 
-                src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png"
-                alt="proteínas"
-                className="h-4 w-4"
-              />
+            <div className="relative w-20 h-20 mx-auto mb-3">
+              <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+                {/* Círculo de fondo */}
+                <path
+                  d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+                  fill="none"
+                  stroke="#e5e7eb"
+                  strokeWidth="3"
+                />
+                {/* Círculo de progreso */}
+                <path
+                  d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+                  fill="none"
+                  stroke="#DE6968"
+                  strokeWidth="3"
+                  strokeDasharray={`${Math.round((recipe.macros.protein * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}, 100`}
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-lg font-bold">{Math.round((recipe.macros.protein * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
+              </div>
             </div>
-            <div className="text-xs text-muted-foreground mb-1">Proteínas</div>
-            <div className="text-sm font-semibold">{Math.round((recipe.macros.protein * servings) / recipe.servings)}g</div>
-          </div>
-          
-          {/* Carbohidratos */}
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-1">
-              <img 
-                src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png"
-                alt="carbohidratos"
-                className="h-4 w-4"
-              />
-            </div>
-            <div className="text-xs text-muted-foreground mb-1">Hidratos</div>
-            <div className="text-sm font-semibold">{Math.round((recipe.macros.carbs * servings) / recipe.servings)}g</div>
+            <div className="text-sm font-medium mb-1">Proteínas</div>
+            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</div>
           </div>
           
           {/* Grasas */}
           <div className="text-center">
-            <div className="flex items-center justify-center mb-1">
-              <img 
-                src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png"
-                alt="grasas"
-                className="h-4 w-4"
-              />
+            <div className="relative w-20 h-20 mx-auto mb-3">
+              <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+                {/* Círculo de fondo */}
+                <path
+                  d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+                  fill="none"
+                  stroke="#e5e7eb"
+                  strokeWidth="3"
+                />
+                {/* Círculo de progreso */}
+                <path
+                  d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
+                  fill="none"
+                  stroke="#6998DD"
+                  strokeWidth="3"
+                  strokeDasharray={`${Math.round((recipe.macros.fat * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}, 100`}
+                />
+              </svg>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-lg font-bold">{Math.round((recipe.macros.fat * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
+              </div>
             </div>
-            <div className="text-xs text-muted-foreground mb-1">Grasas</div>
-            <div className="text-sm font-semibold">{Math.round((recipe.macros.fat * servings) / recipe.servings)}g</div>
+            <div className="text-sm font-medium mb-1">Grasas</div>
+            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</div>
           </div>
         </div>
       </div>
