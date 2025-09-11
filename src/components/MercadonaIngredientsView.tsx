@@ -332,9 +332,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       <div className="flex justify-start mb-4">
         <h3 className="text-lg font-semibold">Ingredientes</h3>
       </div>
-      <div className="text-sm text-muted-foreground mb-3">
-        {Math.round((recipe.calories * servings) / recipe.servings)} kcal • {Math.round((recipe.macros.protein * servings) / recipe.servings)}P • {Math.round((recipe.macros.fat * servings) / recipe.servings)}F • {Math.round((recipe.macros.carbs * servings) / recipe.servings)}C
-      </div>
       <div className="space-y-0">
         {supermarketIngredients.map((ingredient, index) => {
           const usage = calculateUsage(ingredient);
