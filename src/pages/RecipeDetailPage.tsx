@@ -455,10 +455,6 @@ const RecipeDetailPage = () => {
       </div>
 
       <div className="px-4 mt-4 relative z-10">
-          {/* Title and Description */}
-          <div className="mb-6">
-            <h1 className="text-xl font-semibold">{recipe.title} en {recipe.time} minutos</h1>
-          </div>
 
 
       </div>
