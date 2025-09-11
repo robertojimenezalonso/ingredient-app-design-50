@@ -115,7 +115,7 @@ export const ImageLoader = ({
             src={currentSrc}
             alt={alt}
             className={cn(
-              "transition-all duration-300 w-full h-full object-cover rounded-full",
+              "transition-all duration-300 w-full h-full object-cover",
               isLoading ? "opacity-0 scale-105" : "opacity-100 scale-100",
               className
             )}
