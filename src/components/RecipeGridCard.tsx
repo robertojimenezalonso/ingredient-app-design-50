@@ -36,25 +36,16 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
         className="flex gap-3 items-center cursor-pointer relative w-full transition-transform duration-200 h-[120px] py-4"
         onClick={handleClick}
       >
-        <div className="flex-shrink-0">
-          <ImageLoader
-            src={recipe.image} 
-            alt={recipe.title}
-            className="w-[120px] h-[120px] object-cover rounded-lg"
-            category={recipe.category}
-            priority={true} // Prioridad alta para imágenes de recetas
-            placeholder={
-              <div className="text-center">
-                <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-1" />
-                <div className="text-xs opacity-70">Cargando...</div>
-              </div>
-            }
-          />
-        </div>
-        
         <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
-          <div className="flex items-start relative">
-            <h3 className="font-normal text-base leading-tight flex-1 line-clamp-2 pr-4 text-left" style={{ marginRight: "60px" }}>
+          <div className="flex items-center gap-3 relative">
+            <ImageLoader
+              src={recipe.image} 
+              alt={recipe.title}
+              className="w-12 h-12 object-cover rounded-full flex-shrink-0"
+              category={recipe.category}
+              priority={true}
+            />
+            <h3 className="font-normal text-base leading-tight flex-1 line-clamp-2 text-left" style={{ marginRight: "60px" }}>
               {recipe.title}
             </h3>
             <span className="font-normal text-base leading-tight whitespace-nowrap absolute right-0 top-0">{price} €</span>
