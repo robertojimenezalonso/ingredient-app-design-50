@@ -370,7 +370,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                   )}
                   
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="bg-[#F5F5F5] p-3 rounded-lg">
+                  <div className="bg-[#FAFAFA] p-3 rounded-lg">
                     <div className="flex gap-3">
                       <div className="w-12 h-12 flex-shrink-0">
                         <ImageLoader
@@ -390,7 +390,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                               </Badge>
                             )}
                             <h5 className="text-sm leading-tight line-clamp-3">
-                              {ingredient.product_name} {usage.productAmount}
+                              {ingredient.product_name} <span className="whitespace-nowrap">{usage.productAmount}</span>
                             </h5>
                           </div>
                           <span className="font-medium text-sm">
