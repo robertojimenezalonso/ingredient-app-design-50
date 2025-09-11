@@ -457,8 +457,7 @@ const RecipeDetailPage = () => {
       <div className="px-4 mt-4 relative z-10">
           {/* Title and Description */}
           <div className="mb-6">
-            <h1 className="text-2xl font-bold mb-2">{recipe.title}</h1>
-            <p className="text-muted-foreground text-base">Una deliciosa receta que te encantará.</p>
+            <h1 className="text-xl">{recipe.title}</h1>
           </div>
 
           {/* Servings and Category selector */}
