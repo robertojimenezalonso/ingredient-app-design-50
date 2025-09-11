@@ -289,12 +289,12 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       {/* Floating card with supermarket info and pricing */}
       <div className="bg-white rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.08)] p-4 border border-gray-100">
         <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-white flex items-center justify-center">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-white flex items-center justify-center">
               <img 
                 src="/lovable-uploads/b8883c4e-84a6-4389-ba4a-ca0ca802b6fb.png" 
                 alt="Mercadona logo" 
-                className="w-8 h-8 object-contain" 
+                className="w-6 h-6 object-contain" 
               />
             </div>
             <span className="font-medium text-base">Mercadona</span>
