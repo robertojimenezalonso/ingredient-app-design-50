@@ -474,7 +474,7 @@ const RecipeDetailPage = () => {
               </div>
             </div>
             
-            <div className="flex items-center gap-3 bg-muted px-4 py-3 rounded-lg">
+            <div className="flex items-center gap-2">
               <span className="text-base font-medium">Desayuno</span>
               <ChevronDown className="h-4 w-4" />
             </div>
