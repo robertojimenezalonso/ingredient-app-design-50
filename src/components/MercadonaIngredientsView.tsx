@@ -311,13 +311,13 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <div className="py-4">
                   
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="bg-[#FAFAFA] p-3 rounded-lg">
+                  <div className="p-3">
                     <div className="flex gap-3">
-                      <div className="w-12 h-12 flex-shrink-0">
+                      <div className="w-16 h-16 flex-shrink-0">
                         <ImageLoader
                           src={ingredient.image_url}
                           alt={ingredient.product_name}
-                          className="w-full h-full rounded-full object-cover"
+                          className="w-full h-full rounded-lg object-cover"
                           priority={true}
                         />
                       </div>
