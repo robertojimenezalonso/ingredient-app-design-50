@@ -324,8 +324,8 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         )}
       </div>
       
-      <div className="grid gap-2">
-        {sortedIngredients.map((ingredient) => {
+      <div className="space-y-0">
+        {sortedIngredients.map((ingredient, index) => {
           const usage = calculateUsage(ingredient);
           const isSelected = selectedIngredients.has(ingredient.id);
           const percentageColor = getPercentageColor(usage.percentage);
@@ -335,11 +335,11 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             const IconComponent = recipeIngredient ? getIngredientIcon(recipeIngredient.name) : ChefHat;
             
             return (
-              <Card key={ingredient.id} className="transition-all duration-200 hover:shadow-sm">
-                <CardContent className="p-3">
+              <div key={ingredient.id}>
+                <div className="py-3">
                   {/* Sección superior: Ingrediente original de la receta */}
                   {recipeIngredient && (
-                    <div className="flex items-center justify-between p-3">
+                    <div className="flex items-center justify-between px-3 pb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-full">
                           <IconComponent size={12} className="text-gray-600" />
@@ -354,10 +354,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-3">
-                        <span className="font-medium text-sm">
-                          {usage.totalPrice.toFixed(2)}€
-                        </span>
+                      <div className="flex items-center">
                         <Checkbox
                           checked={isSelected}
                           onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
@@ -368,7 +365,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                   )}
                   
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="bg-gray-50 -mx-3 -mb-3 p-3 rounded-b-lg">
+                  <div className="bg-gray-50 p-3">
                     <div className="flex gap-3">
                       <div className="flex items-center">
                         <button className="flex items-center gap-1 text-xs text-gray-500 mr-2">
@@ -395,9 +392,14 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                               {usage.unitsNeeded}X
                             </Badge>
                           )}
-                          <h5 className="font-medium text-sm line-clamp-2 text-left leading-tight">
-                            {ingredient.product_name}
-                          </h5>
+                          <div className="flex-1 flex items-start justify-between">
+                            <h5 className="font-medium text-sm line-clamp-2 text-left leading-tight">
+                              {ingredient.product_name}
+                            </h5>
+                            <span className="font-medium text-sm ml-2">
+                              {usage.totalPrice.toFixed(2)}€
+                            </span>
+                          </div>
                         </div>
                         
                         <div className="text-xs text-gray-500">
@@ -412,23 +414,21 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                           )}
                         </div>
                         
-                        <div className="flex items-center justify-between mt-1">
-                          {usage.unitsNeeded > 1 && (
-                            <div className="text-xs text-gray-500">
-                              {usage.unitPrice.toFixed(2)}€/ud
-                            </div>
-                          )}
-                          <div className="text-right">
-                            <span className="font-medium text-sm">
-                              {usage.totalPrice.toFixed(2)}€
-                            </span>
+                        {usage.unitsNeeded > 1 && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            {usage.unitPrice.toFixed(2)}€/ud
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+                
+                {/* Separador entre ingredientes, excepto para el último */}
+                {index < sortedIngredients.length - 1 && (
+                  <div className="border-b border-gray-200"></div>
+                )}
+              </div>
             );
           }
         })}
