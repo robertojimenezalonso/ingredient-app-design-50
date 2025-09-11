@@ -475,7 +475,7 @@ const RecipeDetailPage = () => {
             </div>
             
             <div className="flex items-center gap-2">
-              <span className="text-base font-medium">Desayuno</span>
+              <span className="text-base font-medium">Comida</span>
               <ChevronDown className="h-4 w-4" />
             </div>
           </div>
