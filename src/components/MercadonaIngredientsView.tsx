@@ -66,14 +66,10 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       data?.forEach(ingredient => {
         const name = ingredient.product_name.toLowerCase();
         // Seleccionar todos los ingredientes EXCEPTO sal, pimienta y aceite
-        // PERO incluir el tomate que debe estar seleccionado por defecto
         if (!name.includes('sal') && !name.includes('pimienta') && !name.includes('aceite')) {
           autoSelected.add(ingredient.id);
         }
-        // Forzar selección del tomate
-        if (name.includes('tomate')) {
-          autoSelected.add(ingredient.id);
-        }
+        // Los ingredientes sal, pimienta y aceite aparecerán en la lista pero no estarán pre-seleccionados
       });
       setSelectedIngredients(autoSelected);
       
