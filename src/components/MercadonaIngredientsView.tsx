@@ -304,7 +304,10 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       
       {/* Título y selector de raciones */}
       <div className="mb-4">
-        <h2 className="text-lg font-semibold mb-3">{recipe.title}</h2>
+        <h2 className="text-lg font-semibold mb-1">{recipe.title}</h2>
+        <div className="text-sm text-muted-foreground mb-3">
+          {Math.round((recipe.calories * servings) / recipe.servings)} kcal • {Math.round((recipe.macros.protein * servings) / recipe.servings)}P • {Math.round((recipe.macros.fat * servings) / recipe.servings)}F • {Math.round((recipe.macros.carbs * servings) / recipe.servings)}C
+        </div>
         <div className="flex items-center justify-between">
           <div className="text-lg font-medium">{(totalSelectedCost / servings).toFixed(2)}€</div>
           <div className="bg-muted/50 px-3 py-2 rounded-xl text-center">
