@@ -446,8 +446,17 @@ const RecipeDetailPage = () => {
       </div>
 
       <div className="px-4 mt-4 relative z-10">
-
-
+        {/* Título con imagen de la receta */}
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+            <img 
+              src={recipe.image} 
+              alt={recipe.title} 
+              className="w-full h-full object-cover" 
+            />
+          </div>
+          <h2 className="text-lg font-semibold">{recipe.title}</h2>
+        </div>
       </div>
 
       {/* Separator */}

@@ -281,17 +281,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
 
   return (
     <div className="space-y-4">
-      {/* Título con imagen de la receta */}
-      <div className="mb-4 flex items-center gap-3">
-        <div className="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
-          <img 
-            src={recipe.image} 
-            alt={recipe.title} 
-            className="w-full h-full object-cover" 
-          />
-        </div>
-        <h2 className="text-lg font-semibold">{recipe.title}</h2>
-      </div>
       
       {/* Floating card with supermarket info and pricing */}
       <div className="bg-white rounded-xl shadow-[0_0_15px_rgba(0,0,0,0.08)] p-4 border border-gray-100">
