@@ -286,7 +286,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
           
           const getSupermarketLogo = () => {
             switch (supermarket) {
-              case 'Mercadona': return mercadonaLogo;
+              case 'Mercadona': return '/lovable-uploads/b8883c4e-84a6-4389-ba4a-ca0ca802b6fb.png';
               case 'Lidl': return lidlLogo;
               case 'Carrefour': return carrefourLogo;
               default: return null;
