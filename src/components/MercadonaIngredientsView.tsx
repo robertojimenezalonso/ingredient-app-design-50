@@ -320,7 +320,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         </div>
         
         <div className="mt-3 pt-3 border-t border-gray-100">
-          <Button variant="secondary" size="sm" className="w-full text-sm flex items-center justify-center gap-2">
+          <Button variant="secondary" size="sm" className="w-full text-sm flex items-center justify-between gap-2">
             <span>Mejor precio {(totalSelectedCost * 0.85).toFixed(2)}€</span>
             <span className="text-gray-500">ver alternativas</span>
             <ChevronRight size={16} />
