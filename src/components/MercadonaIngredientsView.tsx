@@ -312,18 +312,21 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       </div>
       
       {/* Calorías arriba */}
-      <div className="text-center mb-4">
-        <div className="text-2xl font-bold">{Math.round((recipe.calories * servings) / recipe.servings)}</div>
-        <div className="text-sm text-muted-foreground">Calorías</div>
+      <div className="text-center mb-3">
+        <div className="text-xl font-bold">{Math.round((recipe.calories * servings) / recipe.servings)}</div>
+        <div className="text-xs text-muted-foreground">Calorías</div>
       </div>
       
       {/* Información nutricional con círculos */}
-      <div className="bg-muted/50 rounded-xl p-6 mb-4">
-        <div className="grid grid-cols-3 gap-6">
+      <div className="bg-muted/50 rounded-xl p-4 mb-4">
+        <div className="text-center mb-3">
+          <div className="text-sm font-medium">Información nutricional</div>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
           {/* Hidratos */}
           <div className="text-center">
-            <div className="relative w-20 h-20 mx-auto mb-3">
-              <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+            <div className="relative w-16 h-16 mx-auto mb-2">
+              <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 36 36">
                 {/* Círculo de fondo */}
                 <path
                   d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
@@ -341,17 +344,17 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-lg font-bold">{Math.round((recipe.macros.carbs * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
+                <span className="text-sm font-normal">{Math.round((recipe.macros.carbs * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-sm font-medium mb-1">Hidratos</div>
-            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</div>
+            <div className="text-xs font-medium mb-1">Hidratos</div>
+            <div className="text-xs text-muted-foreground">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</div>
           </div>
           
           {/* Proteínas */}
           <div className="text-center">
-            <div className="relative w-20 h-20 mx-auto mb-3">
-              <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+            <div className="relative w-16 h-16 mx-auto mb-2">
+              <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 36 36">
                 {/* Círculo de fondo */}
                 <path
                   d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
@@ -369,17 +372,17 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-lg font-bold">{Math.round((recipe.macros.protein * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
+                <span className="text-sm font-normal">{Math.round((recipe.macros.protein * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-sm font-medium mb-1">Proteínas</div>
-            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</div>
+            <div className="text-xs font-medium mb-1">Proteínas</div>
+            <div className="text-xs text-muted-foreground">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</div>
           </div>
           
           {/* Grasas */}
           <div className="text-center">
-            <div className="relative w-20 h-20 mx-auto mb-3">
-              <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+            <div className="relative w-16 h-16 mx-auto mb-2">
+              <svg className="w-16 h-16 transform -rotate-90" viewBox="0 0 36 36">
                 {/* Círculo de fondo */}
                 <path
                   d="m18,2.0845 a 15.9155,15.9155 0 0,1 0,31.831 a 15.9155,15.9155 0 0,1 0,-31.831"
@@ -397,11 +400,11 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 />
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="text-lg font-bold">{Math.round((recipe.macros.fat * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
+                <span className="text-sm font-normal">{Math.round((recipe.macros.fat * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-sm font-medium mb-1">Grasas</div>
-            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</div>
+            <div className="text-xs font-medium mb-1">Grasas</div>
+            <div className="text-xs text-muted-foreground">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</div>
           </div>
         </div>
       </div>
