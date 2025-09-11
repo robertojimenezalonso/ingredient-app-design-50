@@ -33,6 +33,7 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
   const filteredIngredients = groupedIngredients
     .sort((a, b) => {
       // Selected ingredients go first, then non-selected
+      console.log(`Sorting: ${a.name} (selected: ${a.isSelected}) vs ${b.name} (selected: ${b.isSelected})`);
       if (a.isSelected && !b.isSelected) return -1;
       if (!a.isSelected && b.isSelected) return 1;
       return 0;
@@ -40,6 +41,8 @@ export const IngredientsView = ({ recipes }: IngredientsViewProps) => {
     .filter(ingredient =>
       ingredient.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
+  console.log('Filtered ingredients order:', filteredIngredients.map(ing => `${ing.name} (selected: ${ing.isSelected})`));
 
   const handleAddIngredient = () => {
     toast({
