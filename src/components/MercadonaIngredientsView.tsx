@@ -341,7 +341,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             
             return (
               <div key={ingredient.id}>
-                <div className="py-3">
+                <div className="py-4">
                   {/* Sección superior: Ingrediente original de la receta */}
                   {recipeIngredient && (
                     <div className="flex items-center justify-between px-3 pb-2">
@@ -424,7 +424,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 
                 {/* Separador entre ingredientes, excepto para el último */}
                 {index < sortedIngredients.length - 1 && (
-                  <div className="border-b border-gray-200"></div>
+                  <div className="border-b border-gray-200 my-2"></div>
                 )}
               </div>
             );
