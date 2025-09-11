@@ -282,61 +282,57 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       </div>
       
       {/* Selector de supermercados con precios */}
-      <div className="flex gap-2">
-        {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
-          const price = getSupermarketPrice(supermarket);
-          const isSelected = selectedSupermarket === supermarket;
-          
-          // Calcular colores según precio relativo
-          const allPrices = (['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map(s => getSupermarketPrice(s));
-          const minPrice = Math.min(...allPrices);
-          const maxPrice = Math.max(...allPrices);
-          
-          const getPriceColor = () => {
-            if (price === minPrice) return 'text-green-600';
-            if (price === maxPrice) return 'text-red-600';
-            return 'text-orange-600';
-          };
-          
-          const getPriceTagColor = () => {
-            if (price === minPrice) return 'bg-green-100 text-green-700';
-            if (price === maxPrice) return 'bg-red-100 text-red-700';
-            return 'bg-orange-100 text-orange-700';
-          };
-          
-          const getSupermarketLogo = () => {
-            switch (supermarket) {
-              case 'Mercadona': return '/lovable-uploads/b8883c4e-84a6-4389-ba4a-ca0ca802b6fb.png';
-              case 'Lidl': return lidlLogo;
-              case 'Carrefour': return carrefourLogo;
-              default: return null;
-            }
-          };
-          
-          return (
-            <Button
-              key={supermarket}
-              variant="outline"
-              size="sm"
-              onClick={() => setSelectedSupermarket(supermarket)}
-              className={`rounded-lg px-4 py-3 h-auto flex items-start gap-3 transition-all min-w-32 ${
-                isSelected 
-                  ? 'border-2 border-black bg-white text-black hover:bg-gray-50' 
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border-0'
-              }`}
-            >
-              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 flex items-center justify-center">
-                <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-8 h-8 object-contain" />
-              </div>
-              <div className="flex flex-col items-start gap-1 flex-1">
-                <span className={`text-lg font-semibold ${getPriceColor()}`}>{supermarket}</span>
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPriceTagColor()}`}>
-                  {price.toFixed(2)}€/ración
-                </span>
-              </div>
-            </Button>
-          );
-        })}
+      <div className="overflow-x-auto">
+        <div className="flex gap-0 min-w-max">
+          {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
+            const price = getSupermarketPrice(supermarket);
+            const isSelected = selectedSupermarket === supermarket;
+            
+            // Calcular colores según precio relativo
+            const allPrices = (['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map(s => getSupermarketPrice(s));
+            const minPrice = Math.min(...allPrices);
+            const maxPrice = Math.max(...allPrices);
+            
+            const getPriceColor = () => {
+              if (price === minPrice) return 'text-green-600';
+              if (price === maxPrice) return 'text-red-600';
+              return 'text-orange-600';
+            };
+            
+            const getSupermarketLogo = () => {
+              switch (supermarket) {
+                case 'Mercadona': return '/lovable-uploads/b8883c4e-84a6-4389-ba4a-ca0ca802b6fb.png';
+                case 'Lidl': return lidlLogo;
+                case 'Carrefour': return carrefourLogo;
+                default: return null;
+              }
+            };
+            
+            return (
+              <Button
+                key={supermarket}
+                variant="ghost"
+                size="sm"
+                onClick={() => setSelectedSupermarket(supermarket)}
+                className={`rounded-none px-6 py-4 h-auto flex items-center gap-3 transition-all min-w-48 border-b-2 ${
+                  isSelected 
+                    ? 'border-b-black bg-white text-black' 
+                    : 'border-b-transparent bg-white text-gray-700 hover:bg-gray-50'
+                }`}
+              >
+                <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 flex items-center justify-center">
+                  <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-6 h-6 object-contain" />
+                </div>
+                <div className="flex flex-col items-start gap-1 flex-1">
+                  <span className="text-lg font-semibold">{supermarket}</span>
+                  <span className={`text-xs font-medium ${getPriceColor()}`}>
+                    {price.toFixed(2)}€/ración
+                  </span>
+                </div>
+              </Button>
+            );
+          })}
+        </div>
       </div>
       
       <div className="flex justify-start mb-4">
