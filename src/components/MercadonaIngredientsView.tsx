@@ -370,7 +370,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                   )}
                   
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="bg-gray-100 p-3 rounded-lg">
+                  <div className="bg-[#F5F5F5] p-3 rounded-lg">
                     <div className="flex gap-3">
                       <div className="w-12 h-12 flex-shrink-0">
                         <ImageLoader
