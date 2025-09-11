@@ -6,6 +6,7 @@ import { Checkbox } from './ui/checkbox';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { 
   Apple, 
   Beef, 
@@ -19,7 +20,8 @@ import {
   Salad,
   Cookie,
   Coffee,
-  ChevronRight
+  ChevronRight,
+  Flame
 } from 'lucide-react';
 import mercadonaLogo from '@/assets/mercadona-logo.png';
 import lidlLogo from '@/assets/lidl-logo.png';
@@ -39,11 +41,13 @@ interface MercadonaIngredientsViewProps {
   recipe: Recipe;
   servings: number;
   onSelectionChange?: (selectedIngredients: string[], totalCost: number) => void;
+  completedSteps?: number[];
+  onStepToggle?: (stepIndex: number) => void;
 }
 
 type SupermarketType = 'Mercadona' | 'Lidl' | 'Carrefour';
 
-export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }: MercadonaIngredientsViewProps) => {
+export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, completedSteps = [], onStepToggle }: MercadonaIngredientsViewProps) => {
   const [supermarketIngredients, setSupermarketIngredients] = useState<SupermarketIngredient[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
   const [selectedSupermarket, setSelectedSupermarket] = useState<SupermarketType>('Mercadona');
@@ -281,32 +285,24 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
 
   return (
     <div className="space-y-4">
-      
-      
-      
-      
-      <div className="flex gap-2 mb-4">
-        <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium">
-          Ingredientes
-        </button>
-        <button className="px-4 py-2 bg-muted text-muted-foreground rounded-lg text-sm">
-          Nutrición
-        </button>
-        <button className="px-4 py-2 bg-muted text-muted-foreground rounded-lg text-sm">
-          Pasos
-        </button>
-      </div>
-      <div className="space-y-0">
-        {supermarketIngredients.map((ingredient, index) => {
-          const usage = calculateUsage(ingredient);
-          const isSelected = selectedIngredients.has(ingredient.id);
-          const percentageColor = getPercentageColor(usage.percentage);
+      <Tabs defaultValue="ingredientes" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="ingredientes">Ingredientes</TabsTrigger>
+          <TabsTrigger value="nutricion">Nutrición</TabsTrigger>
+          <TabsTrigger value="pasos">Pasos</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="ingredientes" className="space-y-0 mt-4">
+          {supermarketIngredients.map((ingredient, index) => {
+            const usage = calculateUsage(ingredient);
+            const isSelected = selectedIngredients.has(ingredient.id);
+            const percentageColor = getPercentageColor(usage.percentage);
 
-          {
-            const recipeIngredient = findMatchingRecipeIngredient(ingredient.product_name);
-            const IconComponent = recipeIngredient ? getIngredientIcon(recipeIngredient.name) : ChefHat;
-            
-            return (
+            {
+              const recipeIngredient = findMatchingRecipeIngredient(ingredient.product_name);
+              const IconComponent = recipeIngredient ? getIngredientIcon(recipeIngredient.name) : ChefHat;
+              
+              return (
               <div key={ingredient.id}>
                 <div className="py-2">
                   
@@ -371,12 +367,121 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
               </div>
             );
           }
-        })}
-      </div>
-      
-      <div className="text-xs text-muted-foreground text-center">
-        💡 Sal, pimienta y aceite no están seleccionados por defecto
-      </div>
+          })}
+          
+          <div className="text-xs text-muted-foreground text-center">
+            💡 Sal, pimienta y aceite no están seleccionados por defecto
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="nutricion" className="space-y-4 mt-4">
+          <div className="space-y-3">
+            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
+                  <Flame className="h-3 w-3 text-white" />
+                </div>
+                <span className="font-medium">Calorías</span>
+              </div>
+              <span className="font-bold">{Math.round(recipe.calories * servings / recipe.servings)} kcal</span>
+            </div>
+            
+            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">H</span>
+                </div>
+                <span className="font-medium">Hidratos</span>
+              </div>
+              <span className="font-bold">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</span>
+            </div>
+            
+            <div className="text-sm text-muted-foreground ml-9 space-y-2 pb-3 border-b-2 border-muted">
+              <div className="flex justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-gray-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">Fi</span>
+                  </div>
+                  <span>Fibra</span>
+                </div>
+                <span>2 g</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="ml-8">Azúcares</span>
+                <span>3 g</span>
+              </div>
+            </div>
+            
+            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">P</span>
+                </div>
+                <span className="font-medium">Proteínas</span>
+              </div>
+              <span className="font-bold">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</span>
+            </div>
+            
+            <div className="border-b-2 border-muted pb-3">
+              <div className="flex justify-between items-center py-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">G</span>
+                  </div>
+                  <span className="font-medium">Grasas</span>
+                </div>
+                <span className="font-bold">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</span>
+              </div>
+              
+              <div className="text-sm text-muted-foreground ml-9 space-y-2 mt-2">
+                <div className="flex justify-between">
+                  <span>Grasas saturadas</span>
+                  <span>7 g</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Grasas insaturadas</span>
+                  <span>6,1 g</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-3 pt-3">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Colesterol</span>
+                <span className="font-bold">31,6 mg</span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Sodio</span>
+                <span className="font-bold">74,1 mg</span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Potasio</span>
+                <span className="font-bold">1117,6 mg</span>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+        
+        <TabsContent value="pasos" className="space-y-4 mt-4">
+          <div className="space-y-0">
+            {recipe.instructions.map((instruction, index) => (
+              <div key={index}>
+                <div className="flex items-center gap-4 py-3 cursor-pointer" onClick={() => onStepToggle?.(index)}>
+                  <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-medium">{index + 1}</span>
+                  </div>
+                  <p className={`text-sm leading-relaxed flex-1 ${completedSteps.includes(index) ? 'line-through opacity-50' : ''}`}>
+                    {instruction}
+                  </p>
+                </div>
+                {index < recipe.instructions.length - 1 && <div className="border-b border-border"></div>}
+              </div>
+            ))}
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
