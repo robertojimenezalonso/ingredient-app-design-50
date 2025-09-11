@@ -466,11 +466,11 @@ const RecipeDetailPage = () => {
             <div className="flex items-center gap-6">
               <div className="flex items-center gap-2">
                 <Flame className="h-5 w-5 text-black" />
-                <span className="text-base font-bold">{adjustedCalories} kcal</span>
+                <span className="text-base font-medium">{adjustedCalories} kcal</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-5 w-5 text-black" />
-                <span className="text-base font-bold">{recipe.time} min.</span>
+                <span className="text-base font-medium">{recipe.time} min.</span>
               </div>
             </div>
             
