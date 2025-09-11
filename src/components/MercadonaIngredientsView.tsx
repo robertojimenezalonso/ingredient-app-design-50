@@ -343,25 +343,25 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                             {usage.recipeAmount !== 'No usado' && (
                               <div>
                                 <span>{usage.recipeAmount} en la receta • {usage.percentage}% de uso</span>
-                                <div className="flex items-center gap-2 mt-1">
-                                  <span className="font-medium text-sm text-gray-800">
-                                    {usage.totalPrice.toFixed(2)}€
-                                  </span>
-                                  <button className="flex items-center gap-1 text-xs text-gray-500">
-                                    <span className="font-medium">+2</span>
-                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                  </button>
+                                <div className="font-medium text-sm text-gray-800 mt-1">
+                                  {usage.totalPrice.toFixed(2)}€
                                 </div>
                               </div>
                             )}
                           </div>
-                          <Checkbox
-                            checked={isSelected}
-                            onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                            className="border-gray-300 data-[state=checked]:border-0"
-                          />
+                          <div className="flex items-center gap-3">
+                            <button className="flex items-center gap-1 text-xs text-gray-500">
+                              <span className="font-medium">+2</span>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </button>
+                            <Checkbox
+                              checked={isSelected}
+                              onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                              className="border-gray-300 data-[state=checked]:border-0"
+                            />
+                          </div>
                         </div>
                         
                         {usage.unitsNeeded > 1 && (
