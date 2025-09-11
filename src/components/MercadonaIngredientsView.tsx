@@ -298,10 +298,10 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             return 'text-orange-600';
           };
           
-          const getBackgroundColor = () => {
-            if (price === minPrice) return 'bg-green-50 border-green-200';
-            if (price === maxPrice) return 'bg-red-50 border-red-200';
-            return 'bg-orange-50 border-orange-200';
+          const getPriceTagColor = () => {
+            if (price === minPrice) return 'bg-green-100 text-green-700';
+            if (price === maxPrice) return 'bg-red-100 text-red-700';
+            return 'bg-orange-100 text-orange-700';
           };
           
           const getSupermarketLogo = () => {
@@ -319,17 +319,21 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
               variant="outline"
               size="sm"
               onClick={() => setSelectedSupermarket(supermarket)}
-              className={`rounded-lg px-3 py-2 h-auto flex flex-col items-start gap-1 transition-all ${
+              className={`rounded-lg px-4 py-3 h-auto flex items-start gap-3 transition-all min-w-32 ${
                 isSelected 
-                  ? `border-2 border-black ${getBackgroundColor()} text-black hover:opacity-90` 
-                  : `${getBackgroundColor()} text-gray-700 hover:opacity-80 border-0`
+                  ? 'border-2 border-black bg-white text-black hover:bg-gray-50' 
+                  : 'bg-white text-gray-700 hover:bg-gray-50 border-0'
               }`}
             >
-              <div className="flex items-center gap-2">
-                <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-6 h-6 object-contain" />
-                <span className="text-lg font-semibold">{supermarket}</span>
+              <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 flex items-center justify-center">
+                <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-8 h-8 object-contain" />
               </div>
-              <span className="text-xs text-gray-500">Desde <span className={getPriceColor()}>{price.toFixed(2)}</span>€/ración</span>
+              <div className="flex flex-col items-start gap-1 flex-1">
+                <span className={`text-lg font-semibold ${getPriceColor()}`}>{supermarket}</span>
+                <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPriceTagColor()}`}>
+                  {price.toFixed(2)}€/ración
+                </span>
+              </div>
             </Button>
           );
         })}
