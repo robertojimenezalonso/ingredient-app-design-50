@@ -466,9 +466,6 @@ const RecipeDetailPage = () => {
       <div className="w-full">
         {/* 1. INGREDIENTES */}
         <div className="px-4 mb-8">
-          <div className="flex justify-start mb-4">
-            <h3 className="text-lg font-semibold">Ingredientes</h3>
-          </div>
           <MercadonaIngredientsView 
             recipe={recipe}
             servings={servings}
