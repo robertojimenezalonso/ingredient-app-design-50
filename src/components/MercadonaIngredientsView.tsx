@@ -311,16 +311,11 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         <span className="font-medium text-sm">por {(totalSelectedCost / servings).toFixed(2)}€</span>
       </div>
       
-      {/* Calorías arriba */}
-      <div className="text-center mb-3">
-        <div className="text-xl font-bold">{Math.round((recipe.calories * servings) / recipe.servings)}</div>
-        <div className="text-xs text-muted-foreground">Calorías</div>
-      </div>
-      
       {/* Información nutricional con círculos */}
       <div className="bg-muted/50 rounded-xl p-4 mb-4">
-        <div className="text-center mb-3">
-          <div className="text-sm font-medium">Información nutricional</div>
+        <div className="text-left mb-3">
+          <div className="text-sm font-medium mb-1">Información nutricional por ración</div>
+          <div className="text-sm text-muted-foreground">{Math.round((recipe.calories * servings) / recipe.servings)} calorías</div>
         </div>
         <div className="grid grid-cols-3 gap-4">
           {/* Hidratos */}
@@ -347,8 +342,8 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <span className="text-sm font-normal">{Math.round((recipe.macros.carbs * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-xs font-medium mb-1">Hidratos</div>
-            <div className="text-xs text-muted-foreground">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</div>
+            <div className="text-sm font-medium mb-1">Hidratos</div>
+            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</div>
           </div>
           
           {/* Proteínas */}
@@ -375,8 +370,8 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <span className="text-sm font-normal">{Math.round((recipe.macros.protein * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-xs font-medium mb-1">Proteínas</div>
-            <div className="text-xs text-muted-foreground">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</div>
+            <div className="text-sm font-medium mb-1">Proteínas</div>
+            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</div>
           </div>
           
           {/* Grasas */}
@@ -403,8 +398,8 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <span className="text-sm font-normal">{Math.round((recipe.macros.fat * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-xs font-medium mb-1">Grasas</div>
-            <div className="text-xs text-muted-foreground">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</div>
+            <div className="text-sm font-medium mb-1">Grasas</div>
+            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</div>
           </div>
         </div>
       </div>
