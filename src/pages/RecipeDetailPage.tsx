@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
@@ -486,16 +485,13 @@ const RecipeDetailPage = () => {
       {/* Separator */}
       <div className="w-full h-2 bg-muted/50"></div>
 
-      {/* Tabs */}
-      <Tabs defaultValue="ingredientes" className="w-full">
-        <TabsList className="grid grid-cols-3 mx-4 mt-4 mb-4">
-          <TabsTrigger value="ingredientes">Ingredientes</TabsTrigger>
-          <TabsTrigger value="instrucciones">Pasos</TabsTrigger>
-          <TabsTrigger value="nutricion">Nutrición</TabsTrigger>
-        </TabsList>
-
-        {/* Ingredientes Tab */}
-        <TabsContent value="ingredientes" className="px-4 mb-8">
+      {/* Contenido sin tabs - todo en una página */}
+      <div className="w-full">
+        {/* 1. INGREDIENTES */}
+        <div className="px-4 mb-8">
+          <div className="flex justify-start mb-4">
+            <h3 className="text-lg font-semibold">Ingredientes</h3>
+          </div>
           <MercadonaIngredientsView 
             recipe={recipe}
             servings={servings}
@@ -503,29 +499,13 @@ const RecipeDetailPage = () => {
               console.log('🛒 Ingredientes selection:', selectedIds.length, 'ingredients, cost:', totalCost.toFixed(2), '€');
             }}
           />
-        </TabsContent>
+        </div>
 
-        {/* Instrucciones Tab */}
-        <TabsContent value="instrucciones" className="px-4 mb-8">
-          <div className="mb-6">
-            <div className="space-y-0 mt-4">
-              {recipe.instructions.map((instruction, index) => <div key={index}>
-                  <div className="flex items-center gap-4 py-3 cursor-pointer" onClick={() => handleStepToggle(index)}>
-                    <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium">{index + 1}</span>
-                    </div>
-                    <p className={`text-sm leading-relaxed flex-1 ${completedSteps.includes(index) ? 'line-through opacity-50' : ''}`}>
-                      {instruction}
-                    </p>
-                  </div>
-                  {index < recipe.instructions.length - 1 && <div className="border-b border-border"></div>}
-                </div>)}
-            </div>
+        {/* 2. NUTRICIÓN */}
+        <div className="px-4 mb-8">
+          <div className="flex justify-start mb-4">
+            <h3 className="text-lg font-semibold">Nutrición</h3>
           </div>
-        </TabsContent>
-
-        {/* Información nutricional Tab */}
-        <TabsContent value="nutricion" className="px-4 mb-8">
           <div className="mb-4">
             <div className="space-y-3">
               <div className="flex justify-between items-center py-3 border-b-2 border-muted">
@@ -615,8 +595,30 @@ const RecipeDetailPage = () => {
               </div>
             </div>
           </div>
-        </TabsContent>
-      </Tabs>
+        </div>
+
+        {/* 3. PASOS */}
+        <div className="px-4 mb-8">
+          <div className="flex justify-start mb-4">
+            <h3 className="text-lg font-semibold">Pasos</h3>
+          </div>
+          <div className="mb-6">
+            <div className="space-y-0 mt-4">
+              {recipe.instructions.map((instruction, index) => <div key={index}>
+                  <div className="flex items-center gap-4 py-3 cursor-pointer" onClick={() => handleStepToggle(index)}>
+                    <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
+                      <span className="text-sm font-medium">{index + 1}</span>
+                    </div>
+                    <p className={`text-sm leading-relaxed flex-1 ${completedSteps.includes(index) ? 'line-through opacity-50' : ''}`}>
+                      {instruction}
+                    </p>
+                  </div>
+                  {index < recipe.instructions.length - 1 && <div className="border-b border-border"></div>}
+                </div>)}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>;
 };
 export default RecipeDetailPage;

@@ -267,10 +267,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-center">
-        <h3 className="text-lg font-semibold">Ingredientes</h3>
-      </div>
-      
       {/* Selector de supermercados con precios */}
       <div className="flex gap-2">
         {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
