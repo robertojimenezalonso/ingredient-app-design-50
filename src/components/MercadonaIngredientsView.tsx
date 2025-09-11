@@ -62,8 +62,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
 
       if (error) throw error;
 
-      setSupermarketIngredients(data || []);
-      
       // Auto-seleccionar todos excepto sal, pimienta y aceite (pero incluir tomate)
       const autoSelected = new Set<string>();
       data?.forEach(ingredient => {
@@ -77,6 +75,18 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
           autoSelected.add(ingredient.id);
         }
       });
+      
+      // Ordenar ingredientes: seleccionados primero, no seleccionados después
+      const sortedData = data?.sort((a, b) => {
+        const aSelected = autoSelected.has(a.id);
+        const bSelected = autoSelected.has(b.id);
+        
+        if (aSelected && !bSelected) return -1;
+        if (!aSelected && bSelected) return 1;
+        return 0; // Mantener orden alfabético dentro de cada grupo
+      });
+
+      setSupermarketIngredients(sortedData || []);
       setSelectedIngredients(autoSelected);
       
     } catch (error) {
