@@ -329,12 +329,10 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 flex items-center justify-center">
                   <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-6 h-6 object-contain" />
                 </div>
-                <div className="flex flex-col items-start gap-1 flex-1">
-                  <span className="text-sm font-semibold">{supermarket}</span>
-                  <span className={`text-xs font-medium ${getPriceColor()}`}>
-                    {price.toFixed(2)}€/ración
-                  </span>
-                </div>
+                <span className="text-sm font-semibold flex-1">{supermarket}</span>
+                <span className={`text-xs px-2 py-1 rounded-full font-medium ${getPriceTagColor()}`}>
+                  {price.toFixed(2)}€
+                </span>
               </Button>
             );
           })}
