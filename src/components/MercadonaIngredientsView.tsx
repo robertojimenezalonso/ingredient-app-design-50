@@ -18,7 +18,8 @@ import {
   ChefHat,
   Salad,
   Cookie,
-  Coffee
+  Coffee,
+  ChevronRight
 } from 'lucide-react';
 import mercadonaLogo from '@/assets/mercadona-logo.png';
 import lidlLogo from '@/assets/lidl-logo.png';
@@ -315,6 +316,16 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
           </div>
           <div className="text-sm font-medium">
             {(totalSelectedCost / servings).toFixed(2)}€ por ración
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+          <Button variant="secondary" size="sm" className="text-sm">
+            Mejor precio 15%
+          </Button>
+          <div className="flex items-center gap-1 text-sm text-gray-600">
+            <span>ver alternativas</span>
+            <ChevronRight size={16} />
           </div>
         </div>
       </div>
