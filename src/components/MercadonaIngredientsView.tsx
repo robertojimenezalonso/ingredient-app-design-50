@@ -294,9 +294,9 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
         
         <TabsContent value="ingredientes" className="space-y-0 mt-4">
           {/* Mercadona Header */}
-          <div className="flex items-center gap-3 mb-4 px-3 py-3 bg-muted/50 rounded-lg">
-            <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8" />
-            <span className="font-semibold text-lg">Mercadona</span>
+          <div className="flex items-center gap-3 mb-4 px-3 py-3">
+            <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6" />
+            <span className="font-medium text-sm">En Mercadona</span>
           </div>
           
           {supermarketIngredients.map((ingredient, index) => {
