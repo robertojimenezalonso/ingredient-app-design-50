@@ -311,13 +311,13 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
           return (
             <Button
               key={supermarket}
-              variant={isSelected ? "default" : "outline"}
+              variant="ghost"
               size="sm"
               onClick={() => setSelectedSupermarket(supermarket)}
-              className="flex items-center gap-2 px-3 py-2 h-auto whitespace-nowrap"
+              className={`flex items-center gap-2 px-3 py-2 h-auto whitespace-nowrap bg-muted/50 hover:bg-muted/70 ${isSelected ? 'bg-muted' : ''}`}
             >
-              <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 flex items-center justify-center">
-                <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-4 h-4 object-contain" />
+              <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-white flex items-center justify-center">
+                <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-6 h-6 object-contain" />
               </div>
               <span className="text-sm font-medium">{supermarket}</span>
               <Badge variant="secondary" className={`text-xs px-2 py-0.5 ${getPriceTagColor()}`}>
