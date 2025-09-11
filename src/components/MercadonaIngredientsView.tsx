@@ -369,9 +369,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
           }
           })}
           
-          <div className="text-xs text-muted-foreground text-center">
-            💡 Sal, pimienta y aceite no están seleccionados por defecto
-          </div>
         </TabsContent>
         
         <TabsContent value="nutricion" className="space-y-4 mt-4">
