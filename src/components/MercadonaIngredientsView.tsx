@@ -322,7 +322,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
               className={`rounded-lg px-3 py-2 h-auto flex flex-col items-start gap-1 transition-all ${
                 isSelected 
                   ? `border-2 border-black ${getBackgroundColor()} text-black hover:opacity-90` 
-                  : `${getBackgroundColor()} text-gray-700 hover:opacity-80`
+                  : `${getBackgroundColor()} text-gray-700 hover:opacity-80 border-0`
               }`}
             >
               <div className="flex items-center gap-2">
