@@ -337,80 +337,87 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             return (
               <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-gray-400 shadow-sm' : 'hover:shadow-sm'}`}>
                 <CardContent className="p-3">
-                  {/* Mitad superior: Ingrediente de la receta */}
+                  {/* Sección superior: Ingrediente original de la receta */}
                   {recipeIngredient && (
-                    <div className="flex items-center gap-3 pb-2 border-b border-gray-200 mb-2">
-                      <div className="w-8 h-8 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-full">
-                        <IconComponent size={16} className="text-gray-600" />
+                    <div className="flex items-center justify-between pb-2 border-b border-gray-200 mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-full">
+                          <IconComponent size={12} className="text-gray-600" />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-sm font-medium text-gray-800">
+                            {recipeIngredient.name}
+                          </h4>
+                          <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                            {abbreviateUnit(recipeIngredient.unit)}
+                          </Badge>
+                        </div>
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium text-gray-800">
-                          {recipeIngredient.name}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          Necesitas: {usage.recipeAmount}
-                        </div>
+                      
+                      <div className="flex items-center gap-3">
+                        <span className="font-medium text-sm">
+                          {usage.totalPrice.toFixed(2)}€
+                        </span>
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                          className="border-gray-300"
+                        />
                       </div>
                     </div>
                   )}
                   
-                  {/* Mitad inferior: Producto del supermercado */}
-                  <div className="flex gap-3">
-                    <div className="w-12 h-12 flex-shrink-0">
-                      <ImageLoader
-                        src={ingredient.image_url}
-                        alt={ingredient.product_name}
-                        className="w-full h-full rounded-lg object-cover"
-                        priority={true}
-                      />
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-start mb-1">
-                        <div className="flex-1 mr-3">
-                          <div className="flex items-start gap-2 mb-1">
-                            {usage.unitsNeeded > 1 && (
-                              <Badge variant="secondary" className="text-xs font-bold bg-orange-100 text-orange-800 px-1 py-0.5">
-                                {usage.unitsNeeded}X
-                              </Badge>
-                            )}
-                            <h4 className="font-medium text-sm line-clamp-2 text-left leading-tight">
-                              {ingredient.product_name}
-                            </h4>
-                          </div>
-                          
-                          <div className="text-xs text-muted-foreground">
-                            {usage.productAmount}
-                            {usage.recipeAmount !== 'No usado' && (
-                              <>
-                                <span> · </span>
-                                <span className={`font-normal ${percentageColor}`}>
-                                  {usage.percentage}% usado
-                                </span>
-                              </>
-                            )}
-                          </div>
+                  {/* Sección inferior: Producto del supermercado */}
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <div className="flex gap-3">
+                      <div className="flex items-center">
+                        <button className="flex items-center gap-1 text-xs text-gray-500 mr-2">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                          <span className="font-medium">+2</span>
+                        </button>
+                      </div>
+                      
+                      <div className="w-12 h-12 flex-shrink-0">
+                        <ImageLoader
+                          src={ingredient.image_url}
+                          alt={ingredient.product_name}
+                          className="w-full h-full rounded-lg object-cover"
+                          priority={true}
+                        />
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start gap-2 mb-1">
+                          {usage.unitsNeeded > 1 && (
+                            <Badge variant="secondary" className="text-xs font-bold bg-orange-100 text-orange-800 px-1 py-0.5">
+                              {usage.unitsNeeded}X
+                            </Badge>
+                          )}
+                          <h5 className="font-medium text-sm line-clamp-2 text-left leading-tight">
+                            {ingredient.product_name}
+                          </h5>
                         </div>
                         
-                        <div className="text-right">
-                          <span className="font-medium text-sm">
-                            {usage.totalPrice.toFixed(2)}€
-                          </span>
-                          {usage.unitsNeeded > 1 && (
-                            <div className="text-xs text-muted-foreground">
-                              {usage.unitPrice.toFixed(2)}€/ud
-                            </div>
+                        <div className="text-xs text-gray-500">
+                          {usage.productAmount}
+                          {usage.recipeAmount !== 'No usado' && (
+                            <>
+                              <span> · </span>
+                              <span className="font-normal text-gray-500">
+                                {usage.percentage}% usado
+                              </span>
+                            </>
                           )}
                         </div>
+                        
+                        {usage.unitsNeeded > 1 && (
+                          <div className="text-xs text-gray-500 mt-1">
+                            {usage.unitPrice.toFixed(2)}€/ud
+                          </div>
+                        )}
                       </div>
-                    </div>
-                    
-                    <div className="flex items-center self-center">
-                      <Checkbox
-                        checked={isSelected}
-                        onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                        className="border-gray-300"
-                      />
                     </div>
                   </div>
                 </CardContent>
