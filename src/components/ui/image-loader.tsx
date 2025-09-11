@@ -110,6 +110,20 @@ export const ImageLoader = ({
       ) : (
         <>
           {/* Imagen real */}
+          <img
+            ref={imgRef}
+            src={currentSrc}
+            alt={alt}
+            className={cn(
+              "transition-all duration-300 w-full h-full object-cover",
+              isLoading ? "opacity-0 scale-105" : "opacity-100 scale-100",
+              className
+            )}
+            onLoad={handleLoad}
+            onError={handleError}
+            loading={priority ? "eager" : "lazy"}
+            decoding="async"
+          />
           
           {/* Loading overlay */}
           {isLoading && (
