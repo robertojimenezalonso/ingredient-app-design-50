@@ -342,8 +342,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <span className="text-sm font-normal">{Math.round((recipe.macros.carbs * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-sm font-medium mb-1">Hidratos</div>
-            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</div>
+            <div className="text-sm font-medium">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g Hidratos</div>
           </div>
           
           {/* Proteínas */}
@@ -370,8 +369,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <span className="text-sm font-normal">{Math.round((recipe.macros.protein * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-sm font-medium mb-1">Proteínas</div>
-            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</div>
+            <div className="text-sm font-medium">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g Proteínas</div>
           </div>
           
           {/* Grasas */}
@@ -398,8 +396,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 <span className="text-sm font-normal">{Math.round((recipe.macros.fat * servings / recipe.servings) / ((recipe.macros.carbs + recipe.macros.protein + recipe.macros.fat) * servings / recipe.servings) * 100)}%</span>
               </div>
             </div>
-            <div className="text-sm font-medium mb-1">Grasas</div>
-            <div className="text-sm text-muted-foreground">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</div>
+            <div className="text-sm font-medium">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g Grasas</div>
           </div>
         </div>
       </div>
