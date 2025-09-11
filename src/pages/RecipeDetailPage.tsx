@@ -459,8 +459,6 @@ const RecipeDetailPage = () => {
         </div>
       </div>
 
-      {/* Separator */}
-      <div className="w-full h-2 bg-muted/50"></div>
 
       {/* Contenido sin tabs - todo en una página */}
       <div className="w-full">
