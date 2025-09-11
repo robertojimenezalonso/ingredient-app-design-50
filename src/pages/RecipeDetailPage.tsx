@@ -485,8 +485,6 @@ const RecipeDetailPage = () => {
               <span className="text-base font-bold">{recipe.time} min.</span>
             </div>
           </div>
-          </div>
-
       </div>
 
       {/* Separator */}
