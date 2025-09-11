@@ -279,9 +279,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             <div className="text-xs text-muted-foreground">Raciones</div>
           </div>
         </div>
-        <div className="flex items-center justify-start">
-          <div className="text-lg font-medium">{(totalSelectedCost / servings).toFixed(2)}€</div>
-        </div>
       </div>
       
       {/* Selector de supermercados con precios */}
