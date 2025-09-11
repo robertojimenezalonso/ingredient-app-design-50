@@ -23,7 +23,7 @@ import {
   ChevronRight,
   Flame
 } from 'lucide-react';
-import mercadonaLogo from '@/assets/mercadona-logo.png';
+import mercadonaLogo from '@/assets/mercadona-logo.webp';
 import lidlLogo from '@/assets/lidl-logo.png';
 import carrefourLogo from '@/assets/carrefour-logo.png';
 
