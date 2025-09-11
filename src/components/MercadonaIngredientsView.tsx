@@ -349,15 +349,12 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                             {recipeIngredient.name}
                           </h4>
                           <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
-                            {abbreviateUnit(recipeIngredient.unit)}
+                            {recipeIngredient.unit}
                           </Badge>
                         </div>
                       </div>
                       
-                      <div className="flex items-center gap-3">
-                        <span className="font-medium text-sm">
-                          {usage.totalPrice.toFixed(2)}€
-                        </span>
+                      <div className="flex items-center">
                         <Checkbox
                           checked={isSelected}
                           onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
@@ -412,11 +409,18 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                           )}
                         </div>
                         
-                        {usage.unitsNeeded > 1 && (
-                          <div className="text-xs text-gray-500 mt-1">
-                            {usage.unitPrice.toFixed(2)}€/ud
+                        <div className="flex items-center justify-between mt-1">
+                          {usage.unitsNeeded > 1 && (
+                            <div className="text-xs text-gray-500">
+                              {usage.unitPrice.toFixed(2)}€/ud
+                            </div>
+                          )}
+                          <div className="text-right">
+                            <span className="font-medium text-sm">
+                              {usage.totalPrice.toFixed(2)}€
+                            </span>
                           </div>
-                        )}
+                        </div>
                       </div>
                     </div>
                   </div>
