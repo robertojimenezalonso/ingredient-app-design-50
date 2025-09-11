@@ -335,7 +335,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             const IconComponent = recipeIngredient ? getIngredientIcon(recipeIngredient.name) : ChefHat;
             
             return (
-              <Card key={ingredient.id} className={`transition-all duration-200 ${isSelected ? 'ring-1 ring-gray-400 shadow-sm' : 'hover:shadow-sm'}`}>
+              <Card key={ingredient.id} className="transition-all duration-200 hover:shadow-sm">
                 <CardContent className="p-3">
                   {/* Sección superior: Ingrediente original de la receta */}
                   {recipeIngredient && (
