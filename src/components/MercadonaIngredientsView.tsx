@@ -291,6 +291,34 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
         </div>
       </div>
       
+      {/* Floating card with supermarket info and pricing */}
+      <div className="bg-white rounded-xl shadow-lg p-4 border border-gray-100">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full overflow-hidden flex-shrink-0 bg-white flex items-center justify-center">
+              <img 
+                src="/lovable-uploads/b8883c4e-84a6-4389-ba4a-ca0ca802b6fb.png" 
+                alt="Mercadona logo" 
+                className="w-8 h-8 object-contain" 
+              />
+            </div>
+            <span className="font-semibold text-lg">Mercadona</span>
+          </div>
+          <div className="text-xl font-bold">
+            {totalSelectedCost.toFixed(2)}€
+          </div>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-gray-600">
+            {servings} raciones
+          </div>
+          <div className="text-sm font-medium">
+            {(totalSelectedCost / servings).toFixed(2)}€ por ración
+          </div>
+        </div>
+      </div>
+      
       
       <div className="flex justify-start mb-4">
         <h3 className="text-lg font-semibold">Ingredientes</h3>
