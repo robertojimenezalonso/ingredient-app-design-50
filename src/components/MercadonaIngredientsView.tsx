@@ -282,7 +282,8 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       </div>
       
       {/* Selector de supermercados con precios */}
-      <div className="flex flex-wrap gap-2 mb-4">
+      <div className="overflow-x-auto pb-2">
+        <div className="flex gap-2 min-w-max">
         {(['Mercadona', 'Lidl', 'Carrefour'] as SupermarketType[]).map((supermarket) => {
           const price = getSupermarketPrice(supermarket);
           const isSelected = selectedSupermarket === supermarket;
@@ -313,7 +314,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
               variant={isSelected ? "default" : "outline"}
               size="sm"
               onClick={() => setSelectedSupermarket(supermarket)}
-              className="flex items-center gap-2 px-3 py-2 h-auto"
+              className="flex items-center gap-2 px-3 py-2 h-auto whitespace-nowrap"
             >
               <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 flex items-center justify-center">
                 <img src={getSupermarketLogo()} alt={`${supermarket} logo`} className="w-4 h-4 object-contain" />
@@ -325,6 +326,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             </Button>
           );
         })}
+        </div>
       </div>
       
       <div className="flex justify-start mb-4">
