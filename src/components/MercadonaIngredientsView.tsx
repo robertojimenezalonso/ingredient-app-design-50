@@ -340,7 +340,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                           <div className="text-xs text-gray-500">
                             {usage.recipeAmount !== 'No usado' && (
                               <div>
-                                <span>{usage.recipeAmount} en la receta • punto medio • {usage.percentage}% de uso</span>
+                                <span>{usage.recipeAmount} en la receta • {usage.percentage}% de uso</span>
                                 <div className="font-medium text-sm text-gray-800 mt-1">
                                   {usage.totalPrice.toFixed(2)}€
                                 </div>
