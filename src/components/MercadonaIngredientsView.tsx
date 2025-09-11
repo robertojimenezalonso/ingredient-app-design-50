@@ -308,7 +308,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
             
             return (
               <div key={ingredient.id}>
-                <div className="py-4">
+                <div className="py-2">
                   
                   {/* Sección inferior: Producto del supermercado */}
                   <div className="p-3">
@@ -366,7 +366,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 
                 {/* Separador entre ingredientes, excepto para el último */}
                 {index < supermarketIngredients.length - 1 && (
-                  <div className="border-b border-gray-200 my-2"></div>
+                  <div className="border-b border-gray-200 my-1"></div>
                 )}
               </div>
             );
