@@ -265,17 +265,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
     }
   };
 
-  // Separar ingredientes seleccionados y no seleccionados
-  const selectedIngredientsList = supermarketIngredients.filter(ingredient => 
-    selectedIngredients.has(ingredient.id)
-  );
-  const unselectedIngredientsList = supermarketIngredients.filter(ingredient => 
-    !selectedIngredients.has(ingredient.id)
-  );
-
-  // Combinar listas: seleccionados primero
-  const sortedIngredients = [...selectedIngredientsList, ...unselectedIngredientsList];
-
   return (
     <div className="space-y-4">
       <div className="flex justify-center">
@@ -329,7 +318,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       </div>
       
       <div className="space-y-0">
-        {sortedIngredients.map((ingredient, index) => {
+        {supermarketIngredients.map((ingredient, index) => {
           const usage = calculateUsage(ingredient);
           const isSelected = selectedIngredients.has(ingredient.id);
           const percentageColor = getPercentageColor(usage.percentage);
@@ -422,7 +411,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                 </div>
                 
                 {/* Separador entre ingredientes, excepto para el último */}
-                {index < sortedIngredients.length - 1 && (
+                {index < supermarketIngredients.length - 1 && (
                   <div className="border-b border-gray-200 my-2"></div>
                 )}
               </div>
