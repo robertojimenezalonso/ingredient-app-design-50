@@ -350,7 +350,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                           <IconComponent size={12} className="text-gray-600" />
                         </div>
                         <div className="flex items-center gap-2">
-                          <h4 className="text-sm font-medium text-gray-800">
+                          <h4 className="text-sm text-gray-800">
                             {recipeIngredient.name}
                           </h4>
                           <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
@@ -370,13 +370,13 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                   )}
                   
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="bg-gray-50 p-3">
+                  <div className="bg-gray-100 p-3 rounded-lg">
                     <div className="flex gap-3">
                       <div className="w-12 h-12 flex-shrink-0">
                         <ImageLoader
                           src={ingredient.image_url}
                           alt={ingredient.product_name}
-                          className="w-full h-full rounded-lg object-cover"
+                          className="w-full h-full rounded-full object-cover"
                           priority={true}
                         />
                       </div>
@@ -389,7 +389,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                                 {usage.unitsNeeded}X
                               </Badge>
                             )}
-                            <h5 className="font-medium text-sm leading-tight line-clamp-3">
+                            <h5 className="text-sm leading-tight line-clamp-3">
                               {ingredient.product_name} {usage.productAmount}
                             </h5>
                           </div>
@@ -398,22 +398,26 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                           </span>
                         </div>
                         
+                        <div className="flex items-center justify-between">
+                          <div className="text-xs text-gray-500">
+                            {usage.recipeAmount !== 'No usado' && (
+                              <span>{usage.percentage}% usado</span>
+                            )}
+                          </div>
+                          <button className="flex items-center gap-1 text-xs text-gray-500">
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                            <span className="font-medium">+2</span>
+                          </button>
+                        </div>
+                        
                         {usage.unitsNeeded > 1 && (
                           <div className="text-xs text-gray-500 mt-1">
                             {usage.unitPrice.toFixed(2)}€/ud
                           </div>
                         )}
                       </div>
-                    </div>
-                    
-                    {/* Flecha dropdown y +2 debajo */}
-                    <div className="flex items-center mt-2">
-                      <button className="flex items-center gap-1 text-xs text-gray-500">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                        <span className="font-medium">+2</span>
-                      </button>
                     </div>
                   </div>
                 </div>
