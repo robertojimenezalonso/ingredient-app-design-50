@@ -460,23 +460,23 @@ const RecipeDetailPage = () => {
             <h1 className="text-xl font-semibold">{recipe.title}</h1>
           </div>
 
-          {/* Category selector */}
+
+          {/* Calories, time and category */}
           <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2">
+                <Flame className="h-5 w-5 text-black" />
+                <span className="text-base font-bold">{adjustedCalories} kcal</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5 text-black" />
+                <span className="text-base font-bold">{recipe.time} min.</span>
+              </div>
+            </div>
+            
             <div className="flex items-center gap-3 bg-muted px-4 py-3 rounded-lg cursor-pointer">
               <span className="text-base font-medium">Desayuno</span>
               <ChevronDown className="h-4 w-4" />
-            </div>
-          </div>
-
-          {/* Calories and time */}
-          <div className="flex items-center gap-6 mb-6">
-            <div className="flex items-center gap-2">
-              <Flame className="h-5 w-5 text-black" />
-              <span className="text-base font-bold">{adjustedCalories} kcal</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-black" />
-              <span className="text-base font-bold">{recipe.time} min.</span>
             </div>
           </div>
       </div>
