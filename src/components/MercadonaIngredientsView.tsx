@@ -303,12 +303,12 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       </div>
       
       {/* Selector de raciones */}
-      <div className="flex items-center gap-3 mb-4">
-        <div className="bg-muted px-2 py-2 rounded-lg">
-          <input type="number" inputMode="numeric" min="0" max="10" value={servings} className="w-8 text-lg font-bold text-center bg-transparent border-none focus:outline-none appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" readOnly />
+      <div className="flex items-center justify-between mb-4">
+        <div className="bg-muted/50 px-4 py-3 rounded-xl text-center">
+          <div className="text-2xl font-bold">{servings}</div>
+          <div className="text-xs text-muted-foreground">Raciones</div>
         </div>
-        <span className="text-base font-medium">{servings === 1 ? 'Ración' : 'Raciones'}</span>
-        <span className="font-medium text-sm">por {(totalSelectedCost / servings).toFixed(2)}€</span>
+        <div className="text-lg font-medium">{(totalSelectedCost / servings).toFixed(2)}€</div>
       </div>
       
       
