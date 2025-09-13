@@ -282,7 +282,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
   };
 
   return (
-    <div className="px-4 space-y-4">
+    <div className="space-y-4">
       {/* Receta Header Card */}
       <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
         <CardHeader className="pb-3 px-4">
