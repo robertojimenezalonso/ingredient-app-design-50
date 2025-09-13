@@ -447,16 +447,6 @@ const RecipeDetailPage = () => {
 
       <div className="px-4 mt-2 relative z-10">
         {/* Título con imagen de la receta */}
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-20 h-20 rounded-full overflow-hidden flex-shrink-0">
-            <img 
-              src={recipe.image} 
-              alt={recipe.title} 
-              className="w-full h-full object-cover" 
-            />
-          </div>
-          <h2 className="text-lg font-semibold">{recipe.title}</h2>
-        </div>
       </div>
 
 
