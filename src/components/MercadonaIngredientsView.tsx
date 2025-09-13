@@ -5,8 +5,6 @@ import { ImageLoader } from './ui/image-loader';
 import { Checkbox } from './ui/checkbox';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
-import { Button } from './ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { 
   Apple, 
   Beef, 
@@ -310,43 +308,32 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
         </CardHeader>
       </Card>
 
-      <Tabs defaultValue="ingredientes" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="ingredientes">Ingredientes</TabsTrigger>
-          <TabsTrigger value="nutricion">Nutrición</TabsTrigger>
-          <TabsTrigger value="pasos">Pasos</TabsTrigger>
-        </TabsList>
-        
-        <TabsContent value="ingredientes" className="space-y-0 mt-4">
-          {/* Mercadona Ingredients Card */}
-          <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-            <CardHeader className="pb-3 px-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8" />
-                  <CardTitle className="text-xl font-semibold text-neutral-950">Mercadona</CardTitle>
-                </div>
-                <div className="text-sm text-gray-600">
-                  Raciones {servings}
-                </div>
-              </div>
-            </CardHeader>
+      {/* Mercadona Ingredients Card */}
+      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+        <CardHeader className="pb-3 px-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8" />
+              <CardTitle className="text-xl font-semibold text-neutral-950">Mercadona</CardTitle>
+            </div>
+            <div className="text-sm text-gray-600">
+              Raciones {servings}
+            </div>
+          </div>
+        </CardHeader>
 
-            <CardContent className="px-4 pb-4">
-          
+        <CardContent className="px-4 pb-4">
           {supermarketIngredients.map((ingredient, index) => {
             const usage = calculateUsage(ingredient);
             const isSelected = selectedIngredients.has(ingredient.id);
             const percentageColor = getPercentageColor(usage.percentage);
 
-            {
-              const recipeIngredient = findMatchingRecipeIngredient(ingredient.product_name);
-              const IconComponent = recipeIngredient ? getIngredientIcon(recipeIngredient.name) : ChefHat;
-              
-              return (
+            const recipeIngredient = findMatchingRecipeIngredient(ingredient.product_name);
+            const IconComponent = recipeIngredient ? getIngredientIcon(recipeIngredient.name) : ChefHat;
+            
+            return (
               <div key={ingredient.id}>
                 <div className="py-2">
-                  
                   {/* Sección inferior: Producto del supermercado */}
                   <div className="p-3">
                     <div className="flex gap-3">
@@ -415,13 +402,16 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                 )}
               </div>
             );
-          }
           })}
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="nutricion" className="space-y-4 mt-4">
+        </CardContent>
+      </Card>
+
+      {/* Nutrición Card */}
+      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+        <CardHeader className="pb-3 px-4">
+          <CardTitle className="text-xl font-semibold text-neutral-950">Nutrición</CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 pb-4">
           <div className="space-y-3">
             <div className="flex justify-between items-center py-3 border-b-2 border-muted">
               <div className="flex items-center gap-3">
@@ -509,9 +499,15 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
               </div>
             </div>
           </div>
-        </TabsContent>
-        
-        <TabsContent value="pasos" className="space-y-4 mt-4">
+        </CardContent>
+      </Card>
+
+      {/* Pasos Card */}
+      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+        <CardHeader className="pb-3 px-4">
+          <CardTitle className="text-xl font-semibold text-neutral-950">Pasos</CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 pb-4">
           <div className="space-y-0">
             {recipe.instructions.map((instruction, index) => (
               <div key={index}>
@@ -527,8 +523,8 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
               </div>
             ))}
           </div>
-        </TabsContent>
-      </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 };
