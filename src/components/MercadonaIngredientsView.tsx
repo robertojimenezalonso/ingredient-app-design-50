@@ -3,7 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Recipe } from '@/types/recipe';
 import { ImageLoader } from './ui/image-loader';
 import { Checkbox } from './ui/checkbox';
-import { Card, CardContent } from './ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
@@ -284,7 +284,32 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
   };
 
   return (
-    <div className="space-y-4">
+    <div className="px-4 space-y-4">
+      {/* Receta Header Card */}
+      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+        <CardHeader className="pb-3 px-4">
+          <div className="flex items-center gap-4">
+            <div className="flex-shrink-0">
+              <ImageLoader
+                src={recipe.image} 
+                alt={recipe.title}
+                className="w-20 h-20 object-cover rounded-xl"
+                category={recipe.category}
+                priority={true}
+                placeholder={
+                  <div className="w-20 h-20 bg-gray-200 rounded-xl flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  </div>
+                }
+              />
+            </div>
+            <div className="flex-1">
+              <CardTitle className="text-xl font-semibold text-neutral-950 line-clamp-2">{recipe.title}</CardTitle>
+            </div>
+          </div>
+        </CardHeader>
+      </Card>
+
       <Tabs defaultValue="ingredientes" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="ingredientes">Ingredientes</TabsTrigger>
@@ -293,14 +318,21 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
         </TabsList>
         
         <TabsContent value="ingredientes" className="space-y-0 mt-4">
-          {/* Mercadona Header */}
-          <div className="flex items-center justify-between mb-4 px-3 py-3">
-            <div className="flex items-center gap-3">
-              <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6" />
-              <span className="font-medium text-sm">Mercadona</span>
-            </div>
-            <span className="font-medium text-sm text-gray-600">Raciones {servings}</span>
-          </div>
+          {/* Mercadona Ingredients Card */}
+          <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+            <CardHeader className="pb-3 px-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8" />
+                  <CardTitle className="text-xl font-semibold text-neutral-950">Mercadona</CardTitle>
+                </div>
+                <div className="text-sm text-gray-600">
+                  Raciones {servings}
+                </div>
+              </div>
+            </CardHeader>
+
+            <CardContent className="px-4 pb-4">
           
           {supermarketIngredients.map((ingredient, index) => {
             const usage = calculateUsage(ingredient);
@@ -385,7 +417,8 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
             );
           }
           })}
-          
+            </CardContent>
+          </Card>
         </TabsContent>
         
         <TabsContent value="nutricion" className="space-y-4 mt-4">
