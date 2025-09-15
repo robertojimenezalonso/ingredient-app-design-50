@@ -20,7 +20,7 @@ import {
   Cookie,
   Coffee
 } from 'lucide-react';
-import mercadonaLogo from '@/assets/mercadona-logo.png';
+import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 import lidlLogo from '@/assets/lidl-logo.png';
 import carrefourLogo from '@/assets/carrefour-logo.png';
 
