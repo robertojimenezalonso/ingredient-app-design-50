@@ -3,8 +3,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { Recipe } from '@/types/recipe';
 import { ImageLoader } from './ui/image-loader';
 import { Checkbox } from './ui/checkbox';
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
+import { Button } from './ui/button';
 import { 
   Apple, 
   Beef, 
@@ -17,11 +18,9 @@ import {
   ChefHat,
   Salad,
   Cookie,
-  Coffee,
-  ChevronRight,
-  Flame
+  Coffee
 } from 'lucide-react';
-import mercadonaLogo from '@/assets/mercadona-logo.webp';
+import mercadonaLogo from '@/assets/mercadona-logo.png';
 import lidlLogo from '@/assets/lidl-logo.png';
 import carrefourLogo from '@/assets/carrefour-logo.png';
 
@@ -39,13 +38,11 @@ interface MercadonaIngredientsViewProps {
   recipe: Recipe;
   servings: number;
   onSelectionChange?: (selectedIngredients: string[], totalCost: number) => void;
-  completedSteps?: number[];
-  onStepToggle?: (stepIndex: number) => void;
 }
 
 type SupermarketType = 'Mercadona' | 'Lidl' | 'Carrefour';
 
-export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, completedSteps = [], onStepToggle }: MercadonaIngredientsViewProps) => {
+export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }: MercadonaIngredientsViewProps) => {
   const [supermarketIngredients, setSupermarketIngredients] = useState<SupermarketIngredient[]>([]);
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
   const [selectedSupermarket, setSelectedSupermarket] = useState<SupermarketType>('Mercadona');
@@ -283,65 +280,69 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
 
   return (
     <div className="space-y-4">
-      {/* Receta Header Card */}
-      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-        <CardHeader className="pb-3 px-4">
-          <div className="flex items-center gap-4">
-            <div className="flex-shrink-0">
-              <ImageLoader
-                src={recipe.image} 
-                alt={recipe.title}
-                className="w-20 h-20 object-cover rounded-xl"
-                category={recipe.category}
-                priority={true}
-                placeholder={
-                  <div className="w-20 h-20 bg-gray-200 rounded-xl flex items-center justify-center">
-                    <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                  </div>
-                }
-              />
-            </div>
-            <div className="flex-1">
-              <CardTitle className="text-xl font-semibold text-neutral-950 line-clamp-2">{recipe.title}</CardTitle>
-            </div>
+      {/* Título y selector de raciones */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-semibold">{recipe.title}</h2>
+          <div className="bg-muted/50 px-3 py-2 rounded-xl text-center">
+            <div className="text-xl">{servings}</div>
+            <div className="text-xs text-muted-foreground">Raciones</div>
           </div>
-        </CardHeader>
-      </Card>
+        </div>
+      </div>
+      
+      
+      <div className="flex justify-start mb-4">
+        <h3 className="text-lg font-semibold">Ingredientes</h3>
+      </div>
+      <div className="space-y-0">
+        {supermarketIngredients.map((ingredient, index) => {
+          const usage = calculateUsage(ingredient);
+          const isSelected = selectedIngredients.has(ingredient.id);
+          const percentageColor = getPercentageColor(usage.percentage);
 
-      {/* Mercadona Ingredients Card */}
-      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-        <CardHeader className="pb-3 px-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8" />
-              <CardTitle className="text-xl font-semibold text-neutral-950">Mercadona</CardTitle>
-            </div>
-            <div className="text-sm text-gray-600">
-              Raciones {servings}
-            </div>
-          </div>
-        </CardHeader>
-
-        <CardContent className="px-4 pb-4">
-          {supermarketIngredients.map((ingredient, index) => {
-            const usage = calculateUsage(ingredient);
-            const isSelected = selectedIngredients.has(ingredient.id);
-            const percentageColor = getPercentageColor(usage.percentage);
-
+          {
             const recipeIngredient = findMatchingRecipeIngredient(ingredient.product_name);
             const IconComponent = recipeIngredient ? getIngredientIcon(recipeIngredient.name) : ChefHat;
             
             return (
               <div key={ingredient.id}>
-                <div className="py-2">
+                <div className="py-4">
+                  {/* Sección superior: Ingrediente original de la receta */}
+                  {recipeIngredient && (
+                    <div className="flex items-center justify-between px-3 pb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="w-5 h-5 flex-shrink-0 flex items-center justify-center bg-gray-100 rounded-full">
+                          <IconComponent size={12} className="text-gray-600" />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-sm text-gray-800">
+                            {recipeIngredient.name}
+                          </h4>
+                          <Badge variant="secondary" className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded-full">
+                            {usage.recipeAmount}
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="flex items-center">
+                        <Checkbox
+                          checked={isSelected}
+                          onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
+                          className="border-gray-300 data-[state=checked]:border-0"
+                        />
+                      </div>
+                    </div>
+                  )}
+                  
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="p-3">
+                  <div className="bg-[#FAFAFA] p-3 rounded-lg">
                     <div className="flex gap-3">
-                      <div className="w-16 h-16 flex-shrink-0">
+                      <div className="w-12 h-12 flex-shrink-0">
                         <ImageLoader
                           src={ingredient.image_url}
                           alt={ingredient.product_name}
-                          className="w-full h-full rounded-lg object-cover"
+                          className="w-full h-full rounded-full object-cover"
                           priority={true}
                         />
                       </div>
@@ -358,32 +359,23 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                               {ingredient.product_name} <span className="whitespace-nowrap">{usage.productAmount}</span>
                             </h5>
                           </div>
+                          <span className="font-medium text-sm">
+                            {usage.totalPrice.toFixed(2)}€
+                          </span>
                         </div>
                         
                         <div className="flex items-center justify-between">
                           <div className="text-xs text-gray-500">
                             {usage.recipeAmount !== 'No usado' && (
-                              <div>
-                                <span>En la receta {usage.recipeAmount} • {usage.percentage}% de uso</span>
-                                <div className="font-medium text-sm text-gray-800 mt-1">
-                                  {usage.totalPrice.toFixed(2)}€
-                                </div>
-                              </div>
+                              <span>{usage.percentage}% usado</span>
                             )}
                           </div>
-                          <div className="flex items-center gap-3">
-                            <button className="flex items-center gap-1 text-xs text-gray-500">
-                              <span className="font-medium">+2</span>
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                              </svg>
-                            </button>
-                            <Checkbox
-                              checked={isSelected}
-                              onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
-                              className="border-gray-300 data-[state=checked]:border-0"
-                            />
-                          </div>
+                          <button className="flex items-center gap-1 text-xs text-gray-500">
+                            <span className="font-medium">+2</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
                         </div>
                         
                         {usage.unitsNeeded > 1 && (
@@ -398,133 +390,17 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                 
                 {/* Separador entre ingredientes, excepto para el último */}
                 {index < supermarketIngredients.length - 1 && (
-                  <div className="border-b border-gray-200 my-1"></div>
+                  <div className="border-b border-gray-200 my-2"></div>
                 )}
               </div>
             );
-          })}
-        </CardContent>
-      </Card>
-
-      {/* Nutrición Card */}
-      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-        <CardHeader className="pb-3 px-4">
-          <CardTitle className="text-xl font-semibold text-neutral-950">Nutrición</CardTitle>
-        </CardHeader>
-        <CardContent className="px-4 pb-4">
-          <div className="space-y-3">
-            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
-                  <Flame className="h-3 w-3 text-white" />
-                </div>
-                <span className="font-medium">Calorías</span>
-              </div>
-              <span className="font-bold">{Math.round(recipe.calories * servings / recipe.servings)} kcal</span>
-            </div>
-            
-            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">H</span>
-                </div>
-                <span className="font-medium">Hidratos</span>
-              </div>
-              <span className="font-bold">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</span>
-            </div>
-            
-            <div className="text-sm text-muted-foreground ml-9 space-y-2 pb-3 border-b-2 border-muted">
-              <div className="flex justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="w-5 h-5 bg-gray-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">Fi</span>
-                  </div>
-                  <span>Fibra</span>
-                </div>
-                <span>2 g</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="ml-8">Azúcares</span>
-                <span>3 g</span>
-              </div>
-            </div>
-            
-            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
-              <div className="flex items-center gap-3">
-                <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">P</span>
-                </div>
-                <span className="font-medium">Proteínas</span>
-              </div>
-              <span className="font-bold">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</span>
-            </div>
-            
-            <div className="border-b-2 border-muted pb-3">
-              <div className="flex justify-between items-center py-2">
-                <div className="flex items-center gap-3">
-                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs font-bold">G</span>
-                  </div>
-                  <span className="font-medium">Grasas</span>
-                </div>
-                <span className="font-bold">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</span>
-              </div>
-              
-              <div className="text-sm text-muted-foreground ml-9 space-y-2 mt-2">
-                <div className="flex justify-between">
-                  <span>Grasas saturadas</span>
-                  <span>7 g</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Grasas insaturadas</span>
-                  <span>6,1 g</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="space-y-3 pt-3">
-              <div className="flex justify-between items-center">
-                <span className="font-medium">Colesterol</span>
-                <span className="font-bold">31,6 mg</span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="font-medium">Sodio</span>
-                <span className="font-bold">74,1 mg</span>
-              </div>
-              
-              <div className="flex justify-between items-center">
-                <span className="font-medium">Potasio</span>
-                <span className="font-bold">1117,6 mg</span>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Pasos Card */}
-      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-        <CardHeader className="pb-3 px-4">
-          <CardTitle className="text-xl font-semibold text-neutral-950">Pasos</CardTitle>
-        </CardHeader>
-        <CardContent className="px-4 pb-4">
-          <div className="space-y-0">
-            {recipe.instructions.map((instruction, index) => (
-              <div key={index}>
-                <div className="flex items-center gap-4 py-3 cursor-pointer" onClick={() => onStepToggle?.(index)}>
-                  <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
-                    <span className="text-sm font-medium">{index + 1}</span>
-                  </div>
-                  <p className={`text-sm leading-relaxed flex-1 ${completedSteps.includes(index) ? 'line-through opacity-50' : ''}`}>
-                    {instruction}
-                  </p>
-                </div>
-                {index < recipe.instructions.length - 1 && <div className="border-b border-border"></div>}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+          }
+        })}
+      </div>
+      
+      <div className="text-xs text-muted-foreground text-center">
+        💡 Sal, pimienta y aceite no están seleccionados por defecto
+      </div>
     </div>
   );
 };
