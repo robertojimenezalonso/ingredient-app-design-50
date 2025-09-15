@@ -294,7 +294,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       
       <div className="flex justify-start mb-4">
         <div className="flex items-center gap-2">
-          <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6" />
+          <img src={mercadonaLogo} alt="Mercadona" className="h-6 w-auto object-contain" />
           <h3 className="text-lg font-semibold">Mercadona</h3>
         </div>
       </div>
