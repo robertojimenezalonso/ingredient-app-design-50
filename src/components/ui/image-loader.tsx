@@ -98,7 +98,7 @@ export const ImageLoader = ({
   };
 
   return (
-    <div className={cn("relative overflow-hidden bg-muted", className)}>
+    <div className={cn("relative overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200", className)}>
       {/* Mostrar fallback inmediatamente si hay error */}
       {error && currentSrc === finalFallbackSrc ? (
         <div className={cn("w-full h-full bg-gradient-to-br from-muted to-muted-foreground/20 flex items-center justify-center", className)}>
@@ -115,7 +115,7 @@ export const ImageLoader = ({
             src={currentSrc}
             alt={alt}
             className={cn(
-              "transition-all duration-300 w-full h-full object-cover border border-border rounded-lg",
+              "transition-all duration-300 w-full h-full object-cover",
               isLoading ? "opacity-0 scale-105" : "opacity-100 scale-100",
               className
             )}

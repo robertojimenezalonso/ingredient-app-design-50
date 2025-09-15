@@ -19,12 +19,9 @@ import {
   Cookie,
   Coffee,
   ChevronRight,
-  Flame,
-  Clock,
-  ChevronDown,
-  ChevronUp
+  Flame
 } from 'lucide-react';
-import mercadonaLogo from '@/assets/mercadona-logo-new.png';
+import mercadonaLogo from '@/assets/mercadona-logo.webp';
 import lidlLogo from '@/assets/lidl-logo.png';
 import carrefourLogo from '@/assets/carrefour-logo.png';
 
@@ -53,9 +50,6 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
   const [selectedIngredients, setSelectedIngredients] = useState<Set<string>>(new Set());
   const [selectedSupermarket, setSelectedSupermarket] = useState<SupermarketType>('Mercadona');
   const [isLoading, setIsLoading] = useState(true);
-  const [isIngredientsExpanded, setIsIngredientsExpanded] = useState(false);
-  const [isNutritionExpanded, setIsNutritionExpanded] = useState(false);
-  const [isStepsExpanded, setIsStepsExpanded] = useState(false);
 
   useEffect(() => {
     loadIngredients();
@@ -287,43 +281,28 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
     }
   };
 
-  const displayedIngredients = isIngredientsExpanded ? supermarketIngredients : supermarketIngredients.slice(0, 2);
-
   return (
-    <div className="space-y-4 pb-20">
+    <div className="space-y-4">
       {/* Receta Header Card */}
       <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-        <CardHeader className="pb-4 px-4">
-          <div className="flex flex-col items-center text-center gap-4">
+        <CardHeader className="pb-3 px-4">
+          <div className="flex items-center gap-4">
             <div className="flex-shrink-0">
               <ImageLoader
                 src={recipe.image} 
                 alt={recipe.title}
-                className="w-24 h-24 object-cover rounded-xl mx-auto"
+                className="w-20 h-20 object-cover rounded-xl"
                 category={recipe.category}
                 priority={true}
                 placeholder={
-                  <div className="w-24 h-24 bg-gray-200 rounded-xl flex items-center justify-center mx-auto">
+                  <div className="w-20 h-20 bg-gray-200 rounded-xl flex items-center justify-center">
                     <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
                   </div>
                 }
               />
             </div>
             <div className="flex-1">
-              <CardTitle className="text-xl font-semibold text-neutral-950 mb-3">{recipe.title}</CardTitle>
-              <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
-                <div className="flex items-center gap-1">
-                  <Clock className="w-4 h-4" />
-                  <span>{recipe.time} min</span>
-                </div>
-                <button 
-                  onClick={() => setIsStepsExpanded(!isStepsExpanded)}
-                  className="flex items-center gap-1 hover:text-gray-800"
-                >
-                  <span>Pasos</span>
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-              </div>
+              <CardTitle className="text-xl font-semibold text-neutral-950 line-clamp-2">{recipe.title}</CardTitle>
             </div>
           </div>
         </CardHeader>
@@ -334,21 +313,17 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
         <CardHeader className="pb-3 px-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8 object-contain" />
-              <CardTitle className="text-lg font-medium text-neutral-950">Mercadona</CardTitle>
+              <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8" />
+              <CardTitle className="text-xl font-semibold text-neutral-950">Mercadona</CardTitle>
             </div>
-            <button 
-              onClick={() => setIsIngredientsExpanded(!isIngredientsExpanded)}
-              className="text-sm text-gray-600 flex items-center gap-1"
-            >
-              <span>Raciones {servings}</span>
-              {isIngredientsExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-            </button>
+            <div className="text-sm text-gray-600">
+              Raciones {servings}
+            </div>
           </div>
         </CardHeader>
 
         <CardContent className="px-4 pb-4">
-          {displayedIngredients.map((ingredient, index) => {
+          {supermarketIngredients.map((ingredient, index) => {
             const usage = calculateUsage(ingredient);
             const isSelected = selectedIngredients.has(ingredient.id);
             const percentageColor = getPercentageColor(usage.percentage);
@@ -360,7 +335,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
               <div key={ingredient.id}>
                 <div className="py-2">
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="px-0">
+                  <div className="p-3">
                     <div className="flex gap-3">
                       <div className="w-16 h-16 flex-shrink-0">
                         <ImageLoader
@@ -374,25 +349,22 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between mb-1 gap-4">
                           <div className="flex-1 mr-2">
-                            {isIngredientsExpanded && usage.unitsNeeded > 1 && (
+                            {usage.unitsNeeded > 1 && (
                               <Badge variant="secondary" className="text-xs font-bold bg-orange-100 text-orange-800 px-1 py-0.5 mb-1">
                                 {usage.unitsNeeded}X
                               </Badge>
                             )}
                             <h5 className="text-sm leading-tight line-clamp-3">
-                              {ingredient.product_name.replace(/\s+\d+\s+(gramos|kilogramos|litros|mililitros|unidad|unidades|cucharadas|cucharada|cucharaditas|cucharadita)$/i, '')}
+                              {ingredient.product_name} <span className="whitespace-nowrap">{usage.productAmount}</span>
                             </h5>
                           </div>
                         </div>
                         
-                        <div className="flex items-start justify-between">
+                        <div className="flex items-center justify-between">
                           <div className="text-xs text-gray-500">
                             {usage.recipeAmount !== 'No usado' && (
                               <div>
-                                
-                                <div className="text-xs text-gray-600 mt-1">
-                                  {ingredient.quantity} {abbreviateUnit(ingredient.unit_type)} de {usage.recipeAmount} · {usage.percentage}% de uso
-                                </div>
+                                <span>En la receta {usage.recipeAmount} • {usage.percentage}% de uso</span>
                                 <div className="font-medium text-sm text-gray-800 mt-1">
                                   {usage.totalPrice.toFixed(2)}€
                                 </div>
@@ -400,14 +372,12 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                             )}
                           </div>
                           <div className="flex items-center gap-3">
-                            {isIngredientsExpanded && (
-                              <button className="flex items-center gap-1 text-xs text-gray-500">
-                                <span className="font-medium">+2</span>
-                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                </svg>
-                              </button>
-                            )}
+                            <button className="flex items-center gap-1 text-xs text-gray-500">
+                              <span className="font-medium">+2</span>
+                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                              </svg>
+                            </button>
                             <Checkbox
                               checked={isSelected}
                               onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
@@ -416,7 +386,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                           </div>
                         </div>
                         
-                        {isIngredientsExpanded && usage.unitsNeeded > 1 && (
+                        {usage.unitsNeeded > 1 && (
                           <div className="text-xs text-gray-500 mt-1">
                             {usage.unitPrice.toFixed(2)}€/ud
                           </div>
@@ -427,164 +397,134 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                 </div>
                 
                 {/* Separador entre ingredientes, excepto para el último */}
-                {index < displayedIngredients.length - 1 && (
+                {index < supermarketIngredients.length - 1 && (
                   <div className="border-b border-gray-200 my-1"></div>
                 )}
               </div>
             );
           })}
-          
-          {!isIngredientsExpanded && supermarketIngredients.length > 2 && (
-            <div className="text-center pt-2">
-              <button 
-                onClick={() => setIsIngredientsExpanded(true)}
-                className="text-sm text-gray-500 flex items-center justify-center gap-1 w-full"
-              >
-                <span>Ver {supermarketIngredients.length - 2} más</span>
-                <ChevronDown className="w-4 h-4" />
-              </button>
+        </CardContent>
+      </Card>
+
+      {/* Nutrición Card */}
+      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+        <CardHeader className="pb-3 px-4">
+          <CardTitle className="text-xl font-semibold text-neutral-950">Nutrición</CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 pb-4">
+          <div className="space-y-3">
+            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
+                  <Flame className="h-3 w-3 text-white" />
+                </div>
+                <span className="font-medium">Calorías</span>
+              </div>
+              <span className="font-bold">{Math.round(recipe.calories * servings / recipe.servings)} kcal</span>
             </div>
-          )}
+            
+            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">H</span>
+                </div>
+                <span className="font-medium">Hidratos</span>
+              </div>
+              <span className="font-bold">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</span>
+            </div>
+            
+            <div className="text-sm text-muted-foreground ml-9 space-y-2 pb-3 border-b-2 border-muted">
+              <div className="flex justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-gray-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">Fi</span>
+                  </div>
+                  <span>Fibra</span>
+                </div>
+                <span>2 g</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="ml-8">Azúcares</span>
+                <span>3 g</span>
+              </div>
+            </div>
+            
+            <div className="flex justify-between items-center py-3 border-b-2 border-muted">
+              <div className="flex items-center gap-3">
+                <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
+                  <span className="text-white text-xs font-bold">P</span>
+                </div>
+                <span className="font-medium">Proteínas</span>
+              </div>
+              <span className="font-bold">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</span>
+            </div>
+            
+            <div className="border-b-2 border-muted pb-3">
+              <div className="flex justify-between items-center py-2">
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">G</span>
+                  </div>
+                  <span className="font-medium">Grasas</span>
+                </div>
+                <span className="font-bold">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</span>
+              </div>
+              
+              <div className="text-sm text-muted-foreground ml-9 space-y-2 mt-2">
+                <div className="flex justify-between">
+                  <span>Grasas saturadas</span>
+                  <span>7 g</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Grasas insaturadas</span>
+                  <span>6,1 g</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-3 pt-3">
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Colesterol</span>
+                <span className="font-bold">31,6 mg</span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Sodio</span>
+                <span className="font-bold">74,1 mg</span>
+              </div>
+              
+              <div className="flex justify-between items-center">
+                <span className="font-medium">Potasio</span>
+                <span className="font-bold">1117,6 mg</span>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
 
       {/* Pasos Card */}
-      {isStepsExpanded && (
-        <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-          <CardHeader className="pb-3 px-4">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-xl font-semibold text-neutral-950">Pasos</CardTitle>
-              <button onClick={() => setIsStepsExpanded(false)}>
-                <ChevronUp className="w-5 h-5 text-gray-500" />
-              </button>
-            </div>
-          </CardHeader>
-          <CardContent className="px-4 pb-4">
-            <div className="space-y-0">
-              {recipe.instructions.map((instruction, index) => (
-                <div key={index}>
-                  <div className="flex items-center gap-4 py-3 cursor-pointer" onClick={() => onStepToggle?.(index)}>
-                    <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
-                      <span className="text-sm font-medium">{index + 1}</span>
-                    </div>
-                    <p className={`text-sm leading-relaxed flex-1 ${completedSteps.includes(index) ? 'line-through opacity-50' : ''}`}>
-                      {instruction}
-                    </p>
+      <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+        <CardHeader className="pb-3 px-4">
+          <CardTitle className="text-xl font-semibold text-neutral-950">Pasos</CardTitle>
+        </CardHeader>
+        <CardContent className="px-4 pb-4">
+          <div className="space-y-0">
+            {recipe.instructions.map((instruction, index) => (
+              <div key={index}>
+                <div className="flex items-center gap-4 py-3 cursor-pointer" onClick={() => onStepToggle?.(index)}>
+                  <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-sm font-medium">{index + 1}</span>
                   </div>
-                  {index < recipe.instructions.length - 1 && <div className="border-b border-border"></div>}
+                  <p className={`text-sm leading-relaxed flex-1 ${completedSteps.includes(index) ? 'line-through opacity-50' : ''}`}>
+                    {instruction}
+                  </p>
                 </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Nutrición Card - Fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200">
-        <Card className="bg-white rounded-t-3xl shadow-[0_-4px_20px_rgba(0,0,0,0.1)] border-0 border-t border-[#C3C3C3]">
-          <CardHeader className="pb-3 px-4">
-            <button 
-              onClick={() => setIsNutritionExpanded(!isNutritionExpanded)}
-              className="flex items-center justify-between w-full"
-            >
-              <CardTitle className="text-xl font-semibold text-neutral-950">Nutrición</CardTitle>
-              {isNutritionExpanded ? <ChevronDown className="w-5 h-5" /> : <ChevronUp className="w-5 h-5" />}
-            </button>
-          </CardHeader>
-          
-          {isNutritionExpanded && (
-            <CardContent className="px-4 pb-4">
-              <div className="space-y-3">
-                <div className="flex justify-between items-center py-3 border-b-2 border-muted">
-                  <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
-                      <Flame className="h-3 w-3 text-white" />
-                    </div>
-                    <span className="font-medium">Calorías</span>
-                  </div>
-                  <span className="font-bold">{Math.round(recipe.calories * servings / recipe.servings)} kcal</span>
-                </div>
-                
-                <div className="flex justify-between items-center py-3 border-b-2 border-muted">
-                  <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">H</span>
-                    </div>
-                    <span className="font-medium">Hidratos</span>
-                  </div>
-                  <span className="font-bold">{Math.round((recipe.macros.carbs * servings) / recipe.servings)} g</span>
-                </div>
-                
-                <div className="text-sm text-muted-foreground ml-9 space-y-2 pb-3 border-b-2 border-muted">
-                  <div className="flex justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-5 h-5 bg-gray-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">Fi</span>
-                      </div>
-                      <span>Fibra</span>
-                    </div>
-                    <span>2 g</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="ml-8">Azúcares</span>
-                    <span>3 g</span>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between items-center py-3 border-b-2 border-muted">
-                  <div className="flex items-center gap-3">
-                    <div className="w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">P</span>
-                    </div>
-                    <span className="font-medium">Proteínas</span>
-                  </div>
-                  <span className="font-bold">{Math.round((recipe.macros.protein * servings) / recipe.servings)} g</span>
-                </div>
-                
-                <div className="border-b-2 border-muted pb-3">
-                  <div className="flex justify-between items-center py-2">
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
-                        <span className="text-white text-xs font-bold">G</span>
-                      </div>
-                      <span className="font-medium">Grasas</span>
-                    </div>
-                    <span className="font-bold">{Math.round((recipe.macros.fat * servings) / recipe.servings)} g</span>
-                  </div>
-                  
-                  <div className="text-sm text-muted-foreground ml-9 space-y-2 mt-2">
-                    <div className="flex justify-between">
-                      <span>Grasas saturadas</span>
-                      <span>7 g</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Grasas insaturadas</span>
-                      <span>6,1 g</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-3 pt-3">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Colesterol</span>
-                    <span className="font-bold">31,6 mg</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Sodio</span>
-                    <span className="font-bold">74,1 mg</span>
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Potasio</span>
-                    <span className="font-bold">1117,6 mg</span>
-                  </div>
-                </div>
+                {index < recipe.instructions.length - 1 && <div className="border-b border-border"></div>}
               </div>
-            </CardContent>
-          )}
-        </Card>
-      </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
