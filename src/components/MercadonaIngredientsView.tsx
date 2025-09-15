@@ -24,7 +24,7 @@ import {
   ChevronDown,
   ChevronUp
 } from 'lucide-react';
-import mercadonaLogo from '@/assets/mercadona-logo.webp';
+import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 import lidlLogo from '@/assets/lidl-logo.png';
 import carrefourLogo from '@/assets/carrefour-logo.png';
 
