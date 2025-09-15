@@ -367,7 +367,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
                         <div className="flex items-center justify-between">
                           <div className="text-xs text-gray-500">
                             {usage.recipeAmount !== 'No usado' && (
-                              <span>{usage.percentage}% usado</span>
+                              <span>{usage.percentage}% de uso en receta</span>
                             )}
                           </div>
                           <button className="flex items-center gap-1 text-xs text-gray-500">
