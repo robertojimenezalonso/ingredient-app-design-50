@@ -293,7 +293,10 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange }
       
       
       <div className="flex justify-start mb-4">
-        <h3 className="text-lg font-semibold">Ingredientes</h3>
+        <div className="flex items-center gap-2">
+          <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6" />
+          <h3 className="text-lg font-semibold">Mercadona</h3>
+        </div>
       </div>
       <div className="space-y-0">
         {supermarketIngredients.map((ingredient, index) => {
