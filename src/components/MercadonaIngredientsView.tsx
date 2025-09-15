@@ -360,7 +360,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
               <div key={ingredient.id}>
                 <div className="py-2">
                   {/* Sección inferior: Producto del supermercado */}
-                  <div className="p-3">
+                  <div className="px-0">
                     <div className="flex gap-3">
                       <div className="w-16 h-16 flex-shrink-0">
                         <ImageLoader
@@ -374,22 +374,28 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between mb-1 gap-4">
                           <div className="flex-1 mr-2">
-                            {usage.unitsNeeded > 1 && (
+                            {isIngredientsExpanded && usage.unitsNeeded > 1 && (
                               <Badge variant="secondary" className="text-xs font-bold bg-orange-100 text-orange-800 px-1 py-0.5 mb-1">
                                 {usage.unitsNeeded}X
                               </Badge>
                             )}
                             <h5 className="text-sm leading-tight line-clamp-3">
-                              {ingredient.product_name} <span className="whitespace-nowrap">{usage.productAmount}</span>
+                              {ingredient.product_name.replace(/\s+\d+\s+(gramos|kilogramos|litros|mililitros|unidad|unidades|cucharadas|cucharada|cucharaditas|cucharadita)$/i, '')}
                             </h5>
                           </div>
                         </div>
                         
-                        <div className="flex items-center justify-between">
+                        <div className="flex items-start justify-between">
                           <div className="text-xs text-gray-500">
                             {usage.recipeAmount !== 'No usado' && (
                               <div>
                                 <span>El {usage.percentage}% se usa en esta receta</span>
+                                <div className="text-xs text-gray-600 mt-1">
+                                  {usage.unitsNeeded > 1 ? 
+                                    `${usage.unitsNeeded} ${abbreviateUnit(ingredient.unit_type)} de 1 ${abbreviateUnit(ingredient.unit_type)} que necesitarás` :
+                                    `1 ${abbreviateUnit(ingredient.unit_type)} que necesitarás`
+                                  }
+                                </div>
                                 <div className="font-medium text-sm text-gray-800 mt-1">
                                   {usage.totalPrice.toFixed(2)}€
                                 </div>
@@ -397,12 +403,14 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                             )}
                           </div>
                           <div className="flex items-center gap-3">
-                            <button className="flex items-center gap-1 text-xs text-gray-500">
-                              <span className="font-medium">+2</span>
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                              </svg>
-                            </button>
+                            {isIngredientsExpanded && (
+                              <button className="flex items-center gap-1 text-xs text-gray-500">
+                                <span className="font-medium">+2</span>
+                                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                                </svg>
+                              </button>
+                            )}
                             <Checkbox
                               checked={isSelected}
                               onCheckedChange={(checked) => handleSelectionChange(ingredient.id, checked as boolean)}
@@ -411,7 +419,7 @@ export const MercadonaIngredientsView = ({ recipe, servings, onSelectionChange, 
                           </div>
                         </div>
                         
-                        {usage.unitsNeeded > 1 && (
+                        {isIngredientsExpanded && usage.unitsNeeded > 1 && (
                           <div className="text-xs text-gray-500 mt-1">
                             {usage.unitPrice.toFixed(2)}€/ud
                           </div>
