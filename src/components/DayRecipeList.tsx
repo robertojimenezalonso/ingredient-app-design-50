@@ -96,7 +96,7 @@ export const DayRecipeList = ({
           <div key={dayIndex} className="space-y-2">
             {/* Day Header */}
             <div className="px-4">
-              <h2 className={`text-base font-medium lowercase ${
+              <h2 className={`text-lg font-medium lowercase ${
                 isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
               }`}>
                 {getDateLabel(dayPlan.date)}
