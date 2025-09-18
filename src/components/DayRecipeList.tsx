@@ -93,10 +93,10 @@ export const DayRecipeList = ({
     <div className="min-h-screen" style={{ backgroundColor: '#F7F7F7' }}>
       <div className="space-y-8">
         {dayPlans.map((dayPlan, dayIndex) => (
-          <div key={dayIndex} className="space-y-4">
+          <div key={dayIndex} className="space-y-2">
             {/* Day Header */}
             <div className="px-4">
-              <h2 className={`text-lg font-medium capitalize ${
+              <h2 className={`text-base font-medium lowercase ${
                 isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
               }`}>
                 {getDateLabel(dayPlan.date)}
