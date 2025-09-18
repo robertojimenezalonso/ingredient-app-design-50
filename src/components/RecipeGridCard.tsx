@@ -55,11 +55,11 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
             
             <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
               {/* Title and lock */}
-              <div className="flex items-center gap-2">
-                <h3 className="font-normal text-base leading-tight text-[#00664D] truncate flex-1 mr-2">
+              <div className="relative">
+                <h3 className="font-normal text-base leading-tight text-[#00664D] truncate pr-12">
                   {recipe.title}
                 </h3>
-                <div className="flex-shrink-0">
+                <div className="absolute top-0 right-0">
                   <div className="w-8 h-8 bg-[#C2FFF0] rounded-full flex items-center justify-center">
                     <Lock className="w-4 h-4 text-[#00664D]" fill="currentColor" />
                   </div>
