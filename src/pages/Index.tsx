@@ -77,7 +77,7 @@ const Index = () => {
       <TopHeader selectedDate={selectedDate} />
       
       {/* Horizontal Calendar */}
-      <div className="sticky top-16 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
+      <div className="mt-32 sticky top-32 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
         <HorizontalCalendar
           selectedDate={selectedDate}
           onDateSelect={setSelectedDate}

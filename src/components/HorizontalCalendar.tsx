@@ -52,25 +52,23 @@ export const HorizontalCalendar = ({
             key={index}
             onClick={() => onDateSelect(date)}
             className={cn(
-              "flex-shrink-0 min-w-[80px] h-20 rounded-xl border-2 transition-all duration-200",
-              "flex flex-col items-center justify-center gap-1",
-              "hover:scale-105 active:scale-95",
-              isSelected(date)
-                ? "bg-primary text-primary-foreground border-primary shadow-lg"
-                : isToday(date)
-                ? "bg-primary/10 text-primary border-primary/50"
-                : "bg-card text-card-foreground border-border hover:bg-accent hover:text-accent-foreground"
+              "flex-shrink-0 min-w-[60px] transition-all duration-200",
+              "flex flex-col items-center justify-center gap-1 py-3"
             )}
           >
-            <span className="text-xs font-medium uppercase tracking-wide">
+            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
               {format(date, 'EEE', { locale: es })}
             </span>
-            <span className="text-lg font-bold">
-              {format(date, 'd')}
-            </span>
-            <span className="text-xs opacity-75">
-              {format(date, 'MMM', { locale: es })}
-            </span>
+            <div className={cn(
+              "w-8 h-8 flex items-center justify-center transition-all duration-200",
+              isSelected(date)
+                ? "bg-primary text-primary-foreground rounded-full"
+                : "text-foreground"
+            )}>
+              <span className="text-lg font-bold">
+                {format(date, 'd')}
+              </span>
+            </div>
           </button>
         ))}
       </div>
