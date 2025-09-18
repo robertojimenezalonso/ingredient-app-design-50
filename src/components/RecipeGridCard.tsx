@@ -35,7 +35,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
   return (
     <>
       {isFirstCard ? (
-        <div className="bg-[#D6FFF5] rounded-lg p-3 my-3">
+        <div className="bg-[#EBFFFA] rounded-lg p-3 my-3">
           {/* Title and meal type tag */}
           <div className="flex items-center justify-between mb-3">
             <h3 className="font-semibold text-lg leading-tight text-[#00664D] flex-1 truncate pr-2" 
