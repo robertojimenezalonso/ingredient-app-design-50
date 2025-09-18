@@ -187,11 +187,11 @@ export const DayRecipeList = ({
                   {/* Nutrition Summary */}
                   <div className="px-4 pb-4">
                     {/* Title for macros area */}
-                    <div className="flex-1 rounded-lg py-2 px-3 mb-2" style={{ backgroundColor: '#e8f5e8' }}>
+                    <div className="flex-1 rounded-lg py-2 px-3 mb-2" style={{ backgroundColor: '#ecf9ec' }}>
                       <div className="flex items-center justify-center gap-2">
-                        <span className="text-sm text-green-600">Objetivo comer saludable</span>
-                        <div className="h-4 w-4 bg-green-600 rounded-full flex items-center justify-center">
-                          <Check className="h-2 w-2 text-white" />
+                        <span className="text-sm" style={{ color: '#339933' }}>Objetivo comer saludable</span>
+                        <div className="h-3 w-3 rounded-full flex items-center justify-center" style={{ backgroundColor: '#339933' }}>
+                          <Check className="h-1.5 w-1.5 text-white" />
                         </div>
                       </div>
                     </div>
