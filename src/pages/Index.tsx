@@ -74,7 +74,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Header */}
-      <TopHeader />
+      <TopHeader selectedDate={selectedDate} />
       
       {/* Horizontal Calendar */}
       <div className="sticky top-16 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
