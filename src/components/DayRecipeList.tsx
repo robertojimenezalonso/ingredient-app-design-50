@@ -93,6 +93,20 @@ export const DayRecipeList = ({
     return total.toFixed(2).replace('.', ',');
   };
 
+  const calculateNutritionTotals = (recipes: RecipeWithMeal[]) => {
+    return recipes.reduce((totals, recipe) => {
+      const calories = recipe.calories || 0;
+      const macros = recipe.macros || { fat: 0, carbs: 0, protein: 0 };
+      
+      return {
+        calories: totals.calories + calories,
+        fat: totals.fat + macros.fat,
+        carbs: totals.carbs + macros.carbs,
+        protein: totals.protein + macros.protein
+      };
+    }, { calories: 0, fat: 0, carbs: 0, protein: 0 });
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -119,6 +133,20 @@ export const DayRecipeList = ({
                 </span>
               )}
             </div>
+            
+            {/* Nutrition Summary */}
+            {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+              <div className="px-4">
+                {(() => {
+                  const nutrition = calculateNutritionTotals(dayPlan.recipes);
+                  return (
+                    <div className="text-sm text-muted-foreground">
+                      {nutrition.calories} kcal • {Math.round(nutrition.protein)}g proteína • {Math.round(nutrition.carbs)}g carbohidratos • {Math.round(nutrition.fat)}g grasa
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
             
             {/* Recipes or Generate Button */}
             {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
