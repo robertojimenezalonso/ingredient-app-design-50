@@ -36,15 +36,11 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
     <>
       {isFirstCard ? (
         <div className="bg-[#EBFFFA] rounded-lg p-3 my-3">
-          {/* Title and meal type tag */}
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-lg leading-tight text-[#00664D] flex-1 truncate pr-2" 
-                style={{ maxWidth: 'calc(100% - 80px)' }}>
+          {/* Title */}
+          <div className="mb-3">
+            <h3 className="font-semibold text-lg leading-tight text-[#00664D]">
               {recipe.title}
             </h3>
-            <div className="bg-[#85FFE0] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium">
-              {mealType}
-            </div>
           </div>
           
           {/* Content */}
@@ -76,9 +72,14 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
                 {recipe.calories} kcal
               </div>
               
-              {/* Macros */}
-              <div className="text-sm text-[#00664D]">
-                {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G
+              {/* Macros and tag */}
+              <div className="flex items-center justify-between">
+                <div className="text-sm text-[#00664D]">
+                  {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G
+                </div>
+                <div className="bg-[#85FFE0] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium">
+                  {mealType}
+                </div>
               </div>
             </div>
             
