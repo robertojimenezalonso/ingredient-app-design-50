@@ -134,48 +134,50 @@ export const DayRecipeList = ({
               )}
             </div>
             
-            {/* Nutrition Summary */}
-            {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-              <div className="px-4">
-                {(() => {
-                  const nutrition = calculateNutritionTotals(dayPlan.recipes);
-                  return (
-                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                       <div className="flex items-center gap-1">
-                         <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-                         <span>{nutrition.calories} kcal</span>
-                       </div>
-                       <div className="flex items-center gap-1">
-                         <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
-                         <span>{Math.round(nutrition.protein)}g</span>
-                       </div>
-                       <div className="flex items-center gap-1">
-                         <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
-                         <span>{Math.round(nutrition.carbs)}g</span>
-                       </div>
-                       <div className="flex items-center gap-1">
-                         <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
-                         <span>{Math.round(nutrition.fat)}g</span>
-                       </div>
-                     </div>
-                  );
-                })()}
-              </div>
-            )}
-            
             {/* Recipes or Generate Button */}
             {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
               <div className="mx-4">
-                <div className="bg-white rounded-lg shadow-sm p-4">
-                  {dayPlan.recipes.map((recipe, recipeIndex) => (
-                    <RecipeGridCard
-                      key={`${recipe.id}-${recipeIndex}`}
-                      recipe={recipe}
-                      mealType={recipe.mealTypeLabel}
-                      onClick={() => onRecipeClick(recipe)}
-                      onAdd={() => onAddRecipe(recipe)}
-                    />
-                  ))}
+                <div className="bg-white rounded-lg shadow-sm">
+                  <div className="p-4">
+                    {dayPlan.recipes.map((recipe, recipeIndex) => (
+                      <RecipeGridCard
+                        key={`${recipe.id}-${recipeIndex}`}
+                        recipe={recipe}
+                        mealType={recipe.mealTypeLabel}
+                        onClick={() => onRecipeClick(recipe)}
+                        onAdd={() => onAddRecipe(recipe)}
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Nutrition Summary */}
+                  <div className="px-4 pb-4">
+                    {(() => {
+                      const nutrition = calculateNutritionTotals(dayPlan.recipes);
+                      return (
+                        <div className="rounded-lg p-3" style={{ backgroundColor: '#ECEBF1' }}>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                              <span>{nutrition.calories} kcal</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                              <span>{Math.round(nutrition.protein)}g</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                              <span>{Math.round(nutrition.carbs)}g</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                              <span>{Math.round(nutrition.fat)}g</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
+                  </div>
                 </div>
               </div>
             ) : (
