@@ -14,7 +14,7 @@ export const TopHeader = ({ selectedDate }: TopHeaderProps) => {
   const formattedDate = format(selectedDate, "EEEE, d 'de' MMMM", { locale: es });
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm" style={{ backgroundColor: '#F7F7F7' }}>
+    <div className="fixed top-0 left-0 right-0 z-50" style={{ backgroundColor: '#F7F7F7' }}>
       <div className="flex items-center justify-between px-4 py-3">
         {/* Profile Section */}
         <div 
