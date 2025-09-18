@@ -65,23 +65,26 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
               />
             </div>
             
-            <div className="flex-1 flex flex-col justify-center gap-2">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-normal text-[#00664D]">
-                  {price} €
-                </div>
-                <div className="text-sm text-[#00664D]">
-                  2 personas
-                </div>
+            <div className="flex-1 flex flex-col justify-start gap-1">
+              {/* Price and servings */}
+              <div className="text-base font-medium text-[#00664D]">
+                {price} € • 2 raciones
               </div>
               
-              <div className="flex items-center text-sm text-[#00664D]">
-                <span>{recipe.calories} kcal • {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G</span>
+              {/* Calories */}
+              <div className="text-sm text-[#00664D]">
+                {recipe.calories} kcal
               </div>
               
-              <div className="flex-shrink-0">
-                <Lock className="w-5 h-5 text-[#00664D]" fill="currentColor" />
+              {/* Macros */}
+              <div className="text-sm text-[#00664D]">
+                {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G
               </div>
+            </div>
+            
+            {/* Lock icon centered on the right */}
+            <div className="flex-shrink-0 flex items-center h-[120px]">
+              <Lock className="w-5 h-5 text-[#00664D]" fill="currentColor" />
             </div>
           </div>
         </div>
