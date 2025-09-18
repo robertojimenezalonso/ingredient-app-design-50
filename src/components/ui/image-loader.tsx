@@ -98,7 +98,7 @@ export const ImageLoader = ({
   };
 
   return (
-    <div className={cn("relative overflow-hidden bg-muted", className)}>
+    <div className={cn("relative overflow-hidden bg-muted rounded-lg", className)}>
       {/* Mostrar fallback inmediatamente si hay error */}
       {error && currentSrc === finalFallbackSrc ? (
         <div className={cn("w-full h-full bg-gradient-to-br from-muted to-muted-foreground/20 flex items-center justify-center", className)}>
