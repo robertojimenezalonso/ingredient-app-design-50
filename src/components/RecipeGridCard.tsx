@@ -42,7 +42,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
           <ImageLoader
             src={recipe.image} 
             alt={recipe.title}
-            className="w-[100px] h-[100px] object-cover rounded-lg"
+            className="w-[85px] h-[85px] object-cover rounded-lg"
             category={recipe.category}
             priority={true}
             placeholder={
