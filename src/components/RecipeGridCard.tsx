@@ -36,17 +36,6 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
     <>
       {isFirstCard ? (
         <div className="bg-[#EBFFFA] rounded-lg p-3 my-3">
-          {/* Title and lock */}
-          <div className="flex items-center justify-between mb-3">
-            <h3 className="font-semibold text-lg leading-tight text-[#00664D] flex-1">
-              {recipe.title}
-            </h3>
-            <div className="flex-shrink-0 ml-2">
-              <Lock className="w-5 h-5 text-[#00664D]" fill="currentColor" />
-            </div>
-          </div>
-          
-          {/* Content */}
           <div className="flex gap-3 items-center cursor-pointer" onClick={handleClick}>
             <div className="flex-shrink-0">
               <ImageLoader
@@ -64,15 +53,24 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
               />
             </div>
             
-            <div className="flex-1 flex flex-col justify-start gap-1">
-              {/* Price and servings */}
-              <div className="text-base font-medium text-[#00664D]">
-                {price} € • 2 raciones
+            <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
+              {/* Title and lock */}
+              <div className="flex items-center justify-between">
+                <div className="flex-1 pr-2" style={{ maxWidth: 'calc(100% - 50px)' }}>
+                  <h3 className="font-normal text-base leading-tight truncate text-left text-[#00664D]">
+                    {recipe.title}
+                  </h3>
+                </div>
+                <div className="flex-shrink-0 ml-2">
+                  <div className="w-8 h-8 bg-[#C2FFF0] rounded-full flex items-center justify-center">
+                    <Lock className="w-4 h-4 text-[#00664D]" fill="currentColor" />
+                  </div>
+                </div>
               </div>
               
-              {/* Calories */}
-              <div className="text-sm text-[#00664D]">
-                {recipe.calories} kcal
+              {/* Price and servings */}
+              <div className="text-sm font-normal text-[#00664D]">
+                {price} € • 2 raciones
               </div>
               
               {/* Macros and tag */}
@@ -83,6 +81,11 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
                 <div className="bg-[#C2FFF0] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium">
                   {mealType}
                 </div>
+              </div>
+              
+              {/* Calories and macros combined */}
+              <div className="text-sm text-[#00664D]">
+                {recipe.calories} kcal • {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G
               </div>
             </div>
           </div>
