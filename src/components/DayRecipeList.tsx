@@ -81,6 +81,18 @@ export const DayRecipeList = ({
     return format(date, "EEEE d", { locale: es });
   };
 
+  const generateConsistentPrice = (id: string): number => {
+    const hash = id.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+    return (hash % 8 + 4); // Price between 4.00 - 11.99
+  };
+
+  const calculateDayTotal = (recipes: RecipeWithMeal[]): string => {
+    const total = recipes.reduce((sum, recipe) => {
+      return sum + generateConsistentPrice(recipe.id);
+    }, 0);
+    return total.toFixed(2).replace('.', ',');
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -95,12 +107,17 @@ export const DayRecipeList = ({
         {dayPlans.map((dayPlan, dayIndex) => (
           <div key={dayIndex} className="space-y-2">
             {/* Day Header */}
-            <div className="px-4">
+            <div className="px-4 flex items-center justify-between">
               <h2 className={`text-lg font-medium lowercase ${
                 isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
               }`}>
                 {getDateLabel(dayPlan.date)}
               </h2>
+              {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+                <span className="text-muted-foreground font-normal">
+                  {calculateDayTotal(dayPlan.recipes)} €
+                </span>
+              )}
             </div>
             
             {/* Recipes or Generate Button */}
