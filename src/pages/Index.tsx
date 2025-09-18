@@ -77,11 +77,11 @@ const Index = () => {
       <TopHeader selectedDate={selectedDate} />
       
       {/* Horizontal Calendar */}
-      <div className="mt-32 sticky top-32 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
+      <div className="mt-32 sticky top-32 z-10 bg-background/95 backdrop-blur-sm">
         <HorizontalCalendar
           selectedDate={selectedDate}
           onDateSelect={setSelectedDate}
-          className="py-4"
+          className="py-2"
         />
       </div>
       

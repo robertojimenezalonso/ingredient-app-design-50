@@ -44,7 +44,7 @@ export const HorizontalCalendar = ({
     <div className={cn("w-full", className)}>
       <div 
         ref={scrollRef}
-        className="flex gap-2 overflow-x-auto scrollbar-hide px-4 py-2"
+        className="flex gap-1 overflow-x-auto scrollbar-hide px-4 py-2"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {dates.map((date, index) => (
@@ -52,20 +52,20 @@ export const HorizontalCalendar = ({
             key={index}
             onClick={() => onDateSelect(date)}
             className={cn(
-              "flex-shrink-0 min-w-[60px] transition-all duration-200",
-              "flex flex-col items-center justify-center gap-1 py-3"
+              "flex-shrink-0 min-w-[45px] transition-all duration-200",
+              "flex flex-col items-center justify-center gap-0.5 py-2"
             )}
           >
-            <span className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-              {format(date, 'EEE', { locale: es })}
+            <span className="text-xs font-normal capitalize text-muted-foreground">
+              {format(date, 'EEE', { locale: es }).toLowerCase()}
             </span>
             <div className={cn(
-              "w-8 h-8 flex items-center justify-center transition-all duration-200",
+              "w-6 h-6 flex items-center justify-center transition-all duration-200",
               isSelected(date)
                 ? "bg-primary text-primary-foreground rounded-full"
                 : "text-foreground"
             )}>
-              <span className="text-lg font-bold">
+              <span className="text-sm font-medium">
                 {format(date, 'd')}
               </span>
             </div>
