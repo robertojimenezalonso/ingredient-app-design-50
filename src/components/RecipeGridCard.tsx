@@ -70,7 +70,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
           
           <div className="flex items-center justify-start">
             <div className="text-sm text-muted-foreground">
-              2 raciones • {mealType || "Comida"}
+              {mealType || "Comida"} • 2 raciones
             </div>
           </div>
         </div>
