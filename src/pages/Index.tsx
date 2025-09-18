@@ -4,7 +4,7 @@ import { Recipe } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
 import { VerticalCalendar } from '@/components/HorizontalCalendar';
 import { DayRecipeList } from '@/components/DayRecipeList';
-import { FloatingPlanSummary } from '@/components/FloatingPlanSummary';
+
 import { TopHeader } from '@/components/TopHeader';
 
 const Index = () => {
@@ -95,17 +95,6 @@ const Index = () => {
         />
       </div>
       
-      {/* Floating Plan Summary */}
-      {currentDayRecipes.length > 0 && (
-        <FloatingPlanSummary
-          dayRecipes={currentDayRecipes}
-          selectedDate={selectedDate}
-          onPersonsChange={handlePersonsChange}
-          onSavePlan={handleSavePlan}
-          onChangePlan={handleChangePlan}
-          onNavigatePlan={handleNavigatePlan}
-        />
-      )}
     </div>
   );
 };
