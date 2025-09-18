@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Check, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Recipe } from '@/types/recipe';
 
@@ -51,92 +51,61 @@ export const FloatingPlanSummary = ({
 
   return (
     <div className="fixed bottom-20 left-4 right-4 z-40">
-      <div className="bg-card border border-border rounded-xl shadow-lg p-4 space-y-4">
-        {/* Nutritional Summary */}
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-orange-500" />
-              <span className="text-xs text-muted-foreground">
-                {Math.round(totals.calories)} kcal
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-blue-500" />
-              <span className="text-xs text-muted-foreground">
-                {Math.round(totals.protein)}g P
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-xs text-muted-foreground">
-                {Math.round(totals.carbs)}g C
-              </span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-yellow-500" />
-              <span className="text-xs text-muted-foreground">
-                {Math.round(totals.fat)}g G
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Goal and Price Section */}
+      <div className="bg-card border border-border rounded-xl shadow-lg p-4 space-y-3">
+        
+        {/* First line: Mercadona + Price */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Objetivo: Saludable</span>
-            {isHealthyGoal && (
-              <Check className="w-4 h-4 text-green-500" />
-            )}
+            <div className="w-5 h-5 bg-green-600 rounded flex items-center justify-center">
+              <span className="text-white text-xs font-bold">M</span>
+            </div>
+            <span className="text-sm font-medium">Mercadona</span>
           </div>
-          <div className="text-sm font-semibold text-primary">
+          <div className="text-lg font-bold text-primary">
             {formatPrice(totalPrice)}
           </div>
         </div>
 
-        {/* Persons and Navigation */}
-        <div className="flex items-center justify-between">
-          {/* Persons Selector */}
+        {/* Second line: Goal */}
+        <div className="flex items-center gap-2">
+          <span className="text-sm">Objetivo: Saludable</span>
+          {isHealthyGoal && (
+            <Check className="w-4 h-4 text-green-500" />
+          )}
+        </div>
+
+        {/* Third line: All macros in one line */}
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <span>{Math.round(totals.calories)} kcal</span>
+          <span>P {Math.round(totals.protein)}g</span>
+          <span>H {Math.round(totals.carbs)}g</span>
+          <span>G {Math.round(totals.fat)}g</span>
+        </div>
+
+        {/* Fourth line: For X persons (small text) */}
+        <div className="text-xs text-muted-foreground">
+          Para {persons} {persons === 1 ? 'persona' : 'personas'}
+        </div>
+
+        {/* Fifth line: Navigation and Actions */}
+        <div className="flex items-center justify-between pt-2">
+          {/* Plan Navigation */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Para:</span>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => handlePersonsChange(-1)}
-                className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs hover:bg-muted/80"
-              >
-                -
-              </button>
-              <span className="text-sm font-medium px-2">
-                {persons} {persons === 1 ? 'persona' : 'personas'}
-              </span>
-              <button
-                onClick={() => handlePersonsChange(1)}
-                className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-xs hover:bg-muted/80"
-              >
-                +
-              </button>
-            </div>
+            <button
+              onClick={() => onNavigatePlan?.('prev')}
+              className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              onClick={() => onNavigatePlan?.('next')}
+              className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
           </div>
 
-          {/* Navigation and Actions */}
           <div className="flex items-center gap-3">
-            {/* Plan Navigation */}
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => onNavigatePlan?.('prev')}
-                className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => onNavigatePlan?.('next')}
-                className="w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-muted/80"
-              >
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-
             {/* Change Plan */}
             <button
               onClick={onChangePlan}
