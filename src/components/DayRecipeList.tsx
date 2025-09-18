@@ -56,14 +56,6 @@ export const DayRecipeList = ({
 
   return (
     <div className="space-y-6 px-4">
-      <div className="text-center py-4">
-        <h2 className="text-2xl font-bold text-foreground">
-          {format(selectedDate, "EEEE, d 'de' MMMM", { locale: es })}
-        </h2>
-        <p className="text-muted-foreground mt-1">
-          Menú del día
-        </p>
-      </div>
       
       <div className="space-y-4">
         {dayRecipes.map((recipe, index) => (
