@@ -17,7 +17,7 @@ export const TopHeader = ({ selectedDate }: TopHeaderProps) => {
     <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="flex items-center justify-between px-4 py-3">
         {/* Profile Section */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col items-start gap-2">
           <div 
             className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
             onClick={() => navigate('/profile')}
