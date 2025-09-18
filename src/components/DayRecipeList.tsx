@@ -149,9 +149,19 @@ export const DayRecipeList = ({
                 </h2>
               </div>
               {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                <span className="text-muted-foreground font-normal">
-                  {calculateDayTotal(dayPlan.recipes)} €
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-muted-foreground font-normal">
+                    {calculateDayTotal(dayPlan.recipes)} €
+                  </span>
+                  <Button 
+                    size="sm" 
+                    className="rounded-full h-8 w-8 p-0 flex-shrink-0" 
+                    style={{ backgroundColor: '#ECEBF1' }}
+                    variant="ghost"
+                  >
+                    <Plus className="h-4 w-4 text-muted-foreground" />
+                  </Button>
+                </div>
               )}
             </div>
             
@@ -177,7 +187,7 @@ export const DayRecipeList = ({
                       const nutrition = calculateNutritionTotals(dayPlan.recipes);
                       return (
                         <div className="flex items-center gap-3">
-                          <div className="flex-1 rounded-lg p-3 bg-white border" style={{ borderColor: '#ECEBF1' }}>
+                         <div className="flex-1 rounded-lg p-3 bg-white border" style={{ borderColor: '#ECEBF1' }}>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
                               <div className="flex items-center gap-1">
                                 <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
@@ -197,14 +207,6 @@ export const DayRecipeList = ({
                               </div>
                             </div>
                           </div>
-                          <Button 
-                            size="sm" 
-                            className="rounded-full h-8 w-8 p-0 flex-shrink-0" 
-                            style={{ backgroundColor: '#ECEBF1' }}
-                            variant="ghost"
-                          >
-                            <Plus className="h-4 w-4 text-muted-foreground" />
-                          </Button>
                         </div>
                       );
                     })()}
