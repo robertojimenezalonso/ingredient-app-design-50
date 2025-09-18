@@ -77,7 +77,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
                 <div className="text-sm text-[#00664D]">
                   {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G
                 </div>
-                <div className="bg-[#85FFE0] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium">
+                <div className="bg-[#C2FFF0] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium">
                   {mealType}
                 </div>
               </div>
