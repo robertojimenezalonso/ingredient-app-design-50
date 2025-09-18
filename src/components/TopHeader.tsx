@@ -15,23 +15,17 @@ export const TopHeader = ({ selectedDate }: TopHeaderProps) => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm" style={{ backgroundColor: '#F7F7F7' }}>
-      <div className="flex items-start justify-between px-4 py-3">
+      <div className="flex items-center justify-between px-4 py-3">
         {/* Profile Section */}
-        <div className="flex flex-col items-start gap-2">
-          <div 
-            className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
-            onClick={() => navigate('/profile')}
-          >
-            <img 
-              src="/profile-photo.jpeg" 
-              alt="Perfil" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="flex flex-col">
-            <h1 className="text-lg font-semibold text-foreground">Roberto J.</h1>
-            <p className="text-sm text-muted-foreground capitalize">{formattedDate}</p>
-          </div>
+        <div 
+          className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
+          onClick={() => navigate('/profile')}
+        >
+          <img 
+            src="/profile-photo.jpeg" 
+            alt="Perfil" 
+            className="w-full h-full object-cover"
+          />
         </div>
         
         {/* Mis listas button */}
