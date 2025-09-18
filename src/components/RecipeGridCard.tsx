@@ -36,11 +36,14 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
     <>
       {isFirstCard ? (
         <div className="bg-[#EBFFFA] rounded-lg p-3 my-3">
-          {/* Title */}
-          <div className="mb-3">
-            <h3 className="font-semibold text-lg leading-tight text-[#00664D]">
+          {/* Title and lock */}
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="font-semibold text-lg leading-tight text-[#00664D] flex-1">
               {recipe.title}
             </h3>
+            <div className="flex-shrink-0 ml-2">
+              <Lock className="w-5 h-5 text-[#00664D]" fill="currentColor" />
+            </div>
           </div>
           
           {/* Content */}
@@ -81,11 +84,6 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
                   {mealType}
                 </div>
               </div>
-            </div>
-            
-            {/* Lock icon centered on the right */}
-            <div className="flex-shrink-0 flex items-center h-[120px]">
-              <Lock className="w-5 h-5 text-[#00664D]" fill="currentColor" />
             </div>
           </div>
         </div>
