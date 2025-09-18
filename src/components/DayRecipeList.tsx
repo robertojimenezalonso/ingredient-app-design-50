@@ -7,7 +7,7 @@ import { format, addDays, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Plus } from 'lucide-react';
+import { Plus, Check } from 'lucide-react';
 
 interface RecipeWithMeal extends Recipe {
   mealTypeLabel: string;
@@ -186,11 +186,16 @@ export const DayRecipeList = ({
                   
                   {/* Nutrition Summary */}
                   <div className="px-4 pb-4">
+                    {/* Title for macros area */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <Check className="h-4 w-4 text-green-500" />
+                      <span className="text-sm font-medium text-foreground">Objetivo comer saludable</span>
+                    </div>
                     {(() => {
                       const nutrition = calculateNutritionTotals(dayPlan.recipes);
                       return (
                         <div className="flex items-center gap-3">
-                         <div className="flex-1 rounded-lg p-3 bg-white border" style={{ borderColor: '#ECEBF1' }}>
+                          <div className="flex-1 rounded-lg p-3 bg-white border" style={{ borderColor: '#ECEBF1' }}>
                             <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground flex-wrap">
                               <div className="flex items-center gap-1">
                                 <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
