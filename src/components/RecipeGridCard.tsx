@@ -55,23 +55,23 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
         </div>
         
         <div className="flex-1 flex flex-col justify-center relative gap-2">
-          <div className="flex items-center justify-between">
-            <div className="flex-1 pr-2">
-              <h3 className="font-normal text-base leading-tight truncate text-left pr-8">
+          <div className="flex items-center gap-4">
+            <div className="flex-1 min-w-0 pr-4">
+              <h3 className="font-normal text-base leading-tight truncate text-left">
                 {recipe.title}
               </h3>
             </div>
-            <div className="absolute top-0 right-0">
+            <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="text-sm text-muted-foreground whitespace-nowrap">
+                2 raciones • {mealType || "Comida"}
+              </div>
               <Lock className="w-5 h-5 text-primary" fill="currentColor" />
             </div>
           </div>
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-start">
             <div className="text-sm font-normal text-muted-foreground">
               {price} €
-            </div>
-            <div className="text-sm text-muted-foreground">
-              2 personas • {mealType || "Comida"}
             </div>
           </div>
         </div>
