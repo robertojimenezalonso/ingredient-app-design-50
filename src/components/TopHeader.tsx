@@ -8,12 +8,16 @@ export const TopHeader = () => {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="flex items-center justify-between px-4 py-3">
-        {/* Profile Circle */}
+        {/* Profile Photo */}
         <div 
-          className="w-10 h-10 rounded-full bg-muted flex items-center justify-center cursor-pointer"
+          className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
           onClick={() => navigate('/profile')}
         >
-          <User className="w-5 h-5 text-muted-foreground" />
+          <img 
+            src="/profile-photo.jpeg" 
+            alt="Perfil" 
+            className="w-full h-full object-cover"
+          />
         </div>
         
         {/* Mis listas button */}
