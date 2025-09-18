@@ -143,26 +143,28 @@ export const DayRecipeList = ({
                   disabled
                   className="pointer-events-none"
                 />
-                <h2 className={`text-lg font-medium lowercase ${
-                  isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
-                }`}>
-                  {getDateLabel(dayPlan.date)}
-                </h2>
+                <div className="flex flex-col">
+                  <h2 className={`text-lg font-semibold ${
+                    isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+                  }`}>
+                    {getDateLabel(dayPlan.date)}
+                  </h2>
+                  {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+                    <span className="text-sm text-muted-foreground">
+                      {calculateDayTotal(dayPlan.recipes)} €
+                    </span>
+                  )}
+                </div>
               </div>
               {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                <div className="flex items-center gap-4">
-                  <span className="text-muted-foreground font-normal">
-                    {calculateDayTotal(dayPlan.recipes)} €
-                  </span>
-                  <Button 
-                    size="sm" 
-                    className="rounded-full h-8 w-8 p-0 flex-shrink-0" 
-                    style={{ backgroundColor: '#ECEBF1' }}
-                    variant="ghost"
-                  >
-                    <Plus className="h-4 w-4 text-muted-foreground" />
-                  </Button>
-                </div>
+                <Button 
+                  size="sm" 
+                  className="rounded-full h-8 w-8 p-0 flex-shrink-0" 
+                  style={{ backgroundColor: '#ECEBF1' }}
+                  variant="ghost"
+                >
+                  <Plus className="h-4 w-4 text-muted-foreground" />
+                </Button>
               )}
             </div>
             
