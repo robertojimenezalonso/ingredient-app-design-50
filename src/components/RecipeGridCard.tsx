@@ -33,102 +33,51 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
   };
 
   return (
-    <>
-      {isFirstCard ? (
-        <div className="bg-[#EBFFFA] rounded-lg p-3 my-3">
-          <div className="flex gap-3 items-center cursor-pointer" onClick={handleClick}>
-            <div className="flex-shrink-0">
-              <ImageLoader
-                src={recipe.image} 
-                alt={recipe.title}
-                className="w-[120px] h-[120px] object-cover rounded-lg"
-                category={recipe.category}
-                priority={true}
-                placeholder={
-                  <div className="text-center">
-                    <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-1" />
-                    <div className="text-xs opacity-70">Cargando...</div>
-                  </div>
-                }
-              />
+    <div 
+      className="flex gap-3 items-center cursor-pointer relative w-full transition-transform duration-200 py-4 h-[120px]"
+      onClick={handleClick}
+    >
+      <div className="flex-shrink-0">
+        <ImageLoader
+          src={recipe.image} 
+          alt={recipe.title}
+          className="w-[120px] h-[120px] object-cover rounded-lg"
+          category={recipe.category}
+          priority={true}
+          placeholder={
+            <div className="text-center">
+              <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-1" />
+              <div className="text-xs opacity-70">Cargando...</div>
             </div>
-            
-            <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
-              {/* Title */}
-              <div>
-                <h3 className="font-normal text-base leading-tight text-[#00664D] truncate">
-                  {recipe.title}
-                </h3>
-              </div>
-              
-              {/* Price and servings */}
-              <div className="text-sm font-normal text-[#00664D]">
-                {price} € • 2 raciones
-              </div>
-              
-              {/* Meal type tag */}
-              <div>
-                <div className="bg-[#C2FFF0] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium inline-block">
-                  {mealType}
-                </div>
-              </div>
-              
-              {/* Calories and macros combined */}
-              <div className="text-sm text-[#00664D]">
-                {recipe.calories} kcal • {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G
-              </div>
-            </div>
+          }
+        />
+      </div>
+      
+      <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
+        <div className="flex items-center justify-between">
+          <div className="flex-1 pr-2">
+            <h3 className="font-normal text-base leading-tight truncate text-left pr-8">
+              {recipe.title}
+            </h3>
+          </div>
+          <div className="absolute top-2 right-2">
+            <Lock className="w-5 h-5 text-primary" fill="currentColor" />
           </div>
         </div>
-      ) : (
-        <div 
-          className="flex gap-3 items-center cursor-pointer relative w-full transition-transform duration-200 py-4 h-[120px]"
-          onClick={handleClick}
-        >
-          <div className="flex-shrink-0">
-            <ImageLoader
-              src={recipe.image} 
-              alt={recipe.title}
-              className="w-[120px] h-[120px] object-cover rounded-lg"
-              category={recipe.category}
-              priority={true}
-              placeholder={
-                <div className="text-center">
-                  <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-1" />
-                  <div className="text-xs opacity-70">Cargando...</div>
-                </div>
-              }
-            />
+        
+        <div className="flex items-center justify-between">
+          <div className="text-sm font-normal text-muted-foreground">
+            {price} €
           </div>
-          
-          <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
-            <div className="flex items-center justify-between">
-              <div className="flex-1 pr-2">
-                <h3 className="font-normal text-base leading-tight truncate text-left pr-8">
-                  {recipe.title}
-                </h3>
-              </div>
-              <div className="absolute top-2 right-2">
-                <Lock className="w-5 h-5 text-primary" fill="currentColor" />
-              </div>
-            </div>
-            
-            <div className="flex items-center justify-between">
-              <div className="text-sm font-normal text-muted-foreground">
-                {price} €
-              </div>
-              <div className="text-sm text-muted-foreground">
-                2 personas • {mealType || "Comida"}
-              </div>
-            </div>
-            
-            <div className="flex items-center text-sm text-muted-foreground">
-              <span>{recipe.calories} kcal • {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G</span>
-            </div>
+          <div className="text-sm text-muted-foreground">
+            2 personas • {mealType || "Comida"}
           </div>
         </div>
-      )}
-      <div className="h-px bg-gray-200 mx-0"></div>
-    </>
+        
+        <div className="flex items-center text-sm text-muted-foreground">
+          <span>{recipe.calories} kcal • {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G</span>
+        </div>
+      </div>
+    </div>
   );
 };

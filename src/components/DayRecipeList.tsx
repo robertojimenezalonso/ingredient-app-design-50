@@ -90,45 +90,48 @@ export const DayRecipeList = ({
   }
 
   return (
-    <div className="space-y-8">
-      {dayPlans.map((dayPlan, dayIndex) => (
-        <div key={dayIndex} className="space-y-4">
-          {/* Day Header */}
-          <div className="px-4">
-            <h2 className={`text-lg font-medium capitalize ${
-              isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
-            }`}>
-              {getDateLabel(dayPlan.date)}
-            </h2>
-          </div>
-          
-          {/* Recipes or Generate Button */}
-          {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
-            <div className="space-y-4 px-4">
-              {dayPlan.recipes.map((recipe, recipeIndex) => (
-                <RecipeGridCard
-                  key={`${recipe.id}-${recipeIndex}`}
-                  recipe={recipe}
-                  mealType={recipe.mealTypeLabel}
-                  isFirstCard={recipeIndex === 0}
-                  onClick={() => onRecipeClick(recipe)}
-                  onAdd={() => onAddRecipe(recipe)}
-                />
-              ))}
-            </div>
-          ) : (
+    <div className="bg-gray-50 min-h-screen">
+      <div className="space-y-8">
+        {dayPlans.map((dayPlan, dayIndex) => (
+          <div key={dayIndex} className="space-y-4">
+            {/* Day Header */}
             <div className="px-4">
-              <Button 
-                onClick={() => handleGeneratePlan(dayPlan.date)}
-                className="w-full py-4 text-base"
-                variant="outline"
-              >
-                Generar recetas
-              </Button>
+              <h2 className={`text-lg font-medium capitalize ${
+                isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+              }`}>
+                {getDateLabel(dayPlan.date)}
+              </h2>
             </div>
-          )}
-        </div>
-      ))}
+            
+            {/* Recipes or Generate Button */}
+            {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
+              <div className="mx-4">
+                <div className="bg-white rounded-lg shadow-sm">
+                  {dayPlan.recipes.map((recipe, recipeIndex) => (
+                    <RecipeGridCard
+                      key={`${recipe.id}-${recipeIndex}`}
+                      recipe={recipe}
+                      mealType={recipe.mealTypeLabel}
+                      onClick={() => onRecipeClick(recipe)}
+                      onAdd={() => onAddRecipe(recipe)}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="px-4">
+                <Button 
+                  onClick={() => handleGeneratePlan(dayPlan.date)}
+                  className="w-full py-4 text-base"
+                  variant="outline"
+                >
+                  Generar recetas
+                </Button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
