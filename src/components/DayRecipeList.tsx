@@ -6,6 +6,7 @@ import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { format, addDays, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
 import { Plus } from 'lucide-react';
 
 interface RecipeWithMeal extends Recipe {
@@ -136,11 +137,17 @@ export const DayRecipeList = ({
           <div key={dayIndex} className="space-y-2">
             {/* Day Header */}
             <div className="px-4 flex items-center justify-between">
-              <h2 className={`text-lg font-medium lowercase ${
-                isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
-              }`}>
-                {getDateLabel(dayPlan.date)}
-              </h2>
+              <div className="flex items-center gap-3">
+                <Checkbox 
+                  checked={dayPlan.hasGenerated}
+                  disabled
+                />
+                <h2 className={`text-lg font-medium lowercase ${
+                  isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+                }`}>
+                  {getDateLabel(dayPlan.date)}
+                </h2>
+              </div>
               {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
                 <span className="text-muted-foreground font-normal">
                   {calculateDayTotal(dayPlan.recipes)} €
