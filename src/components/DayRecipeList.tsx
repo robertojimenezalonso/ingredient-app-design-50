@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Recipe } from '@/types/recipe';
 import { RecipeGridCard } from '@/components/RecipeGridCard';
+import { RecipeDrawer } from '@/components/RecipeDrawer';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { format, addDays, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -32,6 +33,18 @@ export const DayRecipeList = ({
 }: DayPlanListProps) => {
   const { recipes, convertToRecipe, isLoading } = useRecipeBank();
   const [dayPlans, setDayPlans] = useState<DayPlan[]>([]);
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const handleRecipeClick = (recipe: Recipe) => {
+    setSelectedRecipe(recipe);
+    setIsDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    setSelectedRecipe(null);
+  };
 
   useEffect(() => {
     if (!isLoading && recipes.length > 0) {
@@ -145,7 +158,7 @@ export const DayRecipeList = ({
                         key={`${recipe.id}-${recipeIndex}`}
                         recipe={recipe}
                         mealType={recipe.mealTypeLabel}
-                        onClick={() => onRecipeClick(recipe)}
+                        onClick={() => handleRecipeClick(recipe)}
                         onAdd={() => onAddRecipe(recipe)}
                       />
                     ))}
@@ -205,6 +218,13 @@ export const DayRecipeList = ({
           </div>
         ))}
       </div>
+      
+      <RecipeDrawer
+        recipe={selectedRecipe}
+        isOpen={isDrawerOpen}
+        onClose={handleCloseDrawer}
+        onAdd={onAddRecipe}
+      />
     </div>
   );
 };

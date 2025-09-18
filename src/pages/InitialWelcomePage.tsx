@@ -5,6 +5,7 @@ import { SavedShoppingListCard } from '@/components/SavedShoppingListCard';
 import { useAuth } from '@/hooks/useAuth';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { RecipeGridCard } from '@/components/RecipeGridCard';
+import { RecipeDrawer } from '@/components/RecipeDrawer';
 import { Recipe } from '@/types/recipe';
 import { Button } from '@/components/ui/button';
 
@@ -12,6 +13,8 @@ const InitialWelcomePage = () => {
   const navigate = useNavigate();
   const { user, loading } = useAuth();
   const { recipes, isLoading: recipesLoading } = useRecipeBank();
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -25,7 +28,13 @@ const InitialWelcomePage = () => {
   };
 
   const handleRecipeClick = (recipe: Recipe) => {
-    navigate(`/recipe/${recipe.id}`);
+    setSelectedRecipe(recipe);
+    setIsDrawerOpen(true);
+  };
+
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    setSelectedRecipe(null);
   };
 
 
@@ -79,6 +88,13 @@ const InitialWelcomePage = () => {
       <div className="mt-8">
         <SavedShoppingListCard />
       </div>
+
+      <RecipeDrawer
+        recipe={selectedRecipe}
+        isOpen={isDrawerOpen}
+        onClose={handleCloseDrawer}
+        onAdd={handleAddRecipe}
+      />
     </div>
   );
 };
