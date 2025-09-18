@@ -55,13 +55,13 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
         </div>
         
         <div className="flex-1 flex flex-col justify-center relative gap-2">
-          <div className="flex items-center justify-between">
-            <div className="flex-1 max-w-[200px]" style={{ marginRight: '16px' }}>
+          <div className="flex items-center relative">
+            <div className="flex-1 pr-20">
               <h3 className="font-normal text-base leading-tight truncate text-left">
                 {recipe.title}
               </h3>
             </div>
-            <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="absolute right-0 flex items-center gap-2">
               <div className="text-sm font-normal text-muted-foreground whitespace-nowrap">
                 {price} €
               </div>
