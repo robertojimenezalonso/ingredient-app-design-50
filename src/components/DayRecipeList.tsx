@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Recipe } from '@/types/recipe';
 import { RecipeGridCard } from '@/components/RecipeGridCard';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
-import { format, isToday, isTomorrow } from 'date-fns';
+import { format, addDays, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
 
@@ -10,11 +10,16 @@ interface RecipeWithMeal extends Recipe {
   mealTypeLabel: string;
 }
 
-interface DayRecipeListProps {
+interface DayPlanListProps {
   selectedDate: Date;
   onRecipeClick: (recipe: Recipe) => void;
   onAddRecipe: (recipe: Recipe) => void;
-  onRecipesChange?: (recipes: RecipeWithMeal[]) => void;
+}
+
+interface DayPlan {
+  date: Date;
+  recipes: RecipeWithMeal[];
+  hasGenerated: boolean;
 }
 
 const MEAL_TYPES = ['Desayuno', 'Comida', 'Cena'];
@@ -22,56 +27,58 @@ const MEAL_TYPES = ['Desayuno', 'Comida', 'Cena'];
 export const DayRecipeList = ({
   selectedDate,
   onRecipeClick,
-  onAddRecipe,
-  onRecipesChange
-}: DayRecipeListProps) => {
+  onAddRecipe
+}: DayPlanListProps) => {
   const { recipes, convertToRecipe, isLoading } = useRecipeBank();
-  const [dayRecipes, setDayRecipes] = useState<RecipeWithMeal[]>([]);
+  const [dayPlans, setDayPlans] = useState<DayPlan[]>([]);
 
   useEffect(() => {
-    if (!isLoading && recipes.length > 0 && isToday(selectedDate)) {
-      // Only generate recipes for today
-      const dateString = format(selectedDate, 'yyyy-MM-dd');
-      const dayIndex = parseInt(dateString.replace(/-/g, '')) % recipes.length;
-      
-      // Select 3 recipes for breakfast, lunch, and dinner
-      const selectedRecipes: RecipeWithMeal[] = MEAL_TYPES.map((mealType, index) => {
-        const recipeIndex = (dayIndex + index) % recipes.length;
-        const recipe = convertToRecipe(recipes[recipeIndex]);
-        return {
-          ...recipe,
-          category: index === 0 ? 'breakfast' : index === 1 ? 'lunch' : 'dinner',
-          mealTypeLabel: mealType
-        } as RecipeWithMeal;
-      });
-      
-      setDayRecipes(selectedRecipes);
-      onRecipesChange?.(selectedRecipes);
-    } else if (!isToday(selectedDate)) {
-      setDayRecipes([]);
-      onRecipesChange?.([]);
-    }
-  }, [selectedDate, recipes, isLoading, convertToRecipe, onRecipesChange]);
-
-  const handleGeneratePlan = () => {
     if (!isLoading && recipes.length > 0) {
-      // Generate recipes for future dates
-      const dateString = format(selectedDate, 'yyyy-MM-dd');
-      const dayIndex = parseInt(dateString.replace(/-/g, '')) % recipes.length;
+      // Generate 7 days starting from today
+      const today = startOfDay(new Date());
+      const days = Array.from({ length: 7 }, (_, i) => addDays(today, i));
       
-      const selectedRecipes: RecipeWithMeal[] = MEAL_TYPES.map((mealType, index) => {
-        const recipeIndex = (dayIndex + index) % recipes.length;
-        const recipe = convertToRecipe(recipes[recipeIndex]);
-        return {
-          ...recipe,
-          category: index === 0 ? 'breakfast' : index === 1 ? 'lunch' : 'dinner',
-          mealTypeLabel: mealType
-        } as RecipeWithMeal;
-      });
+      const plans: DayPlan[] = days.map(date => ({
+        date,
+        recipes: isToday(date) ? generateRecipesForDate(date) : [],
+        hasGenerated: isToday(date)
+      }));
       
-      setDayRecipes(selectedRecipes);
-      onRecipesChange?.(selectedRecipes);
+      setDayPlans(plans);
     }
+  }, [recipes, isLoading]);
+
+  const generateRecipesForDate = (date: Date): RecipeWithMeal[] => {
+    if (recipes.length === 0) return [];
+    
+    const dateString = format(date, 'yyyy-MM-dd');
+    const dayIndex = parseInt(dateString.replace(/-/g, '')) % recipes.length;
+    
+    return MEAL_TYPES.map((mealType, index) => {
+      const recipeIndex = (dayIndex + index) % recipes.length;
+      const recipe = convertToRecipe(recipes[recipeIndex]);
+      return {
+        ...recipe,
+        category: index === 0 ? 'breakfast' : index === 1 ? 'lunch' : 'dinner',
+        mealTypeLabel: mealType
+      } as RecipeWithMeal;
+    });
+  };
+
+  const handleGeneratePlan = (date: Date) => {
+    const newRecipes = generateRecipesForDate(date);
+    
+    setDayPlans(prev => prev.map(plan => 
+      plan.date.getTime() === date.getTime() 
+        ? { ...plan, recipes: newRecipes, hasGenerated: true }
+        : plan
+    ));
+  };
+
+  const getDateLabel = (date: Date) => {
+    if (isToday(date)) return 'Hoy';
+    if (isTomorrow(date)) return 'Mañana';
+    return format(date, "EEEE d", { locale: es });
   };
 
   if (isLoading) {
@@ -82,50 +89,46 @@ export const DayRecipeList = ({
     );
   }
 
-  // Show recipes for today, generate button for future dates
-  if (isToday(selectedDate)) {
-    return (
-      <div className="space-y-4 px-4">
-        {dayRecipes.map((recipe, index) => (
-          <RecipeGridCard
-            key={`${recipe.id}-${index}`}
-            recipe={recipe}
-            mealType={recipe.mealTypeLabel}
-            isFirstCard={index === 0}
-            onClick={() => onRecipeClick(recipe)}
-            onAdd={() => onAddRecipe(recipe)}
-          />
-        ))}
-      </div>
-    );
-  }
-
-  // Show generate button for future dates or generated recipes
   return (
-    <div className="px-4 py-8">
-      {dayRecipes.length === 0 ? (
-        <div className="flex flex-col items-center justify-center space-y-4">
-          <Button 
-            onClick={handleGeneratePlan}
-            className="w-full max-w-md py-6 text-lg"
-          >
-            Generar plan
-          </Button>
+    <div className="space-y-8">
+      {dayPlans.map((dayPlan, dayIndex) => (
+        <div key={dayIndex} className="space-y-4">
+          {/* Day Header */}
+          <div className="px-4">
+            <h2 className={`text-lg font-medium capitalize ${
+              isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+            }`}>
+              {getDateLabel(dayPlan.date)}
+            </h2>
+          </div>
+          
+          {/* Recipes or Generate Button */}
+          {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
+            <div className="space-y-4 px-4">
+              {dayPlan.recipes.map((recipe, recipeIndex) => (
+                <RecipeGridCard
+                  key={`${recipe.id}-${recipeIndex}`}
+                  recipe={recipe}
+                  mealType={recipe.mealTypeLabel}
+                  isFirstCard={recipeIndex === 0}
+                  onClick={() => onRecipeClick(recipe)}
+                  onAdd={() => onAddRecipe(recipe)}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="px-4">
+              <Button 
+                onClick={() => handleGeneratePlan(dayPlan.date)}
+                className="w-full py-4 text-base"
+                variant="outline"
+              >
+                Generar recetas
+              </Button>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="space-y-4">
-          {dayRecipes.map((recipe, index) => (
-            <RecipeGridCard
-              key={`${recipe.id}-${index}`}
-              recipe={recipe}
-              mealType={recipe.mealTypeLabel}
-              isFirstCard={index === 0}
-              onClick={() => onRecipeClick(recipe)}
-              onAdd={() => onAddRecipe(recipe)}
-            />
-          ))}
-        </div>
-      )}
+      ))}
     </div>
   );
 };

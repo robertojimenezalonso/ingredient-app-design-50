@@ -2,9 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Recipe } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
-import { VerticalCalendar } from '@/components/HorizontalCalendar';
 import { DayRecipeList } from '@/components/DayRecipeList';
-
 import { TopHeader } from '@/components/TopHeader';
 
 const Index = () => {
@@ -76,22 +74,12 @@ const Index = () => {
       {/* Top Header */}
       <TopHeader selectedDate={selectedDate} />
       
-      {/* Vertical Calendar */}
+      {/* Vertical Calendar and Recipes */}
       <div className="mt-28">
-        <VerticalCalendar
-          selectedDate={selectedDate}
-          onDateSelect={setSelectedDate}
-          className=""
-        />
-      </div>
-      
-      {/* Day Recipe List */}
-      <div className="pb-32">
         <DayRecipeList
           selectedDate={selectedDate}
           onRecipeClick={handleRecipeClick}
           onAddRecipe={handleAddRecipe}
-          onRecipesChange={handleRecipesChange}
         />
       </div>
       
