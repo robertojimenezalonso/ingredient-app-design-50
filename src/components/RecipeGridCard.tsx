@@ -42,7 +42,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
                 style={{ maxWidth: 'calc(100% - 80px)' }}>
               {recipe.title}
             </h3>
-            <div className="bg-[#00664D] text-[#C2FFF0] px-2 py-1 rounded text-xs font-medium">
+            <div className="bg-[#00F5B8] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium">
               {mealType}
             </div>
           </div>
