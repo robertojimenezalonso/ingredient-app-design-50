@@ -5,6 +5,7 @@ import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { format, addDays, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
+import { Flame, Drumstick, Wheat, Droplet } from 'lucide-react';
 
 interface RecipeWithMeal extends Recipe {
   mealTypeLabel: string;
@@ -140,8 +141,23 @@ export const DayRecipeList = ({
                 {(() => {
                   const nutrition = calculateNutritionTotals(dayPlan.recipes);
                   return (
-                    <div className="text-sm text-muted-foreground">
-                      {nutrition.calories} kcal • {Math.round(nutrition.protein)}g proteína • {Math.round(nutrition.carbs)}g carbohidratos • {Math.round(nutrition.fat)}g grasa
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Flame size={16} className="text-orange-500" />
+                        <span>{nutrition.calories} kcal</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Drumstick size={16} className="text-red-400" />
+                        <span>{Math.round(nutrition.protein)}g</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Wheat size={16} className="text-yellow-600" />
+                        <span>{Math.round(nutrition.carbs)}g</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Droplet size={16} className="text-blue-500" />
+                        <span>{Math.round(nutrition.fat)}g</span>
+                      </div>
                     </div>
                   );
                 })()}
