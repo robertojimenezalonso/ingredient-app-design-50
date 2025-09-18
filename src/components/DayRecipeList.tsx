@@ -91,8 +91,8 @@ export const DayRecipeList = ({
   };
 
   const getDateLabel = (date: Date) => {
-    if (isToday(date)) return 'Hoy';
-    if (isTomorrow(date)) return 'Mañana';
+    if (isToday(date)) return 'hoy';
+    if (isTomorrow(date)) return 'mañana';
     return format(date, "EEEE d", { locale: es });
   };
 
@@ -150,7 +150,7 @@ export const DayRecipeList = ({
                     {getDateLabel(dayPlan.date)}
                   </h2>
                   {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm text-foreground">
                       {calculateDayTotal(dayPlan.recipes)} € · {dayPlan.recipes.length} recetas, {dayPlan.recipes.reduce((total, recipe) => total + (recipe.servings || 1), 0)} raciones
                     </span>
                   )}
