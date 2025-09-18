@@ -59,8 +59,9 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
             <h3 className="font-normal text-base leading-tight truncate text-left">
               {recipe.title}
             </h3>
-            <div className="text-sm font-bold">
-              {price} €
+            <div className="text-sm flex items-center gap-1">
+              <span>{price} €</span>
+              <span className="text-muted-foreground">x por ración</span>
             </div>
           </div>
           
