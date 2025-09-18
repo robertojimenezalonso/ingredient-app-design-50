@@ -5,7 +5,6 @@ import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { format, addDays, startOfDay, isToday, isTomorrow } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Button } from '@/components/ui/button';
-import { Flame, Drumstick, Wheat, Droplet } from 'lucide-react';
 
 interface RecipeWithMeal extends Recipe {
   mealTypeLabel: string;
@@ -141,24 +140,24 @@ export const DayRecipeList = ({
                 {(() => {
                   const nutrition = calculateNutritionTotals(dayPlan.recipes);
                   return (
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Flame size={16} className="text-orange-500" />
-                        <span>{nutrition.calories} kcal</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Drumstick size={16} className="text-red-400" />
-                        <span>{Math.round(nutrition.protein)}g</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Wheat size={16} className="text-yellow-600" />
-                        <span>{Math.round(nutrition.carbs)}g</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Droplet size={16} className="text-blue-500" />
-                        <span>{Math.round(nutrition.fat)}g</span>
-                      </div>
-                    </div>
+                     <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                       <div className="flex items-center gap-1">
+                         <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                         <span>{nutrition.calories} kcal</span>
+                       </div>
+                       <div className="flex items-center gap-1">
+                         <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                         <span>{Math.round(nutrition.protein)}g</span>
+                       </div>
+                       <div className="flex items-center gap-1">
+                         <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                         <span>{Math.round(nutrition.carbs)}g</span>
+                       </div>
+                       <div className="flex items-center gap-1">
+                         <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                         <span>{Math.round(nutrition.fat)}g</span>
+                       </div>
+                     </div>
                   );
                 })()}
               </div>
