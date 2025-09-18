@@ -56,7 +56,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
             <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
               {/* Title and lock */}
               <div className="flex items-center justify-between">
-                <div className="flex-1 pr-2" style={{ maxWidth: 'calc(100% - 50px)' }}>
+                <div className="flex-1" style={{ maxWidth: 'calc(100% - 40px)' }}>
                   <h3 className="font-normal text-base leading-tight truncate text-left text-[#00664D]">
                     {recipe.title}
                   </h3>
@@ -73,12 +73,9 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
                 {price} € • 2 raciones
               </div>
               
-              {/* Macros and tag */}
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-[#00664D]">
-                  {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G
-                </div>
-                <div className="bg-[#C2FFF0] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium">
+              {/* Meal type tag */}
+              <div>
+                <div className="bg-[#C2FFF0] text-[#00664D] px-3 py-1 rounded-full text-xs font-medium inline-block">
                   {mealType}
                 </div>
               </div>
