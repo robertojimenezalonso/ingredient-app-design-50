@@ -33,7 +33,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
   };
 
   return (
-    <div className="py-4 first:pt-0 last:pb-0">
+    <div className="pb-4 first:pt-4 last:pb-0">
       <div 
         className="flex gap-3 items-center cursor-pointer relative w-full transition-transform duration-200"
         onClick={handleClick}
