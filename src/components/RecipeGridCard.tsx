@@ -61,11 +61,10 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
                 {recipe.title}
               </h3>
             </div>
-            <div className="absolute right-0 flex items-center gap-2">
+            <div className="absolute right-0 flex items-center">
               <div className="text-sm font-normal text-muted-foreground whitespace-nowrap">
                 {price} €
               </div>
-              <Lock className="w-5 h-5 text-primary" fill="currentColor" />
             </div>
           </div>
           
