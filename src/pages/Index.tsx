@@ -4,8 +4,8 @@ import { Recipe } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
 import { HorizontalCalendar } from '@/components/HorizontalCalendar';
 import { DayRecipeList } from '@/components/DayRecipeList';
-import { BottomNav } from '@/components/BottomNav';
 import { FloatingPlanSummary } from '@/components/FloatingPlanSummary';
+import { TopHeader } from '@/components/TopHeader';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -72,9 +72,12 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background">
+      {/* Top Header */}
+      <TopHeader />
+      
       {/* Horizontal Calendar */}
-      <div className="sticky top-0 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
+      <div className="sticky top-16 z-10 bg-background/95 backdrop-blur-sm border-b border-border">
         <HorizontalCalendar
           selectedDate={selectedDate}
           onDateSelect={setSelectedDate}
@@ -103,9 +106,6 @@ const Index = () => {
           onNavigatePlan={handleNavigatePlan}
         />
       )}
-      
-      {/* Bottom Navigation */}
-      <BottomNav />
     </div>
   );
 };

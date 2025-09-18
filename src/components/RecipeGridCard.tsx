@@ -7,9 +7,10 @@ interface RecipeGridCardProps {
   recipe: Recipe;
   onAdd: (recipe: Recipe) => void;
   onClick?: (recipe: Recipe) => void;
+  mealType?: string;
 }
 
-export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) => {
+export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType }: RecipeGridCardProps) => {
   // Generate consistent price based on recipe ID to avoid constant changes
   const generateConsistentPrice = (id: string): string => {
     const hash = id.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
@@ -53,22 +54,28 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick }: RecipeGridCardProps) 
         </div>
         
         <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
-          <div className="flex items-start justify-between">
+          <div className="flex items-center justify-between">
             <div className="flex-1 pr-2">
-              <h3 className="font-normal text-base leading-tight line-clamp-2 text-left">
+              <h3 className="font-normal text-base leading-tight truncate text-left">
                 {recipe.title}
               </h3>
-              <div className="text-sm font-normal text-muted-foreground mt-1">
-                {price} €
-              </div>
             </div>
-            {/* Lock icon on the right */}
+            {/* Lock icon centered with title */}
             <div className="flex-shrink-0 ml-2">
               <Lock className="w-5 h-5 text-primary" fill="currentColor" />
             </div>
           </div>
           
-          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+          <div className="flex items-center justify-between">
+            <div className="text-sm font-normal text-muted-foreground">
+              {price} €
+            </div>
+            <div className="text-sm text-muted-foreground">
+              2 personas • {mealType || 'Comida'}
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-3 text-sm text-muted-foreground">
             <span>{recipe.calories} kcal</span>
             <span>P {recipe.macros.protein}g</span>
             <span>H {recipe.macros.carbs}g</span>

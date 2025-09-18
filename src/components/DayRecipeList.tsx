@@ -58,25 +58,16 @@ export const DayRecipeList = ({
   }
 
   return (
-    <div className="space-y-6 px-4">
-      
-      <div className="space-y-4">
-        {dayRecipes.map((recipe, index) => (
-          <div key={`${recipe.id}-${index}`} className="space-y-2">
-            <div className="flex items-center gap-2 px-2">
-              <div className="w-2 h-2 rounded-full bg-primary" />
-              <h3 className="text-lg font-semibold text-foreground">
-                {recipe.mealTypeLabel}
-              </h3>
-            </div>
-            <RecipeGridCard
-              recipe={recipe}
-              onClick={() => onRecipeClick(recipe)}
-              onAdd={() => onAddRecipe(recipe)}
-            />
-          </div>
-        ))}
-      </div>
+    <div className="space-y-4 px-4">
+      {dayRecipes.map((recipe, index) => (
+        <RecipeGridCard
+          key={`${recipe.id}-${index}`}
+          recipe={recipe}
+          mealType={recipe.mealTypeLabel}
+          onClick={() => onRecipeClick(recipe)}
+          onAdd={() => onAddRecipe(recipe)}
+        />
+      ))}
     </div>
   );
 };
