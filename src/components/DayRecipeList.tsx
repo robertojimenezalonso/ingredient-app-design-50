@@ -105,16 +105,18 @@ export const DayRecipeList = ({
             
             {/* Recipes or Generate Button */}
             {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
-              <div className="px-4">
-                {dayPlan.recipes.map((recipe, recipeIndex) => (
-                  <RecipeGridCard
-                    key={`${recipe.id}-${recipeIndex}`}
-                    recipe={recipe}
-                    mealType={recipe.mealTypeLabel}
-                    onClick={() => onRecipeClick(recipe)}
-                    onAdd={() => onAddRecipe(recipe)}
-                  />
-                ))}
+              <div className="mx-4">
+                <div className="bg-white rounded-lg shadow-sm p-4">
+                  {dayPlan.recipes.map((recipe, recipeIndex) => (
+                    <RecipeGridCard
+                      key={`${recipe.id}-${recipeIndex}`}
+                      recipe={recipe}
+                      mealType={recipe.mealTypeLabel}
+                      onClick={() => onRecipeClick(recipe)}
+                      onAdd={() => onAddRecipe(recipe)}
+                    />
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="px-4">
