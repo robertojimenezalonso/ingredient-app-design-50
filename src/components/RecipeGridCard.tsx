@@ -74,10 +74,6 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
               2 personas • {mealType || "Comida"}
             </div>
           </div>
-          
-          <div className="flex items-center text-sm text-muted-foreground">
-            <span>{recipe.calories} kcal • {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G</span>
-          </div>
         </div>
       </div>
     </div>
