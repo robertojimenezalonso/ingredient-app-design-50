@@ -62,8 +62,8 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
               {recipe.title}
             </h3>
             <div className="text-sm flex items-center gap-1">
-              <span>{pricePerServing} €</span>
-              <span className="text-muted-foreground">x por ración</span>
+              <span>{price} €</span>
+              <span className="text-muted-foreground">({pricePerServing} €/ración)</span>
             </div>
           </div>
           
