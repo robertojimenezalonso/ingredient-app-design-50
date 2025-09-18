@@ -103,12 +103,12 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
           
           <div className="flex-1 flex flex-col justify-center relative h-[120px] gap-2">
             <div className="flex items-center justify-between">
-              <div className="flex-1 pr-2" style={{ maxWidth: '80px' }}>
-                <h3 className="font-normal text-base leading-tight truncate text-left">
+              <div className="flex-1 pr-2">
+                <h3 className="font-normal text-base leading-tight truncate text-left pr-8">
                   {recipe.title}
                 </h3>
               </div>
-              <div className="flex-shrink-0 ml-2">
+              <div className="absolute top-2 right-2">
                 <Lock className="w-5 h-5 text-primary" fill="currentColor" />
               </div>
             </div>

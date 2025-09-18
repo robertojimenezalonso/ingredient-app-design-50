@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Recipe } from '@/types/recipe';
 import { useToast } from '@/hooks/use-toast';
-import { HorizontalCalendar } from '@/components/HorizontalCalendar';
+import { VerticalCalendar } from '@/components/HorizontalCalendar';
 import { DayRecipeList } from '@/components/DayRecipeList';
 import { FloatingPlanSummary } from '@/components/FloatingPlanSummary';
 import { TopHeader } from '@/components/TopHeader';
@@ -76,12 +76,12 @@ const Index = () => {
       {/* Top Header */}
       <TopHeader selectedDate={selectedDate} />
       
-      {/* Horizontal Calendar */}
-      <div className="mt-28 sticky top-28 z-10 bg-background/95 backdrop-blur-sm">
-        <HorizontalCalendar
+      {/* Vertical Calendar */}
+      <div className="mt-28">
+        <VerticalCalendar
           selectedDate={selectedDate}
           onDateSelect={setSelectedDate}
-          className="py-2"
+          className=""
         />
       </div>
       
