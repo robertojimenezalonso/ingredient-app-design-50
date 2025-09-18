@@ -150,7 +150,7 @@ export const DayRecipeList = ({
                     {getDateLabel(dayPlan.date)}
                   </h2>
                   {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                    <span className="text-xs text-foreground">
+                    <span className="text-sm text-foreground">
                       {calculateDayTotal(dayPlan.recipes)} € · {dayPlan.recipes.length} recetas, {dayPlan.recipes.reduce((total, recipe) => total + (recipe.servings || 1), 0)} raciones en total
                     </span>
                   )}
