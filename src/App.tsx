@@ -24,6 +24,7 @@ import RecipeBankAdminPage from "./pages/RecipeBankAdminPage";
 import { DailySummaryPage } from "./pages/DailySummaryPage";
 import IngredientEntryPage from "./pages/IngredientEntryPage";
 import AddRecipePage from "./pages/AddRecipePage";
+import ListsPage from "./pages/ListsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,7 +41,7 @@ const App = () => (
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
-            <Route path="/milista" element={<RecipeListPage />} />
+            <Route path="/milista" element={<ListsPage />} />
             <Route path="/search-offers" element={<SearchOffersPage />} />
             <Route path="/supermarket/:supermarket" element={<SupermarketDetailPage />} />
             
