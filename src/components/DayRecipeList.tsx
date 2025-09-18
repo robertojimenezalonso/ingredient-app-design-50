@@ -64,6 +64,7 @@ export const DayRecipeList = ({
           key={`${recipe.id}-${index}`}
           recipe={recipe}
           mealType={recipe.mealTypeLabel}
+          isFirstCard={index === 0}
           onClick={() => onRecipeClick(recipe)}
           onAdd={() => onAddRecipe(recipe)}
         />
