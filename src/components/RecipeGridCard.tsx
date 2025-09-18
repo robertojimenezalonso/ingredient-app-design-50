@@ -83,13 +83,10 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
             </div>
           </div>
           
-          <div className={`flex items-center gap-3 text-sm ${
+          <div className={`flex items-center text-sm ${
             isFirstCard ? "text-[#00664D]" : "text-muted-foreground"
           }`}>
-            <span>{recipe.calories} kcal</span>
-            <span>P {recipe.macros.protein}g</span>
-            <span>H {recipe.macros.carbs}g</span>
-            <span>G {recipe.macros.fat}g</span>
+            <span>{recipe.calories} kcal • {recipe.macros.protein}P • {recipe.macros.carbs}H • {recipe.macros.fat}G</span>
           </div>
         </div>
       </div>
