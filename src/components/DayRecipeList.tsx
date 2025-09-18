@@ -157,37 +157,35 @@ export const DayRecipeList = ({
                       const nutrition = calculateNutritionTotals(dayPlan.recipes);
                       return (
                         <div className="rounded-lg p-3 bg-white border" style={{ borderColor: '#ECEBF1' }}>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                              <div className="flex items-center gap-1">
-                                <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-                                <span>{nutrition.calories} kcal</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
-                                <span>{Math.round(nutrition.protein)}g</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
-                                <span>{Math.round(nutrition.carbs)}g</span>
-                              </div>
-                              <div className="flex items-center gap-1">
-                                <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
-                                <span>{Math.round(nutrition.fat)}g</span>
-                              </div>
+                          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                              <span>{nutrition.calories} kcal</span>
                             </div>
-                            <Button 
-                              size="sm" 
-                              className="rounded-full h-8 w-8 p-0" 
-                              style={{ backgroundColor: '#ECEBF1' }}
-                              variant="ghost"
-                            >
-                              <Plus className="h-4 w-4 text-muted-foreground" />
-                            </Button>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                              <span>{Math.round(nutrition.protein)}g</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                              <span>{Math.round(nutrition.carbs)}g</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                              <span>{Math.round(nutrition.fat)}g</span>
+                            </div>
                           </div>
                         </div>
                       );
                     })()}
+                    <Button 
+                      size="sm" 
+                      className="rounded-full h-8 w-8 p-0 mt-3" 
+                      style={{ backgroundColor: '#ECEBF1' }}
+                      variant="ghost"
+                    >
+                      <Plus className="h-4 w-4 text-muted-foreground" />
+                    </Button>
                   </div>
                 </div>
               </div>
