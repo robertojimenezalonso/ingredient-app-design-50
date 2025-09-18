@@ -187,10 +187,10 @@ export const DayRecipeList = ({
                   {/* Nutrition Summary */}
                   <div className="px-4 pb-4">
                     {/* Title for macros area */}
-                    <div className="flex items-center justify-between mb-1">
+                    <div className="flex items-center gap-2 mb-2">
                       <span className="text-sm text-foreground">Objetivo comer saludable</span>
-                      <div className="h-5 w-5 bg-green-500 rounded-full flex items-center justify-center">
-                        <Check className="h-3 w-3 text-white" />
+                      <div className="h-4 w-4 bg-green-600 rounded-full flex items-center justify-center">
+                        <Check className="h-2 w-2 text-white" />
                       </div>
                     </div>
                     {(() => {
