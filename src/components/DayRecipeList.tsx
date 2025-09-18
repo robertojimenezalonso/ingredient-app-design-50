@@ -13,6 +13,7 @@ interface DayRecipeListProps {
   selectedDate: Date;
   onRecipeClick: (recipe: Recipe) => void;
   onAddRecipe: (recipe: Recipe) => void;
+  onRecipesChange?: (recipes: RecipeWithMeal[]) => void;
 }
 
 const MEAL_TYPES = ['Desayuno', 'Comida', 'Cena'];
@@ -20,7 +21,8 @@ const MEAL_TYPES = ['Desayuno', 'Comida', 'Cena'];
 export const DayRecipeList = ({
   selectedDate,
   onRecipeClick,
-  onAddRecipe
+  onAddRecipe,
+  onRecipesChange
 }: DayRecipeListProps) => {
   const { recipes, convertToRecipe, isLoading } = useRecipeBank();
   const [dayRecipes, setDayRecipes] = useState<RecipeWithMeal[]>([]);
@@ -43,8 +45,9 @@ export const DayRecipeList = ({
       });
       
       setDayRecipes(selectedRecipes);
+      onRecipesChange?.(selectedRecipes);
     }
-  }, [selectedDate, recipes, isLoading, convertToRecipe]);
+  }, [selectedDate, recipes, isLoading, convertToRecipe, onRecipesChange]);
 
   if (isLoading) {
     return (
