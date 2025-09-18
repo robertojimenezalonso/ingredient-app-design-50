@@ -36,7 +36,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
     <>
       <div 
         className={`flex gap-3 items-center cursor-pointer relative w-full transition-transform duration-200 h-[120px] ${
-          isFirstCard ? "bg-[#C2FFF0] rounded-lg p-3" : "py-4"
+          isFirstCard ? "bg-[#C2FFF0] rounded-lg p-3 my-3" : "py-4"
         }`}
         onClick={handleClick}
       >
