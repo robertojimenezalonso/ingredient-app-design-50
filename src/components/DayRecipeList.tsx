@@ -141,6 +141,7 @@ export const DayRecipeList = ({
                 <Checkbox 
                   checked={dayPlan.hasGenerated}
                   disabled
+                  className="pointer-events-none"
                 />
                 <h2 className={`text-lg font-medium lowercase ${
                   isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
