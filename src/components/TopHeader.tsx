@@ -106,7 +106,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="mx-4 mb-2 mt-8 flex justify-center items-center">
+      <div className="mx-4 mb-2 mt-16 flex justify-center items-center">
         <div className="flex gap-2">
           <Button 
             size="sm" 
