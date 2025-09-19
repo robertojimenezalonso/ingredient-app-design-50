@@ -59,33 +59,29 @@ export const TopHeader = ({
         <h2 className="text-lg font-medium text-black">Lista semana saludable</h2>
       </div>
       
-      {/* Mercadona and Better Price Container */}
-      <div className="mx-4 mb-8 mt-1 rounded-lg bg-white pb-1 shadow-sm">
-        {/* Mercadona Section */}
-        <div className="flex items-start justify-between px-4 py-3 pb-6">
-           <div className="flex items-center gap-3">
-             <img src={mercadonaLogo} alt="Mercadona" className="w-12 h-12 object-contain" />
-              <div className="flex flex-col">
-                <span className="text-lg font-medium">Mercadona</span>
-                <span className="text-sm text-gray-500">1 persona · 1 día</span>
-              </div>
-           </div>
-          
-          <div className="text-xl font-medium text-primary">
-            {totalPrice.toFixed(2).replace('.', ',')} €
-          </div>
+      {/* Mercadona Section */}
+      <div className="flex items-start justify-between mx-4 mb-6">
+         <div className="flex items-center gap-3">
+           <img src={mercadonaLogo} alt="Mercadona" className="w-12 h-12 object-contain" />
+            <div className="flex flex-col">
+              <span className="text-lg font-medium">Mercadona</span>
+              <span className="text-sm text-gray-500">1 persona · 1 día</span>
+            </div>
+         </div>
+        
+        <div className="text-xl font-medium text-primary">
+          {totalPrice.toFixed(2).replace('.', ',')} €
         </div>
+      </div>
 
-        {/* Parallel sections */}
-        <div className="flex gap-2 mx-4 mb-4 items-center">
-          {/* Better Price Section */}
-          <div className="rounded-lg px-3 py-2 flex-1 flex items-center justify-center" style={{
-            backgroundColor: '#FFDCC5'
-          }}>
-            <span className="text-sm whitespace-nowrap text-center" style={{
-              color: '#FA6916'
-            }}><span className="underline decoration-offset-2">Mejor precio:</span> <span className="font-semibold">{(totalPrice * 0.8).toFixed(2).replace('.', ',')} €</span></span>
-          </div>
+      {/* Better Price Section */}
+      <div className="mx-4 mb-8">
+        <div className="rounded-lg px-3 py-2 flex items-center justify-center" style={{
+          backgroundColor: '#FFDCC5'
+        }}>
+          <span className="text-sm whitespace-nowrap text-center" style={{
+            color: '#FA6916'
+          }}><span className="underline decoration-offset-2">Mejor precio:</span> <span className="font-semibold">{(totalPrice * 0.8).toFixed(2).replace('.', ',')} €</span></span>
         </div>
       </div>
 
