@@ -23,11 +23,9 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
           className="w-12 h-12 rounded-full overflow-hidden cursor-pointer"
           onClick={() => navigate('/profile')}
         >
-          <img 
-            src="/profile-photo.jpeg" 
-            alt="Perfil" 
-            className="w-full h-full object-cover"
-          />
+          <div className="w-full h-full flex items-center justify-center text-white font-semibold text-lg" style={{ backgroundColor: '#ec4899' }}>
+            RJ
+          </div>
         </div>
         
         {/* Mis listas and Filter buttons */}
