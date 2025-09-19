@@ -60,14 +60,17 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       <div className="mx-4 mb-8 mt-1 rounded-lg bg-white pb-1">
         {/* Mercadona Section */}
         <div className="flex items-center justify-between px-4 py-3 pb-6">
-          <div className="flex items-center gap-3">
-            <img 
-              src={mercadonaLogo} 
-              alt="Mercadona" 
-              className="w-8 h-8 object-contain"
-            />
-            <span className="text-lg font-medium">Mercadona</span>
-          </div>
+           <div className="flex items-center gap-3">
+             <img 
+               src={mercadonaLogo} 
+               alt="Mercadona" 
+               className="w-8 h-8 object-contain"
+             />
+             <div className="flex flex-col">
+               <span className="text-lg font-medium">Mercadona</span>
+               <span className="text-sm text-gray-500">16 ingredientes para 3 recetas</span>
+             </div>
+           </div>
           
           <div className="text-xl font-bold text-primary">
             {totalPrice.toFixed(2).replace('.', ',')} €
