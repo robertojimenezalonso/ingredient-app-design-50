@@ -85,7 +85,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
             Recetas
           </Button>
           <Button variant="outline" className="text-sm">
-            Lista de la compra
+            Carrito
           </Button>
         </div>
         <Button variant="outline" size="icon" className="h-9 w-9">
