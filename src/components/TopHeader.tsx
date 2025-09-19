@@ -79,7 +79,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="mx-4 mb-3 flex justify-between items-center">
+      <div className="mx-4 mb-3 mt-4 flex justify-between items-center">
         <div className="flex gap-2">
           <Button variant="default" className="text-sm">
             Recetas
