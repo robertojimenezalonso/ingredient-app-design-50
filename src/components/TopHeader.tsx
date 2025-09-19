@@ -75,12 +75,12 @@ export const TopHeader = ({
         </div>
       </div>
 
-      {/* Supermercado Button */}
-      <div className="mx-4 mb-8">
+      {/* Supermercados Button */}
+      <div className="mx-4 mb-8 flex justify-center">
         <Button size="sm" className="rounded-full h-10 px-4 flex-shrink-0" style={{
           backgroundColor: '#E4E5E0'
         }} variant="ghost" onClick={() => navigate('/milista')}>
-          <span className="text-sm text-black">Supermercado</span>
+          <span className="text-sm text-black">Supermercados</span>
         </Button>
       </div>
 
