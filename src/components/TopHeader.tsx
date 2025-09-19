@@ -56,22 +56,20 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
 
       {/* Better Price Section */}
-      <div className="mx-4 mb-3 bg-gray-100 rounded-lg p-4">
+      <div className="mx-4 mb-3 bg-gray-200 rounded-lg p-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <span className="text-sm text-foreground">Mejor precio</span>
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500 line-through">
-                {totalPrice.toFixed(2).replace('.', ',')} €
-              </span>
-              <span className="text-sm text-green-600">
-                {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
-              </span>
-            </div>
+            <span className="text-sm text-gray-500 line-through">
+              {totalPrice.toFixed(2).replace('.', ',')} €
+            </span>
+            <span className="text-sm text-green-600">
+              {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
+            </span>
           </div>
           
           <div className="flex items-center gap-2 cursor-pointer">
-            <span className="text-sm text-foreground">Ver alternativas</span>
+            <span className="text-sm text-foreground">Alternativas</span>
             <ChevronRight className="h-4 w-4" />
           </div>
         </div>

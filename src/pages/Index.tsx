@@ -80,7 +80,7 @@ const Index = () => {
       <TopHeader selectedDate={selectedDate} totalPrice={totalPrice} />
       
       {/* Vertical Calendar and Recipes */}
-      <div className="mt-32">
+      <div className="mt-48">
         <DayRecipeList
           selectedDate={selectedDate}
           onRecipeClick={handleRecipeClick}
