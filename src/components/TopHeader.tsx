@@ -4,10 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import mercadonaLogo from '@/assets/mercadona-logo-new.png';
+
 interface TopHeaderProps {
   selectedDate: Date;
   totalPrice?: number;
 }
+
 export const TopHeader = ({
   selectedDate,
   totalPrice = 0
@@ -16,9 +18,12 @@ export const TopHeader = ({
   const formattedDate = format(selectedDate, "EEEE, d 'de' MMMM", {
     locale: es
   });
-  return <div className="fixed top-0 left-0 right-0 z-50" style={{
-    backgroundColor: '#F7F7F7'
-  }}>
+
+  return <>
+    {/* Fixed top section */}
+    <div className="fixed top-0 left-0 right-0 z-50" style={{
+      backgroundColor: '#F7F7F7'
+    }}>
       <div className="flex items-center justify-between px-4 py-3 pb-8">
         {/* Profile Section */}
         <div className="w-10 h-10 rounded-full overflow-hidden cursor-pointer" onClick={() => navigate('/profile')}>
@@ -42,9 +47,13 @@ export const TopHeader = ({
             <SlidersHorizontal className="h-4 w-4 text-black" />
           </Button>
         </div>
-        
       </div>
-      
+    </div>
+
+    {/* Scrollable content */}
+    <div className="pt-20" style={{
+      backgroundColor: '#F7F7F7'
+    }}>
       {/* Title */}
       <div className="mx-4 mb-2">
         <h2 className="text-lg font-medium text-black">Lista semana saludable</h2>
@@ -123,5 +132,6 @@ export const TopHeader = ({
           </Button>
         </div>
       </div>
-    </div>;
+    </div>
+  </>;
 };
