@@ -67,7 +67,7 @@ export const TopHeader = ({
              <img src={mercadonaLogo} alt="Mercadona" className="w-12 h-12 object-contain" />
              <div className="flex flex-col">
                <span className="text-lg font-medium">Mercadona</span>
-               <span className="text-sm text-gray-500">16 ingredientes</span>
+               <span className="text-sm text-gray-500">16 ingredientes · 1 persona</span>
              </div>
            </div>
           
