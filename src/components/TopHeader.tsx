@@ -75,6 +75,16 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
           </div>
         </div>
       </div>
+
+      {/* Navigation Buttons */}
+      <div className="mx-4 mb-3 flex gap-2">
+        <Button variant="default" className="text-sm">
+          Recetas
+        </Button>
+        <Button variant="outline" className="text-sm">
+          Lista de la compra
+        </Button>
+      </div>
     </div>
   );
 };
