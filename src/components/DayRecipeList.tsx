@@ -213,7 +213,7 @@ export const DayRecipeList = ({
                             {/* Objetivo comer saludable tag */}
                             <div className="rounded-lg py-2 px-3 mt-2" style={{ backgroundColor: '#ecf9ec' }}>
                               <div className="flex items-center justify-center gap-2">
-                                <span className="text-sm" style={{ color: '#339933' }}>Objetivo comer saludable</span>
+                                <span className="text-sm" style={{ color: '#339933' }}>Objetivo diario: comer saludablemente</span>
                                 <div className="h-3 w-3 rounded-full flex items-center justify-center" style={{ backgroundColor: '#339933' }}>
                                   <Check className="h-1.5 w-1.5 text-white" />
                                 </div>
