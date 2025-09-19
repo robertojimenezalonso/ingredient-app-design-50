@@ -62,7 +62,7 @@ export const TopHeader = ({
       {/* Mercadona and Better Price Container */}
       <div className="mx-4 mb-8 mt-1 rounded-lg bg-white pb-1 shadow-sm">
         {/* Mercadona Section */}
-        <div className="flex items-center justify-between px-4 py-3 pb-6">
+        <div className="flex items-start justify-between px-4 py-3 pb-6">
            <div className="flex items-center gap-3">
              <img src={mercadonaLogo} alt="Mercadona" className="w-12 h-12 object-contain" />
              <div className="flex flex-col">
