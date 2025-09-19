@@ -141,7 +141,7 @@ export const DayRecipeList = ({
                 <Checkbox 
                   checked={dayPlan.hasGenerated}
                   disabled={!dayPlan.hasGenerated || dayPlan.recipes.length === 0}
-                  className={!dayPlan.hasGenerated || dayPlan.recipes.length === 0 ? "pointer-events-none" : ""}
+                  className={!dayPlan.hasGenerated || dayPlan.recipes.length === 0 ? "pointer-events-none border-muted-foreground/30" : ""}
                 />
                 <div className="flex flex-col">
                   <h2 className={`text-lg font-semibold ${
