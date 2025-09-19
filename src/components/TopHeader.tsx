@@ -1,4 +1,4 @@
-import { User, ChevronRight } from 'lucide-react';
+import { User, ChevronRight, Filter } from 'lucide-react';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -41,7 +41,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
       
       {/* Mercadona and Better Price Container */}
-      <div className="mx-4 mb-3 border border-gray-400 rounded-lg">
+      <div className="mx-4 mb-3 border border-gray-300 rounded-lg">
         {/* Mercadona Section */}
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
@@ -71,8 +71,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
               </span>
             </div>
             
-            <div className="flex items-center gap-1 cursor-pointer">
-              <span className="text-sm text-foreground">Alternativas</span>
+            <div className="cursor-pointer">
               <ChevronRight className="h-4 w-4" />
             </div>
           </div>
@@ -89,8 +88,8 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
             Lista de la compra
           </Button>
         </div>
-        <Button variant="outline" className="text-sm">
-          Filtro
+        <Button variant="outline" size="icon" className="h-9 w-9">
+          <Filter className="h-4 w-4" />
         </Button>
       </div>
     </div>
