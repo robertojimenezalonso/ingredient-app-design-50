@@ -20,7 +20,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       <div className="flex items-center justify-between px-4 py-3">
         {/* Profile Section */}
         <div 
-          className="w-12 h-12 rounded-full overflow-hidden cursor-pointer"
+          className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
           onClick={() => navigate('/profile')}
         >
           <div className="w-full h-full flex items-center justify-center text-white font-semibold text-lg" style={{ backgroundColor: '#ec4899' }}>
