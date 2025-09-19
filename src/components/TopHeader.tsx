@@ -51,6 +51,11 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         
       </div>
       
+      {/* Title */}
+      <div className="mx-4 mb-2">
+        <h2 className="text-lg font-semibold text-black">Lista semana saludable</h2>
+      </div>
+      
       {/* Mercadona and Better Price Container */}
       <div className="mx-4 mb-3 mt-4 border border-gray-300 rounded-lg">
         {/* Mercadona Section */}
