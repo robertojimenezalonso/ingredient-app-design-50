@@ -40,49 +40,57 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         </Button>
       </div>
       
-      {/* Mercadona Section */}
-      <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
-        <div className="flex items-center gap-3">
-          <img 
-            src={mercadonaLogo} 
-            alt="Mercadona" 
-            className="w-8 h-8 object-contain"
-          />
-          <span className="text-lg font-medium">Mercadona</span>
-        </div>
-        
-        <div className="text-xl font-bold text-primary">
-          {totalPrice.toFixed(2).replace('.', ',')} €
-        </div>
-      </div>
-
-      {/* Better Price Section */}
-      <div className="mx-4 mb-3 bg-gray-200 rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-foreground">Mejor precio:</span>
-            <span className="text-sm text-gray-500 line-through">
-              {totalPrice.toFixed(2).replace('.', ',')} €
-            </span>
-            <span className="text-sm text-green-600">
-              {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
-            </span>
+      {/* Mercadona and Better Price Container */}
+      <div className="mx-4 mb-3 border border-gray-400 rounded-lg">
+        {/* Mercadona Section */}
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-3">
+            <img 
+              src={mercadonaLogo} 
+              alt="Mercadona" 
+              className="w-8 h-8 object-contain"
+            />
+            <span className="text-lg font-medium">Mercadona</span>
           </div>
           
-          <div className="flex items-center gap-1 cursor-pointer">
-            <span className="text-sm text-foreground">Alternativas</span>
-            <ChevronRight className="h-4 w-4" />
+          <div className="text-xl font-bold text-primary">
+            {totalPrice.toFixed(2).replace('.', ',')} €
+          </div>
+        </div>
+
+        {/* Better Price Section */}
+        <div className="bg-gray-200 rounded-lg mx-4 mb-4 p-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-foreground">Mejor precio:</span>
+              <span className="text-sm text-gray-500 line-through">
+                {totalPrice.toFixed(2).replace('.', ',')} €
+              </span>
+              <span className="text-sm text-green-600">
+                {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-1 cursor-pointer">
+              <span className="text-sm text-foreground">Alternativas</span>
+              <ChevronRight className="h-4 w-4" />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Navigation Buttons */}
-      <div className="mx-4 mb-3 flex gap-2">
-        <Button variant="default" className="text-sm">
-          Recetas
-        </Button>
+      <div className="mx-4 mb-3 flex justify-between items-center">
+        <div className="flex gap-2">
+          <Button variant="default" className="text-sm">
+            Recetas
+          </Button>
+          <Button variant="outline" className="text-sm">
+            Lista de la compra
+          </Button>
+        </div>
         <Button variant="outline" className="text-sm">
-          Lista de la compra
+          Filtro
         </Button>
       </div>
     </div>
