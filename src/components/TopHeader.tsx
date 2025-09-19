@@ -71,7 +71,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
 
         {/* Better Price Section */}
         <div className="rounded-lg mx-4 mb-4 px-4 h-10 flex items-center" style={{ backgroundColor: '#E4E5E0' }}>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-2">
               <span className="text-sm text-foreground">Mejor precio:</span>
               <span className="text-sm text-gray-500 line-through">
