@@ -1,4 +1,4 @@
-import { User, ChevronRight, Filter } from 'lucide-react';
+import { User, ChevronRight, SlidersHorizontal } from 'lucide-react';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -81,7 +81,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
           </Button>
         </div>
         <Button variant="outline" size="icon" className="h-9 w-9">
-          <Filter className="h-4 w-4" />
+          <SlidersHorizontal className="h-4 w-4" />
         </Button>
       </div>
     </div>
