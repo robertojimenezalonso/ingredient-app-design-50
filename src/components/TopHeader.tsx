@@ -30,17 +30,22 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
           />
         </div>
         
-        {/* Filter and Mis listas buttons */}
+        {/* Mis listas and Filter buttons */}
         <div className="flex gap-2 items-center">
-          <Button variant="outline" size="icon" className="h-9 w-9 rounded-full">
-            <SlidersHorizontal className="h-4 w-4" />
-          </Button>
           <Button 
             variant="outline" 
             className="text-sm font-medium rounded-full"
             onClick={() => navigate('/milista')}
           >
             Mis listas
+          </Button>
+          <Button 
+            size="sm" 
+            className="rounded-full h-8 w-8 p-0 flex-shrink-0" 
+            style={{ backgroundColor: '#ECEBF1' }}
+            variant="ghost"
+          >
+            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
           </Button>
         </div>
         
