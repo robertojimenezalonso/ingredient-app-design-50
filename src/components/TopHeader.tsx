@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 
 interface TopHeaderProps {
   selectedDate: Date;
@@ -43,7 +44,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
         <div className="flex items-center gap-3">
           <img 
-            src="/src/assets/mercadona-logo-new.png" 
+            src={mercadonaLogo} 
             alt="Mercadona" 
             className="w-8 h-8 object-contain"
           />
