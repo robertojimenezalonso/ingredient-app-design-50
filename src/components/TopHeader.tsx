@@ -68,7 +68,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
              />
              <div className="flex flex-col">
                <span className="text-lg font-medium">Mercadona</span>
-               <span className="text-sm text-gray-500">16 ingredientes para 3 recetas</span>
+               <span className="text-sm text-gray-500">16 ingredientes</span>
              </div>
            </div>
           
