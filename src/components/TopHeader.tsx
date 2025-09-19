@@ -82,7 +82,7 @@ export const TopHeader = ({
           <div className="rounded-lg py-2 px-3 flex-1" style={{
             backgroundColor: '#E8F5E8'
           }}>
-            <span className="text-sm text-green-600">Objetivo: comer saludable</span>
+            <span className="text-sm text-green-600">Comer saludable</span>
           </div>
 
           {/* Better Price Section */}
@@ -93,11 +93,6 @@ export const TopHeader = ({
               <span className="text-sm" style={{
                 color: '#FA6916'
               }}>Mejor precio:</span>
-              <span className="text-sm line-through" style={{
-                color: '#FA6916'
-              }}>
-                {totalPrice.toFixed(2).replace('.', ',')} €
-              </span>
               <span className="text-sm text-black">
                 {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
               </span>
