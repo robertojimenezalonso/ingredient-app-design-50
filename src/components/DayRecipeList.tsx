@@ -110,6 +110,10 @@ export const DayRecipeList = ({
         ? { ...plan, recipes: newRecipes, hasGenerated: true }
         : plan
     ));
+    
+    // Automáticamente activar el checkbox del día cuando se generen recetas
+    const dateKey = format(date, 'yyyy-MM-dd');
+    setSelectedDays(prev => new Set(prev).add(dateKey));
   };
 
   const handleDayToggle = (date: Date, checked: boolean) => {
