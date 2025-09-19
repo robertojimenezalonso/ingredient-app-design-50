@@ -215,7 +215,7 @@ export const DayRecipeList = ({
                               <div className="flex items-center justify-center gap-2">
                                 <span className="text-sm" style={{ color: '#339933' }}>Objetivo diario: comer saludable</span>
                                 <div className="h-4 w-4 rounded-full flex items-center justify-center" style={{ backgroundColor: '#339933' }}>
-                                  <Check className="h-1.5 w-1.5 text-white" />
+                                  <Check className="h-2.5 w-2.5 text-white" />
                                 </div>
                               </div>
                             </div>
