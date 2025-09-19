@@ -1,4 +1,4 @@
-import { User, ChevronRight, SlidersHorizontal, Check } from 'lucide-react';
+import { User, ChevronRight, SlidersHorizontal, Check, ShoppingBasket } from 'lucide-react';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -67,8 +67,14 @@ export const TopHeader = ({
              <img src={mercadonaLogo} alt="Mercadona" className="w-12 h-12 object-contain" />
               <div className="flex flex-col">
                 <span className="text-lg font-medium">Mercadona</span>
-                <span className="text-sm text-gray-500">16 ingr. · 80% uso</span>
-                <span className="text-sm text-gray-500">Para 1 persona · 1 día</span>
+                <span className="text-sm text-gray-500 flex items-center gap-1">
+                  <ShoppingBasket className="h-4 w-4 text-gray-400" />
+                  16 ingr. · 80% uso
+                </span>
+                <span className="text-sm text-gray-500 flex items-center gap-1">
+                  <User className="h-4 w-4 text-gray-400" />
+                  1 persona · 1 día
+                </span>
               </div>
            </div>
           
