@@ -34,13 +34,8 @@ export const TopHeader = ({
           </div>
         </div>
         
-        {/* Mis listas and Filter buttons */}
+        {/* Filter button */}
         <div className="flex gap-2 items-center">
-          <Button size="sm" className="rounded-full h-10 px-4 flex-shrink-0" style={{
-          backgroundColor: '#E4E5E0'
-        }} variant="ghost" onClick={() => navigate('/milista')}>
-            <span className="text-sm text-black">Mis listas</span>
-          </Button>
           <Button size="sm" className="rounded-full h-10 w-10 p-0 flex-shrink-0" style={{
           backgroundColor: '#E4E5E0'
         }} variant="ghost">
@@ -78,6 +73,15 @@ export const TopHeader = ({
             color: '#FA6916'
           }}><span className="underline decoration-offset-2">Mejor precio:</span> <span className="font-semibold">{(totalPrice * 0.8).toFixed(2).replace('.', ',')} €</span></span>
         </div>
+      </div>
+
+      {/* Supermercado Button */}
+      <div className="mx-4 mb-8">
+        <Button size="sm" className="rounded-full h-10 px-4 flex-shrink-0" style={{
+          backgroundColor: '#E4E5E0'
+        }} variant="ghost" onClick={() => navigate('/milista')}>
+          <span className="text-sm text-black">Supermercado</span>
+        </Button>
       </div>
 
       {/* Navigation Buttons */}
