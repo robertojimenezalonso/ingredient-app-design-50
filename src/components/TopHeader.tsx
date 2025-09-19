@@ -59,25 +59,25 @@ export const TopHeader = ({
         <h2 className="text-lg font-medium text-black">Lista semana saludable</h2>
       </div>
       
-      {/* Mercadona Section */}
-      <div className="flex items-center justify-between mx-4 mb-4">
-         <div className="flex items-center gap-3">
-           <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8 object-contain" />
-           <div className="flex flex-col">
-             <span className="text-lg font-medium">Mercadona</span>
-             <span className="text-sm text-gray-500">16 ingredientes</span>
+      {/* Mercadona and Better Price Container */}
+      <div className="mx-4 mb-8 mt-1 rounded-lg bg-white pb-1">
+        {/* Mercadona Section */}
+        <div className="flex items-center justify-between px-4 py-3 pb-6">
+           <div className="flex items-center gap-3">
+             <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8 object-contain" />
+             <div className="flex flex-col">
+               <span className="text-lg font-medium">Mercadona</span>
+               <span className="text-sm text-gray-500">16 ingredientes</span>
+             </div>
            </div>
-         </div>
-        
-        <div className="text-xl font-medium text-primary">
-          {totalPrice.toFixed(2).replace('.', ',')} €
+          
+          <div className="text-xl font-medium text-primary">
+            {totalPrice.toFixed(2).replace('.', ',')} €
+          </div>
         </div>
-      </div>
 
-      {/* Better Price and Objective sections in parallel */}
-      <div className="mx-4 mb-8 flex gap-2">
         {/* Better Price Section */}
-        <div className="rounded-lg px-3 py-2 flex items-center flex-1" style={{
+        <div className="rounded-lg mx-4 mb-4 px-3 py-2 flex items-center" style={{
         backgroundColor: '#FFDCC5'
       }}>
            <div className="flex items-center justify-between w-full">
@@ -103,7 +103,7 @@ export const TopHeader = ({
         </div>
 
         {/* Objetivo diario section */}
-        <div className="rounded-lg py-2 px-3 flex-1" style={{
+        <div className="rounded-lg py-2 px-3 mx-4 mb-4" style={{
         backgroundColor: '#E8F5E8'
       }}>
           <div className="flex items-center justify-between">
