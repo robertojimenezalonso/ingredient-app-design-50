@@ -89,7 +89,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
                  {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
                </span>
              </div>
-             <div className="h-5 w-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: '#FA6916' }}>
+             <div className="h-4 w-4 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: '#FA6916' }}>
                !
              </div>
            </div>
