@@ -82,7 +82,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
               </span>
             </div>
             
-            <div className="flex items-center gap-1 cursor-pointer">
+            <div className="flex items-center gap-1 cursor-pointer ml-auto">
               <span className="text-sm text-foreground">Ver</span>
               <ChevronRight className="h-4 w-4" />
             </div>
