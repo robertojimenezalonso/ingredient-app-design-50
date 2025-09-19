@@ -190,7 +190,7 @@ export const DayRecipeList = ({
                       const nutrition = calculateNutritionTotals(dayPlan.recipes);
                       return (
                         <div className="flex items-center gap-3">
-                          <div className="flex-1 rounded-lg p-3" style={{ backgroundColor: '#F7F7FA' }}>
+                          <div className="flex-1 rounded-lg p-3 bg-white" style={{ border: '1px solid #F7F7FA' }}>
                             <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground flex-wrap">
                               <div className="flex items-center gap-1">
                                 <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
