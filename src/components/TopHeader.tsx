@@ -33,11 +33,13 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         {/* Mis listas and Filter buttons */}
         <div className="flex gap-2 items-center">
           <Button 
-            variant="outline" 
-            className="text-sm font-medium rounded-full"
+            size="sm" 
+            className="rounded-full h-8 px-4 flex-shrink-0" 
+            style={{ backgroundColor: '#ECEBF1' }}
+            variant="ghost"
             onClick={() => navigate('/milista')}
           >
-            Mis listas
+            <span className="text-sm text-muted-foreground">Mis listas</span>
           </Button>
           <Button 
             size="sm" 
@@ -91,13 +93,23 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="mx-4 mb-3 mt-4 flex justify-center items-center">
+      <div className="mx-4 mb-2 mt-8 flex justify-center items-center">
         <div className="flex gap-2">
-          <Button variant="default" className="text-sm rounded-full">
-            Recetas
+          <Button 
+            size="sm" 
+            className="rounded-full h-8 px-4 flex-shrink-0" 
+            style={{ backgroundColor: '#ECEBF1' }}
+            variant="ghost"
+          >
+            <span className="text-sm text-muted-foreground">Recetas</span>
           </Button>
-          <Button variant="outline" className="text-sm rounded-full">
-            Carrito
+          <Button 
+            size="sm" 
+            className="rounded-full h-8 px-4 flex-shrink-0" 
+            style={{ backgroundColor: '#ECEBF1' }}
+            variant="ghost"
+          >
+            <span className="text-sm text-muted-foreground">Carrito</span>
           </Button>
         </div>
       </div>
