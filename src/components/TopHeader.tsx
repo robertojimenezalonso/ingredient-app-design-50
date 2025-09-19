@@ -72,7 +72,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
              </div>
            </div>
           
-          <div className="text-xl font-bold text-primary">
+          <div className="text-xl font-medium text-primary">
             {totalPrice.toFixed(2).replace('.', ',')} €
           </div>
         </div>
