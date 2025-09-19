@@ -17,7 +17,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50" style={{ backgroundColor: '#F7F7F7' }}>
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className="flex items-center justify-between px-4 py-3 pb-8">
         {/* Profile Section */}
         <div 
           className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
