@@ -89,8 +89,8 @@ export const TopHeader = ({
           <div className="rounded-lg px-3 py-2 flex-1" style={{
             backgroundColor: '#FFDCC5'
           }}>
-            <div className="flex items-center gap-1">
-              <span className="text-sm whitespace-nowrap" style={{
+            <div className="flex items-center justify-center gap-1">
+              <span className="text-sm whitespace-nowrap text-center" style={{
                 color: '#FA6916'
               }}>Mejor precio: {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €</span>
             </div>
