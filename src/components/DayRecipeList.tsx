@@ -171,7 +171,7 @@ export const DayRecipeList = ({
   }
 
   return (
-    <div className="min-h-screen pt-10" style={{ backgroundColor: '#F7F7F7' }}>
+    <div className="min-h-screen pt-4" style={{ backgroundColor: '#F7F7F7' }}>
       <div className="space-y-8">
         {dayPlans.map((dayPlan, dayIndex) => (
           <div key={dayIndex} className="space-y-4">
