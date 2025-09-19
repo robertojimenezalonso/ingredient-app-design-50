@@ -54,10 +54,6 @@ export const TopHeader = ({
     <div className="pt-20" style={{
       backgroundColor: '#F7F7F7'
     }}>
-      {/* Title */}
-      <div className="mx-4 mb-2">
-        <h2 className="text-lg font-medium text-black">Lista semana saludable</h2>
-      </div>
       
       {/* Mercadona Section */}
       <div className="flex items-start justify-between mx-4 mb-6">
