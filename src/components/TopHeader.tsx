@@ -1,4 +1,4 @@
-import { User, TrendingDown, ChevronRight } from 'lucide-react';
+import { User, ChevronRight } from 'lucide-react';
 import { Button } from './ui/button';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -56,23 +56,24 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
 
       {/* Better Price Section */}
-      <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
-        <div className="flex items-center gap-3">
-          <TrendingDown className="h-5 w-5 text-green-600" />
-          <span className="text-sm font-medium">Mejor precio</span>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 line-through">
-              {totalPrice.toFixed(2).replace('.', ',')} €
-            </span>
-            <span className="text-sm font-bold text-green-600">
-              {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
-            </span>
+      <div className="mx-4 mb-3 bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-sm">Mejor precio</span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-500 line-through">
+                {totalPrice.toFixed(2).replace('.', ',')} €
+              </span>
+              <span className="text-sm text-green-600">
+                {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
+              </span>
+            </div>
           </div>
-        </div>
-        
-        <div className="flex items-center gap-2 cursor-pointer">
-          <span className="text-sm font-medium">Ver alternativas</span>
-          <ChevronRight className="h-4 w-4" />
+          
+          <div className="flex items-center gap-2 cursor-pointer">
+            <span className="text-sm">Ver alternativas</span>
+            <ChevronRight className="h-4 w-4" />
+          </div>
         </div>
       </div>
     </div>
