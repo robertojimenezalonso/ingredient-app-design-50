@@ -192,7 +192,7 @@ export const DayRecipeList = ({
                    </h2>
                   {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
                      <span className="text-sm text-gray-500">
-                       {calculateDayTotal(dayPlan.recipes)} € · {dayPlan.recipes.length} recetas
+                       {calculateDayTotal(dayPlan.recipes)} €
                      </span>
                   )}
                 </div>
