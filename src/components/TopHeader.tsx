@@ -20,7 +20,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       <div className="flex items-center justify-between px-4 py-3">
         {/* Profile Section */}
         <div 
-          className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
+          className="w-12 h-12 rounded-full overflow-hidden cursor-pointer"
           onClick={() => navigate('/profile')}
         >
           <img 
@@ -34,20 +34,20 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         <div className="flex gap-2 items-center">
           <Button 
             size="sm" 
-            className="rounded-full h-8 px-4 flex-shrink-0" 
-            style={{ backgroundColor: '#ECEBF1' }}
+            className="rounded-full h-10 px-4 flex-shrink-0" 
+            style={{ backgroundColor: '#E4E5E0' }}
             variant="ghost"
             onClick={() => navigate('/milista')}
           >
-            <span className="text-sm text-muted-foreground">Mis listas</span>
+            <span className="text-sm text-black">Mis listas</span>
           </Button>
           <Button 
             size="sm" 
-            className="rounded-full h-8 w-8 p-0 flex-shrink-0" 
-            style={{ backgroundColor: '#ECEBF1' }}
+            className="rounded-full h-10 w-10 p-0 flex-shrink-0" 
+            style={{ backgroundColor: '#E4E5E0' }}
             variant="ghost"
           >
-            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+            <SlidersHorizontal className="h-4 w-4 text-black" />
           </Button>
         </div>
         
@@ -97,19 +97,19 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         <div className="flex gap-2">
           <Button 
             size="sm" 
-            className="rounded-full h-8 px-4 flex-shrink-0" 
-            style={{ backgroundColor: '#ECEBF1' }}
+            className="rounded-full h-10 px-4 flex-shrink-0" 
+            style={{ backgroundColor: '#000000' }}
             variant="ghost"
           >
-            <span className="text-sm text-muted-foreground">Recetas</span>
+            <span className="text-sm text-white">Recetas</span>
           </Button>
           <Button 
             size="sm" 
-            className="rounded-full h-8 px-4 flex-shrink-0" 
-            style={{ backgroundColor: '#ECEBF1' }}
+            className="rounded-full h-10 px-4 flex-shrink-0" 
+            style={{ backgroundColor: '#E4E5E0' }}
             variant="ghost"
           >
-            <span className="text-sm text-muted-foreground">Carrito</span>
+            <span className="text-sm text-black">Carrito</span>
           </Button>
         </div>
       </div>
