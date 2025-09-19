@@ -95,7 +95,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         </div>
 
         {/* Objetivo diario section */}
-        <div className="rounded-lg py-2 px-3 mx-4 mb-4 border border-gray-300">
+        <div className="rounded-lg py-2 px-3 mx-4 mb-8 border border-gray-300">
           <div className="flex items-center justify-start gap-2">
             <span className="text-sm text-black">Objetivo diario: comer saludable</span>
             <div className="h-4 w-4 rounded-full flex items-center justify-center" style={{ backgroundColor: '#339933' }}>
