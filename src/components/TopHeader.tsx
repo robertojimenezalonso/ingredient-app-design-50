@@ -30,14 +30,19 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
           />
         </div>
         
-        {/* Mis listas button */}
-        <Button 
-          variant="outline" 
-          className="text-sm font-medium"
-          onClick={() => navigate('/milista')}
-        >
-          Mis listas
-        </Button>
+        {/* Filter and Mis listas buttons */}
+        <div className="flex gap-2 items-center">
+          <Button variant="outline" size="icon" className="h-9 w-9 rounded-full">
+            <SlidersHorizontal className="h-4 w-4" />
+          </Button>
+          <Button 
+            variant="outline" 
+            className="text-sm font-medium rounded-full"
+            onClick={() => navigate('/milista')}
+          >
+            Mis listas
+          </Button>
+        </div>
         
       </div>
       
@@ -81,18 +86,15 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
 
       {/* Navigation Buttons */}
-      <div className="mx-4 mb-3 mt-4 flex justify-between items-center">
+      <div className="mx-4 mb-3 mt-4 flex justify-center items-center">
         <div className="flex gap-2">
-          <Button variant="default" className="text-sm">
+          <Button variant="default" className="text-sm rounded-full">
             Recetas
           </Button>
-          <Button variant="outline" className="text-sm">
+          <Button variant="outline" className="text-sm rounded-full">
             Carrito
           </Button>
         </div>
-        <Button variant="outline" size="icon" className="h-9 w-9">
-          <SlidersHorizontal className="h-4 w-4" />
-        </Button>
       </div>
     </div>
   );
