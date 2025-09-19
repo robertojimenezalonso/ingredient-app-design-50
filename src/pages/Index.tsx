@@ -12,6 +12,7 @@ const Index = () => {
   const [currentDayRecipes, setCurrentDayRecipes] = useState<any[]>([]);
   const [planIndex, setPlanIndex] = useState(0);
   const [savedPlans, setSavedPlans] = useState<any[][]>([]);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
 
   const handleRecipeClick = (recipe: Recipe) => {
     navigate(`/recipe/${recipe.id}`);
@@ -69,17 +70,22 @@ const Index = () => {
     });
   };
 
+  const handleTotalPriceChange = (total: number) => {
+    setTotalPrice(total);
+  };
+
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F7F7F7' }}>
       {/* Top Header */}
-      <TopHeader selectedDate={selectedDate} />
+      <TopHeader selectedDate={selectedDate} totalPrice={totalPrice} />
       
       {/* Vertical Calendar and Recipes */}
-      <div className="mt-28">
+      <div className="mt-32">
         <DayRecipeList
           selectedDate={selectedDate}
           onRecipeClick={handleRecipeClick}
           onAddRecipe={handleAddRecipe}
+          onTotalPriceChange={handleTotalPriceChange}
         />
       </div>
       

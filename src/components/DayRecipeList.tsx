@@ -17,6 +17,7 @@ interface DayPlanListProps {
   selectedDate: Date;
   onRecipeClick: (recipe: Recipe) => void;
   onAddRecipe: (recipe: Recipe) => void;
+  onTotalPriceChange: (total: number) => void;
 }
 
 interface DayPlan {
@@ -30,12 +31,14 @@ const MEAL_TYPES = ['Desayuno', 'Comida', 'Cena'];
 export const DayRecipeList = ({
   selectedDate,
   onRecipeClick,
-  onAddRecipe
+  onAddRecipe,
+  onTotalPriceChange
 }: DayPlanListProps) => {
   const { recipes, convertToRecipe, isLoading } = useRecipeBank();
   const [dayPlans, setDayPlans] = useState<DayPlan[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedDays, setSelectedDays] = useState<Set<string>>(new Set());
 
   const handleRecipeClick = (recipe: Recipe) => {
     setSelectedRecipe(recipe);
@@ -60,8 +63,27 @@ export const DayRecipeList = ({
       }));
       
       setDayPlans(plans);
+      
+      // Initialize with today selected if it has recipes
+      if (isToday(plans[0]?.date) && plans[0]?.hasGenerated) {
+        const todayKey = format(plans[0].date, 'yyyy-MM-dd');
+        setSelectedDays(new Set([todayKey]));
+      }
     }
   }, [recipes, isLoading]);
+
+  useEffect(() => {
+    // Calculate total price when selected days change
+    const total = Array.from(selectedDays).reduce((sum, dayKey) => {
+      const dayPlan = dayPlans.find(plan => format(plan.date, 'yyyy-MM-dd') === dayKey);
+      if (dayPlan && dayPlan.hasGenerated) {
+        return sum + parseFloat(calculateDayTotal(dayPlan.recipes));
+      }
+      return sum;
+    }, 0);
+    
+    onTotalPriceChange(total);
+  }, [selectedDays, dayPlans, onTotalPriceChange]);
 
   const generateRecipesForDate = (date: Date): RecipeWithMeal[] => {
     if (recipes.length === 0) return [];
@@ -88,6 +110,20 @@ export const DayRecipeList = ({
         ? { ...plan, recipes: newRecipes, hasGenerated: true }
         : plan
     ));
+  };
+
+  const handleDayToggle = (date: Date, checked: boolean) => {
+    const dateKey = format(date, 'yyyy-MM-dd');
+    
+    setSelectedDays(prev => {
+      const newSelected = new Set(prev);
+      if (checked) {
+        newSelected.add(dateKey);
+      } else {
+        newSelected.delete(dateKey);
+      }
+      return newSelected;
+    });
   };
 
   const getDateLabel = (date: Date) => {
@@ -139,8 +175,9 @@ export const DayRecipeList = ({
             <div className="px-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Checkbox 
-                  checked={dayPlan.hasGenerated}
+                  checked={selectedDays.has(format(dayPlan.date, 'yyyy-MM-dd'))}
                   disabled={!dayPlan.hasGenerated || dayPlan.recipes.length === 0}
+                  onCheckedChange={(checked) => handleDayToggle(dayPlan.date, checked as boolean)}
                   className={!dayPlan.hasGenerated || dayPlan.recipes.length === 0 ? "pointer-events-none border-muted-foreground/30" : ""}
                 />
                 <div className="flex flex-col">

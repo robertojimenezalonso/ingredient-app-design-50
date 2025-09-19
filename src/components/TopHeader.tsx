@@ -6,9 +6,10 @@ import { es } from 'date-fns/locale';
 
 interface TopHeaderProps {
   selectedDate: Date;
+  totalPrice?: number;
 }
 
-export const TopHeader = ({ selectedDate }: TopHeaderProps) => {
+export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
   const navigate = useNavigate();
 
   const formattedDate = format(selectedDate, "EEEE, d 'de' MMMM", { locale: es });
@@ -36,6 +37,22 @@ export const TopHeader = ({ selectedDate }: TopHeaderProps) => {
         >
           Mis listas
         </Button>
+      </div>
+      
+      {/* Mercadona Section */}
+      <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200">
+        <div className="flex items-center gap-3">
+          <img 
+            src="/src/assets/mercadona-logo-new.png" 
+            alt="Mercadona" 
+            className="w-8 h-8 object-contain"
+          />
+          <span className="text-lg font-medium">Mercadona</span>
+        </div>
+        
+        <div className="text-xl font-bold text-primary">
+          {totalPrice.toFixed(2).replace('.', ',')} €
+        </div>
       </div>
     </div>
   );
