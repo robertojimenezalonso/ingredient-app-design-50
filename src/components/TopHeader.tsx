@@ -80,14 +80,17 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         {/* Better Price Section */}
         <div className="rounded-lg mx-4 mb-4 px-4 h-10 flex items-center" style={{ backgroundColor: '#FFDCC5' }}>
            <div className="flex items-center justify-between w-full">
-             <span className="text-sm" style={{ color: '#FA6916' }}>Mejor precio:</span>
              <div className="flex items-center gap-2">
+               <span className="text-sm" style={{ color: '#FA6916' }}>Mejor precio:</span>
                <span className="text-sm line-through" style={{ color: '#FA6916' }}>
                  {totalPrice.toFixed(2).replace('.', ',')} €
                </span>
                <span className="text-sm text-black font-bold">
                  {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
                </span>
+             </div>
+             <div className="h-5 w-5 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: '#FA6916' }}>
+               !
              </div>
            </div>
         </div>
