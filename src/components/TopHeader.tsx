@@ -59,7 +59,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       <div className="mx-4 mb-3 bg-gray-200 rounded-lg p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm text-foreground">Mejor precio</span>
+            <span className="text-sm text-foreground">Mejor precio:</span>
             <span className="text-sm text-gray-500 line-through">
               {totalPrice.toFixed(2).replace('.', ',')} €
             </span>
@@ -68,7 +68,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
             </span>
           </div>
           
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-1 cursor-pointer">
             <span className="text-sm text-foreground">Alternativas</span>
             <ChevronRight className="h-4 w-4" />
           </div>
