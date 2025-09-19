@@ -85,7 +85,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
                <span className="text-sm line-through" style={{ color: '#FA6916' }}>
                  {totalPrice.toFixed(2).replace('.', ',')} €
                </span>
-               <span className="text-sm text-black font-bold">
+               <span className="text-sm text-black">
                  {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
                </span>
              </div>
