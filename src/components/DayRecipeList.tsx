@@ -185,13 +185,13 @@ export const DayRecipeList = ({
                   className={!dayPlan.hasGenerated || dayPlan.recipes.length === 0 ? "pointer-events-none border-muted-foreground/30" : ""}
                 />
                 <div className="flex flex-col">
-                  <h2 className={`text-lg font-semibold ${
-                    isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
-                  }`}>
-                    {getDateLabel(dayPlan.date)}
-                  </h2>
+                   <h2 className={`text-lg font-medium ${
+                     isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+                   }`}>
+                     {getDateLabel(dayPlan.date)}
+                   </h2>
                   {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                     <span className="text-sm text-foreground">
+                     <span className="text-sm text-gray-500">
                        {calculateDayTotal(dayPlan.recipes)} € · {dayPlan.recipes.length} recetas
                      </span>
                   )}
