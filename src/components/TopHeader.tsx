@@ -30,6 +30,15 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
           />
         </div>
         
+        {/* Mis listas button */}
+        <Button 
+          variant="outline" 
+          className="text-sm font-medium"
+          onClick={() => navigate('/milista')}
+        >
+          Mis listas
+        </Button>
+        
       </div>
       
       {/* Mercadona and Better Price Container */}
