@@ -57,7 +57,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
       
       {/* Mercadona and Better Price Container */}
-      <div className="mx-4 mb-3 mt-1 rounded-lg bg-white">
+      <div className="mx-4 mb-8 mt-1 rounded-lg bg-white">
         {/* Mercadona Section */}
         <div className="flex items-center justify-between px-4 py-3 pb-6">
           <div className="flex items-center gap-3">
