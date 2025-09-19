@@ -57,7 +57,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
       </div>
       
       {/* Mercadona and Better Price Container */}
-      <div className="mx-4 mb-8 mt-1 rounded-lg bg-white pb-4">
+      <div className="mx-4 mb-8 mt-1 rounded-lg bg-white">
         {/* Mercadona Section */}
         <div className="flex items-center justify-between px-4 py-3 pb-6">
           <div className="flex items-center gap-3">
@@ -95,7 +95,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         </div>
 
         {/* Objetivo diario section */}
-        <div className="rounded-lg py-2 px-3 mx-4 mb-12 border border-gray-300">
+        <div className="rounded-lg py-2 px-3 mx-4 mb-4 border border-gray-300">
           <div className="flex items-center justify-start gap-2">
             <span className="text-sm text-black">Objetivo diario: comer saludable</span>
             <div className="h-4 w-4 rounded-full flex items-center justify-center" style={{ backgroundColor: '#339933' }}>
