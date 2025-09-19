@@ -23,7 +23,7 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
           className="w-10 h-10 rounded-full overflow-hidden cursor-pointer"
           onClick={() => navigate('/profile')}
         >
-          <div className="w-full h-full flex items-center justify-center text-white font-semibold text-lg" style={{ backgroundColor: '#ec4899' }}>
+          <div className="w-full h-full flex items-center justify-center text-white font-medium text-lg opacity-90" style={{ backgroundColor: '#ec4899' }}>
             RJ
           </div>
         </div>
