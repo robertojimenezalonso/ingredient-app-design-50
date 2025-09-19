@@ -69,7 +69,7 @@ export const TopHeader = ({
                 <span className="text-lg font-medium">Mercadona</span>
                 <span className="text-sm text-gray-500 flex items-center gap-1">
                   <ShoppingBasket className="h-4 w-4 text-gray-400" />
-                  16 ingr. · 80% uso
+                  16 ingredientes · 80%
                 </span>
                 <span className="text-sm text-gray-500 flex items-center gap-1">
                   <User className="h-4 w-4 text-gray-400" />
