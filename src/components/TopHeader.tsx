@@ -75,18 +75,18 @@ export const TopHeader = ({ selectedDate, totalPrice = 0 }: TopHeaderProps) => {
         </div>
 
         {/* Better Price Section */}
-        <div className="rounded-lg mx-4 mb-4 px-4 h-10 flex items-center" style={{ backgroundColor: '#E4E5E0' }}>
-          <div className="flex items-center justify-between w-full">
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-foreground">Mejor precio:</span>
-              <span className="text-sm text-gray-500 line-through">
-                {totalPrice.toFixed(2).replace('.', ',')} €
-              </span>
-              <span className="text-sm text-green-600">
-                {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
-              </span>
-            </div>
-          </div>
+        <div className="rounded-lg mx-4 mb-4 px-4 h-10 flex items-center" style={{ backgroundColor: '#FFDCC5' }}>
+           <div className="flex items-center justify-between w-full">
+             <span className="text-sm" style={{ color: '#FF7B30' }}>Mejor precio:</span>
+             <div className="flex items-center gap-2">
+               <span className="text-sm text-gray-500 line-through">
+                 {totalPrice.toFixed(2).replace('.', ',')} €
+               </span>
+               <span className="text-sm text-black">
+                 {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
+               </span>
+             </div>
+           </div>
         </div>
 
         {/* Objetivo diario section */}
