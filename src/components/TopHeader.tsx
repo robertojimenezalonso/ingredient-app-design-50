@@ -76,42 +76,31 @@ export const TopHeader = ({
           </div>
         </div>
 
-        {/* Better Price Section */}
-        <div className="rounded-lg mx-4 mb-4 px-3 py-2 flex items-center" style={{
-        backgroundColor: '#FFDCC5'
-      }}>
-           <div className="flex items-center justify-between w-full">
-             <div className="flex items-center gap-2">
-               <span className="text-sm" style={{
-              color: '#FA6916'
-            }}>Mejor precio:</span>
-               <span className="text-sm line-through" style={{
-              color: '#FA6916'
-            }}>
-                 {totalPrice.toFixed(2).replace('.', ',')} €
-               </span>
-               <span className="text-sm text-black">
-                 {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
-               </span>
-             </div>
-             <div className="h-4 w-4 rounded-full flex items-center justify-center text-white text-xs font-bold" style={{
-            backgroundColor: '#FA6916'
+        {/* Parallel sections */}
+        <div className="flex gap-2 mx-4 mb-4">
+          {/* Objetivo section */}
+          <div className="rounded-lg py-2 px-3 flex-1" style={{
+            backgroundColor: '#E8F5E8'
           }}>
-               !
-             </div>
-           </div>
-        </div>
-
-        {/* Objetivo diario section */}
-        <div className="rounded-lg py-2 px-3 mx-4 mb-4" style={{
-        backgroundColor: '#E8F5E8'
-      }}>
-          <div className="flex items-center justify-between">
             <span className="text-sm text-green-600">Objetivo: comer saludable</span>
-            <div className="h-4 w-4 rounded-full flex items-center justify-center" style={{
-            backgroundColor: '#339933'
+          </div>
+
+          {/* Better Price Section */}
+          <div className="rounded-lg px-3 py-2 flex-1" style={{
+            backgroundColor: '#FFDCC5'
           }}>
-              <Check className="h-2.5 w-2.5 text-white" />
+            <div className="flex items-center gap-2">
+              <span className="text-sm" style={{
+                color: '#FA6916'
+              }}>Mejor precio:</span>
+              <span className="text-sm line-through" style={{
+                color: '#FA6916'
+              }}>
+                {totalPrice.toFixed(2).replace('.', ',')} €
+              </span>
+              <span className="text-sm text-black">
+                {(totalPrice * 0.8).toFixed(2).replace('.', ',')} €
+              </span>
             </div>
           </div>
         </div>
