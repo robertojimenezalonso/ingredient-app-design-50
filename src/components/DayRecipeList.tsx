@@ -174,7 +174,7 @@ export const DayRecipeList = ({
     <div className="min-h-screen" style={{ backgroundColor: '#F7F7F7' }}>
       <div className="space-y-8">
         {dayPlans.map((dayPlan, dayIndex) => (
-          <div key={dayIndex} className="space-y-2">
+          <div key={dayIndex} className="space-y-4">
             {/* Day Header */}
             <div className="px-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
