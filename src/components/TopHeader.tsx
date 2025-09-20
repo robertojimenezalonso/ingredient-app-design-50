@@ -36,7 +36,7 @@ export const TopHeader = ({
         
         {/* Carrito button */}
         <Button size="sm" className="rounded-full h-10 px-4 flex-shrink-0" style={{
-          backgroundColor: '#E4E5E0'
+          backgroundColor: '#F7F7F7'
         }} variant="ghost">
           <span className="text-sm text-black">Carrito</span>
         </Button>
@@ -76,7 +76,7 @@ export const TopHeader = ({
       {/* Supermercados Button */}
       <div className="mx-4 mb-8 flex justify-center">
         <Button size="sm" className="rounded-full h-10 px-4 flex-shrink-0" style={{
-          backgroundColor: '#E4E5E0'
+          backgroundColor: '#F7F7F7'
         }} variant="ghost" onClick={() => navigate('/milista')}>
           <span className="text-sm text-black">Supermercados</span>
         </Button>
