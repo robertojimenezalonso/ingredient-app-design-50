@@ -201,7 +201,7 @@ export const DayRecipeList = ({
             
             {/* Nutrition Summary */}
             {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-              <div className="px-4 pb-4">
+              <div className="px-4 pb-2">
                 {(() => {
                   const nutrition = calculateNutritionTotals(dayPlan.recipes);
                   return (
