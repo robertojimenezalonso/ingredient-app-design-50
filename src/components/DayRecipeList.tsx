@@ -193,103 +193,108 @@ export const DayRecipeList = ({
       <div className="space-y-8">
         {dayPlans.map((dayPlan, dayIndex) => {
           const isSelected = selectedDays.has(format(dayPlan.date, 'yyyy-MM-dd'));
+          const showDeleteButton = dayPlan.hasGenerated && dayPlan.recipes.length > 0 && !isSelected;
+          
           return (
-          <div key={dayIndex} className={`space-y-4 transition-opacity duration-200 ${!isSelected && dayPlan.hasGenerated ? 'opacity-50' : 'opacity-100'}`}>
-            {/* Day Header */}
-            <div className="px-4 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Checkbox 
-                  checked={selectedDays.has(format(dayPlan.date, 'yyyy-MM-dd'))}
-                  disabled={!dayPlan.hasGenerated || dayPlan.recipes.length === 0}
-                  onCheckedChange={(checked) => handleDayToggle(dayPlan.date, checked as boolean)}
-                  className={!dayPlan.hasGenerated || dayPlan.recipes.length === 0 ? "pointer-events-none border-muted-foreground/30" : ""}
-                />
-                <h2 className={`text-lg font-medium ${
-                  isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
-                }`}>
-                  {getDateLabel(dayPlan.date)}
-                </h2>
-                {/* Show delete button when day has content but is not selected */}
-                {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && !isSelected && (
-                  <button
-                    onClick={() => handleDeleteDay(dayPlan.date)}
-                    className="text-red-500 text-sm font-medium hover:text-red-600 transition-colors"
-                  >
-                    Eliminar
-                  </button>
+            <div key={dayIndex} className="space-y-4">
+              {/* Day Header - always full opacity */}
+              <div className="px-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <Checkbox 
+                    checked={selectedDays.has(format(dayPlan.date, 'yyyy-MM-dd'))}
+                    disabled={!dayPlan.hasGenerated || dayPlan.recipes.length === 0}
+                    onCheckedChange={(checked) => handleDayToggle(dayPlan.date, checked as boolean)}
+                    className={!dayPlan.hasGenerated || dayPlan.recipes.length === 0 ? "pointer-events-none border-muted-foreground/30" : ""}
+                  />
+                  <h2 className={`text-lg font-medium ${
+                    isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+                  }`}>
+                    {getDateLabel(dayPlan.date)}
+                  </h2>
+                  {/* Show delete button when day has content but is not selected */}
+                  {showDeleteButton && (
+                    <button
+                      onClick={() => handleDeleteDay(dayPlan.date)}
+                      className="text-red-500 text-sm font-medium hover:text-red-600 transition-colors"
+                    >
+                      Eliminar
+                    </button>
+                  )}
+                </div>
+                {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+                  <span className={`text-lg font-medium ${
+                    isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+                  }`}>
+                    {calculateDayTotal(dayPlan.recipes)} €
+                  </span>
                 )}
               </div>
-              {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                <span className={`text-lg font-medium ${
-                  isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
-                }`}>
-                  {calculateDayTotal(dayPlan.recipes)} €
-                </span>
-              )}
-            </div>
-            
-            {/* Nutrition Summary */}
-            {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-              <div className="px-4">
-                {(() => {
-                  const nutrition = calculateNutritionTotals(dayPlan.recipes);
-                  return (
-                    <div className="flex items-center gap-3">
-                      <div className="flex-1 rounded-lg p-3 bg-white" style={{ border: '1px solid #ECEBF1' }}>
-                        <div className="flex items-center justify-center gap-4 text-sm text-black flex-wrap">
-                          <div className="flex items-center gap-1">
-                            <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-                            <span>{nutrition.calories} kcal</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
-                            <span>{Math.round(nutrition.protein)}g</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
-                            <span>{Math.round(nutrition.carbs)}g</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
-                            <span>{Math.round(nutrition.fat)}g</span>
+              
+              {/* Content area with conditional opacity */}
+              <div className={`transition-opacity duration-200 ${!isSelected && dayPlan.hasGenerated ? 'opacity-50' : 'opacity-100'}`}>
+                {/* Nutrition Summary */}
+                {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+                  <div className="px-4">
+                    {(() => {
+                      const nutrition = calculateNutritionTotals(dayPlan.recipes);
+                      return (
+                        <div className="flex items-center gap-3">
+                          <div className="flex-1 rounded-lg p-3 bg-white" style={{ border: '1px solid #ECEBF1' }}>
+                            <div className="flex items-center justify-center gap-4 text-sm text-black flex-wrap">
+                              <div className="flex items-center gap-1">
+                                <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                                <span>{nutrition.calories} kcal</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                                <span>{Math.round(nutrition.protein)}g</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                                <span>{Math.round(nutrition.carbs)}g</span>
+                              </div>
+                              <div className="flex items-center gap-1">
+                                <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                                <span>{Math.round(nutrition.fat)}g</span>
+                              </div>
+                            </div>
                           </div>
                         </div>
+                      );
+                    })()}
+                  </div>
+                )}
+                
+                {/* Recipes or Generate Button */}
+                {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
+                  <div className="mx-4">
+                    <div className="bg-white rounded-lg shadow-sm">
+                      <div className="p-4">
+                        {dayPlan.recipes.map((recipe, recipeIndex) => (
+                          <RecipeGridCard
+                            key={`${recipe.id}-${recipeIndex}`}
+                            recipe={recipe}
+                            mealType={recipe.mealTypeLabel}
+                            onClick={() => handleRecipeClick(recipe)}
+                            onAdd={() => onAddRecipe(recipe)}
+                          />
+                        ))}
                       </div>
                     </div>
-                  );
-                })()}
-              </div>
-            )}
-            
-            {/* Recipes or Generate Button */}
-            {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
-              <div className="mx-4">
-                <div className="bg-white rounded-lg shadow-sm">
-                  <div className="p-4">
-                    {dayPlan.recipes.map((recipe, recipeIndex) => (
-                      <RecipeGridCard
-                        key={`${recipe.id}-${recipeIndex}`}
-                        recipe={recipe}
-                        mealType={recipe.mealTypeLabel}
-                        onClick={() => handleRecipeClick(recipe)}
-                        onAdd={() => onAddRecipe(recipe)}
-                      />
-                    ))}
                   </div>
-                </div>
+                ) : (
+                  <div className="px-4">
+                    <Button 
+                      onClick={() => handleGeneratePlan(dayPlan.date)}
+                      className="w-full py-4 text-base"
+                      variant="outline"
+                    >
+                      Generar recetas
+                    </Button>
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className="px-4">
-                <Button 
-                  onClick={() => handleGeneratePlan(dayPlan.date)}
-                  className="w-full py-4 text-base"
-                  variant="outline"
-                >
-                  Generar recetas
-                </Button>
-              </div>
-            )}
-          </div>
+            </div>
           );
         })}
       </div>
