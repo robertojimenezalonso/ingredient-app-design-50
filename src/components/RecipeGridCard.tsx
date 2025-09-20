@@ -87,7 +87,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
               </span>
             </div>
             <div className="text-sm flex items-center gap-1">
-              <span>{price} €</span>
+              <span>{price} € · x{recipe.servings} {recipe.servings === 1 ? 'ración' : 'raciones'}</span>
               {recipe.servings > 1 && (
                 <span className="text-muted-foreground">({pricePerServing} €/ración)</span>
               )}
