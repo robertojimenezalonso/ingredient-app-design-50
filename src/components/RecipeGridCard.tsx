@@ -19,6 +19,21 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
     return price.replace('.', ',');
   };
   
+  const getMealTypeAbbreviation = (type: string) => {
+    switch (type?.toLowerCase()) {
+      case 'desayuno':
+        return 'D';
+      case 'comida':
+        return 'C';
+      case 'cena':
+        return 'Cena';
+      case 'snack':
+        return 'Snack';
+      default:
+        return type || 'Comida';
+    }
+  };
+  
   const price = generateConsistentPrice(recipe.id);
   const servings = 2;
   const pricePerServing = (parseFloat(price.replace(',', '.')) / servings).toFixed(2).replace('.', ',');
@@ -62,8 +77,8 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
               <h3 className="font-normal text-base leading-tight truncate text-left pr-2 flex-1">
                 {recipe.title}
               </h3>
-              <span className="bg-muted px-2 py-1 rounded text-xs text-muted-foreground whitespace-nowrap ml-2">
-                {mealType || "Comida"}
+              <span className="bg-muted px-2 py-1 rounded-full text-xs text-muted-foreground whitespace-nowrap ml-2">
+                {getMealTypeAbbreviation(mealType || "Comida")}
               </span>
             </div>
             <div className="text-sm flex items-center gap-1">
