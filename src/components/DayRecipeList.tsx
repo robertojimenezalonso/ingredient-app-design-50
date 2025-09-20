@@ -173,8 +173,10 @@ export const DayRecipeList = ({
   return (
     <div className="min-h-screen pt-4" style={{ backgroundColor: '#F7F7F7' }}>
       <div className="space-y-8">
-        {dayPlans.map((dayPlan, dayIndex) => (
-          <div key={dayIndex} className="space-y-4">
+        {dayPlans.map((dayPlan, dayIndex) => {
+          const isSelected = selectedDays.has(format(dayPlan.date, 'yyyy-MM-dd'));
+          return (
+          <div key={dayIndex} className={`space-y-4 transition-opacity duration-200 ${!isSelected && dayPlan.hasGenerated ? 'opacity-50' : 'opacity-100'}`}>
             {/* Day Header */}
             <div className="px-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -261,7 +263,8 @@ export const DayRecipeList = ({
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
       
       <RecipeDrawer
