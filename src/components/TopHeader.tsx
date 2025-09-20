@@ -57,7 +57,7 @@ export const TopHeader = ({
             </div>
          </div>
         
-        <div className="text-3xl font-bold text-primary">
+        <div className="text-5xl text-primary">
           {totalPrice.toFixed(2).replace('.', ',')} €
         </div>
       </div>
