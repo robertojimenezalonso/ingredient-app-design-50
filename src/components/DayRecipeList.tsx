@@ -250,16 +250,6 @@ export const DayRecipeList = ({
                                 <span>{Math.round(nutrition.fat)}g</span>
                               </div>
                             </div>
-                            
-                            {/* Objetivo comer saludable tag */}
-                            <div className="rounded-lg py-2 px-3 mt-2" style={{ backgroundColor: '#ecf9ec' }}>
-                              <div className="flex items-center justify-center gap-2">
-                                <span className="text-sm" style={{ color: '#339933' }}>Objetivo diario: comer saludable</span>
-                                <div className="h-4 w-4 rounded-full flex items-center justify-center" style={{ backgroundColor: '#339933' }}>
-                                  <Check className="h-2.5 w-2.5 text-white" />
-                                </div>
-                              </div>
-                            </div>
                           </div>
                         </div>
                       );
