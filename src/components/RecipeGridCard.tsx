@@ -22,21 +22,21 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
   const getMealTypeAbbreviation = (type: string) => {
     switch (type?.toLowerCase()) {
       case 'desayuno':
-        return 'Desay.';
+        return 'Desayuno';
       case 'comida':
-        return 'Comid.';
+        return 'Comida';
       case 'aperitivo':
-        return 'Aper.';
+        return 'Aperitivo';
       case 'merienda':
-        return 'Merien.';
+        return 'Merienda';
       case 'postre':
-        return 'Postr.';
+        return 'Postre';
       case 'cena':
         return 'Cena';
       case 'snack':
         return 'Snack';
       default:
-        return type || 'Comid.';
+        return type || 'Comida';
     }
   };
   
@@ -86,10 +86,10 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
                 {price} €
               </span>
             </div>
-            <div className="text-sm flex items-center gap-1">
+            <div className="text-sm flex items-center gap-1" style={{ color: '#6C6C6C' }}>
               <span>{getMealTypeAbbreviation(mealType || "Comida")} · {recipe.servings} {recipe.servings === 1 ? 'ración' : 'raciones'}</span>
               {recipe.servings > 1 && (
-                <span className="text-muted-foreground">({pricePerServing} €/ración)</span>
+                <span>({pricePerServing} €/ración)</span>
               )}
             </div>
           </div>
