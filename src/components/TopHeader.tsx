@@ -64,12 +64,8 @@ export const TopHeader = ({
 
       {/* Better Price Section */}
       <div className="mx-4 mb-8">
-        <div className="rounded-lg px-3 py-2 flex items-center justify-center" style={{
-          backgroundColor: '#FFDCC5'
-        }}>
-          <span className="text-sm whitespace-nowrap text-center" style={{
-            color: '#FA6916'
-          }}><span className="underline decoration-offset-2">Mejor precio:</span> <span className="font-semibold">{(totalPrice * 0.8).toFixed(2).replace('.', ',')} €</span></span>
+        <div className="flex items-center justify-center">
+          <span className="text-sm whitespace-nowrap text-center text-black">Mejor precio: <span className="font-semibold">{(totalPrice * 0.8).toFixed(2).replace('.', ',')} €</span></span>
         </div>
       </div>
 
