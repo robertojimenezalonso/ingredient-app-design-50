@@ -130,6 +130,24 @@ export const DayRecipeList = ({
     });
   };
 
+  const handleDeleteDay = (date: Date) => {
+    const dateKey = format(date, 'yyyy-MM-dd');
+    
+    // Remove from selected days
+    setSelectedDays(prev => {
+      const newSelected = new Set(prev);
+      newSelected.delete(dateKey);
+      return newSelected;
+    });
+    
+    // Reset the day plan to initial state
+    setDayPlans(prev => prev.map(plan => 
+      plan.date.getTime() === date.getTime() 
+        ? { ...plan, recipes: [], hasGenerated: false }
+        : plan
+    ));
+  };
+
   const getDateLabel = (date: Date) => {
     if (isToday(date)) return 'hoy';
     if (isTomorrow(date)) return 'mañana';
@@ -191,6 +209,15 @@ export const DayRecipeList = ({
                 }`}>
                   {getDateLabel(dayPlan.date)}
                 </h2>
+                {/* Show delete button when day has content but is not selected */}
+                {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && !isSelected && (
+                  <button
+                    onClick={() => handleDeleteDay(dayPlan.date)}
+                    className="text-red-500 text-sm font-medium hover:text-red-600 transition-colors"
+                  >
+                    Eliminar
+                  </button>
+                )}
               </div>
               {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
                 <span className={`text-lg font-medium ${
