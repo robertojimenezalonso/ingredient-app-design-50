@@ -41,8 +41,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
   };
   
   const price = generateConsistentPrice(recipe.id);
-  const servings = 2;
-  const pricePerServing = (parseFloat(price.replace(',', '.')) / servings).toFixed(2).replace('.', ',');
+  const pricePerServing = (parseFloat(price.replace(',', '.')) / recipe.servings).toFixed(2).replace('.', ',');
 
   const handleClick = () => {
     if (onClick) {
@@ -89,7 +88,9 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
             </div>
             <div className="text-sm flex items-center gap-1">
               <span>{price} €</span>
-              <span className="text-muted-foreground">({pricePerServing} €/ración)</span>
+              {recipe.servings > 1 && (
+                <span className="text-muted-foreground">({pricePerServing} €/ración)</span>
+              )}
             </div>
           </div>
         </div>
