@@ -78,7 +78,7 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
         
         <div className="flex-1 flex flex-col justify-center relative gap-1 min-w-0">
           <div className="flex flex-col">
-            <div className="flex items-center justify-between">
+            <div className="flex items-start justify-between">
               <h3 className="font-normal text-base leading-tight line-clamp-2 text-left pr-2 flex-1">
                 {recipe.title}
               </h3>
