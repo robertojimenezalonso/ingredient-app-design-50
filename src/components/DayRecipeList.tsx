@@ -197,16 +197,6 @@ export const DayRecipeList = ({
                   )}
                 </div>
               </div>
-              {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                <Button 
-                  size="sm" 
-                  className="rounded-full h-10 w-10 p-0 flex-shrink-0" 
-                  style={{ backgroundColor: '#E4E5E0' }}
-                  variant="ghost"
-                >
-                  <Plus className="h-4 w-4 text-black" />
-                </Button>
-              )}
             </div>
             
             {/* Recipes or Generate Button */}
