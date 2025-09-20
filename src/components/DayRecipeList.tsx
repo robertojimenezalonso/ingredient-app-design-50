@@ -184,19 +184,19 @@ export const DayRecipeList = ({
                   onCheckedChange={(checked) => handleDayToggle(dayPlan.date, checked as boolean)}
                   className={!dayPlan.hasGenerated || dayPlan.recipes.length === 0 ? "pointer-events-none border-muted-foreground/30" : ""}
                 />
-                <div className="flex flex-col">
-                   <h2 className={`text-lg font-medium ${
-                     isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
-                   }`}>
-                     {getDateLabel(dayPlan.date)}
-                   </h2>
-                  {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                     <span className="text-sm text-gray-500">
-                       {calculateDayTotal(dayPlan.recipes)} €
-                     </span>
-                  )}
-                </div>
+                <h2 className={`text-lg font-medium ${
+                  isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+                }`}>
+                  {getDateLabel(dayPlan.date)}
+                </h2>
               </div>
+              {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+                <span className={`text-lg font-medium ${
+                  isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+                }`}>
+                  {calculateDayTotal(dayPlan.recipes)} €
+                </span>
+              )}
             </div>
             
             {/* Recipes or Generate Button */}
