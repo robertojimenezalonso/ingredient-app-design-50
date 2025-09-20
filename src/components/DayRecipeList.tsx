@@ -130,6 +130,22 @@ export const DayRecipeList = ({
     });
   };
 
+  const handleDeleteDay = (date: Date) => {
+    setDayPlans(prev => prev.map(plan => 
+      plan.date.getTime() === date.getTime() 
+        ? { ...plan, recipes: [], hasGenerated: false }
+        : plan
+    ));
+    
+    // Remove from selected days
+    const dateKey = format(date, 'yyyy-MM-dd');
+    setSelectedDays(prev => {
+      const newSelected = new Set(prev);
+      newSelected.delete(dateKey);
+      return newSelected;
+    });
+  };
+
   const getDateLabel = (date: Date) => {
     if (isToday(date)) return 'hoy';
     if (isTomorrow(date)) return 'mañana';
@@ -181,7 +197,7 @@ export const DayRecipeList = ({
             <div className="px-4 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Checkbox 
-                  checked={selectedDays.has(format(dayPlan.date, 'yyyy-MM-dd'))}
+                  checked={isSelected}
                   disabled={!dayPlan.hasGenerated || dayPlan.recipes.length === 0}
                   onCheckedChange={(checked) => handleDayToggle(dayPlan.date, checked as boolean)}
                   className={!dayPlan.hasGenerated || dayPlan.recipes.length === 0 ? "pointer-events-none border-muted-foreground/30" : ""}
@@ -192,17 +208,27 @@ export const DayRecipeList = ({
                   {getDateLabel(dayPlan.date)}
                 </h2>
               </div>
-              {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
-                <span className={`text-lg font-medium ${
-                  isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
-                }`}>
-                  {calculateDayTotal(dayPlan.recipes)} €
-                </span>
-              )}
+              <div className="flex items-center gap-3">
+                {!isSelected && dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+                  <button 
+                    onClick={() => handleDeleteDay(dayPlan.date)}
+                    className="text-sm text-red-500 hover:text-red-700 transition-colors"
+                  >
+                    Eliminar
+                  </button>
+                )}
+                {isSelected && dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+                  <span className={`text-lg font-medium ${
+                    isToday(dayPlan.date) ? 'text-primary' : 'text-foreground'
+                  }`}>
+                    {calculateDayTotal(dayPlan.recipes)} €
+                  </span>
+                )}
+              </div>
             </div>
             
             {/* Nutrition Summary */}
-            {dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
+            {isSelected && dayPlan.hasGenerated && dayPlan.recipes.length > 0 && (
               <div className="px-4">
                 {(() => {
                   const nutrition = calculateNutritionTotals(dayPlan.recipes);
@@ -235,7 +261,7 @@ export const DayRecipeList = ({
             )}
             
             {/* Recipes or Generate Button */}
-            {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
+            {isSelected && dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
               <div className="mx-4">
                 <div className="bg-white rounded-lg shadow-sm">
                   <div className="p-4">
