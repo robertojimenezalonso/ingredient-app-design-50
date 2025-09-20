@@ -22,15 +22,21 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
   const getMealTypeAbbreviation = (type: string) => {
     switch (type?.toLowerCase()) {
       case 'desayuno':
-        return 'D';
+        return 'Desay.';
       case 'comida':
-        return 'C';
+        return 'Comid.';
+      case 'aperitivo':
+        return 'Aper.';
+      case 'merienda':
+        return 'Merien.';
+      case 'postre':
+        return 'Postr.';
       case 'cena':
         return 'Cena';
       case 'snack':
         return 'Snack';
       default:
-        return type || 'Comida';
+        return type || 'Comid.';
     }
   };
   
