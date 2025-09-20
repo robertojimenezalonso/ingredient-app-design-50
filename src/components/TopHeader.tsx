@@ -58,7 +58,7 @@ export const TopHeader = ({
          </div>
         
         <div className="text-5xl text-primary">
-          {totalPrice.toFixed(2).replace('.', ',')} €
+          {Math.floor(totalPrice)}<span className="text-2xl">,{(totalPrice % 1).toFixed(2).substring(2)} €</span>
         </div>
       </div>
 
