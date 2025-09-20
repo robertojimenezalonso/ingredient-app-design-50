@@ -234,7 +234,7 @@ export const DayRecipeList = ({
             
             {/* Recipes or Generate Button */}
             {dayPlan.hasGenerated && dayPlan.recipes.length > 0 ? (
-              <div className="mx-4">
+              <div className="mx-4 -mt-2">
                 <div className="bg-white rounded-lg shadow-sm">
                   <div className="p-4">
                     {dayPlan.recipes.map((recipe, recipeIndex) => (
