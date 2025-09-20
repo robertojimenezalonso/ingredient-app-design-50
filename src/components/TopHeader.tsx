@@ -64,7 +64,7 @@ export const TopHeader = ({
 
       {/* Better Price Section */}
       <div className="mx-4 mb-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-center gap-4">
           <span className="text-sm whitespace-nowrap text-black">Mejor precio: <span className="font-semibold">{(totalPrice * 0.8).toFixed(2).replace('.', ',')} €</span></span>
           <span className="text-sm font-medium text-green-600">-{(totalPrice * 0.2).toFixed(2).replace('.', ',')} €</span>
         </div>
