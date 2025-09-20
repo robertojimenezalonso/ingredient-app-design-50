@@ -50,7 +50,7 @@ export const TopHeader = ({
       
       {/* Mercadona Section */}
       <div className="flex flex-col items-center mx-4 mb-6">
-         <div className="flex items-center gap-2 mb-2">
+         <div className="flex items-center gap-1 mb-2">
            <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8 object-contain" />
             <div className="flex flex-col">
               <span className="text-sm font-medium">Mercadona</span>
