@@ -33,15 +33,6 @@ export const TopHeader = ({
             RJ
           </div>
         </div>
-        
-        {/* Filter button */}
-        <div className="flex gap-2 items-center">
-          <Button size="sm" className="rounded-full h-10 w-10 p-0 flex-shrink-0" style={{
-          backgroundColor: '#E4E5E0'
-        }} variant="ghost">
-            <SlidersHorizontal className="h-4 w-4 text-black" />
-          </Button>
-        </div>
       </div>
     </div>
 
