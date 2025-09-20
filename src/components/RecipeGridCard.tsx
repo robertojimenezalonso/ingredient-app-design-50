@@ -82,12 +82,12 @@ export const RecipeGridCard = ({ recipe, onAdd, onClick, mealType, isFirstCard }
               <h3 className="font-normal text-base leading-tight truncate text-left pr-2 flex-1">
                 {recipe.title}
               </h3>
-              <span className="bg-muted px-2 py-1 rounded-full text-xs text-muted-foreground whitespace-nowrap ml-2">
-                {getMealTypeAbbreviation(mealType || "Comida")}
+              <span className="font-normal text-base leading-tight whitespace-nowrap ml-2">
+                {price} €
               </span>
             </div>
             <div className="text-sm flex items-center gap-1">
-              <span>{price} € · {recipe.servings} {recipe.servings === 1 ? 'ración' : 'raciones'}</span>
+              <span>{getMealTypeAbbreviation(mealType || "Comida")} · {recipe.servings} {recipe.servings === 1 ? 'ración' : 'raciones'}</span>
               {recipe.servings > 1 && (
                 <span className="text-muted-foreground">({pricePerServing} €/ración)</span>
               )}
