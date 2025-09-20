@@ -33,6 +33,13 @@ export const TopHeader = ({
             RJ
           </div>
         </div>
+        
+        {/* Carrito button */}
+        <Button size="sm" className="rounded-full h-10 px-4 flex-shrink-0" style={{
+          backgroundColor: '#E4E5E0'
+        }} variant="ghost">
+          <span className="text-sm text-black">Carrito</span>
+        </Button>
       </div>
     </div>
 
@@ -75,21 +82,6 @@ export const TopHeader = ({
         </Button>
       </div>
 
-      {/* Navigation Buttons */}
-      <div className="mx-4 mb-2 mt-8 flex justify-center items-center">
-        <div className="flex gap-2">
-          <Button size="sm" className="rounded-full h-10 px-4 flex-shrink-0" style={{
-          backgroundColor: '#000000'
-        }} variant="ghost">
-            <span className="text-sm text-white">Recetas</span>
-          </Button>
-          <Button size="sm" className="rounded-full h-10 px-4 flex-shrink-0" style={{
-          backgroundColor: '#E4E5E0'
-        }} variant="ghost">
-            <span className="text-sm text-black">Carrito</span>
-          </Button>
-        </div>
-      </div>
     </div>
   </>;
 };
