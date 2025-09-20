@@ -49,15 +49,15 @@ export const TopHeader = ({
     }}>
       
       {/* Mercadona Section */}
-      <div className="flex items-start justify-between mx-4 mb-6">
-         <div className="flex items-center gap-3">
+      <div className="flex flex-col items-center mx-4 mb-6">
+         <div className="flex items-center gap-3 mb-2">
            <img src={mercadonaLogo} alt="Mercadona" className="w-12 h-12 object-contain" />
             <div className="flex flex-col">
               <span className="text-lg font-medium">Mercadona</span>
             </div>
          </div>
         
-        <div className="text-xl font-medium text-primary">
+        <div className="text-3xl font-bold text-primary">
           {totalPrice.toFixed(2).replace('.', ',')} €
         </div>
       </div>
