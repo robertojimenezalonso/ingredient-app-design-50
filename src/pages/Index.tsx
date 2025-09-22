@@ -48,7 +48,7 @@ const Index = () => {
     }
   };
 
-  // Listen for storage changes
+  // Listen for storage changes and custom events
   useEffect(() => {
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'savedShoppingLists') {
@@ -57,8 +57,18 @@ const Index = () => {
       }
     };
 
+    const handleListsUpdated = () => {
+      console.log('Index: Custom listsUpdated event received, refreshing...');
+      refreshLists();
+    };
+
     window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
+    window.addEventListener('listsUpdated', handleListsUpdated);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('listsUpdated', handleListsUpdated);
+    };
   }, []);
 
   // Debug: Log current state

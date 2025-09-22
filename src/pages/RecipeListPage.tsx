@@ -71,63 +71,94 @@ const RecipeListPage = () => {
 
   // Auto-save configuration when AI recipes are loaded and config is available
   useEffect(() => {
+    console.log('RecipeListPage: Auto-save effect running with:', {
+      listId,
+      aiRecipesCount: aiRecipes.length,
+      hasConfig: !!config,
+      selectedDates: config?.selectedDates,
+      servingsPerRecipe: config?.servingsPerRecipe
+    });
+    
     // Only auto-save if we're not viewing a specific saved list
     if (listId) {
       console.log('RecipeListPage: Viewing specific list, skipping auto-save');
       return;
     }
     
-    if (aiRecipes.length > 0 && config && config.selectedDates) {
-      console.log('RecipeListPage: Auto-save effect triggered - recipes:', aiRecipes.length, 'config dates:', config.selectedDates?.length);
-      
-      // Add a flag to prevent multiple saves during the same session
-      const currentSessionKey = `autosave-${config.selectedDates?.join('-')}-${config.servingsPerRecipe}`;
-      const sessionSaved = sessionStorage.getItem(currentSessionKey);
-      
-      if (sessionSaved) {
-        console.log('RecipeListPage: Already saved in this session, skipping');
-        return;
-      }
-      
-      // Check if this configuration was already saved to avoid duplicates
-      const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
-      
-      // Create a more specific check to prevent duplicates
-      const currentRecipeIds = aiRecipes.map(r => r.id).sort().join(',');
-      const alreadySaved = existingLists.some(list => {
-        const listRecipeIds = (list.recipes || []).map(r => r.id).sort().join(',');
-        return list.dates?.join('-') === config.selectedDates?.join('-') && 
-               list.servings === config.servingsPerRecipe &&
-               listRecipeIds === currentRecipeIds;
-      });
-
-      if (!alreadySaved) {
-        const newList = {
-          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // More unique ID
-          name: 'Mi Lista',
-          dates: config.selectedDates || [],
-          servings: config.servingsPerRecipe || 2,
-          meals: config.selectedMeals || [],
-          recipes: aiRecipes,
-          createdAt: new Date().toISOString(),
-          estimatedPrice: calculateEstimatedPrice(aiRecipes.length * 3) // Estimate based on recipes
-        };
-        
-        console.log('RecipeListPage: Saving new list with ID:', newList.id);
-        
-        // Load existing lists and add new one
-        const updatedLists = [newList, ...existingLists.slice(0, 9)]; // Keep only 10 most recent
-        localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
-        
-        // Mark as saved in this session
-        sessionStorage.setItem(currentSessionKey, 'true');
-        
-        console.log('RecipeListPage: Configuration auto-saved as new list');
-      } else {
-        console.log('RecipeListPage: Similar configuration already exists, skipping auto-save');
-      }
+    if (aiRecipes.length === 0) {
+      console.log('RecipeListPage: No AI recipes loaded yet, waiting...');
+      return;
     }
-  }, [aiRecipes.length, config?.selectedDates?.length, config?.servingsPerRecipe, listId]); // Only depend on key values, not full objects
+    
+    if (!config) {
+      console.log('RecipeListPage: No config available yet, waiting...');
+      return;
+    }
+    
+    if (!config.selectedDates) {
+      console.log('RecipeListPage: No selectedDates in config, waiting...');
+      return;
+    }
+    
+    console.log('RecipeListPage: All conditions met, proceeding with auto-save check...');
+    
+    // Add a flag to prevent multiple saves during the same session
+    const currentSessionKey = `autosave-${config.selectedDates?.join('-')}-${config.servingsPerRecipe}`;
+    const sessionSaved = sessionStorage.getItem(currentSessionKey);
+    
+    if (sessionSaved) {
+      console.log('RecipeListPage: Already saved in this session, skipping');
+      return;
+    }
+    
+    // Check if this configuration was already saved to avoid duplicates
+    const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
+    console.log('RecipeListPage: Found', existingLists.length, 'existing lists');
+    
+    // Create a more specific check to prevent duplicates
+    const currentRecipeIds = aiRecipes.map(r => r.id).sort().join(',');
+    const alreadySaved = existingLists.some(list => {
+      const listRecipeIds = (list.recipes || []).map(r => r.id).sort().join(',');
+      return list.dates?.join('-') === config.selectedDates?.join('-') && 
+             list.servings === config.servingsPerRecipe &&
+             listRecipeIds === currentRecipeIds;
+    });
+
+    if (!alreadySaved) {
+      const newList = {
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // More unique ID
+        name: 'Mi Lista',
+        dates: config.selectedDates || [],
+        servings: config.servingsPerRecipe || 2,
+        meals: config.selectedMeals || [],
+        recipes: aiRecipes,
+        createdAt: new Date().toISOString(),
+        estimatedPrice: calculateEstimatedPrice(aiRecipes.length * 3) // Estimate based on recipes
+      };
+      
+      console.log('RecipeListPage: Saving new list with ID:', newList.id);
+      console.log('RecipeListPage: List data:', {
+        name: newList.name,
+        dates: newList.dates,
+        recipesCount: newList.recipes.length,
+        firstRecipe: newList.recipes[0]?.title
+      });
+      
+      // Load existing lists and add new one
+      const updatedLists = [newList, ...existingLists.slice(0, 9)]; // Keep only 10 most recent
+      localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+      
+      // Mark as saved in this session
+      sessionStorage.setItem(currentSessionKey, 'true');
+      
+      console.log('RecipeListPage: Configuration auto-saved as new list - total lists now:', updatedLists.length);
+      
+      // Trigger a custom event to notify Index page
+      window.dispatchEvent(new CustomEvent('listsUpdated'));
+    } else {
+      console.log('RecipeListPage: Similar configuration already exists, skipping auto-save');
+    }
+  }, [aiRecipes, config, listId]); // Back to full object dependencies
 
   // Handle recipe replacement when coming from change mode
   useEffect(() => {
