@@ -5,6 +5,7 @@ import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
+import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 
 const foodTypes = [
   { id: "desayuno", name: "Desayuno", emoji: "🥞" },
@@ -117,8 +118,10 @@ export const AirbnbHeader = ({
               <div className="font-medium text-base text-foreground">
                 Mi lista de la compra
               </div>
-              <div className="text-sm text-muted-foreground font-normal">
-                {config.selectedDates?.length || 0} Días · {config.servingsPerRecipe} Raciones por receta
+              <div className="text-sm text-muted-foreground font-normal flex items-center gap-1">
+                Para {config.selectedDates?.length || 0} días · 
+                <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-contain" />
+                Mercadona
               </div>
             </div>
             <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
