@@ -52,18 +52,18 @@ export const FloatingButton = ({
       paddingBottom: `calc(16px + env(safe-area-inset-bottom))`
     }}>
       {/* Header con logo Mercadona y precio */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-        <div className="flex items-center gap-2">
-          <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-contain" />
-          <span className="text-sm font-medium text-black">Mercadona</span>
-        </div>
-        <div className="text-right">
-          <div className="text-lg font-semibold text-black">
-            {calculatedPrice.toFixed(2).replace('.', ',')} €
+      <div className="flex items-start justify-between px-4 py-3 border-b border-gray-100">
+        <div className="flex flex-col">
+          <div className="flex items-center gap-2 mb-1">
+            <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-contain" />
+            <span className="text-lg font-semibold text-black">Mercadona</span>
           </div>
           <div className="text-xs text-gray-600">
             Mejor precio: <span className="text-green-600">{discountedPrice.replace('.', ',')} €</span> en otros supermercados
           </div>
+        </div>
+        <div className="text-lg font-semibold text-black">
+          {calculatedPrice.toFixed(2).replace('.', ',')} €
         </div>
       </div>
       
