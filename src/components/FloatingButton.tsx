@@ -51,7 +51,7 @@ export const FloatingButton = ({
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg border-t border-gray-100" style={{
       paddingBottom: `calc(16px + env(safe-area-inset-bottom))`,
-      boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.1)'
+      boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)'
     }}>
       {/* Header con logo Mercadona y precio */}
       <div className="flex items-center justify-between px-4 py-3">
