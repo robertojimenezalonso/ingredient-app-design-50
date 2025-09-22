@@ -44,9 +44,8 @@ export const TopHeader = ({
     </div>
 
     {/* Scrollable content */}
-    <div className="pt-20" style={{
-      backgroundColor: '#F7F7F7'
-    }}>
+    <div className="pt-32">
+      
       
       {/* Mercadona Section */}
       <div className="flex flex-col items-center mx-4 mb-2">
