@@ -118,8 +118,8 @@ export const AirbnbHeader = ({
               <div className="font-medium text-base text-foreground">
                 Mi lista de la compra
               </div>
-              <div className="text-sm text-muted-foreground font-normal flex items-center gap-1">
-                <img src={mercadonaLogo} alt="Mercadona" className="w-5 h-5 object-contain" />
+              <div className="text-sm text-muted-foreground font-normal flex items-center">
+                <img src={mercadonaLogo} alt="Mercadona" className="w-5 h-5 object-contain mr-1" />
                 Mercadona · Para {config.selectedDates?.length || 0} días
               </div>
             </div>
