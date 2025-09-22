@@ -122,20 +122,45 @@ const Index = () => {
                      <div className="relative w-16 h-16 flex-shrink-0">
                        {recipeImages.length > 0 ? (
                          <div className="relative w-full h-full">
-                           {recipeImages.map((image, imgIndex) => (
-                             <img
-                               key={imgIndex}
-                               src={image}
-                               alt="Recipe"
-                               className="absolute w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
-                               style={{
-                                 left: `${imgIndex * 6}px`,
-                                 top: `${imgIndex * 2}px`,
-                                 zIndex: 3 - imgIndex,
-                                 transform: `rotate(${(imgIndex - 1) * 2}deg)`
-                               }}
-                             />
-                           ))}
+                           {recipeImages.map((image, imgIndex) => {
+                             // Adjust positioning based on number of images
+                             const totalImages = recipeImages.length;
+                             let left = 0;
+                             let top = 0;
+                             let rotation = 0;
+                             
+                             if (totalImages === 1) {
+                               // Single image centered
+                               left = 2;
+                               top = 2;
+                               rotation = 0;
+                             } else if (totalImages === 2) {
+                               // Two images slightly overlapped
+                               left = imgIndex * 8;
+                               top = imgIndex * 4;
+                               rotation = (imgIndex - 0.5) * 3;
+                             } else {
+                               // Three images with more overlap
+                               left = imgIndex * 6;
+                               top = imgIndex * 2;
+                               rotation = (imgIndex - 1) * 2;
+                             }
+                             
+                             return (
+                               <img
+                                 key={imgIndex}
+                                 src={image}
+                                 alt="Recipe"
+                                 className="absolute w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
+                                 style={{
+                                   left: `${left}px`,
+                                   top: `${top}px`,
+                                   zIndex: 3 - imgIndex,
+                                   transform: `rotate(${rotation}deg)`
+                                 }}
+                               />
+                             );
+                           })}
                          </div>
                        ) : (
                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
