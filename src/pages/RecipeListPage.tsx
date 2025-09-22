@@ -78,20 +78,22 @@ const RecipeListPage = () => {
     }
     
     if (aiRecipes.length > 0 && config && config.selectedDates) {
+      console.log('RecipeListPage: Checking if should auto-save...');
       // Check if this configuration was already saved to avoid duplicates
       const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
-      const configKey = `${config.selectedDates.join('-')}-${config.servingsPerRecipe}-${aiRecipes.length}`;
       
-      // Check if a list with similar config already exists (to prevent duplicates)
-      const alreadySaved = existingLists.some(list => 
-        list.dates?.join('-') === config.selectedDates?.join('-') && 
-        list.servings === config.servingsPerRecipe &&
-        list.recipes?.length === aiRecipes.length
-      );
+      // Create a more specific check to prevent duplicates
+      const currentRecipeIds = aiRecipes.map(r => r.id).sort().join(',');
+      const alreadySaved = existingLists.some(list => {
+        const listRecipeIds = (list.recipes || []).map(r => r.id).sort().join(',');
+        return list.dates?.join('-') === config.selectedDates?.join('-') && 
+               list.servings === config.servingsPerRecipe &&
+               listRecipeIds === currentRecipeIds;
+      });
 
       if (!alreadySaved) {
         const newList = {
-          id: Date.now().toString(),
+          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // More unique ID
           name: 'Mi Lista',
           dates: config.selectedDates || [],
           servings: config.servingsPerRecipe || 2,
@@ -101,7 +103,8 @@ const RecipeListPage = () => {
           estimatedPrice: calculateEstimatedPrice(aiRecipes.length * 3) // Estimate based on recipes
         };
         
-        console.log('RecipeListPage: Saving new list with recipes:', newList.recipes.map(r => ({ title: r.title, image: r.image })));
+        console.log('RecipeListPage: Saving new list with ID:', newList.id);
+        console.log('RecipeListPage: Recipe count:', newList.recipes.length);
         
         // Load existing lists and add new one
         const updatedLists = [newList, ...existingLists.slice(0, 9)]; // Keep only 10 most recent
