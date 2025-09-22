@@ -89,30 +89,22 @@ const RecipeListPage = () => {
     const saveTimeout = setTimeout(() => {
       console.log('RecipeListPage: Timeout reached, proceeding with save check...');
       
-      // Get current recipes from various sources
-      let currentRecipes = [];
+      // Get current recipes - use the same logic as the main component
+      const mealPlanRecipes = mealPlan.flatMap(day => 
+        day.meals.map(meal => meal.recipe).filter(Boolean)
+      );
+      const currentRecipes = aiRecipes.length > 0 ? aiRecipes : mealPlanRecipes;
       
-      // First try AI recipes from state
-      if (aiRecipes.length > 0) {
-        currentRecipes = aiRecipes;
-        console.log('RecipeListPage: Using AI recipes from state:', currentRecipes.length);
+      console.log('RecipeListPage: Available recipes for saving:', {
+        aiRecipesCount: aiRecipes.length,
+        mealPlanRecipesCount: mealPlanRecipes.length,
+        finalRecipesCount: currentRecipes.length
+      });
+      
+      if (currentRecipes.length > 0) {
+        console.log('RecipeListPage: Saving list with recipes:', currentRecipes.map(r => r.title));
       } else {
-        // Try to get from localStorage
-        const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-        if (savedAiRecipes) {
-          try {
-            currentRecipes = JSON.parse(savedAiRecipes);
-            console.log('RecipeListPage: Using AI recipes from localStorage:', currentRecipes.length);
-          } catch (error) {
-            console.error('RecipeListPage: Error parsing AI recipes:', error);
-          }
-        }
-      }
-      
-      // If still no recipes, create a basic list entry anyway
-      if (currentRecipes.length === 0) {
         console.log('RecipeListPage: No recipes found, creating basic list entry');
-        currentRecipes = [];
       }
       
       const newList = {
@@ -191,8 +183,8 @@ const RecipeListPage = () => {
     day.meals.map(meal => meal.recipe).filter(Boolean)
   );
   
-  // Only show AI recipes if available, no fallback to examples
-  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : [];
+  // Use AI recipes if available, otherwise use meal plan recipes
+  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : mealPlanRecipes;
 
   console.log('RecipeListPage: Current recipes state:', {
     aiRecipesCount: aiRecipes.length,
