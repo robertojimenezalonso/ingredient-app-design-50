@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
+import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 interface FloatingButtonProps {
   onClick?: () => void;
   className?: string;
@@ -43,16 +44,52 @@ export const FloatingButton = ({
       navigate('/search-offers');
     }
   };
-  const buttonText = selectedCount !== undefined ? `Buscar súper · Ingredientes (${selectedCount})` : "Cambiar receta";
-  const containerClasses = "fixed bottom-0 left-0 right-0 z-40 flex justify-center";
-  return <div className={containerClasses} style={{
-    paddingBottom: `calc(32px + env(safe-area-inset-bottom))`
-  }}>
-      <Button onClick={handleClick} className={`h-14 text-base font-medium rounded-lg px-6 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating mx-4 w-full max-w-none ${className}`} size="lg">
-        <div className="flex items-center justify-center gap-2">
-          <img src="/lovable-uploads/71eecaf2-ff51-47ff-beef-72570cb4f960.png" alt="search" className="h-5 w-5" />
-          <span>Ingredientes desde {totalPrice ? `${totalPrice.toFixed(2)} €` : '64,76 €'}</span>
+  const calculatedPrice = totalPrice || 64.76;
+  const discountedPrice = (calculatedPrice * 0.85).toFixed(2);
+  
+  return (
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg" style={{
+      paddingBottom: `calc(16px + env(safe-area-inset-bottom))`
+    }}>
+      {/* Header con logo Mercadona y precio */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+        <div className="flex items-center gap-2">
+          <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-contain" />
+          <span className="text-sm font-medium text-black">Mercadona</span>
         </div>
-      </Button>
-    </div>;
+        <div className="text-right">
+          <div className="text-lg font-semibold text-black">
+            {calculatedPrice.toFixed(2).replace('.', ',')} €
+          </div>
+          <div className="text-xs text-gray-600">
+            Mejor precio: <span className="text-green-600">{discountedPrice.replace('.', ',')} €</span> en otros supermercados
+          </div>
+        </div>
+      </div>
+      
+      {/* Botones Carrito y Supermercados */}
+      <div className="flex items-center gap-3 px-4 py-4">
+        {/* Carrito - lado izquierdo */}
+        <div className="flex-1 text-center">
+          <button className="text-base font-medium text-black border-b-2 border-black pb-1">
+            Carrito
+          </button>
+        </div>
+        
+        {/* Supermercados - lado derecho */}
+        <div className="flex-1">
+          <Button 
+            onClick={handleClick} 
+            className="h-12 text-base font-medium rounded-lg px-4 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating w-full"
+            size="lg"
+          >
+            <div className="flex items-center justify-center gap-2">
+              <img src="/lovable-uploads/71eecaf2-ff51-47ff-beef-72570cb4f960.png" alt="search" className="h-5 w-5" />
+              <span>Supermercados</span>
+            </div>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 };
