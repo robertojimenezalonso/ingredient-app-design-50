@@ -37,27 +37,6 @@ const RecipeListPage = () => {
         setAiRecipes(parsedRecipes);
         console.log('RecipeListPage: AI recipes state updated');
         
-        // Auto-save the current configuration as a new list when recipes are loaded
-        if (parsedRecipes.length > 0 && config) {
-          const newList = {
-            id: Date.now().toString(),
-            name: 'Mi Lista',
-            dates: config.selectedDates || [],
-            servings: config.servingsPerRecipe || 2,
-            meals: config.selectedMeals || [],
-            recipes: parsedRecipes,
-            createdAt: new Date().toISOString(),
-            estimatedPrice: calculateEstimatedPrice(parsedRecipes.length * 3) // Estimate based on recipes
-          };
-          
-          // Load existing lists and add new one
-          const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
-          const updatedLists = [newList, ...existingLists.slice(0, 4)]; // Keep only 5 most recent
-          localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
-          
-          console.log('RecipeListPage: Configuration auto-saved as new list');
-        }
-        
         // Keep recipes in localStorage for future visits - don't remove them
       } catch (error) {
         console.error('RecipeListPage: Error parsing AI recipes from localStorage:', error);
@@ -65,7 +44,44 @@ const RecipeListPage = () => {
     } else {
       console.log('RecipeListPage: No AI recipes found in localStorage');
     }
-  }, [config]);
+  }, []); // Only run once when component mounts
+
+  // Auto-save configuration when AI recipes are loaded and config is available
+  useEffect(() => {
+    if (aiRecipes.length > 0 && config && config.selectedDates) {
+      // Check if this configuration was already saved to avoid duplicates
+      const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
+      const configKey = `${config.selectedDates.join('-')}-${config.servingsPerRecipe}-${aiRecipes.length}`;
+      
+      // Check if a list with similar config already exists (to prevent duplicates)
+      const alreadySaved = existingLists.some(list => 
+        list.dates?.join('-') === config.selectedDates?.join('-') && 
+        list.servings === config.servingsPerRecipe &&
+        list.recipes?.length === aiRecipes.length
+      );
+
+      if (!alreadySaved) {
+        const newList = {
+          id: Date.now().toString(),
+          name: 'Mi Lista',
+          dates: config.selectedDates || [],
+          servings: config.servingsPerRecipe || 2,
+          meals: config.selectedMeals || [],
+          recipes: aiRecipes,
+          createdAt: new Date().toISOString(),
+          estimatedPrice: calculateEstimatedPrice(aiRecipes.length * 3) // Estimate based on recipes
+        };
+        
+        // Load existing lists and add new one
+        const updatedLists = [newList, ...existingLists.slice(0, 4)]; // Keep only 5 most recent
+        localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+        
+        console.log('RecipeListPage: Configuration auto-saved as new list');
+      } else {
+        console.log('RecipeListPage: Similar configuration already exists, skipping auto-save');
+      }
+    }
+  }, [aiRecipes, config]); // Run when aiRecipes or config changes
 
   // Handle recipe replacement when coming from change mode
   useEffect(() => {

@@ -63,7 +63,7 @@ const Index = () => {
                 
                 return (
                   <div 
-                    key={list.id || index} 
+                    key={`list-${list.id || `${list.name}-${index}`}`} 
                     className="flex gap-4 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 shadow-[0_4px_20px_rgba(0,0,0,0.1)] border p-4"
                     style={{ borderColor: '#F8F8FC' }}
                     onClick={() => handleGoToList(list.id)}
