@@ -83,10 +83,7 @@ export const FloatingButton = ({
             className="h-12 text-base font-medium rounded-lg px-4 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating w-full"
             size="lg"
           >
-            <div className="flex items-center justify-center gap-2">
-              <img src="/lovable-uploads/71eecaf2-ff51-47ff-beef-72570cb4f960.png" alt="search" className="h-5 w-5" />
-              <span>Supermercados</span>
-            </div>
+            <span>Supermercados</span>
           </Button>
         </div>
       </div>
