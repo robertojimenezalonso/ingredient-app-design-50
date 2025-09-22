@@ -91,9 +91,8 @@ const Index = () => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col p-4">
         <div className="flex-1 flex flex-col">
-          {savedLists.length > 0 && (
-            <h2 className="text-lg font-medium text-left mb-4">Mis listas</h2>
-          )}
+          {/* Always show title */}
+          <h2 className="text-lg font-medium text-left mb-4">Mis listas</h2>
           
           {/* Saved Lists - Solo si existen */}
           {savedLists.length > 0 && (
@@ -109,45 +108,54 @@ const Index = () => {
                     style={{ borderColor: '#F8F8FC' }}
                     onClick={() => handleGoToList(list.id)}
                   >
-                    {/* Recipe images collage on the left */}
-                    <div className="relative w-16 h-16 flex-shrink-0">
-                      {recipeImages.length > 0 ? (
-                        <div className="relative w-full h-full">
-                          {recipeImages.map((image, imgIndex) => (
-                            <img
-                              key={imgIndex}
-                              src={image}
-                              alt="Recipe"
-                              className="absolute w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
-                              style={{
-                                left: `${imgIndex * 6}px`,
-                                top: `${imgIndex * 2}px`,
-                                zIndex: 3 - imgIndex,
-                                transform: `rotate(${(imgIndex - 1) * 2}deg)`
-                              }}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
-                          <span className="text-xs text-gray-500">📝</span>
-                        </div>
-                      )}
-                    </div>
-                    
-                    {/* List information */}
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900 mb-1 text-base">{list.name || 'Mi Lista'}</h3>
-                          <div className="text-sm text-gray-600 flex items-center">
-                            <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-1" />
-                            <span>Mercadona · Para {list.dates?.length || 0} días</span>
-                          </div>
-                        </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+                     {/* Recipe images collage on the left */}
+                     <div className="relative w-16 h-16 flex-shrink-0">
+                       {recipeImages.length > 0 ? (
+                         <div className="relative w-full h-full">
+                           {recipeImages.map((image, imgIndex) => (
+                             <img
+                               key={imgIndex}
+                               src={image}
+                               alt="Recipe"
+                               className="absolute w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
+                               style={{
+                                 left: `${imgIndex * 6}px`,
+                                 top: `${imgIndex * 2}px`,
+                                 zIndex: 3 - imgIndex,
+                                 transform: `rotate(${(imgIndex - 1) * 2}deg)`
+                               }}
+                             />
+                           ))}
+                         </div>
+                       ) : (
+                         <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
+                           <span className="text-xs text-gray-500">📝</span>
+                         </div>
+                       )}
+                     </div>
+                     
+                     {/* List information */}
+                     <div className="flex-1">
+                       <h3 className="font-semibold text-gray-900 mb-1 text-base">{list.name || 'Mi Lista'}</h3>
+                       <div className="text-sm text-gray-600 flex items-center">
+                         <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-1" />
+                         <span>Mercadona · Para {list.dates?.length || 0} días</span>
+                       </div>
+                     </div>
+                   </div>
+                 );
+               })}
+             </div>
+           )}
+           
+           {/* Empty state */}
+           {savedLists.length === 0 && (
+             <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
+               <div className="text-gray-400 text-4xl mb-4">📝</div>
+               <p className="text-gray-600 mb-2">No tienes listas guardadas</p>
+               <p className="text-gray-500 text-sm">Crea tu primera lista de la compra</p>
+             </div>
+           )}
 
           {/* Spacer para empujar el botón hacia abajo */}
           <div className="flex-1"></div>
