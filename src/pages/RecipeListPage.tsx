@@ -69,96 +69,84 @@ const RecipeListPage = () => {
     }
   }, [listId]); // Run when component mounts or listId changes
 
-  // Auto-save configuration when AI recipes are loaded and config is available
+  // Auto-save configuration when user navigates to this page
   useEffect(() => {
-    console.log('RecipeListPage: Auto-save effect running with:', {
-      listId,
-      aiRecipesCount: aiRecipes.length,
-      hasConfig: !!config,
-      selectedDates: config?.selectedDates,
-      servingsPerRecipe: config?.servingsPerRecipe
-    });
+    console.log('RecipeListPage: Auto-save effect running');
     
-    // Only auto-save if we're not viewing a specific saved list
+    // Skip auto-save if viewing a specific saved list
     if (listId) {
       console.log('RecipeListPage: Viewing specific list, skipping auto-save');
       return;
     }
     
-    if (aiRecipes.length === 0) {
-      console.log('RecipeListPage: No AI recipes loaded yet, waiting...');
+    // Check if we have config with dates (minimum requirement for a list)
+    if (!config?.selectedDates?.length) {
+      console.log('RecipeListPage: No config or selected dates, skipping auto-save');
       return;
     }
     
-    if (!config) {
-      console.log('RecipeListPage: No config available yet, waiting...');
-      return;
-    }
-    
-    if (!config.selectedDates) {
-      console.log('RecipeListPage: No selectedDates in config, waiting...');
-      return;
-    }
-    
-    console.log('RecipeListPage: All conditions met, proceeding with auto-save check...');
-    
-    // Add a flag to prevent multiple saves during the same session
-    const currentSessionKey = `autosave-${config.selectedDates?.join('-')}-${config.servingsPerRecipe}`;
-    const sessionSaved = sessionStorage.getItem(currentSessionKey);
-    
-    if (sessionSaved) {
-      console.log('RecipeListPage: Already saved in this session, skipping');
-      return;
-    }
-    
-    // Check if this configuration was already saved to avoid duplicates
-    const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
-    console.log('RecipeListPage: Found', existingLists.length, 'existing lists');
-    
-    // Create a more specific check to prevent duplicates
-    const currentRecipeIds = aiRecipes.map(r => r.id).sort().join(',');
-    const alreadySaved = existingLists.some(list => {
-      const listRecipeIds = (list.recipes || []).map(r => r.id).sort().join(',');
-      return list.dates?.join('-') === config.selectedDates?.join('-') && 
-             list.servings === config.servingsPerRecipe &&
-             listRecipeIds === currentRecipeIds;
-    });
-
-    if (!alreadySaved) {
+    // Create a simple timeout to ensure page is fully loaded
+    const saveTimeout = setTimeout(() => {
+      console.log('RecipeListPage: Timeout reached, proceeding with save check...');
+      
+      // Get current recipes from various sources
+      let currentRecipes = [];
+      
+      // First try AI recipes from state
+      if (aiRecipes.length > 0) {
+        currentRecipes = aiRecipes;
+        console.log('RecipeListPage: Using AI recipes from state:', currentRecipes.length);
+      } else {
+        // Try to get from localStorage
+        const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+        if (savedAiRecipes) {
+          try {
+            currentRecipes = JSON.parse(savedAiRecipes);
+            console.log('RecipeListPage: Using AI recipes from localStorage:', currentRecipes.length);
+          } catch (error) {
+            console.error('RecipeListPage: Error parsing AI recipes:', error);
+          }
+        }
+      }
+      
+      // If still no recipes, create a basic list entry anyway
+      if (currentRecipes.length === 0) {
+        console.log('RecipeListPage: No recipes found, creating basic list entry');
+        currentRecipes = [];
+      }
+      
       const newList = {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`, // More unique ID
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         name: 'Mi Lista',
         dates: config.selectedDates || [],
         servings: config.servingsPerRecipe || 2,
         meals: config.selectedMeals || [],
-        recipes: aiRecipes,
+        recipes: currentRecipes,
         createdAt: new Date().toISOString(),
-        estimatedPrice: calculateEstimatedPrice(aiRecipes.length * 3) // Estimate based on recipes
+        estimatedPrice: calculateEstimatedPrice(currentRecipes.length * 3)
       };
       
-      console.log('RecipeListPage: Saving new list with ID:', newList.id);
-      console.log('RecipeListPage: List data:', {
+      console.log('RecipeListPage: Creating new list:', {
+        id: newList.id,
         name: newList.name,
         dates: newList.dates,
-        recipesCount: newList.recipes.length,
-        firstRecipe: newList.recipes[0]?.title
+        recipesCount: newList.recipes.length
       });
       
       // Load existing lists and add new one
-      const updatedLists = [newList, ...existingLists.slice(0, 9)]; // Keep only 10 most recent
+      const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
+      const updatedLists = [newList, ...existingLists.slice(0, 9)];
+      
       localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+      console.log('RecipeListPage: List saved to localStorage, total lists:', updatedLists.length);
       
-      // Mark as saved in this session
-      sessionStorage.setItem(currentSessionKey, 'true');
-      
-      console.log('RecipeListPage: Configuration auto-saved as new list - total lists now:', updatedLists.length);
-      
-      // Trigger a custom event to notify Index page
+      // Trigger event to update Index page
       window.dispatchEvent(new CustomEvent('listsUpdated'));
-    } else {
-      console.log('RecipeListPage: Similar configuration already exists, skipping auto-save');
-    }
-  }, [aiRecipes, config, listId]); // Back to full object dependencies
+      console.log('RecipeListPage: listsUpdated event dispatched');
+    }, 1000); // 1 second delay to ensure everything is loaded
+    
+    return () => clearTimeout(saveTimeout);
+  }, [config?.selectedDates, config?.servingsPerRecipe, config?.selectedMeals, listId]); // Only trigger on config changes
 
   // Handle recipe replacement when coming from change mode
   useEffect(() => {
