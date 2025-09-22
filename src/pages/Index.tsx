@@ -3,16 +3,25 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Plus, ArrowRight } from 'lucide-react';
+import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 
 const Index = () => {
   const navigate = useNavigate();
   const [savedLists, setSavedLists] = useState<any[]>([]);
 
   useEffect(() => {
-    // Load saved lists from localStorage
+    // Load saved lists from localStorage - NO DEFAULT DATA
     const saved = localStorage.getItem('savedShoppingLists');
     if (saved) {
-      setSavedLists(JSON.parse(saved));
+      try {
+        const parsedLists = JSON.parse(saved);
+        // Sort by creation date (newest first)
+        const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setSavedLists(sortedLists);
+      } catch (error) {
+        console.error('Error parsing saved lists:', error);
+        setSavedLists([]);
+      }
     }
   }, []);
 
@@ -49,16 +58,23 @@ const Index = () => {
               <div className="space-y-3 mb-6">
                 <h2 className="text-lg font-semibold text-gray-800">Acceso rápido</h2>
                 {savedLists.slice(0, 3).map((list, index) => (
-                  <Card key={index} className="border border-gray-200 hover:border-primary/50 transition-colors cursor-pointer" onClick={() => handleGoToList(list.id)}>
+                  <Card key={list.id || index} className="border border-gray-200 hover:border-primary/50 transition-colors cursor-pointer" onClick={() => handleGoToList(list.id)}>
                     <CardContent className="p-4">
                       <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="font-medium text-gray-900">{list.name || 'Mi Lista'}</h3>
-                          <p className="text-sm text-gray-600">
-                            {list.dates?.length || 0} días • {list.servings || 2} personas
-                          </p>
+                        <div className="flex items-center gap-3">
+                          {/* Supermercado a la izquierda */}
+                          <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-cover rounded-full" />
+                          <div>
+                            <h3 className="font-medium text-gray-900">{list.name || 'Mi Lista'}</h3>
+                          </div>
                         </div>
-                        <ArrowRight className="h-5 w-5 text-gray-400" />
+                        {/* Días a la derecha */}
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-gray-600">
+                            {list.dates?.length || 0} día{(list.dates?.length || 0) !== 1 ? 's' : ''}
+                          </span>
+                          <ArrowRight className="h-5 w-5 text-gray-400" />
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
