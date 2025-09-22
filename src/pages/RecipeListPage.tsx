@@ -78,7 +78,17 @@ const RecipeListPage = () => {
     }
     
     if (aiRecipes.length > 0 && config && config.selectedDates) {
-      console.log('RecipeListPage: Checking if should auto-save...');
+      console.log('RecipeListPage: Auto-save effect triggered - recipes:', aiRecipes.length, 'config dates:', config.selectedDates?.length);
+      
+      // Add a flag to prevent multiple saves during the same session
+      const currentSessionKey = `autosave-${config.selectedDates?.join('-')}-${config.servingsPerRecipe}`;
+      const sessionSaved = sessionStorage.getItem(currentSessionKey);
+      
+      if (sessionSaved) {
+        console.log('RecipeListPage: Already saved in this session, skipping');
+        return;
+      }
+      
       // Check if this configuration was already saved to avoid duplicates
       const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
       
@@ -104,18 +114,20 @@ const RecipeListPage = () => {
         };
         
         console.log('RecipeListPage: Saving new list with ID:', newList.id);
-        console.log('RecipeListPage: Recipe count:', newList.recipes.length);
         
         // Load existing lists and add new one
         const updatedLists = [newList, ...existingLists.slice(0, 9)]; // Keep only 10 most recent
         localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+        
+        // Mark as saved in this session
+        sessionStorage.setItem(currentSessionKey, 'true');
         
         console.log('RecipeListPage: Configuration auto-saved as new list');
       } else {
         console.log('RecipeListPage: Similar configuration already exists, skipping auto-save');
       }
     }
-  }, [aiRecipes, config, listId]); // Run when aiRecipes, config, or listId changes
+  }, [aiRecipes.length, config?.selectedDates?.length, config?.servingsPerRecipe, listId]); // Only depend on key values, not full objects
 
   // Handle recipe replacement when coming from change mode
   useEffect(() => {
