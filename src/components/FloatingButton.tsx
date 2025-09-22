@@ -52,8 +52,15 @@ export const FloatingButton = ({
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg" style={{
       paddingBottom: `calc(16px + env(safe-area-inset-bottom))`
     }}>
+      {/* Subtítulo con mejor precio */}
+      <div className="px-4 pt-3 pb-2">
+        <div className="text-sm text-gray-600 text-center">
+          Mejor precio: <span className="font-medium text-green-600">{otherSupermarketPrice.replace('.', ',')} €</span>
+        </div>
+      </div>
+      
       {/* Botones Carrito y Mejor Precio */}
-      <div className="flex items-center gap-3 px-4 py-4">
+      <div className="flex items-center gap-3 px-4 pb-4">
         {/* Carrito - lado izquierdo */}
         <div className="flex-1">
           <Button 
@@ -77,7 +84,6 @@ export const FloatingButton = ({
             <div className="flex items-center justify-center gap-2">
               <Search className="h-4 w-4" />
               <span>Mejor precio</span>
-              <span>{otherSupermarketPrice.replace('.', ',')} €</span>
             </div>
           </Button>
         </div>
