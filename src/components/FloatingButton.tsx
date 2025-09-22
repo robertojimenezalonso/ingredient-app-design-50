@@ -45,7 +45,8 @@ export const FloatingButton = ({
     }
   };
   const calculatedPrice = totalPrice || 64.76;
-  const discountedPrice = (calculatedPrice * 0.85).toFixed(2);
+  const savings = 10.00; // Ahorro fijo de 10€
+  const otherSupermarketPrice = (calculatedPrice - savings).toFixed(2);
   
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg" style={{
@@ -55,11 +56,11 @@ export const FloatingButton = ({
       <div className="flex items-start justify-between px-4 py-3 border-b border-gray-100">
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-1">
-            <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-contain" />
+            <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8 object-contain" />
             <span className="text-lg font-semibold text-black">Mercadona</span>
           </div>
           <div className="text-xs text-gray-600">
-            Mejor precio: <span className="text-green-600">{discountedPrice.replace('.', ',')} €</span> en otros supermercados
+            Ahorra <span className="text-green-600">{savings.toFixed(2).replace('.', ',')} €</span> en otros supermercados
           </div>
         </div>
         <div className="text-lg font-semibold text-black">
@@ -83,7 +84,10 @@ export const FloatingButton = ({
             className="h-12 text-base font-medium rounded-lg px-4 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating w-full"
             size="lg"
           >
-            <span>Supermercados</span>
+            <div className="flex items-center justify-center gap-2">
+              <Search className="h-4 w-4" />
+              <span>Supermercados</span>
+            </div>
           </Button>
         </div>
       </div>
