@@ -1,94 +1,78 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Recipe } from '@/types/recipe';
-import { useToast } from '@/hooks/use-toast';
-import { DayRecipeList } from '@/components/DayRecipeList';
-import { TopHeader } from '@/components/TopHeader';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Plus, ArrowRight } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [currentDayRecipes, setCurrentDayRecipes] = useState<any[]>([]);
-  const [planIndex, setPlanIndex] = useState(0);
-  const [savedPlans, setSavedPlans] = useState<any[][]>([]);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [savedLists, setSavedLists] = useState<any[]>([]);
 
-  const handleRecipeClick = (recipe: Recipe) => {
-    navigate(`/recipe/${recipe.id}`);
-  };
-
-  const handleAddRecipe = (recipe: Recipe) => {
-    toast({
-      title: "Receta añadida",
-      description: `${recipe.title} añadida a favoritos`
-    });
-  };
-
-  const handleRecipesChange = (recipes: any[]) => {
-    setCurrentDayRecipes(recipes);
-  };
-
-  const handlePersonsChange = (persons: number) => {
-    console.log('Personas cambiadas a:', persons);
-  };
-
-  const handleSavePlan = () => {
-    toast({
-      title: "Plan guardado",
-      description: "Tu plan de comidas ha sido guardado exitosamente"
-    });
-  };
-
-  const handleChangePlan = () => {
-    // Generate new plan
-    const newPlanIndex = planIndex + 1;
-    setPlanIndex(newPlanIndex);
-    
-    // Force regeneration by changing selectedDate slightly and back
-    const tempDate = new Date(selectedDate.getTime() + 1000);
-    setSelectedDate(tempDate);
-    setTimeout(() => setSelectedDate(new Date(selectedDate.getTime())), 100);
-    
-    toast({
-      title: "Nuevo plan generado",
-      description: "Se han generado nuevas recetas para el día"
-    });
-  };
-
-  const handleNavigatePlan = (direction: 'prev' | 'next') => {
-    if (direction === 'prev' && planIndex > 0) {
-      setPlanIndex(planIndex - 1);
-    } else if (direction === 'next') {
-      setPlanIndex(planIndex + 1);
+  useEffect(() => {
+    // Load saved lists from localStorage
+    const saved = localStorage.getItem('savedShoppingLists');
+    if (saved) {
+      setSavedLists(JSON.parse(saved));
     }
-    
-    // TODO: Implement plan navigation logic
-    toast({
-      title: `Plan ${direction === 'prev' ? 'anterior' : 'siguiente'}`,
-      description: `Navegando al plan ${direction === 'prev' ? planIndex : planIndex + 2}`
-    });
+  }, []);
+
+  const handleCreateNewList = () => {
+    navigate('/calendar-selection');
   };
 
-  const handleTotalPriceChange = (total: number) => {
-    setTotalPrice(total);
+  const handleGoToList = (listId: string) => {
+    navigate('/milista');
   };
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F7F7F7' }}>
-      {/* Top Header */}
-      <TopHeader selectedDate={selectedDate} totalPrice={totalPrice} />
-      
-      {/* Vertical Calendar and Recipes */}
-      <div>
-        <DayRecipeList
-          selectedDate={selectedDate}
-          onRecipeClick={handleRecipeClick}
-          onAddRecipe={handleAddRecipe}
-          onTotalPriceChange={handleTotalPriceChange}
-        />
+      {/* Top Header - Solo el perfil */}
+      <div className="flex items-center justify-between p-4 bg-white shadow-sm">
+        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+          <span className="text-sm font-medium text-gray-600">👤</span>
+        </div>
+        <div className="flex-1"></div>
       </div>
       
+      {/* Main Content */}
+      <div className="p-4">
+        <Card className="bg-white shadow-sm">
+          <CardContent className="p-6">
+            <h1 className="text-2xl font-bold text-center mb-6">Mis listas</h1>
+            
+            {/* Create New List Button */}
+            <Button 
+              onClick={handleCreateNewList}
+              className="w-full h-14 text-lg font-medium rounded-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating/90 shadow-lg mb-6"
+            >
+              <Plus className="h-5 w-5 mr-2" />
+              Crear nueva lista
+            </Button>
+
+            {/* Saved Lists - Quick Access */}
+            {savedLists.length > 0 && (
+              <div className="space-y-3">
+                <h2 className="text-lg font-semibold text-gray-800">Acceso rápido</h2>
+                {savedLists.slice(0, 3).map((list, index) => (
+                  <Card key={index} className="border border-gray-200 hover:border-primary/50 transition-colors cursor-pointer" onClick={() => handleGoToList(list.id)}>
+                    <CardContent className="p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="font-medium text-gray-900">{list.name || 'Mi Lista'}</h3>
+                          <p className="text-sm text-gray-600">
+                            {list.dates?.length || 0} días • {list.servings || 2} personas
+                          </p>
+                        </div>
+                        <ArrowRight className="h-5 w-5 text-gray-400" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
