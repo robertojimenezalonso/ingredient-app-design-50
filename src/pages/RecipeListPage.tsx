@@ -6,6 +6,7 @@ import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
+import { TopHeader } from '@/components/TopHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { FloatingButton } from '@/components/FloatingButton';
 import { useDateTabs } from '@/hooks/useDateTabs';
@@ -170,6 +171,10 @@ const RecipeListPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      <TopHeader 
+        selectedDate={config.selectedDates?.[0] ? new Date(config.selectedDates[0]) : new Date()}
+        totalPrice={totalPrice}
+      />
 
       <AirbnbHeader 
         showTabs={showTabs}
