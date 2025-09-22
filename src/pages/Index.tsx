@@ -36,6 +36,18 @@ const Index = () => {
     }
   }, []);
 
+  // Clear all saved lists
+  const clearAllLists = () => {
+    localStorage.removeItem('savedShoppingLists');
+    setSavedLists([]);
+    console.log('All saved lists cleared');
+  };
+
+  // Auto-clear on component mount - REMOVE THIS LINE AFTER FIRST USE
+  useEffect(() => {
+    clearAllLists();
+  }, []);
+
   const handleCreateNewList = () => {
     navigate('/calendar-selection');
   };
