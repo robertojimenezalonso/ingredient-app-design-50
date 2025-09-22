@@ -91,15 +91,13 @@ const Index = () => {
                     </div>
                     
                     {/* List information */}
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900 mb-1 text-base">{list.name || 'Mi Lista'}</h3>
-                      <div className="flex items-center gap-2 text-sm text-gray-600">
-                        <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full" />
-                        <span>Mercadona</span>
-                        <span>•</span>
-                        <span>{list.dates?.length || 0} día{(list.dates?.length || 0) !== 1 ? 's' : ''}</span>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900 mb-1 text-base">{list.name || 'Mi Lista'}</h3>
+                        <div className="text-sm text-gray-600 flex items-center">
+                          <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-1" />
+                          <span>Mercadona · Para {list.dates?.length || 0} días</span>
+                        </div>
                       </div>
-                    </div>
                   </div>
                 );
               })}
