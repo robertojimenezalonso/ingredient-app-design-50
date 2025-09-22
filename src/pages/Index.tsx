@@ -10,31 +10,61 @@ const Index = () => {
   const [savedLists, setSavedLists] = useState<any[]>([]);
 
   useEffect(() => {
+    console.log('Index: Component mounted, checking localStorage...');
     // Load saved lists from localStorage - NO DEFAULT DATA
     const saved = localStorage.getItem('savedShoppingLists');
-    console.log('Index: Loading saved lists from localStorage:', saved ? 'Found data' : 'No data');
+    console.log('Index: Raw localStorage data:', saved);
     if (saved) {
       try {
         const parsedLists = JSON.parse(saved);
-        console.log('Index: Parsed lists:', parsedLists.length, 'lists found');
+        console.log('Index: Parsed lists successfully:', parsedLists.length, 'lists found');
+        console.log('Index: Full lists data:', parsedLists);
         if (parsedLists.length > 0) {
-          console.log('Index: First list data:', {
-            name: parsedLists[0]?.name,
-            dates: parsedLists[0]?.dates,
-            recipesCount: parsedLists[0]?.recipes?.length,
-            firstRecipeTitle: parsedLists[0]?.recipes?.[0]?.title,
-            firstRecipeImage: parsedLists[0]?.recipes?.[0]?.image
-          });
+          console.log('Index: First list detailed data:', parsedLists[0]);
         }
         // Sort by creation date (newest first)
         const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        console.log('Index: Setting sorted lists to state:', sortedLists.length);
         setSavedLists(sortedLists);
       } catch (error) {
-        console.error('Error parsing saved lists:', error);
+        console.error('Index: Error parsing saved lists:', error);
         setSavedLists([]);
       }
+    } else {
+      console.log('Index: No data found in localStorage');
+      setSavedLists([]);
     }
   }, []);
+
+  // Add a function to manually refresh lists
+  const refreshLists = () => {
+    console.log('Index: Manually refreshing lists...');
+    const saved = localStorage.getItem('savedShoppingLists');
+    if (saved) {
+      const parsedLists = JSON.parse(saved);
+      const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setSavedLists(sortedLists);
+      console.log('Index: Lists refreshed, count:', sortedLists.length);
+    }
+  };
+
+  // Listen for storage changes
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'savedShoppingLists') {
+        console.log('Index: Storage changed, refreshing lists...');
+        refreshLists();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener('storage', handleStorageChange);
+  }, []);
+
+  // Debug: Log current state
+  useEffect(() => {
+    console.log('Index: Current savedLists state:', savedLists.length, savedLists);
+  }, [savedLists]);
 
   const handleCreateNewList = () => {
     navigate('/calendar-selection');
