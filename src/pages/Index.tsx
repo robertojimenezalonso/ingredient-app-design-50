@@ -12,9 +12,12 @@ const Index = () => {
   useEffect(() => {
     // Load saved lists from localStorage - NO DEFAULT DATA
     const saved = localStorage.getItem('savedShoppingLists');
+    console.log('Index: Loading saved lists from localStorage:', saved ? 'Found data' : 'No data');
     if (saved) {
       try {
         const parsedLists = JSON.parse(saved);
+        console.log('Index: Parsed lists:', parsedLists.length, 'lists found');
+        console.log('Index: First list recipes:', parsedLists[0]?.recipes?.map(r => ({ title: r.title, image: r.image })));
         // Sort by creation date (newest first)
         const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         setSavedLists(sortedLists);

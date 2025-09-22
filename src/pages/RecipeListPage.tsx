@@ -72,6 +72,8 @@ const RecipeListPage = () => {
           estimatedPrice: calculateEstimatedPrice(aiRecipes.length * 3) // Estimate based on recipes
         };
         
+        console.log('RecipeListPage: Saving new list with recipes:', newList.recipes.map(r => ({ title: r.title, image: r.image })));
+        
         // Load existing lists and add new one
         const updatedLists = [newList, ...existingLists.slice(0, 4)]; // Keep only 5 most recent
         localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
