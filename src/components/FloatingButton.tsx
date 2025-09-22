@@ -45,15 +45,15 @@ export const FloatingButton = ({
     }
   };
   const calculatedPrice = totalPrice || 64.76;
-  const savings = 10.00; // Ahorro fijo de 10€
-  const otherSupermarketPrice = (calculatedPrice - savings).toFixed(2);
+  const discountPercentage = 0.15; // 15% discount
+  const betterPrice = calculatedPrice * (1 - discountPercentage);
   
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg" style={{
       paddingBottom: `calc(16px + env(safe-area-inset-bottom))`
     }}>
       {/* Header con logo Mercadona y precio */}
-      <div className="flex items-center justify-between px-4 py-3">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shadow-sm bg-gray-50">
         <div className="flex items-center gap-2">
           <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-cover rounded-full bg-white" />
           <span className="text-base font-medium text-black">Mercadona</span>
@@ -85,7 +85,7 @@ export const FloatingButton = ({
             <div className="flex items-center justify-center gap-2">
               <Search className="h-4 w-4" />
               <span>Mejor precio</span>
-              <span>-{savings.toFixed(2).replace('.', ',')} €</span>
+              <span>{betterPrice.toFixed(2).replace('.', ',')} €</span>
             </div>
           </Button>
         </div>
