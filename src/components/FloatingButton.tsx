@@ -52,10 +52,14 @@ export const FloatingButton = ({
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg" style={{
       paddingBottom: `calc(16px + env(safe-area-inset-bottom))`
     }}>
-      {/* Subtítulo con mejor precio */}
-      <div className="px-4 pt-3 pb-2">
-        <div className="text-sm text-gray-600 text-center">
-          Mejor precio: <span className="font-medium text-green-600">{otherSupermarketPrice.replace('.', ',')} €</span>
+      {/* Header con logo Mercadona y precio */}
+      <div className="flex items-center justify-between px-4 py-3">
+        <div className="flex items-center gap-2">
+          <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-cover rounded-full bg-white" />
+          <span className="text-base font-medium text-black">Mercadona</span>
+        </div>
+        <div className="text-base font-medium text-black">
+          {calculatedPrice.toFixed(2).replace('.', ',')} €
         </div>
       </div>
       
@@ -67,10 +71,7 @@ export const FloatingButton = ({
             className="h-12 text-base font-medium rounded-lg px-4 w-full bg-gray-100 text-black hover:bg-gray-200"
             size="lg"
           >
-            <div className="flex items-center justify-center gap-2">
-              <span>Carrito</span>
-              <span>{calculatedPrice.toFixed(2).replace('.', ',')} €</span>
-            </div>
+            <span>Carrito</span>
           </Button>
         </div>
         
@@ -84,6 +85,7 @@ export const FloatingButton = ({
             <div className="flex items-center justify-center gap-2">
               <Search className="h-4 w-4" />
               <span>Mejor precio</span>
+              <span>-{savings.toFixed(2).replace('.', ',')} €</span>
             </div>
           </Button>
         </div>
