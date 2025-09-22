@@ -36,6 +36,28 @@ const RecipeListPage = () => {
         console.log('RecipeListPage: Recipe titles:', parsedRecipes.map(r => r.title));
         setAiRecipes(parsedRecipes);
         console.log('RecipeListPage: AI recipes state updated');
+        
+        // Auto-save the current configuration as a new list when recipes are loaded
+        if (parsedRecipes.length > 0 && config) {
+          const newList = {
+            id: Date.now().toString(),
+            name: 'Mi Lista',
+            dates: config.selectedDates || [],
+            servings: config.servingsPerRecipe || 2,
+            meals: config.selectedMeals || [],
+            recipes: parsedRecipes,
+            createdAt: new Date().toISOString(),
+            estimatedPrice: calculateEstimatedPrice(parsedRecipes.length * 3) // Estimate based on recipes
+          };
+          
+          // Load existing lists and add new one
+          const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
+          const updatedLists = [newList, ...existingLists.slice(0, 4)]; // Keep only 5 most recent
+          localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+          
+          console.log('RecipeListPage: Configuration auto-saved as new list');
+        }
+        
         // Keep recipes in localStorage for future visits - don't remove them
       } catch (error) {
         console.error('RecipeListPage: Error parsing AI recipes from localStorage:', error);
@@ -43,7 +65,7 @@ const RecipeListPage = () => {
     } else {
       console.log('RecipeListPage: No AI recipes found in localStorage');
     }
-  }, []);
+  }, [config]);
 
   // Handle recipe replacement when coming from change mode
   useEffect(() => {
