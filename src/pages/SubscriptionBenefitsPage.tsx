@@ -20,28 +20,8 @@ const SubscriptionBenefitsPage = () => {
   const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Comparando precios…'];
 
   const saveCurrentPlanningSession = () => {
-    if (config.hasPlanningSession && config.selectedDates?.length) {
-      const existingSavedLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
-      
-      // Get current AI recipes for images
-      const storedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-      const aiRecipes = storedAiRecipes ? JSON.parse(storedAiRecipes) : [];
-      const recipeImages = aiRecipes.slice(0, 3).map((recipe: any) => recipe.image || 'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9');
-      
-      const newShoppingList = {
-        id: Date.now().toString(),
-        name: generatePlanName(),
-        selectedDates: config.selectedDates,
-        servingsPerRecipe: config.servingsPerRecipe || 2,
-        estimatedPrice: '15.90',
-        createdAt: new Date().toISOString(),
-        recipeImages: recipeImages
-      };
-      
-      const updatedLists = [newShoppingList, ...existingSavedLists.slice(0, 9)];
-      localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
-      console.log('Saved new shopping list:', newShoppingList);
-    }
+    // No longer save here - RecipeListPage handles saving automatically
+    console.log('Planning session completed - list will be auto-saved by RecipeListPage');
   };
 
   const generatePlanName = () => {
