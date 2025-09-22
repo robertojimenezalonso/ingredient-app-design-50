@@ -17,7 +17,15 @@ const Index = () => {
       try {
         const parsedLists = JSON.parse(saved);
         console.log('Index: Parsed lists:', parsedLists.length, 'lists found');
-        console.log('Index: First list recipes:', parsedLists[0]?.recipes?.map(r => ({ title: r.title, image: r.image })));
+        if (parsedLists.length > 0) {
+          console.log('Index: First list data:', {
+            name: parsedLists[0]?.name,
+            dates: parsedLists[0]?.dates,
+            recipesCount: parsedLists[0]?.recipes?.length,
+            firstRecipeTitle: parsedLists[0]?.recipes?.[0]?.title,
+            firstRecipeImage: parsedLists[0]?.recipes?.[0]?.image
+          });
+        }
         // Sort by creation date (newest first)
         const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         setSavedLists(sortedLists);
@@ -73,7 +81,7 @@ const Index = () => {
                   >
                     {/* Recipe images collage on the left */}
                     <div className="relative w-16 h-16 flex-shrink-0">
-                      {recipeImages.length > 0 && (
+                      {recipeImages.length > 0 ? (
                         <div className="relative w-full h-full">
                           {recipeImages.map((image, imgIndex) => (
                             <img
@@ -90,17 +98,21 @@ const Index = () => {
                             />
                           ))}
                         </div>
+                      ) : (
+                        <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
+                          <span className="text-xs text-gray-500">📝</span>
+                        </div>
                       )}
                     </div>
                     
                     {/* List information */}
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-gray-900 mb-1 text-base">{list.name || 'Mi Lista'}</h3>
-                        <div className="text-sm text-gray-600 flex items-center">
-                          <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-1" />
-                          <span>Mercadona · Para {list.dates?.length || 0} días</span>
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900 mb-1 text-base">{list.name || 'Mi Lista'}</h3>
+                          <div className="text-sm text-gray-600 flex items-center">
+                            <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-1" />
+                            <span>Mercadona · Para {list.dates?.length || 0} días</span>
+                          </div>
                         </div>
-                      </div>
                   </div>
                 );
               })}
