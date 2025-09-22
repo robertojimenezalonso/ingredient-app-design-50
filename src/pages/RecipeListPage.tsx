@@ -196,6 +196,15 @@ const RecipeListPage = () => {
         />
       </div>
 
+      <FloatingButton 
+        onClick={handleSearchOffers}
+        selectedCount={selectedIngredientsCount}
+        recipeCount={recommendedRecipes.length}
+        totalPrice={totalPrice}
+      >
+        Buscar mejor oferta
+      </FloatingButton>
+
     </div>
   );
 };
