@@ -49,11 +49,12 @@ export const FloatingButton = ({
   const betterPrice = calculatedPrice * (1 - discountPercentage);
   
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg" style={{
-      paddingBottom: `calc(16px + env(safe-area-inset-bottom))`
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg border-t border-gray-100" style={{
+      paddingBottom: `calc(16px + env(safe-area-inset-bottom))`,
+      boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.1)'
     }}>
       {/* Header con logo Mercadona y precio */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100 shadow-sm bg-gray-50">
+      <div className="flex items-center justify-between px-4 py-3">
         <div className="flex items-center gap-2">
           <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-cover rounded-full bg-white" />
           <span className="text-base font-medium text-black">Mercadona</span>
