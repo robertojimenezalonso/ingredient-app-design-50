@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
+import { Search, ShoppingCart } from 'lucide-react';
 import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 interface FloatingButtonProps {
   onClick?: () => void;
@@ -52,32 +52,23 @@ export const FloatingButton = ({
     <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg" style={{
       paddingBottom: `calc(16px + env(safe-area-inset-bottom))`
     }}>
-      {/* Header con logo Mercadona y precio */}
-      <div className="flex items-start justify-between px-4 py-3 border-b border-gray-100">
-        <div className="flex flex-col">
-          <div className="flex items-center gap-2 mb-1">
-            <img src={mercadonaLogo} alt="Mercadona" className="w-8 h-8 object-contain" />
-            <span className="text-lg font-semibold text-black">Mercadona</span>
-          </div>
-          <div className="text-xs text-gray-600">
-            Ahorra <span className="text-green-600">{savings.toFixed(2).replace('.', ',')} €</span> en otros supermercados
-          </div>
-        </div>
-        <div className="text-lg font-semibold text-black">
-          {calculatedPrice.toFixed(2).replace('.', ',')} €
-        </div>
-      </div>
-      
-      {/* Botones Carrito y Supermercados */}
+      {/* Botones Carrito y Mejor Precio */}
       <div className="flex items-center gap-3 px-4 py-4">
         {/* Carrito - lado izquierdo */}
-        <div className="flex-1 text-center">
-          <button className="text-base font-medium text-black border-b-2 border-black pb-1">
-            Carrito
-          </button>
+        <div className="flex-1">
+          <Button 
+            className="h-12 text-base font-medium rounded-lg px-4 w-full bg-gray-100 text-black hover:bg-gray-200"
+            size="lg"
+          >
+            <div className="flex items-center justify-center gap-2">
+              <ShoppingCart className="h-4 w-4" />
+              <span>Carrito</span>
+              <span>{calculatedPrice.toFixed(2).replace('.', ',')} €</span>
+            </div>
+          </Button>
         </div>
         
-        {/* Supermercados - lado derecho */}
+        {/* Mejor Precio - lado derecho */}
         <div className="flex-1">
           <Button 
             onClick={handleClick} 
@@ -86,7 +77,8 @@ export const FloatingButton = ({
           >
             <div className="flex items-center justify-center gap-2">
               <Search className="h-4 w-4" />
-              <span>Supermercados</span>
+              <span>Mejor precio</span>
+              <span>{otherSupermarketPrice.replace('.', ',')} €</span>
             </div>
           </Button>
         </div>
