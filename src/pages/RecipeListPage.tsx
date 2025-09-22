@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { Search, ArrowLeft, Calendar, Users } from 'lucide-react';
 import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 const RecipeListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { listId } = useParams();
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
@@ -24,7 +25,29 @@ const RecipeListPage = () => {
 
   // Load AI recipes from localStorage when component mounts
   useEffect(() => {
-    console.log('RecipeListPage: Component mounted, checking localStorage...');
+    console.log('RecipeListPage: Component mounted, checking for listId:', listId);
+    
+    if (listId) {
+      // Load specific saved list
+      const savedLists = localStorage.getItem('savedShoppingLists');
+      if (savedLists) {
+        try {
+          const parsedLists = JSON.parse(savedLists);
+          const targetList = parsedLists.find(list => list.id === listId);
+          if (targetList && targetList.recipes) {
+            console.log('RecipeListPage: Loading specific list:', targetList.name, 'with recipes:', targetList.recipes.length);
+            setAiRecipes(targetList.recipes);
+            return;
+          }
+        } catch (error) {
+          console.error('RecipeListPage: Error loading specific list:', error);
+        }
+      }
+      console.log('RecipeListPage: Specific list not found, falling back to current recipes');
+    }
+    
+    // Load current AI recipes from localStorage
+    console.log('RecipeListPage: Loading current AI recipes...');
     const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
     console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
     
@@ -44,10 +67,16 @@ const RecipeListPage = () => {
     } else {
       console.log('RecipeListPage: No AI recipes found in localStorage');
     }
-  }, []); // Only run once when component mounts
+  }, [listId]); // Run when component mounts or listId changes
 
   // Auto-save configuration when AI recipes are loaded and config is available
   useEffect(() => {
+    // Only auto-save if we're not viewing a specific saved list
+    if (listId) {
+      console.log('RecipeListPage: Viewing specific list, skipping auto-save');
+      return;
+    }
+    
     if (aiRecipes.length > 0 && config && config.selectedDates) {
       // Check if this configuration was already saved to avoid duplicates
       const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
@@ -75,7 +104,7 @@ const RecipeListPage = () => {
         console.log('RecipeListPage: Saving new list with recipes:', newList.recipes.map(r => ({ title: r.title, image: r.image })));
         
         // Load existing lists and add new one
-        const updatedLists = [newList, ...existingLists.slice(0, 4)]; // Keep only 5 most recent
+        const updatedLists = [newList, ...existingLists.slice(0, 9)]; // Keep only 10 most recent
         localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
         
         console.log('RecipeListPage: Configuration auto-saved as new list');
@@ -83,7 +112,7 @@ const RecipeListPage = () => {
         console.log('RecipeListPage: Similar configuration already exists, skipping auto-save');
       }
     }
-  }, [aiRecipes, config]); // Run when aiRecipes or config changes
+  }, [aiRecipes, config, listId]); // Run when aiRecipes, config, or listId changes
 
   // Handle recipe replacement when coming from change mode
   useEffect(() => {

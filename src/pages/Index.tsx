@@ -33,7 +33,7 @@ const Index = () => {
   };
 
   const handleGoToList = (listId: string) => {
-    navigate('/milista');
+    navigate(`/milista/${listId}`);
   };
 
   return (
@@ -60,7 +60,7 @@ const Index = () => {
           {/* Saved Lists - Solo si existen */}
           {savedLists.length > 0 && (
             <div className="space-y-4 mb-6">
-              {savedLists.slice(0, 3).map((list, index) => {
+              {savedLists.map((list, index) => {
                 // Get first 3 recipe images for collage display
                 const recipeImages = list.recipes?.slice(0, 3).map(recipe => recipe.image) || [];
                 
