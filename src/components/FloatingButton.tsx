@@ -61,7 +61,6 @@ export const FloatingButton = ({
             size="lg"
           >
             <div className="flex items-center justify-center gap-2">
-              <ShoppingCart className="h-4 w-4" />
               <span>Carrito</span>
               <span>{calculatedPrice.toFixed(2).replace('.', ',')} €</span>
             </div>
