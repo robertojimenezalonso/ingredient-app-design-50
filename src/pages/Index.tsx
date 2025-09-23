@@ -118,50 +118,14 @@ const Index = () => {
                     style={{ borderColor: '#F8F8FC' }}
                     onClick={() => handleGoToList(list.id)}
                   >
-                     {/* Recipe images collage on the left */}
+                     {/* Recipe image on the left */}
                      <div className="relative w-16 h-16 flex-shrink-0">
-                       {recipeImages.length > 0 ? (
-                         <div className="relative w-full h-full">
-                           {recipeImages.map((image, imgIndex) => {
-                             // Adjust positioning based on number of images
-                             const totalImages = recipeImages.length;
-                             let left = 0;
-                             let top = 0;
-                             let rotation = 0;
-                             
-                             if (totalImages === 1) {
-                               // Single image centered
-                               left = 2;
-                               top = 2;
-                               rotation = 0;
-                             } else if (totalImages === 2) {
-                               // Two images slightly overlapped
-                               left = imgIndex * 8;
-                               top = imgIndex * 4;
-                               rotation = (imgIndex - 0.5) * 3;
-                             } else {
-                               // Three images with more overlap
-                               left = imgIndex * 6;
-                               top = imgIndex * 2;
-                               rotation = (imgIndex - 1) * 2;
-                             }
-                             
-                             return (
-                               <img
-                                 key={imgIndex}
-                                 src={image}
-                                 alt="Recipe"
-                                 className="absolute w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
-                                 style={{
-                                   left: `${left}px`,
-                                   top: `${top}px`,
-                                   zIndex: 3 - imgIndex,
-                                   transform: `rotate(${rotation}deg)`
-                                 }}
-                               />
-                             );
-                           })}
-                         </div>
+                       {list.recipes && list.recipes.length > 0 ? (
+                         <img
+                           src={list.recipes[0].image}
+                           alt="Recipe"
+                           className="w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
+                         />
                        ) : (
                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
                            <span className="text-xs text-gray-500">📝</span>
