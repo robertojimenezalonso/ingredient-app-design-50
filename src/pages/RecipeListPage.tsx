@@ -92,6 +92,10 @@ const RecipeListPage = () => {
       // Get current recipes from various sources
       let currentRecipes = [];
       
+      console.log('RecipeListPage: Checking recipe sources...');
+      console.log('RecipeListPage: aiRecipes.length:', aiRecipes.length);
+      console.log('RecipeListPage: mealPlanRecipes.length:', mealPlanRecipes.length);
+      
       // First try AI recipes from state
       if (aiRecipes.length > 0) {
         currentRecipes = aiRecipes;
@@ -113,6 +117,7 @@ const RecipeListPage = () => {
       if (currentRecipes.length === 0 && mealPlanRecipes.length > 0) {
         currentRecipes = mealPlanRecipes;
         console.log('RecipeListPage: Using meal plan recipes for saving:', currentRecipes.length);
+        console.log('RecipeListPage: Meal plan recipes:', mealPlanRecipes.map(r => ({ title: r.title, image: r.image })));
       }
       
       // If still no recipes, create a basic list entry anyway

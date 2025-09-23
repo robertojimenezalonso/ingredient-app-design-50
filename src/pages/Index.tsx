@@ -120,11 +120,15 @@ const Index = () => {
                   >
                      {/* Recipe image on the left */}
                      <div className="relative w-16 h-16 flex-shrink-0">
-                       {list.recipes && list.recipes.length > 0 ? (
+                       {list.recipes && list.recipes.length > 0 && list.recipes[0].image ? (
                          <img
                            src={list.recipes[0].image}
-                           alt="Recipe"
+                           alt={list.recipes[0].title || "Recipe"}
                            className="w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
+                           onError={(e) => {
+                             console.log('Index: Image failed to load:', list.recipes[0].image);
+                             e.currentTarget.style.display = 'none';
+                           }}
                          />
                        ) : (
                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
