@@ -141,14 +141,7 @@ const RecipeListPage = () => {
 
   // Auto-save configuration when user navigates to this page
   useEffect(() => {
-    console.log('RecipeListPage: Auto-save effect triggered with dependencies:', {
-      listId,
-      hasConfig: !!config,
-      selectedDatesLength: config?.selectedDates?.length || 0,
-      aiRecipesLength: aiRecipes.length,
-      mealPlanRecipesLength: mealPlanRecipes.length,
-      recommendedRecipesLength: recommendedRecipes.length
-    });
+    console.log('RecipeListPage: Auto-save effect running');
     
     // Skip auto-save if viewing a specific saved list
     if (listId) {
@@ -211,10 +204,10 @@ const RecipeListPage = () => {
       const newList = {
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
         name: 'Mi Lista',
-        selectedDates: config.selectedDates || [],
-        servingsPerRecipe: config.servingsPerRecipe || 2,
-        selectedMeals: config.selectedMeals || [],
-        recipeImages: currentRecipes.slice(0, 3).map(recipe => recipe.image),
+        dates: config.selectedDates || [],
+        servings: config.servingsPerRecipe || 2,
+        meals: config.selectedMeals || [],
+        recipes: currentRecipes,
         createdAt: new Date().toISOString(),
         estimatedPrice: calculateEstimatedPrice(currentRecipes.length * 3)
       };
@@ -222,9 +215,9 @@ const RecipeListPage = () => {
       console.log('RecipeListPage: Creating new list:', {
         id: newList.id,
         name: newList.name,
-        selectedDates: newList.selectedDates,
-        recipesCount: currentRecipes.length,
-        recipeImages: newList.recipeImages
+        dates: newList.dates,
+        recipesCount: newList.recipes.length,
+        firstRecipeImage: newList.recipes[0]?.image
       });
       
       // Load existing lists and add new one
