@@ -112,31 +112,45 @@ export const SavedShoppingListCard = () => {
                       <span>Desde {list.estimatedPrice || '12,50'} €</span>
                     </div>
                   </div>
-                  <div className="w-24 h-16 flex gap-1 overflow-hidden rounded-xl">
+                  <div className="w-16 h-16 relative">
                     {(() => {
                       const fallbackImages = [
                         'https://images.unsplash.com/photo-1618160702438-9b02ab6515c9',
                         'https://images.unsplash.com/photo-1582562124811-c09040d0a901', 
                         'https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07'
                       ];
-                      const imagesToShow = list.recipeImages && list.recipeImages.length > 0 
-                        ? list.recipeImages.slice(0, 3)
-                        : fallbackImages;
+                      
+                      // Determine how many images to show based on actual recipe count
+                      const recipeCount = list.recipeImages?.length || 0;
+                      const imagesToShow = recipeCount > 0 
+                        ? list.recipeImages.slice(0, Math.min(3, recipeCount))
+                        : [fallbackImages[0]]; // Show only 1 fallback if no recipes
                       
                       console.log('Images to show for list', list.id, ':', imagesToShow);
                       
-                      return imagesToShow.map((imageUrl: string, imgIndex: number) => (
-                        <img 
-                          key={imgIndex}
-                          src={imageUrl} 
-                          alt={`Receta ${imgIndex + 1}`}
-                          className="w-8 h-16 object-cover rounded-sm"
-                          onError={(e) => {
-                            console.error('Image failed to load:', imageUrl);
-                            (e.target as HTMLImageElement).src = fallbackImages[imgIndex] || fallbackImages[0];
-                          }}
-                        />
-                      ));
+                      return imagesToShow.map((imageUrl: string, imgIndex: number) => {
+                        const offsetX = imgIndex * 4; // 4px horizontal offset
+                        const offsetY = imgIndex * 3; // 3px vertical offset
+                        const zIndex = imagesToShow.length - imgIndex; // Higher z-index for images on top
+                        
+                        return (
+                          <img 
+                            key={imgIndex}
+                            src={imageUrl} 
+                            alt={`Receta ${imgIndex + 1}`}
+                            className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
+                            style={{
+                              left: `${offsetX}px`,
+                              top: `${offsetY}px`,
+                              zIndex: zIndex
+                            }}
+                            onError={(e) => {
+                              console.error('Image failed to load:', imageUrl);
+                              (e.target as HTMLImageElement).src = fallbackImages[0];
+                            }}
+                          />
+                        );
+                      });
                     })()}
                   </div>
                 </div>
@@ -179,21 +193,24 @@ export const SavedShoppingListCard = () => {
               <span>Desde 12,50 €</span>
             </div>
           </div>
-          <div className="w-24 h-16 flex gap-1 overflow-hidden rounded-xl">
+          <div className="w-16 h-16 relative">
             <img 
               src="https://images.unsplash.com/photo-1618160702438-9b02ab6515c9" 
               alt="Receta 1"
-              className="w-8 h-16 object-cover rounded-sm"
+              className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
+              style={{ left: '0px', top: '0px', zIndex: 3 }}
             />
             <img 
               src="https://images.unsplash.com/photo-1582562124811-c09040d0a901" 
               alt="Receta 2"
-              className="w-8 h-16 object-cover rounded-sm"
+              className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
+              style={{ left: '4px', top: '3px', zIndex: 2 }}
             />
             <img 
               src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" 
               alt="Receta 3"
-              className="w-8 h-16 object-cover rounded-sm"
+              className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
+              style={{ left: '8px', top: '6px', zIndex: 1 }}
             />
           </div>
         </div>
