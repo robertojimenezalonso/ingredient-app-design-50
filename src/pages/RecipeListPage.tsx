@@ -202,6 +202,22 @@ const RecipeListPage = () => {
     day.meals.map(meal => meal.recipe).filter(Boolean)
   );
   
+  console.log('RecipeListPage: Meal plan debug:', {
+    mealPlanLength: mealPlan.length,
+    mealPlan: mealPlan.map(day => ({
+      dateStr: day.dateStr,
+      mealsCount: day.meals.length,
+      meals: day.meals.map(meal => ({
+        meal: meal.meal,
+        hasRecipe: !!meal.recipe,
+        recipeTitle: meal.recipe?.title,
+        recipeImage: meal.recipe?.image
+      }))
+    })),
+    extractedRecipesCount: mealPlanRecipes.length,
+    extractedRecipesTitles: mealPlanRecipes.map(r => r.title)
+  });
+  
   // Only show AI recipes if available, no fallback to examples
   const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : [];
 

@@ -74,6 +74,15 @@ const Index = () => {
   // Debug: Log current state
   useEffect(() => {
     console.log('Index: Current savedLists state:', savedLists.length, savedLists);
+    savedLists.forEach((list, index) => {
+      console.log(`Index: List ${index}:`, {
+        id: list.id,
+        name: list.name,
+        hasRecipes: !!(list.recipes && list.recipes.length > 0),
+        recipesCount: list.recipes ? list.recipes.length : 0,
+        firstRecipeImage: list.recipes && list.recipes[0] ? list.recipes[0].image : 'NO IMAGE'
+      });
+    });
   }, [savedLists]);
 
   const handleCreateNewList = () => {
