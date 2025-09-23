@@ -109,10 +109,10 @@ const RecipeListPage = () => {
         }
       }
       
-      // If no AI recipes, use recommended recipes as fallback
-      if (currentRecipes.length === 0 && recommendedRecipes.length > 0) {
-        currentRecipes = recommendedRecipes;
-        console.log('RecipeListPage: Using recommended recipes as fallback:', currentRecipes.length);
+      // If no AI recipes, use meal plan recipes as fallback for saving
+      if (currentRecipes.length === 0 && mealPlanRecipes.length > 0) {
+        currentRecipes = mealPlanRecipes;
+        console.log('RecipeListPage: Using meal plan recipes for saving:', currentRecipes.length);
       }
       
       // If still no recipes, create a basic list entry anyway
@@ -197,8 +197,8 @@ const RecipeListPage = () => {
     day.meals.map(meal => meal.recipe).filter(Boolean)
   );
   
-  // Use AI recipes if available, otherwise use meal plan recipes
-  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : mealPlanRecipes;
+  // Only show AI recipes if available, no fallback to examples
+  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : [];
 
   console.log('RecipeListPage: Current recipes state:', {
     aiRecipesCount: aiRecipes.length,
