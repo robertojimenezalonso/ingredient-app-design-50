@@ -199,6 +199,7 @@ const Index = () => {
                          <div className="mb-2">
                            <div className="flex items-center text-sm text-gray-700 mb-1">
                              <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-2" />
+                             <span className="mr-2">Mercadona</span>
                              <span className="font-medium">€{list.estimated_price?.toFixed(2) || '0.00'}</span>
                            </div>
                            <div className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium inline-block">
