@@ -128,11 +128,29 @@ const SubscriptionBenefitsPage = () => {
         initializeIngredients(recipes);
         
         recipes.forEach(recipe => {
-          const selectedIngredients = recipe.ingredients.map(ing => ing.id);
-          addToCart(recipe, recipe.servings, selectedIngredients);
+          console.log('SubscriptionBenefitsPage: Processing recipe for cart:', recipe.title);
+          console.log('SubscriptionBenefitsPage: Recipe ingredients check:', recipe.ingredients ? recipe.ingredients.length : 'NO INGREDIENTS');
+          
+          if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
+            const selectedIngredients = recipe.ingredients.map(ing => ing.id);
+            addToCart(recipe, recipe.servings, selectedIngredients);
+          } else {
+            console.warn('SubscriptionBenefitsPage: Recipe missing ingredients, skipping cart addition:', recipe.title);
+          }
         });
 
         // Store recipes in localStorage for compatibility
+        console.log('SubscriptionBenefitsPage: About to store recipes in localStorage');
+        console.log('SubscriptionBenefitsPage: Recipes to store:', recipes.length);
+        recipes.forEach((recipe, index) => {
+          console.log(`SubscriptionBenefitsPage: Recipe ${index + 1}:`, {
+            title: recipe.title,
+            hasIngredients: !!(recipe.ingredients && Array.isArray(recipe.ingredients)),
+            ingredientsCount: recipe.ingredients ? recipe.ingredients.length : 0,
+            image: recipe.image
+          });
+        });
+        
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
         console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
         

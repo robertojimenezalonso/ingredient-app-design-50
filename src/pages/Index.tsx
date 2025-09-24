@@ -229,14 +229,6 @@ const Index = () => {
           {/* Spacer para empujar el botón hacia abajo */}
           <div className="flex-1"></div>
           
-          {/* Debug button - temporal */}
-          <Button 
-            onClick={debugTestSave}
-            className="w-full h-12 text-sm font-medium rounded-lg bg-red-500 text-white hover:bg-red-600 mb-2"
-          >
-            DEBUG: Crear lista test
-          </Button>
-          
           {/* Create New List Button - Abajo */}
           <Button 
             onClick={handleCreateNewList}
