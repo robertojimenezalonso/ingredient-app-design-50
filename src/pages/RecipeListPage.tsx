@@ -26,7 +26,6 @@ const RecipeListPage = () => {
   const { getListById, saveList } = useShoppingLists();
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
-  const [hasAutoSaved, setHasAutoSaved] = useState(false);
 
   // Load AI recipes from localStorage or specific list
   useEffect(() => {
@@ -100,7 +99,6 @@ const RecipeListPage = () => {
     }
   }, [location.state, navigate]);
   
-  
   const categories: CategoryType[] = [
     'breakfast', 'lunch', 'dinner', 
     'appetizer', 'snacks', 'desserts', 'favorites'
@@ -111,31 +109,8 @@ const RecipeListPage = () => {
     day.meals.map(meal => meal.recipe).filter(Boolean)
   );
   
-  console.log('RecipeListPage: Meal plan debug:', {
-    mealPlanLength: mealPlan.length,
-    mealPlan: mealPlan.map(day => ({
-      dateStr: day.dateStr,
-      mealsCount: day.meals.length,
-      meals: day.meals.map(meal => ({
-        meal: meal.meal,
-        hasRecipe: !!meal.recipe,
-        recipeTitle: meal.recipe?.title,
-        recipeImage: meal.recipe?.image
-      }))
-    })),
-    extractedRecipesCount: mealPlanRecipes.length,
-    extractedRecipesTitles: mealPlanRecipes.map(r => r.title)
-  });
-  
   // Only show AI recipes if available, no fallback to examples
   const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : [];
-
-  console.log('RecipeListPage: Current recipes state:', {
-    aiRecipesCount: aiRecipes.length,
-    aiRecipesTitles: aiRecipes.map(r => r.title),
-    recommendedRecipesCount: recommendedRecipes.length,
-    showingAI: aiRecipes.length > 0
-  });
 
   // Calculate estimated price based on ingredients and settings
   const calculateEstimatedPrice = (ingredientsCount: number) => {
@@ -145,71 +120,6 @@ const RecipeListPage = () => {
     
     return +(basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
   };
-
-  // Auto-save new lists to database
-  useEffect(() => {
-    const autoSaveList = async () => {
-      console.log('RecipeListPage: Auto-save effect running');
-      
-      // Skip if already saved, viewing a specific list, or user not authenticated
-      if (hasAutoSaved || listId || !user) {
-        console.log('RecipeListPage: Skipping auto-save:', { hasAutoSaved, listId, hasUser: !!user });
-        return;
-      }
-      
-      // Check if we have config with dates (minimum requirement for a list)
-      if (!config?.selectedDates?.length) {
-        console.log('RecipeListPage: No config or selected dates, skipping auto-save');
-        return;
-      }
-      
-      // Get recipes from meal plan OR aiRecipes
-      let recipesToSave = [];
-      
-      if (aiRecipes.length > 0) {
-        recipesToSave = aiRecipes;
-        console.log('RecipeListPage: Using AI recipes for saving:', recipesToSave.length);
-      } else if (mealPlanRecipes.length > 0) {
-        recipesToSave = mealPlanRecipes;
-        console.log('RecipeListPage: Using meal plan recipes for saving:', recipesToSave.length);
-      } else {
-        console.log('RecipeListPage: No recipes available for saving');
-        return;
-      }
-      
-      // Save to database
-      try {
-        console.log('RecipeListPage: Saving new list to database...');
-        await saveList({
-          name: 'Mi Lista',
-          dates: config.selectedDates || [],
-          servings: config.servingsPerRecipe || 2,
-          meals: config.selectedMeals || [],
-          recipes: recipesToSave,
-          estimated_price: calculateEstimatedPrice(recipesToSave.length * 3)
-        });
-        
-        setHasAutoSaved(true);
-        console.log('RecipeListPage: List saved successfully to database');
-        
-        // Clean up localStorage after successful save
-        localStorage.removeItem('aiGeneratedRecipes');
-        localStorage.removeItem('pendingRecipeGeneration');
-        
-      } catch (error) {
-        console.error('RecipeListPage: Error saving list to database:', error);
-        toast({
-          title: "Error",
-          description: "No se pudo guardar la lista automáticamente",
-          variant: "destructive"
-        });
-      }
-    };
-
-    // Delay auto-save to ensure recipes are loaded
-    const timeoutId = setTimeout(autoSaveList, 2000);
-    return () => clearTimeout(timeoutId);
-  }, [aiRecipes.length, mealPlanRecipes.length, config?.selectedDates, config?.servingsPerRecipe, config?.selectedMeals, hasAutoSaved, listId, user, saveList]);
 
   const { 
     getSelectedIngredientsCount,

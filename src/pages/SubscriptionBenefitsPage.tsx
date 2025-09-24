@@ -5,6 +5,8 @@ import { useUserConfig } from "@/contexts/UserConfigContext";
 import { useRecipeBank } from "@/hooks/useRecipeBank";
 import { useGlobalIngredients } from "@/hooks/useGlobalIngredients";
 import { useCart } from "@/hooks/useCart";
+import { useAuth } from "@/hooks/useAuth";
+import { useShoppingLists } from "@/hooks/useShoppingLists";
 
 const SubscriptionBenefitsPage = () => {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ const SubscriptionBenefitsPage = () => {
   const { getRecipesForPlan, convertToRecipe } = useRecipeBank();
   const { initializeIngredients } = useGlobalIngredients();
   const { addToCart } = useCart();
+  const { user } = useAuth();
+  const { saveList } = useShoppingLists();
   const [progress, setProgress] = useState(1);
   const [checkedItems, setCheckedItems] = useState<boolean[]>([false, false, false, false, false]);
   const [isGeneratingRecipes, setIsGeneratingRecipes] = useState(false);
@@ -19,9 +23,13 @@ const SubscriptionBenefitsPage = () => {
   const items = ['Supermercados', 'Ingredientes', 'Nutrición', 'Recetas', 'Precios'];
   const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Comparando precios…'];
 
-  const saveCurrentPlanningSession = () => {
-    // No longer save here - RecipeListPage handles saving automatically
-    console.log('Planning session completed - list will be auto-saved by RecipeListPage');
+  // Helper function to calculate estimated price
+  const calculateEstimatedPrice = (ingredientsCount: number, params: any) => {
+    const basePrice = ingredientsCount * 1.2;
+    const servingsMultiplier = params.people || 2;
+    const daysMultiplier = params.selectedDates?.length || 1;
+    
+    return +(basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
   };
 
   const generatePlanName = () => {
@@ -71,14 +79,6 @@ const SubscriptionBenefitsPage = () => {
       }
       
       console.log('SubscriptionBenefitsPage: Flattened recipes:', recipes.length);
-      recipes.forEach((recipe, index) => {
-        console.log(`SubscriptionBenefitsPage: Recipe ${index}:`, {
-          id: recipe.id,
-          title: recipe.title,
-          image: recipe.image,
-          hasIngredients: !!(recipe.ingredients && recipe.ingredients.length > 0)
-        });
-      });
       
       // Initialize ingredients and add to cart
       if (recipes.length > 0) {
@@ -90,17 +90,35 @@ const SubscriptionBenefitsPage = () => {
           addToCart(recipe, recipe.servings, selectedIngredients);
         });
 
-        // Store recipes in localStorage for compatibility
+        // Store recipes in localStorage for compatibility (temporary)
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
         console.log('SubscriptionBenefitsPage: Stored', recipes.length, 'recipes in localStorage');
-        console.log('SubscriptionBenefitsPage: First stored recipe:', recipes[0]);
         
-        // Verify storage
-        const verifyStorage = localStorage.getItem('aiGeneratedRecipes');
-        if (verifyStorage) {
-          console.log('SubscriptionBenefitsPage: Verification - localStorage contains data:', verifyStorage.length, 'characters');
+        // Save to database immediately if user is authenticated
+        if (user) {
+          try {
+            console.log('SubscriptionBenefitsPage: Saving list to database immediately...');
+            await saveList({
+              name: generatePlanName(),
+              dates: params.selectedDates || [],
+              servings: params.people || 2,
+              meals: params.selectedMeals || [],
+              recipes: recipes,
+              estimated_price: calculateEstimatedPrice(recipes.length * 3, params)
+            });
+            
+            console.log('SubscriptionBenefitsPage: List saved successfully to database');
+            
+            // Clean up localStorage after successful save
+            localStorage.removeItem('pendingRecipeGeneration');
+            localStorage.removeItem('aiGeneratedRecipes');
+            
+          } catch (error) {
+            console.error('SubscriptionBenefitsPage: Error saving list to database:', error);
+            // Keep in localStorage as fallback
+          }
         } else {
-          console.error('SubscriptionBenefitsPage: ERROR - localStorage verification failed');
+          console.log('SubscriptionBenefitsPage: User not authenticated, keeping in localStorage');
         }
         
         // Preload all recipe images from Supabase
@@ -144,8 +162,7 @@ const SubscriptionBenefitsPage = () => {
         setProgress(100);
         // Mark as having a planning session when complete
         updateConfig({ hasPlanningSession: true });
-        // Save current planning session before navigating
-        saveCurrentPlanningSession();
+        
         // Navigate to milista after reaching 100%
         setTimeout(() => navigate('/milista'), 500);
         return;
