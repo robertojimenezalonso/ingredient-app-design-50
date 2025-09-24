@@ -48,7 +48,7 @@ const RecipeListPage = () => {
         console.log('RecipeListPage: Specific list not found in DB, falling back to current recipes');
       }
       
-      // Load current AI recipes from localStorage (for new lists)
+      // Always try to load current AI recipes from localStorage (for new lists)
       console.log('RecipeListPage: Loading current AI recipes...');
       const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
       console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
@@ -58,9 +58,16 @@ const RecipeListPage = () => {
           const parsedRecipes = JSON.parse(savedAiRecipes);
           console.log('RecipeListPage: Successfully parsed AI recipes:', parsedRecipes.length, 'recipes');
           setAiRecipes(parsedRecipes);
+          // Reset auto-save flag when loading new recipes from localStorage
+          if (!listId) {
+            setHasAutoSaved(false);
+          }
         } catch (error) {
           console.error('RecipeListPage: Error parsing AI recipes from localStorage:', error);
         }
+      } else {
+        console.log('RecipeListPage: No recipes found in localStorage');
+        setAiRecipes([]);
       }
     };
 
