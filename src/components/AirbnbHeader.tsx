@@ -114,24 +114,6 @@ export const AirbnbHeader = ({
         </button>
       </div>
       
-      <div className="px-4 py-2 relative">
-        <div className="flex-1 rounded-lg transition-colors cursor-pointer" style={{ backgroundColor: '#F6F6F6' }}>
-          <div className="px-6 py-2 relative">
-            <div className="text-left">
-              <div className="font-medium text-base text-foreground">
-                Mi lista de la compra
-              </div>
-              <div className="text-sm text-muted-foreground font-normal flex items-center -ml-1">
-                <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-cover mr-1 bg-white rounded-full" />
-                Mercadona · Para {config.selectedDates?.length || 0} días
-              </div>
-            </div>
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-              <img src="/lovable-uploads/8f17d96b-3966-4959-b7ba-b9d53435740d.png" alt="Filter" className="h-5 w-5" />
-            </div>
-          </div>
-        </div>
-      </div>
       
 
 
