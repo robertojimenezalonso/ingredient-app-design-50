@@ -203,7 +203,7 @@ const Index = () => {
                              <span className="font-medium">€{list.estimated_price?.toFixed(2) || '0.00'}</span>
                            </div>
                            <div className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium inline-block">
-                             Mejor precio: €{((list.estimated_price || 0) * 0.85).toFixed(2)}
+                             Otras opciones desde €{((list.estimated_price || 0) * 0.85).toFixed(2)}
                            </div>
                          </div>
                          
