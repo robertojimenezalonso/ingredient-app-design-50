@@ -14,6 +14,9 @@ const Index = () => {
     // Load saved lists from localStorage - NO DEFAULT DATA
     const saved = localStorage.getItem('savedShoppingLists');
     console.log('Index: Raw localStorage data:', saved);
+    console.log('Index: localStorage keys:', Object.keys(localStorage));
+    console.log('Index: localStorage.length:', localStorage.length);
+    
     if (saved) {
       try {
         const parsedLists = JSON.parse(saved);
@@ -34,17 +37,27 @@ const Index = () => {
       console.log('Index: No data found in localStorage');
       setSavedLists([]);
     }
+    
+    console.log('Index: Current savedLists state:', savedLists.length, savedLists);
   }, []);
 
   // Add a function to manually refresh lists
   const refreshLists = () => {
     console.log('Index: Manually refreshing lists...');
     const saved = localStorage.getItem('savedShoppingLists');
+    console.log('Index: Manual refresh - Raw localStorage data:', saved);
     if (saved) {
-      const parsedLists = JSON.parse(saved);
-      const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-      setSavedLists(sortedLists);
-      console.log('Index: Lists refreshed, count:', sortedLists.length);
+      try {
+        const parsedLists = JSON.parse(saved);
+        const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        setSavedLists(sortedLists);
+        console.log('Index: Lists refreshed, count:', sortedLists.length);
+      } catch (error) {
+        console.error('Index: Error in manual refresh:', error);
+      }
+    } else {
+      console.log('Index: Manual refresh - No data found');
+      setSavedLists([]);
     }
   };
 
@@ -87,6 +100,32 @@ const Index = () => {
 
   const handleCreateNewList = () => {
     navigate('/calendar-selection');
+  };
+
+  // DEBUG: Add manual trigger for testing
+  const debugTestSave = () => {
+    console.log('DEBUG: Manual test save triggered');
+    const testList = {
+      id: `debug-${Date.now()}`,
+      name: 'Lista Debug',
+      dates: ['2025-09-24'],
+      servings: 2,
+      meals: ['almuerzo'],
+      recipes: [{
+        id: 'debug-recipe',
+        title: 'Receta Debug',
+        image: 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'
+      }],
+      createdAt: new Date().toISOString(),
+      estimatedPrice: 25.50,
+      recipeImages: ['https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop']
+    };
+    
+    const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
+    const updatedLists = [testList, ...existingLists];
+    localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+    console.log('DEBUG: Test list saved, triggering refresh...');
+    refreshLists();
   };
 
   const handleGoToList = (listId: string) => {
@@ -189,6 +228,14 @@ const Index = () => {
 
           {/* Spacer para empujar el botón hacia abajo */}
           <div className="flex-1"></div>
+          
+          {/* Debug button - temporal */}
+          <Button 
+            onClick={debugTestSave}
+            className="w-full h-12 text-sm font-medium rounded-lg bg-red-500 text-white hover:bg-red-600 mb-2"
+          >
+            DEBUG: Crear lista test
+          </Button>
           
           {/* Create New List Button - Abajo */}
           <Button 

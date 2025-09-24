@@ -136,6 +136,12 @@ const SubscriptionBenefitsPage = () => {
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
         console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
         
+        // IMMEDIATELY save as list when recipes are ready
+        console.log('SubscriptionBenefitsPage: Immediately calling saveCurrentPlanningSession after recipe generation...');
+        setTimeout(() => {
+          saveCurrentPlanningSession();
+        }, 100); // Small delay to ensure localStorage is committed
+        
         // Preload all recipe images from Supabase
         console.log('🔄 Preloading recipe images from Supabase...');
         const preloadPromises = recipes
@@ -151,6 +157,9 @@ const SubscriptionBenefitsPage = () => {
         
         // Mark images as preloaded in localStorage
         localStorage.setItem('recipeImagesPreloaded', 'true');
+        console.log('SubscriptionBenefitsPage: Recipe generation and storage complete');
+      } else {
+        console.log('SubscriptionBenefitsPage: No recipes generated');
       }
     } catch (error) {
       console.error('Error loading recipes from recipe bank:', error);
@@ -177,10 +186,14 @@ const SubscriptionBenefitsPage = () => {
         setProgress(100);
         // Mark as having a planning session when complete
         updateConfig({ hasPlanningSession: true });
+        console.log('SubscriptionBenefitsPage: Progress complete, calling saveCurrentPlanningSession...');
         // Save current planning session before navigating
         saveCurrentPlanningSession();
         // Navigate to milista after reaching 100%
-        setTimeout(() => navigate('/milista'), 500);
+        setTimeout(() => {
+          console.log('SubscriptionBenefitsPage: Navigating to /milista');
+          navigate('/milista');
+        }, 500);
         return;
       }
       
