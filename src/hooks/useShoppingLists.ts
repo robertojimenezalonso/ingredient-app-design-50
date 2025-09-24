@@ -29,7 +29,6 @@ export const useShoppingLists = () => {
 
     try {
       setLoading(true);
-      console.log('useShoppingLists: Starting to load lists for user:', user.id);
       
       // Load lists with their recipes
       const { data: listsData, error: listsError } = await supabase
@@ -44,35 +43,19 @@ export const useShoppingLists = () => {
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
 
-      console.log('useShoppingLists: Query completed');
-      console.log('useShoppingLists: Error:', listsError);
-      console.log('useShoppingLists: Raw data count:', listsData?.length || 0);
-
       if (listsError) {
         console.error('Error loading lists:', listsError);
         return;
       }
 
       // Transform the data to include recipes
-      const transformedLists = (listsData || []).map((list, index) => {
-        const transformed = {
-          ...list,
-          recipes: list.list_recipes
-            ?.sort((a, b) => a.position - b.position)
-            .map(lr => lr.recipe_data as unknown as Recipe) || []
-        };
-        
-        console.log(`useShoppingLists: Transformed list ${index}:`, {
-          id: transformed.id,
-          name: transformed.name,
-          recipesCount: transformed.recipes.length,
-          createdAt: transformed.created_at
-        });
-        
-        return transformed;
-      });
+      const transformedLists = (listsData || []).map((list) => ({
+        ...list,
+        recipes: list.list_recipes
+          ?.sort((a, b) => a.position - b.position)
+          .map(lr => lr.recipe_data as unknown as Recipe) || []
+      }));
 
-      console.log('useShoppingLists: Setting', transformedLists.length, 'transformed lists');
       setLists(transformedLists);
     } catch (error) {
       console.error('Error loading shopping lists:', error);

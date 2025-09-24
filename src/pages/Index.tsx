@@ -117,26 +117,15 @@ const Index = () => {
           {lists.length > 0 && (
             <div className="space-y-4 mb-6">
               {listsToShow.map((list, index) => {
-                // Debug logging
-                console.log('Index: Rendering list:', {
-                  index,
-                  id: list.id,
-                  name: list.name,
-                  recipesCount: list.recipes?.length || 0
-                });
-                
                 // Get first 3 recipe images for collage display
                 const recipeImages = list.recipes?.slice(0, 3) || [];
                 
                 return (
                   <div 
-                    key={`list-${list.id}-${index}`} 
+                    key={list.id} 
                     className="flex gap-4 items-center cursor-pointer relative rounded-xl bg-white w-full transition-transform duration-200 shadow-[0_4px_20px_rgba(0,0,0,0.1)] border p-4"
                     style={{ borderColor: '#F8F8FC' }}
-                    onClick={() => {
-                      console.log('Index: Clicking on list:', list.id, 'name:', list.name);
-                      handleGoToList(list.id);
-                    }}
+                    onClick={() => handleGoToList(list.id)}
                   >
                      {/* Recipe images with new design */}
                      <div className="relative w-20 h-20 flex-shrink-0">
