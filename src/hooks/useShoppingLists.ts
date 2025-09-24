@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { Recipe } from '@/types/recipe';
@@ -169,7 +169,7 @@ export const useShoppingLists = () => {
     }
   };
 
-  const getListById = async (listId: string): Promise<ShoppingList | null> => {
+  const getListById = useCallback(async (listId: string): Promise<ShoppingList | null> => {
     console.log('useShoppingLists: getListById called with:', listId);
     console.log('useShoppingLists: user:', user ? 'exists' : 'null');
     
@@ -215,7 +215,7 @@ export const useShoppingLists = () => {
       console.error('Error loading list by ID:', error);
       return null;
     }
-  };
+  }, [user?.id]); // Only depend on user.id
 
   useEffect(() => {
     console.log('useShoppingLists: useEffect triggered, user:', user ? 'exists' : 'null');

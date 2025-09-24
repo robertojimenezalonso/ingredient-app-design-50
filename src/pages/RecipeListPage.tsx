@@ -79,7 +79,7 @@ const RecipeListPage = () => {
     };
 
     loadRecipes();
-  }, [listId, getListById]);
+  }, [listId]); // Remove getListById from dependencies
 
 
   // Handle recipe replacement when coming from change mode
