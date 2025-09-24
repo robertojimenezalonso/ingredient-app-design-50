@@ -13,6 +13,7 @@ import CalendarSelectionPage from "./pages/CalendarSelectionPage";
 import PeopleAndDietPage from "./pages/PeopleAndDietPage";
 import SubscriptionBenefitsPage from "./pages/SubscriptionBenefitsPage";
 import Index from "./pages/Index";
+import MyListsPage from "./pages/MyListsPage";
 import CategoryPage from "./pages/CategoryPage";
 import RecipeDetailPage from "./pages/RecipeDetailPage";
 import CartPage from "./pages/CartPage";
@@ -38,6 +39,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/mis-listas" element={<MyListsPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
