@@ -1,10 +1,12 @@
-import { SlidersHorizontal, Search, Plus, ChevronDown, Coffee, UtensilsCrossed, Moon, Wine, Package, Cake, Filter, MoreVertical, ArrowLeft } from 'lucide-react';
+import { SlidersHorizontal, Search, Plus, ChevronDown, Coffee, UtensilsCrossed, Moon, Wine, Package, Cake, Filter, MoreVertical, ArrowLeft, UserPlus, Save } from 'lucide-react';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useState, useEffect, useRef } from 'react';
 import { Tabs, TabsList, TabsTrigger } from './ui/tabs';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useNavigate } from 'react-router-dom';
+import { Button } from './ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 
 const foodTypes = [
@@ -36,6 +38,9 @@ interface AirbnbHeaderProps {
   onTabChange?: (dateStr: string) => void;
   onFilterChange?: (filter: 'receta' | 'ingredientes') => void;
   currentFilter?: 'receta' | 'ingredientes';
+  onSaveList?: () => void;
+  onDeleteList?: () => void;
+  isListSaved?: boolean;
   navigationData?: {
     canGoPrevious: boolean;
     canGoNext: boolean;
@@ -53,6 +58,9 @@ export const AirbnbHeader = ({
   onTabChange,
   onFilterChange,
   currentFilter = 'receta',
+  onSaveList,
+  onDeleteList,
+  isListSaved = false,
   navigationData
 }: AirbnbHeaderProps = {}) => {
   const { config } = useUserConfig();
@@ -112,6 +120,37 @@ export const AirbnbHeader = ({
         >
           <ArrowLeft className="h-5 w-5 text-black" />
         </button>
+        
+        {/* Add Person Icon */}
+        <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+          <UserPlus className="h-5 w-5 text-black" />
+        </button>
+        
+        <div className="flex-1"></div>
+        
+        {/* Save Button or Three Dots Menu */}
+        {!isListSaved ? (
+          <Button 
+            onClick={onSaveList}
+            className="bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating px-4 py-2 h-auto text-sm"
+          >
+            <Save className="h-4 w-4 mr-2" />
+            Guardar lista
+          </Button>
+        ) : (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                <MoreVertical className="h-5 w-5 text-black" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={onDeleteList} className="text-red-600">
+                Eliminar lista
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
       
       

@@ -6,6 +6,7 @@ import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 import { useShoppingLists } from '@/hooks/useShoppingLists';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
@@ -372,6 +373,34 @@ const RecipeListPage = () => {
     }
   };
 
+  const handleDeleteList = async () => {
+    if (!listId || !user) return;
+    
+    try {
+      const { error } = await supabase
+        .from('shopping_lists')
+        .delete()
+        .eq('id', listId)
+        .eq('user_id', user.id);
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Lista eliminada",
+        description: "La lista se ha eliminado exitosamente"
+      });
+      
+      navigate('/');
+    } catch (error) {
+      console.error('Error deleting list:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la lista",
+        variant: "destructive"
+      });
+    }
+  };
+
   const daysText = config.selectedDates?.length 
     ? `${config.selectedDates.length} día${config.selectedDates.length > 1 ? 's' : ''}`
     : '0 días';
@@ -408,6 +437,9 @@ const RecipeListPage = () => {
         onTabChange={scrollToDate}
         onFilterChange={handleFilterChange}
         currentFilter="receta"
+        onSaveList={handleSaveList}
+        onDeleteList={handleDeleteList}
+        isListSaved={!!listId}
       />
       
       <div className="bg-white" style={{ paddingTop: '180px' }}>
@@ -423,11 +455,9 @@ const RecipeListPage = () => {
 
       <FloatingButton 
         onClick={handleSearchOffers}
-        onSave={handleSaveList}
         selectedCount={selectedIngredientsCount}
         recipeCount={recommendedRecipes.length}
         totalPrice={totalPrice}
-        showSaveButton={!listId && recommendedRecipes.length > 0}
       >
         Buscar mejor oferta
       </FloatingButton>
