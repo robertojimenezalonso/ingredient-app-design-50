@@ -127,27 +127,50 @@ const Index = () => {
                     style={{ borderColor: '#F8F8FC' }}
                     onClick={() => handleGoToList(list.id)}
                   >
-                     {/* Recipe images in cascade */}
+                     {/* Recipe images with new design */}
                      <div className="relative w-16 h-16 flex-shrink-0">
                         {list.recipes && list.recipes.length > 0 ? (
                           (() => {
                             const imagesToShow = list.recipes.slice(0, Math.min(3, list.recipes.length));
                             
                             return imagesToShow.map((recipe, imgIndex) => {
-                              const offsetX = imgIndex * 6; // 6px horizontal offset
-                              const offsetY = imgIndex * 4; // 4px vertical offset
-                              const zIndex = imagesToShow.length - imgIndex; // Higher z-index for images on top
+                              // Define positioning and rotation for each image
+                              let left = '16px';
+                              let top = '8px';
+                              let rotation = '';
+                              let zIndex = 1;
+                              
+                              if (imgIndex === 0) {
+                                // First image: centered and on top
+                                left = '16px';
+                                top = '8px';
+                                rotation = '';
+                                zIndex = 3;
+                              } else if (imgIndex === 1) {
+                                // Second image: slightly to the left and tilted
+                                left = '4px';
+                                top = '12px';
+                                rotation = 'rotate-[-8deg]';
+                                zIndex = 1;
+                              } else if (imgIndex === 2) {
+                                // Third image: to the right and tilted
+                                left = '28px';
+                                top = '12px';
+                                rotation = 'rotate-[8deg]';
+                                zIndex = 2;
+                              }
                               
                               return (
                                 <img 
                                   key={imgIndex}
                                   src={recipe.image} 
                                   alt={recipe.title || `Recipe ${imgIndex + 1}`}
-                                  className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
+                                  className={`absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-lg transition-transform duration-200 ${rotation}`}
                                   style={{
-                                    left: `${offsetX}px`,
-                                    top: `${offsetY}px`,
-                                    zIndex: zIndex
+                                    left: left,
+                                    top: top,
+                                    zIndex: zIndex,
+                                    filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))'
                                   }}
                                   onError={(e) => {
                                     e.currentTarget.style.display = 'none';
@@ -157,11 +180,16 @@ const Index = () => {
                             });
                           })()
                         ) : (
-                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
+                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center shadow-lg" style={{ 
+                            position: 'absolute', 
+                            left: '16px', 
+                            top: '8px',
+                            filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))'
+                          }}>
                             <span className="text-xs text-gray-500">📝</span>
                           </div>
                         )}
-                      </div>
+                       </div>
                       
                       {/* List information */}
                       <div className="flex-1">
