@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Plus, ArrowRight, Trash2, LogOut } from 'lucide-react';
+import { Plus, ArrowRight, Trash2, LogOut, ChevronDown } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useShoppingLists } from '@/hooks/useShoppingLists';
 import { useToast } from '@/hooks/use-toast';
@@ -13,6 +13,7 @@ const Index = () => {
   const { user, loading: authLoading, signOut } = useAuth();
   const { lists, loading: listsLoading, deleteAllLists } = useShoppingLists();
   const { toast } = useToast();
+  const [showAllLists, setShowAllLists] = useState(false);
 
   // Redirect to auth if not authenticated
   useEffect(() => {
@@ -66,6 +67,11 @@ const Index = () => {
 
   const displayName = user.user_metadata?.display_name || user.email?.charAt(0).toUpperCase() || 'U';
   const initials = displayName.length > 1 ? displayName.substring(0, 2).toUpperCase() : displayName;
+  
+  // Determine which lists to show
+  const maxDefaultLists = 3;
+  const listsToShow = showAllLists ? lists : lists.slice(0, maxDefaultLists);
+  const hasMoreLists = lists.length > maxDefaultLists;
 
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F7F7' }}>
@@ -110,7 +116,7 @@ const Index = () => {
           {/* Saved Lists */}
           {lists.length > 0 && (
             <div className="space-y-4 mb-6">
-              {lists.map((list, index) => {
+              {listsToShow.map((list, index) => {
                 // Get first 3 recipe images for collage display
                 const recipeImages = list.recipes?.slice(0, 3) || [];
                 
@@ -168,10 +174,38 @@ const Index = () => {
                     </div>
                   );
                 })}
-              </div>
-            )}
+              
+              {/* Ver más button */}
+              {hasMoreLists && !showAllLists && (
+                <div className="flex justify-center pt-2">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setShowAllLists(true)}
+                    className="text-gray-600 hover:text-gray-800"
+                  >
+                    Ver más ({lists.length - maxDefaultLists} listas más)
+                    <ChevronDown className="h-4 w-4 ml-1" />
+                  </Button>
+                </div>
+              )}
+              
+              {/* Ver menos button */}
+              {showAllLists && hasMoreLists && (
+                <div className="flex justify-center pt-2">
+                  <Button 
+                    variant="ghost" 
+                    onClick={() => setShowAllLists(false)}
+                    className="text-gray-600 hover:text-gray-800"
+                  >
+                    Ver menos
+                    <ChevronDown className="h-4 w-4 ml-1 rotate-180" />
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
             
-            {/* Empty state */}
+          {/* Empty state */}
             {lists.length === 0 && (
               <div className="flex-1 flex flex-col items-center justify-center text-center py-8">
                 <div className="text-gray-400 text-4xl mb-4">📝</div>
