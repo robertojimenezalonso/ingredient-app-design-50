@@ -110,7 +110,33 @@ const RecipeListPage = () => {
 
   // Get recipes from the meal plan - these are the recommended recipes
   const mealPlanRecipes = mealPlan.flatMap(day => 
-    day.meals.map(meal => meal.recipe).filter(Boolean)
+    day.meals.map(meal => {
+      if (!meal.recipe) return null;
+      return {
+        id: meal.recipe.id || `${meal.recipe.title}-${Date.now()}`,
+        title: meal.recipe.title,
+        image: meal.recipe.image,
+        calories: meal.recipe.calories || 0,
+        time: meal.recipe.time || 30,
+        servings: meal.recipe.servings || 2,
+        category: meal.recipe.category || 'dinner',
+        macros: meal.recipe.macros || {
+          carbs: 0,
+          protein: 0,
+          fat: 0
+        },
+        ingredients: meal.recipe.ingredients || [],
+        instructions: meal.recipe.instructions || [],
+        nutrition: meal.recipe.nutrition || {
+          calories: 0,
+          protein: 0,
+          carbs: 0,
+          fat: 0,
+          fiber: 0,
+          sugar: 0
+        }
+      };
+    }).filter(Boolean)
   );
   
   console.log('RecipeListPage: Meal plan debug:', {
@@ -129,8 +155,8 @@ const RecipeListPage = () => {
     extractedRecipesTitles: mealPlanRecipes.map(r => r.title)
   });
   
-  // Only show AI recipes if available, no fallback to examples
-  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : [];
+  // Use meal plan recipes if AI recipes not available
+  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : mealPlanRecipes;
 
   console.log('RecipeListPage: Current recipes state:', {
     aiRecipesCount: aiRecipes.length,
@@ -179,8 +205,8 @@ const RecipeListPage = () => {
         console.log('RecipeListPage: Using meal plan recipes for saving:', currentRecipes.length);
         console.log('RecipeListPage: Meal plan recipes:', mealPlanRecipes.map(r => ({ title: r.title, image: r.image })));
       }
-      // Priority 3: Try to get from localStorage
-      else {
+      // Priority 3: Check if we have no recipes but meal plan exists
+      else if (mealPlanRecipes.length === 0) {
         const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
         if (savedAiRecipes) {
           try {
