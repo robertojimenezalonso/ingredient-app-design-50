@@ -38,52 +38,54 @@ const RecipeListPage = () => {
       console.log('RecipeListPage: Loading recipes, listId:', listId);
       
       if (listId) {
-        // Load specific saved list from database
+        // Loading a specific saved list - ONLY use that list's data
         console.log('RecipeListPage: About to call getListById with:', listId);
         try {
           console.log('RecipeListPage: Calling getListById...');
           const savedList = await getListById(listId);
           console.log('RecipeListPage: getListById returned:', savedList);
           
-          if (savedList && savedList.recipes) {
+          if (savedList && savedList.recipes && savedList.recipes.length > 0) {
             console.log('RecipeListPage: Loading specific list from DB:', savedList.name, 'with recipes:', savedList.recipes.length);
             setAiRecipes(savedList.recipes);
+            // For saved lists, ONLY use the saved data - don't fallback to localStorage
             return;
           } else {
-            console.log('RecipeListPage: No recipes found in saved list');
+            console.log('RecipeListPage: No recipes found in saved list or list not found');
+            // If saved list has no recipes or doesn't exist, redirect to home
+            navigate('/');
+            return;
           }
         } catch (error) {
           console.error('RecipeListPage: Error loading specific list:', error);
-        }
-        console.log('RecipeListPage: Specific list not found in DB, falling back to current recipes');
-      }
-      
-      // Always try to load current AI recipes from localStorage (for new lists)
-      console.log('RecipeListPage: Loading current AI recipes...');
-      const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-      console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
-      console.log('RecipeListPage: localStorage keys:', Object.keys(localStorage));
-      
-      if (savedAiRecipes) {
-        try {
-          const parsedRecipes = JSON.parse(savedAiRecipes);
-          console.log('RecipeListPage: Successfully parsed AI recipes:', parsedRecipes.length, 'recipes');
-          setAiRecipes(parsedRecipes);
-          // Reset auto-save flag when loading new recipes from localStorage
-          if (!listId) {
-            setHasAutoSaved(false);
-          }
-        } catch (error) {
-          console.error('RecipeListPage: Error parsing AI recipes from localStorage:', error);
+          navigate('/');
+          return;
         }
       } else {
-        console.log('RecipeListPage: No recipes found in localStorage');
-        setAiRecipes([]);
+        // Loading current state for new list creation (no listId)
+        console.log('RecipeListPage: Loading current AI recipes from localStorage...');
+        const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+        console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
+        
+        if (savedAiRecipes) {
+          try {
+            const parsedRecipes = JSON.parse(savedAiRecipes);
+            console.log('RecipeListPage: Successfully parsed AI recipes:', parsedRecipes.length, 'recipes');
+            setAiRecipes(parsedRecipes);
+            setHasAutoSaved(false);
+          } catch (error) {
+            console.error('RecipeListPage: Error parsing AI recipes from localStorage:', error);
+            setAiRecipes([]);
+          }
+        } else {
+          console.log('RecipeListPage: No recipes found in localStorage');
+          setAiRecipes([]);
+        }
       }
     };
 
     loadRecipes();
-  }, [listId]); // Remove getListById from dependencies
+  }, [listId, getListById, navigate]);
 
 
   // Handle recipe replacement when coming from change mode
