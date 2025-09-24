@@ -196,12 +196,12 @@ const Index = () => {
                          <h3 className="font-semibold text-gray-900 mb-1 text-base">{list.name}</h3>
                          
                          {/* Price information */}
-                         <div className="flex items-center justify-between mb-2">
-                           <div className="text-sm text-gray-700">
-                             <span className="font-medium">Mercadona: </span>
-                             <span>€{list.estimated_price?.toFixed(2) || '0.00'}</span>
+                         <div className="mb-2">
+                           <div className="flex items-center text-sm text-gray-700 mb-1">
+                             <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-2" />
+                             <span className="font-medium">€{list.estimated_price?.toFixed(2) || '0.00'}</span>
                            </div>
-                           <div className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                           <div className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium inline-block">
                              Mejor precio: €{((list.estimated_price || 0) * 0.85).toFixed(2)}
                            </div>
                          </div>
