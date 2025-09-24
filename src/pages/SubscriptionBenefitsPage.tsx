@@ -20,8 +20,64 @@ const SubscriptionBenefitsPage = () => {
   const loadingMessages = ['Buscando supermercados…', 'Descargando ingredientes…', 'Información nutricional…', 'Preparando recetas…', 'Comparando precios…'];
 
   const saveCurrentPlanningSession = () => {
-    // No longer save here - RecipeListPage handles saving automatically
-    console.log('Planning session completed - list will be auto-saved by RecipeListPage');
+    console.log('SubscriptionBenefitsPage: Saving current planning session as list...');
+    
+    // Get the generated recipes from localStorage
+    const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+    if (!savedAiRecipes) {
+      console.log('SubscriptionBenefitsPage: No AI recipes found, skipping save');
+      return;
+    }
+    
+    try {
+      const recipes = JSON.parse(savedAiRecipes);
+      if (recipes.length === 0) {
+        console.log('SubscriptionBenefitsPage: Empty recipes array, skipping save');
+        return;
+      }
+      
+      // Create the new list with current config
+      const newList = {
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        name: 'Mi Lista',
+        dates: config.selectedDates || [],
+        servings: config.servingsPerRecipe || 2,
+        meals: config.selectedMeals || [],
+        recipes: recipes,
+        createdAt: new Date().toISOString(),
+        estimatedPrice: calculateEstimatedPrice(recipes.length * 3),
+        recipeImages: recipes.slice(0, 3).map(recipe => recipe.image).filter(Boolean)
+      };
+      
+      console.log('SubscriptionBenefitsPage: Creating new list:', {
+        id: newList.id,
+        name: newList.name,
+        dates: newList.dates,
+        recipesCount: newList.recipes.length,
+        recipeImages: newList.recipeImages?.length || 0
+      });
+      
+      // Load existing lists and add new one
+      const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
+      const updatedLists = [newList, ...existingLists.slice(0, 9)];
+      
+      localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
+      console.log('SubscriptionBenefitsPage: List saved to localStorage, total lists:', updatedLists.length);
+      
+      // Trigger event to update Index page
+      window.dispatchEvent(new CustomEvent('listsUpdated'));
+      console.log('SubscriptionBenefitsPage: listsUpdated event dispatched');
+    } catch (error) {
+      console.error('SubscriptionBenefitsPage: Error saving planning session:', error);
+    }
+  };
+
+  const calculateEstimatedPrice = (ingredientsCount: number) => {
+    const basePrice = ingredientsCount * 1.2;
+    const servingsMultiplier = config.servingsPerRecipe || 2;
+    const daysMultiplier = config.selectedDates?.length || 1;
+    
+    return +(basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
   };
 
   const generatePlanName = () => {
