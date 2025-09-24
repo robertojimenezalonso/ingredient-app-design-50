@@ -57,19 +57,8 @@ export const FloatingButton = ({
       paddingBottom: `calc(16px + env(safe-area-inset-bottom))`,
       boxShadow: '0 -2px 10px rgba(0, 0, 0, 0.05)'
     }}>
-      {/* Header con logo Mercadona y precio */}
-      <div className="flex items-center justify-between px-4 py-3">
-        <div className="flex items-center gap-2">
-          <img src={mercadonaLogo} alt="Mercadona" className="w-6 h-6 object-cover rounded-full bg-white" />
-          <span className="text-base font-medium text-black">Mercadona</span>
-        </div>
-        <div className="text-base font-medium text-black">
-          {calculatedPrice.toFixed(2).replace('.', ',')} €
-        </div>
-      </div>
-      
       {/* Botones */}
-      <div className="flex items-center gap-3 px-4 pb-4">
+      <div className="flex items-center gap-3 px-4 py-4">
         {showSaveButton ? (
           <>
             {/* Guardar Lista - lado izquierdo */}

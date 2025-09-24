@@ -410,7 +410,20 @@ const RecipeListPage = () => {
         currentFilter="receta"
       />
       
-      <div className="bg-white" style={{ paddingTop: '180px' }}>
+      {/* Header con logo Mercadona y precio */}
+      <div className="bg-white border-b border-gray-100 px-4 py-3" style={{ marginTop: '170px' }}>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <img src="/src/assets/mercadona-logo-new.png" alt="Mercadona" className="w-6 h-6 object-cover rounded-full bg-white" />
+            <span className="text-base font-medium text-black">Mercadona</span>
+          </div>
+          <div className="text-base font-medium text-black">
+            {totalPrice.toFixed(2).replace('.', ',')} €
+          </div>
+        </div>
+      </div>
+      
+      <div className="bg-white" style={{ paddingTop: '10px' }}>
         <CategoryCarousel
           category="trending"
           recipes={recommendedRecipes}
