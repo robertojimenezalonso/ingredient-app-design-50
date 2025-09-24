@@ -128,7 +128,7 @@ const Index = () => {
                     onClick={() => handleGoToList(list.id)}
                   >
                      {/* Recipe images with new design */}
-                     <div className="relative w-16 h-16 flex-shrink-0">
+                     <div className="relative w-20 h-20 flex-shrink-0">
                         {list.recipes && list.recipes.length > 0 ? (
                           (() => {
                             const imagesToShow = list.recipes.slice(0, Math.min(3, list.recipes.length));
@@ -142,20 +142,20 @@ const Index = () => {
                               
                               if (imgIndex === 0) {
                                 // First image: centered and on top
-                                left = '16px';
-                                top = '8px';
+                                left = '18px';
+                                top = '10px';
                                 rotation = '';
                                 zIndex = 3;
                               } else if (imgIndex === 1) {
                                 // Second image: slightly to the left and tilted
-                                left = '4px';
-                                top = '12px';
+                                left = '8px';
+                                top = '14px';
                                 rotation = 'rotate-[-8deg]';
                                 zIndex = 1;
                               } else if (imgIndex === 2) {
                                 // Third image: to the right and tilted
                                 left = '28px';
-                                top = '12px';
+                                top = '14px';
                                 rotation = 'rotate-[8deg]';
                                 zIndex = 2;
                               }
@@ -165,7 +165,7 @@ const Index = () => {
                                   key={imgIndex}
                                   src={recipe.image} 
                                   alt={recipe.title || `Recipe ${imgIndex + 1}`}
-                                  className={`absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-lg transition-transform duration-200 ${rotation}`}
+                                  className={`absolute w-14 h-14 object-cover rounded-lg border-2 border-white shadow-lg transition-transform duration-200 ${rotation}`}
                                   style={{
                                     left: left,
                                     top: top,
@@ -180,10 +180,10 @@ const Index = () => {
                             });
                           })()
                         ) : (
-                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center shadow-lg" style={{ 
+                          <div className="w-14 h-14 rounded-lg bg-gray-200 flex items-center justify-center shadow-lg" style={{ 
                             position: 'absolute', 
-                            left: '16px', 
-                            top: '8px',
+                            left: '18px', 
+                            top: '10px',
                             filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))'
                           }}>
                             <span className="text-xs text-gray-500">📝</span>
