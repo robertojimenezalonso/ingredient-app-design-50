@@ -197,9 +197,11 @@ const Index = () => {
                          
                          {/* Price information */}
                          <div className="mb-2">
-                           <div className="flex items-center text-sm text-gray-700 mb-1">
-                             <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-2" />
-                             <span className="mr-2">Mercadona</span>
+                           <div className="flex items-center justify-between text-sm text-gray-700 mb-1">
+                             <div className="flex items-center">
+                               <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-2" />
+                               <span className="mr-2">Mercadona</span>
+                             </div>
                              <span className="font-medium">€{list.estimated_price?.toFixed(2) || '0.00'}</span>
                            </div>
                            <div className="bg-gray-100 text-gray-700 px-2 py-1 text-xs font-medium inline-block" style={{ borderRadius: '8px' }}>
