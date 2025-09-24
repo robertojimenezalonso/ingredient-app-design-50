@@ -139,6 +139,15 @@ const RecipeListPage = () => {
     showingAI: aiRecipes.length > 0
   });
 
+  // Calculate estimated price based on ingredients and settings
+  const calculateEstimatedPrice = (ingredientsCount: number) => {
+    const basePrice = ingredientsCount * 1.2;
+    const servingsMultiplier = config.servingsPerRecipe || 2;
+    const daysMultiplier = config.selectedDates?.length || 1;
+    
+    return +(basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
+  };
+
   // Auto-save configuration when user navigates to this page
   useEffect(() => {
     console.log('RecipeListPage: Auto-save effect running');
@@ -155,51 +164,15 @@ const RecipeListPage = () => {
       return;
     }
     
+    // Check if we have recipes to save
+    if (aiRecipes.length === 0) {
+      console.log('RecipeListPage: No AI recipes available yet, waiting...');
+      return;
+    }
+    
     // Create a simple timeout to ensure page is fully loaded
     const saveTimeout = setTimeout(() => {
-      console.log('RecipeListPage: Timeout reached, proceeding with save check...');
-      
-      // Get current recipes from various sources
-      let currentRecipes = [];
-      
-      console.log('RecipeListPage: Checking recipe sources...');
-      console.log('RecipeListPage: aiRecipes.length:', aiRecipes.length);
-      console.log('RecipeListPage: mealPlanRecipes.length:', mealPlanRecipes.length);
-      console.log('RecipeListPage: recommendedRecipes.length:', recommendedRecipes.length);
-      
-      // Priority 1: Try AI recipes from state
-      if (aiRecipes.length > 0) {
-        currentRecipes = aiRecipes;
-        console.log('RecipeListPage: Using AI recipes from state:', currentRecipes.length);
-        console.log('RecipeListPage: First AI recipe:', currentRecipes[0]?.title, currentRecipes[0]?.image);
-      } 
-      // Priority 2: Try meal plan recipes
-      else if (mealPlanRecipes.length > 0) {
-        currentRecipes = mealPlanRecipes;
-        console.log('RecipeListPage: Using meal plan recipes for saving:', currentRecipes.length);
-        console.log('RecipeListPage: Meal plan recipes:', mealPlanRecipes.map(r => ({ title: r.title, image: r.image })));
-      }
-      // Priority 3: Try to get from localStorage
-      else {
-        const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-        if (savedAiRecipes) {
-          try {
-            const parsedRecipes = JSON.parse(savedAiRecipes);
-            if (parsedRecipes.length > 0) {
-              currentRecipes = parsedRecipes;
-              console.log('RecipeListPage: Using AI recipes from localStorage:', currentRecipes.length);
-            }
-          } catch (error) {
-            console.error('RecipeListPage: Error parsing AI recipes:', error);
-          }
-        }
-      }
-      
-      // Only save if we have recipes
-      if (currentRecipes.length === 0) {
-        console.log('RecipeListPage: No recipes found, skipping auto-save');
-        return;
-      }
+      console.log('RecipeListPage: Timeout reached, proceeding with save...');
       
       const newList = {
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -207,9 +180,9 @@ const RecipeListPage = () => {
         dates: config.selectedDates || [],
         servings: config.servingsPerRecipe || 2,
         meals: config.selectedMeals || [],
-        recipes: currentRecipes,
+        recipes: aiRecipes,
         createdAt: new Date().toISOString(),
-        estimatedPrice: calculateEstimatedPrice(currentRecipes.length * 3)
+        estimatedPrice: calculateEstimatedPrice(aiRecipes.length * 3)
       };
       
       console.log('RecipeListPage: Creating new list:', {
@@ -230,10 +203,10 @@ const RecipeListPage = () => {
       // Trigger event to update Index page
       window.dispatchEvent(new CustomEvent('listsUpdated'));
       console.log('RecipeListPage: listsUpdated event dispatched');
-    }, 3000); // 3 seconds delay to ensure recipes are loaded
+    }, 1000); // Reduced to 1 second
     
     return () => clearTimeout(saveTimeout);
-  }, [aiRecipes.length, mealPlanRecipes.length, config?.selectedDates, config?.servingsPerRecipe, config?.selectedMeals, listId, aiRecipes, mealPlanRecipes, recommendedRecipes]); // Trigger when recipes change
+  }, [aiRecipes.length, config?.selectedDates, config?.servingsPerRecipe, config?.selectedMeals, listId]); // Simplified dependencies
 
   const { 
     getSelectedIngredientsCount,
@@ -251,15 +224,6 @@ const RecipeListPage = () => {
   // Calculate selected ingredients count - use useState for reactivity
   const [selectedIngredientsCount, setSelectedIngredientsCount] = useState(0);
   const [totalPrice, setTotalPrice] = useState(64.76); // Default price
-  
-  // Calculate estimated price based on ingredients and settings
-  const calculateEstimatedPrice = (ingredientsCount: number) => {
-    const basePrice = ingredientsCount * 1.2;
-    const servingsMultiplier = config.servingsPerRecipe || 2;
-    const daysMultiplier = config.selectedDates?.length || 1;
-    
-    return +(basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
-  };
   
   // Update count and price when selection changes
   useEffect(() => {
