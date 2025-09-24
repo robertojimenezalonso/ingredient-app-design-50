@@ -284,33 +284,48 @@ const RecipeListPage = () => {
   };
 
   const handleSearchOffers = async () => {
+    console.log('RecipeListPage: handleSearchOffers called with:', {
+      listId,
+      aiRecipesLength: aiRecipes.length,
+      recommendedRecipesLength: recommendedRecipes.length,
+      hasUser: !!user
+    });
+    
     // Auto-save the list if we have recipes and no listId (new list)
-    if (!listId && aiRecipes.length > 0 && user) {
+    if (!listId && recommendedRecipes.length > 0 && user) {
       try {
         const listData = {
           name: 'Mi Lista',
           dates: mealPlan.map(day => day.dateStr),
           servings: config?.servingsPerRecipe || 2,
           meals: mealPlan.flatMap(day => day.meals.map(meal => meal.meal)),
-          recipes: aiRecipes,
+          recipes: recommendedRecipes, // Use recommendedRecipes instead of aiRecipes
           estimated_price: totalPrice
         };
 
-        console.log('RecipeListPage: Auto-saving list before navigating to offers');
+        console.log('RecipeListPage: About to save list with data:', listData);
         await saveList(listData);
         
         toast({
           title: "Lista guardada",
           description: "Tu lista se ha guardado automáticamente"
         });
+        
+        console.log('RecipeListPage: List saved successfully');
       } catch (error) {
-        console.error('Auto-save failed:', error);
+        console.error('RecipeListPage: Auto-save failed:', error);
         toast({
           title: "Error",
           description: "No se pudo guardar la lista",
           variant: "destructive"
         });
       }
+    } else {
+      console.log('RecipeListPage: Skipping auto-save:', {
+        reason: !listId ? 'no listId' : listId ? 'has listId' : 'unknown',
+        hasRecipes: recommendedRecipes.length > 0,
+        hasUser: !!user
+      });
     }
     
     navigate('/search-offers');
