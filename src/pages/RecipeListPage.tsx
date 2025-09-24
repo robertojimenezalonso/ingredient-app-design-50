@@ -327,8 +327,49 @@ const RecipeListPage = () => {
         hasUser: !!user
       });
     }
-    
     navigate('/search-offers');
+  };
+
+  const handleSaveList = async () => {
+    console.log('RecipeListPage: handleSaveList called with:', {
+      recommendedRecipesLength: recommendedRecipes.length,
+      hasUser: !!user
+    });
+
+    if (recommendedRecipes.length > 0 && user) {
+      try {
+        const listData = {
+          name: 'Mi Lista',
+          dates: mealPlan.map(day => day.dateStr),
+          servings: config?.servingsPerRecipe || 2,
+          meals: mealPlan.flatMap(day => day.meals.map(meal => meal.meal)),
+          recipes: recommendedRecipes,
+          estimated_price: totalPrice
+        };
+
+        console.log('RecipeListPage: About to save list manually with data:', listData);
+        const result = await saveList(listData);
+        
+        toast({
+          title: "Lista guardada",
+          description: "Tu lista se ha guardado exitosamente"
+        });
+        
+        console.log('RecipeListPage: List saved successfully, result:', result);
+        
+        // Navigate to the saved list
+        if (result?.id) {
+          navigate(`/milista/${result.id}`);
+        }
+      } catch (error) {
+        console.error('RecipeListPage: Manual save failed:', error);
+        toast({
+          title: "Error",
+          description: "No se pudo guardar la lista",
+          variant: "destructive"
+        });
+      }
+    }
   };
 
   const daysText = config.selectedDates?.length 
@@ -382,9 +423,11 @@ const RecipeListPage = () => {
 
       <FloatingButton 
         onClick={handleSearchOffers}
+        onSave={handleSaveList}
         selectedCount={selectedIngredientsCount}
         recipeCount={recommendedRecipes.length}
         totalPrice={totalPrice}
+        showSaveButton={!listId && recommendedRecipes.length > 0}
       >
         Buscar mejor oferta
       </FloatingButton>

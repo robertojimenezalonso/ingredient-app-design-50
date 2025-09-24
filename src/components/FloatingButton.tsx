@@ -1,23 +1,27 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Search, ShoppingCart } from 'lucide-react';
+import { Search, ShoppingCart, Save } from 'lucide-react';
 import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 interface FloatingButtonProps {
   onClick?: () => void;
+  onSave?: () => void;
   className?: string;
   children?: React.ReactNode;
   selectedCount?: number;
   totalPrice?: number;
   recipeCount?: number;
+  showSaveButton?: boolean;
 }
 export const FloatingButton = ({
   onClick,
+  onSave,
   className = "",
   children,
   selectedCount,
   totalPrice,
-  recipeCount
+  recipeCount,
+  showSaveButton = false
 }: FloatingButtonProps) => {
   const navigate = useNavigate();
   const [isAtBottom, setIsAtBottom] = useState(false);
@@ -64,32 +68,67 @@ export const FloatingButton = ({
         </div>
       </div>
       
-      {/* Botones Carrito y Mejor Precio */}
+      {/* Botones */}
       <div className="flex items-center gap-3 px-4 pb-4">
-        {/* Carrito - lado izquierdo */}
-        <div className="flex-1">
-          <Button 
-            className="h-12 text-base font-medium rounded-lg px-4 w-full bg-gray-100 text-black hover:bg-gray-200"
-            size="lg"
-          >
-            <span>Carrito</span>
-          </Button>
-        </div>
-        
-        {/* Mejor Precio - lado derecho */}
-        <div className="flex-1">
-          <Button 
-            onClick={handleClick} 
-            className="h-12 text-base font-medium rounded-lg px-4 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating w-full"
-            size="lg"
-          >
-            <div className="flex items-center justify-center gap-2">
-              <Search className="h-4 w-4" />
-              <span>Mejor precio</span>
-              <span>{betterPrice.toFixed(2).replace('.', ',')} €</span>
+        {showSaveButton ? (
+          <>
+            {/* Guardar Lista - lado izquierdo */}
+            <div className="flex-1">
+              <Button 
+                onClick={onSave}
+                className="h-12 text-base font-medium rounded-lg px-4 w-full bg-green-500 text-white hover:bg-green-600"
+                size="lg"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <Save className="h-4 w-4" />
+                  <span>Guardar lista</span>
+                </div>
+              </Button>
             </div>
-          </Button>
-        </div>
+            
+            {/* Mejor Precio - lado derecho */}
+            <div className="flex-1">
+              <Button 
+                onClick={handleClick} 
+                className="h-12 text-base font-medium rounded-lg px-4 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating w-full"
+                size="lg"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <Search className="h-4 w-4" />
+                  <span>Mejor precio</span>
+                  <span>{betterPrice.toFixed(2).replace('.', ',')} €</span>
+                </div>
+              </Button>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Carrito - lado izquierdo */}
+            <div className="flex-1">
+              <Button 
+                className="h-12 text-base font-medium rounded-lg px-4 w-full bg-gray-100 text-black hover:bg-gray-200"
+                size="lg"
+              >
+                <span>Carrito</span>
+              </Button>
+            </div>
+            
+            {/* Mejor Precio - lado derecho */}
+            <div className="flex-1">
+              <Button 
+                onClick={handleClick} 
+                className="h-12 text-base font-medium rounded-lg px-4 shadow-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating w-full"
+                size="lg"
+              >
+                <div className="flex items-center justify-center gap-2">
+                  <Search className="h-4 w-4" />
+                  <span>Mejor precio</span>
+                  <span>{betterPrice.toFixed(2).replace('.', ',')} €</span>
+                </div>
+              </Button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
