@@ -272,8 +272,28 @@ const RecipeListPage = () => {
     
   const servingsText = `${config.servingsPerRecipe || 1} ración${(config.servingsPerRecipe || 1) > 1 ? 'es' : ''}`;
 
+  console.log('RecipeListPage: Rendering with:', {
+    recommendedRecipesCount: recommendedRecipes.length,
+    hasRecipes: recommendedRecipes.length > 0
+  });
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">{recommendedRecipes.length === 0 && !listId && (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-2 text-muted-foreground">Cargando recetas...</p>
+          </div>
+        </div>
+      )}
+
+      {recommendedRecipes.length === 0 && listId && (
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-center">
+            <p className="text-gray-500">No se encontraron recetas en esta lista</p>
+          </div>
+        </div>
+      )}
 
       <AirbnbHeader 
         showTabs={showTabs}
