@@ -171,13 +171,7 @@ export const useShoppingLists = () => {
 
   const getListById = useCallback(async (listId: string): Promise<ShoppingList | null> => {
     console.log('useShoppingLists: getListById called with:', listId);
-    console.log('useShoppingLists: user:', user ? 'exists' : 'null');
     
-    if (!user) {
-      console.log('useShoppingLists: No user, returning null');
-      return null;
-    }
-
     try {
       console.log('useShoppingLists: About to query database...');
       const { data, error } = await supabase
@@ -190,7 +184,6 @@ export const useShoppingLists = () => {
           )
         `)
         .eq('id', listId)
-        .eq('user_id', user.id)
         .maybeSingle();
 
       console.log('useShoppingLists: Database query completed');
@@ -215,7 +208,7 @@ export const useShoppingLists = () => {
       console.error('Error loading list by ID:', error);
       return null;
     }
-  }, [user?.id]); // Only depend on user.id
+  }, []); // Remove user dependency since RLS will handle security
 
   useEffect(() => {
     console.log('useShoppingLists: useEffect triggered, user:', user ? 'exists' : 'null');
