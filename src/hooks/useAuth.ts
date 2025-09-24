@@ -34,6 +34,32 @@ export const useAuth = () => {
     return () => subscription.unsubscribe();
   }, []);
 
+  const signUp = async (email: string, password: string, displayName?: string) => {
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+        data: {
+          display_name: displayName
+        }
+      }
+    });
+    
+    return { data, error };
+  };
+
+  const signIn = async (email: string, password: string) => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password
+    });
+    
+    return { data, error };
+  };
+
   const signOut = async () => {
     try {
       // Clean up auth state first
@@ -59,6 +85,8 @@ export const useAuth = () => {
     user,
     session,
     loading,
+    signUp,
+    signIn,
     signOut,
     isAuthenticated: !!user,
   };

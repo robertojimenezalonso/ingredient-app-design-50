@@ -5,6 +5,8 @@ import { useRecipes } from '@/hooks/useRecipes';
 import { useGlobalIngredients } from '@/hooks/useGlobalIngredients';
 import { useCart } from '@/hooks/useCart';
 import { useUserConfig } from '@/contexts/UserConfigContext';
+import { useAuth } from '@/hooks/useAuth';
+import { useShoppingLists } from '@/hooks/useShoppingLists';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
 import { CategoryCarousel } from '@/components/CategoryCarousel';
 import { FloatingButton } from '@/components/FloatingButton';
@@ -20,54 +22,50 @@ const RecipeListPage = () => {
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();
   const { config } = useUserConfig();
+  const { user } = useAuth();
+  const { getListById, saveList } = useShoppingLists();
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
+  const [hasAutoSaved, setHasAutoSaved] = useState(false);
 
-  // Load AI recipes from localStorage when component mounts
+  // Load AI recipes from localStorage or specific list
   useEffect(() => {
-    console.log('RecipeListPage: Component mounted, checking for listId:', listId);
-    
-    if (listId) {
-      // Load specific saved list
-      const savedLists = localStorage.getItem('savedShoppingLists');
-      if (savedLists) {
+    const loadRecipes = async () => {
+      console.log('RecipeListPage: Loading recipes, listId:', listId);
+      
+      if (listId) {
+        // Load specific saved list from database
         try {
-          const parsedLists = JSON.parse(savedLists);
-          const targetList = parsedLists.find(list => list.id === listId);
-          if (targetList && targetList.recipes) {
-            console.log('RecipeListPage: Loading specific list:', targetList.name, 'with recipes:', targetList.recipes.length);
-            setAiRecipes(targetList.recipes);
+          const savedList = await getListById(listId);
+          if (savedList && savedList.recipes) {
+            console.log('RecipeListPage: Loading specific list from DB:', savedList.name, 'with recipes:', savedList.recipes.length);
+            setAiRecipes(savedList.recipes);
             return;
           }
         } catch (error) {
           console.error('RecipeListPage: Error loading specific list:', error);
         }
+        console.log('RecipeListPage: Specific list not found in DB, falling back to current recipes');
       }
-      console.log('RecipeListPage: Specific list not found, falling back to current recipes');
-    }
-    
-    // Load current AI recipes from localStorage
-    console.log('RecipeListPage: Loading current AI recipes...');
-    const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
-    console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
-    
-    if (savedAiRecipes) {
-      console.log('RecipeListPage: Raw localStorage data length:', savedAiRecipes.length);
-      try {
-        const parsedRecipes = JSON.parse(savedAiRecipes);
-        console.log('RecipeListPage: Successfully parsed AI recipes:', parsedRecipes.length, 'recipes');
-        console.log('RecipeListPage: Recipe titles:', parsedRecipes.map(r => r.title));
-        setAiRecipes(parsedRecipes);
-        console.log('RecipeListPage: AI recipes state updated');
-        
-        // Keep recipes in localStorage for future visits - don't remove them
-      } catch (error) {
-        console.error('RecipeListPage: Error parsing AI recipes from localStorage:', error);
+      
+      // Load current AI recipes from localStorage (for new lists)
+      console.log('RecipeListPage: Loading current AI recipes...');
+      const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
+      console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
+      
+      if (savedAiRecipes) {
+        try {
+          const parsedRecipes = JSON.parse(savedAiRecipes);
+          console.log('RecipeListPage: Successfully parsed AI recipes:', parsedRecipes.length, 'recipes');
+          setAiRecipes(parsedRecipes);
+        } catch (error) {
+          console.error('RecipeListPage: Error parsing AI recipes from localStorage:', error);
+        }
       }
-    } else {
-      console.log('RecipeListPage: No AI recipes found in localStorage');
-    }
-  }, [listId]); // Run when component mounts or listId changes
+    };
+
+    loadRecipes();
+  }, [listId, getListById]);
 
 
   // Handle recipe replacement when coming from change mode
@@ -148,73 +146,70 @@ const RecipeListPage = () => {
     return +(basePrice * servingsMultiplier * daysMultiplier).toFixed(2);
   };
 
-  // Auto-save configuration when user navigates to this page
+  // Auto-save new lists to database
   useEffect(() => {
-    console.log('RecipeListPage: Auto-save effect running');
-    
-    // Skip auto-save if viewing a specific saved list
-    if (listId) {
-      console.log('RecipeListPage: Viewing specific list, skipping auto-save');
-      return;
-    }
-    
-    // Check if we have config with dates (minimum requirement for a list)
-    if (!config?.selectedDates?.length) {
-      console.log('RecipeListPage: No config or selected dates, skipping auto-save');
-      return;
-    }
-    
-    // Get recipes from meal plan OR aiRecipes
-    let recipesToSave = [];
-    
-    if (aiRecipes.length > 0) {
-      recipesToSave = aiRecipes;
-      console.log('RecipeListPage: Using AI recipes for saving:', recipesToSave.length);
-    } else if (mealPlanRecipes.length > 0) {
-      recipesToSave = mealPlanRecipes;
-      console.log('RecipeListPage: Using meal plan recipes for saving:', recipesToSave.length);
-    } else {
-      console.log('RecipeListPage: No recipes available for saving');
-      return;
-    }
-    
-    // Create a simple timeout to ensure page is fully loaded
-    const saveTimeout = setTimeout(() => {
-      console.log('RecipeListPage: Proceeding with save, recipes available:', recipesToSave.length);
+    const autoSaveList = async () => {
+      console.log('RecipeListPage: Auto-save effect running');
       
-      const newList = {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        name: 'Mi Lista',
-        dates: config.selectedDates || [],
-        servings: config.servingsPerRecipe || 2,
-        meals: config.selectedMeals || [],
-        recipes: recipesToSave,
-        createdAt: new Date().toISOString(),
-        estimatedPrice: calculateEstimatedPrice(recipesToSave.length * 3)
-      };
+      // Skip if already saved, viewing a specific list, or user not authenticated
+      if (hasAutoSaved || listId || !user) {
+        console.log('RecipeListPage: Skipping auto-save:', { hasAutoSaved, listId, hasUser: !!user });
+        return;
+      }
       
-      console.log('RecipeListPage: Creating new list:', {
-        id: newList.id,
-        name: newList.name,
-        dates: newList.dates,
-        recipesCount: newList.recipes.length,
-        firstRecipeImage: newList.recipes[0]?.image
-      });
+      // Check if we have config with dates (minimum requirement for a list)
+      if (!config?.selectedDates?.length) {
+        console.log('RecipeListPage: No config or selected dates, skipping auto-save');
+        return;
+      }
       
-      // Load existing lists and add new one
-      const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
-      const updatedLists = [newList, ...existingLists.slice(0, 9)];
+      // Get recipes from meal plan OR aiRecipes
+      let recipesToSave = [];
       
-      localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
-      console.log('RecipeListPage: List saved to localStorage, total lists:', updatedLists.length);
+      if (aiRecipes.length > 0) {
+        recipesToSave = aiRecipes;
+        console.log('RecipeListPage: Using AI recipes for saving:', recipesToSave.length);
+      } else if (mealPlanRecipes.length > 0) {
+        recipesToSave = mealPlanRecipes;
+        console.log('RecipeListPage: Using meal plan recipes for saving:', recipesToSave.length);
+      } else {
+        console.log('RecipeListPage: No recipes available for saving');
+        return;
+      }
       
-      // Trigger event to update Index page
-      window.dispatchEvent(new CustomEvent('listsUpdated'));
-      console.log('RecipeListPage: listsUpdated event dispatched');
-    }, 2000); // 2 seconds delay
-    
-    return () => clearTimeout(saveTimeout);
-  }, [aiRecipes.length, mealPlanRecipes.length, config?.selectedDates, config?.servingsPerRecipe, config?.selectedMeals, listId]);
+      // Save to database
+      try {
+        console.log('RecipeListPage: Saving new list to database...');
+        await saveList({
+          name: 'Mi Lista',
+          dates: config.selectedDates || [],
+          servings: config.servingsPerRecipe || 2,
+          meals: config.selectedMeals || [],
+          recipes: recipesToSave,
+          estimated_price: calculateEstimatedPrice(recipesToSave.length * 3)
+        });
+        
+        setHasAutoSaved(true);
+        console.log('RecipeListPage: List saved successfully to database');
+        
+        // Clean up localStorage after successful save
+        localStorage.removeItem('aiGeneratedRecipes');
+        localStorage.removeItem('pendingRecipeGeneration');
+        
+      } catch (error) {
+        console.error('RecipeListPage: Error saving list to database:', error);
+        toast({
+          title: "Error",
+          description: "No se pudo guardar la lista automáticamente",
+          variant: "destructive"
+        });
+      }
+    };
+
+    // Delay auto-save to ensure recipes are loaded
+    const timeoutId = setTimeout(autoSaveList, 2000);
+    return () => clearTimeout(timeoutId);
+  }, [aiRecipes.length, mealPlanRecipes.length, config?.selectedDates, config?.servingsPerRecipe, config?.selectedMeals, hasAutoSaved, listId, user, saveList]);
 
   const { 
     getSelectedIngredientsCount,

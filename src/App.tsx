@@ -38,6 +38,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/auth" element={<AuthPage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
             <Route path="/people-and-diet" element={<PeopleAndDietPage />} />
             <Route path="/subscription-benefits" element={<SubscriptionBenefitsPage />} />
@@ -45,13 +46,10 @@ const App = () => (
             <Route path="/milista/:listId" element={<RecipeListPage />} />
             <Route path="/search-offers" element={<SearchOffersPage />} />
             <Route path="/supermarket/:supermarket" element={<SupermarketDetailPage />} />
-            
-            
             <Route path="/category/:category" element={<CategoryPage />} />
             <Route path="/recipe/:id" element={<RecipeDetailPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/auth" element={<AuthPage />} />
             <Route path="/cambioReceta" element={<CambioRecetaPage />} />
             <Route path="/recipe-bank-admin" element={<RecipeBankAdminPage />} />
             <Route path="/recipe-table" element={<DailySummaryPage />} />

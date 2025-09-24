@@ -14,6 +14,38 @@ export type Database = {
   }
   public: {
     Tables: {
+      list_recipes: {
+        Row: {
+          created_at: string
+          id: string
+          list_id: string
+          position: number
+          recipe_data: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          list_id: string
+          position?: number
+          recipe_data: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          list_id?: string
+          position?: number
+          recipe_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "list_recipes_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "shopping_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -89,6 +121,42 @@ export type Database = {
           servings?: number
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      shopping_lists: {
+        Row: {
+          created_at: string
+          dates: string[]
+          estimated_price: number | null
+          id: string
+          meals: string[]
+          name: string
+          servings: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          dates?: string[]
+          estimated_price?: number | null
+          id?: string
+          meals?: string[]
+          name?: string
+          servings?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          dates?: string[]
+          estimated_price?: number | null
+          id?: string
+          meals?: string[]
+          name?: string
+          servings?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
