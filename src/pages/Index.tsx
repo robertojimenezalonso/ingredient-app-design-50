@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Plus, ArrowRight } from 'lucide-react';
+import { Plus, ArrowRight, Trash2 } from 'lucide-react';
 import mercadonaLogo from '@/assets/mercadona-logo-new.png';
 
 const Index = () => {
@@ -93,6 +93,13 @@ const Index = () => {
     navigate(`/milista/${listId}`);
   };
 
+  const handleDeleteAllLists = () => {
+    localStorage.removeItem('savedShoppingLists');
+    setSavedLists([]);
+    // Dispatch custom event to notify other components
+    window.dispatchEvent(new CustomEvent('listsUpdated'));
+  };
+
   return (
     <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F7F7' }}>
       {/* Top Header - Solo el perfil con iniciales */}
@@ -105,6 +112,16 @@ const Index = () => {
           </div>
         </div>
         <div className="flex-1"></div>
+        {savedLists.length > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleDeleteAllLists}
+            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        )}
       </div>
       
       {/* Main Content */}
