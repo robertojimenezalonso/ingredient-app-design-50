@@ -121,22 +121,24 @@ export const AirbnbHeader = ({
           <ArrowLeft className="h-5 w-5 text-black" />
         </button>
         
-        {/* Add Person Icon */}
-        <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-          <UserPlus className="h-5 w-5 text-black" />
-        </button>
-        
         <div className="flex-1"></div>
         
         {/* Save Button or Three Dots Menu */}
         {!isListSaved ? (
-          <Button 
-            onClick={onSaveList}
-            className="bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating px-4 py-2 h-auto text-sm"
-          >
-            <Save className="h-4 w-4 mr-2" />
-            Guardar lista
-          </Button>
+          <div className="flex items-center gap-3">
+            {/* Add Person Icon */}
+            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+              <UserPlus className="h-5 w-5 text-black" />
+            </button>
+            
+            <Button 
+              onClick={onSaveList}
+              className="bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating h-12 text-base font-medium rounded-lg px-4"
+              size="lg"
+            >
+              Guardar lista
+            </Button>
+          </div>
         ) : (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
