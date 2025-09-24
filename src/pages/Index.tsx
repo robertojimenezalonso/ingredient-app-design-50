@@ -207,10 +207,6 @@ const Index = () => {
                            </div>
                          </div>
                          
-                         <div className="text-sm text-gray-600 flex items-center">
-                           <img src={mercadonaLogo} alt="Mercadona" className="w-4 h-4 object-cover rounded-full mr-1" />
-                           <span>Mercadona · Para {list.dates?.length || 0} días</span>
-                         </div>
                        </div>
                     </div>
                   );
