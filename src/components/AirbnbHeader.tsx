@@ -123,14 +123,14 @@ export const AirbnbHeader = ({
         
         <div className="flex-1"></div>
         
-        {/* Save Button or Three Dots Menu */}
-        {!isListSaved ? (
-          <div className="flex items-center gap-3">
-            {/* Add Person Icon */}
-            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-              <UserPlus className="h-5 w-5 text-black" />
-            </button>
-            
+        <div className="flex items-center gap-3">
+          {/* Add Person Icon - Always visible */}
+          <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <UserPlus className="h-5 w-5 text-black" />
+          </button>
+          
+          {/* Save Button or Three Dots Menu */}
+          {!isListSaved ? (
             <Button 
               onClick={onSaveList}
               className="bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating h-12 text-base font-medium rounded-lg px-4"
@@ -138,21 +138,21 @@ export const AirbnbHeader = ({
             >
               Guardar
             </Button>
-          </div>
-        ) : (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                <MoreVertical className="h-5 w-5 text-black" />
-              </button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={onDeleteList} className="text-red-600">
-                Eliminar lista
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+          ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <MoreVertical className="h-5 w-5 text-black" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={onDeleteList} className="text-red-600">
+                  Eliminar lista
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+        </div>
       </div>
       
       
