@@ -164,15 +164,23 @@ const RecipeListPage = () => {
       return;
     }
     
-    // Check if we have recipes to save
-    if (aiRecipes.length === 0) {
-      console.log('RecipeListPage: No AI recipes available yet, waiting...');
+    // Get recipes from meal plan OR aiRecipes
+    let recipesToSave = [];
+    
+    if (aiRecipes.length > 0) {
+      recipesToSave = aiRecipes;
+      console.log('RecipeListPage: Using AI recipes for saving:', recipesToSave.length);
+    } else if (mealPlanRecipes.length > 0) {
+      recipesToSave = mealPlanRecipes;
+      console.log('RecipeListPage: Using meal plan recipes for saving:', recipesToSave.length);
+    } else {
+      console.log('RecipeListPage: No recipes available for saving');
       return;
     }
     
     // Create a simple timeout to ensure page is fully loaded
     const saveTimeout = setTimeout(() => {
-      console.log('RecipeListPage: Timeout reached, proceeding with save...');
+      console.log('RecipeListPage: Proceeding with save, recipes available:', recipesToSave.length);
       
       const newList = {
         id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
@@ -180,9 +188,9 @@ const RecipeListPage = () => {
         dates: config.selectedDates || [],
         servings: config.servingsPerRecipe || 2,
         meals: config.selectedMeals || [],
-        recipes: aiRecipes,
+        recipes: recipesToSave,
         createdAt: new Date().toISOString(),
-        estimatedPrice: calculateEstimatedPrice(aiRecipes.length * 3)
+        estimatedPrice: calculateEstimatedPrice(recipesToSave.length * 3)
       };
       
       console.log('RecipeListPage: Creating new list:', {
@@ -203,10 +211,10 @@ const RecipeListPage = () => {
       // Trigger event to update Index page
       window.dispatchEvent(new CustomEvent('listsUpdated'));
       console.log('RecipeListPage: listsUpdated event dispatched');
-    }, 1000); // Reduced to 1 second
+    }, 2000); // 2 seconds delay
     
     return () => clearTimeout(saveTimeout);
-  }, [aiRecipes.length, config?.selectedDates, config?.servingsPerRecipe, config?.selectedMeals, listId]); // Simplified dependencies
+  }, [aiRecipes.length, mealPlanRecipes.length, config?.selectedDates, config?.servingsPerRecipe, config?.selectedMeals, listId]);
 
   const { 
     getSelectedIngredientsCount,
