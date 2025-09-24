@@ -35,12 +35,18 @@ const RecipeListPage = () => {
       
       if (listId) {
         // Load specific saved list from database
+        console.log('RecipeListPage: About to call getListById with:', listId);
         try {
+          console.log('RecipeListPage: Calling getListById...');
           const savedList = await getListById(listId);
+          console.log('RecipeListPage: getListById returned:', savedList);
+          
           if (savedList && savedList.recipes) {
             console.log('RecipeListPage: Loading specific list from DB:', savedList.name, 'with recipes:', savedList.recipes.length);
             setAiRecipes(savedList.recipes);
             return;
+          } else {
+            console.log('RecipeListPage: No recipes found in saved list');
           }
         } catch (error) {
           console.error('RecipeListPage: Error loading specific list:', error);

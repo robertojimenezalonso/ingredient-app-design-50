@@ -170,11 +170,16 @@ export const useShoppingLists = () => {
   };
 
   const getListById = async (listId: string): Promise<ShoppingList | null> => {
+    console.log('useShoppingLists: getListById called with:', listId);
+    console.log('useShoppingLists: user:', user ? 'exists' : 'null');
+    
     if (!user) {
+      console.log('useShoppingLists: No user, returning null');
       return null;
     }
 
     try {
+      console.log('useShoppingLists: About to query database...');
       const { data, error } = await supabase
         .from('shopping_lists')
         .select(`
@@ -188,16 +193,24 @@ export const useShoppingLists = () => {
         .eq('user_id', user.id)
         .maybeSingle();
 
+      console.log('useShoppingLists: Database query completed');
+      console.log('useShoppingLists: error:', error);
+      console.log('useShoppingLists: data:', data ? 'exists' : 'null');
+
       if (error || !data) {
+        console.log('useShoppingLists: Returning null due to error or no data');
         return null;
       }
 
-      return {
+      const result = {
         ...data,
         recipes: data.list_recipes
           ?.sort((a, b) => a.position - b.position)
           .map(lr => lr.recipe_data as unknown as Recipe) || []
       };
+      
+      console.log('useShoppingLists: Returning list with', result.recipes?.length || 0, 'recipes');
+      return result;
     } catch (error) {
       console.error('Error loading list by ID:', error);
       return null;
@@ -205,8 +218,9 @@ export const useShoppingLists = () => {
   };
 
   useEffect(() => {
+    console.log('useShoppingLists: useEffect triggered, user:', user ? 'exists' : 'null');
     loadLists();
-  }, [user]);
+  }, [user?.id]); // Only depend on user.id, not the entire user object
 
   return {
     lists,
