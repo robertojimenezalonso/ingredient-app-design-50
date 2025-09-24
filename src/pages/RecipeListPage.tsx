@@ -247,7 +247,7 @@ const RecipeListPage = () => {
     const price = calculateEstimatedPrice(count);
     setTotalPrice(price);
     console.log('RecipeListPage: Updated price:', price);
-  }, [selectedIngredientIds.join(','), recommendedRecipes, getSelectedIngredientsCount, config.servingsPerRecipe, config.selectedDates?.length]);
+  }, [selectedIngredientIds.join(','), recommendedRecipes.length, getSelectedIngredientsCount, config.servingsPerRecipe, config.selectedDates?.length]);
 
   const handleAddRecipe = (recipe: Recipe) => {
     const selectedIngredients = recipe.ingredients.map(ing => ing.id);
