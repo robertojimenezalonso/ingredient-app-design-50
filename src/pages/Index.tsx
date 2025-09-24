@@ -127,18 +127,36 @@ const Index = () => {
                     style={{ borderColor: '#F8F8FC' }}
                     onClick={() => handleGoToList(list.id)}
                   >
-                     {/* Recipe image on the left */}
+                     {/* Recipe images in cascade */}
                      <div className="relative w-16 h-16 flex-shrink-0">
-                       {list.recipes && list.recipes.length > 0 && list.recipes[0].image ? (
-                         <img
-                           src={list.recipes[0].image}
-                           alt={list.recipes[0].title || "Recipe"}
-                           className="w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
-                           onError={(e) => {
-                             console.log('Index: Image failed to load:', list.recipes[0].image);
-                             e.currentTarget.style.display = 'none';
-                           }}
-                         />
+                       {list.recipes && list.recipes.length > 0 ? (
+                         (() => {
+                           const imagesToShow = list.recipes.slice(0, Math.min(3, list.recipes.length));
+                           
+                           return imagesToShow.map((recipe, imgIndex) => {
+                             const offsetX = imgIndex * 6; // 6px horizontal offset
+                             const offsetY = imgIndex * 4; // 4px vertical offset
+                             const zIndex = imagesToShow.length - imgIndex; // Higher z-index for images on top
+                             
+                             return (
+                               <img 
+                                 key={imgIndex}
+                                 src={recipe.image} 
+                                 alt={recipe.title || `Recipe ${imgIndex + 1}`}
+                                 className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
+                                 style={{
+                                   left: `${offsetX}px`,
+                                   top: `${offsetY}px`,
+                                   zIndex: zIndex
+                                 }}
+                                 onError={(e) => {
+                                   console.log('Index: Image failed to load:', recipe.image);
+                                   e.currentTarget.style.display = 'none';
+                                 }}
+                               />
+                             );
+                           });
+                         })()
                        ) : (
                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
                            <span className="text-xs text-gray-500">📝</span>
