@@ -52,6 +52,7 @@ const RecipeListPage = () => {
       console.log('RecipeListPage: Loading current AI recipes...');
       const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
       console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
+      console.log('RecipeListPage: localStorage keys:', Object.keys(localStorage));
       
       if (savedAiRecipes) {
         try {
@@ -134,8 +135,8 @@ const RecipeListPage = () => {
     extractedRecipesTitles: mealPlanRecipes.map(r => r.title)
   });
   
-  // Only show AI recipes if available, no fallback to examples
-  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : [];
+  // Show AI recipes first, fallback to meal plan recipes, then empty
+  const recommendedRecipes = aiRecipes.length > 0 ? aiRecipes : mealPlanRecipes;
 
   console.log('RecipeListPage: Current recipes state:', {
     aiRecipesCount: aiRecipes.length,
@@ -170,7 +171,7 @@ const RecipeListPage = () => {
         return;
       }
       
-      // Get recipes from meal plan OR aiRecipes
+      // Get recipes to save - prioritize aiRecipes, fallback to meal plan
       let recipesToSave = [];
       
       if (aiRecipes.length > 0) {
