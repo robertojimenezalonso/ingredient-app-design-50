@@ -49,6 +49,7 @@ const SubscriptionBenefitsPage = () => {
   const generateRecipesInBackground = async (params: any) => {
     try {
       console.log('SubscriptionBenefitsPage: Loading recipes from recipe bank...');
+      console.log('SubscriptionBenefitsPage: Params:', params);
       
       // Use recipe bank to get recipes for the selected plan
       const recipePlan = getRecipesForPlan(
@@ -57,18 +58,31 @@ const SubscriptionBenefitsPage = () => {
         params.people
       );
       
+      console.log('SubscriptionBenefitsPage: Recipe plan from bank:', recipePlan);
+      
       // Flatten recipes from the plan
       const recipes = [];
       for (const day of Object.keys(recipePlan)) {
+        console.log(`SubscriptionBenefitsPage: Processing day ${day}:`, recipePlan[day]);
         for (const meal of Object.keys(recipePlan[day])) {
+          console.log(`SubscriptionBenefitsPage: Processing meal ${meal}:`, recipePlan[day][meal]);
           recipes.push(...recipePlan[day][meal]);
         }
       }
       
-      console.log('SubscriptionBenefitsPage: Loaded recipes from bank:', recipes.length);
+      console.log('SubscriptionBenefitsPage: Flattened recipes:', recipes.length);
+      recipes.forEach((recipe, index) => {
+        console.log(`SubscriptionBenefitsPage: Recipe ${index}:`, {
+          id: recipe.id,
+          title: recipe.title,
+          image: recipe.image,
+          hasIngredients: !!(recipe.ingredients && recipe.ingredients.length > 0)
+        });
+      });
       
       // Initialize ingredients and add to cart
       if (recipes.length > 0) {
+        console.log('SubscriptionBenefitsPage: Initializing ingredients...');
         initializeIngredients(recipes);
         
         recipes.forEach(recipe => {
@@ -78,7 +92,16 @@ const SubscriptionBenefitsPage = () => {
 
         // Store recipes in localStorage for compatibility
         localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
-        console.log('SubscriptionBenefitsPage: Stored recipes in localStorage');
+        console.log('SubscriptionBenefitsPage: Stored', recipes.length, 'recipes in localStorage');
+        console.log('SubscriptionBenefitsPage: First stored recipe:', recipes[0]);
+        
+        // Verify storage
+        const verifyStorage = localStorage.getItem('aiGeneratedRecipes');
+        if (verifyStorage) {
+          console.log('SubscriptionBenefitsPage: Verification - localStorage contains data:', verifyStorage.length, 'characters');
+        } else {
+          console.error('SubscriptionBenefitsPage: ERROR - localStorage verification failed');
+        }
         
         // Preload all recipe images from Supabase
         console.log('🔄 Preloading recipe images from Supabase...');

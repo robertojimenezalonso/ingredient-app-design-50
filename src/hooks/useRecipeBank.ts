@@ -157,6 +157,7 @@ export const useRecipeBank = () => {
     meals: string[], 
     people: number = 1
   ): { [key: string]: { [key: string]: Recipe[] } } => {
+    console.log('useRecipeBank: getRecipesForPlan called with:', { days, meals, people });
     const plan: { [key: string]: { [key: string]: Recipe[] } } = {};
     
     days.forEach(day => {
@@ -165,22 +166,32 @@ export const useRecipeBank = () => {
         // Map meal names to categories
         const categoryMap: { [key: string]: string } = {
           'Desayuno': 'desayuno',
-          'Almuerzo': 'comida',
+          'Almuerzo': 'comida',  // Fixed mapping
           'Cena': 'cena',
-          'Snack': 'snack',
-          'Aperitivo': 'aperitivo',
-          'Merienda': 'merienda'
+          'Snack': 'comida',     // Fallback to comida
+          'Aperitivo': 'comida', // Fallback to comida
+          'Merienda': 'comida'   // Fallback to comida
         };
         
-        const category = categoryMap[meal] || meal.toLowerCase();
+        const category = categoryMap[meal] || 'comida'; // Default fallback
+        console.log(`useRecipeBank: Mapping meal "${meal}" to category "${category}"`);
         const randomRecipes = getRandomRecipesByCategory(category, 1);
+        console.log(`useRecipeBank: Found ${randomRecipes.length} recipes for category "${category}"`);
         
-        plan[day][meal] = randomRecipes.map(recipe => 
-          convertToRecipe(recipe, people)
-        );
+        if (randomRecipes.length > 0) {
+          const convertedRecipes = randomRecipes.map(recipe => 
+            convertToRecipe(recipe, people)
+          );
+          plan[day][meal] = convertedRecipes;
+          console.log(`useRecipeBank: Added ${convertedRecipes.length} converted recipes for ${day}/${meal}`);
+        } else {
+          plan[day][meal] = [];
+          console.warn(`useRecipeBank: No recipes found for category "${category}" (meal: ${meal})`);
+        }
       });
     });
     
+    console.log('useRecipeBank: Final plan:', plan);
     return plan;
   };
 
