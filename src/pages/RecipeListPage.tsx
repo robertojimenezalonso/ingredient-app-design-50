@@ -47,8 +47,26 @@ const RecipeListPage = () => {
         console.log('RecipeListPage: Specific list not found in DB, falling back to current recipes');
       }
       
-      // Load current AI recipes from localStorage (for new lists)
-      console.log('RecipeListPage: Loading current AI recipes...');
+      // Check if there's a recently saved list ID
+      const lastSavedListId = localStorage.getItem('lastSavedListId');
+      if (lastSavedListId && !listId) {
+        console.log('RecipeListPage: Found recently saved list, loading:', lastSavedListId);
+        try {
+          const savedList = await getListById(lastSavedListId);
+          if (savedList && savedList.recipes) {
+            console.log('RecipeListPage: Loading recently saved list:', savedList.name, 'with recipes:', savedList.recipes.length);
+            setAiRecipes(savedList.recipes);
+            // Clear the saved list ID after loading
+            localStorage.removeItem('lastSavedListId');
+            return;
+          }
+        } catch (error) {
+          console.error('RecipeListPage: Error loading recently saved list:', error);
+        }
+      }
+      
+      // Load current AI recipes from localStorage (for fallback)
+      console.log('RecipeListPage: Loading current AI recipes from localStorage...');
       const savedAiRecipes = localStorage.getItem('aiGeneratedRecipes');
       console.log('RecipeListPage: localStorage result:', savedAiRecipes ? 'Data found' : 'No data found');
       
@@ -64,7 +82,7 @@ const RecipeListPage = () => {
     };
 
     loadRecipes();
-  }, [listId, getListById]);
+  }, [listId, getListById, user])
 
 
   // Handle recipe replacement when coming from change mode

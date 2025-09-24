@@ -58,6 +58,7 @@ const SubscriptionBenefitsPage = () => {
     try {
       console.log('SubscriptionBenefitsPage: Loading recipes from recipe bank...');
       console.log('SubscriptionBenefitsPage: Params:', params);
+      console.log('SubscriptionBenefitsPage: User authenticated:', !!user, user?.id);
       
       // Use recipe bank to get recipes for the selected plan
       const recipePlan = getRecipesForPlan(
@@ -90,15 +91,11 @@ const SubscriptionBenefitsPage = () => {
           addToCart(recipe, recipe.servings, selectedIngredients);
         });
 
-        // Store recipes in localStorage for compatibility (temporary)
-        localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
-        console.log('SubscriptionBenefitsPage: Stored', recipes.length, 'recipes in localStorage');
-        
-        // Save to database immediately if user is authenticated
+        // Always save to database first if user is authenticated
         if (user) {
           try {
             console.log('SubscriptionBenefitsPage: Saving list to database immediately...');
-            await saveList({
+            const savedList = await saveList({
               name: generatePlanName(),
               dates: params.selectedDates || [],
               servings: params.people || 2,
@@ -107,18 +104,24 @@ const SubscriptionBenefitsPage = () => {
               estimated_price: calculateEstimatedPrice(recipes.length * 3, params)
             });
             
-            console.log('SubscriptionBenefitsPage: List saved successfully to database');
+            console.log('SubscriptionBenefitsPage: List saved successfully to database with ID:', savedList?.id);
             
-            // Clean up localStorage after successful save
+            // Store list ID for navigation
+            localStorage.setItem('lastSavedListId', savedList?.id || '');
+            
+            // Clean up old data
             localStorage.removeItem('pendingRecipeGeneration');
             localStorage.removeItem('aiGeneratedRecipes');
             
           } catch (error) {
             console.error('SubscriptionBenefitsPage: Error saving list to database:', error);
-            // Keep in localStorage as fallback
+            // Fallback to localStorage
+            localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
+            console.log('SubscriptionBenefitsPage: Saved to localStorage as fallback');
           }
         } else {
-          console.log('SubscriptionBenefitsPage: User not authenticated, keeping in localStorage');
+          console.log('SubscriptionBenefitsPage: User not authenticated, saving to localStorage');
+          localStorage.setItem('aiGeneratedRecipes', JSON.stringify(recipes));
         }
         
         // Preload all recipe images from Supabase
