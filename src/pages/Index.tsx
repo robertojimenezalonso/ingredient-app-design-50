@@ -147,16 +147,16 @@ const Index = () => {
                                 rotation = '';
                                 zIndex = 3;
                               } else if (imgIndex === 1) {
-                                // Second image: slightly to the left and tilted
-                                left = '8px';
+                                // Second image: slightly to the left and less tilted
+                                left = '12px';
                                 top = '14px';
-                                rotation = 'rotate-[-8deg]';
+                                rotation = 'rotate-[-4deg]';
                                 zIndex = 1;
                               } else if (imgIndex === 2) {
-                                // Third image: to the right and tilted
-                                left = '28px';
+                                // Third image: to the right and less tilted
+                                left = '24px';
                                 top = '14px';
-                                rotation = 'rotate-[8deg]';
+                                rotation = 'rotate-[4deg]';
                                 zIndex = 2;
                               }
                               
