@@ -283,7 +283,36 @@ const RecipeListPage = () => {
     // Navigation removed as ingredients page no longer exists
   };
 
-  const handleSearchOffers = () => {
+  const handleSearchOffers = async () => {
+    // Auto-save the list if we have recipes and no listId (new list)
+    if (!listId && aiRecipes.length > 0 && user) {
+      try {
+        const listData = {
+          name: 'Mi Lista',
+          dates: mealPlan.map(day => day.dateStr),
+          servings: config?.servingsPerRecipe || 2,
+          meals: mealPlan.flatMap(day => day.meals.map(meal => meal.meal)),
+          recipes: aiRecipes,
+          estimated_price: totalPrice
+        };
+
+        console.log('RecipeListPage: Auto-saving list before navigating to offers');
+        await saveList(listData);
+        
+        toast({
+          title: "Lista guardada",
+          description: "Tu lista se ha guardado automáticamente"
+        });
+      } catch (error) {
+        console.error('Auto-save failed:', error);
+        toast({
+          title: "Error",
+          description: "No se pudo guardar la lista",
+          variant: "destructive"
+        });
+      }
+    }
+    
     navigate('/search-offers');
   };
 
