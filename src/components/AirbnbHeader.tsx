@@ -136,7 +136,7 @@ export const AirbnbHeader = ({
               className="bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating h-12 text-base font-medium rounded-lg px-4"
               size="lg"
             >
-              Guardar lista
+              Guardar
             </Button>
           </div>
         ) : (
