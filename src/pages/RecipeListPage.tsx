@@ -23,7 +23,7 @@ const RecipeListPage = () => {
   const { addToCart } = useCart();
   const { config } = useUserConfig();
   const { user } = useAuth();
-  const { getListById, saveList } = useShoppingLists();
+  const { getListById, saveList, lists } = useShoppingLists();
   const { showTabs, activeTab: activeTabDate, mealPlan, sectionRefs, scrollToDate } = useDateTabs();
   const [aiRecipes, setAiRecipes] = useState<Recipe[]>([]);
   const [hasAutoSaved, setHasAutoSaved] = useState(false);
@@ -168,6 +168,13 @@ const RecipeListPage = () => {
       // Skip if already saved, viewing a specific list, or user not authenticated
       if (hasAutoSaved || listId || !user) {
         console.log('RecipeListPage: Skipping auto-save:', { hasAutoSaved, listId, hasUser: !!user });
+        return;
+      }
+      
+      // Skip if there are already saved lists (to avoid creating duplicates)
+      if (lists.length > 0) {
+        console.log('RecipeListPage: Skipping auto-save - user already has saved lists');
+        setHasAutoSaved(true); // Prevent future auto-save attempts
         return;
       }
       
