@@ -127,39 +127,75 @@ const Index = () => {
                     style={{ borderColor: '#F8F8FC' }}
                     onClick={() => handleGoToList(list.id)}
                   >
-                     {/* Recipe images in cascade */}
+                     {/* Recipe images with depth design */}
                      <div className="relative w-16 h-16 flex-shrink-0">
                        {list.recipes && list.recipes.length > 0 ? (
                          (() => {
                            const imagesToShow = list.recipes.slice(0, Math.min(3, list.recipes.length));
                            
                            return imagesToShow.map((recipe, imgIndex) => {
-                             const offsetX = imgIndex * 6; // 6px horizontal offset
-                             const offsetY = imgIndex * 4; // 4px vertical offset
-                             const zIndex = imagesToShow.length - imgIndex; // Higher z-index for images on top
-                             
-                             return (
-                               <img 
-                                 key={imgIndex}
-                                 src={recipe.image} 
-                                 alt={recipe.title || `Recipe ${imgIndex + 1}`}
-                                 className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
-                                 style={{
-                                   left: `${offsetX}px`,
-                                   top: `${offsetY}px`,
-                                   zIndex: zIndex
-                                 }}
-                                 onError={(e) => {
-                                   console.log('Index: Image failed to load:', recipe.image);
-                                   e.currentTarget.style.display = 'none';
-                                 }}
-                               />
-                             );
+                             if (imgIndex === 0) {
+                               // Main image - larger, centered, straight
+                               return (
+                                 <img 
+                                   key={imgIndex}
+                                   src={recipe.image} 
+                                   alt={recipe.title || `Recipe ${imgIndex + 1}`}
+                                   className="absolute w-14 h-14 object-cover rounded-xl border-2 border-white shadow-lg"
+                                   style={{
+                                     left: '4px',
+                                     top: '4px',
+                                     zIndex: 30
+                                   }}
+                                   onError={(e) => {
+                                     console.log('Index: Image failed to load:', recipe.image);
+                                     e.currentTarget.style.display = 'none';
+                                   }}
+                                 />
+                               );
+                             } else {
+                               // Background images - smaller, tilted, with shadow base
+                               const isLeft = imgIndex === 1;
+                               const rotation = isLeft ? -8 : 8;
+                               const offsetX = isLeft ? -2 : 6;
+                               const offsetY = 8;
+                               
+                               return (
+                                 <div key={imgIndex} className="absolute">
+                                   {/* Shadow base for depth */}
+                                   <div 
+                                     className="absolute w-11 h-11 bg-black/20 rounded-lg blur-sm"
+                                     style={{
+                                       left: `${offsetX + 2}px`,
+                                       top: `${offsetY + 2}px`,
+                                       transform: `rotate(${rotation}deg)`,
+                                       zIndex: 10 + imgIndex
+                                     }}
+                                   />
+                                   {/* Actual image */}
+                                   <img 
+                                     src={recipe.image} 
+                                     alt={recipe.title || `Recipe ${imgIndex + 1}`}
+                                     className="absolute w-11 h-11 object-cover rounded-lg border border-white/60 opacity-70"
+                                     style={{
+                                       left: `${offsetX}px`,
+                                       top: `${offsetY}px`,
+                                       transform: `rotate(${rotation}deg)`,
+                                       zIndex: 15 + imgIndex
+                                     }}
+                                     onError={(e) => {
+                                       console.log('Index: Image failed to load:', recipe.image);
+                                       e.currentTarget.style.display = 'none';
+                                     }}
+                                   />
+                                 </div>
+                               );
+                             }
                            });
                          })()
                        ) : (
-                         <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
-                           <span className="text-xs text-gray-500">📝</span>
+                         <div className="w-14 h-14 rounded-xl bg-gray-200 flex items-center justify-center ml-1 mt-1">
+                           <span className="text-sm text-gray-500">📝</span>
                          </div>
                        )}
                      </div>
