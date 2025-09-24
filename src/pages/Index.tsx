@@ -14,9 +14,6 @@ const Index = () => {
     // Load saved lists from localStorage - NO DEFAULT DATA
     const saved = localStorage.getItem('savedShoppingLists');
     console.log('Index: Raw localStorage data:', saved);
-    console.log('Index: localStorage keys:', Object.keys(localStorage));
-    console.log('Index: localStorage.length:', localStorage.length);
-    
     if (saved) {
       try {
         const parsedLists = JSON.parse(saved);
@@ -37,27 +34,17 @@ const Index = () => {
       console.log('Index: No data found in localStorage');
       setSavedLists([]);
     }
-    
-    console.log('Index: Current savedLists state:', savedLists.length, savedLists);
   }, []);
 
   // Add a function to manually refresh lists
   const refreshLists = () => {
     console.log('Index: Manually refreshing lists...');
     const saved = localStorage.getItem('savedShoppingLists');
-    console.log('Index: Manual refresh - Raw localStorage data:', saved);
     if (saved) {
-      try {
-        const parsedLists = JSON.parse(saved);
-        const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        setSavedLists(sortedLists);
-        console.log('Index: Lists refreshed, count:', sortedLists.length);
-      } catch (error) {
-        console.error('Index: Error in manual refresh:', error);
-      }
-    } else {
-      console.log('Index: Manual refresh - No data found');
-      setSavedLists([]);
+      const parsedLists = JSON.parse(saved);
+      const sortedLists = parsedLists.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setSavedLists(sortedLists);
+      console.log('Index: Lists refreshed, count:', sortedLists.length);
     }
   };
 
@@ -102,32 +89,6 @@ const Index = () => {
     navigate('/calendar-selection');
   };
 
-  // DEBUG: Add manual trigger for testing
-  const debugTestSave = () => {
-    console.log('DEBUG: Manual test save triggered');
-    const testList = {
-      id: `debug-${Date.now()}`,
-      name: 'Lista Debug',
-      dates: ['2025-09-24'],
-      servings: 2,
-      meals: ['almuerzo'],
-      recipes: [{
-        id: 'debug-recipe',
-        title: 'Receta Debug',
-        image: 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop'
-      }],
-      createdAt: new Date().toISOString(),
-      estimatedPrice: 25.50,
-      recipeImages: ['https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop']
-    };
-    
-    const existingLists = JSON.parse(localStorage.getItem('savedShoppingLists') || '[]');
-    const updatedLists = [testList, ...existingLists];
-    localStorage.setItem('savedShoppingLists', JSON.stringify(updatedLists));
-    console.log('DEBUG: Test list saved, triggering refresh...');
-    refreshLists();
-  };
-
   const handleGoToList = (listId: string) => {
     navigate(`/milista/${listId}`);
   };
@@ -166,36 +127,18 @@ const Index = () => {
                     style={{ borderColor: '#F8F8FC' }}
                     onClick={() => handleGoToList(list.id)}
                   >
-                     {/* Recipe images in cascade */}
+                     {/* Recipe image on the left */}
                      <div className="relative w-16 h-16 flex-shrink-0">
-                       {list.recipes && list.recipes.length > 0 ? (
-                         (() => {
-                           const imagesToShow = list.recipes.slice(0, Math.min(3, list.recipes.length));
-                           
-                           return imagesToShow.map((recipe, imgIndex) => {
-                             const offsetX = imgIndex * 6; // 6px horizontal offset
-                             const offsetY = imgIndex * 4; // 4px vertical offset
-                             const zIndex = imagesToShow.length - imgIndex; // Higher z-index for images on top
-                             
-                             return (
-                               <img 
-                                 key={imgIndex}
-                                 src={recipe.image} 
-                                 alt={recipe.title || `Recipe ${imgIndex + 1}`}
-                                 className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
-                                 style={{
-                                   left: `${offsetX}px`,
-                                   top: `${offsetY}px`,
-                                   zIndex: zIndex
-                                 }}
-                                 onError={(e) => {
-                                   console.log('Index: Image failed to load:', recipe.image);
-                                   e.currentTarget.style.display = 'none';
-                                 }}
-                               />
-                             );
-                           });
-                         })()
+                       {list.recipes && list.recipes.length > 0 && list.recipes[0].image ? (
+                         <img
+                           src={list.recipes[0].image}
+                           alt={list.recipes[0].title || "Recipe"}
+                           className="w-12 h-12 rounded-lg object-cover border-2 border-white shadow-sm"
+                           onError={(e) => {
+                             console.log('Index: Image failed to load:', list.recipes[0].image);
+                             e.currentTarget.style.display = 'none';
+                           }}
+                         />
                        ) : (
                          <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
                            <span className="text-xs text-gray-500">📝</span>

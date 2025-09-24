@@ -129,8 +129,8 @@ export const SavedShoppingListCard = () => {
                       console.log('Images to show for list', list.id, ':', imagesToShow);
                       
                       return imagesToShow.map((imageUrl: string, imgIndex: number) => {
-                        const offsetX = imgIndex * 4; // 4px horizontal offset
-                        const offsetY = imgIndex * 3; // 3px vertical offset
+                        const offsetX = imgIndex * 8; // 8px horizontal offset for cascade effect
+                        const offsetY = imgIndex * 6; // 6px vertical offset for cascade effect
                         const zIndex = imagesToShow.length - imgIndex; // Higher z-index for images on top
                         
                         return (
@@ -204,13 +204,13 @@ export const SavedShoppingListCard = () => {
               src="https://images.unsplash.com/photo-1582562124811-c09040d0a901" 
               alt="Receta 2"
               className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
-              style={{ left: '4px', top: '3px', zIndex: 2 }}
+              style={{ left: '8px', top: '6px', zIndex: 2 }}
             />
             <img 
               src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07" 
               alt="Receta 3"
               className="absolute w-12 h-12 object-cover rounded-lg border-2 border-white shadow-sm"
-              style={{ left: '8px', top: '6px', zIndex: 1 }}
+              style={{ left: '16px', top: '12px', zIndex: 1 }}
             />
           </div>
         </div>

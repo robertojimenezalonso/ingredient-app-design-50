@@ -33,16 +33,9 @@ export const useGlobalIngredients = () => {
   const initializeIngredients = useCallback((recipes: Recipe[]) => {
     const allIngredientIds: string[] = [];
     recipes.forEach(recipe => {
-      // Add defensive check for ingredients array
-      if (recipe && recipe.ingredients && Array.isArray(recipe.ingredients)) {
-        recipe.ingredients.forEach(ingredient => {
-          if (ingredient && ingredient.id) {
-            allIngredientIds.push(ingredient.id);
-          }
-        });
-      } else {
-        console.warn('Recipe missing ingredients array:', recipe);
-      }
+      recipe.ingredients.forEach(ingredient => {
+        allIngredientIds.push(ingredient.id);
+      });
     });
     
     // Select all ingredients by default (only if we have no selection yet)
@@ -71,9 +64,8 @@ export const useGlobalIngredients = () => {
   const toggleIngredientByName = useCallback((recipes: Recipe[], ingredientName: string) => {
     // Find all ingredient IDs with this name across all recipes
     const relatedIds = recipes
-      .filter(recipe => recipe && recipe.ingredients && Array.isArray(recipe.ingredients))
       .flatMap(recipe => recipe.ingredients)
-      .filter(ingredient => ingredient && ingredient.name === ingredientName)
+      .filter(ingredient => ingredient.name === ingredientName)
       .map(ingredient => ingredient.id);
 
     setSelectedIngredientIds(current => {
@@ -108,35 +100,28 @@ export const useGlobalIngredients = () => {
     }> = {};
 
     recipes.forEach(recipe => {
-      // Add defensive check for ingredients array
-      if (recipe && recipe.ingredients && Array.isArray(recipe.ingredients)) {
-        recipe.ingredients.forEach(ingredient => {
-          if (ingredient && ingredient.name) {
-            const key = ingredient.name;
-            const amount = parseFloat(ingredient.amount) || 0;
+      recipe.ingredients.forEach(ingredient => {
+        const key = ingredient.name;
+        const amount = parseFloat(ingredient.amount) || 0;
 
-            if (grouped[key]) {
-              grouped[key].recipes.push(recipe.title);
-              // Always add to total regardless of selection status
-              grouped[key].totalAmount += amount;
-              grouped[key].allIds.push(ingredient.id);
-            } else {
-              grouped[key] = {
-                id: ingredient.id,
-                name: ingredient.name,
-                amount: ingredient.amount,
-                unit: ingredient.unit,
-                recipes: [recipe.title],
-                // Always add to total regardless of selection status
-                totalAmount: amount,
-                allIds: [ingredient.id]
-              };
-            }
-          }
-        });
-      } else {
-        console.warn('Recipe missing ingredients in getGroupedIngredients:', recipe);
-      }
+        if (grouped[key]) {
+          grouped[key].recipes.push(recipe.title);
+          // Always add to total regardless of selection status
+          grouped[key].totalAmount += amount;
+          grouped[key].allIds.push(ingredient.id);
+        } else {
+          grouped[key] = {
+            id: ingredient.id,
+            name: ingredient.name,
+            amount: ingredient.amount,
+            unit: ingredient.unit,
+            recipes: [recipe.title],
+            // Always add to total regardless of selection status
+            totalAmount: amount,
+            allIds: [ingredient.id]
+          };
+        }
+      });
     });
 
     return Object.values(grouped).map(item => ({
@@ -163,12 +148,8 @@ export const useGlobalIngredients = () => {
 
   // Get selected ingredients for a specific recipe
   const getSelectedIngredientsForRecipe = useCallback((recipe: Recipe) => {
-    if (!recipe || !recipe.ingredients || !Array.isArray(recipe.ingredients)) {
-      console.warn('Recipe missing ingredients in getSelectedIngredientsForRecipe:', recipe);
-      return [];
-    }
     return recipe.ingredients.filter(ingredient => 
-      ingredient && ingredient.id && selectedIngredientIds.includes(ingredient.id)
+      selectedIngredientIds.includes(ingredient.id)
     ).map(ingredient => ingredient.id);
   }, [selectedIngredientIds]);
 
