@@ -19,6 +19,9 @@ const RecipeListPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { listId } = useParams();
+  
+  console.log('RecipeListPage: Component mounted/updated with listId:', listId);
+  console.log('RecipeListPage: Current URL:', window.location.href);
   const { toast } = useToast();
   const { getRecipesByCategory } = useRecipes();
   const { addToCart } = useCart();

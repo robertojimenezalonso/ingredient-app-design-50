@@ -27,6 +27,8 @@ const Index = () => {
   };
 
   const handleGoToList = (listId: string) => {
+    console.log('Index: Navigating to list with ID:', listId);
+    console.log('Index: Full list data for verification:', lists.find(l => l.id === listId));
     navigate(`/milista/${listId}`);
   };
 
