@@ -121,7 +121,7 @@ const Index = () => {
       <div className="flex-1 flex flex-col px-6 pt-16">
         <div className="w-full max-w-md mx-auto">
           <h1 className="text-3xl font-medium text-[#1C1C1C] mb-2 text-center">
-            Tu lista de compra con IA
+            Tu lista de compra "IA"
           </h1>
           <p className="text-lg text-[#626469] text-center mb-6">
             Haré recetas personalizadas con los productos de tu súper
