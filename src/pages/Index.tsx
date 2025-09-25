@@ -203,7 +203,7 @@ const Index = () => {
             <div className="flex flex-col h-full overflow-y-auto">
               <div className="mx-4 mb-6 flex-shrink-0 space-y-4">
                 <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                  <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                  <p className="text-base leading-relaxed text-left text-[#1C1C1C] mt-8">
                     {calendarTypewriterStep >= 1 && (
                       <span>
                         {displayedCalendarParagraph1}
