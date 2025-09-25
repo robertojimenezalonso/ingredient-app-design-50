@@ -76,7 +76,7 @@ const Index = () => {
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
         <div className="max-w-md mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            Bienvenido a Cartly
+            Genera tu lista de la compra
           </h1>
           <p className="text-lg text-gray-600 mb-8">
             Crea listas de la compra inteligentes chateando con AI
