@@ -112,7 +112,7 @@ const Index = () => {
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                 }`}
               >
-                <img src="/lovable-uploads/carrefour-logo.png" alt="Carrefour" className="w-5 h-5 object-contain" />
+                <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-sm">Carrefour</span>
               </button>
               
