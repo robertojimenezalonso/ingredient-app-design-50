@@ -17,6 +17,7 @@ const Index = () => {
   
   // Expanded state for calendar view
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
   const [showMoreMeals, setShowMoreMeals] = useState(false);
@@ -142,12 +143,20 @@ const Index = () => {
 
   const handleSubmit = () => {
     if (selectedSupermarket) {
-      setIsExpanded(true);
+      // Start transition effect
+      setIsTransitioning(true);
+      
+      // After transition completes, expand to calendar view
+      setTimeout(() => {
+        setIsExpanded(true);
+        setIsTransitioning(false);
+      }, 800);
     }
   };
 
   const handleClose = () => {
     setIsExpanded(false);
+    setIsTransitioning(false);
     setSelectedSupermarket(null);
     setSelectedDates([]);
     setSelectedMeals([]);
@@ -292,17 +301,28 @@ const Index = () => {
       </div>
       
       {/* Main Content - Landing Page */}
-      <div className="flex-1 flex flex-col px-6 pt-16">
-        <div className="w-full max-w-md mx-auto">
-          <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-2 text-center">
-            Genera listas de compra
-          </h1>
-          <p className="text-lg text-[#626469] text-center mb-6">
-            Crea recetas personalizadas con ingredientes de tu súper utilizando IA
-          </p>
+      <div className={`flex-1 flex flex-col transition-all duration-800 ease-out ${isTransitioning ? 'px-0 pt-0' : 'px-6 pt-16'}`}>
+        <div className={`transition-all duration-800 ease-out ${isTransitioning ? 'w-full h-full flex flex-col' : 'w-full max-w-md mx-auto'}`}>
+          {!isTransitioning && (
+            <>
+              <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-2 text-center">
+                Genera listas de compra
+              </h1>
+              <p className="text-lg text-[#626469] text-center mb-6">
+                Crea recetas personalizadas con ingredientes de tu súper utilizando IA
+              </p>
+            </>
+          )}
+          
+          {/* Spacer for transitioning state */}
+          {isTransitioning && <div className="h-[30vh]"></div>}
           
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg p-6 border w-full transition-all duration-500 ease-out" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4', minHeight: '120px' }}>
+          <div className={`shadow-lg p-6 border w-full transition-all duration-800 ease-out ${
+            isTransitioning 
+              ? 'rounded-t-3xl flex-1' 
+              : 'rounded-3xl'
+          }`} style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4', minHeight: isTransitioning ? 'auto' : '120px' }}>
             <div className={`transition-all duration-500 ease-out ${typewriterStep >= 1 ? 'mb-6' : 'mb-0'} space-y-4`}>
               {/* First paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
@@ -371,23 +391,46 @@ const Index = () => {
               </button>
             </div>
             
-            <div className={`flex justify-end transition-all duration-500 ease-out ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 h-0 overflow-hidden'}`}>
-              <Button
-                variant="ghost"
-                onClick={handleSubmit}
-                disabled={!selectedSupermarket}
-                className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
-                style={{
-                  backgroundColor: selectedSupermarket ? '#000000' : '#898885',
-                  color: selectedSupermarket ? '#ffffff' : '#F9F8F2',
-                  border: 'none',
-                  opacity: 1
-                }}
-              >
-                <ArrowUp size={16} />
-              </Button>
-            </div>
+            {!isTransitioning && (
+              <div className={`flex justify-end transition-all duration-500 ease-out ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 h-0 overflow-hidden'}`}>
+                <Button
+                  variant="ghost"
+                  onClick={handleSubmit}
+                  disabled={!selectedSupermarket}
+                  className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
+                  style={{
+                    backgroundColor: selectedSupermarket ? '#000000' : '#898885',
+                    color: selectedSupermarket ? '#ffffff' : '#F9F8F2',
+                    border: 'none',
+                    opacity: 1
+                  }}
+                >
+                  <ArrowUp size={16} />
+                </Button>
+              </div>
+            )}
           </div>
+          
+          {/* Button area for transitioning state */}
+          {isTransitioning && (
+            <div className="border-t rounded-b-3xl" style={{ backgroundColor: '#FCFBF8', borderTopColor: '#ECEAE4' }}>
+              <div className="px-4 py-3 flex justify-end">
+                <Button
+                  variant="ghost"
+                  disabled
+                  className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
+                  style={{
+                    backgroundColor: '#898885',
+                    color: '#F9F8F2',
+                    border: 'none',
+                    opacity: 1
+                  }}
+                >
+                  <ArrowUp size={16} />
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
