@@ -138,7 +138,7 @@ const Index = () => {
         <div className="h-[70vh] flex flex-col relative">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="rounded-t-3xl shadow-lg p-4 bg-white flex-1 transition-all duration-500 ease-out overflow-hidden pb-20">
-            <div className="flex flex-col h-full">
+            <div className="flex flex-col h-full overflow-y-auto">
               <div className="mx-4 mt-6 mb-6 flex-shrink-0 space-y-4">
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
                   Hemos encontrado 824 productos en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}, con ellos podemos preparar más de 2.800 recetas.
@@ -148,11 +148,11 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="flex justify-center flex-1 overflow-hidden">
+              <div className="flex justify-center flex-1">
                 <Calendar 
                   selected={selectedDates} 
                   onSelect={dates => setSelectedDates(dates || [])} 
-                  className="pointer-events-auto max-h-full" 
+                  className="pointer-events-auto" 
                 />
               </div>
             </div>
