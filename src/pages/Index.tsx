@@ -110,7 +110,7 @@ const Index = () => {
           </Button>
           <Button
             onClick={handleGetStarted}
-            className="text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1 rounded-lg"
+            className="text-sm font-medium bg-[#1C1C1C] text-white hover:bg-gray-800 px-3 py-1 rounded-lg"
           >
             Empezar
           </Button>
