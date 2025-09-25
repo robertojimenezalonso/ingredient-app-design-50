@@ -30,10 +30,10 @@ const Index = () => {
     let timeout: NodeJS.Timeout;
     
     if (typewriterStep === 0) {
-      // Start first message after 2 second delay to let user read title
+      // Start first message after 1 second delay to let user read title
       timeout = setTimeout(() => {
         setTypewriterStep(1);
-      }, 2000);
+      }, 1000);
     } else if (typewriterStep === 1) {
       // Type first paragraph character by character
       if (displayedParagraph1.length < paragraph1Text.length) {
