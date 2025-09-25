@@ -123,7 +123,7 @@ const Index = () => {
           <h1 className="text-3xl font-medium text-[#1C1C1C] mb-2 text-center">
             Genera tu lista de la compra
           </h1>
-          <p className="text-gray-600 text-center mb-6">
+          <p className="text-lg text-[#626469] text-center mb-6">
             Haré recetas personalizadas con los productos de tu súper
           </p>
           
