@@ -148,11 +148,11 @@ const Index = () => {
                 </p>
               </div>
               
-              <div className="flex justify-center flex-1">
+              <div className="flex justify-center flex-shrink-0 mb-6">
                 <Calendar 
                   selected={selectedDates} 
                   onSelect={dates => setSelectedDates(dates || [])} 
-                  className="pointer-events-auto" 
+                  className="pointer-events-auto w-full" 
                 />
               </div>
             </div>
