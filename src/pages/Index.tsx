@@ -51,7 +51,7 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: '#F7F7F7' }}>
+    <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-blue-50 to-purple-100 relative overflow-hidden">
       {/* Top Header with Logo and Auth Buttons */}
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center">
