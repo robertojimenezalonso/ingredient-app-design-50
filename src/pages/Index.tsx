@@ -130,7 +130,7 @@ const Index = () => {
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
         <div className="w-full max-w-md mx-auto">
           <h1 className="text-xl font-medium text-gray-900 mb-6">
-            Hola 👋, soy tu asistente de compra en el supermercado.
+            Hola 👋, soy Cartly, tu asistente de compra
           </h1>
           
           {/* Chat-style Call to Action */}
