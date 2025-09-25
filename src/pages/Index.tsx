@@ -22,7 +22,7 @@ const Index = () => {
   const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
   const paragraph1Text = "Crearé recetas según tus preferencias.";
-  const paragraph2Text = "Después, buscaré los productos en tu súper favorito y te generaré la lista de la compra.";
+  const paragraph2Text = "Después, buscaré los ingredientes en tu súper favorito y te generaré la lista de la compra.";
   const paragraph3Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
 
   // Typewriter effect
