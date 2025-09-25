@@ -159,7 +159,7 @@ const Index = () => {
           </div>
 
           {/* Fixed Button Area at Bottom of Screen */}
-          <div className="absolute bottom-0 left-0 right-0 border-t border-gray-200 bg-white px-4 py-3 rounded-b-3xl">
+          <div className="absolute bottom-0 left-0 right-0 border-t border-gray-200 px-4 py-3 rounded-b-3xl" style={{ backgroundColor: '#FCFBF8' }}>
             <div className="flex justify-end">
               <Button
                 variant="ghost"
