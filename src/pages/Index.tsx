@@ -136,14 +136,17 @@ const Index = () => {
         </div>
 
         {/* Lower half with calendar */}
-        <div className="h-1/2 flex flex-col px-6 pb-6">
-          <div className="flex-1 flex flex-col space-y-4">
-            {/* Calendar Container */}
-            <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3] flex-1">
-              <CardHeader className="pb-3 px-4">
-                <CardTitle className="text-2xl font-semibold text-neutral-950">¿Para que días?</CardTitle>
-              </CardHeader>
-              <CardContent className="px-4 pb-4 flex-1 flex flex-col">
+        <div className="h-1/2 flex flex-col">
+          <div className="flex-1 flex flex-col">
+            {/* Calendar Container - Chat style */}
+            <div className="rounded-3xl shadow-lg p-6 border bg-white mx-6 flex-1 transition-all duration-500 ease-out" style={{ borderColor: '#CAC9C4' }}>
+              <div className="flex flex-col h-full">
+                <div className="mb-4">
+                  <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
+                    ¿Para qué días quieres generar recetas?
+                  </p>
+                </div>
+                
                 <div className="flex justify-center flex-1">
                   <Calendar 
                     selected={selectedDates} 
@@ -151,10 +154,26 @@ const Index = () => {
                     className="pointer-events-auto" 
                   />
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Meal Selection Container - Temporarily removed */}
+                {/* Send Button - Bottom Right */}
+                <div className="flex justify-end">
+                  <Button
+                    variant="ghost"
+                    onClick={handleCalendarContinue}
+                    disabled={!canContinue}
+                    className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
+                    style={{
+                      backgroundColor: canContinue ? '#000000' : '#F2F2F2',
+                      color: canContinue ? '#ffffff' : '#5D5D5D',
+                      border: 'none',
+                      opacity: 1
+                    }}
+                  >
+                    <ArrowUp size={16} />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
