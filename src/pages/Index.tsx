@@ -92,7 +92,7 @@ const Index = () => {
             Crea y gestiona tus listas de la compra de forma inteligente
           </p>
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg p-6 border border-gray-100" style={{ backgroundColor: '#F7F4ED' }}>
+          <div className="rounded-3xl shadow-lg p-6 border" style={{ backgroundColor: '#F7F4ED', borderColor: '#CAC9C4' }}>
             <div className="mb-6">
               <p className="text-gray-600 text-base leading-relaxed text-left">
                 ¿En qué supermercado te gustaría hacer la compra?
