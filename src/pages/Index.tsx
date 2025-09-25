@@ -127,15 +127,15 @@ const Index = () => {
         </div>
         <div className="flex items-center gap-3">
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={handleLogin}
-            className="text-sm font-medium text-gray-700 hover:text-gray-900"
+            className="text-sm font-medium text-gray-700 bg-gray-50 border-gray-200 hover:bg-gray-100 px-3 py-1"
           >
             Iniciar sesión
           </Button>
           <Button
             onClick={handleGetStarted}
-            className="text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1.5 rounded-lg"
+            className="text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1 rounded-lg"
           >
             Empezar
           </Button>
