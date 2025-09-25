@@ -209,12 +209,12 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('alcampo')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 border text-base ${
+                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
                   selectedSupermarket === 'alcampo' 
-                    ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'text-black hover:bg-gray-300 border-gray-200'
+                    ? 'bg-gray-800 text-white' 
+                    : 'text-black hover:bg-gray-300'
                 } ${visibleSupermarkets >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#EBEAE5', borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#F2F2F2' } : {}}
               >
                 <img src="/alcampo-logo.png" alt="Alcampo" className="w-4 h-4 object-contain" />
                 <span className="font-medium text-base">Alcampo</span>
