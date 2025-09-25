@@ -86,7 +86,7 @@ const Index = () => {
           {/* Chat-style Call to Action */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
             <div className="mb-6">
-              <p className="text-gray-600 text-base leading-relaxed">
+              <p className="text-gray-600 text-base leading-relaxed text-left">
                 ¿En qué supermercado te gustaría hacer la compra?
               </p>
             </div>
