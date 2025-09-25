@@ -21,10 +21,9 @@ const Index = () => {
   const [showSupermarkets, setShowSupermarkets] = useState(false);
   const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
-  const paragraph1Text = "Hola 👋, soy tu asistente de compra en el supermercado.";
-  const paragraph2Text = "Te ayudaré a crear tu lista según tus preferencias y, a partir de ahí, te propondré recetas con los ingredientes que elijas directamente en tu súper favorito.";
-  const paragraph3Text = "Además, te mostraré cuánto costaría esa misma compra en otros supermercados, por si te ayuda a ahorrar. 💰";
-  const paragraph4Text = "Empecemos… ¿En qué súper te gustaría hacer la compra?";
+  const paragraph1Text = "Te ayudaré a crear tu lista según tus preferencias y, a partir de ahí, te propondré recetas con los ingredientes que elijas directamente en tu súper favorito.";
+  const paragraph2Text = "Además, te mostraré cuánto costaría esa misma compra en otros supermercados, por si te ayuda a ahorrar. 💰";
+  const paragraph3Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
 
   // Typewriter effect
   useEffect(() => {
@@ -66,18 +65,6 @@ const Index = () => {
           setDisplayedParagraph3(paragraph3Text.slice(0, displayedParagraph3.length + 1));
         }, 30);
       } else {
-        // Move to next step after delay
-        setTimeout(() => {
-          setTypewriterStep(4);
-        }, 800);
-      }
-    } else if (typewriterStep === 4) {
-      // Type fourth paragraph character by character
-      if (displayedParagraph4.length < paragraph4Text.length) {
-        timeout = setTimeout(() => {
-          setDisplayedParagraph4(paragraph4Text.slice(0, displayedParagraph4.length + 1));
-        }, 30);
-      } else {
         // Hide cursor and show supermarkets
         setTimeout(() => {
           setShowCursor(false);
@@ -94,7 +81,7 @@ const Index = () => {
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [typewriterStep, displayedParagraph1, displayedParagraph2, displayedParagraph3, displayedParagraph4, paragraph1Text, paragraph2Text, paragraph3Text, paragraph4Text]);
+  }, [typewriterStep, displayedParagraph1, displayedParagraph2, displayedParagraph3, paragraph1Text, paragraph2Text, paragraph3Text]);
 
 
   const handleLogin = () => {
@@ -146,6 +133,9 @@ const Index = () => {
       {/* Main Content - Landing Page */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
         <div className="w-full max-w-md mx-auto">
+          <h1 className="text-xl font-medium text-gray-900 mb-6">
+            Hola 👋, soy tu asistente de compra en el supermercado.
+          </h1>
           
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border bg-white w-full transition-all duration-500 ease-out" style={{ borderColor: '#CAC9C4', minHeight: '120px' }}>
@@ -176,23 +166,11 @@ const Index = () => {
 
               {/* Third paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                <p className="text-base leading-relaxed text-left text-black">
+                <p className="text-base leading-relaxed text-left text-black font-medium">
                   {typewriterStep >= 3 && (
                     <span>
                       {displayedParagraph3}
                       {typewriterStep === 3 && showCursor && <span className="animate-pulse">|</span>}
-                    </span>
-                  )}
-                </p>
-              </div>
-
-              {/* Fourth paragraph */}
-              <div className={`transition-all duration-500 ${typewriterStep >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                <p className="text-base leading-relaxed text-left text-black font-medium">
-                  {typewriterStep >= 4 && (
-                    <span>
-                      👉 Empecemos… ¿En qué súper te gustaría hacer la compra?
-                      {typewriterStep === 4 && showCursor && <span className="animate-pulse">|</span>}
                     </span>
                   )}
                 </p>
