@@ -159,20 +159,20 @@ const Index = () => {
           </div>
 
           {/* Fixed Button Area at Bottom of Screen */}
-          <div className="absolute bottom-0 left-0 right-0 border-t border-gray-200 px-4 py-3 rounded-b-3xl" style={{ backgroundColor: '#FCFBF8' }}>
-            <div className="flex justify-end">
-                <Button
-                  variant="ghost"
-                  onClick={handleCalendarContinue}
-                  disabled={!canContinue}
-                  className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
-                  style={{
-                    backgroundColor: canContinue ? '#000000' : '#898885',
-                    color: canContinue ? '#ffffff' : '#F9F8F2',
-                    border: 'none',
-                    opacity: 1
-                  }}
-                >
+          <div className="absolute bottom-0 left-0 right-0 border-t rounded-b-3xl" style={{ backgroundColor: '#FCFBF8', borderTopColor: '#ECEAE4' }}>
+            <div className="px-4 py-3 flex justify-end">
+              <Button
+                variant="ghost"
+                onClick={handleCalendarContinue}
+                disabled={!canContinue}
+                className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
+                style={{
+                  backgroundColor: canContinue ? '#000000' : '#898885',
+                  color: canContinue ? '#ffffff' : '#F9F8F2',
+                  border: 'none',
+                  opacity: 1
+                }}
+              >
                 <ArrowUp size={16} />
               </Button>
             </div>
