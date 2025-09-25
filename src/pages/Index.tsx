@@ -145,9 +145,12 @@ const Index = () => {
       {/* Main Content - Landing Page */}
       <div className="flex-1 flex flex-col px-6 pt-16">
         <div className="w-full max-w-md mx-auto">
-          <h1 className="text-xl font-medium text-gray-900 mb-6 text-center">
+          <h1 className="text-xl font-medium text-gray-900 mb-2 text-center">
             Hola 👋, soy Cartly, tu asistente de compra en supermercado
           </h1>
+          <p className="text-gray-600 text-center mb-6">
+            Crearé recetas según tus preferencias y buscaré los ingredientes en tu súper
+          </p>
           
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border bg-white w-full transition-all duration-500 ease-out" style={{ borderColor: '#CAC9C4', minHeight: '120px' }}>
