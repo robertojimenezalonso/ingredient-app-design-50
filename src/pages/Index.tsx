@@ -225,12 +225,16 @@ const Index = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={!selectedSupermarket}
-                className={`w-10 h-10 rounded-full flex items-center justify-center border-0 ${
+                className={`w-10 h-10 rounded-full flex items-center justify-center ${
                   selectedSupermarket 
                     ? 'bg-black text-white hover:bg-gray-800' 
                     : 'cursor-not-allowed'
                 }`}
-                style={!selectedSupermarket ? { backgroundColor: '#F2F2F2 !important', color: '#5D5D5D' } : {}}
+                style={{
+                  backgroundColor: selectedSupermarket ? '#000000' : '#F2F2F2',
+                  color: selectedSupermarket ? '#ffffff' : '#5D5D5D',
+                  border: 'none'
+                }}
               >
                 <ArrowUp size={16} />
               </Button>
