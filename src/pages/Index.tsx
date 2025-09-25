@@ -139,7 +139,7 @@ const Index = () => {
           {/* Calendar Container - Chat style */}
           <div className="rounded-t-3xl shadow-lg p-4 bg-white flex-1 transition-all duration-500 ease-out overflow-hidden">
             <div className="flex flex-col h-full">
-              <div className="mb-3 flex-shrink-0 space-y-4">
+              <div className="mx-4 mt-6 mb-6 flex-shrink-0 space-y-4">
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
                   Hemos encontrado 824 productos en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}, con ellos podemos preparar más de 2.800 recetas.
                 </p>
