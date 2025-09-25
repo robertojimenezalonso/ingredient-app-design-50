@@ -124,7 +124,7 @@ const Index = () => {
             Hola 👋, soy, tu asistente IA de supermercado
           </h1>
           <p className="text-gray-600 text-center mb-6">
-            Crearé recetas según tus preferencias y buscaré los ingredientes en tu súper
+            Crearé recetas según tus preferencias utilizando los ingredientes de tu súper
           </p>
           
           {/* Chat-style Call to Action */}
