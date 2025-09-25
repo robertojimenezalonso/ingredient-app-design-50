@@ -378,8 +378,8 @@ const Index = () => {
                 disabled={!selectedSupermarket}
                 className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
                 style={{
-                  backgroundColor: selectedSupermarket ? '#000000' : '#F2F2F2',
-                  color: selectedSupermarket ? '#ffffff' : '#5D5D5D',
+                  backgroundColor: selectedSupermarket ? '#000000' : '#898885',
+                  color: selectedSupermarket ? '#ffffff' : '#F9F8F2',
                   border: 'none',
                   opacity: 1
                 }}
