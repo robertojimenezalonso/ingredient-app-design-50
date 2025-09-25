@@ -104,7 +104,7 @@ const Index = () => {
           <Button
             variant="outline"
             onClick={handleLogin}
-            className="text-sm font-medium text-gray-700 bg-gray-50 border-gray-200 hover:bg-gray-100 px-3 py-1"
+            className="text-sm font-medium text-[#1C1C1C] bg-[#F7F4ED] border-[#EBEAE5] hover:bg-gray-100 px-3 py-1"
           >
             Iniciar sesión
           </Button>
