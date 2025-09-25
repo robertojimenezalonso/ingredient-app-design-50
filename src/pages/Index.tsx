@@ -140,8 +140,8 @@ const Index = () => {
           </h1>
           
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg p-6 border bg-white w-full" style={{ borderColor: '#CAC9C4' }}>
-            <div className="mb-6 space-y-4">
+          <div className="rounded-3xl shadow-lg p-6 border bg-white w-full transition-all duration-500 ease-out" style={{ borderColor: '#CAC9C4', minHeight: '120px' }}>
+            <div className={`transition-all duration-500 ease-out ${typewriterStep >= 1 || typewriterStep >= 2 ? 'mb-6' : 'mb-0'} space-y-4`}>
               {/* Typing animation for the first message */}
               <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                 <p className="text-base leading-relaxed text-left text-black">
@@ -167,7 +167,7 @@ const Index = () => {
               </div>
             </div>
             
-            <div className={`flex flex-col items-start gap-2 mb-6 transition-all duration-500 ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <div className={`flex flex-col items-start gap-2 transition-all duration-500 ease-out ${showSupermarkets ? 'opacity-100 translate-y-0 mb-6' : 'opacity-0 translate-y-4 mb-0 h-0 overflow-hidden'}`}>
               <button 
                 onClick={() => handleSupermarketSelect('mercadona')}
                 className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
@@ -221,7 +221,7 @@ const Index = () => {
               </button>
             </div>
             
-            <div className={`flex justify-end transition-all duration-500 ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <div className={`flex justify-end transition-all duration-500 ease-out ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 h-0 overflow-hidden'}`}>
               <Button
                 variant="ghost"
                 onClick={handleSubmit}
