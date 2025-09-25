@@ -22,8 +22,7 @@ const Index = () => {
   const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
   const paragraph1Text = "Te ayudaré a crear listas de la compra según tus preferencias y, a partir de ahí, te propondré recetas con los ingredientes de tu súper favorito.";
-  const paragraph2Text = "Además, te mostraré cuánto costaría esa misma compra en otros supermercados, por si te ayuda a ahorrar. 💰";
-  const paragraph3Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
+  const paragraph2Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
 
   // Typewriter effect
   useEffect(() => {
@@ -53,18 +52,6 @@ const Index = () => {
           setDisplayedParagraph2(paragraph2Text.slice(0, displayedParagraph2.length + 1));
         }, 30);
       } else {
-        // Move to next step after delay
-        setTimeout(() => {
-          setTypewriterStep(3);
-        }, 800);
-      }
-    } else if (typewriterStep === 3) {
-      // Type third paragraph character by character
-      if (displayedParagraph3.length < paragraph3Text.length) {
-        timeout = setTimeout(() => {
-          setDisplayedParagraph3(paragraph3Text.slice(0, displayedParagraph3.length + 1));
-        }, 30);
-      } else {
         // Hide cursor and show supermarkets
         setTimeout(() => {
           setShowCursor(false);
@@ -81,7 +68,7 @@ const Index = () => {
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [typewriterStep, displayedParagraph1, displayedParagraph2, displayedParagraph3, paragraph1Text, paragraph2Text, paragraph3Text]);
+  }, [typewriterStep, displayedParagraph1, displayedParagraph2, paragraph1Text, paragraph2Text]);
 
 
   const handleLogin = () => {
@@ -154,23 +141,11 @@ const Index = () => {
               
               {/* Second paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                <p className="text-base leading-relaxed text-left text-black">
+                <p className="text-base leading-relaxed text-left text-black font-medium">
                   {typewriterStep >= 2 && (
                     <span>
                       {displayedParagraph2}
                       {typewriterStep === 2 && showCursor && <span className="animate-pulse">|</span>}
-                    </span>
-                  )}
-                </p>
-              </div>
-
-              {/* Third paragraph */}
-              <div className={`transition-all duration-500 ${typewriterStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                <p className="text-base leading-relaxed text-left text-black font-medium">
-                  {typewriterStep >= 3 && (
-                    <span>
-                      {displayedParagraph3}
-                      {typewriterStep === 3 && showCursor && <span className="animate-pulse">|</span>}
                     </span>
                   )}
                 </p>
