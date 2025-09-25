@@ -183,7 +183,7 @@ const Index = () => {
                 } ${visibleSupermarkets >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'mercadona' ? { backgroundColor: '#F2F2F2' } : {}}
               >
-                <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-4 h-4 object-contain" />
+                <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-base">Mercadona</span>
               </button>
               
