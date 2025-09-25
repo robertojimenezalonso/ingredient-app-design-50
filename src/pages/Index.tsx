@@ -10,12 +10,6 @@ const Index = () => {
   const { user, loading: authLoading } = useAuth();
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
 
-  // Redirect to main app if authenticated
-  useEffect(() => {
-    if (!authLoading && user) {
-      navigate('/mis-listas');
-    }
-  }, [user, authLoading, navigate]);
 
   const handleLogin = () => {
     navigate('/auth?mode=login');
@@ -46,9 +40,6 @@ const Index = () => {
     );
   }
 
-  if (user) {
-    return null; // Will redirect to main app
-  }
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50 relative overflow-hidden">
