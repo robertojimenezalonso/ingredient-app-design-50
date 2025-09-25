@@ -140,7 +140,7 @@ const Index = () => {
           </h1>
           
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg p-6 border" style={{ backgroundColor: '#F7F4ED', borderColor: '#CAC9C4' }}>
+          <div className="rounded-3xl shadow-lg p-6 border bg-white" style={{ borderColor: '#CAC9C4' }}>
             <div className="mb-6 space-y-4">
               {/* Typing animation for the first message */}
               <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
