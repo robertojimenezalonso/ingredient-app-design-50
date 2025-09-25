@@ -100,7 +100,7 @@ const Index = () => {
         <div className="flex items-center">
           <h1 className="text-2xl font-bold text-black">Cartly</h1>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 h-24">
           <Button
             variant="outline"
             onClick={handleLogin}
