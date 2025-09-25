@@ -123,6 +123,7 @@ const Index = () => {
       {/* Top Header with Logo and Auth Buttons */}
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center">
+          <h1 className="text-2xl font-bold text-black">Cartly</h1>
         </div>
         <div className="flex items-center gap-3">
           <Button
@@ -134,7 +135,7 @@ const Index = () => {
           </Button>
           <Button
             onClick={handleGetStarted}
-            className="text-sm font-medium bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-lg"
+            className="text-sm font-medium bg-black text-white hover:bg-gray-800 px-3 py-1.5 rounded-lg"
           >
             Empezar
           </Button>
