@@ -122,7 +122,7 @@ const Index = () => {
   // Expanded calendar view
   if (isExpanded) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50 relative">
+      <div className="h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50 relative">
         {/* X button positioned absolutely in top area */}
         <button 
           onClick={handleClose}
@@ -131,10 +131,10 @@ const Index = () => {
           <X className="h-5 w-5 text-[#1C1C1C]" />
         </button>
 
-        {/* First half - completely empty */}
-        <div className="h-1/2"></div>
+        {/* First half - completely empty, spacer */}
+        <div className="flex-1"></div>
 
-        {/* Second half with calendar */}
+        {/* Second half with calendar - fixed to bottom half */}
         <div className="h-1/2 flex flex-col">
           {/* Calendar Container - Chat style */}
           <div className="rounded-t-3xl shadow-lg p-6 bg-white flex-1 transition-all duration-500 ease-out">
