@@ -98,7 +98,7 @@ const Index = () => {
       {/* Top Header with Logo and Auth Buttons */}
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-black">Cartly</h1>
+          <h1 className="text-2xl font-bold text-[#1C1C1C]">Cartly</h1>
         </div>
         <div className="flex items-center gap-3 h-24">
           <Button
@@ -120,7 +120,7 @@ const Index = () => {
       {/* Main Content - Landing Page */}
       <div className="flex-1 flex flex-col px-6 pt-16">
         <div className="w-full max-w-md mx-auto">
-          <h1 className="text-3xl font-medium text-gray-900 mb-2 text-center">
+          <h1 className="text-3xl font-medium text-[#1C1C1C] mb-2 text-center">
             Lista de la compra (IA)
           </h1>
           <p className="text-gray-600 text-center mb-6">
@@ -132,7 +132,7 @@ const Index = () => {
             <div className={`transition-all duration-500 ease-out ${typewriterStep >= 1 ? 'mb-6' : 'mb-0'} space-y-4`}>
               {/* First paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                <p className="text-base leading-relaxed text-left text-black font-medium">
+                <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
                   {typewriterStep >= 1 && (
                     <span>
                       {displayedParagraph1}
@@ -149,7 +149,7 @@ const Index = () => {
                 className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
                   selectedSupermarket === 'mercadona' 
                     ? 'bg-gray-800 text-white' 
-                    : 'text-black hover:bg-gray-300'
+                    : 'text-[#1C1C1C] hover:bg-gray-300'
                 } ${visibleSupermarkets >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'mercadona' ? { backgroundColor: '#F2F2F2' } : {}}
               >
@@ -162,7 +162,7 @@ const Index = () => {
                 className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
                   selectedSupermarket === 'carrefour' 
                     ? 'bg-gray-800 text-white' 
-                    : 'text-black hover:bg-gray-300'
+                    : 'text-[#1C1C1C] hover:bg-gray-300'
                 } ${visibleSupermarkets >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'carrefour' ? { backgroundColor: '#F2F2F2' } : {}}
               >
@@ -175,7 +175,7 @@ const Index = () => {
                 className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
                   selectedSupermarket === 'lidl' 
                     ? 'bg-gray-800 text-white' 
-                    : 'text-black hover:bg-gray-300'
+                    : 'text-[#1C1C1C] hover:bg-gray-300'
                 } ${visibleSupermarkets >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'lidl' ? { backgroundColor: '#F2F2F2' } : {}}
               >
@@ -188,7 +188,7 @@ const Index = () => {
                 className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
                   selectedSupermarket === 'alcampo' 
                     ? 'bg-gray-800 text-white' 
-                    : 'text-black hover:bg-gray-300'
+                    : 'text-[#1C1C1C] hover:bg-gray-300'
                 } ${visibleSupermarkets >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#F2F2F2' } : {}}
               >
