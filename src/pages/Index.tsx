@@ -117,14 +117,6 @@ const Index = () => {
               </button>
             </div>
             
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <button
-                onClick={handleLogin}
-                className="text-sm text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                ¿Ya tienes cuenta? Iniciar sesión
-              </button>
-            </div>
           </div>
         </div>
       </div>
