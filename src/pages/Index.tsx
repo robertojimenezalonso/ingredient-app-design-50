@@ -302,7 +302,7 @@ const Index = () => {
           </p>
           
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg p-6 border bg-white w-full transition-all duration-500 ease-out" style={{ borderColor: '#ECEAE4', minHeight: '120px' }}>
+          <div className="rounded-3xl shadow-lg p-6 border w-full transition-all duration-500 ease-out" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4', minHeight: '120px' }}>
             <div className={`transition-all duration-500 ease-out ${typewriterStep >= 1 ? 'mb-6' : 'mb-0'} space-y-4`}>
               {/* First paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
