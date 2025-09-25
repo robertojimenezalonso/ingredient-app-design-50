@@ -7,6 +7,7 @@ import cartlyLogo from '@/assets/cartly-logo.png';
 const Index = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
 
   // Redirect to main app if authenticated
   useEffect(() => {
@@ -21,6 +22,16 @@ const Index = () => {
 
   const handleGetStarted = () => {
     navigate('/auth?mode=signup');
+  };
+
+  const handleSupermarketSelect = (supermarket: string) => {
+    setSelectedSupermarket(supermarket);
+  };
+
+  const handleSubmit = () => {
+    if (selectedSupermarket) {
+      navigate('/auth?mode=signup');
+    }
   };
 
   if (authLoading) {
@@ -73,50 +84,74 @@ const Index = () => {
           </p>
           {/* Chat-style Call to Action */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-            <div className="flex items-start gap-3 mb-4">
-              <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-sm font-medium">C</span>
-              </div>
-              <div className="flex-1">
-                <p className="text-gray-800 text-base leading-relaxed">
-                  ¿En qué supermercado te gustaría hacer la compra?
-                </p>
-              </div>
+            <div className="mb-6">
+              <p className="text-gray-600 text-base leading-relaxed">
+                ¿En qué supermercado te gustaría hacer la compra?
+              </p>
             </div>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-3 mb-6">
               <button 
-                onClick={handleGetStarted}
-                className="flex items-center gap-2 p-3 bg-red-50 hover:bg-red-100 rounded-lg border border-red-200 transition-colors"
+                onClick={() => handleSupermarketSelect('mercadona')}
+                className={`flex items-center gap-2 p-4 rounded-full transition-colors ${
+                  selectedSupermarket === 'mercadona' 
+                    ? 'bg-gray-800 text-white' 
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                }`}
               >
-                <img src="/lovable-uploads/mercadona-logo-new.png" alt="Mercadona" className="w-6 h-6 object-contain" />
-                <span className="text-red-700 font-medium text-sm">Mercadona</span>
+                <img src="/lovable-uploads/mercadona-logo-new.png" alt="Mercadona" className="w-5 h-5 object-contain" />
+                <span className="font-medium text-sm">Mercadona</span>
               </button>
               
               <button 
-                onClick={handleGetStarted}
-                className="flex items-center gap-2 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 transition-colors"
+                onClick={() => handleSupermarketSelect('carrefour')}
+                className={`flex items-center gap-2 p-4 rounded-full transition-colors ${
+                  selectedSupermarket === 'carrefour' 
+                    ? 'bg-gray-800 text-white' 
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                }`}
               >
-                <img src="/lovable-uploads/carrefour-logo.png" alt="Carrefour" className="w-6 h-6 object-contain" />
-                <span className="text-blue-700 font-medium text-sm">Carrefour</span>
+                <img src="/lovable-uploads/carrefour-logo.png" alt="Carrefour" className="w-5 h-5 object-contain" />
+                <span className="font-medium text-sm">Carrefour</span>
               </button>
               
               <button 
-                onClick={handleGetStarted}
-                className="flex items-center gap-2 p-3 bg-yellow-50 hover:bg-yellow-100 rounded-lg border border-yellow-200 transition-colors"
+                onClick={() => handleSupermarketSelect('lidl')}
+                className={`flex items-center gap-2 p-4 rounded-full transition-colors ${
+                  selectedSupermarket === 'lidl' 
+                    ? 'bg-gray-800 text-white' 
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                }`}
               >
-                <img src="/lovable-uploads/lidl-logo.png" alt="Lidl" className="w-6 h-6 object-contain" />
-                <span className="text-yellow-700 font-medium text-sm">Lidl</span>
+                <img src="/lovable-uploads/lidl-logo.png" alt="Lidl" className="w-5 h-5 object-contain" />
+                <span className="font-medium text-sm">Lidl</span>
               </button>
               
               <button 
-                onClick={handleGetStarted}
-                className="flex items-center justify-center gap-2 p-3 bg-gray-50 hover:bg-gray-100 rounded-lg border border-gray-200 transition-colors"
+                onClick={() => handleSupermarketSelect('otro')}
+                className={`flex items-center justify-center gap-2 p-4 rounded-full transition-colors ${
+                  selectedSupermarket === 'otro' 
+                    ? 'bg-gray-800 text-white' 
+                    : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
+                }`}
               >
-                <span className="text-gray-700 font-medium text-sm">Otro</span>
+                <span className="font-medium text-sm">Otro</span>
               </button>
             </div>
             
+            <div className="flex justify-end">
+              <Button
+                onClick={handleSubmit}
+                disabled={!selectedSupermarket}
+                className={`px-6 py-2 rounded-full font-medium text-sm ${
+                  selectedSupermarket 
+                    ? 'bg-black text-white hover:bg-gray-800' 
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
+              >
+                Enviar
+              </Button>
+            </div>
           </div>
         </div>
       </div>
