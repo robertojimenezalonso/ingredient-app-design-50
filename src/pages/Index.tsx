@@ -124,7 +124,7 @@ const Index = () => {
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                 }`}
               >
-                <img src="/lovable-uploads/lidl-logo.png" alt="Lidl" className="w-5 h-5 object-contain" />
+                <img src="/lidl-logo-updated.png" alt="Lidl" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-sm">Lidl</span>
               </button>
               
