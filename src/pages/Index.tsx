@@ -101,12 +101,12 @@ const Index = () => {
   };
 
   const handleCalendarContinue = () => {
-    if (selectedDates.length > 0 && selectedMeals.length > 0) {
+    if (selectedDates.length > 0) {
       navigate('/auth?mode=signup');
     }
   };
 
-  const canContinue = selectedDates.length > 0 && selectedMeals.length > 0;
+  const canContinue = selectedDates.length > 0;
 
   if (authLoading) {
     return (
@@ -154,76 +154,7 @@ const Index = () => {
               </CardContent>
             </Card>
 
-            {/* Meal Selection Container */}
-            <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
-              <CardContent className="px-4 py-4">
-                <div className="space-y-4">
-                  <h3 className="font-semibold text-xl text-neutral-950">¿Qué comidas?</h3>
-                  
-                  <div className="space-y-2">
-                    {/* Main meals with plus button - same line */}
-                    <div className="flex gap-1 justify-center">
-                      {['Desayuno', 'Almuerzo', 'Cena'].map(meal => 
-                        <Badge 
-                          key={meal} 
-                          variant="outline" 
-                          className={cn(
-                            "cursor-pointer px-2 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center justify-center", 
-                            selectedMeals.includes(meal) 
-                              ? "bg-foreground/15 border-2 border-foreground text-foreground" 
-                              : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
-                          )} 
-                          onClick={() => toggleMeal(meal)}
-                        >
-                          {meal}
-                        </Badge>
-                      )}
-                      
-                      {/* Plus button - in same line */}
-                      <Badge 
-                        variant="outline" 
-                        className="cursor-pointer w-12 h-12 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0 flex items-center justify-center" 
-                        onClick={() => setShowMoreMeals(!showMoreMeals)}
-                      >
-                        {showMoreMeals ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
-                      </Badge>
-                    </div>
-
-                    {/* Additional meals - new line */}
-                    {showMoreMeals && (
-                      <div className="flex gap-2 animate-fade-in">
-                        {additionalMeals.map(meal => 
-                          <Badge 
-                            key={meal} 
-                            variant="outline" 
-                            className={cn(
-                              "cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors", 
-                              selectedMeals.includes(meal) 
-                                ? "bg-foreground/15 border-2 border-foreground text-foreground" 
-                                : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
-                            )} 
-                            onClick={() => toggleMeal(meal)}
-                          >
-                            {meal}
-                          </Badge>
-                        )}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Continue Button */}
-                  <div className="flex justify-end pt-2">
-                    <Button
-                      onClick={handleCalendarContinue}
-                      disabled={!canContinue}
-                      className="px-6 bg-[#1C1C1C] text-white hover:bg-gray-800 disabled:opacity-50 disabled:bg-[#BAB9BC] disabled:text-white rounded-lg py-2 h-auto text-sm font-semibold"
-                    >
-                      Siguiente
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            {/* Meal Selection Container - Temporarily removed */}
           </div>
         </div>
       </div>
