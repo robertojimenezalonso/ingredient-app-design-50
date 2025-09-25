@@ -167,57 +167,57 @@ const Index = () => {
               </div>
             </div>
             
-            <div className={`flex flex-col gap-2 mb-6 transition-all duration-500 ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+            <div className={`flex flex-col items-start gap-2 mb-6 transition-all duration-500 ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <button 
                 onClick={() => handleSupermarketSelect('mercadona')}
-                className={`flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 border text-sm ${
+                className={`inline-flex items-center gap-2 py-1.5 px-2.5 rounded-lg transition-all duration-300 border text-xs ${
                   selectedSupermarket === 'mercadona' 
                     ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'bg-gray-100 text-black hover:bg-gray-200 border-gray-200'
+                    : 'text-black hover:bg-gray-300 border-gray-200'
                 } ${visibleSupermarkets >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'mercadona' ? { borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'mercadona' ? { backgroundColor: '#EBEAE5', borderColor: '#CAC9C4' } : {}}
               >
-                <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-4 h-4 object-contain" />
-                <span className="font-medium text-sm">Mercadona</span>
+                <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-3 h-3 object-contain" />
+                <span className="font-medium text-xs">Mercadona</span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('carrefour')}
-                className={`flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 border text-sm ${
+                className={`inline-flex items-center gap-2 py-1.5 px-2.5 rounded-lg transition-all duration-300 border text-xs ${
                   selectedSupermarket === 'carrefour' 
                     ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'bg-gray-100 text-black hover:bg-gray-200 border-gray-200'
+                    : 'text-black hover:bg-gray-300 border-gray-200'
                 } ${visibleSupermarkets >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'carrefour' ? { borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'carrefour' ? { backgroundColor: '#EBEAE5', borderColor: '#CAC9C4' } : {}}
               >
-                <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-4 h-4 object-contain" />
-                <span className="font-medium text-sm">Carrefour</span>
+                <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-3 h-3 object-contain" />
+                <span className="font-medium text-xs">Carrefour</span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('lidl')}
-                className={`flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 border text-sm ${
+                className={`inline-flex items-center gap-2 py-1.5 px-2.5 rounded-lg transition-all duration-300 border text-xs ${
                   selectedSupermarket === 'lidl' 
                     ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'bg-gray-100 text-black hover:bg-gray-200 border-gray-200'
+                    : 'text-black hover:bg-gray-300 border-gray-200'
                 } ${visibleSupermarkets >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'lidl' ? { borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'lidl' ? { backgroundColor: '#EBEAE5', borderColor: '#CAC9C4' } : {}}
               >
-                <img src="/lidl-logo-updated.png" alt="Lidl" className="w-4 h-4 object-contain rounded-full" />
-                <span className="font-medium text-sm">Lidl</span>
+                <img src="/lidl-logo-updated.png" alt="Lidl" className="w-3 h-3 object-contain rounded-full" />
+                <span className="font-medium text-xs">Lidl</span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('alcampo')}
-                className={`flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 border text-sm ${
+                className={`inline-flex items-center gap-2 py-1.5 px-2.5 rounded-lg transition-all duration-300 border text-xs ${
                   selectedSupermarket === 'alcampo' 
                     ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'bg-gray-100 text-black hover:bg-gray-200 border-gray-200'
+                    : 'text-black hover:bg-gray-300 border-gray-200'
                 } ${visibleSupermarkets >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'alcampo' ? { borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#EBEAE5', borderColor: '#CAC9C4' } : {}}
               >
-                <img src="/alcampo-logo.png" alt="Alcampo" className="w-4 h-4 object-contain" />
-                <span className="font-medium text-sm">Alcampo</span>
+                <img src="/alcampo-logo.png" alt="Alcampo" className="w-3 h-3 object-contain" />
+                <span className="font-medium text-xs">Alcampo</span>
               </button>
             </div>
             
