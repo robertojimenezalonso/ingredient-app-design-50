@@ -141,21 +141,6 @@ const Index = () => {
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center">
         </div>
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            onClick={handleLogin}
-            className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 font-medium"
-          >
-            Iniciar sesión
-          </Button>
-          <Button
-            onClick={handleGetStarted}
-            className="bg-black text-white hover:bg-gray-800 font-medium px-6"
-          >
-            Comenzar
-          </Button>
-        </div>
       </div>
       
       {/* Main Content - Landing Page */}
