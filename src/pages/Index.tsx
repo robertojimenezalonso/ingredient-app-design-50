@@ -302,7 +302,7 @@ const Index = () => {
           </p>
           
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg p-6 border bg-white w-full transition-all duration-500 ease-out" style={{ borderColor: '#CAC9C4', minHeight: '120px' }}>
+          <div className="rounded-3xl shadow-lg p-6 border bg-white w-full transition-all duration-500 ease-out" style={{ borderColor: '#ECEAE4', minHeight: '120px' }}>
             <div className={`transition-all duration-500 ease-out ${typewriterStep >= 1 ? 'mb-6' : 'mb-0'} space-y-4`}>
               {/* First paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
@@ -320,10 +320,10 @@ const Index = () => {
             <div className={`flex flex-col items-start gap-2 transition-all duration-500 ease-out ${showSupermarkets ? 'opacity-100 translate-y-0 mb-6' : 'opacity-0 translate-y-4 mb-0 h-0 overflow-hidden'}`}>
               <button 
                 onClick={() => handleSupermarketSelect('mercadona')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
+                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base border ${
                   selectedSupermarket === 'mercadona' 
-                    ? 'bg-gray-800 text-white' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300'
+                    ? 'bg-gray-800 text-white border-gray-800' 
+                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
                 } ${visibleSupermarkets >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'mercadona' ? { backgroundColor: '#F2F2F2' } : {}}
               >
@@ -333,10 +333,10 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('carrefour')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
+                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base border ${
                   selectedSupermarket === 'carrefour' 
-                    ? 'bg-gray-800 text-white' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300'
+                    ? 'bg-gray-800 text-white border-gray-800' 
+                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
                 } ${visibleSupermarkets >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'carrefour' ? { backgroundColor: '#F2F2F2' } : {}}
               >
@@ -346,10 +346,10 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('lidl')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
+                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base border ${
                   selectedSupermarket === 'lidl' 
-                    ? 'bg-gray-800 text-white' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300'
+                    ? 'bg-gray-800 text-white border-gray-800' 
+                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
                 } ${visibleSupermarkets >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'lidl' ? { backgroundColor: '#F2F2F2' } : {}}
               >
@@ -359,10 +359,10 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('alcampo')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base ${
+                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base border ${
                   selectedSupermarket === 'alcampo' 
-                    ? 'bg-gray-800 text-white' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300'
+                    ? 'bg-gray-800 text-white border-gray-800' 
+                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
                 } ${visibleSupermarkets >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#F2F2F2' } : {}}
               >
