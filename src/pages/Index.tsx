@@ -136,6 +136,7 @@ const Index = () => {
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                 }`}
               >
+                <img src="/alcampo-logo.png" alt="Alcampo" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-sm">Alcampo</span>
               </button>
             </div>
