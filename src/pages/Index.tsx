@@ -124,6 +124,21 @@ const Index = () => {
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center">
         </div>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            onClick={handleLogin}
+            className="text-sm font-medium text-gray-700 hover:text-gray-900"
+          >
+            Iniciar sesión
+          </Button>
+          <Button
+            onClick={handleGetStarted}
+            className="text-sm font-medium bg-black text-white hover:bg-gray-800 px-4 py-2 rounded-lg"
+          >
+            Empezar
+          </Button>
+        </div>
       </div>
       
       {/* Main Content - Landing Page */}
