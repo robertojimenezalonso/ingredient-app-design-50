@@ -105,9 +105,9 @@ const Index = () => {
                 className={`flex items-center gap-2 p-4 rounded-full transition-colors border ${
                   selectedSupermarket === 'mercadona' 
                     ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'bg-transparent text-gray-700 hover:bg-gray-50'
+                    : 'bg-transparent hover:bg-gray-50'
                 }`}
-                style={selectedSupermarket !== 'mercadona' ? { borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'mercadona' ? { borderColor: '#CAC9C4', color: '#5F5F5D' } : {}}
               >
                 <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-sm">Mercadona</span>
@@ -118,9 +118,9 @@ const Index = () => {
                 className={`flex items-center gap-2 p-4 rounded-full transition-colors border ${
                   selectedSupermarket === 'carrefour' 
                     ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'bg-transparent text-gray-700 hover:bg-gray-50'
+                    : 'bg-transparent hover:bg-gray-50'
                 }`}
-                style={selectedSupermarket !== 'carrefour' ? { borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'carrefour' ? { borderColor: '#CAC9C4', color: '#5F5F5D' } : {}}
               >
                 <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-sm">Carrefour</span>
@@ -131,9 +131,9 @@ const Index = () => {
                 className={`flex items-center gap-2 p-4 rounded-full transition-colors border ${
                   selectedSupermarket === 'lidl' 
                     ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'bg-transparent text-gray-700 hover:bg-gray-50'
+                    : 'bg-transparent hover:bg-gray-50'
                 }`}
-                style={selectedSupermarket !== 'lidl' ? { borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'lidl' ? { borderColor: '#CAC9C4', color: '#5F5F5D' } : {}}
               >
                 <img src="/lidl-logo-updated.png" alt="Lidl" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-sm">Lidl</span>
@@ -144,9 +144,9 @@ const Index = () => {
                 className={`flex items-center justify-center gap-2 p-4 rounded-full transition-colors border ${
                   selectedSupermarket === 'alcampo' 
                     ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'bg-transparent text-gray-700 hover:bg-gray-50'
+                    : 'bg-transparent hover:bg-gray-50'
                 }`}
-                style={selectedSupermarket !== 'alcampo' ? { borderColor: '#CAC9C4' } : {}}
+                style={selectedSupermarket !== 'alcampo' ? { borderColor: '#CAC9C4', color: '#5F5F5D' } : {}}
               >
                 <img src="/alcampo-logo.png" alt="Alcampo" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-sm">Alcampo</span>
