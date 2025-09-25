@@ -12,14 +12,18 @@ const Index = () => {
   
   // Typewriter effect states
   const [typewriterStep, setTypewriterStep] = useState(0);
-  const [displayedSubtitle, setDisplayedSubtitle] = useState('');
-  const [displayedQuestion, setDisplayedQuestion] = useState('');
+  const [displayedParagraph1, setDisplayedParagraph1] = useState('');
+  const [displayedParagraph2, setDisplayedParagraph2] = useState('');
+  const [displayedParagraph3, setDisplayedParagraph3] = useState('');
+  const [displayedParagraph4, setDisplayedParagraph4] = useState('');
   const [showCursor, setShowCursor] = useState(true);
   const [showSupermarkets, setShowSupermarkets] = useState(false);
   const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
-  const subtitleText = "Crea listas de la compra inteligentes chateando con AI";
-  const questionText = "¿En qué supermercado te gustaría hacer la compra?";
+  const paragraph1Text = "Hola 👋, soy tu asistente de compra en el supermercado.";
+  const paragraph2Text = "Te ayudaré a crear tu lista según tus preferencias y, a partir de ahí, te propondré recetas con los ingredientes que elijas directamente en tu súper favorito.";
+  const paragraph3Text = "Además, te mostraré cuánto costaría esa misma compra en otros supermercados, por si te ayuda a ahorrar. 💰";
+  const paragraph4Text = "Empecemos… ¿En qué súper te gustaría hacer la compra?";
 
   // Typewriter effect
   useEffect(() => {
@@ -31,25 +35,46 @@ const Index = () => {
         setTypewriterStep(1);
       }, 500);
     } else if (typewriterStep === 1) {
-      // Type subtitle character by character
-      if (displayedSubtitle.length < subtitleText.length) {
+      // Type first paragraph character by character
+      if (displayedParagraph1.length < paragraph1Text.length) {
         timeout = setTimeout(() => {
-          setDisplayedSubtitle(subtitleText.slice(0, displayedSubtitle.length + 1));
+          setDisplayedParagraph1(paragraph1Text.slice(0, displayedParagraph1.length + 1));
         }, 30);
       } else {
-        // Hide cursor and move to next step
+        // Move to next step after delay
         setTimeout(() => {
-          setShowCursor(false);
           setTypewriterStep(2);
         }, 800);
       }
     } else if (typewriterStep === 2) {
-      // Show cursor for second message
-      setShowCursor(true);
-      // Type question character by character
-      if (displayedQuestion.length < questionText.length) {
+      // Type second paragraph character by character
+      if (displayedParagraph2.length < paragraph2Text.length) {
         timeout = setTimeout(() => {
-          setDisplayedQuestion(questionText.slice(0, displayedQuestion.length + 1));
+          setDisplayedParagraph2(paragraph2Text.slice(0, displayedParagraph2.length + 1));
+        }, 30);
+      } else {
+        // Move to next step after delay
+        setTimeout(() => {
+          setTypewriterStep(3);
+        }, 800);
+      }
+    } else if (typewriterStep === 3) {
+      // Type third paragraph character by character
+      if (displayedParagraph3.length < paragraph3Text.length) {
+        timeout = setTimeout(() => {
+          setDisplayedParagraph3(paragraph3Text.slice(0, displayedParagraph3.length + 1));
+        }, 30);
+      } else {
+        // Move to next step after delay
+        setTimeout(() => {
+          setTypewriterStep(4);
+        }, 800);
+      }
+    } else if (typewriterStep === 4) {
+      // Type fourth paragraph character by character
+      if (displayedParagraph4.length < paragraph4Text.length) {
+        timeout = setTimeout(() => {
+          setDisplayedParagraph4(paragraph4Text.slice(0, displayedParagraph4.length + 1));
         }, 30);
       } else {
         // Hide cursor and show supermarkets
@@ -68,7 +93,7 @@ const Index = () => {
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [typewriterStep, displayedSubtitle, displayedQuestion, subtitleText, questionText]);
+  }, [typewriterStep, displayedParagraph1, displayedParagraph2, displayedParagraph3, displayedParagraph4, paragraph1Text, paragraph2Text, paragraph3Text, paragraph4Text]);
 
 
   const handleLogin = () => {
@@ -141,26 +166,50 @@ const Index = () => {
           
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border bg-white w-full transition-all duration-500 ease-out" style={{ borderColor: '#CAC9C4', minHeight: '120px' }}>
-            <div className={`transition-all duration-500 ease-out ${typewriterStep >= 1 || typewriterStep >= 2 ? 'mb-6' : 'mb-0'} space-y-4`}>
-              {/* Typing animation for the first message */}
+            <div className={`transition-all duration-500 ease-out ${typewriterStep >= 1 ? 'mb-6' : 'mb-0'} space-y-4`}>
+              {/* First paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                 <p className="text-base leading-relaxed text-left text-black">
                   {typewriterStep >= 1 && (
                     <span>
-                      {displayedSubtitle}
+                      {displayedParagraph1}
                       {typewriterStep === 1 && showCursor && <span className="animate-pulse">|</span>}
                     </span>
                   )}
                 </p>
               </div>
               
-              {/* Second message with delay */}
+              {/* Second paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                 <p className="text-base leading-relaxed text-left text-black">
                   {typewriterStep >= 2 && (
                     <span>
-                      {displayedQuestion}
+                      {displayedParagraph2}
                       {typewriterStep === 2 && showCursor && <span className="animate-pulse">|</span>}
+                    </span>
+                  )}
+                </p>
+              </div>
+
+              {/* Third paragraph */}
+              <div className={`transition-all duration-500 ${typewriterStep >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                <p className="text-base leading-relaxed text-left text-black">
+                  {typewriterStep >= 3 && (
+                    <span>
+                      {displayedParagraph3}
+                      {typewriterStep === 3 && showCursor && <span className="animate-pulse">|</span>}
+                    </span>
+                  )}
+                </p>
+              </div>
+
+              {/* Fourth paragraph */}
+              <div className={`transition-all duration-500 ${typewriterStep >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                <p className="text-base leading-relaxed text-left text-black">
+                  {typewriterStep >= 4 && (
+                    <span>
+                      {displayedParagraph4}
+                      {typewriterStep === 4 && showCursor && <span className="animate-pulse">|</span>}
                     </span>
                   )}
                 </p>
