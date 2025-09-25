@@ -223,17 +223,15 @@ const Index = () => {
             
             <div className={`flex justify-end transition-all duration-500 ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <Button
+                variant="ghost"
                 onClick={handleSubmit}
                 disabled={!selectedSupermarket}
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  selectedSupermarket 
-                    ? 'bg-black text-white hover:bg-gray-800' 
-                    : 'cursor-not-allowed'
-                }`}
+                className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
                 style={{
                   backgroundColor: selectedSupermarket ? '#000000' : '#F2F2F2',
                   color: selectedSupermarket ? '#ffffff' : '#5D5D5D',
-                  border: 'none'
+                  border: 'none',
+                  opacity: 1
                 }}
               >
                 <ArrowUp size={16} />
