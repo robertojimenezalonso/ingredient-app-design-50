@@ -143,9 +143,6 @@ const Index = () => {
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
                   Hemos encontrado 824 productos en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}, con ellos podemos preparar más de 2.800 recetas.
                 </p>
-                <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                  Ahora vamos a elegir las que mejor encajen contigo.
-                </p>
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-semibold">
                   👉 Dime, ¿para qué días te gustaría hacer tu compra?
                 </p>
