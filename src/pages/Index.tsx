@@ -161,9 +161,6 @@ const Index = () => {
       {/* Main Content - Landing Page */}
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
         <div className="w-full max-w-md mx-auto">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-4">
-            Genera tu lista de la compra
-          </h1>
           
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border bg-white w-full transition-all duration-500 ease-out" style={{ borderColor: '#CAC9C4', minHeight: '120px' }}>
