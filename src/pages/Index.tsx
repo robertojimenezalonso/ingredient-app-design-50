@@ -28,8 +28,19 @@ const Index = () => {
   const [showSupermarkets, setShowSupermarkets] = useState(false);
   const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
+  // Calendar screen typewriter states
+  const [calendarTypewriterStep, setCalendarTypewriterStep] = useState(0);
+  const [displayedCalendarParagraph1, setDisplayedCalendarParagraph1] = useState('');
+  const [displayedCalendarParagraph2, setDisplayedCalendarParagraph2] = useState('');
+  const [showCalendarCursor, setShowCalendarCursor] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(false);
+  
   const paragraph1Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
+  
+  // Calendar screen text
+  const calendarParagraph1Text = `Hemos encontrado 824 productos en ${selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}, con ellos podemos preparar más de 2.800 recetas.`;
+  const calendarParagraph2Text = "👉 Dime, ¿para qué días te gustaría hacer tu compra?";
 
   // Typewriter effect
   useEffect(() => {
@@ -64,6 +75,57 @@ const Index = () => {
       if (timeout) clearTimeout(timeout);
     };
   }, [typewriterStep, displayedParagraph1, paragraph1Text]);
+
+  // Calendar screen typewriter effect
+  useEffect(() => {
+    if (!isExpanded) {
+      // Reset calendar typewriter when not expanded
+      setCalendarTypewriterStep(0);
+      setDisplayedCalendarParagraph1('');
+      setDisplayedCalendarParagraph2('');
+      setShowCalendarCursor(true);
+      setShowCalendar(false);
+      return;
+    }
+
+    let timeout: NodeJS.Timeout;
+    
+    if (calendarTypewriterStep === 0) {
+      // Start first message after 500ms delay
+      timeout = setTimeout(() => {
+        setCalendarTypewriterStep(1);
+      }, 500);
+    } else if (calendarTypewriterStep === 1) {
+      // Type first paragraph character by character
+      if (displayedCalendarParagraph1.length < calendarParagraph1Text.length) {
+        timeout = setTimeout(() => {
+          setDisplayedCalendarParagraph1(calendarParagraph1Text.slice(0, displayedCalendarParagraph1.length + 1));
+        }, 50);
+      } else {
+        // Move to second paragraph
+        setTimeout(() => {
+          setCalendarTypewriterStep(2);
+        }, 500);
+      }
+    } else if (calendarTypewriterStep === 2) {
+      // Type second paragraph character by character
+      if (displayedCalendarParagraph2.length < calendarParagraph2Text.length) {
+        timeout = setTimeout(() => {
+          setDisplayedCalendarParagraph2(calendarParagraph2Text.slice(0, displayedCalendarParagraph2.length + 1));
+        }, 50);
+      } else {
+        // Hide cursor and show calendar
+        setTimeout(() => {
+          setShowCalendarCursor(false);
+          setShowCalendar(true);
+        }, 800);
+      }
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [isExpanded, calendarTypewriterStep, displayedCalendarParagraph1, displayedCalendarParagraph2, calendarParagraph1Text, calendarParagraph2Text]);
 
 
   const handleLogin = () => {
@@ -140,15 +202,29 @@ const Index = () => {
           <div className="rounded-t-3xl shadow-lg p-4 flex-1 transition-all duration-500 ease-out overflow-hidden pb-20 border" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
             <div className="flex flex-col h-full overflow-y-auto">
               <div className="mx-4 mb-6 flex-shrink-0 space-y-4">
-                <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                  Hemos encontrado 824 productos en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}, con ellos podemos preparar más de 2.800 recetas.
-                </p>
-                <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-semibold">
-                  👉 Dime, ¿para qué días te gustaría hacer tu compra?
-                </p>
+                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                  <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                    {calendarTypewriterStep >= 1 && (
+                      <span>
+                        {displayedCalendarParagraph1}
+                        {calendarTypewriterStep === 1 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                      </span>
+                    )}
+                  </p>
+                </div>
+                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                  <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-semibold">
+                    {calendarTypewriterStep >= 2 && (
+                      <span>
+                        {displayedCalendarParagraph2}
+                        {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                      </span>
+                    )}
+                  </p>
+                </div>
               </div>
               
-              <div className="flex justify-center flex-shrink-0">
+              <div className={`flex justify-center flex-shrink-0 transition-all duration-500 ease-out ${showCalendar ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <Calendar 
                   selected={selectedDates} 
                   onSelect={dates => setSelectedDates(dates || [])} 
