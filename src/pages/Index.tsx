@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, ArrowRight } from 'lucide-react';
 import cartlyLogo from '@/assets/cartly-logo.png';
 
 const Index = () => {
@@ -188,11 +188,14 @@ const Index = () => {
 
               {/* Fourth paragraph */}
               <div className={`transition-all duration-500 ${typewriterStep >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                <p className="text-base leading-relaxed text-left text-black">
+                <p className="text-base leading-relaxed text-left text-black font-medium">
                   {typewriterStep >= 4 && (
-                    <span>
-                      {displayedParagraph4}
-                      {typewriterStep === 4 && showCursor && <span className="animate-pulse">|</span>}
+                    <span className="flex items-center gap-2">
+                      <ArrowRight size={16} className="text-gray-600" />
+                      <span>
+                        {displayedParagraph4}
+                        {typewriterStep === 4 && showCursor && <span className="animate-pulse">|</span>}
+                      </span>
                     </span>
                   )}
                 </p>
