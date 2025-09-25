@@ -41,10 +41,8 @@ const Index = () => {
           setDisplayedParagraph1(paragraph1Text.slice(0, displayedParagraph1.length + 1));
         }, 30);
       } else {
-        // Move to next step after brief delay
-        setTimeout(() => {
-          setTypewriterStep(2);
-        }, 200);
+        // Move to next step immediately for fluid flow
+        setTypewriterStep(2);
       }
     } else if (typewriterStep === 2) {
       // Type second paragraph character by character
@@ -53,10 +51,8 @@ const Index = () => {
           setDisplayedParagraph2(paragraph2Text.slice(0, displayedParagraph2.length + 1));
         }, 30);
       } else {
-        // Move to next step after brief delay
-        setTimeout(() => {
-          setTypewriterStep(3);
-        }, 200);
+        // Move to next step immediately for fluid flow
+        setTypewriterStep(3);
       }
     } else if (typewriterStep === 3) {
       // Type third paragraph character by character
