@@ -121,7 +121,7 @@ const Index = () => {
       <div className="flex-1 flex flex-col px-6 pt-16">
         <div className="w-full max-w-md mx-auto">
           <h1 className="text-xl font-medium text-gray-900 mb-2 text-center">
-            Hola 👋, soy, tu asistente IA de supermercado
+            Hagamos tu lista de la compra con IA
           </h1>
           <p className="text-gray-600 text-center mb-6">
             Te prepararé recetas a tu medida con los ingredientes de tu súper
