@@ -21,7 +21,7 @@ const Index = () => {
   const [showSupermarkets, setShowSupermarkets] = useState(false);
   const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
-  const paragraph1Text = "Te ayudaré a crear tu lista según tus preferencias y, a partir de ahí, te propondré recetas con los ingredientes que elijas directamente en tu súper favorito.";
+  const paragraph1Text = "Te ayudaré a crear listas de la compra según tus preferencias y, a partir de ahí, te propondré recetas con los ingredientes de tu súper favorito.";
   const paragraph2Text = "Además, te mostraré cuánto costaría esa misma compra en otros supermercados, por si te ayuda a ahorrar. 💰";
   const paragraph3Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
 
