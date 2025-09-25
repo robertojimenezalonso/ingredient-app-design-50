@@ -135,9 +135,9 @@ const Index = () => {
         <div className="h-[30vh]"></div>
 
         {/* Calendar area - 70% of screen */}
-        <div className="h-[70vh] flex flex-col">
-          {/* Calendar Container - Chat style */}
-          <div className="rounded-t-3xl shadow-lg p-4 bg-white flex-1 transition-all duration-500 ease-out overflow-hidden">
+        <div className="h-[70vh] flex flex-col relative">
+          {/* Calendar Container - Chat style with bottom padding for fixed button */}
+          <div className="rounded-t-3xl shadow-lg p-4 bg-white flex-1 transition-all duration-500 ease-out overflow-hidden pb-20">
             <div className="flex flex-col h-full">
               <div className="mx-4 mt-6 mb-6 flex-shrink-0 space-y-4">
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
@@ -159,25 +159,25 @@ const Index = () => {
                 />
               </div>
             </div>
+          </div>
 
-            {/* Fixed Button Area with Separator */}
-            <div className="border-t border-gray-200 bg-white px-4 py-3">
-              <div className="flex justify-end">
-                <Button
-                  variant="ghost"
-                  onClick={handleCalendarContinue}
-                  disabled={!canContinue}
-                  className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
-                  style={{
-                    backgroundColor: canContinue ? '#000000' : '#F2F2F2',
-                    color: canContinue ? '#ffffff' : '#5D5D5D',
-                    border: 'none',
-                    opacity: 1
-                  }}
-                >
-                  <ArrowUp size={16} />
-                </Button>
-              </div>
+          {/* Fixed Button Area at Bottom of Screen */}
+          <div className="absolute bottom-0 left-0 right-0 border-t border-gray-200 bg-white px-4 py-3 rounded-b-3xl">
+            <div className="flex justify-end">
+              <Button
+                variant="ghost"
+                onClick={handleCalendarContinue}
+                disabled={!canContinue}
+                className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
+                style={{
+                  backgroundColor: canContinue ? '#000000' : '#F2F2F2',
+                  color: canContinue ? '#ffffff' : '#5D5D5D',
+                  border: 'none',
+                  opacity: 1
+                }}
+              >
+                <ArrowUp size={16} />
+              </Button>
             </div>
           </div>
         </div>
