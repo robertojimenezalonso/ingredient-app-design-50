@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/useAuth';
+import { ArrowUp } from 'lucide-react';
 import cartlyLogo from '@/assets/cartly-logo.png';
 
 const Index = () => {
@@ -143,13 +144,13 @@ const Index = () => {
               <Button
                 onClick={handleSubmit}
                 disabled={!selectedSupermarket}
-                className={`px-6 py-2 rounded-full font-medium text-sm ${
+                className={`w-10 h-10 rounded-full flex items-center justify-center ${
                   selectedSupermarket 
                     ? 'bg-black text-white hover:bg-gray-800' 
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 }`}
               >
-                Enviar
+                <ArrowUp size={16} />
               </Button>
             </div>
           </div>
