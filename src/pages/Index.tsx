@@ -94,7 +94,7 @@ const Index = () => {
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border" style={{ backgroundColor: '#F7F4ED', borderColor: '#CAC9C4' }}>
             <div className="mb-6">
-              <p className="text-gray-600 text-base leading-relaxed text-left">
+              <p className="text-base leading-relaxed text-left" style={{ color: '#5F5F5D' }}>
                 ¿En qué supermercado te gustaría hacer la compra?
               </p>
             </div>
