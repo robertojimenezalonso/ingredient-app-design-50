@@ -124,7 +124,7 @@ const Index = () => {
             Tu lista de la compra
           </h1>
           <p className="text-lg text-[#626469] text-center mb-6">
-            Haré recetas personalizadas con los productos de tu súper
+            Te generaré recetas personalizadas con ingredientes de tu súper utilizando IA
           </p>
           
           {/* Chat-style Call to Action */}
