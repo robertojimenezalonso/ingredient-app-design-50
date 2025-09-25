@@ -21,7 +21,7 @@ const Index = () => {
   const [showSupermarkets, setShowSupermarkets] = useState(false);
   const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
-  const paragraph1Text = "Crearé listas de la compra según tus preferencias. Después, te propondré recetas con ingredientes de tu súper favorito.";
+  const paragraph1Text = "Después, te propondré recetas con ingredientes de tu súper favorito.";
   const paragraph2Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
 
   // Typewriter effect
@@ -121,7 +121,7 @@ const Index = () => {
       <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
         <div className="w-full max-w-md mx-auto">
           <h1 className="text-xl font-medium text-gray-900 mb-6">
-            Hola 👋, soy tu asistente de compra en el supermercado.
+            Crearé listas de la compra según tus preferencias.
           </h1>
           
           {/* Chat-style Call to Action */}
