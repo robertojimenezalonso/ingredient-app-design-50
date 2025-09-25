@@ -139,7 +139,7 @@ const Index = () => {
         <div className="flex-1 flex flex-col">
           <div className="flex-1 flex flex-col">
             {/* Calendar Container - Chat style */}
-            <div className="rounded-t-3xl shadow-lg p-6 border bg-white flex-1 transition-all duration-500 ease-out" style={{ borderColor: '#CAC9C4' }}>
+            <div className="rounded-t-3xl shadow-lg p-6 bg-white flex-1 transition-all duration-500 ease-out">
               <div className="flex flex-col h-full">
                 <div className="mb-4">
                   <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
