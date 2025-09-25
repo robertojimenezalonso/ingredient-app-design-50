@@ -16,6 +16,7 @@ const Index = () => {
   const [displayedQuestion, setDisplayedQuestion] = useState('');
   const [showCursor, setShowCursor] = useState(true);
   const [showSupermarkets, setShowSupermarkets] = useState(false);
+  const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
   const subtitleText = "Crea listas de la compra inteligentes chateando con AI";
   const questionText = "¿En qué supermercado te gustaría hacer la compra?";
@@ -55,6 +56,11 @@ const Index = () => {
         setTimeout(() => {
           setShowCursor(false);
           setShowSupermarkets(true);
+          // Start showing supermarkets one by one
+          setTimeout(() => setVisibleSupermarkets(1), 200);
+          setTimeout(() => setVisibleSupermarkets(2), 400);
+          setTimeout(() => setVisibleSupermarkets(3), 600);
+          setTimeout(() => setVisibleSupermarkets(4), 800);
         }, 800);
       }
     }
@@ -164,11 +170,11 @@ const Index = () => {
             <div className={`grid grid-cols-2 gap-3 mb-6 transition-all duration-500 ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <button 
                 onClick={() => handleSupermarketSelect('mercadona')}
-                className={`flex items-center gap-2 p-4 rounded-full transition-colors border ${
+                className={`flex items-center gap-2 p-4 rounded-full transition-all duration-300 border ${
                   selectedSupermarket === 'mercadona' 
                     ? 'bg-gray-800 text-white border-gray-800' 
                     : 'bg-transparent text-black hover:bg-gray-50'
-                }`}
+                } ${visibleSupermarkets >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'mercadona' ? { borderColor: '#CAC9C4' } : {}}
               >
                 <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
@@ -177,11 +183,11 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('carrefour')}
-                className={`flex items-center gap-2 p-4 rounded-full transition-colors border ${
+                className={`flex items-center gap-2 p-4 rounded-full transition-all duration-300 border ${
                   selectedSupermarket === 'carrefour' 
                     ? 'bg-gray-800 text-white border-gray-800' 
                     : 'bg-transparent text-black hover:bg-gray-50'
-                }`}
+                } ${visibleSupermarkets >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'carrefour' ? { borderColor: '#CAC9C4' } : {}}
               >
                 <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-5 h-5 object-contain" />
@@ -190,11 +196,11 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('lidl')}
-                className={`flex items-center gap-2 p-4 rounded-full transition-colors border ${
+                className={`flex items-center gap-2 p-4 rounded-full transition-all duration-300 border ${
                   selectedSupermarket === 'lidl' 
                     ? 'bg-gray-800 text-white border-gray-800' 
                     : 'bg-transparent text-black hover:bg-gray-50'
-                }`}
+                } ${visibleSupermarkets >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'lidl' ? { borderColor: '#CAC9C4' } : {}}
               >
                 <img src="/lidl-logo-updated.png" alt="Lidl" className="w-5 h-5 object-contain rounded-full" />
@@ -203,11 +209,11 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('alcampo')}
-                className={`flex items-center justify-center gap-2 p-4 rounded-full transition-colors border ${
+                className={`flex items-center justify-center gap-2 p-4 rounded-full transition-all duration-300 border ${
                   selectedSupermarket === 'alcampo' 
                     ? 'bg-gray-800 text-white border-gray-800' 
                     : 'bg-transparent text-black hover:bg-gray-50'
-                }`}
+                } ${visibleSupermarkets >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
                 style={selectedSupermarket !== 'alcampo' ? { borderColor: '#CAC9C4' } : {}}
               >
                 <img src="/alcampo-logo.png" alt="Alcampo" className="w-5 h-5 object-contain" />
