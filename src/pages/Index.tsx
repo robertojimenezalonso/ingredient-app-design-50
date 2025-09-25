@@ -26,7 +26,7 @@ const Index = () => {
   };
 
   const handleSupermarketSelect = (supermarket: string) => {
-    setSelectedSupermarket(supermarket);
+    setSelectedSupermarket(selectedSupermarket === supermarket ? null : supermarket);
   };
 
   const handleSubmit = () => {
