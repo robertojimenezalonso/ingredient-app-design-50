@@ -128,14 +128,14 @@ const Index = () => {
               </button>
               
               <button 
-                onClick={() => handleSupermarketSelect('otro')}
+                onClick={() => handleSupermarketSelect('alcampo')}
                 className={`flex items-center justify-center gap-2 p-4 rounded-full transition-colors ${
-                  selectedSupermarket === 'otro' 
+                  selectedSupermarket === 'alcampo' 
                     ? 'bg-gray-800 text-white' 
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                 }`}
               >
-                <span className="font-medium text-sm">Otro</span>
+                <span className="font-medium text-sm">Alcampo</span>
               </button>
             </div>
             
