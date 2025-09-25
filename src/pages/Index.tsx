@@ -131,11 +131,11 @@ const Index = () => {
           <X className="h-5 w-5 text-[#1C1C1C]" />
         </button>
 
-        {/* First half - completely empty, spacer */}
-        <div className="flex-1"></div>
+        {/* First 30% - spacer */}
+        <div className="h-[30vh]"></div>
 
-        {/* Second half with calendar - fixed to bottom half */}
-        <div className="h-1/2 flex flex-col max-h-1/2">
+        {/* Calendar area - 70% of screen */}
+        <div className="h-[70vh] flex flex-col">
           {/* Calendar Container - Chat style */}
           <div className="rounded-t-3xl shadow-lg p-4 bg-white flex-1 transition-all duration-500 ease-out overflow-hidden">
             <div className="flex flex-col h-full">
