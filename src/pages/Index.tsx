@@ -228,8 +228,9 @@ const Index = () => {
                 className={`w-10 h-10 rounded-full flex items-center justify-center ${
                   selectedSupermarket 
                     ? 'bg-black text-white hover:bg-gray-800' 
-                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'cursor-not-allowed'
                 }`}
+                style={!selectedSupermarket ? { backgroundColor: '#F2F2F2', color: '#5D5D5D' } : {}}
               >
                 <ArrowUp size={16} />
               </Button>
