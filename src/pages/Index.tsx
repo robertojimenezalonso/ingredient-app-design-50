@@ -138,7 +138,7 @@ const Index = () => {
             <div className="mb-6 space-y-4">
               {/* Typing animation for the first message */}
               <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                <p className="text-base leading-relaxed text-left text-gray-600">
+                <p className="text-base leading-relaxed text-left text-black">
                   {typewriterStep >= 1 && (
                     <span>
                       {displayedSubtitle}
