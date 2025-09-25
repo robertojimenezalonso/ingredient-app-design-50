@@ -122,7 +122,7 @@ const Index = () => {
   // Expanded calendar view
   if (isExpanded) {
     return (
-      <div className="h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50 relative">
+      <div className="h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50 relative overflow-hidden">
         {/* X button positioned absolutely in top area */}
         <button 
           onClick={handleClose}
@@ -135,26 +135,26 @@ const Index = () => {
         <div className="flex-1"></div>
 
         {/* Second half with calendar - fixed to bottom half */}
-        <div className="h-1/2 flex flex-col">
+        <div className="h-1/2 flex flex-col max-h-1/2">
           {/* Calendar Container - Chat style */}
-          <div className="rounded-t-3xl shadow-lg p-6 bg-white flex-1 transition-all duration-500 ease-out">
+          <div className="rounded-t-3xl shadow-lg p-4 bg-white flex-1 transition-all duration-500 ease-out overflow-hidden">
             <div className="flex flex-col h-full">
-              <div className="mb-4">
+              <div className="mb-3 flex-shrink-0">
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
                   ¿Para qué días quieres generar recetas?
                 </p>
               </div>
               
-              <div className="flex justify-center flex-1">
+              <div className="flex justify-center flex-1 overflow-hidden">
                 <Calendar 
                   selected={selectedDates} 
                   onSelect={dates => setSelectedDates(dates || [])} 
-                  className="pointer-events-auto" 
+                  className="pointer-events-auto max-h-full" 
                 />
               </div>
 
               {/* Send Button - Bottom Right */}
-              <div className="flex justify-end">
+              <div className="flex justify-end flex-shrink-0 mt-2">
                 <Button
                   variant="ghost"
                   onClick={handleCalendarContinue}
