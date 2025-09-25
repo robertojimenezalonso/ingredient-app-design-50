@@ -9,6 +9,60 @@ const Index = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
+  
+  // Typewriter effect states
+  const [typewriterStep, setTypewriterStep] = useState(0);
+  const [displayedSubtitle, setDisplayedSubtitle] = useState('');
+  const [displayedQuestion, setDisplayedQuestion] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const [showSupermarkets, setShowSupermarkets] = useState(false);
+  
+  const subtitleText = "Crea listas de la compra inteligentes chateando con AI";
+  const questionText = "¿En qué supermercado te gustaría hacer la compra?";
+
+  // Typewriter effect
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    
+    if (typewriterStep === 0) {
+      // Start first message after initial delay
+      timeout = setTimeout(() => {
+        setTypewriterStep(1);
+      }, 500);
+    } else if (typewriterStep === 1) {
+      // Type subtitle character by character
+      if (displayedSubtitle.length < subtitleText.length) {
+        timeout = setTimeout(() => {
+          setDisplayedSubtitle(subtitleText.slice(0, displayedSubtitle.length + 1));
+        }, 30);
+      } else {
+        // Hide cursor and move to next step
+        setTimeout(() => {
+          setShowCursor(false);
+          setTypewriterStep(2);
+        }, 800);
+      }
+    } else if (typewriterStep === 2) {
+      // Show cursor for second message
+      setShowCursor(true);
+      // Type question character by character
+      if (displayedQuestion.length < questionText.length) {
+        timeout = setTimeout(() => {
+          setDisplayedQuestion(questionText.slice(0, displayedQuestion.length + 1));
+        }, 30);
+      } else {
+        // Hide cursor and show supermarkets
+        setTimeout(() => {
+          setShowCursor(false);
+          setShowSupermarkets(true);
+        }, 800);
+      }
+    }
+
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [typewriterStep, displayedSubtitle, displayedQuestion, subtitleText, questionText]);
 
 
   const handleLogin = () => {
@@ -78,18 +132,36 @@ const Index = () => {
           <h1 className="text-2xl font-semibold text-gray-900 mb-4">
             Genera tu lista de la compra
           </h1>
-          <p className="text-lg text-gray-600 mb-8">
-            Crea listas de la compra inteligentes chateando con AI
-          </p>
+          
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border" style={{ backgroundColor: '#F7F4ED', borderColor: '#CAC9C4' }}>
-            <div className="mb-6">
-              <p className="text-base leading-relaxed text-left text-black">
-                ¿En qué supermercado te gustaría hacer la compra?
-              </p>
+            <div className="mb-6 space-y-4">
+              {/* Typing animation for the first message */}
+              <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                <p className="text-base leading-relaxed text-left text-gray-600">
+                  {typewriterStep >= 1 && (
+                    <span>
+                      {displayedSubtitle}
+                      {typewriterStep === 1 && showCursor && <span className="animate-pulse">|</span>}
+                    </span>
+                  )}
+                </p>
+              </div>
+              
+              {/* Second message with delay */}
+              <div className={`transition-all duration-500 ${typewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                <p className="text-base leading-relaxed text-left text-black">
+                  {typewriterStep >= 2 && (
+                    <span>
+                      {displayedQuestion}
+                      {typewriterStep === 2 && showCursor && <span className="animate-pulse">|</span>}
+                    </span>
+                  )}
+                </p>
+              </div>
             </div>
             
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <div className={`grid grid-cols-2 gap-3 mb-6 transition-all duration-500 ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <button 
                 onClick={() => handleSupermarketSelect('mercadona')}
                 className={`flex items-center gap-2 p-4 rounded-full transition-colors border ${
@@ -143,7 +215,7 @@ const Index = () => {
               </button>
             </div>
             
-            <div className="flex justify-end">
+            <div className={`flex justify-end transition-all duration-500 ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
               <Button
                 onClick={handleSubmit}
                 disabled={!selectedSupermarket}
