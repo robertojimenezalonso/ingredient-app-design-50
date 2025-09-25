@@ -158,9 +158,11 @@ const Index = () => {
                   className="pointer-events-auto max-h-full" 
                 />
               </div>
+            </div>
 
-              {/* Send Button - Bottom Right */}
-              <div className="flex justify-end flex-shrink-0 mt-2">
+            {/* Fixed Button Area with Separator */}
+            <div className="border-t border-gray-200 bg-white px-4 py-3">
+              <div className="flex justify-end">
                 <Button
                   variant="ghost"
                   onClick={handleCalendarContinue}
