@@ -120,7 +120,7 @@ const Index = () => {
       {/* Main Content - Landing Page */}
       <div className="flex-1 flex flex-col px-6 pt-16">
         <div className="w-full max-w-md mx-auto">
-          <h1 className="text-xl font-medium text-gray-900 mb-2 text-center">
+          <h1 className="text-3xl font-medium text-gray-900 mb-2 text-center">
             Tu lista de la compra con IA
           </h1>
           <p className="text-gray-600 text-center mb-6">
