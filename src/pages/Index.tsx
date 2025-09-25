@@ -100,7 +100,7 @@ const Index = () => {
                     : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
                 }`}
               >
-                <img src="/lovable-uploads/mercadona-logo-new.png" alt="Mercadona" className="w-5 h-5 object-contain" />
+                <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-sm">Mercadona</span>
               </button>
               
