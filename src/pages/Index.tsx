@@ -122,56 +122,53 @@ const Index = () => {
   // Expanded calendar view
   if (isExpanded) {
     return (
-      <div className="min-h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50">
-        {/* Upper half with X button */}
-        <div className="h-1/2 flex flex-col justify-start">
-          <div className="p-6">
-            <button 
-              onClick={handleClose}
-              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors"
-            >
-              <X className="h-5 w-5 text-[#1C1C1C]" />
-            </button>
-          </div>
-        </div>
+      <div className="min-h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50 relative">
+        {/* X button positioned absolutely in top area */}
+        <button 
+          onClick={handleClose}
+          className="absolute top-6 left-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors z-10"
+        >
+          <X className="h-5 w-5 text-[#1C1C1C]" />
+        </button>
 
-        {/* Lower half with calendar - starts exactly at middle */}
+        {/* First half - completely empty */}
+        <div className="h-1/2"></div>
+
+        {/* Second half with calendar */}
         <div className="h-1/2 flex flex-col">
-          <div className="flex-1 flex flex-col">
-            {/* Calendar Container - Chat style */}
-            <div className="rounded-t-3xl shadow-lg p-6 bg-white flex-1 transition-all duration-500 ease-out">
-              <div className="flex flex-col h-full">
-                <div className="mb-4">
-                  <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
-                    ¿Para qué días quieres generar recetas?
-                  </p>
-                </div>
-                
-                <div className="flex justify-center flex-1">
-                  <Calendar 
-                    selected={selectedDates} 
-                    onSelect={dates => setSelectedDates(dates || [])} 
-                    className="pointer-events-auto" 
-                  />
-                </div>
+          {/* Calendar Container - Chat style */}
+          <div className="rounded-t-3xl shadow-lg p-6 bg-white flex-1 transition-all duration-500 ease-out">
+            <div className="flex flex-col h-full">
+              <div className="mb-4">
+                <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
+                  ¿Para qué días quieres generar recetas?
+                </p>
+              </div>
+              
+              <div className="flex justify-center flex-1">
+                <Calendar 
+                  selected={selectedDates} 
+                  onSelect={dates => setSelectedDates(dates || [])} 
+                  className="pointer-events-auto" 
+                />
+              </div>
 
-                {/* Send Button - Bottom Right */}
-                <div className="flex justify-end">
-                  <Button
-                    variant="ghost"
-                    onClick={handleCalendarContinue}
-                    disabled={!canContinue}
-                    className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
-                    style={{
-                      backgroundColor: canContinue ? '#000000' : '#F2F2F2',
-                      color: canContinue ? '#ffffff' : '#5D5D5D',
-                      border: 'none',
-                      opacity: 1
-                    }}
-                  >
-                    <ArrowUp size={16} />
-                  </Button>
-                </div>
+              {/* Send Button - Bottom Right */}
+              <div className="flex justify-end">
+                <Button
+                  variant="ghost"
+                  onClick={handleCalendarContinue}
+                  disabled={!canContinue}
+                  className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
+                  style={{
+                    backgroundColor: canContinue ? '#000000' : '#F2F2F2',
+                    color: canContinue ? '#ffffff' : '#5D5D5D',
+                    border: 'none',
+                    opacity: 1
+                  }}
+                >
+                  <ArrowUp size={16} />
+                </Button>
               </div>
             </div>
           </div>
