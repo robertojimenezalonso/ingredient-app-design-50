@@ -6,6 +6,7 @@ import { ArrowUp } from 'lucide-react';
 import cartlyLogo from '@/assets/cartly-logo.png';
 
 const Index = () => {
+  // Chat conversation component with 4-paragraph typewriter effect
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
