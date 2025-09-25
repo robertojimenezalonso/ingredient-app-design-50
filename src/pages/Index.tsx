@@ -325,7 +325,7 @@ const Index = () => {
                     ? 'bg-gray-800 text-white border-gray-800' 
                     : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
                 } ${visibleSupermarkets >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'mercadona' ? { backgroundColor: '#F2F2F2' } : {}}
+                style={selectedSupermarket !== 'mercadona' ? { backgroundColor: '#F6F4ED' } : {}}
               >
                 <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
                 <span className="font-medium text-base">Mercadona</span>
@@ -338,7 +338,7 @@ const Index = () => {
                     ? 'bg-gray-800 text-white border-gray-800' 
                     : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
                 } ${visibleSupermarkets >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'carrefour' ? { backgroundColor: '#F2F2F2' } : {}}
+                style={selectedSupermarket !== 'carrefour' ? { backgroundColor: '#F6F4ED' } : {}}
               >
                 <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-4 h-4 object-contain" />
                 <span className="font-medium text-base">Carrefour</span>
@@ -351,7 +351,7 @@ const Index = () => {
                     ? 'bg-gray-800 text-white border-gray-800' 
                     : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
                 } ${visibleSupermarkets >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'lidl' ? { backgroundColor: '#F2F2F2' } : {}}
+                style={selectedSupermarket !== 'lidl' ? { backgroundColor: '#F6F4ED' } : {}}
               >
                 <img src="/lidl-logo-updated.png" alt="Lidl" className="w-4 h-4 object-contain rounded-full" />
                 <span className="font-medium text-base">Lidl</span>
@@ -364,7 +364,7 @@ const Index = () => {
                     ? 'bg-gray-800 text-white border-gray-800' 
                     : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
                 } ${visibleSupermarkets >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
-                style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#F2F2F2' } : {}}
+                style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#F6F4ED' } : {}}
               >
                 <img src="/alcampo-logo.png" alt="Alcampo" className="w-4 h-4 object-contain" />
                 <span className="font-medium text-base">Alcampo</span>
