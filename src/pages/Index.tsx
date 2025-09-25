@@ -1,8 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { ArrowUp, ArrowRight } from 'lucide-react';
+import { ArrowUp, ArrowRight, X, Plus, Minus } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
 
 const Index = () => {
@@ -10,6 +14,12 @@ const Index = () => {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
+  
+  // Expanded state for calendar view
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
+  const [showMoreMeals, setShowMoreMeals] = useState(false);
   
   // Typewriter effect states
   const [typewriterStep, setTypewriterStep] = useState(0);
@@ -19,6 +29,7 @@ const Index = () => {
   const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
   
   const paragraph1Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
+  const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
 
   // Typewriter effect
   useEffect(() => {
@@ -69,9 +80,33 @@ const Index = () => {
 
   const handleSubmit = () => {
     if (selectedSupermarket) {
+      setIsExpanded(true);
+    }
+  };
+
+  const handleClose = () => {
+    setIsExpanded(false);
+    setSelectedSupermarket(null);
+    setSelectedDates([]);
+    setSelectedMeals([]);
+    setShowMoreMeals(false);
+  };
+
+  const toggleMeal = (meal: string) => {
+    if (selectedMeals.includes(meal)) {
+      setSelectedMeals(selectedMeals.filter(m => m !== meal));
+    } else {
+      setSelectedMeals([...selectedMeals, meal]);
+    }
+  };
+
+  const handleCalendarContinue = () => {
+    if (selectedDates.length > 0 && selectedMeals.length > 0) {
       navigate('/auth?mode=signup');
     }
   };
+
+  const canContinue = selectedDates.length > 0 && selectedMeals.length > 0;
 
   if (authLoading) {
     return (
@@ -79,6 +114,117 @@ const Index = () => {
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
           <p className="mt-2 text-muted-foreground">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Expanded calendar view
+  if (isExpanded) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50">
+        {/* Upper half with X button */}
+        <div className="h-1/2 flex flex-col">
+          <div className="p-6">
+            <button 
+              onClick={handleClose}
+              className="flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors"
+            >
+              <X className="h-5 w-5 text-[#1C1C1C]" />
+            </button>
+          </div>
+        </div>
+
+        {/* Lower half with calendar */}
+        <div className="h-1/2 flex flex-col px-6 pb-6">
+          <div className="flex-1 flex flex-col space-y-4">
+            {/* Calendar Container */}
+            <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3] flex-1">
+              <CardHeader className="pb-3 px-4">
+                <CardTitle className="text-2xl font-semibold text-neutral-950">¿Para que días?</CardTitle>
+              </CardHeader>
+              <CardContent className="px-4 pb-4 flex-1 flex flex-col">
+                <div className="flex justify-center flex-1">
+                  <Calendar 
+                    selected={selectedDates} 
+                    onSelect={dates => setSelectedDates(dates || [])} 
+                    className="pointer-events-auto" 
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Meal Selection Container */}
+            <Card className="bg-white rounded-3xl shadow-[0_4px_20px_rgba(0,0,0,0.1)] border border-[#C3C3C3]">
+              <CardContent className="px-4 py-4">
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-xl text-neutral-950">¿Qué comidas?</h3>
+                  
+                  <div className="space-y-2">
+                    {/* Main meals with plus button - same line */}
+                    <div className="flex gap-1 justify-center">
+                      {['Desayuno', 'Almuerzo', 'Cena'].map(meal => 
+                        <Badge 
+                          key={meal} 
+                          variant="outline" 
+                          className={cn(
+                            "cursor-pointer px-2 py-2 text-sm font-medium rounded-full transition-colors flex-1 text-center justify-center", 
+                            selectedMeals.includes(meal) 
+                              ? "bg-foreground/15 border-2 border-foreground text-foreground" 
+                              : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
+                          )} 
+                          onClick={() => toggleMeal(meal)}
+                        >
+                          {meal}
+                        </Badge>
+                      )}
+                      
+                      {/* Plus button - in same line */}
+                      <Badge 
+                        variant="outline" 
+                        className="cursor-pointer w-12 h-12 text-sm font-medium rounded-full border-2 border-muted text-foreground hover:bg-muted/50 transition-colors flex-shrink-0 flex items-center justify-center" 
+                        onClick={() => setShowMoreMeals(!showMoreMeals)}
+                      >
+                        {showMoreMeals ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                      </Badge>
+                    </div>
+
+                    {/* Additional meals - new line */}
+                    {showMoreMeals && (
+                      <div className="flex gap-2 animate-fade-in">
+                        {additionalMeals.map(meal => 
+                          <Badge 
+                            key={meal} 
+                            variant="outline" 
+                            className={cn(
+                              "cursor-pointer px-4 py-2 text-sm font-medium rounded-full transition-colors", 
+                              selectedMeals.includes(meal) 
+                                ? "bg-foreground/15 border-2 border-foreground text-foreground" 
+                                : "bg-transparent border-2 border-muted text-foreground hover:bg-muted/50"
+                            )} 
+                            onClick={() => toggleMeal(meal)}
+                          >
+                            {meal}
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Continue Button */}
+                  <div className="flex justify-end pt-2">
+                    <Button
+                      onClick={handleCalendarContinue}
+                      disabled={!canContinue}
+                      className="px-6 bg-[#1C1C1C] text-white hover:bg-gray-800 disabled:opacity-50 disabled:bg-[#BAB9BC] disabled:text-white rounded-lg py-2 h-auto text-sm font-semibold"
+                    >
+                      Siguiente
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     );
