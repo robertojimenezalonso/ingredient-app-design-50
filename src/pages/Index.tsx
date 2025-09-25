@@ -79,7 +79,7 @@ const Index = () => {
             Bienvenido a Cartly
           </h1>
           <p className="text-lg text-gray-600 mb-8">
-            Crea y gestiona tus listas de la compra de forma inteligente
+            Crea listas de la compra inteligentes chateando con AI
           </p>
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border" style={{ backgroundColor: '#F7F4ED', borderColor: '#CAC9C4' }}>
