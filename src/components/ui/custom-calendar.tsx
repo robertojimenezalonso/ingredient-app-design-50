@@ -252,10 +252,13 @@ export function CustomCalendar({
                             "h-9 w-9 p-0 font-normal rounded-full relative transition-colors bg-transparent focus:outline-none",
                             isSelected(date) &&
                               "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
-                            isToday(date) && !isSelected(date) && "bg-accent text-accent-foreground",
+                            isToday(date) && !isSelected(date) && "text-foreground",
                             isPast(date) && "opacity-60 cursor-not-allowed"
                           )}
-                          style={isPast(date) ? { textDecoration: 'line-through' } : {}}
+                          style={{
+                            ...(isPast(date) ? { textDecoration: 'line-through' } : {}),
+                            ...(isToday(date) && !isSelected(date) ? { backgroundColor: '#ECEAE4' } : {})
+                          }}
                         >
                           {date.getDate()}
                         </button>
