@@ -124,7 +124,7 @@ const Index = () => {
     return (
       <div className="min-h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50">
         {/* Upper half with X button */}
-        <div className="h-1/2 flex flex-col">
+        <div className="h-1/2 flex flex-col justify-start">
           <div className="p-6">
             <button 
               onClick={handleClose}
@@ -135,8 +135,8 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Lower half with calendar */}
-        <div className="flex-1 flex flex-col">
+        {/* Lower half with calendar - starts exactly at middle */}
+        <div className="h-1/2 flex flex-col">
           <div className="flex-1 flex flex-col">
             {/* Calendar Container - Chat style */}
             <div className="rounded-t-3xl shadow-lg p-6 bg-white flex-1 transition-all duration-500 ease-out">
