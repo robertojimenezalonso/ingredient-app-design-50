@@ -135,7 +135,7 @@ const Index = () => {
                 }`}
                 style={selectedSupermarket !== 'lidl' ? { borderColor: '#CAC9C4' } : {}}
               >
-                <img src="/lidl-logo-updated.png" alt="Lidl" className="w-5 h-5 object-contain" />
+                <img src="/lidl-logo-updated.png" alt="Lidl" className="w-5 h-5 object-contain rounded-full" />
                 <span className="font-medium text-sm">Lidl</span>
               </button>
               
