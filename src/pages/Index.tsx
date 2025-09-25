@@ -190,12 +190,9 @@ const Index = () => {
               <div className={`transition-all duration-500 ${typewriterStep >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                 <p className="text-base leading-relaxed text-left text-black font-medium">
                   {typewriterStep >= 4 && (
-                    <span className="flex items-center gap-2">
-                      <ArrowRight size={16} className="text-gray-600" />
-                      <span>
-                        {displayedParagraph4}
-                        {typewriterStep === 4 && showCursor && <span className="animate-pulse">|</span>}
-                      </span>
+                    <span>
+                      👉 Empecemos… ¿En qué súper te gustaría hacer la compra?
+                      {typewriterStep === 4 && showCursor && <span className="animate-pulse">|</span>}
                     </span>
                   )}
                 </p>
