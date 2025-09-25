@@ -209,7 +209,7 @@ export function CustomCalendar({
   };
 
   return (
-    <div className={cn("max-h-96 overflow-y-auto p-3 rounded-lg border", className)} style={{ backgroundColor: '#F6F4ED', borderColor: '#ECEAE4' }}>
+    <div className={cn("max-h-96 overflow-y-auto p-3 rounded-lg border mx-4", className)} style={{ backgroundColor: '#F6F4ED', borderColor: '#ECEAE4' }}>
       {Object.entries(monthGroups).map(([monthKey, weeks]) => {
         const monthDate = dates.find(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
         if (!monthDate) return null;
