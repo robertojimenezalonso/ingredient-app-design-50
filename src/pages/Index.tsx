@@ -30,16 +30,16 @@ const Index = () => {
     let timeout: NodeJS.Timeout;
     
     if (typewriterStep === 0) {
-      // Start first message after initial delay
+      // Start first message after 2 second delay to let user read title
       timeout = setTimeout(() => {
         setTypewriterStep(1);
-      }, 500);
+      }, 2000);
     } else if (typewriterStep === 1) {
       // Type first paragraph character by character
       if (displayedParagraph1.length < paragraph1Text.length) {
         timeout = setTimeout(() => {
           setDisplayedParagraph1(paragraph1Text.slice(0, displayedParagraph1.length + 1));
-        }, 30);
+        }, 50);
       } else {
         // Move to next step immediately for fluid flow
         setTypewriterStep(2);
@@ -49,7 +49,7 @@ const Index = () => {
       if (displayedParagraph2.length < paragraph2Text.length) {
         timeout = setTimeout(() => {
           setDisplayedParagraph2(paragraph2Text.slice(0, displayedParagraph2.length + 1));
-        }, 30);
+        }, 50);
       } else {
         // Move to next step immediately for fluid flow
         setTypewriterStep(3);
@@ -59,7 +59,7 @@ const Index = () => {
       if (displayedParagraph3.length < paragraph3Text.length) {
         timeout = setTimeout(() => {
           setDisplayedParagraph3(paragraph3Text.slice(0, displayedParagraph3.length + 1));
-        }, 30);
+        }, 50);
       } else {
         // Hide cursor and show supermarkets
         setTimeout(() => {
