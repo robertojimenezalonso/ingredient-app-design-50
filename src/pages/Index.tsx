@@ -209,19 +209,8 @@ const Index = () => {
                     )}
                   </p>
                 </div>
-                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                  <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-semibold">
-                    {calendarTypewriterStep >= 2 && (
-                      <span>
-                        {displayedCalendarParagraph2}
-                        {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
-                      </span>
-                    )}
-                  </p>
-                </div>
-
-                {/* Product Cards below first paragraph */}
-                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} mt-6`}>
+                {/* Product Cards above the question */}
+                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} mt-6 mb-6`}>
                   <div className="flex gap-4 justify-center">
                     {/* Product Card 1 */}
                     <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
@@ -272,8 +261,18 @@ const Index = () => {
                     </div>
                   </div>
                 </div>
+
+                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                  <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-semibold">
+                    {calendarTypewriterStep >= 2 && (
+                      <span>
+                        {displayedCalendarParagraph2}
+                        {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                      </span>
+                    )}
+                  </p>
+                </div>
               </div>
-              
               <div className={`flex justify-center flex-shrink-0 transition-all duration-500 ease-out ${showCalendar ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
                 <Calendar 
                   selected={selectedDates} 
