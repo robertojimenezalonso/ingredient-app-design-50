@@ -223,7 +223,6 @@ const Index = () => {
                       />
                       <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
                       <div className="flex items-center gap-1 text-xs">
-                        <span className="line-through text-gray-400">€,55 €</span>
                         <span className="text-red-600 font-semibold">4,75 €</span>
                         <span className="text-gray-500">/ud.</span>
                       </div>
@@ -238,7 +237,6 @@ const Index = () => {
                       />
                       <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
                       <div className="flex items-center gap-1 text-xs">
-                        <span className="line-through text-gray-400">€,55 €</span>
                         <span className="text-red-600 font-semibold">4,75 €</span>
                         <span className="text-gray-500">/ud.</span>
                       </div>
@@ -253,7 +251,6 @@ const Index = () => {
                       />
                       <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
                       <div className="flex items-center gap-1 text-xs">
-                        <span className="line-through text-gray-400">€,55 €</span>
                         <span className="text-red-600 font-semibold">4,75 €</span>
                         <span className="text-gray-500">/ud.</span>
                       </div>
