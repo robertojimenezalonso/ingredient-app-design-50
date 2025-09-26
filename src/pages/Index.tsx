@@ -195,6 +195,24 @@ const Index = () => {
           </button>
         </div>
 
+        {/* Selected Supermarket Tag - First thing visible, positioned top right */}
+        <div className="fixed top-20 right-4 z-10">
+          <div className="flex items-center gap-2 bg-gray-800 text-white rounded-lg px-3 py-2 text-sm">
+            <img 
+              src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
+                   selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
+                   selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
+              alt={selectedSupermarket} 
+              className="w-4 h-4 object-contain"
+            />
+            <span className="font-medium">
+              {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
+               selectedSupermarket === 'carrefour' ? 'Carrefour' : 
+               selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+            </span>
+          </div>
+        </div>
+
         {/* Chat area - starts below fixed header */}
         <div className="h-screen flex flex-col relative pt-16">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
@@ -205,24 +223,6 @@ const Index = () => {
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
                   👉 Empecemos… ¿En qué súper te gustaría hacer la compra?
                 </p>
-              </div>
-
-              {/* Selected Supermarket Tag - first thing visible on screen */}
-              <div className="flex justify-end px-4 pb-2">
-                <div className="flex items-center gap-2 bg-gray-800 text-white rounded-lg px-3 py-2 text-sm">
-                  <img 
-                    src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
-                         selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
-                         selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
-                    alt={selectedSupermarket} 
-                    className="w-4 h-4 object-contain"
-                  />
-                  <span className="font-medium">
-                    {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
-                     selectedSupermarket === 'carrefour' ? 'Carrefour' : 
-                     selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
-                  </span>
-                </div>
               </div>
               
               <div className="px-4 flex-shrink-0 space-y-4">
