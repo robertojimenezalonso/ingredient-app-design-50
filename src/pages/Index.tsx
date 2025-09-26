@@ -205,8 +205,8 @@ const Index = () => {
                 <div className="mt-6 mb-4">
                   <div className="flex flex-wrap gap-2 justify-center">
                     {/* Product Tag 1 */}
-                    <div className="flex items-start gap-2 rounded-lg border p-2" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-                      <div className="bg-white rounded p-1">
+                    <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+                      <div className="bg-white rounded">
                         <img 
                           src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
                           alt="Patatas" 
@@ -223,8 +223,8 @@ const Index = () => {
                     </div>
 
                     {/* Product Tag 2 */}
-                    <div className="flex items-start gap-2 rounded-lg border p-2" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-                      <div className="bg-white rounded p-1">
+                    <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+                      <div className="bg-white rounded">
                         <img 
                           src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
                           alt="Patatas" 
@@ -241,8 +241,8 @@ const Index = () => {
                     </div>
 
                     {/* Product Tag 3 */}
-                    <div className="flex items-start gap-2 rounded-lg border p-2" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-                      <div className="bg-white rounded p-1">
+                    <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+                      <div className="bg-white rounded">
                         <img 
                           src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
                           alt="Patatas" 
@@ -259,8 +259,8 @@ const Index = () => {
                     </div>
 
                     {/* Product Tag 4 */}
-                    <div className="flex items-start gap-2 rounded-lg border p-2" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-                      <div className="bg-white rounded p-1">
+                    <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+                      <div className="bg-white rounded">
                         <img 
                           src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
                           alt="Patatas" 
