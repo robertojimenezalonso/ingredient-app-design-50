@@ -198,7 +198,7 @@ const Index = () => {
         {/* Chat area - starts below fixed header */}
         <div className="h-screen flex flex-col relative pt-16">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
-          <div className="flex-1 transition-all duration-500 ease-out overflow-hidden pb-20" style={{ backgroundColor: '#FCFBF8' }}>
+          <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
             <div className="flex flex-col h-full overflow-y-auto">
               <div className="px-4 flex-shrink-0 space-y-4">
                 <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
