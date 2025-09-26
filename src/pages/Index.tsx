@@ -218,8 +218,8 @@ const Index = () => {
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
             <div className="flex flex-col h-full overflow-y-auto">
-              {/* Previous question - positioned above viewport, only visible when scrolling up */}
-              <div className="px-4 pb-2" style={{ marginTop: '-48px' }}>
+              {/* Previous question - above viewport, only visible when scrolling up */}
+              <div className="px-4 pb-2 pt-16" id="previous-question">
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
                   👉 Empecemos… ¿En qué súper te gustaría hacer la compra?
                 </p>
