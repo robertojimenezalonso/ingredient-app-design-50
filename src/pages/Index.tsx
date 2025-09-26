@@ -184,7 +184,7 @@ const Index = () => {
   // Expanded calendar view
   if (isExpanded) {
     return (
-      <div className="h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50 relative overflow-hidden">
+      <div className="h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
         {/* X button positioned absolutely in top area */}
         <button 
           onClick={handleClose}
@@ -193,63 +193,10 @@ const Index = () => {
           <X className="h-5 w-5 text-[#1C1C1C]" />
         </button>
 
-        {/* First 30% - Product cards area */}
-        <div className="h-[30vh] flex flex-col justify-center px-6">
-          <div className="flex gap-4 justify-center">
-            {/* Product Card 1 */}
-            <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
-              <img 
-                src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                alt="Patatas" 
-                className="w-16 h-16 object-cover rounded mb-2"
-              />
-              <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
-              <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
-              <div className="flex items-center gap-1 text-xs">
-                <span className="line-through text-gray-400">€,55 €</span>
-                <span className="text-red-600 font-semibold">4,75 €</span>
-                <span className="text-gray-500">/ud.</span>
-              </div>
-            </div>
-
-            {/* Product Card 2 */}
-            <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
-              <img 
-                src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                alt="Patatas" 
-                className="w-16 h-16 object-cover rounded mb-2"
-              />
-              <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
-              <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
-              <div className="flex items-center gap-1 text-xs">
-                <span className="line-through text-gray-400">€,55 €</span>
-                <span className="text-red-600 font-semibold">4,75 €</span>
-                <span className="text-gray-500">/ud.</span>
-              </div>
-            </div>
-
-            {/* Product Card 3 */}
-            <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
-              <img 
-                src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                alt="Patatas" 
-                className="w-16 h-16 object-cover rounded mb-2"
-              />
-              <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
-              <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
-              <div className="flex items-center gap-1 text-xs">
-                <span className="line-through text-gray-400">€,55 €</span>
-                <span className="text-red-600 font-semibold">4,75 €</span>
-                <span className="text-gray-500">/ud.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Calendar area - 70% of screen */}
-        <div className="h-[70vh] flex flex-col relative">
+        {/* Chat area - Full screen */}
+        <div className="h-screen flex flex-col relative">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
-          <div className="rounded-t-3xl shadow-lg p-4 flex-1 transition-all duration-500 ease-out overflow-hidden pb-20 border" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+          <div className="flex-1 transition-all duration-500 ease-out overflow-hidden pb-20 p-4" style={{ backgroundColor: '#FCFBF8' }}>
             <div className="flex flex-col h-full overflow-y-auto">
               <div className="mx-4 mb-6 flex-shrink-0 space-y-4">
                 <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
@@ -272,6 +219,59 @@ const Index = () => {
                     )}
                   </p>
                 </div>
+
+                {/* Product Cards below first paragraph */}
+                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} mt-6`}>
+                  <div className="flex gap-4 justify-center">
+                    {/* Product Card 1 */}
+                    <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
+                      <img 
+                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                        alt="Patatas" 
+                        className="w-16 h-16 object-cover rounded mb-2"
+                      />
+                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
+                      <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
+                      <div className="flex items-center gap-1 text-xs">
+                        <span className="line-through text-gray-400">€,55 €</span>
+                        <span className="text-red-600 font-semibold">4,75 €</span>
+                        <span className="text-gray-500">/ud.</span>
+                      </div>
+                    </div>
+
+                    {/* Product Card 2 */}
+                    <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
+                      <img 
+                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                        alt="Patatas" 
+                        className="w-16 h-16 object-cover rounded mb-2"
+                      />
+                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
+                      <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
+                      <div className="flex items-center gap-1 text-xs">
+                        <span className="line-through text-gray-400">€,55 €</span>
+                        <span className="text-red-600 font-semibold">4,75 €</span>
+                        <span className="text-gray-500">/ud.</span>
+                      </div>
+                    </div>
+
+                    {/* Product Card 3 */}
+                    <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
+                      <img 
+                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                        alt="Patatas" 
+                        className="w-16 h-16 object-cover rounded mb-2"
+                      />
+                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
+                      <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
+                      <div className="flex items-center gap-1 text-xs">
+                        <span className="line-through text-gray-400">€,55 €</span>
+                        <span className="text-red-600 font-semibold">4,75 €</span>
+                        <span className="text-gray-500">/ud.</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               
               <div className={`flex justify-center flex-shrink-0 transition-all duration-500 ease-out ${showCalendar ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
@@ -285,7 +285,7 @@ const Index = () => {
           </div>
 
           {/* Fixed Button Area at Bottom of Screen */}
-          <div className="absolute bottom-0 left-0 right-0 border-t rounded-b-3xl" style={{ backgroundColor: '#FCFBF8', borderTopColor: '#ECEAE4' }}>
+          <div className="absolute bottom-0 left-0 right-0 border-t" style={{ backgroundColor: '#FCFBF8', borderTopColor: '#ECEAE4' }}>
             <div className="px-4 py-3 flex justify-end">
               <Button
                 variant="ghost"
