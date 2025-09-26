@@ -186,7 +186,7 @@ const Index = () => {
     return (
       <div className="h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
         {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center" style={{ backgroundColor: '#FCFBF8' }}>
+        <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center border-b" style={{ backgroundColor: '#FCFBF8', borderBottomColor: '#ECEAE4' }}>
           <button 
             onClick={handleClose}
             className="ml-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors"
