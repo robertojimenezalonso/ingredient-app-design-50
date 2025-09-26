@@ -35,31 +35,6 @@ const Index = () => {
   const [showCalendarCursor, setShowCalendarCursor] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
   
-  // Scroll effect for previous question
-  useEffect(() => {
-    if (!isExpanded) return;
-    
-    const scrollContainer = document.querySelector('.overflow-y-auto');
-    if (!scrollContainer) return;
-    
-    const handleScroll = () => {
-      const previousQuestion = document.getElementById('previous-question');
-      if (!previousQuestion) return;
-      
-      const scrollTop = scrollContainer.scrollTop;
-      if (scrollTop > 20) {
-        previousQuestion.style.transform = 'translateY(0)';
-        previousQuestion.style.opacity = '1';
-      } else {
-        previousQuestion.style.transform = 'translateY(-32px)';
-        previousQuestion.style.opacity = '0';
-      }
-    };
-    
-    scrollContainer.addEventListener('scroll', handleScroll);
-    return () => scrollContainer.removeEventListener('scroll', handleScroll);
-  }, [isExpanded]);
-  
   const paragraph1Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
   
@@ -225,8 +200,8 @@ const Index = () => {
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
             <div className="flex flex-col h-full overflow-y-auto">
-              {/* Previous question - appears when scrolling up */}
-              <div className="px-4 pb-2 -translate-y-8 opacity-0 transition-all duration-300" id="previous-question">
+              {/* Previous question - always there, visible when scrolling up */}
+              <div className="px-4 pb-2" id="previous-question">
                 <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
                   👉 Empecemos… ¿En qué súper te gustaría hacer la compra?
                 </p>
