@@ -35,6 +35,31 @@ const Index = () => {
   const [showCalendarCursor, setShowCalendarCursor] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
   
+  // Scroll effect for selected supermarket tag
+  useEffect(() => {
+    if (!isExpanded) return;
+    
+    const scrollContainer = document.querySelector('.overflow-y-auto');
+    if (!scrollContainer) return;
+    
+    const handleScroll = () => {
+      const selectedTag = document.getElementById('selected-supermarket');
+      if (!selectedTag) return;
+      
+      const scrollTop = scrollContainer.scrollTop;
+      if (scrollTop > 20) {
+        selectedTag.style.transform = 'translateY(0)';
+        selectedTag.style.opacity = '1';
+      } else {
+        selectedTag.style.transform = 'translateY(-32px)';
+        selectedTag.style.opacity = '0';
+      }
+    };
+    
+    scrollContainer.addEventListener('scroll', handleScroll);
+    return () => scrollContainer.removeEventListener('scroll', handleScroll);
+  }, [isExpanded]);
+  
   const paragraph1Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
   
@@ -200,6 +225,24 @@ const Index = () => {
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
             <div className="flex flex-col h-full overflow-y-auto">
+              {/* Selected Supermarket Tag - appears when scrolling up */}
+              <div className="flex justify-end px-4 pt-4 pb-2 -translate-y-8 opacity-0 transition-all duration-300" id="selected-supermarket">
+                <div className="flex items-center gap-2 bg-gray-800 text-white rounded-lg px-3 py-2 text-sm">
+                  <img 
+                    src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
+                         selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
+                         selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
+                    alt={selectedSupermarket} 
+                    className="w-4 h-4 object-contain"
+                  />
+                  <span className="font-medium">
+                    {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
+                     selectedSupermarket === 'carrefour' ? 'Carrefour' : 
+                     selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                  </span>
+                </div>
+              </div>
+              
               <div className="px-4 flex-shrink-0 space-y-4">
                 {/* Product Tags above all text */}
                 <div className="mt-6 mb-4">
