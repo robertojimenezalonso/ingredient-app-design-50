@@ -195,29 +195,31 @@ const Index = () => {
           </button>
         </div>
 
-        {/* Selected Supermarket Tag - First thing visible, positioned top right */}
-        <div className="fixed top-20 right-4 z-10">
-          <div className="flex items-center gap-2 bg-gray-800 text-white rounded-lg px-3 py-2 text-sm">
-            <img 
-              src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
-                   selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
-                   selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
-              alt={selectedSupermarket} 
-              className="w-4 h-4 object-contain"
-            />
-            <span className="font-medium">
-              {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
-               selectedSupermarket === 'carrefour' ? 'Carrefour' : 
-               selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
-            </span>
-          </div>
-        </div>
 
         {/* Chat area - starts below fixed header */}
         <div className="h-screen flex flex-col relative pt-16">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
-            <div className="flex flex-col h-full overflow-y-auto">
+          <div className="flex flex-col h-full overflow-y-auto">
+            {/* User response - supermarket selection (right-aligned) */}
+            <div className="px-4 pt-4 mb-6">
+              <div className="flex justify-end">
+                <div className="flex items-center gap-2 bg-gray-800 text-white rounded-lg px-3 py-2 text-sm max-w-xs">
+                  <img 
+                    src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
+                         selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
+                         selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
+                    alt={selectedSupermarket} 
+                    className="w-4 h-4 object-contain"
+                  />
+                  <span className="font-medium">
+                    {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
+                     selectedSupermarket === 'carrefour' ? 'Carrefour' : 
+                     selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                  </span>
+                </div>
+              </div>
+            </div>
               
               <div className="px-4 flex-shrink-0 space-y-4">
                 {/* Product Tags above all text */}
