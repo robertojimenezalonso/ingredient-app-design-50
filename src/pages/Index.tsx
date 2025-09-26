@@ -205,12 +205,14 @@ const Index = () => {
                 <div className="mt-6 mb-4">
                   <div className="flex flex-wrap gap-2 justify-center">
                     {/* Product Tag 1 */}
-                    <div className="flex items-start gap-2 bg-white rounded-lg shadow-sm p-2">
-                      <img 
-                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                        alt="Patatas" 
-                        className="w-10 h-10 object-cover rounded"
-                      />
+                    <div className="flex items-start gap-2 rounded-lg border p-2" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+                      <div className="bg-white rounded p-1">
+                        <img 
+                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                          alt="Patatas" 
+                          className="w-10 h-10 object-cover rounded"
+                        />
+                      </div>
                       <div className="flex flex-col">
                         <h3 className="text-xs text-[#1C1C1C] mb-1">Patatas 5kg</h3>
                         <div className="flex items-center gap-1 text-xs">
@@ -221,12 +223,14 @@ const Index = () => {
                     </div>
 
                     {/* Product Tag 2 */}
-                    <div className="flex items-start gap-2 bg-white rounded-lg shadow-sm p-2">
-                      <img 
-                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                        alt="Patatas" 
-                        className="w-10 h-10 object-cover rounded"
-                      />
+                    <div className="flex items-start gap-2 rounded-lg border p-2" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+                      <div className="bg-white rounded p-1">
+                        <img 
+                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                          alt="Patatas" 
+                          className="w-10 h-10 object-cover rounded"
+                        />
+                      </div>
                       <div className="flex flex-col">
                         <h3 className="text-xs text-[#1C1C1C] mb-1">Patatas 5kg</h3>
                         <div className="flex items-center gap-1 text-xs">
@@ -237,12 +241,14 @@ const Index = () => {
                     </div>
 
                     {/* Product Tag 3 */}
-                    <div className="flex items-start gap-2 bg-white rounded-lg shadow-sm p-2">
-                      <img 
-                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                        alt="Patatas" 
-                        className="w-10 h-10 object-cover rounded"
-                      />
+                    <div className="flex items-start gap-2 rounded-lg border p-2" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+                      <div className="bg-white rounded p-1">
+                        <img 
+                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                          alt="Patatas" 
+                          className="w-10 h-10 object-cover rounded"
+                        />
+                      </div>
                       <div className="flex flex-col">
                         <h3 className="text-xs text-[#1C1C1C] mb-1">Patatas 5kg</h3>
                         <div className="flex items-center gap-1 text-xs">
@@ -253,12 +259,14 @@ const Index = () => {
                     </div>
 
                     {/* Product Tag 4 */}
-                    <div className="flex items-start gap-2 bg-white rounded-lg shadow-sm p-2">
-                      <img 
-                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                        alt="Patatas" 
-                        className="w-10 h-10 object-cover rounded"
-                      />
+                    <div className="flex items-start gap-2 rounded-lg border p-2" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+                      <div className="bg-white rounded p-1">
+                        <img 
+                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                          alt="Patatas" 
+                          className="w-10 h-10 object-cover rounded"
+                        />
+                      </div>
                       <div className="flex flex-col">
                         <h3 className="text-xs text-[#1C1C1C] mb-1">Patatas 5kg</h3>
                         <div className="flex items-center gap-1 text-xs">
