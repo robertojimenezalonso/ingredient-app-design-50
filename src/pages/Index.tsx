@@ -35,7 +35,7 @@ const Index = () => {
   const [showCalendarCursor, setShowCalendarCursor] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
   
-  // Scroll effect for original question
+  // Scroll effect for previous question
   useEffect(() => {
     if (!isExpanded) return;
     
@@ -43,16 +43,16 @@ const Index = () => {
     if (!scrollContainer) return;
     
     const handleScroll = () => {
-      const originalQuestion = document.getElementById('original-question');
-      if (!originalQuestion) return;
+      const previousQuestion = document.getElementById('previous-question');
+      if (!previousQuestion) return;
       
       const scrollTop = scrollContainer.scrollTop;
       if (scrollTop > 20) {
-        originalQuestion.style.transform = 'translateY(0)';
-        originalQuestion.style.opacity = '1';
+        previousQuestion.style.transform = 'translateY(0)';
+        previousQuestion.style.opacity = '1';
       } else {
-        originalQuestion.style.transform = 'translateY(-32px)';
-        originalQuestion.style.opacity = '0';
+        previousQuestion.style.transform = 'translateY(-32px)';
+        previousQuestion.style.opacity = '0';
       }
     };
     
@@ -225,15 +225,15 @@ const Index = () => {
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
             <div className="flex flex-col h-full overflow-y-auto">
-              {/* Original question from previous screen - appears when scrolling up */}
-              <div className="px-4 pb-2 -translate-y-8 opacity-0 transition-all duration-300" id="original-question">
-                <div className="bg-white rounded-lg border p-3 text-sm text-[#1C1C1C]" style={{ borderColor: '#ECEAE4' }}>
+              {/* Previous question - appears when scrolling up */}
+              <div className="px-4 pb-2 -translate-y-8 opacity-0 transition-all duration-300" id="previous-question">
+                <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
                   👉 Empecemos… ¿En qué súper te gustaría hacer la compra?
-                </div>
+                </p>
               </div>
 
-              {/* Selected Supermarket Tag - visible by default */}
-              <div className="flex justify-end px-4 pt-4 pb-2">
+              {/* Selected Supermarket Tag - point 0 of new conversation */}
+              <div className="flex justify-end px-4 pb-2">
                 <div className="flex items-center gap-2 bg-gray-800 text-white rounded-lg px-3 py-2 text-sm">
                   <img 
                     src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
