@@ -215,43 +215,65 @@ const Index = () => {
                 <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'} mt-6 mb-6`}>
                   <div className="flex gap-4 justify-center">
                     {/* Product Card 1 */}
-                    <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
-                      <img 
-                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                        alt="Patatas" 
-                        className="w-16 h-16 object-cover rounded mb-2"
-                      />
-                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
-                      <div className="flex items-center gap-1 text-xs">
-                        <span className="text-red-600 font-semibold">4,75 €</span>
+                    <div className="w-28 flex flex-col">
+                      <div className="bg-white rounded-lg shadow-sm p-3 mb-2 flex justify-center">
+                        <img 
+                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                          alt="Patatas" 
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </div>
+                      <h3 className="text-xs text-[#1C1C1C] text-left mb-1">Patatas 5kg</h3>
+                      <div className="flex items-center gap-1 text-xs text-left">
+                        <span className="text-[#1C1C1C]">4,75 €</span>
                         <span className="text-gray-500">/ud.</span>
                       </div>
                     </div>
 
                     {/* Product Card 2 */}
-                    <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
-                      <img 
-                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                        alt="Patatas" 
-                        className="w-16 h-16 object-cover rounded mb-2"
-                      />
-                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
-                      <div className="flex items-center gap-1 text-xs">
-                        <span className="text-red-600 font-semibold">4,75 €</span>
+                    <div className="w-28 flex flex-col">
+                      <div className="bg-white rounded-lg shadow-sm p-3 mb-2 flex justify-center">
+                        <img 
+                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                          alt="Patatas" 
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </div>
+                      <h3 className="text-xs text-[#1C1C1C] text-left mb-1">Patatas 5kg</h3>
+                      <div className="flex items-center gap-1 text-xs text-left">
+                        <span className="text-[#1C1C1C]">4,75 €</span>
                         <span className="text-gray-500">/ud.</span>
                       </div>
                     </div>
 
                     {/* Product Card 3 */}
-                    <div className="bg-white rounded-lg shadow-sm p-3 w-28 flex flex-col items-center">
-                      <img 
-                        src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                        alt="Patatas" 
-                        className="w-16 h-16 object-cover rounded mb-2"
-                      />
-                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
-                      <div className="flex items-center gap-1 text-xs">
-                        <span className="text-red-600 font-semibold">4,75 €</span>
+                    <div className="w-28 flex flex-col">
+                      <div className="bg-white rounded-lg shadow-sm p-3 mb-2 flex justify-center">
+                        <img 
+                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                          alt="Patatas" 
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </div>
+                      <h3 className="text-xs text-[#1C1C1C] text-left mb-1">Patatas 5kg</h3>
+                      <div className="flex items-center gap-1 text-xs text-left">
+                        <span className="text-[#1C1C1C]">4,75 €</span>
+                        <span className="text-gray-500">/ud.</span>
+                      </div>
+                    </div>
+
+                    {/* Product Card 4 */}
+                    <div className="w-28 flex flex-col">
+                      <div className="bg-white rounded-lg shadow-sm p-3 mb-2 flex justify-center">
+                        <img 
+                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
+                          alt="Patatas" 
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                      </div>
+                      <h3 className="text-xs text-[#1C1C1C] text-left mb-1">Patatas 5kg</h3>
+                      <div className="flex items-center gap-1 text-xs text-left">
+                        <span className="text-[#1C1C1C]">4,75 €</span>
                         <span className="text-gray-500">/ud.</span>
                       </div>
                     </div>
