@@ -321,7 +321,7 @@ const Index = () => {
       {/* Top Header with Logo and Auth Buttons */}
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-[#1C1C1C]">Cartly</h1>
+          <h1 className="text-2xl font-bold text-[#1C1C1C]">Grochat</h1>
         </div>
         <div className="flex items-center gap-3 h-24">
           <Button
