@@ -185,16 +185,18 @@ const Index = () => {
   if (isExpanded) {
     return (
       <div className="h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
-        {/* X button positioned absolutely in top area */}
-        <button 
-          onClick={handleClose}
-          className="absolute top-6 left-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors z-10"
-        >
-          <X className="h-5 w-5 text-[#1C1C1C]" />
-        </button>
+        {/* Fixed Header */}
+        <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center" style={{ backgroundColor: '#FCFBF8' }}>
+          <button 
+            onClick={handleClose}
+            className="ml-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors"
+          >
+            <X className="h-5 w-5 text-[#1C1C1C]" />
+          </button>
+        </div>
 
-        {/* Chat area - Full screen */}
-        <div className="h-screen flex flex-col relative">
+        {/* Chat area - starts below fixed header */}
+        <div className="h-screen flex flex-col relative pt-16">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden pb-20 p-4" style={{ backgroundColor: '#FCFBF8' }}>
             <div className="flex flex-col h-full overflow-y-auto">
