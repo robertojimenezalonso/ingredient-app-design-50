@@ -203,7 +203,7 @@ const Index = () => {
               <div className="px-4 flex-shrink-0 space-y-4">
                 {/* Product Tags above all text */}
                 <div className="mt-6 mb-4">
-                  <div className="flex flex-wrap gap-2 justify-center">
+                  <div className="flex flex-wrap gap-2 justify-start">
                     {/* Product Tag 1 */}
                     <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
                       <div className="bg-white rounded">
