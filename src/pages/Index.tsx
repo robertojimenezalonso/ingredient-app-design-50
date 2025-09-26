@@ -221,8 +221,7 @@ const Index = () => {
                         alt="Patatas" 
                         className="w-16 h-16 object-cover rounded mb-2"
                       />
-                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
-                      <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
+                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
                       <div className="flex items-center gap-1 text-xs">
                         <span className="line-through text-gray-400">€,55 €</span>
                         <span className="text-red-600 font-semibold">4,75 €</span>
@@ -237,8 +236,7 @@ const Index = () => {
                         alt="Patatas" 
                         className="w-16 h-16 object-cover rounded mb-2"
                       />
-                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
-                      <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
+                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
                       <div className="flex items-center gap-1 text-xs">
                         <span className="line-through text-gray-400">€,55 €</span>
                         <span className="text-red-600 font-semibold">4,75 €</span>
@@ -253,8 +251,7 @@ const Index = () => {
                         alt="Patatas" 
                         className="w-16 h-16 object-cover rounded mb-2"
                       />
-                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-1">Patatas</h3>
-                      <p className="text-xs text-gray-600 text-center mb-2">Malla 5 kg</p>
+                      <h3 className="text-xs font-medium text-[#1C1C1C] text-center mb-2">Patatas 5kg</h3>
                       <div className="flex items-center gap-1 text-xs">
                         <span className="line-through text-gray-400">€,55 €</span>
                         <span className="text-red-600 font-semibold">4,75 €</span>
