@@ -35,6 +35,12 @@ const Index = () => {
   const [showCalendarCursor, setShowCalendarCursor] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
   
+  // Loading states
+  const [showLoadingDot, setShowLoadingDot] = useState(false);
+  const [showSearchingText, setShowSearchingText] = useState(false);
+  const [showResultCard, setShowResultCard] = useState(false);
+  const [loadingComplete, setLoadingComplete] = useState(false);
+  
   const paragraph1Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
   
   // Menu desplegable state
@@ -73,6 +79,28 @@ const Index = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen]);
 
+  // Loading sequence effect
+  useEffect(() => {
+    if (isExpanded && !loadingComplete) {
+      // Reset all states
+      setShowLoadingDot(false);
+      setShowSearchingText(false);
+      setShowResultCard(false);
+      setCalendarTypewriterStep(0);
+      setDisplayedCalendarParagraph1('');
+      setDisplayedCalendarParagraph2('');
+      
+      // Start sequence
+      setTimeout(() => setShowLoadingDot(true), 300);
+      setTimeout(() => setShowSearchingText(true), 1000);
+      setTimeout(() => setShowResultCard(true), 2500);
+      setTimeout(() => {
+        setLoadingComplete(true);
+        setCalendarTypewriterStep(1);
+      }, 3500);
+    }
+  }, [isExpanded, loadingComplete]);
+
   // Typewriter effect
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -109,41 +137,26 @@ const Index = () => {
 
   // Calendar screen typewriter effect
   useEffect(() => {
-    if (!isExpanded) {
-      // Reset calendar typewriter when not expanded
-      setCalendarTypewriterStep(0);
-      setDisplayedCalendarParagraph1('');
-      setDisplayedCalendarParagraph2('');
-      setShowCalendarCursor(true);
-      setShowCalendar(false);
-      return;
-    }
-
     let timeout: NodeJS.Timeout;
     
-    if (calendarTypewriterStep === 0) {
-      // Start first message after 500ms delay
-      timeout = setTimeout(() => {
-        setCalendarTypewriterStep(1);
-      }, 500);
-    } else if (calendarTypewriterStep === 1) {
-      // Type first paragraph character by character
+    if (isExpanded && calendarTypewriterStep === 1) {
+      // Type first paragraph
       if (displayedCalendarParagraph1.length < calendarParagraph1Text.length) {
         timeout = setTimeout(() => {
           setDisplayedCalendarParagraph1(calendarParagraph1Text.slice(0, displayedCalendarParagraph1.length + 1));
-        }, 50);
+        }, 30);
       } else {
         // Move to second paragraph
         setTimeout(() => {
           setCalendarTypewriterStep(2);
         }, 500);
       }
-    } else if (calendarTypewriterStep === 2) {
-      // Type second paragraph character by character
+    } else if (isExpanded && calendarTypewriterStep === 2) {
+      // Type second paragraph
       if (displayedCalendarParagraph2.length < calendarParagraph2Text.length) {
         timeout = setTimeout(() => {
           setDisplayedCalendarParagraph2(calendarParagraph2Text.slice(0, displayedCalendarParagraph2.length + 1));
-        }, 50);
+        }, 30);
       } else {
         // Hide cursor and show calendar
         setTimeout(() => {
@@ -184,6 +197,7 @@ const Index = () => {
         navigate('/auth?returnTo=expanded');
         return;
       }
+      setLoadingComplete(false);
       setIsExpanded(true);
     }
   };
@@ -194,6 +208,7 @@ const Index = () => {
     setSelectedDates([]);
     setSelectedMeals([]);
     setShowMoreMeals(false);
+    setLoadingComplete(false);
   };
 
   const toggleMeal = (meal: string) => {
@@ -237,139 +252,119 @@ const Index = () => {
           </button>
         </div>
 
-
         {/* Chat area - starts below fixed header */}
         <div className="h-screen flex flex-col relative pt-16">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
-          <div className="flex flex-col h-full overflow-y-auto">
-            {/* User response - supermarket selection (right-aligned) */}
-            <div className="px-4 pt-4 mb-6">
-              <div className="flex justify-end">
-                <div className="flex items-center gap-2 text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" style={{ backgroundColor: '#F6F4ED' }}>
-                  <img 
-                    src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
-                         selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
-                         selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
-                    alt={selectedSupermarket} 
-                    className="w-4 h-4 object-contain"
-                  />
-                  <span className="font-medium">
-                    {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
-                     selectedSupermarket === 'carrefour' ? 'Carrefour' : 
-                     selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
-                  </span>
+            <div className="flex flex-col h-full overflow-y-auto">
+              {/* User response - supermarket selection (right-aligned) */}
+              <div className="px-4 pt-4 mb-6">
+                <div className="flex justify-end">
+                  <div className="flex items-center gap-2 text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" style={{ backgroundColor: '#F6F4ED' }}>
+                    <img 
+                      src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
+                           selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
+                           selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
+                      alt={selectedSupermarket} 
+                      className="w-4 h-4 object-contain"
+                    />
+                    <span className="font-medium">
+                      {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
+                       selectedSupermarket === 'carrefour' ? 'Carrefour' : 
+                       selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-              
-              <div className="px-4 flex-shrink-0 space-y-4">
-                {/* Product Tags above all text */}
-                <div className="mt-6 mb-4">
-                  <div className="flex flex-wrap gap-2 justify-start">
-                    {/* Product Tag 1 */}
-                    <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-                      <div className="bg-white rounded">
-                        <img 
-                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                          alt="Patatas" 
-                          className="w-10 h-10 object-cover rounded"
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <h3 className="text-xs text-[#1C1C1C] mb-1">Patatas 5kg</h3>
-                        <div className="flex items-center gap-1 text-xs">
-                          <span className="text-[#1C1C1C]">4,75 €</span>
-                          <span className="text-gray-500">/ud.</span>
-                        </div>
-                      </div>
-                    </div>
 
-                    {/* Product Tag 2 */}
-                    <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-                      <div className="bg-white rounded">
-                        <img 
-                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                          alt="Patatas" 
-                          className="w-10 h-10 object-cover rounded"
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <h3 className="text-xs text-[#1C1C1C] mb-1">Patatas 5kg</h3>
-                        <div className="flex items-center gap-1 text-xs">
-                          <span className="text-[#1C1C1C]">4,75 €</span>
-                          <span className="text-gray-500">/ud.</span>
+              {/* Loading sequence */}
+              {!loadingComplete && (
+                <div className="px-4 mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      {/* Loading dot */}
+                      {showLoadingDot && (
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="w-3 h-3 bg-[#1C1C1C] rounded-full animate-pulse"></div>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Product Tag 3 */}
-                    <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-                      <div className="bg-white rounded">
-                        <img 
-                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                          alt="Patatas" 
-                          className="w-10 h-10 object-cover rounded"
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <h3 className="text-xs text-[#1C1C1C] mb-1">Patatas 5kg</h3>
-                        <div className="flex items-center gap-1 text-xs">
-                          <span className="text-[#1C1C1C]">4,75 €</span>
-                          <span className="text-gray-500">/ud.</span>
+                      )}
+                      
+                      {/* Searching text with wave effect */}
+                      {showSearchingText && (
+                        <div className="mb-4">
+                          <div className="flex items-center gap-1">
+                            <span className="text-[#1C1C1C] text-sm">Buscando ingredientes en</span>
+                            <div className="inline-flex">
+                              {(selectedSupermarket === 'mercadona' ? 'Mercadona' : 
+                                selectedSupermarket === 'carrefour' ? 'Carrefour' : 
+                                selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo').split('').map((letter, index) => (
+                                <span 
+                                  key={index}
+                                  className="text-[#1C1C1C] text-sm font-medium animate-bounce"
+                                  style={{ 
+                                    animationDelay: `${index * 0.1}s`,
+                                    animationDuration: '1s'
+                                  }}
+                                >
+                                  {letter}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Product Tag 4 */}
-                    <div className="flex items-start gap-2 rounded-lg border p-1" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-                      <div className="bg-white rounded">
-                        <img 
-                          src="https://prod-mercadona.imgix.net/images/a66b8d4177a91f7f219903267291e071.jpg?fit=crop&h=300&w=300" 
-                          alt="Patatas" 
-                          className="w-10 h-10 object-cover rounded"
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <h3 className="text-xs text-[#1C1C1C] mb-1">Patatas 5kg</h3>
-                        <div className="flex items-center gap-1 text-xs">
-                          <span className="text-[#1C1C1C]">4,75 €</span>
-                          <span className="text-gray-500">/ud.</span>
+                      )}
+                      
+                      {/* Result card */}
+                      {showResultCard && (
+                        <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
+                          <p className="text-[#1C1C1C] text-sm font-medium">
+                            Hemos encontrado 824 ingredientes en {' '}
+                            {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
+                             selectedSupermarket === 'carrefour' ? 'Carrefour' : 
+                             selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                          </p>
                         </div>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </div>
+              )}
 
-                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                  <p className="text-base leading-relaxed text-left text-[#1C1C1C] mt-8">
-                    {calendarTypewriterStep >= 1 && (
-                      <span>
-                        {displayedCalendarParagraph1}
-                        {calendarTypewriterStep === 1 && showCalendarCursor && <span className="animate-pulse">|</span>}
-                      </span>
-                    )}
-                  </p>
+              {/* Main content - only show after loading is complete */}
+              {loadingComplete && (
+                <div className="px-4 flex-shrink-0 space-y-4">
+                  {/* Calendar paragraph with typewriter effect */}
+                  <div className="mb-6">
+                    <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium mb-4">
+                        {calendarTypewriterStep >= 1 && (
+                          <span>
+                            {displayedCalendarParagraph1}
+                            {calendarTypewriterStep === 1 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
+                        {calendarTypewriterStep >= 2 && (
+                          <span>
+                            {displayedCalendarParagraph2}
+                            {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  <div className={`flex justify-center flex-shrink-0 transition-all duration-500 ease-out ${showCalendar ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                    <Calendar 
+                      selected={selectedDates} 
+                      onSelect={dates => setSelectedDates(dates || [])} 
+                      className="pointer-events-auto w-full" 
+                    />
+                  </div>
                 </div>
-
-                <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                  <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-semibold">
-                    {calendarTypewriterStep >= 2 && (
-                      <span>
-                        {displayedCalendarParagraph2}
-                        {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
-                      </span>
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div className={`flex justify-center flex-shrink-0 transition-all duration-500 ease-out ${showCalendar ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                <Calendar 
-                  selected={selectedDates} 
-                  onSelect={dates => setSelectedDates(dates || [])} 
-                  className="pointer-events-auto w-full" 
-                />
-              </div>
+              )}
             </div>
           </div>
 
@@ -397,15 +392,14 @@ const Index = () => {
     );
   }
 
-
+  // Main Landing Page
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-t from-purple-200 via-blue-100 to-gray-50 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative" style={{ backgroundColor: '#F7F7F7' }}>
       {/* Vintage grain effect */}
       <div 
-        className="absolute inset-0 opacity-20 pointer-events-none"
+        className="absolute inset-0 pointer-events-none"
         style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-          mixBlendMode: 'multiply'
+          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23000' fill-opacity='0.025' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")`,
         }}
       />
       {/* Top Header with Logo and Auth Buttons/Menu */}
@@ -480,9 +474,9 @@ const Index = () => {
           <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-2 text-center">
             Genera listas de compra
           </h1>
-          <p className="text-lg text-[#626469] text-center mb-6">
-            Crea recetas personalizadas con ingredientes de tu súper utilizando IA
-          </p>
+          <h2 className="text-3xl font-semibold text-[#1C1C1C] mb-8 text-center">
+            inteligentes con IA
+          </h2>
           
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border w-full transition-all duration-500 ease-out" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4', minHeight: '120px' }}>
