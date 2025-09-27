@@ -231,14 +231,20 @@ const Index = () => {
                             </span>
                           </div>
                         </div>}
-                      
-                      {/* Result card - replaces the searching text */}
-                      {showResultCard && <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
-                          <p className="text-[#1C1C1C] text-sm font-medium">
-                            Hemos encontrado 824 ingredientes en {' '}
-                            {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
-                          </p>
-                        </div>}
+                    </div>
+                  </div>
+                </div>}
+
+              {/* Result card - stays visible always once shown */}
+              {showResultCard && <div className="px-4 mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
+                        <p className="text-[#1C1C1C] text-sm font-medium">
+                          Hemos encontrado 824 ingredientes en {' '}
+                          {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>}
