@@ -432,7 +432,7 @@ const Index = () => {
       </div>
       
       {/* Main Content - Landing Page */}
-      <div className="flex-1 flex flex-col px-6 pt-16">
+      <div className="flex-1 flex flex-col px-6 pt-16" style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 20%, #dee2e6 40%, #ced4da 60%, #adb5bd 80%, #6f42c1 100%)' }}>
         <div className="w-full max-w-md mx-auto">
           <h1 className="text-3xl font-medium text-[#1C1C1C] mb-8 text-center">
             Genera listas de compra
