@@ -377,7 +377,7 @@ const Index = () => {
             {/* Horizontal supermarket layout */}
             <div className="flex justify-between items-center gap-3 mb-4">
               <button onClick={() => handleSupermarketSelect('mercadona')} className="flex flex-col items-center gap-1 transition-all duration-300">
-                <div className={`w-16 h-16 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-gray-800' : 'bg-white'}`}>
+                <div className={`w-16 h-16 rounded-xl flex items-center justify-center border transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-gray-800' : 'bg-[#F6F4ED]'}`} style={{ borderColor: '#ECEAE4' }}>
                   <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-12 h-12 object-contain" />
                 </div>
                 <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
