@@ -8,41 +8,42 @@ import { useAuth } from '@/hooks/useAuth';
 import { ArrowUp, ArrowRight, X, Plus, Minus, Menu, LogOut, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
-
 const Index = () => {
   // Chat conversation component with 4-paragraph typewriter effect
   const navigate = useNavigate();
-  const { user, loading: authLoading, signOut } = useAuth();
+  const {
+    user,
+    loading: authLoading,
+    signOut
+  } = useAuth();
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
-  
+
   // Expanded state for calendar view
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
   const [showMoreMeals, setShowMoreMeals] = useState(false);
-  
+
   // Remove typewriter effect states - show content immediately
-  
+
   // Calendar screen typewriter states
   const [calendarTypewriterStep, setCalendarTypewriterStep] = useState(0);
   const [displayedCalendarParagraph1, setDisplayedCalendarParagraph1] = useState('');
   const [displayedCalendarParagraph2, setDisplayedCalendarParagraph2] = useState('');
   const [showCalendarCursor, setShowCalendarCursor] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
-  
+
   // Loading states
   const [showLoadingDot, setShowLoadingDot] = useState(false);
   const [showSearchingText, setShowSearchingText] = useState(false);
   const [showResultCard, setShowResultCard] = useState(false);
   const [loadingComplete, setLoadingComplete] = useState(false);
-  
   const paragraph1Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
-  
+
   // Menu desplegable state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
-  
+
   // Calendar screen text
   const calendarParagraph1Text = `Hemos encontrado 824 productos en ${selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}, con ellos podemos preparar más de 2.800 recetas.`;
   const calendarParagraph2Text = "👉 Dime, ¿para qué días te gustaría hacer tu compra?";
@@ -51,7 +52,6 @@ const Index = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const pendingSupermarket = localStorage.getItem('pendingSupermarket');
-    
     if (user && pendingSupermarket && urlParams.get('expanded') !== null) {
       setSelectedSupermarket(pendingSupermarket);
       setIsExpanded(true);
@@ -69,7 +69,6 @@ const Index = () => {
         setIsMenuOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isMenuOpen]);
@@ -84,7 +83,7 @@ const Index = () => {
       setCalendarTypewriterStep(0);
       setDisplayedCalendarParagraph1('');
       setDisplayedCalendarParagraph2('');
-      
+
       // Start sequence
       setTimeout(() => setShowLoadingDot(true), 300);
       setTimeout(() => setShowSearchingText(true), 1000);
@@ -101,7 +100,6 @@ const Index = () => {
   // Calendar screen typewriter effect
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    
     if (isExpanded && calendarTypewriterStep === 1) {
       // Type first paragraph
       if (displayedCalendarParagraph1.length < calendarParagraph1Text.length) {
@@ -128,30 +126,23 @@ const Index = () => {
         }, 800);
       }
     }
-
     return () => {
       if (timeout) clearTimeout(timeout);
     };
   }, [isExpanded, calendarTypewriterStep, displayedCalendarParagraph1, displayedCalendarParagraph2, calendarParagraph1Text, calendarParagraph2Text]);
-
-
   const handleLogin = () => {
     navigate('/auth?mode=login');
   };
-
   const handleGetStarted = () => {
     navigate('/auth?mode=signup');
   };
-
   const handleLogout = async () => {
     setIsMenuOpen(false);
     await signOut();
   };
-
   const handleSupermarketSelect = (supermarket: string) => {
     setSelectedSupermarket(selectedSupermarket === supermarket ? null : supermarket);
   };
-
   const handleSubmit = () => {
     if (selectedSupermarket) {
       if (!user) {
@@ -164,7 +155,6 @@ const Index = () => {
       setIsExpanded(true);
     }
   };
-
   const handleClose = () => {
     setIsExpanded(false);
     setSelectedSupermarket(null);
@@ -173,7 +163,6 @@ const Index = () => {
     setShowMoreMeals(false);
     setLoadingComplete(false);
   };
-
   const toggleMeal = (meal: string) => {
     if (selectedMeals.includes(meal)) {
       setSelectedMeals(selectedMeals.filter(m => m !== meal));
@@ -181,36 +170,34 @@ const Index = () => {
       setSelectedMeals([...selectedMeals, meal]);
     }
   };
-
   const handleCalendarContinue = () => {
     if (selectedDates.length > 0) {
       navigate('/auth?mode=signup');
     }
   };
-
   const canContinue = selectedDates.length > 0;
-
   if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F7F7F7' }}>
+    return <div className="min-h-screen flex items-center justify-center" style={{
+      backgroundColor: '#F7F7F7'
+    }}>
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
           <p className="mt-2 text-muted-foreground">Cargando...</p>
         </div>
-      </div>
-    );
+      </div>;
   }
 
   // Expanded calendar view
   if (isExpanded) {
-    return (
-      <div className="h-screen flex flex-col relative overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
+    return <div className="h-screen flex flex-col relative overflow-hidden" style={{
+      backgroundColor: '#FCFBF8'
+    }}>
         {/* Fixed Header */}
-        <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center border-b" style={{ backgroundColor: '#FCFBF8', borderBottomColor: '#ECEAE4' }}>
-          <button 
-            onClick={handleClose}
-            className="ml-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors"
-          >
+        <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center border-b" style={{
+        backgroundColor: '#FCFBF8',
+        borderBottomColor: '#ECEAE4'
+      }}>
+          <button onClick={handleClose} className="ml-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors">
             <X className="h-5 w-5 text-[#1C1C1C]" />
           </button>
         </div>
@@ -218,162 +205,120 @@ const Index = () => {
         {/* Chat area - starts below fixed header */}
         <div className="h-screen flex flex-col relative pt-16">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
-          <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FCFBF8' }}>
+          <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{
+          backgroundColor: '#FCFBF8'
+        }}>
             <div className="flex flex-col h-full overflow-y-auto">
               {/* User response - supermarket selection (right-aligned) */}
               <div className="px-4 pt-4 mb-6">
                 <div className="flex justify-end">
-                  <div className="flex items-center gap-2 text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" style={{ backgroundColor: '#F6F4ED' }}>
-                    <img 
-                      src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
-                           selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
-                           selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
-                      alt={selectedSupermarket} 
-                      className="w-4 h-4 object-contain"
-                    />
+                  <div className="flex items-center gap-2 text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" style={{
+                  backgroundColor: '#F6F4ED'
+                }}>
+                    <img src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} alt={selectedSupermarket} className="w-4 h-4 object-contain" />
                     <span className="font-medium">
-                      {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
-                       selectedSupermarket === 'carrefour' ? 'Carrefour' : 
-                       selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                      {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                     </span>
                   </div>
                 </div>
               </div>
 
               {/* Loading sequence */}
-              {!loadingComplete && (
-                <div className="px-4 mb-6">
+              {!loadingComplete && <div className="px-4 mb-6">
                   <div className="flex justify-start">
                     <div className="max-w-xs">
                       {/* Loading dot */}
-                      {showLoadingDot && (
-                        <div className="flex items-center gap-2 mb-4">
+                      {showLoadingDot && <div className="flex items-center gap-2 mb-4">
                           <div className="w-3 h-3 bg-[#1C1C1C] rounded-full animate-pulse"></div>
-                        </div>
-                      )}
+                        </div>}
                       
                       {/* Searching text with wave effect */}
-                      {showSearchingText && (
-                        <div className="mb-4">
+                      {showSearchingText && <div className="mb-4">
                           <div className="flex items-center gap-1">
                             <span className="text-[#1C1C1C] text-sm">Buscando ingredientes en</span>
                             <div className="inline-flex">
-                              {(selectedSupermarket === 'mercadona' ? 'Mercadona' : 
-                                selectedSupermarket === 'carrefour' ? 'Carrefour' : 
-                                selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo').split('').map((letter, index) => (
-                                <span 
-                                  key={index}
-                                  className="text-[#1C1C1C] text-sm font-medium animate-bounce"
-                                  style={{ 
-                                    animationDelay: `${index * 0.1}s`,
-                                    animationDuration: '1s'
-                                  }}
-                                >
+                              {(selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo').split('').map((letter, index) => <span key={index} className="text-[#1C1C1C] text-sm font-medium animate-bounce" style={{
+                          animationDelay: `${index * 0.1}s`,
+                          animationDuration: '1s'
+                        }}>
                                   {letter}
-                                </span>
-                              ))}
+                                </span>)}
                             </div>
                           </div>
-                        </div>
-                      )}
+                        </div>}
                       
                       {/* Result card */}
-                      {showResultCard && (
-                        <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
+                      {showResultCard && <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
                           <p className="text-[#1C1C1C] text-sm font-medium">
                             Hemos encontrado 824 ingredientes en {' '}
-                            {selectedSupermarket === 'mercadona' ? 'Mercadona' : 
-                             selectedSupermarket === 'carrefour' ? 'Carrefour' : 
-                             selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                            {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                           </p>
-                        </div>
-                      )}
+                        </div>}
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
 
               {/* Main content - only show after loading is complete */}
-              {loadingComplete && (
-                <div className="px-4 flex-shrink-0 space-y-4">
+              {loadingComplete && <div className="px-4 flex-shrink-0 space-y-4">
                   {/* Calendar paragraph with typewriter effect */}
                   <div className="mb-6">
                     <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                       <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium mb-4">
-                        {calendarTypewriterStep >= 1 && (
-                          <span>
+                        {calendarTypewriterStep >= 1 && <span>
                             {displayedCalendarParagraph1}
                             {calendarTypewriterStep === 1 && showCalendarCursor && <span className="animate-pulse">|</span>}
-                          </span>
-                        )}
+                          </span>}
                       </p>
                     </div>
                     <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                       <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
-                        {calendarTypewriterStep >= 2 && (
-                          <span>
+                        {calendarTypewriterStep >= 2 && <span>
                             {displayedCalendarParagraph2}
                             {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
-                          </span>
-                        )}
+                          </span>}
                       </p>
                     </div>
                   </div>
                   <div className={`flex justify-center flex-shrink-0 transition-all duration-500 ease-out ${showCalendar ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
-                    <Calendar 
-                      selected={selectedDates} 
-                      onSelect={dates => setSelectedDates(dates || [])} 
-                      className="pointer-events-auto w-full" 
-                    />
+                    <Calendar selected={selectedDates} onSelect={dates => setSelectedDates(dates || [])} className="pointer-events-auto w-full" />
                   </div>
-                </div>
-              )}
+                </div>}
             </div>
           </div>
 
           {/* Fixed Button Area at Bottom of Screen */}
-          <div className="absolute bottom-0 left-0 right-0 border-t" style={{ backgroundColor: '#FCFBF8', borderTopColor: '#ECEAE4' }}>
+          <div className="absolute bottom-0 left-0 right-0 border-t" style={{
+          backgroundColor: '#FCFBF8',
+          borderTopColor: '#ECEAE4'
+        }}>
             <div className="px-4 py-3 flex justify-end">
-              <Button
-                variant="ghost"
-                onClick={handleCalendarContinue}
-                disabled={!canContinue}
-                className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
-                style={{
-                  backgroundColor: canContinue ? '#000000' : '#898885',
-                  color: canContinue ? '#ffffff' : '#F9F8F2',
-                  border: 'none',
-                  opacity: 1
-                }}
-              >
+              <Button variant="ghost" onClick={handleCalendarContinue} disabled={!canContinue} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0" style={{
+              backgroundColor: canContinue ? '#000000' : '#898885',
+              color: canContinue ? '#ffffff' : '#F9F8F2',
+              border: 'none',
+              opacity: 1
+            }}>
                 <ArrowUp size={16} />
               </Button>
             </div>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
 
   // Main Landing Page
-  return (
-    <div className="min-h-screen flex flex-col relative gradient-grain">
+  return <div className="min-h-screen flex flex-col relative gradient-grain">
       {/* Remove vintage grain effect */}
       {/* Top Header with Logo and Auth Buttons/Menu */}
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center gap-3">
-          {user && (
-            <div className="relative">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center justify-center w-10 h-10 hover:bg-gray-100/20 transition-colors"
-              >
+          {user && <div className="relative">
+              <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex items-center justify-center w-10 h-10 hover:bg-gray-100/20 transition-colors">
                 <Menu className="h-5 w-5 text-[#1C1C1C]" />
               </button>
               
               {/* Dropdown Menu */}
-              {isMenuOpen && (
-                <div className="absolute top-12 left-0 w-64 bg-white rounded-lg shadow-lg border border-[#EBEAE5] z-50">
+              {isMenuOpen && <div className="absolute top-12 left-0 w-64 bg-white rounded-lg shadow-lg border border-[#EBEAE5] z-50">
                   <div className="p-4">
                     {/* User Info */}
                     <div className="border-b border-[#EBEAE5] pb-3 mb-3">
@@ -391,38 +336,24 @@ const Index = () => {
                     </div>
                     
                     {/* Logout Button */}
-                    <button
-                      onClick={handleLogout}
-                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#1C1C1C] hover:bg-[#F7F4ED] rounded-lg transition-colors"
-                    >
+                    <button onClick={handleLogout} className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#1C1C1C] hover:bg-[#F7F4ED] rounded-lg transition-colors">
                       <LogOut className="h-4 w-4" />
                       Cerrar sesión
                     </button>
                   </div>
-                </div>
-              )}
-            </div>
-          )}
+                </div>}
+            </div>}
           <h1 className="text-2xl font-medium text-[#1C1C1C]">Grochat</h1>
         </div>
         
-        {!user && (
-          <div className="flex items-center gap-3 h-24">
-            <Button
-              variant="outline"
-              onClick={handleLogin}
-              className="text-sm font-medium text-[#1C1C1C] bg-[#F7F4ED] border-[#EBEAE5] hover:bg-gray-100 px-3 py-1"
-            >
+        {!user && <div className="flex items-center gap-3 h-24">
+            <Button variant="outline" onClick={handleLogin} className="text-sm font-medium text-[#1C1C1C] bg-[#F7F4ED] border-[#EBEAE5] hover:bg-gray-100 px-3 py-1">
               Iniciar sesión
             </Button>
-            <Button
-              onClick={handleGetStarted}
-              className="text-sm font-medium bg-[#1C1C1C] text-white hover:bg-gray-800 px-3 py-1 rounded-lg"
-            >
+            <Button onClick={handleGetStarted} className="text-sm font-medium bg-[#1C1C1C] text-white hover:bg-gray-800 px-3 py-1 rounded-lg">
               Empezar
             </Button>
-          </div>
-        )}
+          </div>}
       </div>
       
       {/* Main Content - Landing Page */}
@@ -431,11 +362,12 @@ const Index = () => {
           <h1 className="text-3xl font-medium text-[#1C1C1C] mb-4 text-center">
             Genera listas de compra
           </h1>
-          <p className="text-base text-gray-600 mb-8 text-center">
-            Crea con IA recetas personalizadas utilizando los ingredientes de tu súpermercado
-          </p>
+          <p className="text-base text-gray-600 mb-8 text-center">Crea recetas personalizadas utilizando los ingredientes de tu súpermercado</p>
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg p-6 border w-full" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+          <div className="rounded-3xl shadow-lg p-6 border w-full" style={{
+          backgroundColor: '#FCFBF8',
+          borderColor: '#ECEAE4'
+        }}>
             <div className="mb-6">
               <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
                 {paragraph1Text}
@@ -444,92 +376,56 @@ const Index = () => {
             
             {/* Horizontal supermarket layout */}
             <div className="flex justify-between items-center gap-3 mb-6">
-              <button 
-                onClick={() => handleSupermarketSelect('mercadona')}
-                className="flex flex-col items-center gap-1 transition-all duration-300"
-              >
-                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
-                  selectedSupermarket === 'mercadona' ? 'bg-gray-800' : 'bg-white'
-                }`}>
+              <button onClick={() => handleSupermarketSelect('mercadona')} className="flex flex-col items-center gap-1 transition-all duration-300">
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-gray-800' : 'bg-white'}`}>
                   <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-10 h-10 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${
-                  selectedSupermarket === 'mercadona' ? 'text-gray-800' : 'text-[#1C1C1C]'
-                }`}>
+                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Mercadona
                 </span>
               </button>
               
-              <button 
-                onClick={() => handleSupermarketSelect('carrefour')}
-                className="flex flex-col items-center gap-1 transition-all duration-300"
-              >
-                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
-                  selectedSupermarket === 'carrefour' ? 'bg-gray-800' : 'bg-white'
-                }`}>
+              <button onClick={() => handleSupermarketSelect('carrefour')} className="flex flex-col items-center gap-1 transition-all duration-300">
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'bg-gray-800' : 'bg-white'}`}>
                   <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-10 h-10 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${
-                  selectedSupermarket === 'carrefour' ? 'text-gray-800' : 'text-[#1C1C1C]'
-                }`}>
+                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Carrefour
                 </span>
               </button>
               
-              <button 
-                onClick={() => handleSupermarketSelect('lidl')}
-                className="flex flex-col items-center gap-1 transition-all duration-300"
-              >
-                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
-                  selectedSupermarket === 'lidl' ? 'bg-gray-800' : 'bg-white'
-                }`}>
+              <button onClick={() => handleSupermarketSelect('lidl')} className="flex flex-col items-center gap-1 transition-all duration-300">
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'bg-gray-800' : 'bg-white'}`}>
                   <img src="/lidl-logo-updated.png" alt="Lidl" className="w-10 h-10 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${
-                  selectedSupermarket === 'lidl' ? 'text-gray-800' : 'text-[#1C1C1C]'
-                }`}>
+                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Lidl
                 </span>
               </button>
               
-              <button 
-                onClick={() => handleSupermarketSelect('alcampo')}
-                className="flex flex-col items-center gap-1 transition-all duration-300"
-              >
-                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
-                  selectedSupermarket === 'alcampo' ? 'bg-gray-800' : 'bg-white'
-                }`}>
+              <button onClick={() => handleSupermarketSelect('alcampo')} className="flex flex-col items-center gap-1 transition-all duration-300">
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'bg-gray-800' : 'bg-white'}`}>
                   <img src="/alcampo-logo.png" alt="Alcampo" className="w-8 h-8 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${
-                  selectedSupermarket === 'alcampo' ? 'text-gray-800' : 'text-[#1C1C1C]'
-                }`}>
+                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Alcampo
                 </span>
               </button>
             </div>
             
             <div className="flex justify-end">
-              <Button
-                variant="ghost"
-                onClick={handleSubmit}
-                disabled={!selectedSupermarket}
-                className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0"
-                style={{
-                  backgroundColor: selectedSupermarket ? '#000000' : '#898885',
-                  color: selectedSupermarket ? '#ffffff' : '#F9F8F2',
-                  border: 'none',
-                  opacity: 1
-                }}
-              >
+              <Button variant="ghost" onClick={handleSubmit} disabled={!selectedSupermarket} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0" style={{
+              backgroundColor: selectedSupermarket ? '#000000' : '#898885',
+              color: selectedSupermarket ? '#ffffff' : '#F9F8F2',
+              border: 'none',
+              opacity: 1
+            }}>
                 <ArrowUp size={16} />
               </Button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
