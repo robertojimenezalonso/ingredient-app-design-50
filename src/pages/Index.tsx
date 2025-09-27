@@ -343,7 +343,7 @@ const Index = () => {
                   </div>
                 </div>}
             </div>}
-          <h1 className="text-2xl font-medium text-[#1C1C1C]">Grochat</h1>
+          <h1 className="text-2xl font-semibold text-[#1C1C1C]">Grochat</h1>
         </div>
         
         {!user && <div className="flex items-center gap-3 h-24">
