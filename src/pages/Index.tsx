@@ -246,7 +246,7 @@ const Index = () => {
             {/* User response - supermarket selection (right-aligned) */}
             <div className="px-4 pt-4 mb-6">
               <div className="flex justify-end">
-                <div className="flex items-center gap-2 bg-gray-800 text-white rounded-lg px-3 py-2 text-sm max-w-xs">
+                <div className="flex items-center gap-2 text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" style={{ backgroundColor: '#F6F4ED' }}>
                   <img 
                     src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : 
                          selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : 
