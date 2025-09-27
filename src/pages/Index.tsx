@@ -357,9 +357,7 @@ const Index = () => {
 
   // Main Landing Page
   return (
-    <div className="min-h-screen flex flex-col relative" style={{ 
-      background: 'linear-gradient(180deg, #ffffff,#ffffff,#66deca,#00c2dc,#009fe1)' 
-    }}>
+    <div className="min-h-screen flex flex-col relative gradient-grain">
       {/* Remove vintage grain effect */}
       {/* Top Header with Logo and Auth Buttons/Menu */}
       <div className="flex items-center justify-between p-6">
