@@ -437,10 +437,6 @@ const Index = () => {
           <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-2 text-center">
             Genera listas de compra
           </h1>
-          <h2 className="text-3xl font-semibold text-[#1C1C1C] mb-8 text-center">
-            inteligentes con IA
-          </h2>
-          
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border w-full" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
             <div className="mb-6">
