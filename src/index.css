@@ -23,23 +23,23 @@
   width: 100%;
   height: 100vh;
 
-  /* Degradado base */
+  /* 🎨 Degradado base */
   background: -webkit-linear-gradient(
-    180deg,
+    0deg,
+    #eb4792,
+    #e55d55,
+    #edca7a,
     #ffffff,
-    #ffffff,
-    #90e9dc,
-    #4fe9dc,
-    #40d8e9
-  );
+    #ffffff
+  ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
-    180deg,
+    0deg,
+    #eb4792,
+    #e55d55,
+    #edca7a,
     #ffffff,
-    #ffffff,
-    #90e9dc,
-    #4fe9dc,
-    #40d8e9
-  );
+    #ffffff
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   overflow: hidden;
 }
 
@@ -51,13 +51,13 @@
   width: 100%;
   height: 100%;
 
-  /* Textura de ruido muy marcada */
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj48ZmlsdGVyIGlkPSJub2lzZUZpbHRlciI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9IjEuMiIgbnVtT2N0YXZlcz0iNCIvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWx0ZXI9InVybCgjbm9pc2VGaWx0ZXIpIi8+PC9zdmc+");
+  /* 🌌 Textura de ruido muy intensa */
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIxLjUiIG51bU9jdGF2ZXM9IjYiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
   background-repeat: repeat;
 
-  opacity: 0.35; /* mucho más visible */
+  opacity: 0.45; /* más fuerte */
+  mix-blend-mode: overlay; /* lo mezcla con el degradado */
   pointer-events: none;
-  mix-blend-mode: overlay; /* hace que se funda mejor con el degradado */
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
