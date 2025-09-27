@@ -373,7 +373,7 @@ const Index = () => {
           backgroundColor: '#FCFBF8',
           borderColor: '#ECEAE4'
         }}>
-            <div className="mb-6">
+            <div className="mb-3">
               <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
                 {paragraph1Text}
               </p>
@@ -392,35 +392,35 @@ const Index = () => {
                 </span>
               </button>
               
-              <button onClick={() => handleSupermarketSelect('carrefour')} className="flex flex-col items-center gap-1 transition-all duration-300">
+              <button onClick={() => handleSupermarketSelect('carrefour')} className="flex flex-col items-center gap-2 transition-all duration-300">
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center border transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'bg-[#D2D1CE]' : 'bg-[#F6F4ED]'}`} style={{
                 borderColor: selectedSupermarket === 'carrefour' ? '#020817' : '#ECEAE4'
               }}>
                   <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-12 h-12 object-contain" />
                 </div>
-                <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
+                <span className={`text-xs font-semibold transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Carrefour
                 </span>
               </button>
               
-              <button onClick={() => handleSupermarketSelect('lidl')} className="flex flex-col items-center gap-1 transition-all duration-300">
+              <button onClick={() => handleSupermarketSelect('lidl')} className="flex flex-col items-center gap-2 transition-all duration-300">
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center border transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'bg-[#D2D1CE]' : 'bg-[#F6F4ED]'}`} style={{
                 borderColor: selectedSupermarket === 'lidl' ? '#020817' : '#ECEAE4'
               }}>
                   <img src="/lidl-logo-updated.png" alt="Lidl" className="w-12 h-12 object-contain rounded-md" />
                 </div>
-                <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
+                <span className={`text-xs font-semibold transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Lidl
                 </span>
               </button>
               
-              <button onClick={() => handleSupermarketSelect('alcampo')} className="flex flex-col items-center gap-1 transition-all duration-300">
+              <button onClick={() => handleSupermarketSelect('alcampo')} className="flex flex-col items-center gap-2 transition-all duration-300">
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center border transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'bg-[#D2D1CE]' : 'bg-[#F6F4ED]'}`} style={{
                 borderColor: selectedSupermarket === 'alcampo' ? '#020817' : '#ECEAE4'
               }}>
                   <img src="/alcampo-logo.png" alt="Alcampo" className="w-10 h-10 object-contain" />
                 </div>
-                <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
+                <span className={`text-xs font-semibold transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Alcampo
                 </span>
               </button>
