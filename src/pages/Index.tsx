@@ -368,7 +368,7 @@ const Index = () => {
             <div className="relative">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="flex items-center justify-center w-10 h-10 rounded-full bg-[#F7F4ED] border-[#EBEAE5] hover:bg-gray-100 transition-colors"
+                className="flex items-center justify-center w-10 h-10 hover:bg-gray-100/20 transition-colors"
               >
                 <Menu className="h-5 w-5 text-[#1C1C1C]" />
               </button>
