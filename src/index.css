@@ -42,26 +42,32 @@
   );
   overflow: hidden;
   
-  /* 🌊 Efecto de ola que revela el fondo */
-  clip-path: inset(100% 0 0 0);
-  animation: waveReveal 2s ease-out forwards;
+  /* 🌊 Efecto difuminado que revela el fondo */
+  mask: linear-gradient(to top, transparent 0%, black 0%);
+  -webkit-mask: linear-gradient(to top, transparent 0%, black 0%);
+  animation: fadeReveal 2.5s ease-out forwards;
 }
 
-@keyframes waveReveal {
+@keyframes fadeReveal {
   0% {
-    clip-path: inset(100% 0 0 0);
+    mask: linear-gradient(to top, transparent 0%, transparent 100%);
+    -webkit-mask: linear-gradient(to top, transparent 0%, transparent 100%);
   }
   25% {
-    clip-path: inset(75% 0 0 0);
+    mask: linear-gradient(to top, black 0%, black 25%, transparent 40%, transparent 100%);
+    -webkit-mask: linear-gradient(to top, black 0%, black 25%, transparent 40%, transparent 100%);
   }
   50% {
-    clip-path: inset(50% 0 0 0);
+    mask: linear-gradient(to top, black 0%, black 50%, transparent 65%, transparent 100%);
+    -webkit-mask: linear-gradient(to top, black 0%, black 50%, transparent 65%, transparent 100%);
   }
   75% {
-    clip-path: inset(25% 0 0 0);
+    mask: linear-gradient(to top, black 0%, black 75%, transparent 90%, transparent 100%);
+    -webkit-mask: linear-gradient(to top, black 0%, black 75%, transparent 90%, transparent 100%);
   }
   100% {
-    clip-path: inset(0% 0 0 0);
+    mask: linear-gradient(to top, black 0%, black 100%);
+    -webkit-mask: linear-gradient(to top, black 0%, black 100%);
   }
 }
 
