@@ -38,7 +38,7 @@ const Index = () => {
   const [showSearchingText, setShowSearchingText] = useState(false);
   const [showResultCard, setShowResultCard] = useState(false);
   const [loadingComplete, setLoadingComplete] = useState(false);
-  const paragraph1Text = "Crea recetas con los ingredientes de tu supermercado usando IA";
+  const paragraph1Text = "Elige tu súper para hacer la compra";
 
   // Menu desplegable state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
