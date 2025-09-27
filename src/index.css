@@ -45,7 +45,7 @@
   /* 🌊 Efecto difuminado que revela el fondo */
   mask: linear-gradient(to top, transparent 0%, black 0%);
   -webkit-mask: linear-gradient(to top, transparent 0%, black 0%);
-  animation: fadeReveal 2.5s ease-out forwards;
+  animation: fadeReveal 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
 @keyframes fadeReveal {
@@ -53,17 +53,21 @@
     mask: linear-gradient(to top, transparent 0%, transparent 100%);
     -webkit-mask: linear-gradient(to top, transparent 0%, transparent 100%);
   }
-  25% {
-    mask: linear-gradient(to top, black 0%, black 25%, transparent 40%, transparent 100%);
-    -webkit-mask: linear-gradient(to top, black 0%, black 25%, transparent 40%, transparent 100%);
+  20% {
+    mask: linear-gradient(to top, black 0%, black 15%, transparent 25%, transparent 100%);
+    -webkit-mask: linear-gradient(to top, black 0%, black 15%, transparent 25%, transparent 100%);
   }
-  50% {
-    mask: linear-gradient(to top, black 0%, black 50%, transparent 65%, transparent 100%);
-    -webkit-mask: linear-gradient(to top, black 0%, black 50%, transparent 65%, transparent 100%);
+  40% {
+    mask: linear-gradient(to top, black 0%, black 35%, transparent 50%, transparent 100%);
+    -webkit-mask: linear-gradient(to top, black 0%, black 35%, transparent 50%, transparent 100%);
   }
-  75% {
-    mask: linear-gradient(to top, black 0%, black 75%, transparent 90%, transparent 100%);
-    -webkit-mask: linear-gradient(to top, black 0%, black 75%, transparent 90%, transparent 100%);
+  60% {
+    mask: linear-gradient(to top, black 0%, black 55%, transparent 70%, transparent 100%);
+    -webkit-mask: linear-gradient(to top, black 0%, black 55%, transparent 70%, transparent 100%);
+  }
+  80% {
+    mask: linear-gradient(to top, black 0%, black 75%, transparent 85%, transparent 100%);
+    -webkit-mask: linear-gradient(to top, black 0%, black 75%, transparent 85%, transparent 100%);
   }
   100% {
     mask: linear-gradient(to top, black 0%, black 100%);
