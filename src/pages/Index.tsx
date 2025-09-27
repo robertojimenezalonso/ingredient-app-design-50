@@ -378,7 +378,7 @@ const Index = () => {
             <div className="flex justify-between items-center gap-3 mb-6">
               <button onClick={() => handleSupermarketSelect('mercadona')} className="flex flex-col items-center gap-1 transition-all duration-300">
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-gray-800' : 'bg-white'}`}>
-                  <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-10 h-10 object-contain" />
+                  <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-12 h-12 object-contain" />
                 </div>
                 <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Mercadona
