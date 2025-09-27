@@ -41,6 +41,23 @@
     #ffffff
   );
   overflow: hidden;
+  
+  /* 🎬 Animación de entrada */
+  animation: backgroundSlideUp 1.5s ease-out forwards;
+}
+
+@keyframes backgroundSlideUp {
+  0% {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .gradient-grain::after {
