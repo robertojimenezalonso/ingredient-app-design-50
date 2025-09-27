@@ -5,14 +5,14 @@ import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { ArrowUp, ArrowRight, X, Plus, Minus } from 'lucide-react';
+import { ArrowUp, ArrowRight, X, Plus, Minus, Menu, LogOut, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
 
 const Index = () => {
   // Chat conversation component with 4-paragraph typewriter effect
   const navigate = useNavigate();
-  const { user, loading: authLoading } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
   
   // Expanded state for calendar view
@@ -36,6 +36,10 @@ const Index = () => {
   const [showCalendar, setShowCalendar] = useState(false);
   
   const paragraph1Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
+  
+  // Menu desplegable state
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
   
   // Calendar screen text
@@ -55,6 +59,19 @@ const Index = () => {
       window.history.replaceState({}, '', '/');
     }
   }, [user]);
+
+  // Cerrar menú al hacer clic fuera
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (isMenuOpen && !target.closest('.relative')) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isMenuOpen]);
 
   // Typewriter effect
   useEffect(() => {
@@ -148,6 +165,11 @@ const Index = () => {
 
   const handleGetStarted = () => {
     navigate('/auth?mode=signup');
+  };
+
+  const handleLogout = async () => {
+    setIsMenuOpen(false);
+    await signOut();
   };
 
   const handleSupermarketSelect = (supermarket: string) => {
@@ -386,26 +408,70 @@ const Index = () => {
           mixBlendMode: 'multiply'
         }}
       />
-      {/* Top Header with Logo and Auth Buttons */}
+      {/* Top Header with Logo and Auth Buttons/Menu */}
       <div className="flex items-center justify-between p-6">
-        <div className="flex items-center">
+        <div className="flex items-center gap-3">
+          {user && (
+            <div className="relative">
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="flex items-center justify-center w-10 h-10 rounded-full bg-[#F7F4ED] border-[#EBEAE5] hover:bg-gray-100 transition-colors"
+              >
+                <Menu className="h-5 w-5 text-[#1C1C1C]" />
+              </button>
+              
+              {/* Dropdown Menu */}
+              {isMenuOpen && (
+                <div className="absolute top-12 left-0 w-64 bg-white rounded-lg shadow-lg border border-[#EBEAE5] z-50">
+                  <div className="p-4">
+                    {/* User Info */}
+                    <div className="border-b border-[#EBEAE5] pb-3 mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 bg-[#1C1C1C] rounded-full flex items-center justify-center">
+                          <User className="h-4 w-4 text-white" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-[#1C1C1C] text-sm">
+                            {user.user_metadata?.display_name || user.email?.split('@')[0] || 'Usuario'}
+                          </p>
+                          <p className="text-xs text-gray-500">{user.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Logout Button */}
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#1C1C1C] hover:bg-[#F7F4ED] rounded-lg transition-colors"
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Cerrar sesión
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
           <h1 className="text-2xl font-bold text-[#1C1C1C]">Grochat</h1>
         </div>
-        <div className="flex items-center gap-3 h-24">
-          <Button
-            variant="outline"
-            onClick={handleLogin}
-            className="text-sm font-medium text-[#1C1C1C] bg-[#F7F4ED] border-[#EBEAE5] hover:bg-gray-100 px-3 py-1"
-          >
-            Iniciar sesión
-          </Button>
-          <Button
-            onClick={handleGetStarted}
-            className="text-sm font-medium bg-[#1C1C1C] text-white hover:bg-gray-800 px-3 py-1 rounded-lg"
-          >
-            Empezar
-          </Button>
-        </div>
+        
+        {!user && (
+          <div className="flex items-center gap-3 h-24">
+            <Button
+              variant="outline"
+              onClick={handleLogin}
+              className="text-sm font-medium text-[#1C1C1C] bg-[#F7F4ED] border-[#EBEAE5] hover:bg-gray-100 px-3 py-1"
+            >
+              Iniciar sesión
+            </Button>
+            <Button
+              onClick={handleGetStarted}
+              className="text-sm font-medium bg-[#1C1C1C] text-white hover:bg-gray-800 px-3 py-1 rounded-lg"
+            >
+              Empezar
+            </Button>
+          </div>
+        )}
       </div>
       
       {/* Main Content - Landing Page */}
