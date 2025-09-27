@@ -38,7 +38,7 @@ const Index = () => {
   const [showSearchingText, setShowSearchingText] = useState(false);
   const [showResultCard, setShowResultCard] = useState(false);
   const [loadingComplete, setLoadingComplete] = useState(false);
-  const paragraph1Text = "👉 Empecemos… ¿En qué súper te gustaría hacer la compra?";
+  const paragraph1Text = "Elige tu súper para hacer la compra";
 
   // Menu desplegable state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
