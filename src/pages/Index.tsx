@@ -439,7 +439,7 @@ const Index = () => {
           </h1>
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border w-full" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
-            <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium mb-4">
+            <p className="text-base leading-relaxed text-left text-[#1C1C1C] mb-4">
               Nuestros usuarios ahorran de media 50 € al mes por persona gracias a nuestras listas de la compra inteligentes con IA.
             </p>
             <div className="mb-6">
