@@ -308,6 +308,8 @@ const Index = () => {
 
   // Main Landing Page
   return <div className="min-h-screen flex flex-col relative gradient-grain">
+      {/* Content wrapper with z-index to stay above grain */}
+      <div className="relative z-10 min-h-screen flex flex-col">
       {/* Remove vintage grain effect */}
       {/* Top Header with Logo and Auth Buttons/Menu */}
       <div className="flex items-center justify-between p-6">
@@ -434,9 +436,10 @@ de tu súpermercado
                 <ArrowUp size={16} />
               </Button>
             </div>
-          </div>
         </div>
       </div>
+      </div>
+    </div>
     </div>;
 };
 export default Index;
