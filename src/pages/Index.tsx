@@ -452,7 +452,7 @@ const Index = () => {
             <div className="flex justify-between items-center gap-3 mb-6">
               <button 
                 onClick={() => handleSupermarketSelect('mercadona')}
-                className="flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
+                className="flex flex-col items-center gap-1 transition-all duration-300"
               >
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
                   selectedSupermarket === 'mercadona' ? 'bg-gray-800' : 'bg-white'
@@ -468,7 +468,7 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('carrefour')}
-                className="flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
+                className="flex flex-col items-center gap-1 transition-all duration-300"
               >
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
                   selectedSupermarket === 'carrefour' ? 'bg-gray-800' : 'bg-white'
@@ -484,7 +484,7 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('lidl')}
-                className="flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
+                className="flex flex-col items-center gap-1 transition-all duration-300"
               >
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
                   selectedSupermarket === 'lidl' ? 'bg-gray-800' : 'bg-white'
@@ -500,7 +500,7 @@ const Index = () => {
               
               <button 
                 onClick={() => handleSupermarketSelect('alcampo')}
-                className="flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
+                className="flex flex-col items-center gap-1 transition-all duration-300"
               >
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
                   selectedSupermarket === 'alcampo' ? 'bg-gray-800' : 'bg-white'
