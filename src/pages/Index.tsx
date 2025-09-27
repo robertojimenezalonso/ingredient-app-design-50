@@ -426,7 +426,7 @@ const Index = () => {
       </div>
       
       {/* Main Content - Landing Page */}
-      <div className="flex-1 flex flex-col justify-start px-6 pt-16">
+      <div className="flex-1 flex flex-col justify-start px-6 pt-12">
         <div className="w-full max-w-md mx-auto">
           <h1 className="text-3xl font-medium text-[#1C1C1C] mb-8 text-center">
             Genera listas de compra
