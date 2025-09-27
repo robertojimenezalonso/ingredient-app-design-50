@@ -365,8 +365,8 @@ const Index = () => {
             Genera listas de compra
           </h1>
           <p className="text-base mb-8 text-center" style={{ color: '#5E6168' }}>
-            Crea recetas utilizando los ingredientes<br />
-            de tu súpermercado
+            Crea recetas con los ingredientes<br />
+            de tu supermercado usando IA
           </p>
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg pt-6 px-6 pb-6 border w-full" style={{
