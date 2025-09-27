@@ -424,14 +424,13 @@ de tu súpermercado
               </button>
             </div>
             
-            <div className="flex justify-end -mb-2">
-              <Button variant="ghost" onClick={handleSubmit} disabled={!selectedSupermarket} className="rounded-full flex items-center justify-center gap-2 border-0 px-4 py-2" style={{
+            <div className="flex justify-end mt-4 -mb-2">
+              <Button variant="ghost" onClick={handleSubmit} disabled={!selectedSupermarket} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0" style={{
               backgroundColor: selectedSupermarket ? '#000000' : '#898885',
               color: selectedSupermarket ? '#ffffff' : '#F9F8F2',
               border: 'none',
               opacity: 1
             }}>
-                <span className="text-sm font-medium">Enviar</span>
                 <ArrowUp size={16} />
               </Button>
             </div>
