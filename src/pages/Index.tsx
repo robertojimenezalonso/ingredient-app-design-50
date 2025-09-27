@@ -431,7 +431,7 @@ const Index = () => {
           <h1 className="text-3xl font-medium text-[#1C1C1C] mb-4 text-center">
             Genera listas de compra
           </h1>
-          <p className="text-lg text-gray-600 mb-8 text-center">
+          <p className="text-base text-gray-600 mb-8 text-center">
             Crea con IA recetas personalizadas utilizando los ingredientes de tu súpermercado
           </p>
           {/* Chat-style Call to Action */}
