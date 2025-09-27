@@ -364,10 +364,10 @@ const Index = () => {
           <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-4 text-center">
             Genera listas de compra
           </h1>
-          <p className="text-base mb-8 text-center" style={{ color: '#5E6168' }}>Crea recetas utilizando los ingredientes 
-de tu súpermercado
-
-        </p>
+          <p className="text-base mb-8 text-center" style={{ color: '#5E6168' }}>
+            Crea recetas utilizando los ingredientes<br />
+            de tu súpermercado
+          </p>
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg pt-6 px-6 pb-6 border w-full" style={{
           backgroundColor: '#FCFBF8',
