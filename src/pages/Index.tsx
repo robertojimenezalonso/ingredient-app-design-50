@@ -83,12 +83,18 @@ const Index = () => {
 
       // Start sequence
       setTimeout(() => setShowLoadingDot(true), 300);
-      setTimeout(() => setShowSearchingText(true), 1500);
-      setTimeout(() => setShowResultCard(true), 2500);
+      setTimeout(() => {
+        setShowLoadingDot(false);
+        setShowSearchingText(true);
+      }, 1500);
+      setTimeout(() => {
+        setShowSearchingText(false);
+        setShowResultCard(true);
+      }, 5500); // 4 segundos de búsqueda (1500 + 4000)
       setTimeout(() => {
         setLoadingComplete(true);
         setCalendarTypewriterStep(2);
-      }, 3500);
+      }, 6000);
     }
   }, [isExpanded, loadingComplete]);
 
@@ -208,17 +214,17 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Loading sequence */}
+              {/* Loading sequence - all elements appear in the same position */}
               {!loadingComplete && <div className="px-4 mb-6">
                   <div className="flex justify-start">
-                    <div className="max-w-xs">
+                    <div className="max-w-xs min-h-[60px]">
                       {/* Loading dot */}
-                      {showLoadingDot && <div className="flex items-center gap-2 mb-4">
+                      {showLoadingDot && <div className="flex items-center gap-2">
                           <div className="w-3 h-3 bg-[#1C1C1C] rounded-full animate-pulse"></div>
                         </div>}
                       
-                      {/* Searching text with pulsing effect */}
-                      {showSearchingText && <div className="mb-4">
+                      {/* Searching text with pulsing effect - replaces the dot */}
+                      {showSearchingText && <div>
                           <div className="flex items-center gap-1">
                             <span className="text-[#1C1C1C] text-sm animate-pulse">
                               Buscando ingredientes en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
@@ -226,7 +232,7 @@ const Index = () => {
                           </div>
                         </div>}
                       
-                      {/* Result card */}
+                      {/* Result card - replaces the searching text */}
                       {showResultCard && <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
                           <p className="text-[#1C1C1C] text-sm font-medium">
                             Hemos encontrado 824 ingredientes en {' '}
