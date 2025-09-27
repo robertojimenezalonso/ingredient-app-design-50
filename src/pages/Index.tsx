@@ -405,7 +405,7 @@ de tu súpermercado
                 <div className={`w-14 h-14 rounded-xl flex items-center justify-center border transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'bg-[#D2D1CE]' : 'bg-[#F6F4ED]'}`} style={{
                 borderColor: selectedSupermarket === 'lidl' ? '#020817' : '#ECEAE4'
               }}>
-                  <img src="/lidl-logo-updated.png" alt="Lidl" className="w-10 h-10 object-contain" />
+                  <img src="/lidl-logo-updated.png" alt="Lidl" className="w-10 h-10 object-contain rounded-md" />
                 </div>
                 <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Lidl
