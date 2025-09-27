@@ -364,7 +364,7 @@ const Index = () => {
           <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-4 text-center">
             Genera listas de compra
           </h1>
-          <p className="text-base text-gray-600 mb-8 text-center">Crea recetas utilizando los ingredientes 
+          <p className="text-base mb-8 text-center" style={{ color: '#5E6168' }}>Crea recetas utilizando los ingredientes 
 de tu súpermercado
 
         </p>
