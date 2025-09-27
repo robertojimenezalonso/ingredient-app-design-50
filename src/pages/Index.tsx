@@ -5,7 +5,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
-import { ArrowUp, ArrowRight, X, Plus, Minus, Menu, LogOut, User } from 'lucide-react';
+import { ArrowUp, ArrowRight, X, Plus, Minus, Menu, LogOut, User, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
 const Index = () => {
@@ -215,39 +215,34 @@ const Index = () => {
               </div>
 
               {/* Loading sequence - all elements appear in the same position */}
-              {!loadingComplete && <div className="px-4 mb-6">
-                  <div className="flex justify-start">
-                    <div className="max-w-xs min-h-[60px]">
-                      {/* Loading dot */}
-                      {showLoadingDot && <div className="flex items-center gap-2">
-                          <div className="w-3 h-3 bg-[#1C1C1C] rounded-full animate-pulse"></div>
-                        </div>}
-                      
-                      {/* Searching text with pulsing effect - replaces the dot */}
-                      {showSearchingText && <div>
-                          <div className="flex items-center gap-1">
-                            <span className="text-[#1C1C1C] text-sm animate-pulse">
-                              Buscando ingredientes en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
-                            </span>
-                          </div>
-                        </div>}
-                    </div>
-                  </div>
-                </div>}
-
-              {/* Result card - stays visible always once shown */}
-              {showResultCard && <div className="px-4 mb-6">
-                  <div className="flex justify-start">
-                    <div className="max-w-xs">
-                      <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
+              <div className="px-4 mb-6">
+                <div className="flex justify-start">
+                  <div className="max-w-xs min-h-[60px]">
+                    {/* Loading dot */}
+                    {showLoadingDot && !showSearchingText && !showResultCard && <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#1C1C1C] rounded-full animate-pulse"></div>
+                      </div>}
+                    
+                    {/* Searching text with pulsing effect and search icon - replaces the dot */}
+                    {showSearchingText && !showResultCard && <div>
+                        <div className="flex items-center gap-2">
+                          <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
+                          <span className="text-[#1C1C1C] text-sm animate-pulse">
+                            Buscando ingredientes en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                          </span>
+                        </div>
+                      </div>}
+                    
+                    {/* Result card - replaces everything else and stays fixed */}
+                    {showResultCard && <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
                         <p className="text-[#1C1C1C] text-sm font-medium">
                           Hemos encontrado 824 ingredientes en {' '}
                           {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                         </p>
-                      </div>
-                    </div>
+                      </div>}
                   </div>
-                </div>}
+                </div>
+              </div>
 
               {/* Main content - only show after loading is complete */}
               {loadingComplete && <div className="px-4 flex-shrink-0 space-y-4">
