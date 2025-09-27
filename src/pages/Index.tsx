@@ -142,6 +142,11 @@ const Index = () => {
 
   const handleSubmit = () => {
     if (selectedSupermarket) {
+      if (!user) {
+        // Si no está logueado, redirigir al login
+        navigate('/auth');
+        return;
+      }
       setIsExpanded(true);
     }
   };
