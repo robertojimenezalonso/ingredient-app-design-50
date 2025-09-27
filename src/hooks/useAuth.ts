@@ -73,11 +73,11 @@ export const useAuth = () => {
       await supabase.auth.signOut({ scope: 'global' });
       
       // Force page reload for clean state
-      window.location.href = '/auth';
+      window.location.href = '/';
     } catch (error) {
       console.error('Error signing out:', error);
       // Force redirect even if sign out fails
-      window.location.href = '/auth';
+      window.location.href = '/';
     }
   };
 
