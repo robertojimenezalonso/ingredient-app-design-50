@@ -405,7 +405,7 @@ const Index = () => {
               )}
             </div>
           )}
-          <h1 className="text-2xl font-bold text-[#1C1C1C]">Grochat</h1>
+          <h1 className="text-2xl font-medium text-[#1C1C1C]">Grochat</h1>
         </div>
         
         {!user && (
