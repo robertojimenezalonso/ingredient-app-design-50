@@ -21,12 +21,7 @@ const Index = () => {
   const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
   const [showMoreMeals, setShowMoreMeals] = useState(false);
   
-  // Typewriter effect states
-  const [typewriterStep, setTypewriterStep] = useState(0);
-  const [displayedParagraph1, setDisplayedParagraph1] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const [showSupermarkets, setShowSupermarkets] = useState(false);
-  const [visibleSupermarkets, setVisibleSupermarkets] = useState<number>(0);
+  // Remove typewriter effect states - show content immediately
   
   // Calendar screen typewriter states
   const [calendarTypewriterStep, setCalendarTypewriterStep] = useState(0);
@@ -101,39 +96,7 @@ const Index = () => {
     }
   }, [isExpanded, loadingComplete]);
 
-  // Typewriter effect
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    
-    if (typewriterStep === 0) {
-      // Start first message after 1 second delay to let user read title
-      timeout = setTimeout(() => {
-        setTypewriterStep(1);
-      }, 1000);
-    } else if (typewriterStep === 1) {
-      // Type first paragraph character by character
-      if (displayedParagraph1.length < paragraph1Text.length) {
-        timeout = setTimeout(() => {
-          setDisplayedParagraph1(paragraph1Text.slice(0, displayedParagraph1.length + 1));
-        }, 50);
-      } else {
-        // Hide cursor and show supermarkets
-        setTimeout(() => {
-          setShowCursor(false);
-          setShowSupermarkets(true);
-          // Start showing supermarkets one by one
-          setTimeout(() => setVisibleSupermarkets(1), 200);
-          setTimeout(() => setVisibleSupermarkets(2), 400);
-          setTimeout(() => setVisibleSupermarkets(3), 600);
-          setTimeout(() => setVisibleSupermarkets(4), 800);
-        }, 800);
-      }
-    }
-
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [typewriterStep, displayedParagraph1, paragraph1Text]);
+  // Remove typewriter effect - content shows immediately
 
   // Calendar screen typewriter effect
   useEffect(() => {
@@ -479,76 +442,77 @@ const Index = () => {
           </h2>
           
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg p-6 border w-full transition-all duration-500 ease-out" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4', minHeight: '120px' }}>
-            <div className={`transition-all duration-500 ease-out ${typewriterStep >= 1 ? 'mb-6' : 'mb-0'} space-y-4`}>
-              {/* First paragraph */}
-              <div className={`transition-all duration-500 ${typewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
-                  {typewriterStep >= 1 && (
-                    <span>
-                      {displayedParagraph1}
-                      {typewriterStep === 1 && showCursor && <span className="animate-pulse">|</span>}
-                    </span>
-                  )}
-                </p>
-              </div>
+          <div className="rounded-3xl shadow-lg p-6 border w-full" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
+            <div className="mb-6">
+              <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
+                {paragraph1Text}
+              </p>
             </div>
             
-            <div className={`flex flex-col items-start gap-2 transition-all duration-500 ease-out ${showSupermarkets ? 'opacity-100 translate-y-0 mb-6' : 'opacity-0 translate-y-4 mb-0 h-0 overflow-hidden'}`}>
+            {/* Horizontal supermarket grid with iPhone-style icons */}
+            <div className="grid grid-cols-2 gap-4 mb-6">
               <button 
                 onClick={() => handleSupermarketSelect('mercadona')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base border ${
+                className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 border ${
                   selectedSupermarket === 'mercadona' 
-                    ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
-                } ${visibleSupermarkets >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                    ? 'bg-gray-800 text-white border-gray-800 scale-95' 
+                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4] hover:scale-105'
+                }`}
                 style={selectedSupermarket !== 'mercadona' ? { backgroundColor: '#F6F4ED' } : {}}
               >
-                <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
-                <span className="font-medium text-base">Mercadona</span>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
+                  <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-8 h-8 object-contain" />
+                </div>
+                <span className="font-medium text-sm">Mercadona</span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('carrefour')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base border ${
+                className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 border ${
                   selectedSupermarket === 'carrefour' 
-                    ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
-                } ${visibleSupermarkets >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                    ? 'bg-gray-800 text-white border-gray-800 scale-95' 
+                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4] hover:scale-105'
+                }`}
                 style={selectedSupermarket !== 'carrefour' ? { backgroundColor: '#F6F4ED' } : {}}
               >
-                <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-4 h-4 object-contain" />
-                <span className="font-medium text-base">Carrefour</span>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
+                  <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-8 h-8 object-contain" />
+                </div>
+                <span className="font-medium text-sm">Carrefour</span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('lidl')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base border ${
+                className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 border ${
                   selectedSupermarket === 'lidl' 
-                    ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
-                } ${visibleSupermarkets >= 3 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                    ? 'bg-gray-800 text-white border-gray-800 scale-95' 
+                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4] hover:scale-105'
+                }`}
                 style={selectedSupermarket !== 'lidl' ? { backgroundColor: '#F6F4ED' } : {}}
               >
-                <img src="/lidl-logo-updated.png" alt="Lidl" className="w-4 h-4 object-contain rounded-full" />
-                <span className="font-medium text-base">Lidl</span>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
+                  <img src="/lidl-logo-updated.png" alt="Lidl" className="w-8 h-8 object-contain" />
+                </div>
+                <span className="font-medium text-sm">Lidl</span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('alcampo')}
-                className={`inline-flex items-center gap-2 py-2 px-3 rounded-lg transition-all duration-300 text-base border ${
+                className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 border ${
                   selectedSupermarket === 'alcampo' 
-                    ? 'bg-gray-800 text-white border-gray-800' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4]'
-                } ${visibleSupermarkets >= 4 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}
+                    ? 'bg-gray-800 text-white border-gray-800 scale-95' 
+                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4] hover:scale-105'
+                }`}
                 style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#F6F4ED' } : {}}
               >
-                <img src="/alcampo-logo.png" alt="Alcampo" className="w-4 h-4 object-contain" />
-                <span className="font-medium text-base">Alcampo</span>
+                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
+                  <img src="/alcampo-logo.png" alt="Alcampo" className="w-8 h-8 object-contain" />
+                </div>
+                <span className="font-medium text-sm">Alcampo</span>
               </button>
             </div>
             
-            <div className={`flex justify-end transition-all duration-500 ease-out ${showSupermarkets ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 h-0 overflow-hidden'}`}>
+            <div className="flex justify-end">
               <Button
                 variant="ghost"
                 onClick={handleSubmit}
