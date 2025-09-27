@@ -24,14 +24,6 @@
   height: 100vh;
 
   /* 🎨 Degradado base */
-  background: -webkit-linear-gradient(
-    0deg,
-    #eb4792,
-    #e55d55,
-    #edca7a,
-    #ffffff,
-    #ffffff
-  );
   background: linear-gradient(
     0deg,
     #eb4792,
@@ -54,10 +46,30 @@
   /* 🌌 Textura de ruido fuerte */
   background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIxLjQiIG51bU9jdGF2ZXM9IjciLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
   background-repeat: repeat;
-
-  opacity: 0.45; /* más fuerte */
-  mix-blend-mode: overlay; /* mantiene integración con el color */
+  opacity: 0.45;
+  mix-blend-mode: overlay;
   pointer-events: none;
+
+  /* 🎭 Máscara para difuminar borde superior de la animación */
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  mask-image: linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
+  mask-repeat: no-repeat;
+  mask-size: cover;
+
+  /* Animación */
+  transform: translateY(100%);
+  animation: grainReveal 3s ease-out forwards;
+}
+
+@keyframes grainReveal {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
