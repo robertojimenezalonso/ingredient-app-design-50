@@ -28,7 +28,6 @@ const Index = () => {
 
   // Calendar screen typewriter states
   const [calendarTypewriterStep, setCalendarTypewriterStep] = useState(0);
-  const [displayedCalendarParagraph1, setDisplayedCalendarParagraph1] = useState('');
   const [displayedCalendarParagraph2, setDisplayedCalendarParagraph2] = useState('');
   const [showCalendarCursor, setShowCalendarCursor] = useState(true);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -45,7 +44,6 @@ const Index = () => {
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
 
   // Calendar screen text
-  const calendarParagraph1Text = `Hemos encontrado 824 productos en ${selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}, con ellos podemos preparar más de 2.800 recetas.`;
   const calendarParagraph2Text = "👉 Dime, ¿para qué días te gustaría hacer tu compra?";
 
   // Detectar regreso del login y expandir automáticamente
@@ -81,16 +79,15 @@ const Index = () => {
       setShowSearchingText(false);
       setShowResultCard(false);
       setCalendarTypewriterStep(0);
-      setDisplayedCalendarParagraph1('');
       setDisplayedCalendarParagraph2('');
 
       // Start sequence
       setTimeout(() => setShowLoadingDot(true), 300);
-      setTimeout(() => setShowSearchingText(true), 1000);
+      setTimeout(() => setShowSearchingText(true), 1500);
       setTimeout(() => setShowResultCard(true), 2500);
       setTimeout(() => {
         setLoadingComplete(true);
-        setCalendarTypewriterStep(1);
+        setCalendarTypewriterStep(2);
       }, 3500);
     }
   }, [isExpanded, loadingComplete]);
@@ -100,19 +97,7 @@ const Index = () => {
   // Calendar screen typewriter effect
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    if (isExpanded && calendarTypewriterStep === 1) {
-      // Type first paragraph
-      if (displayedCalendarParagraph1.length < calendarParagraph1Text.length) {
-        timeout = setTimeout(() => {
-          setDisplayedCalendarParagraph1(calendarParagraph1Text.slice(0, displayedCalendarParagraph1.length + 1));
-        }, 30);
-      } else {
-        // Move to second paragraph
-        setTimeout(() => {
-          setCalendarTypewriterStep(2);
-        }, 500);
-      }
-    } else if (isExpanded && calendarTypewriterStep === 2) {
+    if (isExpanded && calendarTypewriterStep === 2) {
       // Type second paragraph
       if (displayedCalendarParagraph2.length < calendarParagraph2Text.length) {
         timeout = setTimeout(() => {
@@ -129,7 +114,7 @@ const Index = () => {
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [isExpanded, calendarTypewriterStep, displayedCalendarParagraph1, displayedCalendarParagraph2, calendarParagraph1Text, calendarParagraph2Text]);
+  }, [isExpanded, calendarTypewriterStep, displayedCalendarParagraph2, calendarParagraph2Text]);
   const handleLogin = () => {
     navigate('/auth?mode=login');
   };
@@ -232,18 +217,12 @@ const Index = () => {
                           <div className="w-3 h-3 bg-[#1C1C1C] rounded-full animate-pulse"></div>
                         </div>}
                       
-                      {/* Searching text with wave effect */}
+                      {/* Searching text with pulsing effect */}
                       {showSearchingText && <div className="mb-4">
                           <div className="flex items-center gap-1">
-                            <span className="text-[#1C1C1C] text-sm">Buscando ingredientes en</span>
-                            <div className="inline-flex">
-                              {(selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo').split('').map((letter, index) => <span key={index} className="text-[#1C1C1C] text-sm font-medium animate-bounce" style={{
-                          animationDelay: `${index * 0.1}s`,
-                          animationDuration: '1s'
-                        }}>
-                                  {letter}
-                                </span>)}
-                            </div>
+                            <span className="text-[#1C1C1C] text-sm animate-pulse">
+                              Buscando ingredientes en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                            </span>
                           </div>
                         </div>}
                       
@@ -262,14 +241,6 @@ const Index = () => {
               {loadingComplete && <div className="px-4 flex-shrink-0 space-y-4">
                   {/* Calendar paragraph with typewriter effect */}
                   <div className="mb-6">
-                    <div className={`transition-all duration-500 ${calendarTypewriterStep >= 1 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                      <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium mb-4">
-                        {calendarTypewriterStep >= 1 && <span>
-                            {displayedCalendarParagraph1}
-                            {calendarTypewriterStep === 1 && showCalendarCursor && <span className="animate-pulse">|</span>}
-                          </span>}
-                      </p>
-                    </div>
                     <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                       <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
                         {calendarTypewriterStep >= 2 && <span>
