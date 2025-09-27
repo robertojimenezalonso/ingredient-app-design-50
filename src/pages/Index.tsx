@@ -380,7 +380,7 @@ const Index = () => {
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-gray-800' : 'bg-white'}`}>
                   <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-12 h-12 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
+                <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Mercadona
                 </span>
               </button>
@@ -389,7 +389,7 @@ const Index = () => {
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'bg-gray-800' : 'bg-white'}`}>
                   <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-10 h-10 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
+                <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Carrefour
                 </span>
               </button>
@@ -398,7 +398,7 @@ const Index = () => {
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'bg-gray-800' : 'bg-white'}`}>
                   <img src="/lidl-logo-updated.png" alt="Lidl" className="w-10 h-10 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
+                <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Lidl
                 </span>
               </button>
@@ -407,7 +407,7 @@ const Index = () => {
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'bg-gray-800' : 'bg-white'}`}>
                   <img src="/alcampo-logo.png" alt="Alcampo" className="w-8 h-8 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
+                <span className={`text-xs font-medium transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
                   Alcampo
                 </span>
               </button>
