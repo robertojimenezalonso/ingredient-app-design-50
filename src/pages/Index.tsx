@@ -364,7 +364,7 @@ const Index = () => {
           </h1>
           <p className="text-base text-gray-600 mb-8 text-center">Crea recetas personalizadas utilizando los ingredientes de tu súpermercado</p>
           {/* Chat-style Call to Action */}
-          <div className="rounded-3xl shadow-lg pt-6 px-6 pb-4 border w-full" style={{
+          <div className="rounded-3xl shadow-lg pt-6 px-6 pb-6 border w-full" style={{
           backgroundColor: '#FCFBF8',
           borderColor: '#ECEAE4'
         }}>
