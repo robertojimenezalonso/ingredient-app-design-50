@@ -42,21 +42,26 @@
   );
   overflow: hidden;
   
-  /* 🎬 Animación de entrada */
-  animation: backgroundSlideUp 1.5s ease-out forwards;
+  /* 🌊 Efecto de ola que revela el fondo */
+  clip-path: inset(100% 0 0 0);
+  animation: waveReveal 2s ease-out forwards;
 }
 
-@keyframes backgroundSlideUp {
+@keyframes waveReveal {
   0% {
-    transform: translateY(100%);
-    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+  }
+  25% {
+    clip-path: inset(75% 0 0 0);
   }
   50% {
-    opacity: 0.5;
+    clip-path: inset(50% 0 0 0);
+  }
+  75% {
+    clip-path: inset(25% 0 0 0);
   }
   100% {
-    transform: translateY(0);
-    opacity: 1;
+    clip-path: inset(0% 0 0 0);
   }
 }
 
