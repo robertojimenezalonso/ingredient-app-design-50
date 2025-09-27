@@ -31,7 +31,7 @@
     #edca7a,
     #ffffff,
     #ffffff
-  ); /* Chrome 10-25, Safari 5.1-6 */
+  );
   background: linear-gradient(
     0deg,
     #eb4792,
@@ -39,7 +39,7 @@
     #edca7a,
     #ffffff,
     #ffffff
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  );
   overflow: hidden;
 }
 
@@ -51,12 +51,12 @@
   width: 100%;
   height: 100%;
 
-  /* 🌌 Textura de ruido muy intensa */
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIxLjUiIG51bU9jdGF2ZXM9IjYiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
+  /* 🌌 Textura de ruido brutal */
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIyLjIiIG51bU9jdGF2ZXM9IjgiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
   background-repeat: repeat;
 
-  opacity: 0.45; /* más fuerte */
-  mix-blend-mode: overlay; /* lo mezcla con el degradado */
+  opacity: 0.65; /* mucho más visible */
+  mix-blend-mode: multiply; /* lo ensucia aún más */
   pointer-events: none;
 }
 
