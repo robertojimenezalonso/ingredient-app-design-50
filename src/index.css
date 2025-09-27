@@ -38,37 +38,30 @@
 .gradient-grain::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  /* 🌌 Textura de ruido fuerte */
+  inset: 0;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIxLjQiIG51bU9jdGF2ZXM9IjciLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
   background-repeat: repeat;
-  opacity: 0.45;
+  opacity: 0; /* empieza invisible */
   mix-blend-mode: overlay;
   pointer-events: none;
 
-  /* 🎭 Máscara para difuminar borde superior de la animación */
-  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
-  -webkit-mask-repeat: no-repeat;
-  -webkit-mask-size: cover;
-  mask-image: linear-gradient(to top, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%);
-  mask-repeat: no-repeat;
-  mask-size: cover;
+  /* Gradiente que se anima */
+  mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
 
-  /* Animación */
-  transform: translateY(100%);
-  animation: grainReveal 3s ease-out forwards;
+  animation: revealGrain 4s ease-out forwards;
 }
 
-@keyframes grainReveal {
-  from {
-    transform: translateY(100%);
+@keyframes revealGrain {
+  0% {
+    opacity: 0;
+    -webkit-mask-position: 0 100%;
+            mask-position: 0 100%;
   }
-  to {
-    transform: translateY(0%);
+  100% {
+    opacity: 0.45; /* intensidad final del grano */
+    -webkit-mask-position: 0 0%;
+            mask-position: 0 0%;
   }
 }
 
