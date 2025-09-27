@@ -24,14 +24,6 @@
   height: 100vh;
 
   /* 🎨 Degradado base */
-  background: -webkit-linear-gradient(
-    0deg,
-    #eb4792,
-    #e55d55,
-    #edca7a,
-    #ffffff,
-    #ffffff
-  );
   background: linear-gradient(
     0deg,
     #eb4792,
@@ -46,18 +38,31 @@
 .gradient-grain::after {
   content: "";
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-
-  /* 🌌 Textura de ruido MUY marcada */
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIyLjAiIG51bU9jdGF2ZXM9IjgiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
+  inset: 0;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIxLjQiIG51bU9jdGF2ZXM9IjciLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
   background-repeat: repeat;
-
-  opacity: 0.65; /* mucho más visible */
-  mix-blend-mode: multiply; /* ensucia más el degradado */
+  opacity: 0; /* empieza invisible */
+  mix-blend-mode: overlay;
   pointer-events: none;
+
+  /* Gradiente que se anima */
+  mask-image: linear-gradient(to top, black 0%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to top, black 0%, transparent 100%);
+
+  animation: revealGrain 4s ease-out forwards;
+}
+
+@keyframes revealGrain {
+  0% {
+    opacity: 0;
+    -webkit-mask-position: 0 100%;
+            mask-position: 0 100%;
+  }
+  100% {
+    opacity: 0.45; /* intensidad final del grano */
+    -webkit-mask-position: 0 0%;
+            mask-position: 0 0%;
+  }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here.
