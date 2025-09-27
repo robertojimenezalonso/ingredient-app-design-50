@@ -234,8 +234,8 @@ const Index = () => {
                       </div>}
                     
                     {/* Result card - replaces everything else and stays fixed */}
-                    {showResultCard && <div className="bg-white rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in">
-                        <p className="text-[#1C1C1C] text-sm font-medium">
+                    {showResultCard && <div className="rounded-lg p-4 border border-[#ECEAE4] shadow-sm animate-fade-in" style={{ backgroundColor: '#F6F4ED' }}>
+                        <p className="text-[#1C1C1C] text-sm">
                           Hemos encontrado 824 ingredientes en {' '}
                           {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                         </p>
