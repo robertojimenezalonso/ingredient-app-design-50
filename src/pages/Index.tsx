@@ -381,7 +381,7 @@ const Index = () => {
             
             {/* Horizontal supermarket layout */}
             <div className="flex justify-between items-center gap-3 mb-4">
-              <button onClick={() => handleSupermarketSelect('mercadona')} className="flex flex-col items-center gap-1 transition-all duration-300">
+              <button onClick={() => handleSupermarketSelect('mercadona')} className="flex flex-col items-center gap-2 transition-all duration-300">
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center border transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-[#D2D1CE]' : 'bg-[#F6F4ED]'}`} style={{
                 borderColor: selectedSupermarket === 'mercadona' ? '#020817' : '#ECEAE4'
               }}>
