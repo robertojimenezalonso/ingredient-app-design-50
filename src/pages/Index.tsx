@@ -369,7 +369,7 @@ const Index = () => {
           borderColor: '#ECEAE4'
         }}>
             <div className="mb-6">
-              <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
+              <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
                 {paragraph1Text}
               </p>
             </div>
