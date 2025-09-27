@@ -24,7 +24,14 @@ const AuthPage = () => {
   // Redirect if already authenticated
   useEffect(() => {
     if (!authLoading && user) {
-      navigate('/');
+      const urlParams = new URLSearchParams(window.location.search);
+      const returnTo = urlParams.get('returnTo');
+      
+      if (returnTo === 'expanded') {
+        navigate('/?expanded=true');
+      } else {
+        navigate('/');
+      }
     }
   }, [user, authLoading, navigate]);
 
@@ -57,7 +64,14 @@ const AuthPage = () => {
             setError(error.message);
           }
         } else {
-          navigate('/');
+          const urlParams = new URLSearchParams(window.location.search);
+          const returnTo = urlParams.get('returnTo');
+          
+          if (returnTo === 'expanded') {
+            navigate('/?expanded=true');
+          } else {
+            navigate('/');
+          }
         }
       }
     } catch (err) {

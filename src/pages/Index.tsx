@@ -42,6 +42,20 @@ const Index = () => {
   const calendarParagraph1Text = `Hemos encontrado 824 productos en ${selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}, con ellos podemos preparar más de 2.800 recetas.`;
   const calendarParagraph2Text = "👉 Dime, ¿para qué días te gustaría hacer tu compra?";
 
+  // Detectar regreso del login y expandir automáticamente
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const pendingSupermarket = localStorage.getItem('pendingSupermarket');
+    
+    if (user && pendingSupermarket && urlParams.get('expanded') !== null) {
+      setSelectedSupermarket(pendingSupermarket);
+      setIsExpanded(true);
+      localStorage.removeItem('pendingSupermarket');
+      // Limpiar URL sin recargar
+      window.history.replaceState({}, '', '/');
+    }
+  }, [user]);
+
   // Typewriter effect
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -143,8 +157,9 @@ const Index = () => {
   const handleSubmit = () => {
     if (selectedSupermarket) {
       if (!user) {
-        // Si no está logueado, redirigir al login
-        navigate('/auth');
+        // Guardar el supermercado seleccionado antes de ir al login
+        localStorage.setItem('pendingSupermarket', selectedSupermarket);
+        navigate('/auth?returnTo=expanded');
         return;
       }
       setIsExpanded(true);
