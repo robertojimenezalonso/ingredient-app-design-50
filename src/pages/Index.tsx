@@ -448,66 +448,70 @@ const Index = () => {
               </p>
             </div>
             
-            {/* Horizontal supermarket grid with iPhone-style icons */}
-            <div className="grid grid-cols-2 gap-4 mb-6">
+            {/* Horizontal supermarket layout */}
+            <div className="flex justify-between items-center gap-3 mb-6">
               <button 
                 onClick={() => handleSupermarketSelect('mercadona')}
-                className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 border ${
-                  selectedSupermarket === 'mercadona' 
-                    ? 'bg-gray-800 text-white border-gray-800 scale-95' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4] hover:scale-105'
-                }`}
-                style={selectedSupermarket !== 'mercadona' ? { backgroundColor: '#F6F4ED' } : {}}
+                className="flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
-                  <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-8 h-8 object-contain" />
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
+                  selectedSupermarket === 'mercadona' ? 'bg-gray-800' : 'bg-white'
+                }`}>
+                  <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-10 h-10 object-contain" />
                 </div>
-                <span className="font-medium text-sm">Mercadona</span>
+                <span className={`text-xs transition-all duration-300 ${
+                  selectedSupermarket === 'mercadona' ? 'font-bold text-gray-800' : 'font-medium text-[#1C1C1C]'
+                }`}>
+                  Mercadona
+                </span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('carrefour')}
-                className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 border ${
-                  selectedSupermarket === 'carrefour' 
-                    ? 'bg-gray-800 text-white border-gray-800 scale-95' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4] hover:scale-105'
-                }`}
-                style={selectedSupermarket !== 'carrefour' ? { backgroundColor: '#F6F4ED' } : {}}
+                className="flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
-                  <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-8 h-8 object-contain" />
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
+                  selectedSupermarket === 'carrefour' ? 'bg-gray-800' : 'bg-white'
+                }`}>
+                  <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-10 h-10 object-contain" />
                 </div>
-                <span className="font-medium text-sm">Carrefour</span>
+                <span className={`text-xs transition-all duration-300 ${
+                  selectedSupermarket === 'carrefour' ? 'font-bold text-gray-800' : 'font-medium text-[#1C1C1C]'
+                }`}>
+                  Carrefour
+                </span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('lidl')}
-                className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 border ${
-                  selectedSupermarket === 'lidl' 
-                    ? 'bg-gray-800 text-white border-gray-800 scale-95' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4] hover:scale-105'
-                }`}
-                style={selectedSupermarket !== 'lidl' ? { backgroundColor: '#F6F4ED' } : {}}
+                className="flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
-                  <img src="/lidl-logo-updated.png" alt="Lidl" className="w-8 h-8 object-contain" />
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
+                  selectedSupermarket === 'lidl' ? 'bg-gray-800' : 'bg-white'
+                }`}>
+                  <img src="/lidl-logo-updated.png" alt="Lidl" className="w-10 h-10 object-contain" />
                 </div>
-                <span className="font-medium text-sm">Lidl</span>
+                <span className={`text-xs transition-all duration-300 ${
+                  selectedSupermarket === 'lidl' ? 'font-bold text-gray-800' : 'font-medium text-[#1C1C1C]'
+                }`}>
+                  Lidl
+                </span>
               </button>
               
               <button 
                 onClick={() => handleSupermarketSelect('alcampo')}
-                className={`flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 border ${
-                  selectedSupermarket === 'alcampo' 
-                    ? 'bg-gray-800 text-white border-gray-800 scale-95' 
-                    : 'text-[#1C1C1C] hover:bg-gray-300 border-[#ECEAE4] hover:scale-105'
-                }`}
-                style={selectedSupermarket !== 'alcampo' ? { backgroundColor: '#F6F4ED' } : {}}
+                className="flex flex-col items-center gap-1 transition-all duration-300 hover:scale-105"
               >
-                <div className="w-12 h-12 rounded-xl flex items-center justify-center bg-white shadow-sm">
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center shadow-sm transition-all duration-300 ${
+                  selectedSupermarket === 'alcampo' ? 'bg-gray-800' : 'bg-white'
+                }`}>
                   <img src="/alcampo-logo.png" alt="Alcampo" className="w-8 h-8 object-contain" />
                 </div>
-                <span className="font-medium text-sm">Alcampo</span>
+                <span className={`text-xs transition-all duration-300 ${
+                  selectedSupermarket === 'alcampo' ? 'font-bold text-gray-800' : 'font-medium text-[#1C1C1C]'
+                }`}>
+                  Alcampo
+                </span>
               </button>
             </div>
             
