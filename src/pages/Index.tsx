@@ -428,9 +428,12 @@ const Index = () => {
       {/* Main Content - Landing Page */}
       <div className="flex-1 flex flex-col justify-start px-6 pt-20">
         <div className="w-full max-w-md mx-auto">
-          <h1 className="text-3xl font-medium text-[#1C1C1C] mb-8 text-center">
+          <h1 className="text-3xl font-medium text-[#1C1C1C] mb-4 text-center">
             Genera listas de compra
           </h1>
+          <p className="text-lg text-gray-600 mb-8 text-center">
+            Crea con IA recetas personalizadas utilizando los ingredientes de tu súpermercado
+          </p>
           {/* Chat-style Call to Action */}
           <div className="rounded-3xl shadow-lg p-6 border w-full" style={{ backgroundColor: '#FCFBF8', borderColor: '#ECEAE4' }}>
             <div className="mb-6">
