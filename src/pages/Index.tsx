@@ -207,7 +207,7 @@ const Index = () => {
                   backgroundColor: '#F6F4ED'
                 }}>
                     <img src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} alt={selectedSupermarket} className="w-4 h-4 object-contain" />
-                    <span className="font-medium">
+                    <span>
                       {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                     </span>
                   </div>
