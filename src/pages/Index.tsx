@@ -357,14 +357,10 @@ const Index = () => {
 
   // Main Landing Page
   return (
-    <div className="min-h-screen flex flex-col relative" style={{ backgroundColor: '#F7F7F7' }}>
-      {/* Vintage grain effect */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23000' fill-opacity='0.025' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E")`,
-        }}
-      />
+    <div className="min-h-screen flex flex-col relative" style={{ 
+      background: 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 15%, #d6d8db 30%, #9bb5ff 50%, #7c3aed 70%, #d946ef 85%, #ec4899 100%)' 
+    }}>
+      {/* Remove vintage grain effect */}
       {/* Top Header with Logo and Auth Buttons/Menu */}
       <div className="flex items-center justify-between p-6">
         <div className="flex items-center gap-3">
@@ -432,7 +428,7 @@ const Index = () => {
       </div>
       
       {/* Main Content - Landing Page */}
-      <div className="flex-1 flex flex-col px-6 pt-16" style={{ background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 20%, #dee2e6 40%, #ced4da 60%, #adb5bd 80%, #6f42c1 100%)' }}>
+      <div className="flex-1 flex flex-col px-6 pt-16">
         <div className="w-full max-w-md mx-auto">
           <h1 className="text-3xl font-medium text-[#1C1C1C] mb-8 text-center">
             Genera listas de compra
