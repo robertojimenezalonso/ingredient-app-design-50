@@ -349,7 +349,7 @@ const Index = () => {
           {/* Chat-style Call to Action */}
           <div className="shadow-lg pt-6 px-6 pb-6 border w-full" style={{
           backgroundColor: '#F7F4ED',
-          borderColor: '#ECEAE4',
+          borderColor: '#E1DED7',
           borderRadius: '30px'
         }}>
             <div className="mb-3">
