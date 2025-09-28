@@ -285,7 +285,9 @@ const Index = () => {
   }
 
   // Main Landing Page
-  return <div className="min-h-screen flex flex-col relative gradient-grain">
+  return <div className="min-h-screen flex flex-col relative" style={{
+    background: 'linear-gradient(0deg, #f36f83,#ffdcdf,#ffffff,#ffffff)'
+  }}>
       {/* Content wrapper with z-index to stay above grain */}
       <div className="relative z-10 min-h-screen flex flex-col">
       {/* Remove vintage grain effect */}
