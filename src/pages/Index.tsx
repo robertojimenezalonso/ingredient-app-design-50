@@ -339,7 +339,7 @@ const Index = () => {
       {/* Main Content - Landing Page */}
       <div className="flex-1 flex flex-col justify-start px-4 pt-20">
         <div className="w-full max-w-md mx-auto mt-8">
-          <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-2 text-center">
+          <h1 className="text-3xl font-bold text-[#1C1C1C] mb-2 text-center">
             Genera listas de compra
           </h1>
           <p className="text-lg mb-4 text-center leading-snug" style={{ color: '#5E6168' }}>
