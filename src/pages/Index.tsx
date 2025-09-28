@@ -342,7 +342,7 @@ const Index = () => {
           <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-4 text-center">
             Genera listas de compra
           </h1>
-          <p className="text-lg mb-6 text-center" style={{ color: '#5E6168' }}>
+          <p className="text-lg mb-6 text-center leading-tight" style={{ color: '#5E6168' }}>
             Crea recetas con los ingredientes<br />
             de tu supermercado usando IA
           </p>
