@@ -347,7 +347,7 @@ const Index = () => {
             de tu supermercado usando IA
           </p>
           {/* Chat-style Call to Action */}
-          <div className="shadow-lg pt-6 px-6 pb-6 border w-full" style={{
+          <div className="shadow-lg pt-6 px-6 pb-6 border w-full mt-8" style={{
           backgroundColor: '#FCFBF8',
           borderColor: '#E1DED7',
           borderRadius: '30px'
