@@ -199,7 +199,7 @@ const Index = () => {
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{
           backgroundColor: '#FCFBF8'
         }}>
-            <div className="flex flex-col h-full overflow-y-auto" style={{ backgroundColor: '#FCFBF8' }}>
+            <div className="flex flex-col h-full overflow-y-auto">
               {/* User response - supermarket selection (right-aligned) */}
               <div className="px-4 pt-4 mb-6">
                 <div className="flex justify-end">
