@@ -1,6 +1,5 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 
 interface CustomCalendarProps {
   className?: string;
@@ -16,24 +15,12 @@ export function CustomCalendar({
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   
-  // Calculate Monday of current week
-  const getMondayOfCurrentWeek = (date: Date) => {
-    const monday = new Date(date);
-    const dayOfWeek = monday.getDay();
-    const daysToSubtract = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
-    monday.setDate(monday.getDate() - daysToSubtract); // No additional days subtracted
-    return monday;
-  };
-  
-  const mondayOfCurrentWeek = getMondayOfCurrentWeek(today);
-  
-  // Generate dates from Monday of current week to end of next month
+  // Generate 20 days starting from today
   const generateDates = () => {
     const dates = [];
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); // Last day of next month
+    const currentDate = new Date(today);
     
-    const currentDate = new Date(mondayOfCurrentWeek);
-    while (currentDate <= endDate) {
+    for (let i = 0; i < 20; i++) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
@@ -42,46 +29,41 @@ export function CustomCalendar({
 
   const dates = generateDates();
   
-  // Group dates by month and week
-  const groupDatesByMonth = () => {
-    const months: { [key: string]: Date[][] } = {};
-    
-    dates.forEach(date => {
-      const monthKey = `${date.getFullYear()}-${date.getMonth()}`;
-      if (!months[monthKey]) {
-        months[monthKey] = [];
-      }
-      
-      const weekIndex = Math.floor((date.getDate() - 1) / 7);
-      if (!months[monthKey][weekIndex]) {
-        months[monthKey][weekIndex] = [];
-      }
-      
-      months[monthKey][weekIndex].push(date);
+  // Get current month for display
+  const getCurrentMonth = () => {
+    const currentMonth = dates.find(date => {
+      return date.getMonth() !== today.getMonth();
     });
-    
-    return months;
+    return currentMonth ? currentMonth : today;
   };
 
-  const monthGroups = groupDatesByMonth();
+  const [displayMonth, setDisplayMonth] = React.useState(today.getMonth());
+  
+  React.useEffect(() => {
+    // Update display month when scrolling through dates
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const dateElement = entry.target as HTMLElement;
+          const dateIndex = parseInt(dateElement.dataset.dateIndex || '0');
+          const date = dates[dateIndex];
+          if (date && date.getMonth() !== displayMonth) {
+            setDisplayMonth(date.getMonth());
+          }
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const dateElements = document.querySelectorAll('[data-date-index]');
+    dateElements.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, [dates, displayMonth]);
   
   const isSelected = (date: Date) => {
     return selected.some(selectedDate => 
-      selectedDate.getTime() === date.getTime()
+      selectedDate.getTime() === selectedDate.getTime()
     );
-  };
-
-  const isPast = (date: Date) => {
-    // If today is Monday, no dates are considered past
-    const todayDayOfWeek = today.getDay();
-    const isTodayMonday = todayDayOfWeek === 1;
-    
-    if (isTodayMonday) {
-      return false;
-    }
-    
-    // Otherwise, dates before today are past
-    return date < today;
   };
 
   const isToday = (date: Date) => {
@@ -89,13 +71,10 @@ export function CustomCalendar({
   };
 
   const handleDateClick = (date: Date) => {
-    // Don't allow selection of past dates
-    if (isPast(date)) return;
-    
     const isDateSelected = isSelected(date);
     
     if (isDateSelected) {
-      // Deselect the date - remove it from the array
+      // Deselect the date
       const newSelected = selected.filter(selectedDate => 
         selectedDate.getTime() !== date.getTime()
       );
@@ -103,10 +82,9 @@ export function CustomCalendar({
     } else {
       // Select the date
       if (selected.length === 0) {
-        // First date selection
         onSelect?.([date]);
       } else if (selected.length === 1) {
-        // Second date - create range between the two dates
+        // Create range between the two dates
         const firstDate = selected[0];
         const startDate = date < firstDate ? date : firstDate;
         const endDate = date < firstDate ? firstDate : date;
@@ -119,158 +97,64 @@ export function CustomCalendar({
         }
         onSelect?.(rangeDates);
       } else {
-        // Multiple dates already selected - check if we can create a new range
-        const sortedSelected = [...selected].sort((a, b) => a.getTime() - b.getTime());
-        
-        // Find isolated dates (dates that don't have adjacent dates selected)
-        const isolatedDates = sortedSelected.filter(selectedDate => {
-          const prevDay = new Date(selectedDate);
-          prevDay.setDate(selectedDate.getDate() - 1);
-          const nextDay = new Date(selectedDate);
-          nextDay.setDate(selectedDate.getDate() + 1);
-          
-          const hasPrevious = sortedSelected.some(d => d.getTime() === prevDay.getTime());
-          const hasNext = sortedSelected.some(d => d.getTime() === nextDay.getTime());
-          
-          return !hasPrevious && !hasNext;
-        });
-        
-        // If there's exactly one isolated date, create a range with it and the new date
-        if (isolatedDates.length === 1) {
-          const isolatedDate = isolatedDates[0];
-          const startDate = date < isolatedDate ? date : isolatedDate;
-          const endDate = date < isolatedDate ? isolatedDate : date;
-          
-          // Remove the isolated date from current selection
-          const remainingSelected = selected.filter(d => d.getTime() !== isolatedDate.getTime());
-          
-          // Create range between isolated date and new date
-          const rangeDates = [];
-          const current = new Date(startDate);
-          while (current <= endDate) {
-            rangeDates.push(new Date(current));
-            current.setDate(current.getDate() + 1);
-          }
-          
-          // Combine remaining selection with new range
-          const newSelected = [...remainingSelected, ...rangeDates].sort((a, b) => a.getTime() - b.getTime());
-          onSelect?.(newSelected);
-        } else {
-          // Add as individual date
-          const newSelected = [...selected, date].sort((a, b) => a.getTime() - b.getTime());
-          onSelect?.(newSelected);
-        }
+        // Add as individual date
+        const newSelected = [...selected, date].sort((a, b) => a.getTime() - b.getTime());
+        onSelect?.(newSelected);
       }
     }
   };
 
-  const formatMonth = (date: Date) => {
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  const formatMonth = (monthIndex: number) => {
+    const date = new Date();
+    date.setMonth(monthIndex);
+    return date.toLocaleDateString('es-ES', { month: 'long' });
   };
 
-  // Create a proper week structure
-  const createWeekStructure = (monthDates: Date[]) => {
-    const weeks: (Date | null)[][] = [];
-    const firstDate = monthDates[0];
-    const lastDate = monthDates[monthDates.length - 1];
-    
-    // Start from the Monday of the week containing the first date
-    const startDate = new Date(firstDate);
-    const dayOfWeek = startDate.getDay();
-    startDate.setDate(startDate.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-    
-    const currentWeek: (Date | null)[] = [];
-    const currentDate = new Date(startDate);
-    
-    while (currentDate <= lastDate || currentWeek.length < 7) {
-      if (currentDate >= firstDate && currentDate <= lastDate && monthDates.some(d => d.getTime() === currentDate.getTime())) {
-        currentWeek.push(new Date(currentDate));
-      } else {
-        currentWeek.push(null);
-      }
-      
-      if (currentWeek.length === 7) {
-        weeks.push([...currentWeek]);
-        currentWeek.length = 0;
-      }
-      
-      currentDate.setDate(currentDate.getDate() + 1);
-      
-      if (currentDate > lastDate && currentWeek.length > 0) {
-        while (currentWeek.length < 7) {
-          currentWeek.push(null);
-        }
-        weeks.push([...currentWeek]);
-        break;
-      }
-    }
-    
-    return weeks;
+  const formatDayOfWeek = (date: Date) => {
+    return date.toLocaleDateString('es-ES', { weekday: 'short' });
   };
 
   return (
-    <div className={cn("p-3 rounded-lg border mx-4", className)} style={{ backgroundColor: '#F6F4ED', borderColor: '#ECEAE4' }}>
-      {Object.entries(monthGroups).map(([monthKey, weeks]) => {
-        const monthDate = dates.find(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
-        if (!monthDate) return null;
-        
-        const monthDates = dates.filter(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
-        const weekStructure = createWeekStructure(monthDates);
-        
-        return (
-          <div key={monthKey} className="space-y-4 mb-6">
-            <div className="flex justify-start pt-1 relative items-center pl-2">
-              <span className="text-sm font-medium">{formatMonth(monthDate)}</span>
+    <div className={cn("p-4 rounded-lg border", className)} style={{ backgroundColor: '#F6F4ED', borderColor: '#ECEAE4' }}>
+      {/* Fixed month display */}
+      <div className="mb-4">
+        <span className="text-base font-medium text-[#1C1C1C]">
+          {formatMonth(displayMonth)} {dates.find(d => d.getMonth() === displayMonth)?.getFullYear()}
+        </span>
+      </div>
+      
+      {/* Horizontal scrollable calendar */}
+      <div className="overflow-x-auto">
+        <div className="flex gap-4 pb-2" style={{ width: 'max-content' }}>
+          {dates.map((date, index) => (
+            <div
+              key={index}
+              data-date-index={index}
+              className="flex flex-col items-center min-w-[60px]"
+            >
+              {/* Day of week */}
+              <div className="text-xs text-muted-foreground mb-1 capitalize">
+                {formatDayOfWeek(date)}
+              </div>
+              
+              {/* Date button */}
+              <button
+                onClick={() => handleDateClick(date)}
+                className={cn(
+                  "h-12 w-12 rounded-full flex items-center justify-center text-base transition-colors relative",
+                  isSelected(date) 
+                    ? "bg-[#1C1C1C] text-white" 
+                    : isToday(date)
+                    ? "bg-[#ECEAE4] text-[#1C1C1C]"
+                    : "hover:bg-[#ECEAE4] text-[#1C1C1C]"
+                )}
+              >
+                {date.getDate()}
+              </button>
             </div>
-            
-            {/* Day headers */}
-            <div className="flex">
-              {["L", "M", "X", "J", "V", "S", "D"].map((day) => (
-                <div
-                  key={day}
-                  className="text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] flex items-center justify-center"
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
-            
-            {/* Date grid */}
-            <div className="space-y-1">
-              {weekStructure.map((week, weekIndex) => (
-                <div key={weekIndex} className="flex w-full mt-2 gap-1">
-                  {week.map((date, dayIndex) => (
-                    <div
-                      key={dayIndex}
-                      className="h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20 flex items-center justify-center"
-                    >
-                      {date && (
-                        <button
-                          onClick={() => handleDateClick(date)}
-                          disabled={isPast(date)}
-                          className={cn(
-                            "h-9 w-9 p-0 font-normal rounded-full relative transition-colors bg-transparent focus:outline-none",
-                            isSelected(date) &&
-                              "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
-                            isToday(date) && !isSelected(date) && "text-foreground",
-                            isPast(date) && "opacity-60 cursor-not-allowed"
-                          )}
-                          style={{
-                            ...(isPast(date) ? { textDecoration: 'line-through' } : {}),
-                            ...(isToday(date) && !isSelected(date) ? { backgroundColor: '#ECEAE4' } : {})
-                          }}
-                        >
-                          {date.getDate()}
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </div>
-        );
-      })}
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
