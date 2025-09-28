@@ -29,31 +29,58 @@ export function CustomCalendar({
 
   const dates = generateDates();
   
-  // Get current month for display
-  const getCurrentMonth = () => {
-    const currentMonth = dates.find(date => {
-      return date.getMonth() !== today.getMonth();
-    });
-    return currentMonth ? currentMonth : today;
-  };
-
-  const [displayMonth, setDisplayMonth] = React.useState(today.getMonth());
+  // State for current displayed month
+  const [displayMonth, setDisplayMonth] = React.useState(() => {
+    return { month: today.getMonth(), year: today.getFullYear() };
+  });
   
   React.useEffect(() => {
-    // Update display month when scrolling through dates
+    // Find the first date that's currently visible on the left side of the scroll container
+    const scrollContainer = document.querySelector('.overflow-x-auto');
+    if (!scrollContainer) return;
+
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const dateElement = entry.target as HTMLElement;
-          const dateIndex = parseInt(dateElement.dataset.dateIndex || '0');
-          const date = dates[dateIndex];
-          if (date && date.getMonth() !== displayMonth) {
-            setDisplayMonth(date.getMonth());
+      // Get all visible dates
+      const visibleDates = entries
+        .filter(entry => entry.isIntersecting)
+        .map(entry => {
+          const element = entry.target as HTMLElement;
+          const dateIndex = parseInt(element.dataset.dateIndex || '0');
+          return { element, date: dates[dateIndex], index: dateIndex };
+        })
+        .filter(item => item.date)
+        .sort((a, b) => a.index - b.index);
+
+      if (visibleDates.length > 0) {
+        // Get the first visible date (leftmost)
+        const firstVisibleDate = visibleDates[0].date;
+        
+        // Check if this date represents a different month than currently displayed
+        const newMonth = firstVisibleDate.getMonth();
+        const newYear = firstVisibleDate.getFullYear();
+        
+        if (newMonth !== displayMonth.month || newYear !== displayMonth.year) {
+          // Only change if this is the first day of the new month visible
+          // or if we've scrolled far enough that the new month is dominant
+          const newMonthDates = visibleDates.filter(item => 
+            item.date.getMonth() === newMonth && item.date.getFullYear() === newYear
+          );
+          const currentMonthDates = visibleDates.filter(item => 
+            item.date.getMonth() === displayMonth.month && item.date.getFullYear() === displayMonth.year
+          );
+          
+          // Change month when new month has more visible days than current month
+          if (newMonthDates.length > currentMonthDates.length) {
+            setDisplayMonth({ month: newMonth, year: newYear });
           }
         }
-      });
-    }, { threshold: 0.5 });
+      }
+    }, { 
+      threshold: 0.3,
+      root: scrollContainer
+    });
 
+    // Observe all date elements
     const dateElements = document.querySelectorAll('[data-date-index]');
     dateElements.forEach(el => observer.observe(el));
 
@@ -104,9 +131,10 @@ export function CustomCalendar({
     }
   };
 
-  const formatMonth = (monthIndex: number) => {
+  const formatMonth = (monthData: { month: number; year: number }) => {
     const date = new Date();
-    date.setMonth(monthIndex);
+    date.setMonth(monthData.month);
+    date.setFullYear(monthData.year);
     return date.toLocaleDateString('es-ES', { month: 'long' });
   };
 
@@ -119,7 +147,7 @@ export function CustomCalendar({
       {/* Fixed month display */}
       <div className="mb-4">
         <span className="text-base font-medium text-[#1C1C1C]">
-          {formatMonth(displayMonth)} {dates.find(d => d.getMonth() === displayMonth)?.getFullYear()}
+          {formatMonth(displayMonth)} {displayMonth.year}
         </span>
       </div>
       
