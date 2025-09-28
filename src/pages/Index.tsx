@@ -203,10 +203,10 @@ const Index = () => {
               {/* User response - supermarket selection (right-aligned) */}
               <div className="px-4 pt-4 mb-6">
                 <div className="flex justify-end">
-                  <div className="flex items-center gap-2 text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" style={{
+                  <div className="flex items-center gap-2 text-[#1C1C1C] rounded-lg px-3 py-2 text-base max-w-xs" style={{
                   backgroundColor: '#F6F4ED'
                 }}>
-                    <img src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} alt={selectedSupermarket} className="w-4 h-4 object-contain" />
+                    <img src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} alt={selectedSupermarket} className="w-6 h-6 object-contain" />
                     <span>
                       {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                     </span>
@@ -227,7 +227,7 @@ const Index = () => {
                     {showSearchingText && !showResultCard && <div>
                         <div className="flex items-center gap-2">
                           <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
-                          <span className="text-[#1C1C1C] text-sm animate-pulse">
+                          <span className="text-[#1C1C1C] text-base animate-pulse">
                             Buscando ingredientes en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                           </span>
                         </div>
@@ -235,7 +235,7 @@ const Index = () => {
                     
                     {/* Result card - replaces everything else and stays fixed */}
                     {showResultCard && <div className="rounded-lg p-4 border border-[#ECEAE4] animate-fade-in" style={{ backgroundColor: '#F6F4ED' }}>
-                        <p className="text-[#1C1C1C] text-sm">
+                        <p className="text-[#1C1C1C] text-base">
                           Hemos encontrado 824 ingredientes en {' '}
                           {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                         </p>
@@ -249,7 +249,7 @@ const Index = () => {
                   {/* Calendar paragraph with typewriter effect */}
                   <div className="mb-6">
                     <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                      <p className="text-base leading-relaxed text-left text-[#1C1C1C] font-medium">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
                         {calendarTypewriterStep >= 2 && <span>
                             {displayedCalendarParagraph2}
                             {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
