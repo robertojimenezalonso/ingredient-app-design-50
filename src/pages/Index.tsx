@@ -350,7 +350,7 @@ const Index = () => {
           <div className="shadow-lg pt-6 px-6 pb-6 border w-full" style={{
           backgroundColor: '#FCFBF8',
           borderColor: '#ECEAE4',
-          borderRadius: '90px'
+          borderRadius: '30px'
         }}>
             <div className="mb-3">
               <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
