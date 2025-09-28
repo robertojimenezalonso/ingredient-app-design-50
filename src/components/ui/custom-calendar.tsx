@@ -27,12 +27,12 @@ export function CustomCalendar({
   
   const mondayOfCurrentWeek = getMondayOfCurrentWeek(today);
   
-  // Generate dates from Monday of current week to end of next month
+  // Generate dates from today to end of next month (one month from today)
   const generateDates = () => {
     const dates = [];
-    const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); // Last day of next month
+    const endDate = new Date(today.getFullYear(), today.getMonth() + 1, 0); // Last day of current month + 1 month
     
-    const currentDate = new Date(mondayOfCurrentWeek);
+    const currentDate = new Date(today);
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
@@ -209,7 +209,7 @@ export function CustomCalendar({
   };
 
   return (
-    <div className={cn("p-3 rounded-lg border mx-4", className)} style={{ backgroundColor: '#F6F4ED', borderColor: '#ECEAE4' }}>
+    <div className={cn("p-3 rounded-lg border mx-6", className)} style={{ backgroundColor: '#F6F4ED', borderColor: '#ECEAE4' }}>
       {Object.entries(monthGroups).map(([monthKey, weeks]) => {
         const monthDate = dates.find(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
         if (!monthDate) return null;
