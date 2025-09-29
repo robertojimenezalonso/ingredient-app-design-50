@@ -272,7 +272,11 @@ const Index = () => {
                               style={{ marginLeft: index > 0 ? '-8px' : '0', zIndex: 3 - index }}
                             >
                               {ingredient.image_url ? (
-                                <img src={ingredient.image_url} alt={ingredient.product_name} className="w-9 h-9 object-cover rounded-full" />
+                                <img 
+                                  src={ingredient.image_url} 
+                                  alt={ingredient.product_name} 
+                                  className={`object-cover rounded-full ${index === 0 ? 'w-10 h-10' : 'w-9 h-9'}`} 
+                                />
                               ) : (
                                 <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">
                                   <span className="text-sm font-medium text-gray-500">{ingredient.product_name.charAt(0).toUpperCase()}</span>
