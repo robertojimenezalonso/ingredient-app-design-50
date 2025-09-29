@@ -205,7 +205,8 @@ export function CustomCalendar({
   };
 
   return (
-    <div className={cn("p-3 rounded-lg", className)} style={{ backgroundColor: '#F4F4F4' }}>
+    <div className={cn("p-4 rounded-lg", className)} style={{ backgroundColor: '#F4F4F4' }}>
+      <div className="max-w-sm mx-auto">{/* Center the calendar content */}
       {Object.entries(monthGroups).map(([monthKey, weeks]) => {
         const monthDate = dates.find(d => `${d.getFullYear()}-${d.getMonth()}` === monthKey);
         if (!monthDate) return null;
@@ -216,7 +217,7 @@ export function CustomCalendar({
         return (
           <div key={monthKey} className="space-y-4 mb-6">
             <div className="flex justify-start pt-1 relative items-center pl-2">
-              <span className="text-sm font-medium">{formatMonth(monthDate)}</span>
+              <span className="text-base font-medium">{formatMonth(monthDate)}</span>
             </div>
             
             {/* Day headers */}
@@ -224,7 +225,7 @@ export function CustomCalendar({
               {["L", "M", "X", "J", "V", "S", "D"].map((day) => (
                 <div
                   key={day}
-                  className="text-muted-foreground rounded-md w-9 font-normal text-[0.8rem] flex items-center justify-center"
+                  className="text-muted-foreground rounded-md w-12 font-normal text-base flex items-center justify-center h-12"
                 >
                   {day}
                 </div>
@@ -238,14 +239,14 @@ export function CustomCalendar({
                   {week.map((date, dayIndex) => (
                     <div
                       key={dayIndex}
-                      className="h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20 flex items-center justify-center"
+                      className="h-12 w-12 text-center text-base p-0 relative focus-within:relative focus-within:z-20 flex items-center justify-center"
                     >
                       {date && (
                         <button
                           onClick={() => handleDateClick(date)}
                           disabled={isPast(date)}
                           className={cn(
-                            "h-9 w-9 p-0 font-normal rounded-full relative transition-colors bg-transparent focus:outline-none",
+                            "h-12 w-12 p-0 font-normal rounded-full relative transition-colors bg-transparent focus:outline-none text-base",
                             isSelected(date) &&
                               "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
                             isToday(date) && !isSelected(date) && "text-foreground",
@@ -267,6 +268,7 @@ export function CustomCalendar({
           </div>
         );
       })}
+      </div>
     </div>
   );
 }
