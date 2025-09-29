@@ -361,7 +361,7 @@ const Index = () => {
             {/* Horizontal supermarket layout */}
             <div className="flex justify-between items-center gap-3 mb-1">
               <button onClick={() => handleSupermarketSelect('mercadona')} className="flex flex-col items-center gap-2 transition-all duration-300">
-                <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-[#D2D1CE]' : 'bg-[#F4F4F4]'}`}>
+                <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-[#D9DADC] border border-[#020818]' : 'bg-[#F4F4F4]'}`}>
                   <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-14 h-14 object-contain" />
                 </div>
                 <span className={`text-xs font-semibold transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
@@ -370,7 +370,7 @@ const Index = () => {
               </button>
               
               <button onClick={() => handleSupermarketSelect('carrefour')} className="flex flex-col items-center gap-2 transition-all duration-300">
-                <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'bg-[#D2D1CE]' : 'bg-[#F4F4F4]'}`}>
+                <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'bg-[#D9DADC] border border-[#020818]' : 'bg-[#F4F4F4]'}`}>
                   <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-12 h-12 object-contain" />
                 </div>
                 <span className={`text-xs font-semibold transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
@@ -379,7 +379,7 @@ const Index = () => {
               </button>
               
               <button onClick={() => handleSupermarketSelect('lidl')} className="flex flex-col items-center gap-2 transition-all duration-300">
-                <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'bg-[#D2D1CE]' : 'bg-[#F4F4F4]'}`}>
+                <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'bg-[#D9DADC] border border-[#020818]' : 'bg-[#F4F4F4]'}`}>
                   <img src="/lidl-logo-updated.png" alt="Lidl" className="w-12 h-12 object-contain rounded-md" />
                 </div>
                 <span className={`text-xs font-semibold transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
@@ -388,7 +388,7 @@ const Index = () => {
               </button>
               
               <button onClick={() => handleSupermarketSelect('alcampo')} className="flex flex-col items-center gap-2 transition-all duration-300">
-                <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'bg-[#D2D1CE]' : 'bg-[#F4F4F4]'}`}>
+                <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'bg-[#D9DADC] border border-[#020818]' : 'bg-[#F4F4F4]'}`}>
                   <img src="/alcampo-logo.png" alt="Alcampo" className="w-10 h-10 object-contain" />
                 </div>
                 <span className={`text-xs font-semibold transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'text-gray-800' : 'text-[#1C1C1C]'}`}>
