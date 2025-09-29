@@ -8,6 +8,10 @@ import { useAuth } from '@/hooks/useAuth';
 import { ArrowUp, ArrowRight, X, Plus, Minus, Menu, LogOut, User, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
+import tomatoImg from '@/assets/ingredients/tomato.png';
+import breadImg from '@/assets/ingredients/bread.png';
+import milkImg from '@/assets/ingredients/milk.png';
+import chickenImg from '@/assets/ingredients/chicken.png';
 const Index = () => {
   // Chat conversation component with 4-paragraph typewriter effect
   const navigate = useNavigate();
@@ -234,10 +238,28 @@ const Index = () => {
                       </div>}
                     
                     {/* Result card - replaces everything else and stays fixed */}
-                    {showResultCard && <p className="text-[#1C1C1C] text-base animate-fade-in">
+                    {showResultCard && <>
+                      <p className="text-[#1C1C1C] text-base animate-fade-in">
                           Hemos encontrado 824 ingredientes en {' '}
                           {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
-                        </p>}
+                        </p>
+                        
+                        {/* Ingredients Preview */}
+                        <div className="flex items-center gap-2 mt-3 animate-fade-in">
+                          <div className="w-8 h-8 rounded bg-white border border-gray-200 flex items-center justify-center">
+                            <img src={tomatoImg} alt="Tomato" className="w-6 h-6 object-cover rounded" />
+                          </div>
+                          <div className="w-8 h-8 rounded bg-white border border-gray-200 flex items-center justify-center">
+                            <img src={breadImg} alt="Bread" className="w-6 h-6 object-cover rounded" />
+                          </div>
+                          <div className="w-8 h-8 rounded bg-white border border-gray-200 flex items-center justify-center">
+                            <img src={milkImg} alt="Milk" className="w-6 h-6 object-cover rounded" />
+                          </div>
+                          <div className="w-8 h-8 rounded bg-[#F4F4F4] border border-gray-200 flex items-center justify-center">
+                            <span className="text-xs font-medium text-gray-600">+820</span>
+                          </div>
+                        </div>
+                      </>}
                   </div>
                 </div>
               </div>
