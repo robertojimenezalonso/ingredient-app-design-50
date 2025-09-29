@@ -327,10 +327,10 @@ const Index = () => {
         </div>
         
         {!user && <div className="flex items-center gap-3 h-24">
-            <Button variant="ghost" onClick={handleLogin} className="text-sm font-medium text-[#1C1C1C] bg-[#F4F4F4] hover:bg-gray-100 px-3 py-1 border-none">
+            <Button variant="ghost" onClick={handleLogin} className="text-sm font-medium text-[#1C1C1C] bg-[#F4F4F4] hover:bg-gray-100 px-3 py-0.5 border-none">
               Iniciar sesión
             </Button>
-            <Button onClick={handleGetStarted} className="text-sm font-medium bg-[#1C1C1C] text-white hover:bg-gray-800 px-3 py-1 rounded-lg">
+            <Button onClick={handleGetStarted} className="text-sm font-medium bg-[#1C1C1C] text-white hover:bg-gray-800 px-3 py-0.5 rounded-lg">
               Empezar
             </Button>
           </div>}
