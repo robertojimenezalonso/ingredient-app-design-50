@@ -76,7 +76,7 @@ All colors MUST be HSL.
 
 @layer base {
   body {
-    overflow-x: hidden;
+    overflow: hidden;
     /* Disable zoom and touch manipulation */
     touch-action: manipulation;
     -webkit-touch-callout: none;
@@ -88,7 +88,7 @@ All colors MUST be HSL.
   }
   
   html {
-    overflow-x: hidden;
+    overflow: hidden;
     /* Disable zoom */
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
