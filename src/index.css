@@ -26,33 +26,52 @@
   /* 🎨 Degradado base */
   background: -webkit-linear-gradient(
     0deg,
-    #f36f83,
-    #ffdcdf,
+    #aaaaaa,
+    #c0c0c0,
+    #d6d6d6,
     #ffffff,
     #ffffff
   );
   background: linear-gradient(
     0deg,
-    #f36f83,
-    #ffdcdf,
+    #aaaaaa,
+    #c0c0c0,
+    #d6d6d6,
     #ffffff,
     #ffffff
   );
   overflow: hidden;
 }
 
+/* 🔵 Capa de puntos grandes (halftone) */
+.gradient-grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(#000 0 1.2px, transparent 1.3px),
+    radial-gradient(#000 0 1.2px, transparent 1.3px);
+  background-size: 5px 5px, 5px 5px;
+  background-position: 0 0, 2.5px 2.5px;
+
+  opacity: 0.35; /* intensidad de los puntos */
+  mix-blend-mode: multiply;
+}
+
+/* 🌌 Capa de grano orgánico */
 .gradient-grain::after {
   content: "";
   position: absolute;
   inset: 0;
+  pointer-events: none;
 
-  /* 🌌 Textura de ruido con puntos más marcados */
-  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIxLjYiIG51bU9jdGF2ZXM9IjQiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGZpbHRlciBpZD0ibm9pc2VGaWx0ZXIiPjxmZVR1cmJ1bGVuY2UgdHlwZT0iZnJhY3RhbE5vaXNlIiBiYXNlRnJlcXVlbmN5PSIxLjgiIG51bU9jdGF2ZXM9IjYiLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgZmlsdGVyPSJ1cmwoI25vaXNlRmlsdGVyKSIvPjwvc3ZnPg==");
   background-repeat: repeat;
 
-  opacity: 0.65; /* más fuerte */
-  mix-blend-mode: overlay; /* respeta los colores */
-  pointer-events: none;
+  opacity: 0.55; /* grano visible y fuerte */
+  mix-blend-mode: overlay;
 }
 
 @keyframes revealGrain {
