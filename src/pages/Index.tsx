@@ -64,10 +64,13 @@ const Index = () => {
   useEffect(() => {
     const fetchIngredients = async () => {
       if (selectedSupermarket) {
+        // Capitalizar la primera letra para que coincida con los datos en Supabase
+        const supermarketName = selectedSupermarket.charAt(0).toUpperCase() + selectedSupermarket.slice(1);
+        
         const { data, error } = await supabase
           .from('supermarket_ingredients')
           .select('*')
-          .eq('supermarket', selectedSupermarket)
+          .eq('supermarket', supermarketName)
           .limit(3);
         
         if (!error && data) {
