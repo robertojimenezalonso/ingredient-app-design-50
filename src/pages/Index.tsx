@@ -268,20 +268,20 @@ const Index = () => {
                           {supermarketIngredients.slice(0, 3).map((ingredient, index) => (
                             <div 
                               key={ingredient.id} 
-                              className="w-10 h-10 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center relative"
+                              className="w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center relative"
                               style={{ marginLeft: index > 0 ? '-8px' : '0', zIndex: 3 - index }}
                             >
                               {ingredient.image_url ? (
-                                <img src={ingredient.image_url} alt={ingredient.product_name} className="w-8 h-8 object-cover rounded-full" />
+                                <img src={ingredient.image_url} alt={ingredient.product_name} className="w-9 h-9 object-cover rounded-full" />
                               ) : (
-                                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
-                                  <span className="text-xs text-gray-500">{ingredient.product_name.charAt(0).toUpperCase()}</span>
+                                <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">
+                                  <span className="text-sm font-medium text-gray-500">{ingredient.product_name.charAt(0).toUpperCase()}</span>
                                 </div>
                               )}
                             </div>
                           ))}
                           <div 
-                            className="w-10 h-10 rounded-full bg-[#F4F4F4] border-2 border-gray-200 flex items-center justify-center relative"
+                            className="w-10 h-10 rounded-full bg-[#F4F4F4] flex items-center justify-center relative"
                             style={{ marginLeft: '-8px', zIndex: 0 }}
                           >
                             <span className="text-xs font-medium text-gray-600">+821</span>
