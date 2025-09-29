@@ -234,12 +234,10 @@ const Index = () => {
                       </div>}
                     
                     {/* Result card - replaces everything else and stays fixed */}
-                    {showResultCard && <div className="rounded-lg p-4 animate-fade-in" style={{ backgroundColor: '#F6F4ED' }}>
-                        <p className="text-[#1C1C1C] text-base">
+                    {showResultCard && <p className="text-[#1C1C1C] text-base animate-fade-in">
                           Hemos encontrado 824 ingredientes en {' '}
                           {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
-                        </p>
-                      </div>}
+                        </p>}
                   </div>
                 </div>
               </div>
