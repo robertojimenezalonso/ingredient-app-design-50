@@ -76,7 +76,7 @@ All colors MUST be HSL.
 
 @layer base {
   body {
-    overflow-x: hidden;
+    overflow: hidden; /* Disable all scrolling */
     /* Disable zoom and touch manipulation */
     touch-action: manipulation;
     -webkit-touch-callout: none;
@@ -85,14 +85,23 @@ All colors MUST be HSL.
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    /* Mobile safe areas */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
   }
   
   html {
-    overflow-x: hidden;
-    /* Disable zoom */
+    overflow: hidden; /* Disable all scrolling */
+    /* Disable zoom completely */
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     touch-action: manipulation;
+    /* Prevent zoom gestures */
+    -ms-touch-action: manipulation;
+    -webkit-user-scalable: no;
+    user-scalable: no;
   }
   :root {
     --background: 0 0% 96.9%;

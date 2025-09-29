@@ -181,7 +181,11 @@ const Index = () => {
   // Expanded calendar view
   if (isExpanded) {
     return <div className="h-screen flex flex-col relative overflow-hidden" style={{
-      backgroundColor: '#FCFBF8'
+      backgroundColor: '#FCFBF8',
+      paddingTop: 'env(safe-area-inset-top, 0px)',
+      paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+      paddingLeft: 'env(safe-area-inset-left, 0px)',
+      paddingRight: 'env(safe-area-inset-right, 0px)'
     }}>
         {/* Fixed Header */}
         <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center border-b" style={{
@@ -285,7 +289,13 @@ const Index = () => {
   }
 
   // Main Landing Page
-  return <div className="min-h-screen flex flex-col relative gradient-grain">
+  return <div className="min-h-screen flex flex-col relative gradient-grain" style={{
+    backgroundColor: 'white',
+    paddingTop: 'env(safe-area-inset-top, 0px)',
+    paddingBottom: 'env(safe-area-inset-bottom, 0px)',
+    paddingLeft: 'env(safe-area-inset-left, 0px)',
+    paddingRight: 'env(safe-area-inset-right, 0px)'
+  }}>
       {/* Content wrapper with z-index to stay above grain */}
       <div className="relative z-10 min-h-screen flex flex-col">
       {/* Remove vintage grain effect */}
