@@ -204,7 +204,7 @@ const Index = () => {
               <div className="px-4 pt-4 mb-6">
                 <div className="flex justify-end">
                   <div className="flex items-center gap-2 text-[#1C1C1C] rounded-lg px-3 py-2 text-base max-w-xs" style={{
-                  backgroundColor: '#F6F4ED'
+                  backgroundColor: '#F4F4F4'
                 }}>
                     <img src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} alt={selectedSupermarket} className="w-6 h-6 object-contain" />
                     <span>
