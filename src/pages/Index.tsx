@@ -273,7 +273,7 @@ const Index = () => {
                             >
                               {ingredient.image_url ? (
                                 <img 
-                                  src={index === 0 ? "https://ygmlvvveoacykrqsmnva.supabase.co/storage/v1/object/public/recipe-images/1757273972921-a91f13d218a7badd0b10b7b0e3088f20.jpg" : ingredient.image_url} 
+                                  src={index === 0 ? "https://ygmlvvveoacykrqsmnva.supabase.co/storage/v1/object/public/recipe-images/1757274343872-bfc088bcd08f0dc6e421323e51b5d9fa.jpg" : ingredient.image_url} 
                                   alt={ingredient.product_name} 
                                   className="w-9 h-9 object-cover rounded-full" 
                                 />
