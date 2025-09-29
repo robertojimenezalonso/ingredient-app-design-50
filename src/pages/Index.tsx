@@ -268,7 +268,7 @@ const Index = () => {
                           {supermarketIngredients.slice(0, 3).map((ingredient, index) => (
                             <div 
                               key={ingredient.id} 
-                              className="w-10 h-10 rounded-full bg-white border border-[#F4F4F4] flex items-center justify-center relative"
+                              className="w-10 h-10 rounded-full bg-white border border-[#D6D6D6] flex items-center justify-center relative"
                               style={{ marginLeft: index > 0 ? '-8px' : '0', zIndex: 3 - index }}
                             >
                               {ingredient.image_url ? (
