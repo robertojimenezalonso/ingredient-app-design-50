@@ -286,7 +286,7 @@ const Index = () => {
                           ))}
                           <div 
                             className="w-10 h-10 rounded-full bg-[#F4F4F4] flex items-center justify-center relative"
-                            style={{ marginLeft: '-8px', zIndex: 0 }}
+                            style={{ marginLeft: '-8px', zIndex: 4 }}
                           >
                             <span className="text-xs font-medium text-gray-600">+821</span>
                           </div>
