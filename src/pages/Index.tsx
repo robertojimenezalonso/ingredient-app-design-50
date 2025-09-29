@@ -327,7 +327,7 @@ const Index = () => {
         </div>
         
         {!user && <div className="flex items-center gap-3 h-24">
-            <Button variant="outline" onClick={handleLogin} className="text-sm font-medium text-[#1C1C1C] bg-[#F7F4ED] border-[#EBEAE5] hover:bg-gray-100 px-3 py-1">
+            <Button variant="outline" onClick={handleLogin} className="text-sm font-medium text-[#1C1C1C] bg-[#F4F4F4] hover:bg-gray-100 px-3 py-1">
               Iniciar sesión
             </Button>
             <Button onClick={handleGetStarted} className="text-sm font-medium bg-[#1C1C1C] text-white hover:bg-gray-800 px-3 py-1 rounded-lg">
