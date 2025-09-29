@@ -253,7 +253,7 @@ export function CustomCalendar({
                           )}
                           style={{
                             ...(isPast(date) ? { textDecoration: 'line-through' } : {}),
-                            ...(isToday(date) && !isSelected(date) ? { backgroundColor: '#ECEAE4' } : {})
+                            ...(isToday(date) && !isSelected(date) ? { backgroundColor: '#D6D6D6' } : {})
                           }}
                         >
                           {date.getDate()}
