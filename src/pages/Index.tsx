@@ -259,8 +259,7 @@ const Index = () => {
                     {/* Result card - replaces everything else and stays fixed */}
                     {showResultCard && <>
                       <p className="text-[#1C1C1C] text-base animate-fade-in">
-                          Hemos encontrado 824 ingredientes en {' '}
-                          {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                          He encontrado 824 productos en Mercadona
                         </p>
                         
                         {/* Ingredients Preview */}
