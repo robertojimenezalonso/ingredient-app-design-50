@@ -8,10 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ArrowUp, ArrowRight, X, Plus, Minus, Menu, LogOut, User, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
-import tomatoImg from '@/assets/ingredients/tomato.png';
-import breadImg from '@/assets/ingredients/bread.png';
-import milkImg from '@/assets/ingredients/milk.png';
-import chickenImg from '@/assets/ingredients/chicken.png';
+import { supabase } from '@/integrations/supabase/client';
 const Index = () => {
   // Chat conversation component with 4-paragraph typewriter effect
   const navigate = useNavigate();
@@ -21,6 +18,7 @@ const Index = () => {
     signOut
   } = useAuth();
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
+  const [supermarketIngredients, setSupermarketIngredients] = useState<any[]>([]);
 
   // Expanded state for calendar view
   const [isExpanded, setIsExpanded] = useState(false);
@@ -50,7 +48,6 @@ const Index = () => {
   // Calendar screen text
   const calendarParagraph2Text = "👉 Dime, ¿para qué días te gustaría hacer tu compra?";
 
-  // Detectar regreso del login y expandir automáticamente
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const pendingSupermarket = localStorage.getItem('pendingSupermarket');
@@ -62,6 +59,25 @@ const Index = () => {
       window.history.replaceState({}, '', '/');
     }
   }, [user]);
+
+  // Cargar ingredientes del supermercado seleccionado
+  useEffect(() => {
+    const fetchIngredients = async () => {
+      if (selectedSupermarket) {
+        const { data, error } = await supabase
+          .from('supermarket_ingredients')
+          .select('*')
+          .eq('supermarket', selectedSupermarket)
+          .limit(3);
+        
+        if (!error && data) {
+          setSupermarketIngredients(data);
+        }
+      }
+    };
+    
+    fetchIngredients();
+  }, [selectedSupermarket]);
 
   // Cerrar menú al hacer clic fuera
   useEffect(() => {
@@ -245,18 +261,27 @@ const Index = () => {
                         </p>
                         
                         {/* Ingredients Preview */}
-                        <div className="flex items-center gap-2 mt-3 animate-fade-in">
-                          <div className="w-8 h-8 rounded bg-white border border-gray-200 flex items-center justify-center">
-                            <img src={tomatoImg} alt="Tomato" className="w-6 h-6 object-cover rounded" />
-                          </div>
-                          <div className="w-8 h-8 rounded bg-white border border-gray-200 flex items-center justify-center">
-                            <img src={breadImg} alt="Bread" className="w-6 h-6 object-cover rounded" />
-                          </div>
-                          <div className="w-8 h-8 rounded bg-white border border-gray-200 flex items-center justify-center">
-                            <img src={milkImg} alt="Milk" className="w-6 h-6 object-cover rounded" />
-                          </div>
-                          <div className="w-8 h-8 rounded bg-[#F4F4F4] border border-gray-200 flex items-center justify-center">
-                            <span className="text-xs font-medium text-gray-600">+820</span>
+                        <div className="flex items-center mt-3 animate-fade-in" style={{ marginLeft: '-4px' }}>
+                          {supermarketIngredients.slice(0, 3).map((ingredient, index) => (
+                            <div 
+                              key={ingredient.id} 
+                              className="w-10 h-10 rounded-full bg-white border-2 border-gray-200 flex items-center justify-center relative"
+                              style={{ marginLeft: index > 0 ? '-8px' : '0', zIndex: 3 - index }}
+                            >
+                              {ingredient.image_url ? (
+                                <img src={ingredient.image_url} alt={ingredient.product_name} className="w-8 h-8 object-cover rounded-full" />
+                              ) : (
+                                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center">
+                                  <span className="text-xs text-gray-500">{ingredient.product_name.charAt(0).toUpperCase()}</span>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                          <div 
+                            className="w-10 h-10 rounded-full bg-[#F4F4F4] border-2 border-gray-200 flex items-center justify-center relative"
+                            style={{ marginLeft: '-8px', zIndex: 0 }}
+                          >
+                            <span className="text-xs font-medium text-gray-600">+821</span>
                           </div>
                         </div>
                       </>}
