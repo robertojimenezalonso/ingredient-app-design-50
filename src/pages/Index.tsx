@@ -70,8 +70,7 @@ const Index = () => {
         const { data, error } = await supabase
           .from('supermarket_ingredients')
           .select('*')
-          .eq('supermarket', supermarketName)
-          .limit(3);
+          .eq('supermarket', supermarketName);
         
         if (!error && data) {
           setSupermarketIngredients(data);
@@ -259,35 +258,55 @@ const Index = () => {
                     {/* Result card - replaces everything else and stays fixed */}
                     {showResultCard && <>
                       <p className="text-[#1C1C1C] text-base animate-fade-in">
-                          He encontrado 824 productos en Mercadona
+                          He encontrado {supermarketIngredients.length} productos en Mercadona
                         </p>
                         
-                        {/* Ingredients Preview */}
-                        <div className="flex items-center mt-3 animate-fade-in" style={{ marginLeft: '-4px' }}>
-                          {supermarketIngredients.slice(0, 3).map((ingredient, index) => (
-                            <div 
-                              key={ingredient.id} 
-                              className="w-10 h-10 rounded-full bg-white border border-[#D6D6D6] flex items-center justify-center relative"
-                              style={{ marginLeft: index > 0 ? '-8px' : '0', zIndex: 3 - index }}
-                            >
-                              {ingredient.image_url ? (
-                                <img 
-                                  src={index === 0 ? "https://ygmlvvveoacykrqsmnva.supabase.co/storage/v1/object/public/recipe-images/1757274343872-bfc088bcd08f0dc6e421323e51b5d9fa.jpg" : ingredient.image_url} 
-                                  alt={ingredient.product_name} 
-                                  className="w-9 h-9 object-cover rounded-full" 
-                                />
-                              ) : (
-                                <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">
-                                  <span className="text-sm font-medium text-gray-500">{ingredient.product_name.charAt(0).toUpperCase()}</span>
+                        {/* Ingredients Cards */}
+                        <div className="mt-4 animate-fade-in">
+                          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                            {supermarketIngredients.map((ingredient, index) => (
+                              <div 
+                                key={ingredient.id}
+                                className="flex-shrink-0 w-24 bg-white rounded-lg border border-[#D6D6D6] p-2"
+                              >
+                                <div className="w-full h-16 bg-gray-100 rounded-md mb-2 overflow-hidden">
+                                  {ingredient.image_url ? (
+                                    <img 
+                                      src={ingredient.image_url} 
+                                      alt={ingredient.product_name}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full flex items-center justify-center">
+                                      <span className="text-xs font-medium text-gray-500">
+                                        {ingredient.product_name.charAt(0).toUpperCase()}
+                                      </span>
+                                    </div>
+                                  )}
                                 </div>
-                              )}
+                                <h4 className="text-xs font-medium text-[#1C1C1C] line-clamp-2 mb-1">
+                                  {ingredient.product_name}
+                                </h4>
+                                <p className="text-xs text-gray-600 mb-1">
+                                  {ingredient.quantity} {ingredient.unit_type}
+                                </p>
+                                <p className="text-xs font-semibold text-[#1C1C1C]">
+                                  €{ingredient.price}
+                                </p>
+                              </div>
+                            ))}
+                            
+                            {/* More products indicator */}
+                            <div className="flex-shrink-0 w-24 h-32 flex items-center justify-center">
+                              <div className="text-center">
+                                <div className="w-12 h-12 bg-[#F4F4F4] rounded-full flex items-center justify-center mb-2">
+                                  <span className="text-xs font-medium text-gray-600">
+                                    +{Math.max(0, 824 - supermarketIngredients.length)}
+                                  </span>
+                                </div>
+                                <p className="text-xs text-gray-500">más productos</p>
+                              </div>
                             </div>
-                          ))}
-                          <div 
-                            className="w-10 h-10 rounded-full bg-[#F4F4F4] flex items-center justify-center relative"
-                            style={{ marginLeft: '-8px', zIndex: 4 }}
-                          >
-                            <span className="text-xs font-medium text-gray-600">+821</span>
                           </div>
                         </div>
                       </>}
