@@ -265,8 +265,8 @@ const Index = () => {
                         
                         {/* Ingredients Preview */}
                         <div className="flex items-center mt-3 animate-fade-in" style={{ marginLeft: '-4px' }}>
-                          {(supermarketIngredients.length > 1 
-                            ? [supermarketIngredients[1], supermarketIngredients[0], supermarketIngredients[2]].filter(Boolean).slice(0, 3)
+                          {(supermarketIngredients.length > 4 
+                            ? [supermarketIngredients[1], supermarketIngredients[4], supermarketIngredients[2]].filter(Boolean).slice(0, 3)
                             : supermarketIngredients.slice(0, 3)
                           ).map((ingredient, index) => (
                             <div 
