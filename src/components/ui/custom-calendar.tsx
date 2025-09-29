@@ -27,12 +27,16 @@ export function CustomCalendar({
   
   const mondayOfCurrentWeek = getMondayOfCurrentWeek(today);
   
-  // Generate dates from Monday of current week to end of next month
+  // Generate dates from Monday of previous week to end of next month
   const generateDates = () => {
     const dates = [];
     const endDate = new Date(today.getFullYear(), today.getMonth() + 2, 0); // Last day of next month
     
-    const currentDate = new Date(mondayOfCurrentWeek);
+    // Start from Monday of previous week
+    const startDate = new Date(mondayOfCurrentWeek);
+    startDate.setDate(startDate.getDate() - 7); // Go back one week
+    
+    const currentDate = new Date(startDate);
     while (currentDate <= endDate) {
       dates.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
@@ -72,15 +76,7 @@ export function CustomCalendar({
   };
 
   const isPast = (date: Date) => {
-    // If today is Monday, no dates are considered past
-    const todayDayOfWeek = today.getDay();
-    const isTodayMonday = todayDayOfWeek === 1;
-    
-    if (isTodayMonday) {
-      return false;
-    }
-    
-    // Otherwise, dates before today are past
+    // Dates before today are considered past and should be disabled
     return date < today;
   };
 
@@ -253,7 +249,7 @@ export function CustomCalendar({
                             isSelected(date) &&
                               "bg-foreground/15 border-2 border-foreground text-foreground hover:bg-foreground/15",
                             isToday(date) && !isSelected(date) && "text-foreground",
-                            isPast(date) && "opacity-60 cursor-not-allowed"
+                            isPast(date) && "opacity-60 cursor-not-allowed text-gray-400"
                           )}
                           style={{
                             ...(isPast(date) ? { textDecoration: 'line-through' } : {}),
