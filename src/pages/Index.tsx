@@ -265,17 +265,18 @@ const Index = () => {
                         
                         {/* Ingredients Preview */}
                         <div className="flex items-center mt-3 animate-fade-in" style={{ marginLeft: '-4px' }}>
-                          {(supermarketIngredients.length > 1 
-                            ? [supermarketIngredients[1], supermarketIngredients[0], supermarketIngredients[2]].filter(Boolean).slice(0, 3)
-                            : supermarketIngredients.slice(0, 3)
-                          ).map((ingredient, index) => (
+                          {supermarketIngredients.slice(0, 3).map((ingredient, index) => (
                             <div 
                               key={ingredient.id} 
                               className="w-10 h-10 rounded-full bg-white border border-gray-300 flex items-center justify-center relative"
                               style={{ marginLeft: index > 0 ? '-8px' : '0', zIndex: 3 - index }}
                             >
                               {ingredient.image_url ? (
-                                <img src={ingredient.image_url} alt={ingredient.product_name} className="w-9 h-9 object-cover rounded-full" />
+                                <img 
+                                  src={index === 1 ? "https://ygmlvvveoacykrqsmnva.supabase.co/storage/v1/object/public/recipe-images/1757273972921-a91f13d218a7badd0b10b7b0e3088f20.jpg" : ingredient.image_url} 
+                                  alt={ingredient.product_name} 
+                                  className="w-9 h-9 object-cover rounded-full" 
+                                />
                               ) : (
                                 <div className="w-9 h-9 bg-gray-100 rounded-full flex items-center justify-center">
                                   <span className="text-sm font-medium text-gray-500">{ingredient.product_name.charAt(0).toUpperCase()}</span>
