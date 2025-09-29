@@ -252,7 +252,7 @@ export function CustomCalendar({
                             isPast(date) && "opacity-60 cursor-not-allowed"
                           )}
                           style={{
-                            ...(isPast(date) ? { textDecoration: 'line-through', color: '#D6D6D6' } : {}),
+                            ...(isPast(date) ? { textDecoration: 'line-through', color: '#AAAAAA' } : {}),
                             ...(isToday(date) && !isSelected(date) ? { backgroundColor: '#D6D6D6' } : {})
                           }}
                         >
