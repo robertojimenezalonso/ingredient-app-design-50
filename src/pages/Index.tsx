@@ -263,13 +263,13 @@ const Index = () => {
                         
                         {/* Ingredients Cards */}
                         <div className="mt-4 animate-fade-in">
-                          <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+                          <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide">
                             {supermarketIngredients.map((ingredient, index) => (
                               <div 
                                 key={ingredient.id}
-                                className="flex-shrink-0 w-24 bg-white rounded-lg border border-[#D6D6D6] p-2"
+                                className="flex-shrink-0 w-20"
                               >
-                                <div className="w-full h-16 bg-gray-100 rounded-md mb-2 overflow-hidden">
+                                <div className="w-full h-20 rounded-lg mb-2 overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
                                   {ingredient.image_url ? (
                                     <img 
                                       src={ingredient.image_url} 
@@ -284,22 +284,19 @@ const Index = () => {
                                     </div>
                                   )}
                                 </div>
-                                <h4 className="text-xs font-medium text-[#1C1C1C] line-clamp-2 mb-1">
-                                  {ingredient.product_name}
+                                <h4 className="text-sm text-[#1C1C1C] line-clamp-2 mb-1">
+                                  {ingredient.product_name} ({ingredient.quantity} {ingredient.unit_type})
                                 </h4>
-                                <p className="text-xs text-gray-600 mb-1">
-                                  {ingredient.quantity} {ingredient.unit_type}
-                                </p>
-                                <p className="text-xs font-semibold text-[#1C1C1C]">
-                                  €{ingredient.price}
+                                <p className="text-sm text-gray-600">
+                                  {ingredient.price.toFixed(2).replace('.', ',')}€
                                 </p>
                               </div>
                             ))}
                             
                             {/* More products indicator */}
-                            <div className="flex-shrink-0 w-24 h-32 flex items-center justify-center">
+                            <div className="flex-shrink-0 w-20 h-32 flex items-center justify-center">
                               <div className="text-center">
-                                <div className="w-12 h-12 bg-[#F4F4F4] rounded-full flex items-center justify-center mb-2">
+                                <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2" style={{ backgroundColor: '#F4F4F4' }}>
                                   <span className="text-xs font-medium text-gray-600">
                                     +{Math.max(0, 824 - supermarketIngredients.length)}
                                   </span>
