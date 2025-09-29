@@ -197,7 +197,7 @@ const Index = () => {
         <div className="h-screen flex flex-col relative pt-16">
           {/* Calendar Container - Chat style with bottom padding for fixed button */}
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{
-          backgroundColor: '#FCFBF8'
+          backgroundColor: '#FFFFFF'
         }}>
             <div className="flex flex-col h-full overflow-y-auto">
               {/* User response - supermarket selection (right-aligned) */}
