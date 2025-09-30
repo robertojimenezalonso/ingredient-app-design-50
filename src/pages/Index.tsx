@@ -389,6 +389,8 @@ const Index = () => {
 
               {/* Main content - only show after loading is complete */}
               {loadingComplete && <div className="px-4 flex-shrink-0 space-y-4">
+                  {/* Divider line */}
+                  <div className="w-full animate-fade-in" style={{ borderTop: '1px solid #E5E5E5', marginBottom: '1.5rem' }} />
                   {/* Calendar paragraph with typewriter effect */}
                   <div className="mb-6">
                     <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
