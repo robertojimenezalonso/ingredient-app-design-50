@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, ArrowUp } from 'lucide-react';
+import { ArrowLeft, ArrowUp, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -196,9 +196,10 @@ export const RecipePreferencesPage = () => {
                     )}
                   </div>
                   <Button
-                    variant="outline"
-                    className="w-full text-[#1C1C1C] border-[#E5E5E5] hover:bg-[#F4F4F4]"
+                    variant="default"
+                    className="bg-[#1C1C1C] text-white hover:bg-[#000000] w-auto"
                   >
+                    <Plus className="h-4 w-4 mr-2" />
                     Añadir perfil de salud
                   </Button>
                 </div>
