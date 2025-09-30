@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -18,6 +18,20 @@ export const RecipePreferencesPage = () => {
   const selectedSupermarket = location.state?.selectedSupermarket || null;
   const mealSelections = location.state?.mealSelections || [];
   const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
+  
+  // Animation states
+  const [showIcon, setShowIcon] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const [showNumbers, setShowNumbers] = useState(false);
+  const [visibleNumbersCount, setVisibleNumbersCount] = useState(0);
+  const [showSecondText, setShowSecondText] = useState(false);
+  const [displayedSecondText, setDisplayedSecondText] = useState('');
+  const [showCustomButton, setShowCustomButton] = useState(false);
+
+  const fullText = "Número de personas por receta. Selecciona:";
+  const secondFullText = "O también puedes:";
+  const totalNumbers = 10;
 
   const handleContinue = () => {
     if (selectedServings !== null) {
@@ -57,6 +71,63 @@ export const RecipePreferencesPage = () => {
     const formatted = format(date, 'EEE d', { locale: es });
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
   };
+
+  // Start animation sequence
+  useEffect(() => {
+    // Show icon first
+    setTimeout(() => setShowIcon(true), 300);
+    
+    // Start typewriter after icon
+    setTimeout(() => {
+      if (displayedText.length === 0) {
+        setDisplayedText(fullText[0]);
+      }
+    }, 500);
+  }, []);
+
+  // Typewriter effect for first text
+  useEffect(() => {
+    if (showIcon && displayedText.length < fullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(fullText.slice(0, displayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (displayedText.length === fullText.length && showCursor) {
+      setTimeout(() => {
+        setShowCursor(false);
+        setShowNumbers(true);
+      }, 200);
+    }
+  }, [showIcon, displayedText, fullText, showCursor]);
+
+  // Progressive numbers appearance
+  useEffect(() => {
+    if (showNumbers && visibleNumbersCount < totalNumbers) {
+      const timeout = setTimeout(() => {
+        setVisibleNumbersCount(prev => prev + 1);
+      }, 80);
+      return () => clearTimeout(timeout);
+    } else if (visibleNumbersCount === totalNumbers && !showSecondText) {
+      setTimeout(() => {
+        setShowSecondText(true);
+        setDisplayedSecondText(secondFullText[0]);
+      }, 300);
+    }
+  }, [showNumbers, visibleNumbersCount, totalNumbers, showSecondText]);
+
+  // Typewriter effect for second text
+  useEffect(() => {
+    if (showSecondText && displayedSecondText.length < secondFullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedSecondText(secondFullText.slice(0, displayedSecondText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (displayedSecondText.length === secondFullText.length && !showCustomButton) {
+      setTimeout(() => {
+        setShowCustomButton(true);
+      }, 100);
+    }
+  }, [showSecondText, displayedSecondText, secondFullText, showCustomButton]);
 
   return (
     <div className="min-h-screen flex flex-col relative" style={{
@@ -105,64 +176,85 @@ export const RecipePreferencesPage = () => {
               <div className="flex justify-start">
                 <div className="max-w-xs">
                   <div className="flex items-start gap-2 mb-4">
-                    <span className="text-lg">👤</span>
-                    <p className="text-base text-[#1C1C1C]">
-                      Número de personas por receta. Selecciona:
-                    </p>
+                    {showIcon && (
+                      <span className="text-lg animate-fade-in">👤</span>
+                    )}
+                    {showIcon && (
+                      <p className="text-base text-[#1C1C1C]">
+                        {displayedText}
+                        {showCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    )}
                   </div>
-                  <div className="space-y-2">
-                    <div className="flex gap-2">
-                      {[1, 2, 3, 4, 5].map((num) => (
+                  {showNumbers && (
+                    <div className="space-y-2">
+                      <div className="flex gap-2">
+                        {[1, 2, 3, 4, 5].map((num, index) => {
+                          const isVisible = index < visibleNumbersCount;
+                          return (
+                            <button
+                              key={num}
+                              onClick={() => setSelectedServings(selectedServings === num ? null : num)}
+                              className={`px-4 py-2 rounded-full text-sm transition-all ${
+                                isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+                              }`}
+                              style={{
+                                backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
+                                color: '#020818',
+                                border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
+                                transition: 'all 0.2s ease-out'
+                              }}
+                            >
+                              {num}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <div className="flex gap-2">
+                        {[6, 7, 8, 9, 10].map((num, index) => {
+                          const isVisible = index + 5 < visibleNumbersCount;
+                          return (
+                            <button
+                              key={num}
+                              onClick={() => setSelectedServings(selectedServings === num ? null : num)}
+                              className={`px-4 py-2 rounded-full text-sm transition-all ${
+                                isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+                              }`}
+                              style={{
+                                backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
+                                color: '#020818',
+                                border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
+                                transition: 'all 0.2s ease-out'
+                              }}
+                            >
+                              {num}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  {showSecondText && (
+                    <div className="mt-6">
+                      <p className="text-base text-[#1C1C1C] mb-3">
+                        {displayedSecondText}
+                      </p>
+                      {showCustomButton && (
                         <button
-                          key={num}
-                          onClick={() => setSelectedServings(selectedServings === num ? null : num)}
-                          className="px-4 py-2 rounded-full text-sm transition-all"
+                          onClick={() => setSelectedServings(selectedServings === 'custom' ? null : 'custom')}
+                          className="px-4 py-2 rounded-lg text-sm transition-all animate-fade-in"
                           style={{
-                            backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
+                            backgroundColor: selectedServings === 'custom' ? '#D9DADC' : '#F4F4F4',
                             color: '#020818',
-                            border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
+                            border: selectedServings === 'custom' ? '1px solid #020818' : '1px solid transparent',
                             transition: 'all 0.2s ease-out'
                           }}
                         >
-                          {num}
+                          Customizar por receta
                         </button>
-                      ))}
+                      )}
                     </div>
-                    <div className="flex gap-2">
-                      {[6, 7, 8, 9, 10].map((num) => (
-                        <button
-                          key={num}
-                          onClick={() => setSelectedServings(selectedServings === num ? null : num)}
-                          className="px-4 py-2 rounded-full text-sm transition-all"
-                          style={{
-                            backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
-                            color: '#020818',
-                            border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
-                            transition: 'all 0.2s ease-out'
-                          }}
-                        >
-                          {num}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="mt-6">
-                    <p className="text-base text-[#1C1C1C] mb-3">
-                      O también puedes:
-                    </p>
-                    <button
-                      onClick={() => setSelectedServings(selectedServings === 'custom' ? null : 'custom')}
-                      className="px-4 py-2 rounded-lg text-sm transition-all"
-                      style={{
-                        backgroundColor: selectedServings === 'custom' ? '#D9DADC' : '#F4F4F4',
-                        color: '#020818',
-                        border: selectedServings === 'custom' ? '1px solid #020818' : '1px solid transparent',
-                        transition: 'all 0.2s ease-out'
-                      }}
-                    >
-                      Customizar por receta
-                    </button>
-                  </div>
+                  )}
                 </div>
               </div>
             </div>
