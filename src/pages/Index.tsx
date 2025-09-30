@@ -433,17 +433,19 @@ const Index = () => {
                       {/* Additional text */}
                       {showRecipesText && (
                         <p className="mt-3 text-base text-[#1C1C1C]">
-                          {displayedRecipesText.includes('4.000 recetas') ? (
-                            <>
-                              Con estos ingredientes puedo generar más de <span className="font-semibold">4.000 recetas</span>. Te mostraré solo las que mejor encajen contigo.
-                              {showRecipesCursor && displayedRecipesText.length === recipesText.length && <span className="animate-pulse">|</span>}
-                            </>
-                          ) : (
-                            <>
-                              {displayedRecipesText}
-                              {showRecipesCursor && <span className="animate-pulse">|</span>}
-                            </>
-                          )}
+                          {displayedRecipesText.split('4.000 recetas').map((part, index) => {
+                            if (index === 0) {
+                              return <span key={index}>{part}</span>;
+                            } else {
+                              return (
+                                <span key={index}>
+                                  <span className="font-semibold">4.000 recetas</span>
+                                  {part}
+                                </span>
+                              );
+                            }
+                          })}
+                          {showRecipesCursor && <span className="animate-pulse">|</span>}
                         </p>
                       )}
                     </>}
