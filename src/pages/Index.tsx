@@ -286,13 +286,15 @@ const Index = () => {
       return;
     }
     
-    // Verificar si estamos intentando seleccionar más de 7 días
+    // Si se intenta seleccionar más de 7 días, mostrar error y no permitir
     if (dates.length > 7) {
       setDateSelectionError(true);
-      // Mantener solo los primeros 7 días
+      // No actualizar las fechas, mantener las que ya estaban
+      setTimeout(() => setDateSelectionError(false), 3000); // Ocultar después de 3 segundos
       return;
     }
     
+    // Si es válido, actualizar y quitar error
     setDateSelectionError(false);
     setSelectedDates(dates);
   };
