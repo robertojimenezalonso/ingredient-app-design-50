@@ -186,8 +186,8 @@ export const RecipePreferencesPage = () => {
             {/* Bot question - servings selection */}
             <div className="px-4 mb-6">
               <div className="flex justify-start">
-                <div className="max-w-xs">
-                  <div className="flex items-start gap-2 mb-4">
+                <div className="max-w-xs w-full">
+                  <div className="mb-4">
                     {showIcon && (
                       <p className="text-base text-[#1C1C1C]">
                         {displayedText}
