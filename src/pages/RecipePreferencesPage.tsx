@@ -77,18 +77,12 @@ export const RecipePreferencesPage = () => {
                   style={{ backgroundColor: '#F4F4F4' }}
                 >
                   {Object.values(groupedSelections).map((group: any, index: number) => (
-                    <div 
-                      key={index}
-                      className="flex flex-wrap gap-2 items-center mb-1 last:mb-0"
-                    >
-                      <span className="font-medium">{formatShortDate(group.date)}:</span>
-                      {group.mealTypes.map((mealType: string, mealIndex: number) => (
-                        <span key={mealIndex}>
-                          {mealType}
-                          {mealIndex < group.mealTypes.length - 1 && ','}
-                        </span>
-                      ))}
-                    </div>
+                    <span key={index}>
+                      <span className="font-bold">{formatShortDate(group.date)}</span>
+                      {' '}
+                      {group.mealTypes.join(', ')}
+                      {index < Object.values(groupedSelections).length - 1 && ' - '}
+                    </span>
                   ))}
                 </div>
               </div>
