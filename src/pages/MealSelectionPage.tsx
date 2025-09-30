@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +22,53 @@ export const MealSelectionPage = () => {
   );
 
   const mealTypes = ['Desayuno', 'Comida', 'Cena', 'Postre', 'Snack'];
+  
+  // Animation states
+  const [showIcon, setShowIcon] = useState(false);
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(true);
+  const [showDates, setShowDates] = useState(false);
+  const [visibleDateIndex, setVisibleDateIndex] = useState(-1);
+
+  const fullText = "Ahora necesito saber qué tipo de comidas quieres elegir para esos días. Selecciona:";
+
+  // Start animation sequence
+  useEffect(() => {
+    // Show icon first
+    setTimeout(() => setShowIcon(true), 300);
+    
+    // Start typewriter after icon
+    setTimeout(() => {
+      if (displayedText.length === 0) {
+        setDisplayedText(fullText[0]);
+      }
+    }, 500);
+  }, []);
+
+  // Typewriter effect
+  useEffect(() => {
+    if (showIcon && displayedText.length < fullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(fullText.slice(0, displayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (displayedText.length === fullText.length && showCursor) {
+      setTimeout(() => {
+        setShowCursor(false);
+        setShowDates(true);
+      }, 200);
+    }
+  }, [showIcon, displayedText, fullText, showCursor]);
+
+  // Progressive date appearance
+  useEffect(() => {
+    if (showDates && visibleDateIndex < mealSelections.length - 1) {
+      const timeout = setTimeout(() => {
+        setVisibleDateIndex(prev => prev + 1);
+      }, 300);
+      return () => clearTimeout(timeout);
+    }
+  }, [showDates, visibleDateIndex, mealSelections.length]);
 
   const handleBack = () => {
     navigate('/?step=calendar&completed=true', { 
@@ -140,47 +187,70 @@ export const MealSelectionPage = () => {
               <div className="flex justify-start">
                 <div className="max-w-xs">
                   <div className="flex items-start gap-2">
-                    <span className="text-lg">🍛</span>
-                    <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                      Ahora necesito saber <span className="font-semibold">qué tipo de comidas</span> quieres elegir para esos días. Selecciona:
-                    </p>
+                    {showIcon && (
+                      <span className="text-lg animate-fade-in">🍛</span>
+                    )}
+                    {showIcon && (
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {displayedText.split('qué tipo de comidas').map((part, index) => {
+                          if (index === 0) {
+                            return <span key={index}>{part}</span>;
+                          } else {
+                            return (
+                              <span key={index}>
+                                <span className="font-semibold">qué tipo de comidas</span>
+                                {part}
+                              </span>
+                            );
+                          }
+                        })}
+                        {showCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Date and meal type selection */}
-            <div className="px-4 space-y-6 mb-6">
-              {mealSelections.map((selection, dateIndex) => (
-                <div key={dateIndex} className="space-y-3">
-                  {/* Date label */}
-                  <p className="text-sm font-medium text-[#1C1C1C]">
-                    {formatFullDate(selection.date)}
-                  </p>
-                  
-                  {/* Meal type tags */}
-                  <div className="flex flex-wrap gap-2 pointer-events-auto">
-                    {mealTypes.map((mealType) => {
-                      const isSelected = selection.mealTypes.includes(mealType);
-                      return (
-                        <button
-                          key={mealType}
-                          onClick={() => toggleMealType(dateIndex, mealType)}
-                          className="px-3 py-1.5 rounded-lg text-sm font-normal transition-all pointer-events-auto cursor-pointer"
-                          style={{
-                            backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
-                            color: '#020818',
-                            border: isSelected ? '1px solid #020818' : '1px solid transparent'
-                          }}
-                        >
-                          {mealType}
-                        </button>
-                      );
-                    })}
+            {showDates && (
+              <div className="px-4 space-y-6 mb-6">
+                {mealSelections.map((selection, dateIndex) => (
+                  <div 
+                    key={dateIndex} 
+                    className={`space-y-3 transition-all duration-500 ${
+                      dateIndex <= visibleDateIndex ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                    }`}
+                  >
+                    {/* Date label */}
+                    <p className="text-sm font-medium text-[#1C1C1C]">
+                      {formatFullDate(selection.date)}
+                    </p>
+                    
+                    {/* Meal type tags */}
+                    <div className="flex flex-wrap gap-2 pointer-events-auto">
+                      {mealTypes.map((mealType) => {
+                        const isSelected = selection.mealTypes.includes(mealType);
+                        return (
+                          <button
+                            key={mealType}
+                            onClick={() => toggleMealType(dateIndex, mealType)}
+                            className="px-3 py-1.5 rounded-lg text-sm font-normal transition-all pointer-events-auto cursor-pointer"
+                            style={{
+                              backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
+                              color: '#020818',
+                              border: isSelected ? '1px solid #020818' : '1px solid transparent'
+                            }}
+                          >
+                            {mealType}
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
