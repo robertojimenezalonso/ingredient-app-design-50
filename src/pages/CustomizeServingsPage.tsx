@@ -59,7 +59,7 @@ export const CustomizeServingsPage = () => {
   const [displayedText, setDisplayedText] = useState(shouldSkipAnimations ? fullText : '');
   const [showCursor, setShowCursor] = useState(!shouldSkipAnimations);
   const [showContent, setShowContent] = useState(shouldSkipAnimations);
-  const [visibleItemIndex, setVisibleItemIndex] = useState(shouldSkipAnimations ? servingSelections.length - 1 : -1);
+  const [visibleItemIndex, setVisibleItemIndex] = useState(shouldSkipAnimations ? groupedSelections.length - 1 : -1);
   const [visibleNumbersCount, setVisibleNumbersCount] = useState(shouldSkipAnimations ? servingSelections.length * 10 : 0);
 
   const totalNumbers = servingSelections.length * 10;
@@ -94,17 +94,17 @@ export const CustomizeServingsPage = () => {
     }
   }, [showIcon, displayedText, fullText, showCursor, shouldSkipAnimations]);
 
-  // Progressive item appearance - each meal card appears one by one
+  // Progressive item appearance
   useEffect(() => {
     if (shouldSkipAnimations) return;
     
-    if (showContent && visibleItemIndex < servingSelections.length - 1) {
+    if (showContent && visibleItemIndex < groupedSelections.length - 1) {
       const timeout = setTimeout(() => {
         setVisibleItemIndex(prev => prev + 1);
-      }, 150);
+      }, 300);
       return () => clearTimeout(timeout);
     }
-  }, [showContent, visibleItemIndex, servingSelections.length, shouldSkipAnimations]);
+  }, [showContent, visibleItemIndex, groupedSelections.length, shouldSkipAnimations]);
 
   // Progressive numbers appearance
   useEffect(() => {
@@ -236,76 +236,76 @@ export const CustomizeServingsPage = () => {
                   {showContent && (
                     <div className="space-y-6">
                       {groupedSelections.map((group: any, groupIndex: number) => {
+                        const isVisible = groupIndex <= visibleItemIndex;
+                        
                         return (
                           <div 
                             key={groupIndex} 
-                            className="space-y-3"
+                            className={`space-y-3 transition-all ${
+                              isVisible ? 'opacity-100' : 'opacity-0'
+                            }`}
                           >
-                            {/* Date label - appears when first meal of this date is visible */}
-                            {group.meals.some((meal: any) => meal.originalIndex <= visibleItemIndex) && (
+                            {/* Date label - appears once per day */}
+                            {isVisible && (
                               <p className="text-sm font-medium text-[#1C1C1C] animate-fade-in">
                                 {formatFullDate(group.date)}
                               </p>
                             )}
                             
                             {/* Meal types for this date */}
-                            {group.meals.map((meal: any, mealIndex: number) => {
-                              const isVisible = meal.originalIndex <= visibleItemIndex;
-                              
-                              return isVisible ? (
-                                <div 
-                                  key={mealIndex} 
-                                  className="flex items-center justify-between px-4 py-2 rounded-lg animate-fade-in"
-                                  style={{
-                                    backgroundColor: '#F4F4F4'
-                                  }}
-                                >
-                                  <p className="text-base text-[#1C1C1C]">
-                                    {meal.mealType}
-                                  </p>
+                            {isVisible && group.meals.map((meal: any, mealIndex: number) => (
+                              <div 
+                                key={mealIndex} 
+                                className="flex items-center justify-between px-4 py-2 rounded-lg"
+                                style={{
+                                  backgroundColor: '#F4F4F4'
+                                }}
+                              >
+                                <p className="text-base text-[#1C1C1C]">
+                                  {meal.mealType}
+                                </p>
+                                
+                                {/* Counter with +/- buttons */}
+                                <div className="flex items-center gap-3">
+                                  <button
+                                    onClick={() => {
+                                      const currentServings = meal.servings || 0;
+                                      if (currentServings > 0) {
+                                        handleServingSelection(meal.originalIndex, currentServings - 1);
+                                      }
+                                    }}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                                    style={{
+                                      backgroundColor: (meal.servings || 0) === 0 ? 'transparent' : '#D6D6D6',
+                                      border: (meal.servings || 0) === 0 ? '1px solid #D6D6D6' : 'none',
+                                      color: '#1C1C1C'
+                                    }}
+                                  >
+                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', lineHeight: '1' }}>−</span>
                                   
-                                  {/* Counter with +/- buttons */}
-                                  <div className="flex items-center gap-3">
-                                    <button
-                                      onClick={() => {
-                                        const currentServings = meal.servings || 0;
-                                        if (currentServings > 0) {
-                                          handleServingSelection(meal.originalIndex, currentServings - 1);
-                                        }
-                                      }}
-                                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                                      style={{
-                                        backgroundColor: (meal.servings || 0) === 0 ? 'transparent' : '#D6D6D6',
-                                        border: (meal.servings || 0) === 0 ? '1px solid #D6D6D6' : 'none',
-                                        color: '#1C1C1C'
-                                      }}
-                                    >
-                                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', lineHeight: '1' }}>−</span>
-                                    
-                                    </button>
-                                    
-                                    <span className="text-base font-medium text-[#1C1C1C] min-w-[24px] text-center">
-                                      {meal.servings || 0}
-                                    </span>
-                                    
-                                    <button
-                                      onClick={() => {
-                                        const currentServings = meal.servings || 0;
-                                        handleServingSelection(meal.originalIndex, currentServings + 1);
-                                      }}
-                                      className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
-                                      style={{
-                                        backgroundColor: '#D6D6D6',
-                                        color: '#1C1C1C'
-                                      }}
-                                    >
-                                      <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', lineHeight: '1' }}>+</span>
-                                    
-                                    </button>
-                                  </div>
+                                  </button>
+                                  
+                                  <span className="text-base font-medium text-[#1C1C1C] min-w-[24px] text-center">
+                                    {meal.servings || 0}
+                                  </span>
+                                  
+                                  <button
+                                    onClick={() => {
+                                      const currentServings = meal.servings || 0;
+                                      handleServingSelection(meal.originalIndex, currentServings + 1);
+                                    }}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                                    style={{
+                                      backgroundColor: '#D6D6D6',
+                                      color: '#1C1C1C'
+                                    }}
+                                  >
+                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', lineHeight: '1' }}>+</span>
+                                  
+                                  </button>
                                 </div>
-                              ) : null;
-                            })}
+                              </div>
+                            ))}
                           </div>
                         );
                       })}
