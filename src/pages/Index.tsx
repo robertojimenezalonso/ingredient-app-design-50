@@ -48,6 +48,15 @@ const Index = () => {
   const [showSource, setShowSource] = useState(false);
   const [showRecipesText, setShowRecipesText] = useState(false);
   
+  // Typewriter states for chat messages
+  const [displayedSearchResultText, setDisplayedSearchResultText] = useState('');
+  const [showSearchResultCursor, setShowSearchResultCursor] = useState(true);
+  const [displayedRecipesText, setDisplayedRecipesText] = useState('');
+  const [showRecipesCursor, setShowRecipesCursor] = useState(true);
+  
+  const searchResultText = "He encontrado 824 ingredientes en Mercadona:";
+  const recipesText = "Con estos ingredientes puedo generar más de 4.000 recetas. Te mostraré solo las que mejor encajen contigo.";
+  
   const paragraph1Text = "Elige tu súper para hacer la compra";
 
   // Menu desplegable state
@@ -110,10 +119,14 @@ const Index = () => {
       setShowSearchingText(false);
       setShowResultCard(false);
       setShowSearchResult(false);
+      setDisplayedSearchResultText('');
+      setShowSearchResultCursor(true);
       setShowIngredients(false);
       setVisibleIngredientsCount(0);
       setShowSource(false);
       setShowRecipesText(false);
+      setDisplayedRecipesText('');
+      setShowRecipesCursor(true);
       setCalendarTypewriterStep(0);
       setDisplayedCalendarParagraph2('');
 
@@ -126,31 +139,29 @@ const Index = () => {
       setTimeout(() => {
         setShowSearchingText(false);
         setShowResultCard(true);
-        setShowSearchResult(true);
+        setShowSearchResult(true); // Start typewriter for search result
       }, 7000);
-      
-      // Show ingredients container
-      setTimeout(() => {
-        setShowIngredients(true);
-      }, 7500);
-      
-      // Show source
-      setTimeout(() => {
-        setShowSource(true);
-      }, 7500 + (supermarketIngredients.length * 100) + 500);
-      
-      // Show recipes text
-      setTimeout(() => {
-        setShowRecipesText(true);
-      }, 7500 + (supermarketIngredients.length * 100) + 1000);
-      
-      // Start calendar sequence
-      setTimeout(() => {
-        setLoadingComplete(true);
-        setCalendarTypewriterStep(2);
-      }, 7500 + (supermarketIngredients.length * 100) + 1500);
     }
-  }, [isExpanded, loadingComplete, supermarketIngredients.length]);
+  }, [isExpanded, loadingComplete]);
+  
+  // Typewriter effect for search result text
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (showSearchResult && displayedSearchResultText.length < searchResultText.length) {
+      timeout = setTimeout(() => {
+        setDisplayedSearchResultText(searchResultText.slice(0, displayedSearchResultText.length + 1));
+      }, 30); // 30ms per character for typewriter speed
+    } else if (showSearchResult && displayedSearchResultText.length === searchResultText.length) {
+      // Hide cursor and show ingredients after text is complete
+      setTimeout(() => {
+        setShowSearchResultCursor(false);
+        setShowIngredients(true);
+      }, 500);
+    }
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [showSearchResult, displayedSearchResultText, searchResultText]);
   
   // Progressive ingredient appearance
   useEffect(() => {
@@ -159,8 +170,42 @@ const Index = () => {
         setVisibleIngredientsCount(prev => prev + 1);
       }, 100); // 100ms between each ingredient
       return () => clearTimeout(timer);
+    } else if (showIngredients && visibleIngredientsCount >= supermarketIngredients.length + 1) {
+      // After all ingredients shown, show source
+      setTimeout(() => {
+        setShowSource(true);
+      }, 300);
     }
   }, [showIngredients, visibleIngredientsCount, supermarketIngredients.length]);
+  
+  // Show recipes text after source
+  useEffect(() => {
+    if (showSource && !showRecipesText) {
+      setTimeout(() => {
+        setShowRecipesText(true);
+      }, 500);
+    }
+  }, [showSource, showRecipesText]);
+  
+  // Typewriter effect for recipes text
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (showRecipesText && displayedRecipesText.length < recipesText.length) {
+      timeout = setTimeout(() => {
+        setDisplayedRecipesText(recipesText.slice(0, displayedRecipesText.length + 1));
+      }, 30); // 30ms per character
+    } else if (showRecipesText && displayedRecipesText.length === recipesText.length) {
+      // Hide cursor and start calendar sequence after text is complete
+      setTimeout(() => {
+        setShowRecipesCursor(false);
+        setLoadingComplete(true);
+        setCalendarTypewriterStep(2);
+      }, 800);
+    }
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [showRecipesText, displayedRecipesText, recipesText]);
 
   // Remove typewriter effect - content shows immediately
 
@@ -306,10 +351,20 @@ const Index = () => {
                     {/* Result card - replaces everything else and stays fixed */}
                     {showResultCard && <>
                       {showSearchResult && (
-                        <div className="flex items-start gap-2 animate-fade-in">
+                        <div className="flex items-start gap-2">
                           <span className="text-lg">🔍</span>
                           <p className="text-[#1C1C1C] text-base">
-                            He encontrado <span className="font-semibold">824 ingredientes en Mercadona:</span>
+                            {displayedSearchResultText.split('824 ingredientes en Mercadona:').length > 1 ? (
+                              <>
+                                He encontrado <span className="font-semibold">824 ingredientes en Mercadona:</span>
+                                {showSearchResultCursor && displayedSearchResultText.length === searchResultText.length && <span className="animate-pulse">|</span>}
+                              </>
+                            ) : (
+                              <>
+                                {displayedSearchResultText}
+                                {showSearchResultCursor && <span className="animate-pulse">|</span>}
+                              </>
+                            )}
                           </p>
                         </div>
                       )}
@@ -377,8 +432,18 @@ const Index = () => {
                       
                       {/* Additional text */}
                       {showRecipesText && (
-                        <p className="mt-3 text-base text-[#1C1C1C] animate-fade-in">
-                          Con estos ingredientes puedo generar más de <span className="font-semibold">4.000 recetas</span>. Te mostraré solo las que mejor encajen contigo.
+                        <p className="mt-3 text-base text-[#1C1C1C]">
+                          {displayedRecipesText.includes('4.000 recetas') ? (
+                            <>
+                              Con estos ingredientes puedo generar más de <span className="font-semibold">4.000 recetas</span>. Te mostraré solo las que mejor encajen contigo.
+                              {showRecipesCursor && displayedRecipesText.length === recipesText.length && <span className="animate-pulse">|</span>}
+                            </>
+                          ) : (
+                            <>
+                              {displayedRecipesText}
+                              {showRecipesCursor && <span className="animate-pulse">|</span>}
+                            </>
+                          )}
                         </p>
                       )}
                     </>}
