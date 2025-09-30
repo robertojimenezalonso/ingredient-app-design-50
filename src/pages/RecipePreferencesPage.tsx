@@ -260,27 +260,6 @@ export const RecipePreferencesPage = () => {
                       </div>
                     </div>
                   )}
-                  {showSecondText && (
-                    <div className="mt-6">
-                      <p className="text-base text-[#1C1C1C] mb-3">
-                        {displayedSecondText}
-                      </p>
-                      {showCustomButton && (
-                        <button
-                          onClick={() => setSelectedServings(selectedServings === 'custom' ? null : 'custom')}
-                          className="px-4 py-2 rounded-lg text-sm transition-all animate-fade-in"
-                          style={{
-                            backgroundColor: selectedServings === 'custom' ? '#D9DADC' : '#F4F4F4',
-                            color: '#020818',
-                            border: selectedServings === 'custom' ? '1px solid #020818' : '1px solid transparent',
-                            transition: 'all 0.2s ease-out'
-                          }}
-                        >
-                          Customizar por receta
-                        </button>
-                      )}
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
