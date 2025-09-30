@@ -113,11 +113,11 @@ const Index = () => {
       setTimeout(() => {
         setShowSearchingText(false);
         setShowResultCard(true);
-      }, 5500); // 4 segundos de búsqueda (1500 + 4000)
+      }, 7000); // 4 segundos de búsqueda + 3.5 segundos de contador + 2 segundos extra = 9.5 segundos, pero empezamos en 1.5
       setTimeout(() => {
         setLoadingComplete(true);
         setCalendarTypewriterStep(2);
-      }, 6000);
+      }, 7500); // 1.5 + 4 + 3.5 + 2 = 11 segundos total, pero ajustamos el timing
     }
   }, [isExpanded, loadingComplete]);
 
