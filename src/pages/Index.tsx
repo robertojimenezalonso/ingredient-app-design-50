@@ -487,11 +487,10 @@ const Index = () => {
           </div>
 
           {/* Fixed Button Area at Bottom of Screen */}
-          <div className="absolute bottom-0 left-0 right-0 border-t" style={{
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#E5E5E5'
+          <div className="absolute bottom-0 left-0 right-0" style={{
+          backgroundColor: '#FFFFFF'
         }}>
-            <div className="px-4 py-3 flex justify-end">
+            <div className="px-4 py-4 flex justify-end">
               <Button variant="ghost" onClick={handleCalendarContinue} disabled={!canContinue} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0" style={{
               backgroundColor: canContinue ? '#000000' : '#898885',
               color: canContinue ? '#ffffff' : '#F9F8F2',
