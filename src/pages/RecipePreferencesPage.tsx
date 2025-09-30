@@ -91,7 +91,8 @@ export const RecipePreferencesPage = () => {
 
             {/* Bot question - servings selection */}
             <div className="px-4 mb-6">
-              <div className="flex justify-start">
+              <div className="flex justify-start gap-2">
+                <div className="text-2xl">🍽️</div>
                 <div className="max-w-xs">
                   <p className="text-base text-[#1C1C1C] mb-4">
                     ¿Cuántas raciones por receta te gustaría elegir?
