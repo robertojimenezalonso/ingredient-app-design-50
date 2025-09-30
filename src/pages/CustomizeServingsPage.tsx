@@ -276,7 +276,7 @@ export const CustomizeServingsPage = () => {
                                     }}
                                     className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                                     style={{
-                                      backgroundColor: '#F4F4F4',
+                                      backgroundColor: '#D6D6D6',
                                       color: '#1C1C1C'
                                     }}
                                   >
@@ -294,7 +294,7 @@ export const CustomizeServingsPage = () => {
                                     }}
                                     className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                                     style={{
-                                      backgroundColor: '#F4F4F4',
+                                      backgroundColor: '#D6D6D6',
                                       color: '#1C1C1C'
                                     }}
                                   >
