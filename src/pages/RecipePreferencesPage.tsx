@@ -112,10 +112,12 @@ export const RecipePreferencesPage = () => {
                       <button
                         key={num}
                         onClick={() => setSelectedServings(num)}
-                        className="px-4 py-2 rounded-full text-sm transition-colors"
+                        className="px-4 py-2 rounded-full text-sm transition-all"
                         style={{
-                          backgroundColor: selectedServings === num ? '#1C1C1C' : '#F4F4F4',
-                          color: selectedServings === num ? '#FFFFFF' : '#1C1C1C'
+                          backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
+                          color: '#020818',
+                          border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
+                          transition: 'all 0.2s ease-out'
                         }}
                       >
                         {num}
@@ -125,10 +127,12 @@ export const RecipePreferencesPage = () => {
                   <div className="mt-4">
                     <button
                       onClick={() => setSelectedServings('custom')}
-                      className="px-4 py-2 rounded-full text-sm transition-colors"
+                      className="px-4 py-2 rounded-full text-sm transition-all"
                       style={{
-                        backgroundColor: selectedServings === 'custom' ? '#1C1C1C' : '#F4F4F4',
-                        color: selectedServings === 'custom' ? '#FFFFFF' : '#1C1C1C'
+                        backgroundColor: selectedServings === 'custom' ? '#D9DADC' : '#F4F4F4',
+                        color: '#020818',
+                        border: selectedServings === 'custom' ? '1px solid #020818' : '1px solid transparent',
+                        transition: 'all 0.2s ease-out'
                       }}
                     >
                       Customizar por receta
