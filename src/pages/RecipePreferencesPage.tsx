@@ -37,9 +37,20 @@ export const RecipePreferencesPage = () => {
 
   const handleContinue = () => {
     if (selectedServings !== null) {
-      // Aquí navegaremos a la siguiente pantalla con los datos
-      console.log('Continuing with servings:', selectedServings);
-      // TODO: navigate to next page
+      if (selectedServings === 'custom') {
+        // Navegar a la pantalla de customización
+        navigate('/customize-servings', {
+          state: { 
+            confirmedDates,
+            selectedSupermarket,
+            mealSelections
+          }
+        });
+      } else {
+        // Aquí navegaremos a la siguiente pantalla con los datos
+        console.log('Continuing with servings:', selectedServings);
+        // TODO: navigate to next page
+      }
     }
   };
 
