@@ -35,14 +35,26 @@ export const MealSelectionPage = () => {
 
   const toggleMealType = (dateIndex: number, mealType: string) => {
     setMealSelections(prev => {
-      const newSelections = [...prev];
-      const currentMeals = newSelections[dateIndex].mealTypes;
-      
-      if (currentMeals.includes(mealType)) {
-        newSelections[dateIndex].mealTypes = currentMeals.filter(m => m !== mealType);
-      } else {
-        newSelections[dateIndex].mealTypes = [...currentMeals, mealType];
-      }
+      const newSelections = prev.map((selection, index) => {
+        if (index === dateIndex) {
+          const currentMeals = selection.mealTypes;
+          
+          if (currentMeals.includes(mealType)) {
+            // Deseleccionar
+            return {
+              ...selection,
+              mealTypes: currentMeals.filter(m => m !== mealType)
+            };
+          } else {
+            // Seleccionar
+            return {
+              ...selection,
+              mealTypes: [...currentMeals, mealType]
+            };
+          }
+        }
+        return selection;
+      });
       
       return newSelections;
     });
