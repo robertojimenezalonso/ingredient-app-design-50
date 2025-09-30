@@ -232,57 +232,33 @@ export const CustomizeServingsPage = () => {
                             
                             {/* Number selection */}
                             {isVisible && (
-                              <div className="space-y-2">
-                                <div className="flex gap-2">
-                                  {[1, 2, 3, 4, 5].map((num, numIndex) => {
-                                    const numberIndex = getNumberIndex(itemIndex, numIndex);
-                                    const isNumberVisible = numberIndex < visibleNumbersCount;
-                                    const isSelected = selection.servings === num;
-                                    
-                                    return (
-                                      <button
-                                        key={num}
-                                        onClick={() => handleServingSelection(itemIndex, num)}
-                                        className={`px-4 py-2 rounded-full text-sm transition-all ${
-                                          isNumberVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                                        }`}
-                                        style={{
-                                          backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
-                                          color: '#020818',
-                                          border: isSelected ? '1px solid #020818' : '1px solid transparent',
-                                          transition: 'all 0.2s ease-out'
-                                        }}
-                                      >
-                                        {num}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
-                                <div className="flex gap-2">
-                                  {[6, 7, 8, 9, 10].map((num, numIndex) => {
-                                    const numberIndex = getNumberIndex(itemIndex, numIndex + 5);
-                                    const isNumberVisible = numberIndex < visibleNumbersCount;
-                                    const isSelected = selection.servings === num;
-                                    
-                                    return (
-                                      <button
-                                        key={num}
-                                        onClick={() => handleServingSelection(itemIndex, num)}
-                                        className={`px-4 py-2 rounded-full text-sm transition-all ${
-                                          isNumberVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                                        }`}
-                                        style={{
-                                          backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
-                                          color: '#020818',
-                                          border: isSelected ? '1px solid #020818' : '1px solid transparent',
-                                          transition: 'all 0.2s ease-out'
-                                        }}
-                                      >
-                                        {num}
-                                      </button>
-                                    );
-                                  })}
-                                </div>
+                              <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4" style={{
+                                scrollbarWidth: 'none',
+                                msOverflowStyle: 'none'
+                              }}>
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, numIndex) => {
+                                  const numberIndex = getNumberIndex(itemIndex, numIndex);
+                                  const isNumberVisible = numberIndex < visibleNumbersCount;
+                                  const isSelected = selection.servings === num;
+                                  
+                                  return (
+                                    <button
+                                      key={num}
+                                      onClick={() => handleServingSelection(itemIndex, num)}
+                                      className={`px-4 py-2 rounded-full text-sm transition-all flex-shrink-0 ${
+                                        isNumberVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+                                      }`}
+                                      style={{
+                                        backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
+                                        color: '#020818',
+                                        border: isSelected ? '1px solid #020818' : '1px solid transparent',
+                                        transition: 'all 0.2s ease-out'
+                                      }}
+                                    >
+                                      {num}
+                                    </button>
+                                  );
+                                })}
                               </div>
                             )}
                           </div>
