@@ -263,7 +263,7 @@ const Index = () => {
           <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{
           backgroundColor: '#FFFFFF'
         }}>
-            <div className="flex flex-col h-full overflow-y-auto">
+            <div className="flex flex-col h-full overflow-y-auto scrollbar-hide">
               {/* User response - supermarket selection (right-aligned) */}
               <div className="px-4 pt-4 mb-6">
                 <div className="flex justify-end">
