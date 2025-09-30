@@ -261,7 +261,7 @@ export const CustomizeServingsPage = () => {
                                   backgroundColor: '#F4F4F4'
                                 }}
                               >
-                                <p className="text-sm text-[#1C1C1C]">
+                                <p className="text-base text-[#1C1C1C]">
                                   {meal.mealType}
                                 </p>
                                 
