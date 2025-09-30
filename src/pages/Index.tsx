@@ -40,6 +40,14 @@ const Index = () => {
   const [showSearchingText, setShowSearchingText] = useState(false);
   const [showResultCard, setShowResultCard] = useState(false);
   const [loadingComplete, setLoadingComplete] = useState(false);
+  
+  // Progressive chat effect states
+  const [showSearchResult, setShowSearchResult] = useState(false);
+  const [showIngredients, setShowIngredients] = useState(false);
+  const [visibleIngredientsCount, setVisibleIngredientsCount] = useState(0);
+  const [showSource, setShowSource] = useState(false);
+  const [showRecipesText, setShowRecipesText] = useState(false);
+  
   const paragraph1Text = "Elige tu súper para hacer la compra";
 
   // Menu desplegable state
@@ -101,6 +109,11 @@ const Index = () => {
       setShowLoadingDot(false);
       setShowSearchingText(false);
       setShowResultCard(false);
+      setShowSearchResult(false);
+      setShowIngredients(false);
+      setVisibleIngredientsCount(0);
+      setShowSource(false);
+      setShowRecipesText(false);
       setCalendarTypewriterStep(0);
       setDisplayedCalendarParagraph2('');
 
@@ -113,13 +126,41 @@ const Index = () => {
       setTimeout(() => {
         setShowSearchingText(false);
         setShowResultCard(true);
-      }, 7000); // 4 segundos de búsqueda + 3.5 segundos de contador + 2 segundos extra = 9.5 segundos, pero empezamos en 1.5
+        setShowSearchResult(true);
+      }, 7000);
+      
+      // Show ingredients container
+      setTimeout(() => {
+        setShowIngredients(true);
+      }, 7500);
+      
+      // Show source
+      setTimeout(() => {
+        setShowSource(true);
+      }, 7500 + (supermarketIngredients.length * 100) + 500);
+      
+      // Show recipes text
+      setTimeout(() => {
+        setShowRecipesText(true);
+      }, 7500 + (supermarketIngredients.length * 100) + 1000);
+      
+      // Start calendar sequence
       setTimeout(() => {
         setLoadingComplete(true);
         setCalendarTypewriterStep(2);
-      }, 7500); // 1.5 + 4 + 3.5 + 2 = 11 segundos total, pero ajustamos el timing
+      }, 7500 + (supermarketIngredients.length * 100) + 1500);
     }
-  }, [isExpanded, loadingComplete]);
+  }, [isExpanded, loadingComplete, supermarketIngredients.length]);
+  
+  // Progressive ingredient appearance
+  useEffect(() => {
+    if (showIngredients && visibleIngredientsCount < supermarketIngredients.length + 1) {
+      const timer = setTimeout(() => {
+        setVisibleIngredientsCount(prev => prev + 1);
+      }, 100); // 100ms between each ingredient
+      return () => clearTimeout(timer);
+    }
+  }, [showIngredients, visibleIngredientsCount, supermarketIngredients.length]);
 
   // Remove typewriter effect - content shows immediately
 
@@ -264,67 +305,83 @@ const Index = () => {
                     
                     {/* Result card - replaces everything else and stays fixed */}
                     {showResultCard && <>
-                      <div className="flex items-start gap-2">
-                        <span className="text-lg">🔍</span>
-                        <p className="text-[#1C1C1C] text-base animate-fade-in">
-                          He encontrado <span className="font-semibold">824 ingredientes en Mercadona:</span>
-                        </p>
-                      </div>
+                      {showSearchResult && (
+                        <div className="flex items-start gap-2 animate-fade-in">
+                          <span className="text-lg">🔍</span>
+                          <p className="text-[#1C1C1C] text-base">
+                            He encontrado <span className="font-semibold">824 ingredientes en Mercadona:</span>
+                          </p>
+                        </div>
+                      )}
                         
-                         {/* Ingredients Cards */}
-                         <div className="mt-4 animate-fade-in w-screen relative -ml-4">
-                            <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide pl-4">
-                              {supermarketIngredients.slice(1).concat(supermarketIngredients.slice(0, 1)).map((ingredient, index) => (
-                               <div 
-                                 key={ingredient.id}
-                                 className="flex-shrink-0 w-20"
-                               >
-                                 <div className="w-full h-20 rounded-lg mb-2 overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
-                                   {ingredient.image_url ? (
-                                     <img 
-                                       src={ingredient.image_url} 
-                                       alt={ingredient.product_name}
-                                       className="w-full h-full object-cover"
-                                     />
-                                   ) : (
-                                     <div className="w-full h-full flex items-center justify-center">
-                                       <span className="text-xs font-medium text-gray-500">
-                                         {ingredient.product_name.charAt(0).toUpperCase()}
-                                       </span>
-                                     </div>
-                                   )}
-                                 </div>
-                                 <h4 className="text-sm text-[#1C1C1C] line-clamp-2 mb-1">
-                                   {ingredient.product_name} ({ingredient.quantity} {ingredient.unit_type})
-                                 </h4>
-                                 <p className="text-sm text-gray-600">
-                                   {ingredient.price.toFixed(2).replace('.', ',')}€
-                                 </p>
-                               </div>
-                             ))}
-                             
-                              {/* More products indicator */}
-                              <div className="flex-shrink-0 w-20 h-32 flex items-center justify-center">
+                      {/* Ingredients Cards */}
+                      {showIngredients && (
+                        <div className="mt-4 w-screen relative -ml-4">
+                          <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide pl-4">
+                            {supermarketIngredients.slice(1).concat(supermarketIngredients.slice(0, 1)).map((ingredient, index) => (
+                              index < visibleIngredientsCount && (
+                                <div 
+                                  key={ingredient.id}
+                                  className="flex-shrink-0 w-20 animate-fade-in"
+                                  style={{
+                                    animationDelay: '0ms',
+                                    animationDuration: '200ms'
+                                  }}
+                                >
+                                  <div className="w-full h-20 rounded-lg mb-2 overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
+                                    {ingredient.image_url ? (
+                                      <img 
+                                        src={ingredient.image_url} 
+                                        alt={ingredient.product_name}
+                                        className="w-full h-full object-cover"
+                                      />
+                                    ) : (
+                                      <div className="w-full h-full flex items-center justify-center">
+                                        <span className="text-xs font-medium text-gray-500">
+                                          {ingredient.product_name.charAt(0).toUpperCase()}
+                                        </span>
+                                      </div>
+                                    )}
+                                  </div>
+                                  <h4 className="text-sm text-[#1C1C1C] line-clamp-2 mb-1">
+                                    {ingredient.product_name} ({ingredient.quantity} {ingredient.unit_type})
+                                  </h4>
+                                  <p className="text-sm text-gray-600">
+                                    {ingredient.price.toFixed(2).replace('.', ',')}€
+                                  </p>
+                                </div>
+                              )
+                            ))}
+                            
+                            {/* More products indicator */}
+                            {visibleIngredientsCount > supermarketIngredients.length && (
+                              <div className="flex-shrink-0 w-20 h-32 flex items-center justify-center animate-fade-in">
                                 <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F4F4F4' }}>
                                   <span className="text-xs font-medium text-gray-600">
                                     +{Math.max(0, 824 - supermarketIngredients.length)}
                                   </span>
                                 </div>
                               </div>
-                            </div>
+                            )}
                           </div>
-                          
-                          {/* Source attribution */}
-                          <div className="mt-3 flex items-center justify-start gap-2">
-                            <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
-                            <span className="text-sm text-gray-600">Fuente</span>
-                          </div>
-                          
-                          {/* Additional text */}
-                          <p className="mt-3 text-base text-[#1C1C1C]">
-                            Con estos ingredientes puedo crear más de <span className="font-semibold">4000 recetas diferentes</span>. Te ayudaré a filtrarlas para mostrarte las que mejor se adapten a ti.
-                          </p>
-                       </>}
+                        </div>
+                      )}
+                      
+                      {/* Source attribution */}
+                      {showSource && (
+                        <div className="mt-3 flex items-center justify-start gap-2 animate-fade-in">
+                          <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
+                          <span className="text-sm text-gray-600">Fuente</span>
+                        </div>
+                      )}
+                      
+                      {/* Additional text */}
+                      {showRecipesText && (
+                        <p className="mt-3 text-base text-[#1C1C1C] animate-fade-in">
+                          Con estos ingredientes puedo crear más de <span className="font-semibold">4000 recetas diferentes</span>. Te ayudaré a filtrarlas para mostrarte las que mejor se adapten a ti.
+                        </p>
+                      )}
+                    </>}
                   </div>
                 </div>
               </div>
