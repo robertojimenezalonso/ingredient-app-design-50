@@ -405,7 +405,7 @@ const Index = () => {
                                 </>
                               ) : (
                                 <>
-                                  Primero necesito saber para <span className="font-semibold">qué días</span> quieres organizar tu compra.
+                                  Primero necesito saber <span className="font-semibold">para qué días</span> quieres organizar tu compra.
                                 </>
                               )}
                             </span>}
