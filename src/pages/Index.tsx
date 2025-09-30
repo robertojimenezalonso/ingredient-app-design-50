@@ -286,9 +286,10 @@ const Index = () => {
       return;
     }
     
+    // Verificar si estamos intentando seleccionar más de 7 días
     if (dates.length > 7) {
       setDateSelectionError(true);
-      // No actualizar las fechas si excede el límite
+      // Mantener solo los primeros 7 días
       return;
     }
     
@@ -505,18 +506,22 @@ const Index = () => {
                     </div>
                   </div>
                   <div className={`flex justify-center flex-shrink-0 ${showCalendar ? 'opacity-100' : 'opacity-0'}`}>
-                    {dateSelectionError && (
-                      <div className="absolute bottom-24 left-0 right-0 text-center px-4">
-                        <p className="text-sm text-red-500">
-                          Máximo puedes seleccionar 7 días para organizar tu compra
-                        </p>
-                      </div>
-                    )}
                     <Calendar selected={selectedDates} onSelect={handleDateSelect} className="pointer-events-auto w-full" />
                   </div>
                 </div>}
             </div>
           </div>
+
+          {/* Error Message Area - Outside footer */}
+          {dateSelectionError && (
+            <div className="absolute bottom-16 left-0 right-0 px-4" style={{ backgroundColor: '#FFFFFF' }}>
+              <div className="py-3 text-center">
+                <p className="text-sm text-red-500">
+                  Máximo puedes seleccionar 7 días<br />para organizar tu compra
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Fixed Button Area at Bottom of Screen */}
           <div className="absolute bottom-0 left-0 right-0" style={{
