@@ -9,20 +9,31 @@ export const IngredientProgressAnimation = ({
   supermarketIngredients, 
   totalCount 
 }: IngredientProgressAnimationProps) => {
-  const [showCircles, setShowCircles] = useState(false);
+  const [showFirst, setShowFirst] = useState(false);
+  const [showSecond, setShowSecond] = useState(false);
+  const [showThird, setShowThird] = useState(false);
   const [showCounter, setShowCounter] = useState(false);
   const [currentCount, setCurrentCount] = useState(10);
 
   useEffect(() => {
-    // Todos los círculos aparecen juntos 1 segundo después
-    const timer1 = setTimeout(() => setShowCircles(true), 1000);
+    // Círculos aparecen secuencialmente en 1.5 segundos total
+    // Primer círculo: 1 segundo después del texto
+    const timer1 = setTimeout(() => setShowFirst(true), 1000);
     
-    // Contador empieza al mismo tiempo que los círculos
-    const timer2 = setTimeout(() => setShowCounter(true), 1000);
+    // Segundo círculo: 0.5 segundos después del primero
+    const timer2 = setTimeout(() => setShowSecond(true), 1500);
+    
+    // Tercer círculo: 0.5 segundos después del segundo  
+    const timer3 = setTimeout(() => setShowThird(true), 2000);
+    
+    // Contador: 0.5 segundos después del tercero
+    const timer4 = setTimeout(() => setShowCounter(true), 2500);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      clearTimeout(timer3);
+      clearTimeout(timer4);
     };
   }, []);
 
@@ -44,10 +55,10 @@ export const IngredientProgressAnimation = ({
   return (
     <div className="flex items-center mt-4">
       {/* Primer ingrediente */}
-      <div className={`transition-all duration-300 ${showCircles ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+      <div className={`transition-all duration-300 ${showFirst ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         {supermarketIngredients[0] && (
           <div 
-            className="w-12 h-12 rounded-full overflow-hidden"
+            className="w-10 h-10 rounded-full overflow-hidden"
             style={{ 
               backgroundColor: '#F4F4F4',
               border: '1px solid #D6D6D6'
@@ -71,10 +82,10 @@ export const IngredientProgressAnimation = ({
       </div>
 
       {/* Segundo ingrediente - solapado */}
-      <div className={`transition-all duration-300 -ml-3 ${showCircles ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+      <div className={`transition-all duration-300 -ml-2 ${showSecond ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         {supermarketIngredients[1] && (
           <div 
-            className="w-12 h-12 rounded-full overflow-hidden"
+            className="w-10 h-10 rounded-full overflow-hidden"
             style={{ 
               backgroundColor: '#F4F4F4',
               border: '1px solid #D6D6D6'
@@ -98,10 +109,10 @@ export const IngredientProgressAnimation = ({
       </div>
 
       {/* Tercer ingrediente - solapado */}
-      <div className={`transition-all duration-300 -ml-3 ${showCircles ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+      <div className={`transition-all duration-300 -ml-2 ${showThird ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         {supermarketIngredients[2] && (
           <div 
-            className="w-12 h-12 rounded-full overflow-hidden"
+            className="w-10 h-10 rounded-full overflow-hidden"
             style={{ 
               backgroundColor: '#F4F4F4',
               border: '1px solid #D6D6D6'
@@ -125,9 +136,9 @@ export const IngredientProgressAnimation = ({
       </div>
 
       {/* Círculo contador - solapado */}
-      <div className={`transition-all duration-300 -ml-3 ${showCircles ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+      <div className={`transition-all duration-300 -ml-2 ${showCounter ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         <div 
-          className="w-12 h-12 rounded-full flex items-center justify-center"
+          className="w-10 h-10 rounded-full flex items-center justify-center"
           style={{ 
             backgroundColor: '#E5E5E5',
             border: '1px solid #D6D6D6'
