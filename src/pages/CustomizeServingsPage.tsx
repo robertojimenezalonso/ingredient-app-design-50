@@ -32,7 +32,7 @@ export const CustomizeServingsPage = () => {
     return mealSelections.map((selection: MealSelection) => ({
       date: new Date(selection.date),
       mealType: selection.mealType,
-      servings: null
+      servings: 0
     }));
   });
 
@@ -129,12 +129,12 @@ export const CustomizeServingsPage = () => {
     });
   };
 
-  const handleServingSelection = (index: number, servings: number | null) => {
+  const handleServingSelection = (index: number, servings: number) => {
     setServingSelections(prev => {
       const newSelections = [...prev];
       newSelections[index] = {
         ...newSelections[index],
-        servings: newSelections[index].servings === servings ? null : servings
+        servings: Math.max(0, servings)
       };
       return newSelections;
     });
@@ -156,8 +156,8 @@ export const CustomizeServingsPage = () => {
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
   };
 
-  // Check if all selections have at least one serving selected
-  const canContinue = servingSelections.every(selection => selection.servings !== null);
+  // Check if at least one selection has at least one serving
+  const canContinue = servingSelections.some(selection => (selection.servings || 0) > 0);
 
   const handleContinue = () => {
     if (canContinue) {
@@ -166,9 +166,9 @@ export const CustomizeServingsPage = () => {
     }
   };
 
-  // Get selected servings for the bottom bar (reversed to show last selected first)
+  // Get selected servings for the bottom bar (only those with servings > 0)
   const getSelectedServings = () => {
-    return servingSelections.filter(selection => selection.servings !== null).reverse();
+    return servingSelections.filter(selection => (selection.servings || 0) > 0).reverse();
   };
 
   const selectedServings = getSelectedServings();
@@ -254,39 +254,53 @@ export const CustomizeServingsPage = () => {
                             
                             {/* Meal types for this date */}
                             {isVisible && group.meals.map((meal: any, mealIndex: number) => (
-                              <div key={mealIndex} className="space-y-2">
-                                <p className="text-sm font-medium text-[#1C1C1C]">
-                                  • {meal.mealType}
+                              <div 
+                                key={mealIndex} 
+                                className="flex items-center justify-between px-4 py-3 rounded-lg border"
+                                style={{
+                                  borderColor: '#E5E5E5',
+                                  backgroundColor: '#FFFFFF'
+                                }}
+                              >
+                                <p className="text-sm text-[#1C1C1C]">
+                                  {meal.mealType}
                                 </p>
                                 
-                                {/* Number selection */}
-                                <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4" style={{
-                                  scrollbarWidth: 'none',
-                                  msOverflowStyle: 'none'
-                                }}>
-                                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, numIndex) => {
-                                    const numberIndex = getNumberIndex(groupIndex, mealIndex, numIndex);
-                                    const isNumberVisible = numberIndex < visibleNumbersCount;
-                                    const isSelected = meal.servings === num;
-                                    
-                                    return (
-                                      <button
-                                        key={num}
-                                        onClick={() => handleServingSelection(meal.originalIndex, num)}
-                                        className={`px-4 py-2 rounded-full text-sm transition-all flex-shrink-0 ${
-                                          isNumberVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                                        }`}
-                                        style={{
-                                          backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
-                                          color: '#020818',
-                                          border: isSelected ? '1px solid #020818' : '1px solid transparent',
-                                          transition: 'all 0.2s ease-out'
-                                        }}
-                                      >
-                                        {num}
-                                      </button>
-                                    );
-                                  })}
+                                {/* Counter with +/- buttons */}
+                                <div className="flex items-center gap-3">
+                                  <button
+                                    onClick={() => {
+                                      const currentServings = meal.servings || 0;
+                                      if (currentServings > 0) {
+                                        handleServingSelection(meal.originalIndex, currentServings - 1);
+                                      }
+                                    }}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                                    style={{
+                                      backgroundColor: '#F4F4F4',
+                                      color: '#1C1C1C'
+                                    }}
+                                  >
+                                    −
+                                  </button>
+                                  
+                                  <span className="text-base font-medium text-[#1C1C1C] min-w-[24px] text-center">
+                                    {meal.servings || 0}
+                                  </span>
+                                  
+                                  <button
+                                    onClick={() => {
+                                      const currentServings = meal.servings || 0;
+                                      handleServingSelection(meal.originalIndex, currentServings + 1);
+                                    }}
+                                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
+                                    style={{
+                                      backgroundColor: '#F4F4F4',
+                                      color: '#1C1C1C'
+                                    }}
+                                  >
+                                    +
+                                  </button>
                                 </div>
                               </div>
                             ))}
