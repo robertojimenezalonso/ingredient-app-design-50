@@ -61,13 +61,14 @@ export const MealSelectionPage = () => {
   };
 
   const getSelectedMealTags = () => {
-    const tags: { date: Date; mealType: string }[] = [];
-    mealSelections.forEach(selection => {
-      selection.mealTypes.forEach(mealType => {
-        tags.push({ date: selection.date, mealType });
+    const tags: { date: Date; mealType: string; dateIndex: number; mealIndex: number }[] = [];
+    mealSelections.forEach((selection, dateIndex) => {
+      selection.mealTypes.forEach((mealType, mealIndex) => {
+        tags.push({ date: selection.date, mealType, dateIndex, mealIndex });
       });
     });
-    return tags;
+    // Invertir el orden para que los últimos seleccionados aparezcan primero
+    return tags.reverse();
   };
 
   const selectedTags = getSelectedMealTags();
