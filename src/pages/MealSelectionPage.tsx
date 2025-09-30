@@ -12,7 +12,10 @@ export const MealSelectionPage = () => {
 
   const handleBack = () => {
     navigate('/?step=calendar&completed=true', { 
-      state: { confirmedDates } 
+      state: { 
+        confirmedDates,
+        shouldRestoreSelection: true 
+      } 
     });
   };
 

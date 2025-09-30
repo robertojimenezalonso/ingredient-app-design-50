@@ -79,6 +79,8 @@ const Index = () => {
     if (step === 'calendar' && completed === 'true') {
       // Volviendo desde la página de comidas
       const savedDates = location.state?.confirmedDates || [];
+      const shouldRestore = location.state?.shouldRestoreSelection || false;
+      
       setIsExpanded(true);
       setLoadingComplete(true);
       setCalendarTypewriterStep(2);
@@ -95,10 +97,16 @@ const Index = () => {
       setShowRecipesText(true);
       setDisplayedRecipesText(recipesText);
       setShowRecipesCursor(false);
+      
+      // Restaurar las fechas seleccionadas si es necesario
+      if (shouldRestore && savedDates.length > 0) {
+        setSelectedDates(savedDates);
+      }
+      
       // Clear URL params
       window.history.replaceState({}, '', '/');
     }
-  }, [location]);
+  }, [location, calendarParagraph2Text, searchResultText, recipesText, supermarketIngredients.length]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
