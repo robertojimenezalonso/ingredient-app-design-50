@@ -625,7 +625,11 @@ const Index = () => {
             <div className="flex items-center gap-2 mt-4 -mb-2">
               {selectedSupermarket && (
                 <div className="flex-1 flex items-center gap-2 px-4 py-2 rounded-full" style={{ backgroundColor: '#F2F2F2' }}>
-                  <Badge variant="secondary" className="bg-gray-400 text-white hover:bg-gray-400">
+                  <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-2" style={{ 
+                    backgroundColor: '#D9DADC', 
+                    color: '#020818',
+                    borderRadius: '8px'
+                  }}>
                     {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                   </Badge>
                 </div>
