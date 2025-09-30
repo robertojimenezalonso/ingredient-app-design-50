@@ -27,6 +27,7 @@ import IngredientEntryPage from "./pages/IngredientEntryPage";
 import AddRecipePage from "./pages/AddRecipePage";
 import ListsPage from "./pages/ListsPage";
 import { MealSelectionPage } from "./pages/MealSelectionPage";
+import { RecipePreferencesPage } from "./pages/RecipePreferencesPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,6 +42,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/meal-selection" element={<MealSelectionPage />} />
+            <Route path="/recipe-preferences" element={<RecipePreferencesPage />} />
             <Route path="/mis-listas" element={<MyListsPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />

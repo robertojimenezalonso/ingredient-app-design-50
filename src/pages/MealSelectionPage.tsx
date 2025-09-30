@@ -16,10 +16,25 @@ export const MealSelectionPage = () => {
   const location = useLocation();
   const confirmedDates = location.state?.confirmedDates || [];
   const selectedSupermarket = location.state?.selectedSupermarket || null;
+  const savedMealSelections = location.state?.mealSelections || null;
+  const shouldRestore = location.state?.shouldRestoreSelection || false;
   
-  const [mealSelections, setMealSelections] = useState<MealSelection[]>(
-    confirmedDates.map((date: Date) => ({ date, mealTypes: [] }))
-  );
+  const [mealSelections, setMealSelections] = useState<MealSelection[]>(() => {
+    // Si estamos volviendo desde la siguiente página, restaurar las selecciones
+    if (shouldRestore && savedMealSelections) {
+      const restored = confirmedDates.map((date: Date) => ({ date, mealTypes: [] as string[] }));
+      savedMealSelections.forEach((selection: any) => {
+        const dateIndex = restored.findIndex((r: MealSelection) => 
+          r.date.getTime() === new Date(selection.date).getTime()
+        );
+        if (dateIndex !== -1) {
+          restored[dateIndex].mealTypes.push(selection.mealType);
+        }
+      });
+      return restored;
+    }
+    return confirmedDates.map((date: Date) => ({ date, mealTypes: [] }));
+  });
 
   const mealTypes = ['Desayuno', 'Comida', 'Cena', 'Postre', 'Snack'];
   
@@ -139,8 +154,22 @@ export const MealSelectionPage = () => {
 
   const handleContinue = () => {
     if (canContinue) {
-      // Aquí continuaremos con el siguiente paso
-      console.log('Meal selections:', mealSelections);
+      // Preparar las selecciones para la siguiente página
+      const flattenedSelections: { date: Date; mealType: string }[] = [];
+      mealSelections.forEach(selection => {
+        selection.mealTypes.forEach(mealType => {
+          flattenedSelections.push({ date: selection.date, mealType });
+        });
+      });
+
+      // Navegar a la siguiente página con todas las selecciones
+      navigate('/recipe-preferences', {
+        state: { 
+          confirmedDates,
+          selectedSupermarket,
+          mealSelections: flattenedSelections
+        }
+      });
     }
   };
 

@@ -1,0 +1,110 @@
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+
+type MealSelection = {
+  date: Date;
+  mealType: string;
+};
+
+export const RecipePreferencesPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const confirmedDates = location.state?.confirmedDates || [];
+  const selectedSupermarket = location.state?.selectedSupermarket || null;
+  const mealSelections = location.state?.mealSelections || [];
+
+  const handleBack = () => {
+    navigate('/meal-selection', { 
+      state: { 
+        confirmedDates,
+        selectedSupermarket,
+        mealSelections,
+        shouldRestoreSelection: true 
+      } 
+    });
+  };
+
+  // Agrupar selecciones por fecha
+  const groupedSelections = mealSelections.reduce((acc: any, selection: MealSelection) => {
+    const dateKey = selection.date.getTime();
+    if (!acc[dateKey]) {
+      acc[dateKey] = {
+        date: selection.date,
+        mealTypes: []
+      };
+    }
+    acc[dateKey].mealTypes.push(selection.mealType);
+    return acc;
+  }, {});
+
+  const formatShortDate = (date: Date) => {
+    const formatted = format(date, 'EEE d', { locale: es });
+    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+  };
+
+  return (
+    <div className="min-h-screen flex flex-col relative" style={{
+      backgroundColor: '#FCFBF8'
+    }}>
+      {/* Fixed Header */}
+      <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center border-b" style={{
+        backgroundColor: '#FFFFFF',
+        borderBottomColor: '#E5E5E5'
+      }}>
+        <button 
+          onClick={handleBack} 
+          className="ml-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors"
+        >
+          <ArrowLeft className="h-5 w-5 text-[#1C1C1C]" />
+        </button>
+      </div>
+
+      {/* Chat area - starts below fixed header */}
+      <div className="h-screen flex flex-col relative pt-16">
+        <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{
+          backgroundColor: '#FFFFFF'
+        }}>
+          <div className="flex flex-col h-full overflow-y-auto scrollbar-hide">
+            {/* User response - meal selections (right-aligned) */}
+            <div className="px-4 pt-4 mb-6">
+              <div className="flex justify-end">
+                <div className="flex flex-col gap-2 items-end">
+                  {Object.values(groupedSelections).map((group: any, index: number) => (
+                    <div 
+                      key={index}
+                      className="flex flex-wrap gap-2 items-center text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" 
+                      style={{ backgroundColor: '#F4F4F4' }}
+                    >
+                      <span className="font-medium">{formatShortDate(group.date)}:</span>
+                      {group.mealTypes.map((mealType: string, mealIndex: number) => (
+                        <span key={mealIndex}>
+                          {mealType}
+                          {mealIndex < group.mealTypes.length - 1 && ','}
+                        </span>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Aquí irá la siguiente pregunta */}
+            <div className="px-4 mb-6">
+              <div className="flex justify-start">
+                <div className="max-w-xs">
+                  <p className="text-base text-[#1C1C1C]">
+                    {/* La siguiente pregunta irá aquí */}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
