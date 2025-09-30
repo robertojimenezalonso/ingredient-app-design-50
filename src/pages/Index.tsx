@@ -529,7 +529,7 @@ const Index = () => {
           <div className="absolute bottom-0 left-0 right-0" style={{
           backgroundColor: '#FFFFFF'
         }}>
-            <div className="px-4 py-4 flex items-center gap-2">
+            <div className="px-4 pt-4 pb-6 flex items-center gap-2" style={{ paddingBottom: 'max(1.5rem, env(safe-area-inset-bottom))' }}>
               {selectedDates.length > 0 && (
                 <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{ 
                   backgroundColor: '#F2F2F2',
