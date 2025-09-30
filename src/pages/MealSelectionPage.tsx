@@ -69,11 +69,14 @@ export const MealSelectionPage = () => {
   };
 
   const formatFullDate = (date: Date) => {
-    const dayName = format(date, 'EEEE', { locale: es });
+    const dayName = format(date, 'EEE', { locale: es }); // Abreviación del día
     const dayNumber = format(date, 'd', { locale: es });
     const month = format(date, 'MMM', { locale: es }); // Abreviación del mes
     
-    return `${dayName.charAt(0).toUpperCase() + dayName.slice(1)} ${dayNumber} de ${month}`;
+    const capitalizedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+    const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
+    
+    return `${capitalizedDay} ${dayNumber} - ${capitalizedMonth}`;
   };
 
   return (
