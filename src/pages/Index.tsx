@@ -303,17 +303,14 @@ const Index = () => {
                                </div>
                              ))}
                              
-                             {/* More products indicator */}
-                             <div className="flex-shrink-0 w-20 h-32 flex items-center justify-center">
-                               <div className="text-center">
-                                 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2" style={{ backgroundColor: '#F4F4F4' }}>
-                                   <span className="text-xs font-medium text-gray-600">
-                                     +{Math.max(0, 824 - supermarketIngredients.length)}
-                                   </span>
-                                 </div>
-                                 <p className="text-xs text-gray-500">más productos</p>
-                               </div>
-                             </div>
+                              {/* More products indicator */}
+                              <div className="flex-shrink-0 w-20 h-32 flex items-center justify-center">
+                                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F4F4F4' }}>
+                                  <span className="text-xs font-medium text-gray-600">
+                                    +{Math.max(0, 824 - supermarketIngredients.length)}
+                                  </span>
+                                </div>
+                              </div>
                             </div>
                           </div>
                           
