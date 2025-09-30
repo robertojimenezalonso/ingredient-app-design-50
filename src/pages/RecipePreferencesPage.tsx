@@ -190,7 +190,7 @@ export const RecipePreferencesPage = () => {
                   <div className="mb-4">
                     {showIcon && (
                       <p className="text-base text-[#1C1C1C] whitespace-pre-line">
-                        <span className="font-semibold">Veo que aún no tienes ningún perfil de salud vinculado a tu cuenta.</span> Esto nos ayudará a entender mejor tus <span className="font-semibold">objetivos y preferencias,</span> y así ofrecerte <span className="font-semibold">recetas personalizadas</span> con los ingredientes de <span className="font-semibold capitalize">{selectedSupermarket || 'tu supermercado favorito'}</span>.{'\n\n'}Agrega tantos <span className="font-semibold">perfiles de salud</span> como personas vayan a comer en los días seleccionados.
+                        <span className="font-semibold">Veo que aún no tienes ningún perfil de salud vinculado a tu cuenta.</span> Esto nos ayudará a entender mejor tus <span className="font-semibold">objetivos y preferencias,</span> y así ofrecerte recetas personalizadas con los ingredientes de <span className="font-semibold capitalize">{selectedSupermarket || 'tu supermercado favorito'}</span>.{'\n\n'}Agrega tantos <span className="font-semibold">perfiles de salud</span> como personas vayan a comer en los días seleccionados.
                         {showCursor && <span className="animate-pulse">|</span>}
                       </p>
                     )}
