@@ -387,7 +387,7 @@ const Index = () => {
               </div>
 
               {/* Main content - only show after loading is complete */}
-              {loadingComplete && <div className="px-4 flex-shrink-0 space-y-4">
+              {loadingComplete && <div className="px-4 flex-shrink-0 space-y-4 pb-24">
                   {/* Divider line */}
                   <div className="w-full animate-fade-in" style={{ borderTop: '1px solid #E5E5E5', marginBottom: '1.5rem' }} />
                   {/* Calendar paragraph with typewriter effect */}
