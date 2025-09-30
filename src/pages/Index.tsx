@@ -156,7 +156,7 @@ const Index = () => {
       setTimeout(() => {
         setShowSearchResultCursor(false);
         setShowIngredients(true);
-      }, 500);
+      }, 200); // Reduced from 500ms to 200ms
     }
     return () => {
       if (timeout) clearTimeout(timeout);
@@ -174,7 +174,7 @@ const Index = () => {
       // After all ingredients shown, show source
       setTimeout(() => {
         setShowSource(true);
-      }, 300);
+      }, 150); // Reduced from 300ms to 150ms
     }
   }, [showIngredients, visibleIngredientsCount, supermarketIngredients.length]);
   
@@ -183,7 +183,7 @@ const Index = () => {
     if (showSource && !showRecipesText) {
       setTimeout(() => {
         setShowRecipesText(true);
-      }, 500);
+      }, 200); // Reduced from 500ms to 200ms
     }
   }, [showSource, showRecipesText]);
   
@@ -200,7 +200,7 @@ const Index = () => {
         setShowRecipesCursor(false);
         setLoadingComplete(true);
         setCalendarTypewriterStep(2);
-      }, 800);
+      }, 300); // Reduced from 800ms to 300ms
     }
     return () => {
       if (timeout) clearTimeout(timeout);
@@ -219,11 +219,11 @@ const Index = () => {
           setDisplayedCalendarParagraph2(calendarParagraph2Text.slice(0, displayedCalendarParagraph2.length + 1));
         }, 30);
       } else {
-        // Hide cursor and show calendar
+        // Hide cursor and show calendar immediately
         setTimeout(() => {
           setShowCalendarCursor(false);
           setShowCalendar(true);
-        }, 800);
+        }, 100); // Reduced from 800ms to 100ms for quicker transition
       }
     }
     return () => {
@@ -456,7 +456,7 @@ const Index = () => {
               {/* Main content - only show after loading is complete */}
               {loadingComplete && <div className="px-4 flex-shrink-0 space-y-4 pb-24">
                   {/* Divider line */}
-                  <div className="w-full animate-fade-in" style={{ borderTop: '1px solid #E5E5E5', marginBottom: '1.5rem' }} />
+                  <div className="w-full" style={{ borderTop: '1px solid #E5E5E5', marginBottom: '1.5rem' }} />
                   {/* Calendar paragraph with typewriter effect */}
                   <div className="mb-6">
                     <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
@@ -479,7 +479,7 @@ const Index = () => {
                       </div>
                     </div>
                   </div>
-                  <div className={`flex justify-center flex-shrink-0 transition-all duration-500 ease-out ${showCalendar ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                  <div className={`flex justify-center flex-shrink-0 ${showCalendar ? 'opacity-100' : 'opacity-0'}`}>
                     <Calendar selected={selectedDates} onSelect={dates => setSelectedDates(dates || [])} className="pointer-events-auto w-full" />
                   </div>
                 </div>}
