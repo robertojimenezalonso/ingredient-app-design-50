@@ -394,20 +394,23 @@ const Index = () => {
                   {/* Calendar paragraph with typewriter effect */}
                   <div className="mb-6">
                     <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                        {calendarTypewriterStep >= 2 && <span>
-                            {displayedCalendarParagraph2.length < calendarParagraph2Text.length ? (
-                              <>
-                                {displayedCalendarParagraph2}
-                                {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
-                              </>
-                            ) : (
-                              <>
-                                📅 Primero necesito saber para <span className="font-semibold">qué días</span> quieres organizar tu compra.
-                              </>
-                            )}
-                          </span>}
-                      </p>
+                      <div className="flex items-start gap-2">
+                        <span className="text-lg">📅</span>
+                        <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                          {calendarTypewriterStep >= 2 && <span>
+                              {displayedCalendarParagraph2.length < calendarParagraph2Text.length ? (
+                                <>
+                                  {displayedCalendarParagraph2.replace('📅 ', '')}
+                                  {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                                </>
+                              ) : (
+                                <>
+                                  Primero necesito saber para <span className="font-semibold">qué días</span> quieres organizar tu compra.
+                                </>
+                              )}
+                            </span>}
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <div className={`flex justify-center flex-shrink-0 transition-all duration-500 ease-out ${showCalendar ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
