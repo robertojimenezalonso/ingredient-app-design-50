@@ -38,7 +38,7 @@ export const MealSelectionPage = () => {
 
   const mealTypes = ['Desayuno', 'Comida', 'Cena', 'Postre', 'Snack'];
   
-  const fullText = "Genial 👌. Aún no tienes ningún perfil de comensal guardado. Agrega al menos uno para poder personalizar tus recetas.";
+  const fullText = "Ahora necesito saber qué tipo de comidas quieres elegir para esos días. Selecciona:";
   const totalMealTags = mealSelections.length * mealTypes.length;
   
   // Animation states
@@ -236,17 +236,28 @@ export const MealSelectionPage = () => {
               </div>
             </div>
 
-            {/* Bot message - no profiles message */}
+            {/* Bot message - meal type selection */}
             <div className="px-4 mb-6">
               <div className="flex justify-start">
-                <div className="max-w-full w-full">
+                <div className="max-w-xs">
                   <div className="flex items-start gap-2">
                     {showIcon && (
-                      <span className="text-lg animate-fade-in">👤</span>
+                      <span className="text-lg animate-fade-in">🍛</span>
                     )}
                     {showIcon && (
-                      <p className="text-base text-[#1C1C1C]">
-                        {displayedText}
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {displayedText.split('qué tipo de comidas').map((part, index) => {
+                          if (index === 0) {
+                            return <span key={index}>{part}</span>;
+                          } else {
+                            return (
+                              <span key={index}>
+                                <span className="font-semibold">qué tipo de comidas</span>
+                                {part}
+                              </span>
+                            );
+                          }
+                        })}
                         {showCursor && <span className="animate-pulse">|</span>}
                       </p>
                     )}
@@ -254,6 +265,56 @@ export const MealSelectionPage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Date and meal type selection */}
+            {showDates && (
+              <div className="px-4 space-y-6 mb-6">
+                {mealSelections.map((selection, dateIndex) => (
+                  <div 
+                    key={dateIndex} 
+                    className="space-y-3"
+                  >
+                    {/* Date label - appears from left to right */}
+                    {dateIndex <= visibleDateIndex && (
+                      <p className="text-sm font-medium text-[#1C1C1C] animate-fade-in" style={{
+                        animation: 'fade-in 0.3s ease-out'
+                      }}>
+                        {formatFullDate(selection.date)}
+                      </p>
+                    )}
+                    
+                    {/* Meal type tags - appear one by one */}
+                    {dateIndex <= visibleDateIndex && (
+                      <div className="flex flex-wrap gap-2 pointer-events-auto">
+                        {mealTypes.map((mealType, mealIndex) => {
+                          const isSelected = selection.mealTypes.includes(mealType);
+                          const tagIndex = getMealTagIndex(dateIndex, mealIndex);
+                          const isVisible = tagIndex < visibleMealTagsCount;
+                          
+                          return (
+                            <button
+                              key={mealType}
+                              onClick={() => toggleMealType(dateIndex, mealType)}
+                              className={`px-3 py-1.5 rounded-lg text-sm font-normal transition-all pointer-events-auto cursor-pointer ${
+                                isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+                              }`}
+                              style={{
+                                backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
+                                color: '#020818',
+                                border: isSelected ? '1px solid #020818' : '1px solid transparent',
+                                transition: 'all 0.2s ease-out'
+                              }}
+                            >
+                              {mealType}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
