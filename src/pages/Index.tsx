@@ -567,20 +567,20 @@ const Index = () => {
           </div>
 
           {/* Error Message Area - Outside footer */}
-          {dateSelectionError && (
-            <div className="absolute bottom-16 left-0 right-0 px-4" style={{ backgroundColor: '#FFFFFF' }}>
-              <div className="py-3 text-center">
-                <p className="text-sm text-red-500">
-                  Selecciona un máximo de 7 días
-                </p>
-              </div>
-            </div>
-          )}
 
           {/* Fixed Button Area at Bottom of Screen */}
           <div className="absolute bottom-0 left-0 right-0" style={{
           backgroundColor: '#FFFFFF'
         }}>
+            {/* Error Message Area */}
+            {dateSelectionError && (
+              <div className="px-4 pt-3 text-center">
+                <p className="text-sm text-red-500">
+                  Selecciona un máximo de 7 días
+                </p>
+              </div>
+            )}
+            
             <div className="px-4 pt-4 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
               {selectedDates.length > 0 && (
                 <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
