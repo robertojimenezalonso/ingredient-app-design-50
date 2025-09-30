@@ -38,8 +38,8 @@ export const RecipePreferencesPage = () => {
   const handleContinue = () => {
     if (selectedServings !== null) {
       if (selectedServings === 'custom') {
-        // Navegar a la pantalla de customización
-        navigate('/customize-servings', {
+        // Navegar a la pantalla de perfiles de comensales
+        navigate('/diner-profiles', {
           state: { 
             confirmedDates,
             selectedSupermarket,
