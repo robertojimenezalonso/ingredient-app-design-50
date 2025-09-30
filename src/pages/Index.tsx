@@ -624,18 +624,13 @@ const Index = () => {
             
             <div className="flex items-center gap-2 mt-4 -mb-2">
               {selectedSupermarket && (
-                <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ backgroundColor: '#F2F2F2' }}>
-                  <Badge variant="secondary" className="bg-gray-400 text-white hover:bg-gray-400 flex items-center gap-2">
-                    <img 
-                      src={selectedSupermarket === 'mercadona' ? '/mercadona-logo-updated.webp' : selectedSupermarket === 'carrefour' ? '/carrefour-logo-updated.png' : selectedSupermarket === 'lidl' ? '/lidl-logo-updated.png' : '/alcampo-logo.png'} 
-                      alt={selectedSupermarket} 
-                      className="w-4 h-4 object-contain" 
-                    />
+                <div className="flex-1 flex items-center gap-2 px-4 py-2 rounded-full" style={{ backgroundColor: '#F2F2F2' }}>
+                  <Badge variant="secondary" className="bg-gray-400 text-white hover:bg-gray-400">
                     {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                   </Badge>
                 </div>
               )}
-              <Button variant="ghost" onClick={handleSubmit} disabled={!selectedSupermarket} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0" style={{
+              <Button variant="ghost" onClick={handleSubmit} disabled={!selectedSupermarket} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" style={{
               backgroundColor: selectedSupermarket ? '#000000' : '#898885',
               color: selectedSupermarket ? '#ffffff' : '#F9F8F2',
               border: 'none',
