@@ -188,7 +188,7 @@ export const MealSelectionPage = () => {
         <div className="absolute bottom-0 left-0 right-0" style={{
           backgroundColor: '#FFFFFF'
         }}>
-          <div className="px-4 pt-6 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
+          <div className="px-4 pt-4 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
             {selectedTags.length > 0 && (
               <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{ 
                 backgroundColor: '#F2F2F2',
