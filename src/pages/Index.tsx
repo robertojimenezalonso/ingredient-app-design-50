@@ -10,6 +10,8 @@ import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
 import { supabase } from '@/integrations/supabase/client';
 import { IngredientProgressAnimation } from '@/components/IngredientProgressAnimation';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 const Index = () => {
   // Chat conversation component with 4-paragraph typewriter effect
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ const Index = () => {
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
   const [showMoreMeals, setShowMoreMeals] = useState(false);
+  const [dateSelectionError, setDateSelectionError] = useState(false);
 
   // Remove typewriter effect states - show content immediately
 
@@ -275,6 +278,28 @@ const Index = () => {
       navigate('/auth?mode=signup');
     }
   };
+
+  const handleDateSelect = (dates: Date[] | undefined) => {
+    if (!dates) {
+      setSelectedDates([]);
+      setDateSelectionError(false);
+      return;
+    }
+    
+    if (dates.length > 7) {
+      setDateSelectionError(true);
+      // No actualizar las fechas si excede el límite
+      return;
+    }
+    
+    setDateSelectionError(false);
+    setSelectedDates(dates);
+  };
+
+  const removeDateTag = (dateToRemove: Date) => {
+    setSelectedDates(selectedDates.filter(date => date.getTime() !== dateToRemove.getTime()));
+    setDateSelectionError(false);
+  };
   const canContinue = selectedDates.length > 0;
   if (authLoading) {
     return <div className="min-h-screen flex items-center justify-center" style={{
@@ -479,8 +504,15 @@ const Index = () => {
                       </div>
                     </div>
                   </div>
+                  {dateSelectionError && (
+                    <div className="mt-2 mb-2 text-center">
+                      <p className="text-sm text-red-500">
+                        Máximo puedes seleccionar 7 días para organizar tu compra
+                      </p>
+                    </div>
+                  )}
                   <div className={`flex justify-center flex-shrink-0 ${showCalendar ? 'opacity-100' : 'opacity-0'}`}>
-                    <Calendar selected={selectedDates} onSelect={dates => setSelectedDates(dates || [])} className="pointer-events-auto w-full" />
+                    <Calendar selected={selectedDates} onSelect={handleDateSelect} className="pointer-events-auto w-full" />
                   </div>
                 </div>}
             </div>
@@ -490,8 +522,32 @@ const Index = () => {
           <div className="absolute bottom-0 left-0 right-0" style={{
           backgroundColor: '#FFFFFF'
         }}>
-            <div className="px-4 py-4 flex justify-end">
-              <Button variant="ghost" onClick={handleCalendarContinue} disabled={!canContinue} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0" style={{
+            <div className="px-4 py-4 flex items-center gap-2">
+              {selectedDates.length > 0 && (
+                <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto" style={{ backgroundColor: '#F2F2F2' }}>
+                  {selectedDates.sort((a, b) => a.getTime() - b.getTime()).map((date, index) => (
+                    <Badge 
+                      key={index} 
+                      variant="secondary" 
+                      className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
+                      style={{ 
+                        backgroundColor: '#D9DADC', 
+                        color: '#020818',
+                        borderRadius: '8px'
+                      }}
+                    >
+                      {format(date, 'EEE d', { locale: es })}
+                      <button
+                        onClick={() => removeDateTag(date)}
+                        className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
+                      >
+                        <X size={12} />
+                      </button>
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              <Button variant="ghost" onClick={handleCalendarContinue} disabled={!canContinue} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" style={{
               backgroundColor: canContinue ? '#000000' : '#898885',
               color: canContinue ? '#ffffff' : '#F9F8F2',
               border: 'none',
