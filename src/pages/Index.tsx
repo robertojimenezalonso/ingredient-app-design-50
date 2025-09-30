@@ -319,6 +319,11 @@ const Index = () => {
                             <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
                             <span className="text-sm text-gray-600">Fuente</span>
                           </div>
+                          
+                          {/* Additional text */}
+                          <p className="mt-3 text-base text-[#1C1C1C]">
+                            Con estos ingredientes puedo crear más de 4.000 recetas diferentes. Te ayudaré a filtrarlas para mostrarte las que mejor se adapten a ti.
+                          </p>
                        </>}
                   </div>
                 </div>
