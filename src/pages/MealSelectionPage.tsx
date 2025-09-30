@@ -123,9 +123,12 @@ export const MealSelectionPage = () => {
             <div className="px-4 mb-6">
               <div className="flex justify-start">
                 <div className="max-w-xs">
-                  <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                    Ahora necesito saber <span className="font-semibold">qué tipo de comidas</span> quieres elegir para esos días. Selecciona:
-                  </p>
+                  <div className="flex items-start gap-2">
+                    <span className="text-lg">🍛</span>
+                    <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                      Ahora necesito saber <span className="font-semibold">qué tipo de comidas</span> quieres elegir para esos días. Selecciona:
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
