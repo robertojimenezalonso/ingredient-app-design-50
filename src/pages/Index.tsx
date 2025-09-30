@@ -274,9 +274,9 @@ const Index = () => {
                              {supermarketIngredients.map((ingredient, index) => (
                                <div 
                                  key={ingredient.id}
-                                 className="flex-shrink-0 w-16"
+                                 className="flex-shrink-0 w-20"
                                >
-                                 <div className="w-full h-16 rounded-lg mb-2 overflow-hidden" style={{ backgroundColor: '#E5E5E5' }}>
+                                 <div className="w-full h-20 rounded-lg mb-2 overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
                                    {ingredient.image_url ? (
                                      <img 
                                        src={ingredient.image_url} 
@@ -301,9 +301,9 @@ const Index = () => {
                              ))}
                              
                              {/* More products indicator */}
-                             <div className="flex-shrink-0 w-16 h-28 flex items-center justify-center">
+                             <div className="flex-shrink-0 w-20 h-32 flex items-center justify-center">
                                <div className="text-center">
-                                 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2" style={{ backgroundColor: '#E5E5E5' }}>
+                                 <div className="w-12 h-12 rounded-full flex items-center justify-center mb-2" style={{ backgroundColor: '#F4F4F4' }}>
                                    <span className="text-xs font-medium text-gray-600">
                                      +{Math.max(0, 824 - supermarketIngredients.length)}
                                    </span>
