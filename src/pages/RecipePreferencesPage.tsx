@@ -110,22 +110,41 @@ export const RecipePreferencesPage = () => {
                       Número de personas por receta. Selecciona:
                     </p>
                   </div>
-                  <div className="flex flex-wrap gap-2">
-                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
-                      <button
-                        key={num}
-                        onClick={() => setSelectedServings(num)}
-                        className="px-4 py-2 rounded-full text-sm transition-all"
-                        style={{
-                          backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
-                          color: '#020818',
-                          border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
-                          transition: 'all 0.2s ease-out'
-                        }}
-                      >
-                        {num}
-                      </button>
-                    ))}
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <button
+                          key={num}
+                          onClick={() => setSelectedServings(num)}
+                          className="px-4 py-2 rounded-full text-sm transition-all"
+                          style={{
+                            backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
+                            color: '#020818',
+                            border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
+                            transition: 'all 0.2s ease-out'
+                          }}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      {[6, 7, 8, 9, 10].map((num) => (
+                        <button
+                          key={num}
+                          onClick={() => setSelectedServings(num)}
+                          className="px-4 py-2 rounded-full text-sm transition-all"
+                          style={{
+                            backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
+                            color: '#020818',
+                            border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
+                            transition: 'all 0.2s ease-out'
+                          }}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                   <div className="mt-6">
                     <button
