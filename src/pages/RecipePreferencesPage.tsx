@@ -212,54 +212,6 @@ export const RecipePreferencesPage = () => {
                       </p>
                     )}
                   </div>
-                  {showNumbers && (
-                    <div className="space-y-2">
-                      <div className="flex gap-2">
-                        {[1, 2, 3, 4, 5].map((num, index) => {
-                          const isVisible = index < visibleNumbersCount;
-                          return (
-                            <button
-                              key={num}
-                              onClick={() => setSelectedServings(selectedServings === num ? null : num)}
-                              className={`px-4 py-2 rounded-full text-sm transition-all ${
-                                isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                              }`}
-                              style={{
-                                backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
-                                color: '#020818',
-                                border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
-                                transition: 'all 0.2s ease-out'
-                              }}
-                            >
-                              {num}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      <div className="flex gap-2">
-                        {[6, 7, 8, 9, 10].map((num, index) => {
-                          const isVisible = index + 5 < visibleNumbersCount;
-                          return (
-                            <button
-                              key={num}
-                              onClick={() => setSelectedServings(selectedServings === num ? null : num)}
-                              className={`px-4 py-2 rounded-full text-sm transition-all ${
-                                isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                              }`}
-                              style={{
-                                backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
-                                color: '#020818',
-                                border: selectedServings === num ? '1px solid #020818' : '1px solid transparent',
-                                transition: 'all 0.2s ease-out'
-                              }}
-                            >
-                              {num}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             </div>
