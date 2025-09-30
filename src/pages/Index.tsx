@@ -571,7 +571,7 @@ const Index = () => {
             <div className="absolute bottom-16 left-0 right-0 px-4" style={{ backgroundColor: '#FFFFFF' }}>
               <div className="py-3 text-center">
                 <p className="text-sm text-red-500">
-                  Máximo puedes seleccionar 7 días<br />para organizar tu compra
+                  Selecciona un máximo de 7 días
                 </p>
               </div>
             </div>
