@@ -104,11 +104,14 @@ export const RecipePreferencesPage = () => {
             <div className="px-4 mb-6">
               <div className="flex justify-start">
                 <div className="max-w-xs">
-                  <p className="text-base text-[#1C1C1C] mb-4">
-                    👤 Número de personas por receta. Selecciona:
-                  </p>
+                  <div className="flex items-start gap-2 mb-4">
+                    <span className="text-lg">👤</span>
+                    <p className="text-base text-[#1C1C1C]">
+                      Número de personas por receta. Selecciona:
+                    </p>
+                  </div>
                   <div className="flex flex-wrap gap-2">
-                    {[1, 2, 3, 4, 5, 6].map((num) => (
+                    {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                       <button
                         key={num}
                         onClick={() => setSelectedServings(num)}
@@ -124,10 +127,10 @@ export const RecipePreferencesPage = () => {
                       </button>
                     ))}
                   </div>
-                  <div className="mt-4">
+                  <div className="mt-6">
                     <button
                       onClick={() => setSelectedServings('custom')}
-                      className="px-4 py-2 rounded-full text-sm transition-all"
+                      className="px-4 py-2 rounded-lg text-sm transition-all"
                       style={{
                         backgroundColor: selectedServings === 'custom' ? '#D9DADC' : '#F4F4F4',
                         color: '#020818',
