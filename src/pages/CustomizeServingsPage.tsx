@@ -241,7 +241,7 @@ export const CustomizeServingsPage = () => {
                         return (
                           <div 
                             key={groupIndex} 
-                            className={`space-y-4 transition-all ${
+                            className={`space-y-3 transition-all ${
                               isVisible ? 'opacity-100' : 'opacity-0'
                             }`}
                           >
