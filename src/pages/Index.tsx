@@ -143,7 +143,7 @@ const Index = () => {
         setShowSearchingText(false);
         setShowResultCard(true);
         setShowSearchResult(true); // Start typewriter for search result
-      }, 7000);
+      }, 8500); // Increased from 7000 to 8500 to allow counter to reach 824 and wait 1s
     }
   }, [isExpanded, loadingComplete]);
   
