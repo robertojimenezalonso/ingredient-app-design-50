@@ -79,7 +79,13 @@ const Index = () => {
     if (step === 'calendar' && completed === 'true') {
       // Volviendo desde la página de comidas
       const savedDates = location.state?.confirmedDates || [];
+      const savedSupermarket = location.state?.selectedSupermarket || null;
       const shouldRestore = location.state?.shouldRestoreSelection || false;
+      
+      // Restaurar el supermercado
+      if (savedSupermarket) {
+        setSelectedSupermarket(savedSupermarket);
+      }
       
       setIsExpanded(true);
       setLoadingComplete(true);
@@ -314,9 +320,12 @@ const Index = () => {
   };
   const handleCalendarContinue = () => {
     if (selectedDates.length > 0) {
-      // Navegar a la página de selección de comidas con las fechas
+      // Navegar a la página de selección de comidas con las fechas y el supermercado
       navigate('/meal-selection', {
-        state: { confirmedDates: selectedDates }
+        state: { 
+          confirmedDates: selectedDates,
+          selectedSupermarket: selectedSupermarket
+        }
       });
     }
   };

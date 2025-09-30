@@ -9,11 +9,13 @@ export const MealSelectionPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const confirmedDates = location.state?.confirmedDates || [];
+  const selectedSupermarket = location.state?.selectedSupermarket || null;
 
   const handleBack = () => {
     navigate('/?step=calendar&completed=true', { 
       state: { 
         confirmedDates,
+        selectedSupermarket,
         shouldRestoreSelection: true 
       } 
     });
