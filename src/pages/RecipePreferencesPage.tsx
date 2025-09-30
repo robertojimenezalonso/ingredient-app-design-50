@@ -58,14 +58,9 @@ export const RecipePreferencesPage = () => {
   
   // Animation states
   const skipAnimations = shouldSkipAnimations || (persistedData !== null);
-  const [showIcon, setShowIcon] = useState(skipAnimations);
+  const [showIcon, setShowIcon] = useState(true);
   const [displayedText, setDisplayedText] = useState(skipAnimations ? fullText : '');
   const [showCursor, setShowCursor] = useState(!skipAnimations);
-  const [showNumbers, setShowNumbers] = useState(skipAnimations);
-  const [visibleNumbersCount, setVisibleNumbersCount] = useState(skipAnimations ? totalNumbers : 0);
-  const [showSecondText, setShowSecondText] = useState(skipAnimations);
-  const [displayedSecondText, setDisplayedSecondText] = useState(skipAnimations ? secondFullText : '');
-  const [showCustomButton, setShowCustomButton] = useState(skipAnimations);
 
   const handleContinue = () => {
     if (selectedServings !== null) {
@@ -125,26 +120,16 @@ export const RecipePreferencesPage = () => {
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
   };
 
-  // Start animation sequence
+  // Typewriter effect for text
   useEffect(() => {
     if (skipAnimations) return;
     
-    // Show icon first
-    setTimeout(() => setShowIcon(true), 300);
-    
-    // Start typewriter after icon
-    setTimeout(() => {
-      if (displayedText.length === 0) {
+    if (displayedText.length === 0) {
+      // Start typewriter
+      setTimeout(() => {
         setDisplayedText(fullText[0]);
-      }
-    }, 500);
-  }, [skipAnimations]);
-
-  // Typewriter effect for first text
-  useEffect(() => {
-    if (skipAnimations) return;
-    
-    if (showIcon && displayedText.length < fullText.length) {
+      }, 300);
+    } else if (displayedText.length < fullText.length) {
       const timeout = setTimeout(() => {
         setDisplayedText(fullText.slice(0, displayedText.length + 1));
       }, 30);
@@ -152,43 +137,9 @@ export const RecipePreferencesPage = () => {
     } else if (displayedText.length === fullText.length && showCursor) {
       setTimeout(() => {
         setShowCursor(false);
-        setShowNumbers(true);
       }, 200);
     }
-  }, [showIcon, displayedText, fullText, showCursor, skipAnimations]);
-
-  // Progressive numbers appearance
-  useEffect(() => {
-    if (skipAnimations) return;
-    
-    if (showNumbers && visibleNumbersCount < totalNumbers) {
-      const timeout = setTimeout(() => {
-        setVisibleNumbersCount(prev => prev + 1);
-      }, 80);
-      return () => clearTimeout(timeout);
-    } else if (visibleNumbersCount === totalNumbers && !showSecondText) {
-      setTimeout(() => {
-        setShowSecondText(true);
-        setDisplayedSecondText(secondFullText[0]);
-      }, 300);
-    }
-  }, [showNumbers, visibleNumbersCount, totalNumbers, showSecondText, skipAnimations]);
-
-  // Typewriter effect for second text
-  useEffect(() => {
-    if (skipAnimations) return;
-    
-    if (showSecondText && displayedSecondText.length < secondFullText.length) {
-      const timeout = setTimeout(() => {
-        setDisplayedSecondText(secondFullText.slice(0, displayedSecondText.length + 1));
-      }, 30);
-      return () => clearTimeout(timeout);
-    } else if (displayedSecondText.length === secondFullText.length && !showCustomButton) {
-      setTimeout(() => {
-        setShowCustomButton(true);
-      }, 100);
-    }
-  }, [showSecondText, displayedSecondText, secondFullText, showCustomButton, skipAnimations]);
+  }, [displayedText, fullText, showCursor, skipAnimations]);
 
   return (
     <div className="min-h-screen flex flex-col relative" style={{
