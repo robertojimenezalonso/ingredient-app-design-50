@@ -504,14 +504,14 @@ const Index = () => {
                       </div>
                     </div>
                   </div>
-                  {dateSelectionError && (
-                    <div className="mt-2 mb-2 text-center">
-                      <p className="text-sm text-red-500">
-                        Máximo puedes seleccionar 7 días para organizar tu compra
-                      </p>
-                    </div>
-                  )}
                   <div className={`flex justify-center flex-shrink-0 ${showCalendar ? 'opacity-100' : 'opacity-0'}`}>
+                    {dateSelectionError && (
+                      <div className="absolute bottom-24 left-0 right-0 text-center px-4">
+                        <p className="text-sm text-red-500">
+                          Máximo puedes seleccionar 7 días para organizar tu compra
+                        </p>
+                      </div>
+                    )}
                     <Calendar selected={selectedDates} onSelect={handleDateSelect} className="pointer-events-auto w-full" />
                   </div>
                 </div>}
@@ -525,26 +525,24 @@ const Index = () => {
             <div className="px-4 py-4 flex items-center gap-2">
               {selectedDates.length > 0 && (
                 <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto" style={{ backgroundColor: '#F2F2F2' }}>
-                  {selectedDates.sort((a, b) => a.getTime() - b.getTime()).map((date, index) => (
-                    <Badge 
-                      key={index} 
-                      variant="secondary" 
-                      className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
-                      style={{ 
-                        backgroundColor: '#D9DADC', 
-                        color: '#020818',
-                        borderRadius: '8px'
-                      }}
-                    >
-                      {format(date, 'EEE d', { locale: es })}
-                      <button
-                        onClick={() => removeDateTag(date)}
-                        className="ml-1 hover:bg-gray-300 rounded-full p-0.5"
+                  {[...selectedDates].reverse().map((date, index) => {
+                    const formatted = format(date, 'EEE d', { locale: es });
+                    const capitalized = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+                    return (
+                      <Badge 
+                        key={index} 
+                        variant="secondary" 
+                        className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
+                        style={{ 
+                          backgroundColor: '#D9DADC', 
+                          color: '#020818',
+                          borderRadius: '8px'
+                        }}
                       >
-                        <X size={12} />
-                      </button>
-                    </Badge>
-                  ))}
+                        {capitalized}
+                      </Badge>
+                    );
+                  })}
                 </div>
               )}
               <Button variant="ghost" onClick={handleCalendarContinue} disabled={!canContinue} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" style={{
