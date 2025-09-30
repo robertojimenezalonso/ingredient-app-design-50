@@ -274,15 +274,14 @@ export const CustomizeServingsPage = () => {
                                         handleServingSelection(meal.originalIndex, currentServings - 1);
                                       }
                                     }}
-                                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors leading-none"
+                                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                                     style={{
                                       backgroundColor: (meal.servings || 0) === 0 ? 'transparent' : '#D6D6D6',
                                       border: (meal.servings || 0) === 0 ? '1px solid #D6D6D6' : 'none',
-                                      color: '#1C1C1C',
-                                      lineHeight: '0'
+                                      color: '#1C1C1C'
                                     }}
                                   >
-                                    −
+                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', lineHeight: '1' }}>−</span>
                                   
                                   </button>
                                   
@@ -295,14 +294,13 @@ export const CustomizeServingsPage = () => {
                                       const currentServings = meal.servings || 0;
                                       handleServingSelection(meal.originalIndex, currentServings + 1);
                                     }}
-                                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors leading-none"
+                                    className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                                     style={{
                                       backgroundColor: '#D6D6D6',
-                                      color: '#1C1C1C',
-                                      lineHeight: '0'
+                                      color: '#1C1C1C'
                                     }}
                                   >
-                                    +
+                                    <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', lineHeight: '1' }}>+</span>
                                   
                                   </button>
                                 </div>
