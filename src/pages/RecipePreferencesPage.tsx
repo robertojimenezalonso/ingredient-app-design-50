@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, ArrowUp } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -17,6 +18,16 @@ export const RecipePreferencesPage = () => {
   const selectedSupermarket = location.state?.selectedSupermarket || null;
   const mealSelections = location.state?.mealSelections || [];
   const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
+
+  const handleContinue = () => {
+    if (selectedServings !== null) {
+      // Aquí navegaremos a la siguiente pantalla con los datos
+      console.log('Continuing with servings:', selectedServings);
+      // TODO: navigate to next page
+    }
+  };
+
+  const canContinue = selectedServings !== null;
 
   const handleBack = () => {
     navigate('/meal-selection', { 
@@ -66,7 +77,7 @@ export const RecipePreferencesPage = () => {
 
       {/* Chat area - starts below fixed header */}
       <div className="h-screen flex flex-col relative pt-16">
-        <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{
+        <div className="flex-1 transition-all duration-500 ease-out overflow-hidden pb-20" style={{
           backgroundColor: '#FFFFFF'
         }}>
           <div className="flex flex-col h-full overflow-y-auto scrollbar-hide">
@@ -127,6 +138,47 @@ export const RecipePreferencesPage = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Fixed Button Area at Bottom of Screen */}
+        <div className="absolute bottom-0 left-0 right-0" style={{
+          backgroundColor: '#FFFFFF'
+        }}>
+          <div className="px-4 pt-4 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
+            {selectedServings !== null && (
+              <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{ 
+                backgroundColor: '#F2F2F2',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none'
+              }}>
+                <Badge 
+                  variant="secondary" 
+                  className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
+                  style={{ 
+                    backgroundColor: '#D9DADC', 
+                    color: '#020818',
+                    borderRadius: '8px'
+                  }}
+                >
+                  {selectedServings === 'custom' ? 'Customizar por receta' : `${selectedServings} raciones`}
+                </Badge>
+              </div>
+            )}
+            <Button 
+              variant="ghost" 
+              onClick={handleContinue} 
+              disabled={!canContinue} 
+              className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" 
+              style={{
+                backgroundColor: canContinue ? '#000000' : '#898885',
+                color: canContinue ? '#ffffff' : '#F9F8F2',
+                border: 'none',
+                opacity: 1
+              }}
+            >
+              <ArrowUp size={16} />
+            </Button>
           </div>
         </div>
       </div>
