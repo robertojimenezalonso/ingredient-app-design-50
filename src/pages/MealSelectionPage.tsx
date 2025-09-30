@@ -196,7 +196,7 @@ export const MealSelectionPage = () => {
                         borderRadius: '8px'
                       }}
                     >
-                      {capitalized} - {tag.mealType}
+                      {tag.mealType} - {capitalized}
                     </Badge>
                   );
                 })}
