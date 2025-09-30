@@ -72,12 +72,14 @@ export const RecipePreferencesPage = () => {
             {/* User response - meal selections (right-aligned) */}
             <div className="px-4 pt-4 mb-6">
               <div className="flex justify-end">
-                <div className="flex flex-col gap-2 items-end">
+                <div 
+                  className="text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" 
+                  style={{ backgroundColor: '#F4F4F4' }}
+                >
                   {Object.values(groupedSelections).map((group: any, index: number) => (
                     <div 
                       key={index}
-                      className="flex flex-wrap gap-2 items-center text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" 
-                      style={{ backgroundColor: '#F4F4F4' }}
+                      className="flex flex-wrap gap-2 items-center mb-1 last:mb-0"
                     >
                       <span className="font-medium">{formatShortDate(group.date)}:</span>
                       {group.mealTypes.map((mealType: string, mealIndex: number) => (
