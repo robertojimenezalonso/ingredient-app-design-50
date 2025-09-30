@@ -147,6 +147,9 @@ export const RecipePreferencesPage = () => {
                     </div>
                   </div>
                   <div className="mt-6">
+                    <p className="text-base text-[#1C1C1C] mb-3">
+                      O también puedes:
+                    </p>
                     <button
                       onClick={() => setSelectedServings('custom')}
                       className="px-4 py-2 rounded-lg text-sm transition-all"
