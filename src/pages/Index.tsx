@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -15,6 +15,7 @@ import { es } from 'date-fns/locale';
 const Index = () => {
   // Chat conversation component with 4-paragraph typewriter effect
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     user,
     loading: authLoading,
@@ -26,7 +27,6 @@ const Index = () => {
   // Expanded state for calendar view
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const [confirmedDates, setConfirmedDates] = useState<Date[]>([]);
   const [selectedMeals, setSelectedMeals] = useState<string[]>([]);
   const [showMoreMeals, setShowMoreMeals] = useState(false);
   const [dateSelectionError, setDateSelectionError] = useState(false);
@@ -69,6 +69,36 @@ const Index = () => {
 
   // Calendar screen text
   const calendarParagraph2Text = "📅 Primero necesito saber para qué días quieres organizar tu compra.";
+
+  // Check if returning from meal selection page
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const step = urlParams.get('step');
+    const completed = urlParams.get('completed');
+    
+    if (step === 'calendar' && completed === 'true') {
+      // Volviendo desde la página de comidas
+      const savedDates = location.state?.confirmedDates || [];
+      setIsExpanded(true);
+      setLoadingComplete(true);
+      setCalendarTypewriterStep(2);
+      setDisplayedCalendarParagraph2(calendarParagraph2Text);
+      setShowCalendar(true);
+      setShowCalendarCursor(false);
+      setShowResultCard(true);
+      setShowSearchResult(true);
+      setDisplayedSearchResultText(searchResultText);
+      setShowSearchResultCursor(false);
+      setShowIngredients(true);
+      setVisibleIngredientsCount(supermarketIngredients.length + 1);
+      setShowSource(true);
+      setShowRecipesText(true);
+      setDisplayedRecipesText(recipesText);
+      setShowRecipesCursor(false);
+      // Clear URL params
+      window.history.replaceState({}, '', '/');
+    }
+  }, [location]);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -276,12 +306,10 @@ const Index = () => {
   };
   const handleCalendarContinue = () => {
     if (selectedDates.length > 0) {
-      // Guardar los días seleccionados como confirmados
-      setConfirmedDates([...selectedDates]);
-      // Limpiar la selección actual
-      setSelectedDates([]);
-      // Aquí más adelante continuaremos con el siguiente paso
-      // Por ahora solo guardamos los días
+      // Navegar a la página de selección de comidas con las fechas
+      navigate('/meal-selection', {
+        state: { confirmedDates: selectedDates }
+      });
     }
   };
 
@@ -309,7 +337,7 @@ const Index = () => {
     setSelectedDates(selectedDates.filter(date => date.getTime() !== dateToRemove.getTime()));
     setDateSelectionError(false);
   };
-  const canContinue = selectedDates.length > 0 && confirmedDates.length === 0;
+  const canContinue = selectedDates.length > 0;
   if (authLoading) {
     return <div className="min-h-screen flex items-center justify-center" style={{
       backgroundColor: '#F7F7F7'
@@ -356,28 +384,6 @@ const Index = () => {
                   </div>
                 </div>
               </div>
-
-              {/* User response - selected dates (right-aligned) */}
-              {confirmedDates.length > 0 && (
-                <div className="px-4 mb-6">
-                  <div className="flex justify-end">
-                    <div className="flex flex-wrap gap-2 items-center text-[#1C1C1C] rounded-lg px-3 py-2 text-base max-w-xs" style={{
-                      backgroundColor: '#F4F4F4'
-                    }}>
-                      {confirmedDates.sort((a, b) => a.getTime() - b.getTime()).map((date, index) => {
-                        const formatted = format(date, 'EEE d', { locale: es });
-                        const capitalized = formatted.charAt(0).toUpperCase() + formatted.slice(1);
-                        return (
-                          <span key={index}>
-                            {capitalized}
-                            {index < confirmedDates.length - 1 && ', '}
-                          </span>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              )}
 
               {/* Loading sequence - all elements appear in the same position */}
               <div className="px-4 mb-6">
@@ -514,36 +520,31 @@ const Index = () => {
                   {/* Divider line */}
                   <div className="w-full" style={{ borderTop: '1px solid #E5E5E5', marginBottom: '1.5rem' }} />
                   
-                  {/* Calendar section - only show when no dates confirmed */}
-                  {confirmedDates.length === 0 && (
-                    <>
-                      {/* Calendar paragraph with typewriter effect */}
-                      <div className="mb-6">
-                        <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
-                          <div className="flex items-start gap-2">
-                            <span className="text-lg">📅</span>
-                            <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                              {calendarTypewriterStep >= 2 && <span>
-                                  {displayedCalendarParagraph2.length < calendarParagraph2Text.length ? (
-                                    <>
-                                      {displayedCalendarParagraph2.replace('📅 ', '')}
-                                      {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
-                                    </>
-                                  ) : (
-                                    <>
-                                      Primero necesito saber <span className="font-semibold">para qué días</span> quieres organizar tu compra. Selecciona:
-                                    </>
-                                  )}
-                                </span>}
-                            </p>
-                          </div>
-                        </div>
+                  {/* Calendar paragraph with typewriter effect */}
+                  <div className="mb-6">
+                    <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
+                      <div className="flex items-start gap-2">
+                        <span className="text-lg">📅</span>
+                        <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                          {calendarTypewriterStep >= 2 && <span>
+                              {displayedCalendarParagraph2.length < calendarParagraph2Text.length ? (
+                                <>
+                                  {displayedCalendarParagraph2.replace('📅 ', '')}
+                                  {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                                </>
+                              ) : (
+                                <>
+                                  Primero necesito saber <span className="font-semibold">para qué días</span> quieres organizar tu compra. Selecciona:
+                                </>
+                              )}
+                            </span>}
+                        </p>
                       </div>
-                      <div className={`flex justify-center flex-shrink-0 ${showCalendar ? 'opacity-100' : 'opacity-0'}`}>
-                        <Calendar selected={selectedDates} onSelect={handleDateSelect} className="pointer-events-auto w-full" />
-                      </div>
-                    </>
-                  )}
+                    </div>
+                  </div>
+                  <div className={`flex justify-center flex-shrink-0 ${showCalendar ? 'opacity-100' : 'opacity-0'}`}>
+                    <Calendar selected={selectedDates} onSelect={handleDateSelect} className="pointer-events-auto w-full" />
+                  </div>
                 </div>}
             </div>
           </div>
@@ -564,8 +565,8 @@ const Index = () => {
           backgroundColor: '#FFFFFF'
         }}>
             <div className="px-4 pt-6 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
-              {selectedDates.length > 0 && !confirmedDates.length && (
-                <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{ 
+              {selectedDates.length > 0 && (
+                <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
                   backgroundColor: '#F2F2F2',
                   scrollbarWidth: 'none',
                   msOverflowStyle: 'none'

@@ -26,6 +26,7 @@ import { DailySummaryPage } from "./pages/DailySummaryPage";
 import IngredientEntryPage from "./pages/IngredientEntryPage";
 import AddRecipePage from "./pages/AddRecipePage";
 import ListsPage from "./pages/ListsPage";
+import { MealSelectionPage } from "./pages/MealSelectionPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -39,6 +40,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
+            <Route path="/meal-selection" element={<MealSelectionPage />} />
             <Route path="/mis-listas" element={<MyListsPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
