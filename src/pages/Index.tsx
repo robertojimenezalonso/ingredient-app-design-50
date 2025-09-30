@@ -55,7 +55,7 @@ const Index = () => {
   const additionalMeals = ['Aperitivo', 'Snack', 'Merienda'];
 
   // Calendar screen text
-  const calendarParagraph2Text = "👉 Dime, ¿para qué días te gustaría hacer tu compra?";
+  const calendarParagraph2Text = "📅 Primero necesito saber para qué días quieres organizar tu compra.";
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -394,8 +394,16 @@ const Index = () => {
                     <div className={`transition-all duration-500 ${calendarTypewriterStep >= 2 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}`}>
                       <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
                         {calendarTypewriterStep >= 2 && <span>
-                            {displayedCalendarParagraph2}
-                            {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                            {displayedCalendarParagraph2.length < calendarParagraph2Text.length ? (
+                              <>
+                                {displayedCalendarParagraph2}
+                                {calendarTypewriterStep === 2 && showCalendarCursor && <span className="animate-pulse">|</span>}
+                              </>
+                            ) : (
+                              <>
+                                📅 Primero necesito saber para <span className="font-semibold">qué días</span> quieres organizar tu compra.
+                              </>
+                            )}
                           </span>}
                       </p>
                     </div>
