@@ -511,7 +511,7 @@ const Index = () => {
       <div className="relative z-10 min-h-screen flex flex-col">
       {/* Remove vintage grain effect */}
       {/* Top Header with Logo and Auth Buttons/Menu */}
-      <div className="flex items-center justify-between p-6">
+      <div className="flex items-center justify-between px-6 pt-3 pb-6">
         <div className="flex items-center gap-3">
           {user && <div className="relative">
               <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="flex items-center justify-center w-10 h-10 hover:bg-gray-100/20 transition-colors">
@@ -562,8 +562,8 @@ const Index = () => {
       </div>
       
       {/* Main Content - Landing Page */}
-      <div className="flex-1 flex flex-col justify-start px-4 pt-20">
-        <div className="w-full max-w-md mx-auto mt-6">
+      <div className="flex-1 flex flex-col justify-start px-4 pt-8">
+        <div className="w-full max-w-md mx-auto mt-2">
           <h1 className="text-3xl font-semibold text-[#1C1C1C] mb-2 text-center">
             Genera listas de compra
           </h1>
