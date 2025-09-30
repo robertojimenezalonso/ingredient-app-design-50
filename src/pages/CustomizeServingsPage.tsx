@@ -276,11 +276,13 @@ export const CustomizeServingsPage = () => {
                                     }}
                                     className="w-8 h-8 rounded-full flex items-center justify-center transition-colors"
                                     style={{
-                                      backgroundColor: '#D6D6D6',
+                                      backgroundColor: (meal.servings || 0) === 0 ? 'transparent' : '#D6D6D6',
+                                      border: (meal.servings || 0) === 0 ? '1px solid #D6D6D6' : 'none',
                                       color: '#1C1C1C'
                                     }}
                                   >
-                                    −
+                                    <span className="flex items-center justify-center">−</span>
+                                  
                                   </button>
                                   
                                   <span className="text-base font-medium text-[#1C1C1C] min-w-[24px] text-center">
@@ -298,7 +300,8 @@ export const CustomizeServingsPage = () => {
                                       color: '#1C1C1C'
                                     }}
                                   >
-                                    +
+                                    <span className="flex items-center justify-center">+</span>
+                                  
                                   </button>
                                 </div>
                               </div>
