@@ -378,8 +378,7 @@ const Index = () => {
                       {/* Additional text */}
                       {showRecipesText && (
                         <p className="mt-3 text-base text-[#1C1C1C] animate-fade-in">
-                          Con estos ingredientes puedo generar más de <span className="font-semibold">4.000 recetas</span>.<br />
-                          Te mostraré solo las que mejor encajen contigo.
+                          Con estos ingredientes puedo generar más de <span className="font-semibold">4.000 recetas</span>. Te mostraré solo las que mejor encajen contigo.
                         </p>
                       )}
                     </>}
