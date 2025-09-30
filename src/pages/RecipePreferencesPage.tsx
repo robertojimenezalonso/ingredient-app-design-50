@@ -57,14 +57,15 @@ export const RecipePreferencesPage = () => {
   const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
   
   // Animation states
-  const [showIcon, setShowIcon] = useState(shouldSkipAnimations);
-  const [displayedText, setDisplayedText] = useState(shouldSkipAnimations ? fullText : '');
-  const [showCursor, setShowCursor] = useState(!shouldSkipAnimations);
-  const [showNumbers, setShowNumbers] = useState(shouldSkipAnimations);
-  const [visibleNumbersCount, setVisibleNumbersCount] = useState(shouldSkipAnimations ? totalNumbers : 0);
-  const [showSecondText, setShowSecondText] = useState(shouldSkipAnimations);
-  const [displayedSecondText, setDisplayedSecondText] = useState(shouldSkipAnimations ? secondFullText : '');
-  const [showCustomButton, setShowCustomButton] = useState(shouldSkipAnimations);
+  const skipAnimations = shouldSkipAnimations || (persistedData !== null);
+  const [showIcon, setShowIcon] = useState(skipAnimations);
+  const [displayedText, setDisplayedText] = useState(skipAnimations ? fullText : '');
+  const [showCursor, setShowCursor] = useState(!skipAnimations);
+  const [showNumbers, setShowNumbers] = useState(skipAnimations);
+  const [visibleNumbersCount, setVisibleNumbersCount] = useState(skipAnimations ? totalNumbers : 0);
+  const [showSecondText, setShowSecondText] = useState(skipAnimations);
+  const [displayedSecondText, setDisplayedSecondText] = useState(skipAnimations ? secondFullText : '');
+  const [showCustomButton, setShowCustomButton] = useState(skipAnimations);
 
   const handleContinue = () => {
     if (selectedServings !== null) {
@@ -126,7 +127,7 @@ export const RecipePreferencesPage = () => {
 
   // Start animation sequence
   useEffect(() => {
-    if (shouldSkipAnimations) return;
+    if (skipAnimations) return;
     
     // Show icon first
     setTimeout(() => setShowIcon(true), 300);
@@ -137,11 +138,11 @@ export const RecipePreferencesPage = () => {
         setDisplayedText(fullText[0]);
       }
     }, 500);
-  }, [shouldSkipAnimations]);
+  }, [skipAnimations]);
 
   // Typewriter effect for first text
   useEffect(() => {
-    if (shouldSkipAnimations) return;
+    if (skipAnimations) return;
     
     if (showIcon && displayedText.length < fullText.length) {
       const timeout = setTimeout(() => {
@@ -154,11 +155,11 @@ export const RecipePreferencesPage = () => {
         setShowNumbers(true);
       }, 200);
     }
-  }, [showIcon, displayedText, fullText, showCursor, shouldSkipAnimations]);
+  }, [showIcon, displayedText, fullText, showCursor, skipAnimations]);
 
   // Progressive numbers appearance
   useEffect(() => {
-    if (shouldSkipAnimations) return;
+    if (skipAnimations) return;
     
     if (showNumbers && visibleNumbersCount < totalNumbers) {
       const timeout = setTimeout(() => {
@@ -171,11 +172,11 @@ export const RecipePreferencesPage = () => {
         setDisplayedSecondText(secondFullText[0]);
       }, 300);
     }
-  }, [showNumbers, visibleNumbersCount, totalNumbers, showSecondText, shouldSkipAnimations]);
+  }, [showNumbers, visibleNumbersCount, totalNumbers, showSecondText, skipAnimations]);
 
   // Typewriter effect for second text
   useEffect(() => {
-    if (shouldSkipAnimations) return;
+    if (skipAnimations) return;
     
     if (showSecondText && displayedSecondText.length < secondFullText.length) {
       const timeout = setTimeout(() => {
@@ -187,7 +188,7 @@ export const RecipePreferencesPage = () => {
         setShowCustomButton(true);
       }, 100);
     }
-  }, [showSecondText, displayedSecondText, secondFullText, showCustomButton, shouldSkipAnimations]);
+  }, [showSecondText, displayedSecondText, secondFullText, showCustomButton, skipAnimations]);
 
   return (
     <div className="min-h-screen flex flex-col relative" style={{
