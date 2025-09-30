@@ -265,7 +265,7 @@ const Index = () => {
                     {/* Result card - replaces everything else and stays fixed */}
                     {showResultCard && <>
                       <p className="text-[#1C1C1C] text-base animate-fade-in">
-                          He encontrado 824 ingredientes en Mercadona
+                          🔍 He encontrado 824 ingredientes en Mercadona
                         </p>
                         
                          {/* Ingredients Cards */}
