@@ -158,7 +158,7 @@ export const MealSelectionPage = () => {
   };
 
   const selectedTags = getSelectedMealTags();
-  const canContinue = selectedTags.length > 0;
+  const canContinue = mealSelections.every(selection => selection.mealTypes.length > 0);
 
   const handleContinue = () => {
     if (canContinue) {
