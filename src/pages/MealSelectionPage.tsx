@@ -29,8 +29,10 @@ export const MealSelectionPage = () => {
   const [showCursor, setShowCursor] = useState(true);
   const [showDates, setShowDates] = useState(false);
   const [visibleDateIndex, setVisibleDateIndex] = useState(-1);
+  const [visibleMealTagsCount, setVisibleMealTagsCount] = useState(0);
 
   const fullText = "Ahora necesito saber qué tipo de comidas quieres elegir para esos días. Selecciona:";
+  const totalMealTags = mealSelections.length * mealTypes.length;
 
   // Start animation sequence
   useEffect(() => {
@@ -69,6 +71,20 @@ export const MealSelectionPage = () => {
       return () => clearTimeout(timeout);
     }
   }, [showDates, visibleDateIndex, mealSelections.length]);
+
+  // Progressive meal tags appearance - starts after date is visible
+  useEffect(() => {
+    if (showDates && visibleMealTagsCount < totalMealTags) {
+      const timeout = setTimeout(() => {
+        setVisibleMealTagsCount(prev => prev + 1);
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+  }, [showDates, visibleMealTagsCount, totalMealTags]);
+
+  const getMealTagIndex = (dateIndex: number, mealIndex: number) => {
+    return dateIndex * mealTypes.length + mealIndex;
+  };
 
   const handleBack = () => {
     navigate('/?step=calendar&completed=true', { 
@@ -218,35 +234,45 @@ export const MealSelectionPage = () => {
                 {mealSelections.map((selection, dateIndex) => (
                   <div 
                     key={dateIndex} 
-                    className={`space-y-3 transition-all duration-500 ${
-                      dateIndex <= visibleDateIndex ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                    }`}
+                    className="space-y-3"
                   >
-                    {/* Date label */}
-                    <p className="text-sm font-medium text-[#1C1C1C]">
-                      {formatFullDate(selection.date)}
-                    </p>
+                    {/* Date label - appears from left to right */}
+                    {dateIndex <= visibleDateIndex && (
+                      <p className="text-sm font-medium text-[#1C1C1C] animate-fade-in" style={{
+                        animation: 'fade-in 0.3s ease-out'
+                      }}>
+                        {formatFullDate(selection.date)}
+                      </p>
+                    )}
                     
-                    {/* Meal type tags */}
-                    <div className="flex flex-wrap gap-2 pointer-events-auto">
-                      {mealTypes.map((mealType) => {
-                        const isSelected = selection.mealTypes.includes(mealType);
-                        return (
-                          <button
-                            key={mealType}
-                            onClick={() => toggleMealType(dateIndex, mealType)}
-                            className="px-3 py-1.5 rounded-lg text-sm font-normal transition-all pointer-events-auto cursor-pointer"
-                            style={{
-                              backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
-                              color: '#020818',
-                              border: isSelected ? '1px solid #020818' : '1px solid transparent'
-                            }}
-                          >
-                            {mealType}
-                          </button>
-                        );
-                      })}
-                    </div>
+                    {/* Meal type tags - appear one by one */}
+                    {dateIndex <= visibleDateIndex && (
+                      <div className="flex flex-wrap gap-2 pointer-events-auto">
+                        {mealTypes.map((mealType, mealIndex) => {
+                          const isSelected = selection.mealTypes.includes(mealType);
+                          const tagIndex = getMealTagIndex(dateIndex, mealIndex);
+                          const isVisible = tagIndex < visibleMealTagsCount;
+                          
+                          return (
+                            <button
+                              key={mealType}
+                              onClick={() => toggleMealType(dateIndex, mealType)}
+                              className={`px-3 py-1.5 rounded-lg text-sm font-normal transition-all pointer-events-auto cursor-pointer ${
+                                isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+                              }`}
+                              style={{
+                                backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
+                                color: '#020818',
+                                border: isSelected ? '1px solid #020818' : '1px solid transparent',
+                                transition: 'all 0.2s ease-out'
+                              }}
+                            >
+                              {mealType}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
