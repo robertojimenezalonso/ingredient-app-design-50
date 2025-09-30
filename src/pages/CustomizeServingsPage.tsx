@@ -166,9 +166,9 @@ export const CustomizeServingsPage = () => {
     }
   };
 
-  // Get selected servings for the bottom bar
+  // Get selected servings for the bottom bar (reversed to show last selected first)
   const getSelectedServings = () => {
-    return servingSelections.filter(selection => selection.servings !== null);
+    return servingSelections.filter(selection => selection.servings !== null).reverse();
   };
 
   const selectedServings = getSelectedServings();
