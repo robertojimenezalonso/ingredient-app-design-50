@@ -314,9 +314,15 @@ const Index = () => {
                                  <p className="text-xs text-gray-500">más productos</p>
                                </div>
                              </div>
-                           </div>
-                         </div>
-                      </>}
+                            </div>
+                          </div>
+                          
+                          {/* Source attribution */}
+                          <div className="mt-3 pl-4 flex items-center gap-2">
+                            <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-5 h-5 object-contain" />
+                            <span className="text-xs text-gray-500">Fuente</span>
+                          </div>
+                       </>}
                   </div>
                 </div>
               </div>
