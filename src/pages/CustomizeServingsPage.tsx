@@ -141,14 +141,14 @@ export const CustomizeServingsPage = () => {
   };
 
   const formatFullDate = (date: Date) => {
-    const dayName = format(date, 'EEEE', { locale: es });
+    const dayName = format(date, 'EEE', { locale: es });
     const dayNumber = format(date, 'd', { locale: es });
-    const month = format(date, 'MMMM', { locale: es });
+    const month = format(date, 'MMM', { locale: es });
     
     const capitalizedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
     const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
     
-    return `${capitalizedDay} ${dayNumber} de ${capitalizedMonth}`;
+    return `${capitalizedDay} ${dayNumber} - ${capitalizedMonth}`;
   };
 
   const formatShortDate = (date: Date) => {
@@ -247,7 +247,7 @@ export const CustomizeServingsPage = () => {
                           >
                             {/* Date label - appears once per day */}
                             {isVisible && (
-                              <p className="text-base font-semibold text-[#1C1C1C] animate-fade-in">
+                              <p className="text-sm font-normal text-[#1C1C1C] animate-fade-in">
                                 {formatFullDate(group.date)}
                               </p>
                             )}
