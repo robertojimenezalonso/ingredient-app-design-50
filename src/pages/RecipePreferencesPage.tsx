@@ -195,6 +195,12 @@ export const RecipePreferencesPage = () => {
                       </p>
                     )}
                   </div>
+                  <Button
+                    variant="outline"
+                    className="w-full text-[#1C1C1C] border-[#E5E5E5] hover:bg-[#F4F4F4]"
+                  >
+                    Añadir perfil de salud
+                  </Button>
                 </div>
               </div>
             </div>
