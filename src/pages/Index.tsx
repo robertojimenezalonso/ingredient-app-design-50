@@ -531,7 +531,11 @@ const Index = () => {
         }}>
             <div className="px-4 py-4 flex items-center gap-2">
               {selectedDates.length > 0 && (
-                <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto" style={{ backgroundColor: '#F2F2F2' }}>
+                <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{ 
+                  backgroundColor: '#F2F2F2',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}>
                   {[...selectedDates].reverse().map((date, index) => {
                     const formatted = format(date, 'EEE d', { locale: es });
                     const capitalized = formatted.charAt(0).toUpperCase() + formatted.slice(1);
