@@ -38,19 +38,21 @@ export const MealSelectionPage = () => {
 
   const mealTypes = ['Desayuno', 'Comida', 'Cena', 'Postre', 'Snack'];
   
-  // Animation states
-  const [showIcon, setShowIcon] = useState(false);
-  const [displayedText, setDisplayedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const [showDates, setShowDates] = useState(false);
-  const [visibleDateIndex, setVisibleDateIndex] = useState(-1);
-  const [visibleMealTagsCount, setVisibleMealTagsCount] = useState(0);
-
   const fullText = "Ahora necesito saber qué tipo de comidas quieres elegir para esos días. Selecciona:";
   const totalMealTags = mealSelections.length * mealTypes.length;
+  
+  // Animation states
+  const [showIcon, setShowIcon] = useState(shouldRestore);
+  const [displayedText, setDisplayedText] = useState(shouldRestore ? fullText : '');
+  const [showCursor, setShowCursor] = useState(!shouldRestore);
+  const [showDates, setShowDates] = useState(shouldRestore);
+  const [visibleDateIndex, setVisibleDateIndex] = useState(shouldRestore ? mealSelections.length - 1 : -1);
+  const [visibleMealTagsCount, setVisibleMealTagsCount] = useState(shouldRestore ? totalMealTags : 0);
 
   // Start animation sequence
   useEffect(() => {
+    if (shouldRestore) return;
+    
     // Show icon first
     setTimeout(() => setShowIcon(true), 300);
     
@@ -60,10 +62,12 @@ export const MealSelectionPage = () => {
         setDisplayedText(fullText[0]);
       }
     }, 500);
-  }, []);
+  }, [shouldRestore]);
 
   // Typewriter effect
   useEffect(() => {
+    if (shouldRestore) return;
+    
     if (showIcon && displayedText.length < fullText.length) {
       const timeout = setTimeout(() => {
         setDisplayedText(fullText.slice(0, displayedText.length + 1));
@@ -75,27 +79,31 @@ export const MealSelectionPage = () => {
         setShowDates(true);
       }, 200);
     }
-  }, [showIcon, displayedText, fullText, showCursor]);
+  }, [showIcon, displayedText, fullText, showCursor, shouldRestore]);
 
   // Progressive date appearance
   useEffect(() => {
+    if (shouldRestore) return;
+    
     if (showDates && visibleDateIndex < mealSelections.length - 1) {
       const timeout = setTimeout(() => {
         setVisibleDateIndex(prev => prev + 1);
       }, 300);
       return () => clearTimeout(timeout);
     }
-  }, [showDates, visibleDateIndex, mealSelections.length]);
+  }, [showDates, visibleDateIndex, mealSelections.length, shouldRestore]);
 
   // Progressive meal tags appearance - starts after date is visible
   useEffect(() => {
+    if (shouldRestore) return;
+    
     if (showDates && visibleMealTagsCount < totalMealTags) {
       const timeout = setTimeout(() => {
         setVisibleMealTagsCount(prev => prev + 1);
       }, 100);
       return () => clearTimeout(timeout);
     }
-  }, [showDates, visibleMealTagsCount, totalMealTags]);
+  }, [showDates, visibleMealTagsCount, totalMealTags, shouldRestore]);
 
   const getMealTagIndex = (dateIndex: number, mealIndex: number) => {
     return dateIndex * mealTypes.length + mealIndex;
@@ -167,7 +175,8 @@ export const MealSelectionPage = () => {
         state: { 
           confirmedDates,
           selectedSupermarket,
-          mealSelections: flattenedSelections
+          mealSelections: flattenedSelections,
+          shouldRestoreSelection: false
         }
       });
     }

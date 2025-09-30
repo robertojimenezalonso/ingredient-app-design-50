@@ -17,21 +17,23 @@ export const RecipePreferencesPage = () => {
   const confirmedDates = location.state?.confirmedDates || [];
   const selectedSupermarket = location.state?.selectedSupermarket || null;
   const mealSelections = location.state?.mealSelections || [];
-  const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
+  const shouldSkipAnimations = location.state?.shouldRestoreSelection || false;
   
-  // Animation states
-  const [showIcon, setShowIcon] = useState(false);
-  const [displayedText, setDisplayedText] = useState('');
-  const [showCursor, setShowCursor] = useState(true);
-  const [showNumbers, setShowNumbers] = useState(false);
-  const [visibleNumbersCount, setVisibleNumbersCount] = useState(0);
-  const [showSecondText, setShowSecondText] = useState(false);
-  const [displayedSecondText, setDisplayedSecondText] = useState('');
-  const [showCustomButton, setShowCustomButton] = useState(false);
-
   const fullText = "Número de personas por receta. Selecciona:";
   const secondFullText = "O también puedes:";
   const totalNumbers = 10;
+  
+  const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
+  
+  // Animation states
+  const [showIcon, setShowIcon] = useState(shouldSkipAnimations);
+  const [displayedText, setDisplayedText] = useState(shouldSkipAnimations ? fullText : '');
+  const [showCursor, setShowCursor] = useState(!shouldSkipAnimations);
+  const [showNumbers, setShowNumbers] = useState(shouldSkipAnimations);
+  const [visibleNumbersCount, setVisibleNumbersCount] = useState(shouldSkipAnimations ? totalNumbers : 0);
+  const [showSecondText, setShowSecondText] = useState(shouldSkipAnimations);
+  const [displayedSecondText, setDisplayedSecondText] = useState(shouldSkipAnimations ? secondFullText : '');
+  const [showCustomButton, setShowCustomButton] = useState(shouldSkipAnimations);
 
   const handleContinue = () => {
     if (selectedServings !== null) {
@@ -74,6 +76,8 @@ export const RecipePreferencesPage = () => {
 
   // Start animation sequence
   useEffect(() => {
+    if (shouldSkipAnimations) return;
+    
     // Show icon first
     setTimeout(() => setShowIcon(true), 300);
     
@@ -83,10 +87,12 @@ export const RecipePreferencesPage = () => {
         setDisplayedText(fullText[0]);
       }
     }, 500);
-  }, []);
+  }, [shouldSkipAnimations]);
 
   // Typewriter effect for first text
   useEffect(() => {
+    if (shouldSkipAnimations) return;
+    
     if (showIcon && displayedText.length < fullText.length) {
       const timeout = setTimeout(() => {
         setDisplayedText(fullText.slice(0, displayedText.length + 1));
@@ -98,10 +104,12 @@ export const RecipePreferencesPage = () => {
         setShowNumbers(true);
       }, 200);
     }
-  }, [showIcon, displayedText, fullText, showCursor]);
+  }, [showIcon, displayedText, fullText, showCursor, shouldSkipAnimations]);
 
   // Progressive numbers appearance
   useEffect(() => {
+    if (shouldSkipAnimations) return;
+    
     if (showNumbers && visibleNumbersCount < totalNumbers) {
       const timeout = setTimeout(() => {
         setVisibleNumbersCount(prev => prev + 1);
@@ -113,10 +121,12 @@ export const RecipePreferencesPage = () => {
         setDisplayedSecondText(secondFullText[0]);
       }, 300);
     }
-  }, [showNumbers, visibleNumbersCount, totalNumbers, showSecondText]);
+  }, [showNumbers, visibleNumbersCount, totalNumbers, showSecondText, shouldSkipAnimations]);
 
   // Typewriter effect for second text
   useEffect(() => {
+    if (shouldSkipAnimations) return;
+    
     if (showSecondText && displayedSecondText.length < secondFullText.length) {
       const timeout = setTimeout(() => {
         setDisplayedSecondText(secondFullText.slice(0, displayedSecondText.length + 1));
@@ -127,7 +137,7 @@ export const RecipePreferencesPage = () => {
         setShowCustomButton(true);
       }, 100);
     }
-  }, [showSecondText, displayedSecondText, secondFullText, showCustomButton]);
+  }, [showSecondText, displayedSecondText, secondFullText, showCustomButton, shouldSkipAnimations]);
 
   return (
     <div className="min-h-screen flex flex-col relative" style={{
