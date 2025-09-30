@@ -67,7 +67,8 @@ export const RecipePreferencesPage = () => {
     });
   };
 
-  // Agrupar selecciones por fecha
+  // Agrupar selecciones por fecha y ordenar tipos de comida
+  const mealTypeOrder = ['Desayuno', 'Comida', 'Cena', 'Postre', 'Snack'];
   const groupedSelections = mealSelections.reduce((acc: any, selection: MealSelection) => {
     const dateKey = selection.date.getTime();
     if (!acc[dateKey]) {
@@ -79,6 +80,13 @@ export const RecipePreferencesPage = () => {
     acc[dateKey].mealTypes.push(selection.mealType);
     return acc;
   }, {});
+
+  // Ordenar los tipos de comida en cada grupo
+  Object.values(groupedSelections).forEach((group: any) => {
+    group.mealTypes.sort((a: string, b: string) => {
+      return mealTypeOrder.indexOf(a) - mealTypeOrder.indexOf(b);
+    });
+  });
 
   const formatShortDate = (date: Date) => {
     const formatted = format(date, 'EEE d', { locale: es });
