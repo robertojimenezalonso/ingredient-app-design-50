@@ -9,6 +9,7 @@ import { ArrowUp, ArrowRight, X, Plus, Minus, Menu, LogOut, User, Search } from 
 import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
 import { supabase } from '@/integrations/supabase/client';
+import { IngredientProgressAnimation } from '@/components/IngredientProgressAnimation';
 const Index = () => {
   // Chat conversation component with 4-paragraph typewriter effect
   const navigate = useNavigate();
@@ -253,6 +254,12 @@ const Index = () => {
                             Buscando ingredientes en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                           </span>
                         </div>
+                        
+                        {/* Progressive ingredient circles */}
+                        <IngredientProgressAnimation 
+                          supermarketIngredients={supermarketIngredients} 
+                          totalCount={824}
+                        />
                       </div>}
                     
                     {/* Result card - replaces everything else and stays fixed */}
