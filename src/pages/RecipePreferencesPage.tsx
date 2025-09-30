@@ -55,12 +55,17 @@ export const RecipePreferencesPage = () => {
   const totalNumbers = 10;
   
   const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
+  const [healthProfiles, setHealthProfiles] = useState<number[]>([]);
   
   // Animation states
   const skipAnimations = shouldSkipAnimations || (persistedData !== null);
   const [showIcon, setShowIcon] = useState(true);
   const [displayedText, setDisplayedText] = useState(skipAnimations ? fullText : '');
   const [showCursor, setShowCursor] = useState(!skipAnimations);
+
+  const handleAddProfile = () => {
+    setHealthProfiles([...healthProfiles, healthProfiles.length + 1]);
+  };
 
   const handleContinue = () => {
     if (selectedServings !== null) {
@@ -195,8 +200,44 @@ export const RecipePreferencesPage = () => {
                       </p>
                     )}
                   </div>
+                  
+                  {/* Health Profiles */}
+                  {healthProfiles.map((profileNum, index) => (
+                    <div key={profileNum} className="mb-4">
+                      <h3 className="text-lg font-semibold text-[#1C1C1C] mb-3">Perfil {profileNum}</h3>
+                      <div className="border border-[#E5E5E5] rounded-lg overflow-hidden">
+                        {[
+                          'Nombre',
+                          'Fecha de nacimiento',
+                          'Sexo',
+                          'Altura',
+                          'Peso',
+                          'Alergias e intolerancias',
+                          'Objetivo de salud'
+                        ].map((field, fieldIndex, array) => (
+                          <div key={field}>
+                            <div className="flex items-center justify-between px-4 py-3">
+                              <span className="text-[#1C1C1C] text-sm">{field}</span>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="text-[#1C1C1C] hover:bg-[#F4F4F4] h-8 px-3"
+                              >
+                                Añadir
+                              </Button>
+                            </div>
+                            {fieldIndex < array.length - 1 && (
+                              <div className="border-t border-[#E5E5E5]" />
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                  
                   <Button
                     variant="default"
+                    onClick={handleAddProfile}
                     className="bg-[#1C1C1C] text-white hover:bg-[#000000] w-auto"
                   >
                     <Plus className="h-4 w-4 mr-2" />
