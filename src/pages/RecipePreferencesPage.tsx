@@ -14,10 +14,41 @@ type MealSelection = {
 export const RecipePreferencesPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const confirmedDates = location.state?.confirmedDates || [];
-  const selectedSupermarket = location.state?.selectedSupermarket || null;
-  const mealSelections = location.state?.mealSelections || [];
-  const shouldSkipAnimations = location.state?.shouldRestoreSelection || false;
+  
+  // Try to get data from localStorage first, then from location.state
+  const getPersistedData = () => {
+    const stored = localStorage.getItem('recipePreferencesData');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Convert date strings back to Date objects
+      return {
+        confirmedDates: parsed.confirmedDates.map((d: string) => new Date(d)),
+        selectedSupermarket: parsed.selectedSupermarket,
+        mealSelections: parsed.mealSelections.map((m: any) => ({
+          ...m,
+          date: new Date(m.date)
+        }))
+      };
+    }
+    return null;
+  };
+  
+  const persistedData = getPersistedData();
+  const confirmedDates = location.state?.confirmedDates || persistedData?.confirmedDates || [];
+  const selectedSupermarket = location.state?.selectedSupermarket || persistedData?.selectedSupermarket || null;
+  const mealSelections = location.state?.mealSelections || persistedData?.mealSelections || [];
+  const shouldSkipAnimations = location.state?.shouldRestoreSelection || !!persistedData;
+  
+  // Save data to localStorage whenever it changes
+  useEffect(() => {
+    if (confirmedDates.length > 0 || mealSelections.length > 0) {
+      localStorage.setItem('recipePreferencesData', JSON.stringify({
+        confirmedDates,
+        selectedSupermarket,
+        mealSelections
+      }));
+    }
+  }, [confirmedDates, selectedSupermarket, mealSelections]);
   
   const fullText = "Genial 👌. Aún no tienes ningún perfil de comensal guardado. Agrega al menos uno para poder personalizar tus recetas.";
   const secondFullText = "O también puedes:";
