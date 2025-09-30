@@ -254,9 +254,9 @@ export const CustomizeServingsPage = () => {
                             
                             {/* Meal types for this date */}
                             {isVisible && group.meals.map((meal: any, mealIndex: number) => (
-                              <div key={mealIndex} className="space-y-2">
+                              <div key={mealIndex} className="space-y-2 ml-4">
                                 <p className="text-sm font-medium text-[#1C1C1C]">
-                                  {meal.mealType}
+                                  • {meal.mealType}
                                 </p>
                                 
                                 {/* Number selection */}
