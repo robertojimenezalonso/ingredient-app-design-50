@@ -19,7 +19,7 @@ export const RecipePreferencesPage = () => {
   const mealSelections = location.state?.mealSelections || [];
   const shouldSkipAnimations = location.state?.shouldRestoreSelection || false;
   
-  const fullText = "Vale, dime el número...";
+  const fullText = "Número de personas por receta. Selecciona:";
   const secondFullText = "O también puedes:";
   const totalNumbers = 10;
   
