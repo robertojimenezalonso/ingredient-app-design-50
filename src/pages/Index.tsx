@@ -250,7 +250,7 @@ const Index = () => {
         {/* Fixed Header */}
         <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center border-b" style={{
         backgroundColor: '#FFFFFF',
-        borderBottomColor: '#D6D6D6'
+        borderBottomColor: '#E5E5E5'
       }}>
           <button onClick={handleClose} className="ml-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors">
             <X className="h-5 w-5 text-[#1C1C1C]" />
@@ -409,7 +409,7 @@ const Index = () => {
           {/* Fixed Button Area at Bottom of Screen */}
           <div className="absolute bottom-0 left-0 right-0 border-t" style={{
           backgroundColor: '#FFFFFF',
-          borderTopColor: '#D6D6D6'
+          borderTopColor: '#E5E5E5'
         }}>
             <div className="px-4 py-3 flex justify-end">
               <Button variant="ghost" onClick={handleCalendarContinue} disabled={!canContinue} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0" style={{
