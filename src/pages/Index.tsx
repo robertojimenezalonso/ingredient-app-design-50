@@ -264,9 +264,12 @@ const Index = () => {
                     
                     {/* Result card - replaces everything else and stays fixed */}
                     {showResultCard && <>
-                      <p className="text-[#1C1C1C] text-base animate-fade-in">
-                          🔍 He encontrado <span className="font-semibold">824 ingredientes en Mercadona:</span>
+                      <div className="flex items-start gap-2">
+                        <span className="text-lg">🔍</span>
+                        <p className="text-[#1C1C1C] text-base animate-fade-in">
+                          He encontrado <span className="font-semibold">824 ingredientes en Mercadona:</span>
                         </p>
+                      </div>
                         
                          {/* Ingredients Cards */}
                          <div className="mt-4 animate-fade-in w-screen relative -ml-4">
