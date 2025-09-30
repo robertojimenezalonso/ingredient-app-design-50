@@ -49,11 +49,17 @@ export const IngredientProgressAnimation = ({
   }, [showCounter, currentCount, totalCount]);
 
   return (
-    <div className="flex items-center gap-3 mt-4">
+    <div className="flex items-center mt-4">
       {/* Primer ingrediente */}
       <div className={`transition-all duration-300 ${showFirst ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         {supermarketIngredients[0] && (
-          <div className="w-12 h-12 rounded-full overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
+          <div 
+            className="w-12 h-12 rounded-full overflow-hidden border-2"
+            style={{ 
+              backgroundColor: '#F4F4F4',
+              borderColor: '#D1D5DB'
+            }}
+          >
             {supermarketIngredients[0].image_url ? (
               <img 
                 src={supermarketIngredients[0].image_url} 
@@ -71,10 +77,16 @@ export const IngredientProgressAnimation = ({
         )}
       </div>
 
-      {/* Segundo ingrediente */}
-      <div className={`transition-all duration-300 ${showSecond ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+      {/* Segundo ingrediente - solapado */}
+      <div className={`transition-all duration-300 -ml-3 ${showSecond ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         {supermarketIngredients[1] && (
-          <div className="w-12 h-12 rounded-full overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
+          <div 
+            className="w-12 h-12 rounded-full overflow-hidden border-2"
+            style={{ 
+              backgroundColor: '#F4F4F4',
+              borderColor: '#D1D5DB'
+            }}
+          >
             {supermarketIngredients[1].image_url ? (
               <img 
                 src={supermarketIngredients[1].image_url} 
@@ -92,10 +104,16 @@ export const IngredientProgressAnimation = ({
         )}
       </div>
 
-      {/* Tercer ingrediente */}
-      <div className={`transition-all duration-300 ${showThird ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+      {/* Tercer ingrediente - solapado */}
+      <div className={`transition-all duration-300 -ml-3 ${showThird ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         {supermarketIngredients[2] && (
-          <div className="w-12 h-12 rounded-full overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
+          <div 
+            className="w-12 h-12 rounded-full overflow-hidden border-2"
+            style={{ 
+              backgroundColor: '#F4F4F4',
+              borderColor: '#D1D5DB'
+            }}
+          >
             {supermarketIngredients[2].image_url ? (
               <img 
                 src={supermarketIngredients[2].image_url} 
@@ -113,11 +131,14 @@ export const IngredientProgressAnimation = ({
         )}
       </div>
 
-      {/* Círculo contador */}
-      <div className={`transition-all duration-300 ${showCounter ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
+      {/* Círculo contador - solapado */}
+      <div className={`transition-all duration-300 -ml-3 ${showCounter ? 'opacity-100 scale-100' : 'opacity-0 scale-75'}`}>
         <div 
-          className="w-12 h-12 rounded-full flex items-center justify-center"
-          style={{ backgroundColor: '#E5E5E5' }}
+          className="w-12 h-12 rounded-full flex items-center justify-center border-2"
+          style={{ 
+            backgroundColor: '#E5E5E5',
+            borderColor: '#D1D5DB'
+          }}
         >
           <span className="text-xs font-medium text-gray-600">
             {currentCount}
