@@ -585,38 +585,38 @@ const Index = () => {
             
             {/* Horizontal supermarket layout */}
             <div className="flex justify-between items-center gap-3 mb-1">
-              <button onClick={() => handleSupermarketSelect('mercadona')} className="flex flex-col items-center gap-2 transition-all duration-300">
+              <button onClick={() => handleSupermarketSelect('mercadona')} className="flex-1 flex flex-col items-center gap-2 transition-all duration-300">
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'bg-[#D9DADC] border border-[#020818]' : 'bg-[#F4F4F4]'}`}>
                   <img src="/mercadona-logo-updated.webp" alt="Mercadona" className="w-14 h-14 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'mercadona' ? 'font-semibold text-gray-800' : 'font-normal text-[#1C1C1C]'}`}>
+                <span className={`text-xs transition-all duration-300 text-center ${selectedSupermarket === 'mercadona' ? 'font-semibold text-gray-800' : 'font-normal text-[#1C1C1C]'}`}>
                   Mercadona
                 </span>
               </button>
               
-              <button onClick={() => handleSupermarketSelect('carrefour')} className="flex flex-col items-center gap-2 transition-all duration-300">
+              <button onClick={() => handleSupermarketSelect('carrefour')} className="flex-1 flex flex-col items-center gap-2 transition-all duration-300">
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'bg-[#D9DADC] border border-[#020818]' : 'bg-[#F4F4F4]'}`}>
                   <img src="/carrefour-logo-updated.png" alt="Carrefour" className="w-12 h-12 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'carrefour' ? 'font-semibold text-gray-800' : 'font-normal text-[#1C1C1C]'}`}>
+                <span className={`text-xs transition-all duration-300 text-center ${selectedSupermarket === 'carrefour' ? 'font-semibold text-gray-800' : 'font-normal text-[#1C1C1C]'}`}>
                   Carrefour
                 </span>
               </button>
               
-              <button onClick={() => handleSupermarketSelect('lidl')} className="flex flex-col items-center gap-2 transition-all duration-300">
+              <button onClick={() => handleSupermarketSelect('lidl')} className="flex-1 flex flex-col items-center gap-2 transition-all duration-300">
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'bg-[#D9DADC] border border-[#020818]' : 'bg-[#F4F4F4]'}`}>
                   <img src="/lidl-logo-updated.png" alt="Lidl" className="w-12 h-12 object-contain rounded-md" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'lidl' ? 'font-semibold text-gray-800' : 'font-normal text-[#1C1C1C]'}`}>
+                <span className={`text-xs transition-all duration-300 text-center ${selectedSupermarket === 'lidl' ? 'font-semibold text-gray-800' : 'font-normal text-[#1C1C1C]'}`}>
                   Lidl
                 </span>
               </button>
               
-              <button onClick={() => handleSupermarketSelect('alcampo')} className="flex flex-col items-center gap-2 transition-all duration-300">
+              <button onClick={() => handleSupermarketSelect('alcampo')} className="flex-1 flex flex-col items-center gap-2 transition-all duration-300">
                 <div className={`w-16 h-16 rounded-xl flex items-center justify-center transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'bg-[#D9DADC] border border-[#020818]' : 'bg-[#F4F4F4]'}`}>
                   <img src="/alcampo-logo.png" alt="Alcampo" className="w-10 h-10 object-contain" />
                 </div>
-                <span className={`text-xs transition-all duration-300 ${selectedSupermarket === 'alcampo' ? 'font-semibold text-gray-800' : 'font-normal text-[#1C1C1C]'}`}>
+                <span className={`text-xs transition-all duration-300 text-center ${selectedSupermarket === 'alcampo' ? 'font-semibold text-gray-800' : 'font-normal text-[#1C1C1C]'}`}>
                   Alcampo
                 </span>
               </button>
