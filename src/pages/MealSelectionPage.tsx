@@ -60,15 +60,6 @@ export const MealSelectionPage = () => {
             </div>
 
             {/* Future content will go here */}
-            <div className="px-4 mb-6">
-              <div className="flex justify-start">
-                <div className="max-w-xs">
-                  <p className="text-base text-[#1C1C1C]">
-                    Siguiente paso del flujo...
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
