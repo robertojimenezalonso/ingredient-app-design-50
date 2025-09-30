@@ -247,7 +247,7 @@ export const CustomizeServingsPage = () => {
                           >
                             {/* Date label - appears once per day */}
                             {isVisible && (
-                              <p className="text-sm font-normal text-[#1C1C1C] animate-fade-in">
+                              <p className="text-sm font-medium text-[#1C1C1C] animate-fade-in">
                                 {formatFullDate(group.date)}
                               </p>
                             )}
