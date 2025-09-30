@@ -269,8 +269,8 @@ const Index = () => {
                         </p>
                         
                         {/* Ingredients Cards */}
-                         <div className="mt-4 animate-fade-in absolute left-0 right-0">
-                           <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide pl-4 pr-4">
+                         <div className="mt-4 animate-fade-in -mx-4 -mr-4">
+                           <div className="flex gap-4 overflow-x-auto pb-2 scrollbar-hide pl-4 pr-8">
                             {supermarketIngredients.map((ingredient, index) => (
                               <div 
                                 key={ingredient.id}
