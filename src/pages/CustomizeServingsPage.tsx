@@ -25,7 +25,7 @@ export const CustomizeServingsPage = () => {
   const mealSelections = location.state?.mealSelections || [];
   const shouldSkipAnimations = location.state?.shouldRestoreSelection || false;
 
-  const fullText = "Perfecto, vamos a customizar el numero de personas por cada comida. Porfavor, seleciona al menos una persona para cada tipo de comida";
+  const fullText = "Perfecto, Indica cuántas personas habrá en cada comida.";
 
   // Initialize servings selections
   const [servingSelections, setServingSelections] = useState<ServingSelection[]>(() => {
