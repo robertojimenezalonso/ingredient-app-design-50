@@ -16,6 +16,7 @@ export const RecipePreferencesPage = () => {
   const confirmedDates = location.state?.confirmedDates || [];
   const selectedSupermarket = location.state?.selectedSupermarket || null;
   const mealSelections = location.state?.mealSelections || [];
+  const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
 
   const handleBack = () => {
     navigate('/meal-selection', { 
@@ -88,13 +89,40 @@ export const RecipePreferencesPage = () => {
               </div>
             </div>
 
-            {/* Aquí irá la siguiente pregunta */}
+            {/* Bot question - servings selection */}
             <div className="px-4 mb-6">
               <div className="flex justify-start">
                 <div className="max-w-xs">
-                  <p className="text-base text-[#1C1C1C]">
-                    {/* La siguiente pregunta irá aquí */}
+                  <p className="text-base text-[#1C1C1C] mb-4">
+                    ¿Cuántas raciones por receta te gustaría elegir?
                   </p>
+                  <div className="flex flex-wrap gap-2">
+                    {[1, 2, 3, 4, 5, 6].map((num) => (
+                      <button
+                        key={num}
+                        onClick={() => setSelectedServings(num)}
+                        className="px-4 py-2 rounded-full text-sm transition-colors"
+                        style={{
+                          backgroundColor: selectedServings === num ? '#1C1C1C' : '#F4F4F4',
+                          color: selectedServings === num ? '#FFFFFF' : '#1C1C1C'
+                        }}
+                      >
+                        {num}
+                      </button>
+                    ))}
+                  </div>
+                  <div className="mt-4">
+                    <button
+                      onClick={() => setSelectedServings('custom')}
+                      className="px-4 py-2 rounded-full text-sm transition-colors"
+                      style={{
+                        backgroundColor: selectedServings === 'custom' ? '#1C1C1C' : '#F4F4F4',
+                        color: selectedServings === 'custom' ? '#FFFFFF' : '#1C1C1C'
+                      }}
+                    >
+                      Customizar por receta
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
