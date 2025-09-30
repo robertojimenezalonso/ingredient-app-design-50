@@ -146,14 +146,14 @@ export const MealSelectionPage = () => {
                   </p>
                   
                   {/* Meal type tags */}
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 pointer-events-auto">
                     {mealTypes.map((mealType) => {
                       const isSelected = selection.mealTypes.includes(mealType);
                       return (
                         <button
                           key={mealType}
                           onClick={() => toggleMealType(dateIndex, mealType)}
-                          className="px-3 py-1.5 rounded-lg text-sm font-normal transition-all"
+                          className="px-3 py-1.5 rounded-lg text-sm font-normal transition-all pointer-events-auto cursor-pointer"
                           style={{
                             backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
                             color: '#020818',
