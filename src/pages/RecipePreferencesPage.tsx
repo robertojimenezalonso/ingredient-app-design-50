@@ -115,7 +115,7 @@ export const RecipePreferencesPage = () => {
                       {[1, 2, 3, 4, 5].map((num) => (
                         <button
                           key={num}
-                          onClick={() => setSelectedServings(num)}
+                          onClick={() => setSelectedServings(selectedServings === num ? null : num)}
                           className="px-4 py-2 rounded-full text-sm transition-all"
                           style={{
                             backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
@@ -132,7 +132,7 @@ export const RecipePreferencesPage = () => {
                       {[6, 7, 8, 9, 10].map((num) => (
                         <button
                           key={num}
-                          onClick={() => setSelectedServings(num)}
+                          onClick={() => setSelectedServings(selectedServings === num ? null : num)}
                           className="px-4 py-2 rounded-full text-sm transition-all"
                           style={{
                             backgroundColor: selectedServings === num ? '#D9DADC' : '#F4F4F4',
@@ -151,7 +151,7 @@ export const RecipePreferencesPage = () => {
                       O también puedes:
                     </p>
                     <button
-                      onClick={() => setSelectedServings('custom')}
+                      onClick={() => setSelectedServings(selectedServings === 'custom' ? null : 'custom')}
                       className="px-4 py-2 rounded-lg text-sm transition-all"
                       style={{
                         backgroundColor: selectedServings === 'custom' ? '#D9DADC' : '#F4F4F4',
