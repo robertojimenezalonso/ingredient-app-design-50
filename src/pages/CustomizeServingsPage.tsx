@@ -156,8 +156,8 @@ export const CustomizeServingsPage = () => {
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
   };
 
-  // Check if at least one selection has at least one serving
-  const canContinue = servingSelections.some(selection => (selection.servings || 0) > 0);
+  // Check if ALL selections have at least one serving
+  const canContinue = servingSelections.every(selection => (selection.servings || 0) > 0);
 
   const handleContinue = () => {
     if (canContinue) {
