@@ -256,10 +256,9 @@ export const CustomizeServingsPage = () => {
                             {isVisible && group.meals.map((meal: any, mealIndex: number) => (
                               <div 
                                 key={mealIndex} 
-                                className="flex items-center justify-between px-4 py-3 rounded-lg border"
+                                className="flex items-center justify-between px-4 py-2 rounded-lg"
                                 style={{
-                                  borderColor: '#E5E5E5',
-                                  backgroundColor: '#FFFFFF'
+                                  backgroundColor: '#F4F4F4'
                                 }}
                               >
                                 <p className="text-sm text-[#1C1C1C]">
