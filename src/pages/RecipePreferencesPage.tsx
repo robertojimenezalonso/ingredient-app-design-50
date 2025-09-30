@@ -50,7 +50,7 @@ export const RecipePreferencesPage = () => {
     }
   }, [confirmedDates, selectedSupermarket, mealSelections]);
   
-  const fullText = "Genial 👌. Aún no tienes ningún perfil de comensal guardado. Agrega al menos uno para poder personalizar tus recetas.";
+  const fullText = `Veo que aún no tienes ningún perfil de salud vinculado a tu cuenta. Esto nos ayudará a entender mejor tus objetivos y preferencias, y así ofrecerte recetas personalizadas con los ingredientes de ${selectedSupermarket || 'tu supermercado favorito'}.\n\nAgrega tantos perfiles de salud como personas vayan a comer en los días seleccionados.`;
   const secondFullText = "O también puedes:";
   const totalNumbers = 10;
   
@@ -189,7 +189,7 @@ export const RecipePreferencesPage = () => {
                 <div className="max-w-xs w-full">
                   <div className="mb-4">
                     {showIcon && (
-                      <p className="text-base text-[#1C1C1C]">
+                      <p className="text-base text-[#1C1C1C] whitespace-pre-line">
                         {displayedText}
                         {showCursor && <span className="animate-pulse">|</span>}
                       </p>
