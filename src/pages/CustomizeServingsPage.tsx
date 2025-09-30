@@ -36,12 +36,30 @@ export const CustomizeServingsPage = () => {
     }));
   });
 
+  // Group selections by date
+  const groupedByDate = servingSelections.reduce((acc: any, selection, index) => {
+    const dateKey = selection.date.getTime();
+    if (!acc[dateKey]) {
+      acc[dateKey] = {
+        date: selection.date,
+        meals: []
+      };
+    }
+    acc[dateKey].meals.push({
+      ...selection,
+      originalIndex: index
+    });
+    return acc;
+  }, {});
+
+  const groupedSelections = Object.values(groupedByDate);
+
   // Animation states
   const [showIcon, setShowIcon] = useState(shouldSkipAnimations);
   const [displayedText, setDisplayedText] = useState(shouldSkipAnimations ? fullText : '');
   const [showCursor, setShowCursor] = useState(!shouldSkipAnimations);
   const [showContent, setShowContent] = useState(shouldSkipAnimations);
-  const [visibleItemIndex, setVisibleItemIndex] = useState(shouldSkipAnimations ? servingSelections.length - 1 : -1);
+  const [visibleItemIndex, setVisibleItemIndex] = useState(shouldSkipAnimations ? groupedSelections.length - 1 : -1);
   const [visibleNumbersCount, setVisibleNumbersCount] = useState(shouldSkipAnimations ? servingSelections.length * 10 : 0);
 
   const totalNumbers = servingSelections.length * 10;
@@ -80,13 +98,13 @@ export const CustomizeServingsPage = () => {
   useEffect(() => {
     if (shouldSkipAnimations) return;
     
-    if (showContent && visibleItemIndex < servingSelections.length - 1) {
+    if (showContent && visibleItemIndex < groupedSelections.length - 1) {
       const timeout = setTimeout(() => {
         setVisibleItemIndex(prev => prev + 1);
       }, 300);
       return () => clearTimeout(timeout);
     }
-  }, [showContent, visibleItemIndex, servingSelections.length, shouldSkipAnimations]);
+  }, [showContent, visibleItemIndex, groupedSelections.length, shouldSkipAnimations]);
 
   // Progressive numbers appearance
   useEffect(() => {
@@ -123,14 +141,14 @@ export const CustomizeServingsPage = () => {
   };
 
   const formatFullDate = (date: Date) => {
-    const dayName = format(date, 'EEE', { locale: es });
+    const dayName = format(date, 'EEEE', { locale: es });
     const dayNumber = format(date, 'd', { locale: es });
-    const month = format(date, 'MMM', { locale: es });
+    const month = format(date, 'MMMM', { locale: es });
     
     const capitalizedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
     const capitalizedMonth = month.charAt(0).toUpperCase() + month.slice(1);
     
-    return `${capitalizedDay} ${dayNumber} - ${capitalizedMonth}`;
+    return `${capitalizedDay} ${dayNumber} de ${capitalizedMonth}`;
   };
 
   const formatShortDate = (date: Date) => {
@@ -155,8 +173,12 @@ export const CustomizeServingsPage = () => {
 
   const selectedServings = getSelectedServings();
 
-  const getNumberIndex = (itemIndex: number, numIndex: number) => {
-    return itemIndex * 10 + numIndex;
+  const getNumberIndex = (groupIndex: number, mealIndex: number, numIndex: number) => {
+    let totalBefore = 0;
+    for (let i = 0; i < groupIndex; i++) {
+      totalBefore += (groupedSelections[i] as any).meals.length * 10;
+    }
+    return totalBefore + (mealIndex * 10) + numIndex;
   };
 
   return (
@@ -213,54 +235,61 @@ export const CustomizeServingsPage = () => {
                   {/* Meal selections with serving options */}
                   {showContent && (
                     <div className="space-y-6">
-                      {servingSelections.map((selection, itemIndex) => {
-                        const isVisible = itemIndex <= visibleItemIndex;
+                      {groupedSelections.map((group: any, groupIndex: number) => {
+                        const isVisible = groupIndex <= visibleItemIndex;
                         
                         return (
                           <div 
-                            key={itemIndex} 
-                            className={`space-y-3 transition-all ${
+                            key={groupIndex} 
+                            className={`space-y-4 transition-all ${
                               isVisible ? 'opacity-100' : 'opacity-0'
                             }`}
                           >
-                            {/* Date and meal type label */}
+                            {/* Date label - appears once per day */}
                             {isVisible && (
-                              <p className="text-sm font-medium text-[#1C1C1C] animate-fade-in">
-                                {formatFullDate(selection.date)} - {selection.mealType}
+                              <p className="text-base font-semibold text-[#1C1C1C] animate-fade-in">
+                                {formatFullDate(group.date)}
                               </p>
                             )}
                             
-                            {/* Number selection */}
-                            {isVisible && (
-                              <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4" style={{
-                                scrollbarWidth: 'none',
-                                msOverflowStyle: 'none'
-                              }}>
-                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, numIndex) => {
-                                  const numberIndex = getNumberIndex(itemIndex, numIndex);
-                                  const isNumberVisible = numberIndex < visibleNumbersCount;
-                                  const isSelected = selection.servings === num;
-                                  
-                                  return (
-                                    <button
-                                      key={num}
-                                      onClick={() => handleServingSelection(itemIndex, num)}
-                                      className={`px-4 py-2 rounded-full text-sm transition-all flex-shrink-0 ${
-                                        isNumberVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
-                                      }`}
-                                      style={{
-                                        backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
-                                        color: '#020818',
-                                        border: isSelected ? '1px solid #020818' : '1px solid transparent',
-                                        transition: 'all 0.2s ease-out'
-                                      }}
-                                    >
-                                      {num}
-                                    </button>
-                                  );
-                                })}
+                            {/* Meal types for this date */}
+                            {isVisible && group.meals.map((meal: any, mealIndex: number) => (
+                              <div key={mealIndex} className="space-y-2">
+                                <p className="text-sm font-medium text-[#1C1C1C]">
+                                  {meal.mealType}
+                                </p>
+                                
+                                {/* Number selection */}
+                                <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4" style={{
+                                  scrollbarWidth: 'none',
+                                  msOverflowStyle: 'none'
+                                }}>
+                                  {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num, numIndex) => {
+                                    const numberIndex = getNumberIndex(groupIndex, mealIndex, numIndex);
+                                    const isNumberVisible = numberIndex < visibleNumbersCount;
+                                    const isSelected = meal.servings === num;
+                                    
+                                    return (
+                                      <button
+                                        key={num}
+                                        onClick={() => handleServingSelection(meal.originalIndex, num)}
+                                        className={`px-4 py-2 rounded-full text-sm transition-all flex-shrink-0 ${
+                                          isNumberVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-75'
+                                        }`}
+                                        style={{
+                                          backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
+                                          color: '#020818',
+                                          border: isSelected ? '1px solid #020818' : '1px solid transparent',
+                                          transition: 'all 0.2s ease-out'
+                                        }}
+                                      >
+                                        {num}
+                                      </button>
+                                    );
+                                  })}
+                                </div>
                               </div>
-                            )}
+                            ))}
                           </div>
                         );
                       })}
