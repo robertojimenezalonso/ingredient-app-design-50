@@ -245,7 +245,7 @@ export function CustomCalendar({
                           onClick={() => handleDateClick(date)}
                           disabled={isPast(date)}
                           className={cn(
-                            "h-11 w-11 p-0 font-normal rounded-full relative transition-colors bg-transparent focus:outline-none text-sm",
+                            "h-10 w-10 p-0 font-normal rounded-full relative transition-colors bg-transparent focus:outline-none text-sm",
                             isSelected(date) &&
                               "bg-foreground/15 border border-foreground text-foreground hover:bg-foreground/15",
                             isToday(date) && !isSelected(date) && "text-foreground",
@@ -253,7 +253,7 @@ export function CustomCalendar({
                           )}
                           style={{
                             ...(isPast(date) ? { textDecoration: 'line-through', color: '#AAAAAA' } : {}),
-                            ...(isToday(date) && !isSelected(date) ? { backgroundColor: '#D6D6D6', width: '2.75rem', height: '2.75rem' } : {})
+                            ...(isToday(date) && !isSelected(date) ? { backgroundColor: '#D6D6D6', width: '2.5rem', height: '2.5rem' } : {})
                           }}
                         >
                           {date.getDate()}
