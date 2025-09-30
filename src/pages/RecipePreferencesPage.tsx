@@ -206,9 +206,6 @@ export const RecipePreferencesPage = () => {
                 <div className="max-w-xs">
                   <div className="flex items-start gap-2 mb-4">
                     {showIcon && (
-                      <span className="text-lg animate-fade-in">👤</span>
-                    )}
-                    {showIcon && (
                       <p className="text-base text-[#1C1C1C]">
                         {displayedText}
                         {showCursor && <span className="animate-pulse">|</span>}
