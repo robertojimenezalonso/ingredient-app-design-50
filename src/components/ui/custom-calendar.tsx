@@ -97,66 +97,9 @@ export function CustomCalendar({
       );
       onSelect?.(newSelected);
     } else {
-      // Select the date
-      if (selected.length === 0) {
-        // First date selection
-        onSelect?.([date]);
-      } else if (selected.length === 1) {
-        // Second date - create range between the two dates
-        const firstDate = selected[0];
-        const startDate = date < firstDate ? date : firstDate;
-        const endDate = date < firstDate ? firstDate : date;
-        
-        const rangeDates = [];
-        const current = new Date(startDate);
-        while (current <= endDate) {
-          rangeDates.push(new Date(current));
-          current.setDate(current.getDate() + 1);
-        }
-        onSelect?.(rangeDates);
-      } else {
-        // Multiple dates already selected - check if we can create a new range
-        const sortedSelected = [...selected].sort((a, b) => a.getTime() - b.getTime());
-        
-        // Find isolated dates (dates that don't have adjacent dates selected)
-        const isolatedDates = sortedSelected.filter(selectedDate => {
-          const prevDay = new Date(selectedDate);
-          prevDay.setDate(selectedDate.getDate() - 1);
-          const nextDay = new Date(selectedDate);
-          nextDay.setDate(selectedDate.getDate() + 1);
-          
-          const hasPrevious = sortedSelected.some(d => d.getTime() === prevDay.getTime());
-          const hasNext = sortedSelected.some(d => d.getTime() === nextDay.getTime());
-          
-          return !hasPrevious && !hasNext;
-        });
-        
-        // If there's exactly one isolated date, create a range with it and the new date
-        if (isolatedDates.length === 1) {
-          const isolatedDate = isolatedDates[0];
-          const startDate = date < isolatedDate ? date : isolatedDate;
-          const endDate = date < isolatedDate ? isolatedDate : date;
-          
-          // Remove the isolated date from current selection
-          const remainingSelected = selected.filter(d => d.getTime() !== isolatedDate.getTime());
-          
-          // Create range between isolated date and new date
-          const rangeDates = [];
-          const current = new Date(startDate);
-          while (current <= endDate) {
-            rangeDates.push(new Date(current));
-            current.setDate(current.getDate() + 1);
-          }
-          
-          // Combine remaining selection with new range
-          const newSelected = [...remainingSelected, ...rangeDates].sort((a, b) => a.getTime() - b.getTime());
-          onSelect?.(newSelected);
-        } else {
-          // Add as individual date
-          const newSelected = [...selected, date].sort((a, b) => a.getTime() - b.getTime());
-          onSelect?.(newSelected);
-        }
-      }
+      // Select the date - simply add it to the array
+      const newSelected = [...selected, date].sort((a, b) => a.getTime() - b.getTime());
+      onSelect?.(newSelected);
     }
   };
 
