@@ -106,7 +106,7 @@ export const RecipePreferencesPage = () => {
                 <div className="text-2xl">🍽️</div>
                 <div className="max-w-xs">
                   <p className="text-base text-[#1C1C1C] mb-4">
-                    Elige las raciones por receta. Selecciona:
+                    👤 Número de personas por receta
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {[1, 2, 3, 4, 5, 6].map((num) => (
