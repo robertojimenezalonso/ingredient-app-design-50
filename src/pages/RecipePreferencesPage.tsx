@@ -67,6 +67,7 @@ export const RecipePreferencesPage = () => {
   const [goalDrawerOpen, setGoalDrawerOpen] = useState(false);
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState<'main' | 'personal-data' | 'macros' | 'calories' | 'nutrition'>('main');
+  const [editingField, setEditingField] = useState<string | null>(null);
   const [editingProfile, setEditingProfile] = useState<{
     id?: number;
     name: string;
@@ -522,9 +523,23 @@ export const RecipePreferencesPage = () => {
                 {/* Nombre */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
                   <span className="text-base text-[#1C1C1C]">Nombre</span>
-                  <button className="text-sm text-[#898885]">
-                    {editingProfile?.name || 'Añadir'}
-                  </button>
+                  {editingField === 'name' ? (
+                    <Input
+                      autoFocus
+                      value={editingProfile?.name || ''}
+                      onChange={(e) => setEditingProfile(prev => prev ? { ...prev, name: e.target.value } : null)}
+                      onBlur={() => setEditingField(null)}
+                      className="w-32 h-8 text-sm text-right"
+                      placeholder="Escribe aquí"
+                    />
+                  ) : (
+                    <button 
+                      onClick={() => setEditingField('name')}
+                      className="text-sm text-[#898885]"
+                    >
+                      Añadir
+                    </button>
+                  )}
                 </div>
 
                 {/* Fecha de nacimiento */}
