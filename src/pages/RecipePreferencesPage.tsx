@@ -429,7 +429,7 @@ export const RecipePreferencesPage = () => {
           <div className="px-4 py-8 overflow-y-auto h-full" style={{ backgroundColor: '#F4F4F4' }}>
             <Card className="overflow-hidden">
               {/* Datos personales */}
-              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5] min-h-[72px]">
                 <div className="flex-1 flex items-center gap-3">
                   <User className="h-5 w-5 text-[#898885] flex-shrink-0" />
                   <h4 className="text-base text-[#1C1C1C]">Datos personales</h4>
@@ -438,7 +438,7 @@ export const RecipePreferencesPage = () => {
               </button>
 
               {/* Ajustes macronutrientes */}
-              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5] min-h-[72px]">
                 <div className="flex-1 flex items-center gap-3">
                   <Utensils className="h-5 w-5 text-[#898885] flex-shrink-0" />
                   <div className="text-left">
@@ -450,7 +450,7 @@ export const RecipePreferencesPage = () => {
               </button>
 
               {/* Ajustes calorías */}
-              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5] min-h-[72px]">
                 <div className="flex-1 flex items-center gap-3">
                   <Flame className="h-5 w-5 text-[#898885] flex-shrink-0" />
                   <div className="text-left">
@@ -462,7 +462,7 @@ export const RecipePreferencesPage = () => {
               </button>
 
               {/* Necesidades y preferencias nutricionales */}
-              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors">
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors min-h-[72px]">
                 <div className="flex-1 flex items-center gap-3">
                   <Apple className="h-5 w-5 text-[#898885] flex-shrink-0" />
                   <div className="text-left">
