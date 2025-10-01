@@ -393,7 +393,7 @@ export const RecipePreferencesPage = () => {
 
       {/* Profile Drawer */}
       <Drawer open={profileDrawerOpen} onOpenChange={setProfileDrawerOpen}>
-        <DrawerContent className="bg-white animate-slide-in-right h-[80vh]">
+        <DrawerContent className="bg-white animate-slide-in-right h-[70vh]">
           
           {/* Profile Header with Avatar and Progress */}
           <div className="px-4 pt-6 pb-4 flex items-center gap-4 border-b border-[#E5E5E5]">
