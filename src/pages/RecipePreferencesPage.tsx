@@ -449,7 +449,9 @@ export const RecipePreferencesPage = () => {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-[#1C1C1C]">{editingProfile?.name || 'Nuevo perfil'}</h3>
+                    <h3 className="text-xl font-semibold text-[#1C1C1C]">
+                      {editingProfile?.name && editingProfile.name.trim() ? editingProfile.name : 'Comensal 1'}
+                    </h3>
                     <p className="text-sm text-[#898885]">
                       {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 0)}% perfil completado
                     </p>
