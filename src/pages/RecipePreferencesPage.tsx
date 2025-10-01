@@ -426,7 +426,7 @@ export const RecipePreferencesPage = () => {
 
               {/* Profile Card */}
               <div className="px-4 pt-8">
-                <Card className="overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.08)] p-4 flex items-center gap-4">
+                <Card className="overflow-hidden shadow-[0_4px_20px_rgba(0,0,0,0.1)] p-4 flex items-center gap-4">
                   <div className="relative flex-shrink-0 w-16 h-16">
                     <svg className="absolute inset-0 w-16 h-16" style={{ transform: 'rotate(-90deg)' }}>
                       <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
