@@ -531,9 +531,9 @@ export const RecipePreferencesPage = () => {
                 <button
                   key={diet}
                   onClick={() => handleSelectDiet(diet)}
-                  className="w-full py-4 px-4 text-left text-base hover:bg-[#E5E5E5] transition-colors flex items-center justify-between"
+                  className="w-full py-4 px-4 text-left text-base hover:bg-[#D1D1D1] transition-colors flex items-center justify-between"
                   style={{
-                    backgroundColor: '#F4F4F4',
+                    backgroundColor: '#E5E5E5',
                     borderRadius: '8px'
                   }}
                 >
