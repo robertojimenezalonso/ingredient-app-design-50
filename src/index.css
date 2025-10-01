@@ -85,6 +85,10 @@ All colors MUST be HSL.
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    /* Prevent viewport resize on keyboard open */
+    position: fixed;
+    width: 100%;
+    height: 100%;
   }
   
   html {
@@ -93,6 +97,14 @@ All colors MUST be HSL.
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     touch-action: manipulation;
+    /* Ensure stable height */
+    height: 100%;
+  }
+  
+  #root {
+    /* Ensure root takes full space */
+    height: 100%;
+    overflow: auto;
   }
   :root {
     --background: 0 0% 96.9%;
