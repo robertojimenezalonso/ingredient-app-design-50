@@ -1,0 +1,327 @@
+import { useState, useEffect, useRef } from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { X, User } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+interface ProfileCreationDrawerProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (profileData: any) => void;
+  editingProfile?: any;
+}
+
+type Step = 'name' | 'birthDate' | 'weight' | 'height' | 'sex' | 'activityLevel';
+
+export const ProfileCreationDrawer = ({ 
+  isOpen, 
+  onClose, 
+  onSave,
+  editingProfile 
+}: ProfileCreationDrawerProps) => {
+  const [currentStep, setCurrentStep] = useState<Step>('name');
+  
+  // Parse existing data if editing
+  const parseBirthDate = (birthDateStr?: string) => {
+    if (!birthDateStr) return { day: '', month: '', year: '' };
+    const parts = birthDateStr.split('/');
+    if (parts.length === 3) {
+      return { day: parts[0], month: parts[1], year: parts[2] };
+    }
+    return { day: '', month: '', year: '' };
+  };
+
+  const parseWeight = (weightStr?: string) => {
+    if (!weightStr) return { value: '', unit: 'kg' };
+    const parts = weightStr.split(' ');
+    return { value: parts[0] || '', unit: parts[1] || 'kg' };
+  };
+
+  const parseHeight = (heightStr?: string) => {
+    if (!heightStr) return { value: '', unit: 'cm' };
+    const parts = heightStr.split(' ');
+    return { value: parts[0] || '', unit: parts[1] || 'cm' };
+  };
+
+  const [profileData, setProfileData] = useState({
+    name: editingProfile?.name || '',
+    birthDate: parseBirthDate(editingProfile?.birthDate),
+    weight: parseWeight(editingProfile?.weight).value,
+    weightUnit: parseWeight(editingProfile?.weight).unit,
+    height: parseHeight(editingProfile?.height).value,
+    heightUnit: parseHeight(editingProfile?.height).unit,
+    sex: editingProfile?.sex || '',
+    activityLevel: editingProfile?.activityLevel || ''
+  });
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isOpen && currentStep === 'name') {
+      setTimeout(() => inputRef.current?.focus(), 100);
+    }
+  }, [isOpen, currentStep]);
+
+  const getStepTitle = () => {
+    const isEditing = editingProfile;
+    switch (currentStep) {
+      case 'name': return isEditing?.name ? 'Actualizar nombre' : 'Añadir nombre';
+      case 'birthDate': return isEditing?.birthDate ? 'Actualizar fecha de nacimiento' : 'Añadir fecha de nacimiento';
+      case 'weight': return isEditing?.weight ? 'Actualizar peso' : 'Añadir peso';
+      case 'height': return isEditing?.height ? 'Actualizar altura' : 'Añadir altura';
+      case 'sex': return isEditing?.sex ? 'Actualizar sexo' : 'Añadir sexo';
+      case 'activityLevel': return isEditing?.activityLevel ? 'Actualizar nivel de actividad' : 'Añadir nivel de actividad';
+      default: return '';
+    }
+  };
+
+  const canContinue = () => {
+    switch (currentStep) {
+      case 'name': return profileData.name.trim().length > 0;
+      case 'birthDate': 
+        return profileData.birthDate.day && 
+               profileData.birthDate.month && 
+               profileData.birthDate.year &&
+               parseInt(profileData.birthDate.day) >= 1 && 
+               parseInt(profileData.birthDate.day) <= 31 &&
+               parseInt(profileData.birthDate.month) >= 1 && 
+               parseInt(profileData.birthDate.month) <= 12 &&
+               parseInt(profileData.birthDate.year) >= 1900 && 
+               parseInt(profileData.birthDate.year) <= new Date().getFullYear();
+      case 'weight': return profileData.weight && parseFloat(profileData.weight) > 0;
+      case 'height': return profileData.height && parseFloat(profileData.height) > 0;
+      case 'sex': return profileData.sex !== '';
+      case 'activityLevel': return profileData.activityLevel !== '';
+      default: return false;
+    }
+  };
+
+  const handleContinue = () => {
+    const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
+    const currentIndex = steps.indexOf(currentStep);
+    
+    if (currentIndex < steps.length - 1) {
+      setCurrentStep(steps[currentIndex + 1]);
+    } else {
+      // Last step - save profile
+      onSave(profileData);
+    }
+  };
+
+  const getCompletionPercentage = () => {
+    const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
+    const completedSteps = steps.filter(step => {
+      switch (step) {
+        case 'name': return profileData.name.trim().length > 0;
+        case 'birthDate': return profileData.birthDate.day && profileData.birthDate.month && profileData.birthDate.year;
+        case 'weight': return profileData.weight && parseFloat(profileData.weight) > 0;
+        case 'height': return profileData.height && parseFloat(profileData.height) > 0;
+        case 'sex': return profileData.sex !== '';
+        case 'activityLevel': return profileData.activityLevel !== '';
+        default: return false;
+      }
+    }).length;
+    return Math.round((completedSteps / steps.length) * 100);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
+      <Card className="w-full max-h-[90vh] flex flex-col rounded-t-3xl rounded-b-none border-0 shadow-2xl">
+        {/* Header with profile info */}
+        <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
+          <div className="flex items-center gap-3 flex-1">
+            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+              <User className="w-5 h-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-medium">
+                {profileData.name || 'Nuevo comensal'}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {getCompletionPercentage()}% completado
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </CardHeader>
+
+        {/* Content */}
+        <CardContent className="flex-1 overflow-y-auto p-4 pb-24">
+          <div className="space-y-4">
+            <h3 className="text-base font-medium">{getStepTitle()}</h3>
+            
+            {currentStep === 'name' && (
+              <Input
+                ref={inputRef}
+                type="text"
+                value={profileData.name}
+                onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                placeholder="Escribe tu nombre"
+                className="w-full"
+              />
+            )}
+
+            {currentStep === 'birthDate' && (
+              <div className="space-y-4">
+                <div className="flex gap-2">
+                  <Input
+                    type="number"
+                    value={profileData.birthDate.day}
+                    onChange={(e) => setProfileData({ 
+                      ...profileData, 
+                      birthDate: { ...profileData.birthDate, day: e.target.value }
+                    })}
+                    placeholder="DD"
+                    min="1"
+                    max="31"
+                    className="flex-1"
+                  />
+                  <Input
+                    type="number"
+                    value={profileData.birthDate.month}
+                    onChange={(e) => setProfileData({ 
+                      ...profileData, 
+                      birthDate: { ...profileData.birthDate, month: e.target.value }
+                    })}
+                    placeholder="MM"
+                    min="1"
+                    max="12"
+                    className="flex-1"
+                  />
+                  <Input
+                    type="number"
+                    value={profileData.birthDate.year}
+                    onChange={(e) => setProfileData({ 
+                      ...profileData, 
+                      birthDate: { ...profileData.birthDate, year: e.target.value }
+                    })}
+                    placeholder="YYYY"
+                    min="1900"
+                    max={new Date().getFullYear()}
+                    className="flex-1"
+                  />
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  Te preguntamos esto porque la edad afecta la composición del cuerpo. Usamos esta información para ofrecerte recetas personalizadas.
+                </p>
+              </div>
+            )}
+
+            {currentStep === 'weight' && (
+              <div className="space-y-4">
+                <Input
+                  type="number"
+                  value={profileData.weight}
+                  onChange={(e) => setProfileData({ ...profileData, weight: e.target.value })}
+                  placeholder="Escribe tu peso"
+                  className="w-full"
+                />
+                <div className="flex gap-2">
+                  {['kg', 'lb', 'st'].map(unit => (
+                    <button
+                      key={unit}
+                      onClick={() => setProfileData({ ...profileData, weightUnit: unit })}
+                      className={cn(
+                        "px-4 py-2 rounded-lg border transition-colors",
+                        profileData.weightUnit === unit 
+                          ? "bg-primary text-primary-foreground" 
+                          : "bg-background hover:bg-accent"
+                      )}
+                    >
+                      {unit}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {currentStep === 'height' && (
+              <div className="space-y-4">
+                <Input
+                  type="number"
+                  value={profileData.height}
+                  onChange={(e) => setProfileData({ ...profileData, height: e.target.value })}
+                  placeholder="Escribe tu altura"
+                  className="w-full"
+                />
+                <div className="flex gap-2">
+                  {['cm', 'ft'].map(unit => (
+                    <button
+                      key={unit}
+                      onClick={() => setProfileData({ ...profileData, heightUnit: unit })}
+                      className={cn(
+                        "px-4 py-2 rounded-lg border transition-colors",
+                        profileData.heightUnit === unit 
+                          ? "bg-primary text-primary-foreground" 
+                          : "bg-background hover:bg-accent"
+                      )}
+                    >
+                      {unit}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {currentStep === 'sex' && (
+              <div className="space-y-2">
+                {['Masculino', 'Femenino', 'Otro'].map(option => (
+                  <button
+                    key={option}
+                    onClick={() => setProfileData({ ...profileData, sex: option })}
+                    className={cn(
+                      "w-full px-4 py-3 rounded-lg border transition-colors text-left",
+                      profileData.sex === option 
+                        ? "bg-primary text-primary-foreground" 
+                        : "bg-background hover:bg-accent"
+                    )}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {currentStep === 'activityLevel' && (
+              <div className="space-y-2">
+                {['Bajo', 'Moderado', 'Alto', 'Muy alto'].map(option => (
+                  <button
+                    key={option}
+                    onClick={() => setProfileData({ ...profileData, activityLevel: option })}
+                    className={cn(
+                      "w-full px-4 py-3 rounded-lg border transition-colors text-left",
+                      profileData.activityLevel === option 
+                        ? "bg-primary text-primary-foreground" 
+                        : "bg-background hover:bg-accent"
+                    )}
+                  >
+                    {option}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </CardContent>
+
+        {/* Fixed bottom button */}
+        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t">
+          <Button
+            onClick={handleContinue}
+            disabled={!canContinue()}
+            className="w-full"
+          >
+            Guardar y continuar
+          </Button>
+        </div>
+      </Card>
+    </div>
+  );
+};

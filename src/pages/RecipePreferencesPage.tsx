@@ -8,6 +8,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/u
 import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { ProfileCreationDrawer } from '@/components/ProfileCreationDrawer';
 
 type MealSelection = {
   date: Date;
@@ -181,12 +182,17 @@ export const RecipePreferencesPage = () => {
 
   const handleAddProfile = () => {
     setEditingProfile({
+      id: Date.now(),
       name: '',
       diet: undefined,
       allergies: undefined,
-      healthGoal: undefined
+      healthGoal: undefined,
+      birthDate: '',
+      weight: '',
+      height: '',
+      sex: '',
+      activityLevel: ''
     });
-    setCurrentSection('main');
     setProfileDrawerOpen(true);
   };
 
@@ -202,28 +208,28 @@ export const RecipePreferencesPage = () => {
     setProfileDrawerOpen(true);
   };
 
-  const handleSaveProfile = () => {
-    if (!editingProfile || !editingProfile.name.trim()) return;
+  const handleSaveProfile = (profileData: any) => {
+    const newProfile = {
+      id: editingProfile?.id || Date.now(),
+      name: profileData.name,
+      diet: editingProfile?.diet,
+      allergies: editingProfile?.allergies,
+      healthGoal: editingProfile?.healthGoal,
+      birthDate: `${profileData.birthDate.day}/${profileData.birthDate.month}/${profileData.birthDate.year}`,
+      weight: `${profileData.weight} ${profileData.weightUnit}`,
+      height: `${profileData.height} ${profileData.heightUnit}`,
+      sex: profileData.sex,
+      activityLevel: profileData.activityLevel
+    };
 
-    if (editingProfile.id) {
+    const existingIndex = healthProfiles.findIndex(p => p.id === newProfile.id);
+    
+    if (existingIndex >= 0) {
       setHealthProfiles(profiles =>
-        profiles.map(p => p.id === editingProfile.id ? {
-          ...p,
-          name: editingProfile.name,
-          diet: editingProfile.diet,
-          allergies: editingProfile.allergies,
-          healthGoal: editingProfile.healthGoal
-        } : p)
+        profiles.map(p => p.id === newProfile.id ? newProfile : p)
       );
     } else {
-      const newId = healthProfiles.length + 1;
-      setHealthProfiles([...healthProfiles, {
-        id: newId,
-        name: editingProfile.name,
-        diet: editingProfile.diet,
-        allergies: editingProfile.allergies,
-        healthGoal: editingProfile.healthGoal
-      }]);
+      setHealthProfiles([...healthProfiles, newProfile]);
     }
     
     setProfileDrawerOpen(false);
@@ -471,225 +477,13 @@ export const RecipePreferencesPage = () => {
         </div>
       </div>
 
-      {/* Profile Drawer */}
-      {profileDrawerOpen && (
-        <div className="fixed inset-0 z-50 bg-white flex flex-col">
-          
-          {/* Profile Header with Avatar and Progress - Only show in main view */}
-          {currentSection === 'main' && (
-            <>
-              {/* Top Header */}
-              <div className="px-4 py-6 flex items-center border-b border-[#E5E5E5]">
-                <button 
-                  onClick={handleCancelProfile}
-                  className="mr-4"
-                >
-                  <ArrowLeft className="h-5 w-5 text-[#1C1C1C]" />
-                </button>
-                <h3 className="flex-1 text-center text-sm font-semibold text-[#1C1C1C]">Creación perfil</h3>
-                <div className="w-5" /> {/* Spacer for centering */}
-              </div>
-
-              {/* Profile Card */}
-              <div className="px-4 pt-8 pb-4">
-                <Card className="overflow-visible shadow-[0_0_20px_rgba(0,0,0,0.08)] p-4 flex items-center gap-4">
-                  <div className="relative flex-shrink-0 w-16 h-16">
-                    <svg className="absolute inset-0 w-16 h-16" style={{ transform: 'rotate(-90deg)' }}>
-                      <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
-                      <circle
-                        cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="2.5" fill="none"
-                        strokeDasharray={`${2 * Math.PI * 30}`}
-                        strokeDashoffset={`${2 * Math.PI * 30 * (1 - (editingProfile ? getProfileCompletion(editingProfile as any) : 0) / 100)}`}
-                        strokeLinecap="round" className="transition-all duration-300"
-                      />
-                    </svg>
-                    <div 
-                      className="absolute inset-2 rounded-full flex items-center justify-center text-xl font-semibold text-white"
-                      style={{ 
-                        backgroundColor: editingProfile?.id 
-                          ? getProfileColor(healthProfiles.findIndex(p => p.id === editingProfile.id))
-                          : getProfileColor(healthProfiles.length)
-                      }}
-                    >
-                      {getInitials(editingProfile?.name || 'C')}
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-medium text-[#1C1C1C]">
-                      {editingProfile?.name && editingProfile.name.trim() ? editingProfile.name : 'Comensal 1'}
-                    </h3>
-                    <p className="text-sm text-[#898885]">
-                      {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 0)}% perfil completado
-                    </p>
-                  </div>
-                </Card>
-              </div>
-            </>
-          )}
-
-          {/* Main View */}
-          {currentSection === 'main' && (
-            <div className="flex-1 px-4 py-4 overflow-y-auto animate-fade-in" style={{ backgroundColor: '#FFFFFF' }}>
-              <h2 className="text-base font-medium text-[#1C1C1C] mb-2 relative z-10">Personalización</h2>
-              <Card className="overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.08)]">
-                {/* Datos personales */}
-                <button 
-                  onClick={() => setCurrentSection('personal-data')}
-                  className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5] min-h-[72px]"
-                >
-                  <div className="flex-1 flex items-center gap-3">
-                    <User className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                    <h4 className="text-base text-[#1C1C1C]">Datos personales</h4>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                </button>
-
-                {/* Ajustes macronutrientes */}
-                <button 
-                  onClick={() => setCurrentSection('macros')}
-                  className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5] min-h-[72px]"
-                >
-                  <div className="flex-1 flex items-center gap-3">
-                    <Utensils className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                    <div className="text-left">
-                      <h4 className="text-base text-[#1C1C1C]">Ajustes macronutrientes</h4>
-                      <p className="text-sm text-[#898885] mt-0.5">Hidratos, grasas, proteínas</p>
-                    </div>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                </button>
-
-                {/* Ajustes calorías */}
-                <button 
-                  onClick={() => setCurrentSection('calories')}
-                  className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5] min-h-[72px]"
-                >
-                  <div className="flex-1 flex items-center gap-3">
-                    <Flame className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                    <div className="text-left">
-                      <h4 className="text-base text-[#1C1C1C]">Ajustes calorías</h4>
-                      <p className="text-sm text-[#898885] mt-0.5">2500 kcal/día</p>
-                    </div>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                </button>
-
-                {/* Necesidades y preferencias nutricionales */}
-                <button 
-                  onClick={() => setCurrentSection('nutrition')}
-                  className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors min-h-[72px]"
-                >
-                  <div className="flex-1 flex items-center gap-3">
-                    <Apple className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                    <div className="text-left">
-                      <h4 className="text-base text-[#1C1C1C]">Necesidades y preferencias nutricionales</h4>
-                    </div>
-                  </div>
-                  <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                </button>
-              </Card>
-            </div>
-          )}
-
-          {/* Personal Data View */}
-          {currentSection === 'personal-data' && (
-            <div className="flex-1 flex flex-col animate-slide-in-right" style={{ backgroundColor: '#FFFFFF' }}>
-              {/* Header */}
-              <div className="px-4 py-6 flex items-center border-b border-[#E5E5E5]">
-                <button 
-                  onClick={handleBackToMain}
-                  className="mr-4"
-                >
-                  <ArrowLeft className="h-5 w-5 text-[#1C1C1C]" />
-                </button>
-                <h3 className="flex-1 text-center text-base font-medium text-[#1C1C1C]">Datos personales</h3>
-                <div className="w-5" /> {/* Spacer for centering */}
-              </div>
-
-              {/* Fields */}
-              <div className="flex-1 overflow-y-auto">
-                {/* Nombre */}
-                <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#898885]">Nombre</span>
-                  <button 
-                    onClick={() => handleNavigateToEdit('name')}
-                    className="text-base text-[#1C1C1C]"
-                  >
-                    {editingProfile?.name && editingProfile.name.trim() ? editingProfile.name : 'Añadir'}
-                  </button>
-                </div>
-
-                {/* Fecha de nacimiento */}
-                <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#898885]">Fecha de nacimiento</span>
-                  <button 
-                    onClick={() => handleNavigateToEdit('birthDate')}
-                    className="text-base text-[#1C1C1C]"
-                  >
-                    {editingProfile?.birthDate || 'Añadir'}
-                  </button>
-                </div>
-
-                {/* Peso actual */}
-                <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#898885]">Peso actual</span>
-                  <button 
-                    onClick={() => handleNavigateToEdit('weight')}
-                    className="text-base text-[#1C1C1C]"
-                  >
-                    {editingProfile?.weight || 'Añadir'}
-                  </button>
-                </div>
-
-                {/* Altura */}
-                <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#898885]">Altura</span>
-                  <button 
-                    onClick={() => handleNavigateToEdit('height')}
-                    className="text-base text-[#1C1C1C]"
-                  >
-                    {editingProfile?.height || 'Añadir'}
-                  </button>
-                </div>
-
-                {/* Sexo */}
-                <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#898885]">Sexo</span>
-                  <button 
-                    onClick={() => handleNavigateToEdit('sex')}
-                    className="text-base text-[#1C1C1C]"
-                  >
-                    {editingProfile?.sex || 'Añadir'}
-                  </button>
-                </div>
-
-                {/* Nivel de actividad */}
-                <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#898885]">Nivel de actividad</span>
-                  <button 
-                    onClick={() => handleNavigateToEdit('activityLevel')}
-                    className="text-base text-[#1C1C1C]"
-                  >
-                    {editingProfile?.activityLevel || 'Añadir'}
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Fixed Button at Bottom - Only show in main view */}
-          {currentSection === 'main' && (
-            <div className="px-4 py-4" style={{ backgroundColor: '#FFFFFF' }}>
-              <Button
-                variant="default"
-                className="w-full bg-[#1C1C1C] text-white hover:bg-[#000000]"
-              >
-                Guardar perfil
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
+      {/* Profile Creation Drawer */}
+      <ProfileCreationDrawer
+        isOpen={profileDrawerOpen}
+        onClose={handleCancelProfile}
+        onSave={handleSaveProfile}
+        editingProfile={editingProfile}
+      />
     </div>
   );
 };
