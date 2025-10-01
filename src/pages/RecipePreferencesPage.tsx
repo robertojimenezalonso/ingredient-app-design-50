@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { ArrowLeft, ArrowUp, Plus, MoreVertical } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -56,8 +57,10 @@ export const RecipePreferencesPage = () => {
   const totalNumbers = 10;
   
   const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
-  const [healthProfiles, setHealthProfiles] = useState<Array<{ id: number; name: string; isEditingName: boolean }>>([]);
+  const [healthProfiles, setHealthProfiles] = useState<Array<{ id: number; name: string; diet?: string; isEditingName: boolean }>>([]);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  const [dietDrawerOpen, setDietDrawerOpen] = useState(false);
+  const [selectedProfileForDiet, setSelectedProfileForDiet] = useState<number | null>(null);
   
   // Animation states
   const skipAnimations = shouldSkipAnimations || (persistedData !== null);
@@ -67,7 +70,22 @@ export const RecipePreferencesPage = () => {
 
   const handleAddProfile = () => {
     const newId = healthProfiles.length + 1;
-    setHealthProfiles([...healthProfiles, { id: newId, name: '', isEditingName: false }]);
+    setHealthProfiles([...healthProfiles, { id: newId, name: '', diet: undefined, isEditingName: false }]);
+  };
+
+  const handleOpenDietDrawer = (profileId: number) => {
+    setSelectedProfileForDiet(profileId);
+    setDietDrawerOpen(true);
+  };
+
+  const handleSelectDiet = (diet: string) => {
+    if (selectedProfileForDiet !== null) {
+      setHealthProfiles(profiles =>
+        profiles.map(p => p.id === selectedProfileForDiet ? { ...p, diet } : p)
+      );
+    }
+    setDietDrawerOpen(false);
+    setSelectedProfileForDiet(null);
   };
 
   const handleStartEditingName = (profileId: number) => {
@@ -296,6 +314,24 @@ export const RecipePreferencesPage = () => {
                                     Añadir
                                   </Button>
                                 )
+                              ) : field === 'Dieta' ? (
+                                profile.diet ? (
+                                  <button
+                                    onClick={() => handleOpenDietDrawer(profile.id)}
+                                    className="text-[#1C1C1C] text-base"
+                                  >
+                                    {profile.diet}
+                                  </button>
+                                ) : (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
+                                    onClick={() => handleOpenDietDrawer(profile.id)}
+                                  >
+                                    Añadir
+                                  </Button>
+                                )
                               ) : (
                                 <Button
                                   variant="ghost"
@@ -375,6 +411,28 @@ export const RecipePreferencesPage = () => {
           </div>
         </div>
       </div>
+
+      {/* Diet Drawer */}
+      <Drawer open={dietDrawerOpen} onOpenChange={setDietDrawerOpen}>
+        <DrawerContent className="max-h-[50vh]">
+          <DrawerHeader>
+            <DrawerTitle className="text-center text-xl font-semibold">
+              ¿Sigues alguna dieta específica?
+            </DrawerTitle>
+          </DrawerHeader>
+          <div className="px-4 pb-8 space-y-2">
+            {['Clásico', 'Pescetariano', 'Vegetariano', 'Vegano'].map((diet) => (
+              <button
+                key={diet}
+                onClick={() => handleSelectDiet(diet)}
+                className="w-full py-4 px-4 text-left text-base hover:bg-[#F4F4F4] rounded-lg transition-colors"
+              >
+                {diet}
+              </button>
+            ))}
+          </div>
+        </DrawerContent>
+      </Drawer>
     </div>
   );
 };
