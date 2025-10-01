@@ -208,10 +208,7 @@ export const RecipePreferencesPage = () => {
                       <div className="border border-[#E5E5E5] rounded-lg overflow-hidden">
                         {[
                           'Nombre',
-                          'Fecha de nacimiento',
-                          'Sexo',
-                          'Altura',
-                          'Peso',
+                          'Dieta',
                           'Alergias e intolerancias',
                           'Objetivo de salud'
                         ].map((field, fieldIndex, array) => (
