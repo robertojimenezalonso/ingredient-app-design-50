@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { ArrowLeft, ArrowUp, Plus, MoreVertical } from 'lucide-react';
 import { format } from 'date-fns';
@@ -57,10 +58,40 @@ export const RecipePreferencesPage = () => {
   const totalNumbers = 10;
   
   const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
-  const [healthProfiles, setHealthProfiles] = useState<Array<{ id: number; name: string; diet?: string; isEditingName: boolean }>>([]);
+  const [healthProfiles, setHealthProfiles] = useState<Array<{ 
+    id: number; 
+    name: string; 
+    diet?: string;
+    allergies?: string;
+    healthGoal?: string;
+    isEditingName: boolean 
+  }>>([]);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [dietDrawerOpen, setDietDrawerOpen] = useState(false);
   const [selectedProfileForDiet, setSelectedProfileForDiet] = useState<number | null>(null);
+
+  // Helper function to get initials from name
+  const getInitials = (name: string) => {
+    if (!name) return '';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  // Helper function to calculate profile completion percentage
+  const getProfileCompletion = (profile: typeof healthProfiles[0]) => {
+    let completed = 0;
+    const total = 4; // Nombre, Dieta, Alergias, Objetivo
+    
+    if (profile.name) completed++;
+    if (profile.diet) completed++;
+    if (profile.allergies) completed++;
+    if (profile.healthGoal) completed++;
+    
+    return (completed / total) * 100;
+  };
   
   // Animation states
   const skipAnimations = shouldSkipAnimations || (persistedData !== null);
@@ -70,7 +101,14 @@ export const RecipePreferencesPage = () => {
 
   const handleAddProfile = () => {
     const newId = healthProfiles.length + 1;
-    setHealthProfiles([...healthProfiles, { id: newId, name: '', diet: undefined, isEditingName: false }]);
+    setHealthProfiles([...healthProfiles, { 
+      id: newId, 
+      name: '', 
+      diet: undefined, 
+      allergies: undefined,
+      healthGoal: undefined,
+      isEditingName: false 
+    }]);
   };
 
   const handleOpenDietDrawer = (profileId: number) => {
@@ -253,9 +291,41 @@ export const RecipePreferencesPage = () => {
                   {healthProfiles.map((profile, index) => (
                     <div key={profile.id} className="mb-4">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-lg font-semibold text-[#1C1C1C]">
-                          {profile.name && `${index + 1} - `}{profile.name || `Perfil ${profile.id}`}
-                        </h3>
+                        <div className="flex items-center gap-3">
+                          {/* Avatar with circular progress */}
+                          <div className="relative">
+                            <svg className="absolute inset-0 w-12 h-12 -rotate-90">
+                              <circle
+                                cx="24"
+                                cy="24"
+                                r="20"
+                                stroke="#E5E5E5"
+                                strokeWidth="3"
+                                fill="none"
+                              />
+                              <circle
+                                cx="24"
+                                cy="24"
+                                r="20"
+                                stroke="#1C1C1C"
+                                strokeWidth="3"
+                                fill="none"
+                                strokeDasharray={`${2 * Math.PI * 20}`}
+                                strokeDashoffset={`${2 * Math.PI * 20 * (1 - getProfileCompletion(profile) / 100)}`}
+                                strokeLinecap="round"
+                                className="transition-all duration-300"
+                              />
+                            </svg>
+                            <Avatar className="w-12 h-12">
+                              <AvatarFallback className="bg-[#F4F4F4] text-[#1C1C1C] text-sm font-medium">
+                                {getInitials(profile.name)}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                          <h3 className="text-lg font-semibold text-[#1C1C1C]">
+                            {profile.name || `Perfil ${profile.id}`}
+                          </h3>
+                        </div>
                         <div className="relative">
                           <button
                             onClick={() => toggleMenu(profile.id)}
