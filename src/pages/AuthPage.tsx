@@ -8,7 +8,6 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowLeft, Mail, Lock, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { authSchemas } from '@/lib/validation';
-import { z } from 'zod';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -44,25 +43,19 @@ const AuthPage = () => {
 
     try {
       // Validate form data with Zod
-      const schema = isSignUp ? authSchemas.signUp : authSchemas.signIn;
-      const validationResult = schema.safeParse(formData);
-      
-      if (!validationResult.success) {
-        const firstError = validationResult.error.errors[0];
-        setError(firstError.message);
-        setLoading(false);
-        return;
-      }
-
-      const validatedData = validationResult.data;
-
       if (isSignUp) {
-        const signUpData = validatedData as z.infer<typeof authSchemas.signUp>;
-        const { error } = await signUp(
-          signUpData.email, 
-          signUpData.password, 
-          signUpData.displayName
-        );
+        const validationResult = authSchemas.signUp.safeParse(formData);
+        
+        if (!validationResult.success) {
+          const firstError = validationResult.error.errors[0];
+          setError(firstError.message);
+          setLoading(false);
+          return;
+        }
+
+        const { email, password, displayName } = validationResult.data;
+        const { error } = await signUp(email, password, displayName);
+        
         if (error) {
           if (error.message.includes('already registered')) {
             setError('Este email ya está registrado. Intenta iniciar sesión.');
@@ -76,7 +69,18 @@ const AuthPage = () => {
           });
         }
       } else {
-        const { error } = await signIn(validatedData.email, validatedData.password);
+        const validationResult = authSchemas.signIn.safeParse(formData);
+        
+        if (!validationResult.success) {
+          const firstError = validationResult.error.errors[0];
+          setError(firstError.message);
+          setLoading(false);
+          return;
+        }
+
+        const { email, password } = validationResult.data;
+        const { error } = await signIn(email, password);
+        
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
             setError('Email o contraseña incorrectos.');
