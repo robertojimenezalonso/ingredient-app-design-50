@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { X, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Keyboard } from '@capacitor/keyboard';
 
 interface ProfileCreationDrawerProps {
   isOpen: boolean;
@@ -81,46 +82,59 @@ export const ProfileCreationDrawer = ({
     setProfileData({ ...profileData, birthDate: formatted });
   };
 
-  // Prevent background scroll when drawer is open
+  // Prevent background scroll and keyboard behavior when drawer is open
   useEffect(() => {
     if (isOpen) {
-      // Fix body scroll
+      // Configure keyboard to not resize viewport
+      Keyboard.setResizeMode({ mode: 'none' as any }).catch(err => {
+        console.log('Keyboard plugin not available:', err);
+      });
+      
+      // Fix body scroll and position
+      const scrollY = window.scrollY;
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
-      document.body.style.height = '100vh';
-    } else {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      
+      return () => {
+        // Restore scroll position
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        window.scrollTo(0, scrollY);
+      };
     }
-    return () => {
-      document.body.style.overflow = '';
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.height = '';
-    };
   }, [isOpen]);
 
   useEffect(() => {
     if (!isOpen) return;
     
-    // Focus immediately without setTimeout to maintain user gesture chain
+    // Focus immediately and prevent scroll into view
     requestAnimationFrame(() => {
-      switch (currentStep) {
-        case 'name':
-          nameInputRef.current?.focus();
-          break;
-        case 'birthDate':
-          birthDateInputRef.current?.focus();
-          break;
-        case 'weight':
-          weightInputRef.current?.focus();
-          break;
-        case 'height':
-          heightInputRef.current?.focus();
-          break;
+      const input = (() => {
+        switch (currentStep) {
+          case 'name': return nameInputRef.current;
+          case 'birthDate': return birthDateInputRef.current;
+          case 'weight': return weightInputRef.current;
+          case 'height': return heightInputRef.current;
+          default: return null;
+        }
+      })();
+      
+      if (input) {
+        // Focus without scrolling
+        input.focus({ preventScroll: true });
+        
+        // Show keyboard explicitly
+        Keyboard.show().catch(err => {
+          console.log('Keyboard show not available:', err);
+        });
       }
     });
   }, [isOpen, currentStep]);
@@ -300,6 +314,11 @@ export const ProfileCreationDrawer = ({
                 placeholder="Escribe aqui"
                 className="w-full"
                 autoFocus
+                onBlur={(e) => {
+                  // Prevent keyboard from hiding
+                  e.preventDefault();
+                  setTimeout(() => e.target.focus({ preventScroll: true }), 0);
+                }}
               />
             )}
 
@@ -315,6 +334,10 @@ export const ProfileCreationDrawer = ({
                 maxLength={10}
                 className="w-full"
                 autoFocus
+                onBlur={(e) => {
+                  e.preventDefault();
+                  setTimeout(() => e.target.focus({ preventScroll: true }), 0);
+                }}
               />
             )}
 
@@ -330,6 +353,10 @@ export const ProfileCreationDrawer = ({
                   placeholder="Escribe tu peso"
                   className="w-full"
                   autoFocus
+                  onBlur={(e) => {
+                    e.preventDefault();
+                    setTimeout(() => e.target.focus({ preventScroll: true }), 0);
+                  }}
                 />
                 <div className="flex gap-2">
                   {['kg', 'lb', 'st'].map(unit => (
@@ -362,6 +389,10 @@ export const ProfileCreationDrawer = ({
                   placeholder="Escribe tu altura"
                   className="w-full"
                   autoFocus
+                  onBlur={(e) => {
+                    e.preventDefault();
+                    setTimeout(() => e.target.focus({ preventScroll: true }), 0);
+                  }}
                 />
                 <div className="flex gap-2">
                   {['cm', 'ft'].map(unit => (
