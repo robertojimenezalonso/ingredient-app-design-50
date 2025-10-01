@@ -1,13 +1,21 @@
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { sanitizeInput } from "@/lib/validation";
 
 export const regenerateRecipeImage = async (recipeId: string, recipeTitle: string) => {
   try {
     toast.info('Regenerando imagen con mejor calidad...');
     
+    // Sanitize recipe title before sending to edge function
+    const sanitizedTitle = sanitizeInput.recipeName(recipeTitle);
+    
+    if (!sanitizedTitle) {
+      throw new Error('Nombre de receta inválido');
+    }
+    
     // Llamar a la función edge para generar nueva imagen
     const { data, error } = await supabase.functions.invoke('generate-recipe-image', {
-      body: { recipeName: recipeTitle }
+      body: { recipeName: sanitizedTitle }
     });
 
     if (error) throw error;

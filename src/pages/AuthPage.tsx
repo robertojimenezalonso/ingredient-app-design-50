@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowLeft, Mail, Lock, User } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { authSchemas } from '@/lib/validation';
+import { z } from 'zod';
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -41,8 +43,26 @@ const AuthPage = () => {
     setError('');
 
     try {
+      // Validate form data with Zod
+      const schema = isSignUp ? authSchemas.signUp : authSchemas.signIn;
+      const validationResult = schema.safeParse(formData);
+      
+      if (!validationResult.success) {
+        const firstError = validationResult.error.errors[0];
+        setError(firstError.message);
+        setLoading(false);
+        return;
+      }
+
+      const validatedData = validationResult.data;
+
       if (isSignUp) {
-        const { error } = await signUp(formData.email, formData.password, formData.displayName);
+        const signUpData = validatedData as z.infer<typeof authSchemas.signUp>;
+        const { error } = await signUp(
+          signUpData.email, 
+          signUpData.password, 
+          signUpData.displayName
+        );
         if (error) {
           if (error.message.includes('already registered')) {
             setError('Este email ya está registrado. Intenta iniciar sesión.');
@@ -56,7 +76,7 @@ const AuthPage = () => {
           });
         }
       } else {
-        const { error } = await signIn(formData.email, formData.password);
+        const { error } = await signIn(validatedData.email, validatedData.password);
         if (error) {
           if (error.message.includes('Invalid login credentials')) {
             setError('Email o contraseña incorrectos.');

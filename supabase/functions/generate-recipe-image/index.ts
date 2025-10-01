@@ -19,6 +19,20 @@ interface ImageRequest {
   recipeNames?: string[]; // For batch processing (up to 5)
 }
 
+// Sanitize recipe name to prevent injection attacks
+function sanitizeRecipeName(name: string): string {
+  if (!name || typeof name !== 'string') {
+    throw new Error('Invalid recipe name');
+  }
+  
+  return name
+    .replace(/[<>]/g, '') // Remove angle brackets
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/[^\w\s\-,.áéíóúñÁÉÍÓÚÑ]/g, '') // Allow only safe characters
+    .trim()
+    .slice(0, 200); // Limit length to 200 characters
+}
+
 // Function to download image from URL and upload to Supabase Storage
 async function downloadAndUploadImage(imageUrl: string, fileName: string): Promise<string> {
   console.log('Downloading image from OpenAI URL:', imageUrl);
@@ -72,11 +86,23 @@ serve(async (req) => {
   }
 
   try {
-    const { recipeName, recipeNames }: ImageRequest = await req.json();
+    const body = await req.json();
+    
+    // Validate request body size (max 10KB)
+    const bodySize = JSON.stringify(body).length;
+    if (bodySize > 10240) {
+      throw new Error('Request body too large');
+    }
+    
+    const { recipeName, recipeNames }: ImageRequest = body;
+    
+    // Sanitize inputs
+    const sanitizedRecipeName = recipeName ? sanitizeRecipeName(recipeName) : undefined;
+    const sanitizedRecipeNames = recipeNames?.map(name => sanitizeRecipeName(name));
     
     // Determine if this is a single recipe or batch request
-    const isMultiple = recipeNames && recipeNames.length > 0;
-    const recipesToProcess = isMultiple ? recipeNames! : [recipeName!];
+    const isMultiple = sanitizedRecipeNames && sanitizedRecipeNames.length > 0;
+    const recipesToProcess = isMultiple ? sanitizedRecipeNames : [sanitizedRecipeName!];
     
     // Validate batch size (max 5 as per OpenAI limit)
     if (recipesToProcess.length > 5) {
