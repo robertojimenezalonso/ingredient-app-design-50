@@ -209,8 +209,8 @@ export const ProfileCreationDrawer = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-end p-4" style={{ paddingBottom: '16px' }}>
-      <Card className="w-full max-w-md max-h-[80vh] flex flex-col rounded-3xl border-0 shadow-2xl mx-auto">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-end p-4" style={{ paddingTop: '120px', paddingBottom: '16px' }}>
+      <Card className="w-full max-w-md max-h-[calc(100vh-136px)] flex flex-col rounded-3xl border-0 shadow-2xl mx-auto">
         {/* Header with profile info */}
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
           <div className="flex items-center gap-3 flex-1">
