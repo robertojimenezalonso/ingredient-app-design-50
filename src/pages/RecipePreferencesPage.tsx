@@ -429,7 +429,7 @@ export const RecipePreferencesPage = () => {
           <div className="px-4 py-8 overflow-y-auto max-h-[85vh]" style={{ backgroundColor: '#F4F4F4' }}>
             <Card className="overflow-hidden">
               {/* Datos personales */}
-              <button className="w-full py-6 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
                 <div className="flex-1 text-left">
                   <h4 className="text-base text-[#1C1C1C]">Datos personales</h4>
                 </div>
@@ -437,7 +437,7 @@ export const RecipePreferencesPage = () => {
               </button>
 
               {/* Ajustes macronutrientes */}
-              <button className="w-full py-6 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
                 <div className="flex-1 text-left">
                   <h4 className="text-base text-[#1C1C1C]">Ajustes macronutrientes</h4>
                   <p className="text-sm text-[#898885] mt-0.5">Hidratos, grasas, proteínas</p>
@@ -446,7 +446,7 @@ export const RecipePreferencesPage = () => {
               </button>
 
               {/* Ajustes calorías */}
-              <button className="w-full py-6 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
                 <div className="flex-1 text-left">
                   <h4 className="text-base text-[#1C1C1C]">Ajustes calorías</h4>
                   <p className="text-sm text-[#898885] mt-0.5">2500 kcal/día</p>
@@ -455,7 +455,7 @@ export const RecipePreferencesPage = () => {
               </button>
 
               {/* Necesidades y preferencias nutricionales */}
-              <button className="w-full py-6 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors">
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors">
                 <div className="flex-1 text-left">
                   <h4 className="text-base text-[#1C1C1C]">Necesidades y preferencias nutricionales</h4>
                 </div>
