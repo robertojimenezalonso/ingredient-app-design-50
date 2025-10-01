@@ -134,7 +134,17 @@ export const RecipePreferencesPage = () => {
   const handleSelectDiet = (diet: string) => {
     if (selectedProfileForDiet !== null) {
       setHealthProfiles(profiles =>
-        profiles.map(p => p.id === selectedProfileForDiet ? { ...p, diet } : p)
+        profiles.map(p => {
+          if (p.id === selectedProfileForDiet) {
+            // Si ya está seleccionada esta dieta, la deseleccionamos
+            if (p.diet === diet) {
+              return { ...p, diet: undefined };
+            }
+            // Si no, la seleccionamos
+            return { ...p, diet };
+          }
+          return p;
+        })
       );
     }
     setDietDrawerOpen(false);
@@ -531,16 +541,14 @@ export const RecipePreferencesPage = () => {
                 <button
                   key={diet}
                   onClick={() => handleSelectDiet(diet)}
-                  className="w-full py-4 px-4 text-left text-base hover:bg-[#D1D1D1] transition-colors flex items-center justify-between"
+                  className="w-full py-4 px-4 text-left text-base transition-colors flex items-center justify-between"
                   style={{
-                    backgroundColor: '#E5E5E5',
-                    borderRadius: '8px'
+                    backgroundColor: isSelected ? '#FFFFFF' : '#E5E5E5',
+                    borderRadius: '8px',
+                    border: isSelected ? '2px solid #1C1C1C' : '2px solid transparent'
                   }}
                 >
                   {diet}
-                  {isSelected && (
-                    <span className="text-[#10B981] font-medium">✓</span>
-                  )}
                 </button>
               );
             })}
