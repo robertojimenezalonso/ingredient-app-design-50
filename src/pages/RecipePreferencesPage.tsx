@@ -106,7 +106,7 @@ export const RecipePreferencesPage = () => {
     }
   };
 
-  const canContinue = selectedServings !== null;
+  const canContinue = healthProfiles.some(profile => profile.name.trim() !== '');
 
   const handleBack = () => {
     navigate('/meal-selection', { 
@@ -237,21 +237,38 @@ export const RecipePreferencesPage = () => {
                           <div key={field}>
                             <div className="flex items-center justify-between px-4 py-3">
                               <span className="text-[#1C1C1C] text-sm">{field}</span>
-                              {field === 'Nombre' && profile.isEditingName ? (
-                                <Input
-                                  autoFocus
-                                  value={profile.name}
-                                  onChange={(e) => handleNameChange(profile.id, e.target.value)}
-                                  onBlur={() => handleNameBlur(profile.id)}
-                                  className="h-8 flex-1 text-sm"
-                                  placeholder="Escribe aquí"
-                                />
+                              {field === 'Nombre' ? (
+                                profile.isEditingName ? (
+                                  <Input
+                                    autoFocus
+                                    value={profile.name}
+                                    onChange={(e) => handleNameChange(profile.id, e.target.value)}
+                                    onBlur={() => handleNameBlur(profile.id)}
+                                    className="h-8 flex-1 text-sm"
+                                    placeholder="Escribe aquí"
+                                  />
+                                ) : profile.name ? (
+                                  <button
+                                    onClick={() => handleStartEditingName(profile.id)}
+                                    className="text-[#1C1C1C] text-sm hover:underline"
+                                  >
+                                    {profile.name}
+                                  </button>
+                                ) : (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3"
+                                    onClick={() => handleStartEditingName(profile.id)}
+                                  >
+                                    Añadir
+                                  </Button>
+                                )
                               ) : (
                                 <Button
                                   variant="ghost"
                                   size="sm"
                                   className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3"
-                                  onClick={() => field === 'Nombre' && handleStartEditingName(profile.id)}
                                 >
                                   Añadir
                                 </Button>
@@ -285,23 +302,28 @@ export const RecipePreferencesPage = () => {
           backgroundColor: '#FFFFFF'
         }}>
           <div className="px-4 pt-4 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
-            {selectedServings !== null && (
+            {healthProfiles.filter(p => p.name.trim() !== '').length > 0 && (
               <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{ 
                 backgroundColor: '#F2F2F2',
                 scrollbarWidth: 'none',
                 msOverflowStyle: 'none'
               }}>
-                <Badge 
-                  variant="secondary" 
-                  className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
-                  style={{ 
-                    backgroundColor: '#D9DADC', 
-                    color: '#020818',
-                    borderRadius: '8px'
-                  }}
-                >
-                  {selectedServings === 'custom' ? 'Customizar por receta' : `${selectedServings} raciones`}
-                </Badge>
+                {healthProfiles
+                  .filter(profile => profile.name.trim() !== '')
+                  .map(profile => (
+                    <Badge 
+                      key={profile.id}
+                      variant="secondary" 
+                      className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
+                      style={{ 
+                        backgroundColor: '#D9DADC', 
+                        color: '#020818',
+                        borderRadius: '8px'
+                      }}
+                    >
+                      {profile.name}
+                    </Badge>
+                  ))}
               </div>
             )}
             <Button 
