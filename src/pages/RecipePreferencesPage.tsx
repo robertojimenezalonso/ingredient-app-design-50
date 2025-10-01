@@ -81,6 +81,72 @@ export const RecipePreferencesPage = () => {
     activityLevel?: string;
   } | null>(null);
 
+  // Handle returning from edit pages
+  useEffect(() => {
+    if (location.state?.editedField && location.state?.editedValue) {
+      const { editedField, editedValue, nextField } = location.state;
+      
+      setEditingProfile(prev => {
+        if (!prev) return prev;
+        const updated = { ...prev, [editedField]: editedValue };
+        return updated;
+      });
+      
+      // Navigate to next field if specified
+      if (nextField) {
+        setTimeout(() => {
+          handleNavigateToEdit(nextField);
+        }, 300);
+      }
+      
+      // Clear the state to prevent re-triggering
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
+
+  const handleNavigateToEdit = (field: string) => {
+    const routes: { [key: string]: string } = {
+      name: '/edit-name',
+      birthDate: '/edit-birth-date',
+      weight: '/edit-weight',
+      height: '/edit-height',
+      sex: '/edit-sex',
+      activityLevel: '/edit-activity-level'
+    };
+    
+    const route = routes[field];
+    if (route) {
+      const state: any = {
+        profileId: editingProfile?.id
+      };
+      
+      // Add the current value for the specific field
+      if (field === 'name') {
+        state.name = editingProfile?.name || '';
+      } else if (field === 'birthDate') {
+        state.birthDate = editingProfile?.birthDate || '';
+      } else if (field === 'weight') {
+        // Parse weight and unit if exists
+        const weightStr = editingProfile?.weight || '';
+        const parts = weightStr.split(' ');
+        state.weight = parts[0] || '';
+        state.weightUnit = parts[1] || 'kg';
+      } else if (field === 'height') {
+        // Parse height and unit if exists
+        const heightStr = editingProfile?.height || '';
+        const parts = heightStr.split(' ');
+        state.height = parts[0] || '';
+        state.heightUnit = parts[1] || 'cm';
+      } else if (field === 'sex') {
+        state.sex = editingProfile?.sex || '';
+      } else if (field === 'activityLevel') {
+        state.activityLevel = editingProfile?.activityLevel || '';
+      }
+      
+      navigate(route, { state });
+    }
+  };
+
   // Helper functions
   const getInitials = (name: string) => {
     if (!name || name === 'Comensal 1') return 'C1';
@@ -545,29 +611,21 @@ export const RecipePreferencesPage = () => {
                 {/* Nombre */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
                   <span className="text-base text-[#898885]">Nombre</span>
-                  {editingField === 'name' ? (
-                    <Input
-                      autoFocus
-                      value={editingProfile?.name || ''}
-                      onChange={(e) => setEditingProfile(prev => prev ? { ...prev, name: e.target.value } : null)}
-                      onBlur={() => setEditingField(null)}
-                      className="w-32 h-8 text-base text-right"
-                      placeholder="Escribe aquí"
-                    />
-                  ) : (
-                    <button 
-                      onClick={() => setEditingField('name')}
-                      className="text-base text-[#1C1C1C]"
-                    >
-                      {editingProfile?.name && editingProfile.name.trim() ? editingProfile.name : 'Añadir'}
-                    </button>
-                  )}
+                  <button 
+                    onClick={() => handleNavigateToEdit('name')}
+                    className="text-base text-[#1C1C1C]"
+                  >
+                    {editingProfile?.name && editingProfile.name.trim() ? editingProfile.name : 'Añadir'}
+                  </button>
                 </div>
 
                 {/* Fecha de nacimiento */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
                   <span className="text-base text-[#898885]">Fecha de nacimiento</span>
-                  <button className="text-base text-[#1C1C1C]">
+                  <button 
+                    onClick={() => handleNavigateToEdit('birthDate')}
+                    className="text-base text-[#1C1C1C]"
+                  >
                     {editingProfile?.birthDate || 'Añadir'}
                   </button>
                 </div>
@@ -575,7 +633,10 @@ export const RecipePreferencesPage = () => {
                 {/* Peso actual */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
                   <span className="text-base text-[#898885]">Peso actual</span>
-                  <button className="text-base text-[#1C1C1C]">
+                  <button 
+                    onClick={() => handleNavigateToEdit('weight')}
+                    className="text-base text-[#1C1C1C]"
+                  >
                     {editingProfile?.weight || 'Añadir'}
                   </button>
                 </div>
@@ -583,7 +644,10 @@ export const RecipePreferencesPage = () => {
                 {/* Altura */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
                   <span className="text-base text-[#898885]">Altura</span>
-                  <button className="text-base text-[#1C1C1C]">
+                  <button 
+                    onClick={() => handleNavigateToEdit('height')}
+                    className="text-base text-[#1C1C1C]"
+                  >
                     {editingProfile?.height || 'Añadir'}
                   </button>
                 </div>
@@ -591,7 +655,10 @@ export const RecipePreferencesPage = () => {
                 {/* Sexo */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
                   <span className="text-base text-[#898885]">Sexo</span>
-                  <button className="text-base text-[#1C1C1C]">
+                  <button 
+                    onClick={() => handleNavigateToEdit('sex')}
+                    className="text-base text-[#1C1C1C]"
+                  >
                     {editingProfile?.sex || 'Añadir'}
                   </button>
                 </div>
@@ -599,7 +666,10 @@ export const RecipePreferencesPage = () => {
                 {/* Nivel de actividad */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
                   <span className="text-base text-[#898885]">Nivel de actividad</span>
-                  <button className="text-base text-[#1C1C1C]">
+                  <button 
+                    onClick={() => handleNavigateToEdit('activityLevel')}
+                    className="text-base text-[#1C1C1C]"
+                  >
                     {editingProfile?.activityLevel || 'Añadir'}
                   </button>
                 </div>

@@ -1,0 +1,107 @@
+import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+
+export const EditBirthDatePage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const existingBirthDate = location.state?.birthDate || '';
+  const profileId = location.state?.profileId;
+  const isEditing = !!existingBirthDate;
+  
+  const [day, setDay] = useState(existingBirthDate ? existingBirthDate.split('/')[0] : '');
+  const [month, setMonth] = useState(existingBirthDate ? existingBirthDate.split('/')[1] : '');
+  const [year, setYear] = useState(existingBirthDate ? existingBirthDate.split('/')[2] : '');
+  
+  const handleContinue = () => {
+    const birthDate = `${day}/${month}/${year}`;
+    navigate('/recipe-preferences', { 
+      state: { 
+        editedField: 'birthDate',
+        editedValue: birthDate,
+        profileId,
+        nextField: 'weight'
+      } 
+    });
+  };
+  
+  const handleBack = () => {
+    navigate('/recipe-preferences');
+  };
+  
+  const isValid = day && month && year && 
+                  parseInt(day) >= 1 && parseInt(day) <= 31 &&
+                  parseInt(month) >= 1 && parseInt(month) <= 12 &&
+                  parseInt(year) >= 1900 && parseInt(year) <= new Date().getFullYear();
+  
+  return (
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 border-b">
+        <button
+          onClick={handleBack}
+          className="p-2 hover:bg-accent rounded-full transition-colors"
+        >
+          <ArrowLeft className="h-5 w-5 text-foreground" />
+        </button>
+        <h3 className="flex-1 text-center text-base font-medium text-foreground">
+          {isEditing ? 'Actualizar fecha de nacimiento' : 'Añadir fecha de nacimiento'}
+        </h3>
+        <div className="w-9" /> {/* Spacer for centering */}
+      </div>
+      
+      {/* Content */}
+      <div className="flex-1 p-4">
+        <div className="flex gap-2 justify-center items-center mb-4">
+          <Input
+            type="number"
+            value={day}
+            onChange={(e) => setDay(e.target.value)}
+            placeholder="DD"
+            className="w-20 text-center"
+            min="1"
+            max="31"
+          />
+          <span className="text-muted-foreground">/</span>
+          <Input
+            type="number"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            placeholder="MM"
+            className="w-20 text-center"
+            min="1"
+            max="12"
+          />
+          <span className="text-muted-foreground">/</span>
+          <Input
+            type="number"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            placeholder="AAAA"
+            className="w-24 text-center"
+            min="1900"
+            max={new Date().getFullYear()}
+          />
+        </div>
+        
+        <p className="text-xs text-muted-foreground text-center px-4 mt-6">
+          Te preguntamos esto porque la edad afecta la composición del cuerpo. Usamos esta información para ofrecerte recetas personalizadas.
+        </p>
+      </div>
+      
+      {/* Bottom Button */}
+      <div className="p-4 border-t bg-background">
+        <Button
+          onClick={handleContinue}
+          disabled={!isValid}
+          className="w-full"
+        >
+          Guardar y continuar
+        </Button>
+      </div>
+    </div>
+  );
+};

@@ -29,6 +29,12 @@ import ListsPage from "./pages/ListsPage";
 import { MealSelectionPage } from "./pages/MealSelectionPage";
 import { RecipePreferencesPage } from "./pages/RecipePreferencesPage";
 import { CustomizeServingsPage } from "./pages/CustomizeServingsPage";
+import { EditNamePage } from "./pages/EditNamePage";
+import { EditBirthDatePage } from "./pages/EditBirthDatePage";
+import { EditWeightPage } from "./pages/EditWeightPage";
+import { EditHeightPage } from "./pages/EditHeightPage";
+import { EditSexPage } from "./pages/EditSexPage";
+import { EditActivityLevelPage } from "./pages/EditActivityLevelPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -45,6 +51,12 @@ const App = () => (
             <Route path="/meal-selection" element={<MealSelectionPage />} />
             <Route path="/recipe-preferences" element={<RecipePreferencesPage />} />
             <Route path="/customize-servings" element={<CustomizeServingsPage />} />
+            <Route path="/edit-name" element={<EditNamePage />} />
+            <Route path="/edit-birth-date" element={<EditBirthDatePage />} />
+            <Route path="/edit-weight" element={<EditWeightPage />} />
+            <Route path="/edit-height" element={<EditHeightPage />} />
+            <Route path="/edit-sex" element={<EditSexPage />} />
+            <Route path="/edit-activity-level" element={<EditActivityLevelPage />} />
             <Route path="/mis-listas" element={<MyListsPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/calendar-selection" element={<CalendarSelectionPage />} />
