@@ -361,7 +361,7 @@ export const ProfileCreationDrawer = ({
                 <button
                   type="button"
                   onClick={() => {
-                    const units = ['kg', 'lb', 'st'];
+                    const units = ['kg', 'lb'];
                     const currentIndex = units.indexOf(profileData.weightUnit);
                     const nextIndex = (currentIndex + 1) % units.length;
                     setProfileData({ ...profileData, weightUnit: units[nextIndex] });
