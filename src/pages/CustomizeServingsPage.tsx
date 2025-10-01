@@ -200,10 +200,10 @@ export const CustomizeServingsPage = () => {
 
       {/* Chat area - starts below fixed header */}
       <div className="h-screen flex flex-col relative pt-16">
-        <div className="flex-1 transition-all duration-500 ease-out overflow-hidden pb-20" style={{
+        <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{
           backgroundColor: '#FFFFFF'
         }}>
-          <div className="flex flex-col h-full overflow-y-auto scrollbar-hide">
+          <div className="flex flex-col h-full overflow-y-auto scrollbar-hide pb-48">
             {/* User response - "Customizar por receta" (right-aligned) */}
             <div className="px-4 pt-4 mb-6">
               <div className="flex justify-end">
