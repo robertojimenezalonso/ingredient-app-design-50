@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -430,7 +430,8 @@ export const RecipePreferencesPage = () => {
             <Card className="overflow-hidden">
               {/* Datos personales */}
               <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
-                <div className="flex-1 text-left">
+                <div className="flex-1 flex items-center gap-3">
+                  <User className="h-5 w-5 text-[#898885] flex-shrink-0" />
                   <h4 className="text-base text-[#1C1C1C]">Datos personales</h4>
                 </div>
                 <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
@@ -438,25 +439,32 @@ export const RecipePreferencesPage = () => {
 
               {/* Ajustes macronutrientes */}
               <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
-                <div className="flex-1 text-left">
-                  <h4 className="text-base text-[#1C1C1C]">Ajustes macronutrientes</h4>
-                  <p className="text-sm text-[#898885] mt-0.5">Hidratos, grasas, proteínas</p>
+                <div className="flex-1 flex items-center gap-3">
+                  <Utensils className="h-5 w-5 text-[#898885] flex-shrink-0" />
+                  <div className="text-left">
+                    <h4 className="text-base text-[#1C1C1C]">Ajustes macronutrientes</h4>
+                    <p className="text-sm text-[#898885] mt-0.5">Hidratos, grasas, proteínas</p>
+                  </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
               </button>
 
               {/* Ajustes calorías */}
               <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
-                <div className="flex-1 text-left">
-                  <h4 className="text-base text-[#1C1C1C]">Ajustes calorías</h4>
-                  <p className="text-sm text-[#898885] mt-0.5">2500 kcal/día</p>
+                <div className="flex-1 flex items-center gap-3">
+                  <Flame className="h-5 w-5 text-[#898885] flex-shrink-0" />
+                  <div className="text-left">
+                    <h4 className="text-base text-[#1C1C1C]">Ajustes calorías</h4>
+                    <p className="text-sm text-[#898885] mt-0.5">2500 kcal/día</p>
+                  </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
               </button>
 
               {/* Necesidades y preferencias nutricionales */}
               <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors">
-                <div className="flex-1 text-left">
+                <div className="flex-1 flex items-center gap-3">
+                  <Apple className="h-5 w-5 text-[#898885] flex-shrink-0" />
                   <h4 className="text-base text-[#1C1C1C]">Necesidades y preferencias nutricionales</h4>
                 </div>
                 <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
