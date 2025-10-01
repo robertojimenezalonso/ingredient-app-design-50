@@ -411,41 +411,52 @@ export const RecipePreferencesPage = () => {
           
           {/* Profile Header with Avatar and Progress - Only show in main view */}
           {currentSection === 'main' && (
-            <div className="px-4 pt-6 pb-4 flex items-center gap-4 border-b border-[#E5E5E5]">
-              <div className="relative flex-shrink-0 w-16 h-16">
-                <svg className="absolute inset-0 w-16 h-16" style={{ transform: 'rotate(-90deg)' }}>
-                  <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
-                  <circle
-                    cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="2.5" fill="none"
-                    strokeDasharray={`${2 * Math.PI * 30}`}
-                    strokeDashoffset={`${2 * Math.PI * 30 * (1 - (editingProfile ? getProfileCompletion(editingProfile as any) : 0) / 100)}`}
-                    strokeLinecap="round" className="transition-all duration-300"
-                  />
-                </svg>
-                <div 
-                  className="absolute inset-2 rounded-full flex items-center justify-center text-xl font-semibold text-white"
-                  style={{ 
-                    backgroundColor: editingProfile?.id 
-                      ? getProfileColor(healthProfiles.findIndex(p => p.id === editingProfile.id))
-                      : getProfileColor(healthProfiles.length)
-                  }}
+            <>
+              {/* Top Header */}
+              <div className="px-4 py-6 flex items-center border-b border-[#E5E5E5]">
+                <button 
+                  onClick={handleCancelProfile}
+                  className="mr-4"
                 >
-                  {getInitials(editingProfile?.name || 'C')}
-                </div>
+                  <ArrowLeft className="h-5 w-5 text-[#1C1C1C]" />
+                </button>
+                <h3 className="flex-1 text-center text-sm font-semibold text-[#1C1C1C]">Creación perfil</h3>
+                <div className="w-5" /> {/* Spacer for centering */}
               </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-semibold text-[#1C1C1C]">{editingProfile?.name || 'Nuevo perfil'}</h3>
-                <p className="text-sm text-[#898885]">
-                  {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 0)}% perfil completado
-                </p>
+
+              {/* Profile Card */}
+              <div className="px-4 pt-8">
+                <Card className="overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.08)] p-4 flex items-center gap-4">
+                  <div className="relative flex-shrink-0 w-16 h-16">
+                    <svg className="absolute inset-0 w-16 h-16" style={{ transform: 'rotate(-90deg)' }}>
+                      <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
+                      <circle
+                        cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="2.5" fill="none"
+                        strokeDasharray={`${2 * Math.PI * 30}`}
+                        strokeDashoffset={`${2 * Math.PI * 30 * (1 - (editingProfile ? getProfileCompletion(editingProfile as any) : 0) / 100)}`}
+                        strokeLinecap="round" className="transition-all duration-300"
+                      />
+                    </svg>
+                    <div 
+                      className="absolute inset-2 rounded-full flex items-center justify-center text-xl font-semibold text-white"
+                      style={{ 
+                        backgroundColor: editingProfile?.id 
+                          ? getProfileColor(healthProfiles.findIndex(p => p.id === editingProfile.id))
+                          : getProfileColor(healthProfiles.length)
+                      }}
+                    >
+                      {getInitials(editingProfile?.name || 'C')}
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-[#1C1C1C]">{editingProfile?.name || 'Nuevo perfil'}</h3>
+                    <p className="text-sm text-[#898885]">
+                      {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 0)}% perfil completado
+                    </p>
+                  </div>
+                </Card>
               </div>
-              <button 
-                onClick={handleCancelProfile}
-                className="p-2 hover:bg-[#F4F4F4] rounded-full transition-colors"
-              >
-                <X className="h-5 w-5 text-[#1C1C1C]" />
-              </button>
-            </div>
+            </>
           )}
 
           {/* Main View */}
