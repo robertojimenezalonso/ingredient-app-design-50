@@ -543,9 +543,9 @@ export const RecipePreferencesPage = () => {
                   onClick={() => handleSelectDiet(diet)}
                   className="w-full py-4 px-4 text-left text-base transition-colors flex items-center justify-between"
                   style={{
-                    backgroundColor: isSelected ? '#FFFFFF' : '#E5E5E5',
+                    backgroundColor: isSelected ? '#D9DADC' : '#E5E5E5',
                     borderRadius: '8px',
-                    border: isSelected ? '2px solid #1C1C1C' : '2px solid transparent'
+                    border: isSelected ? '1px solid #020817' : '1px solid transparent'
                   }}
                 >
                   {diet}
