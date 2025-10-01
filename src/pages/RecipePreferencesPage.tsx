@@ -526,7 +526,7 @@ export const RecipePreferencesPage = () => {
 
       {/* Diet Drawer */}
       <Drawer open={dietDrawerOpen} onOpenChange={setDietDrawerOpen}>
-        <DrawerContent className="max-h-[50vh]">
+        <DrawerContent className="max-h-[50vh] bg-white">
           <DrawerHeader>
             <DrawerTitle className="text-left text-lg font-medium">
               ¿Sigues alguna dieta específica?
