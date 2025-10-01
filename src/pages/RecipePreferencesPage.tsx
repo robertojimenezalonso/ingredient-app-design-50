@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Card } from '@/components/ui/card';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { ArrowLeft, ArrowUp, Plus, MoreVertical, X } from 'lucide-react';
+import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -425,28 +426,42 @@ export const RecipePreferencesPage = () => {
             </div>
           </div>
 
-          <div className="px-4 py-6 space-y-3 overflow-y-auto max-h-[60vh]">
-            {/* Necesidades y preferencias nutricionales */}
-            <button className="w-full py-4 px-4 text-left bg-[#F4F4F4] rounded-lg hover:bg-[#E5E5E5] transition-colors">
-              <h4 className="text-base font-medium text-[#1C1C1C]">Necesidades y preferencias nutricionales</h4>
-            </button>
+          <div className="px-4 py-6 overflow-y-auto max-h-[60vh]">
+            <Card className="overflow-hidden">
+              {/* Necesidades y preferencias nutricionales */}
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+                <div className="flex-1 text-left">
+                  <h4 className="text-base text-[#1C1C1C]">Necesidades y preferencias nutricionales</h4>
+                </div>
+                <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
+              </button>
 
-            {/* Datos personales */}
-            <button className="w-full py-4 px-4 text-left bg-[#F4F4F4] rounded-lg hover:bg-[#E5E5E5] transition-colors">
-              <h4 className="text-base font-medium text-[#1C1C1C]">Datos personales</h4>
-            </button>
+              {/* Datos personales */}
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+                <div className="flex-1 text-left">
+                  <h4 className="text-base text-[#1C1C1C]">Datos personales</h4>
+                </div>
+                <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
+              </button>
 
-            {/* Ajustes macronutrientes */}
-            <button className="w-full py-4 px-4 text-left bg-[#F4F4F4] rounded-lg hover:bg-[#E5E5E5] transition-colors">
-              <h4 className="text-base font-medium text-[#1C1C1C]">Ajustes macronutrientes</h4>
-              <p className="text-sm text-[#898885] mt-1">Hidratos, grasas, proteínas</p>
-            </button>
+              {/* Ajustes macronutrientes */}
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5]">
+                <div className="flex-1 text-left">
+                  <h4 className="text-base text-[#1C1C1C]">Ajustes macronutrientes</h4>
+                  <p className="text-sm text-[#898885] mt-0.5">Hidratos, grasas, proteínas</p>
+                </div>
+                <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
+              </button>
 
-            {/* Ajustes calorías */}
-            <button className="w-full py-4 px-4 text-left bg-[#F4F4F4] rounded-lg hover:bg-[#E5E5E5] transition-colors">
-              <h4 className="text-base font-medium text-[#1C1C1C]">Ajustes calorías</h4>
-              <p className="text-sm text-[#898885] mt-1">2500 kcal/día</p>
-            </button>
+              {/* Ajustes calorías */}
+              <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors">
+                <div className="flex-1 text-left">
+                  <h4 className="text-base text-[#1C1C1C]">Ajustes calorías</h4>
+                  <p className="text-sm text-[#898885] mt-0.5">2500 kcal/día</p>
+                </div>
+                <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
+              </button>
+            </Card>
           </div>
 
           <div className="px-4 pb-6 border-t border-[#E5E5E5] pt-4">
