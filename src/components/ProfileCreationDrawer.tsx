@@ -178,8 +178,8 @@ export const ProfileCreationDrawer = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center px-4 pb-4">
-      <Card className="w-full max-w-md max-h-[85vh] flex flex-col rounded-3xl border-0 shadow-2xl">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md max-h-[80vh] flex flex-col rounded-3xl border-0 shadow-2xl">
         {/* Header with profile info */}
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
           <div className="flex items-center gap-3 flex-1">
@@ -221,7 +221,7 @@ export const ProfileCreationDrawer = ({
         </CardHeader>
 
         {/* Content */}
-        <CardContent className="flex-1 overflow-y-auto p-4 pb-24">
+        <CardContent className="flex-1 overflow-y-auto p-4">
           <div className="space-y-4">
             <h3 className="text-base font-medium">{getStepTitle()}</h3>
             
@@ -385,8 +385,8 @@ export const ProfileCreationDrawer = ({
           </div>
         </CardContent>
 
-        {/* Fixed bottom button */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 bg-background border-t">
+        {/* Bottom button - part of the card */}
+        <div className="p-4 border-t flex-shrink-0">
           <Button
             onClick={handleContinue}
             disabled={!canContinue()}
