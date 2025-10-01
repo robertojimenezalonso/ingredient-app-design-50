@@ -75,7 +75,7 @@ export const RecipePreferencesPage = () => {
 
   // Helper functions
   const getInitials = (name: string) => {
-    if (!name) return '';
+    if (!name || name === 'Comensal 1') return 'CO';
     const parts = name.trim().split(' ');
     if (parts.length === 1) {
       return parts[0].substring(0, 2).toUpperCase();
@@ -107,7 +107,7 @@ export const RecipePreferencesPage = () => {
 
   const handleAddProfile = () => {
     setEditingProfile({
-      name: '',
+      name: 'Comensal 1',
       diet: undefined,
       allergies: undefined,
       healthGoal: undefined
@@ -401,81 +401,62 @@ export const RecipePreferencesPage = () => {
               <X className="h-5 w-5" />
             </button>
           </DrawerHeader>
-          <div className="px-4 py-6 space-y-6 overflow-y-auto max-h-[70vh]">
-            {/* Nombre */}
-            <div>
-              <label className="text-sm font-medium text-[#1C1C1C] mb-2 block">Nombre*</label>
-              <Input
-                value={editingProfile?.name || ''}
-                onChange={(e) => setEditingProfile(prev => prev ? { ...prev, name: e.target.value } : null)}
-                placeholder="Escribe el nombre"
-                className="w-full"
-              />
-            </div>
-
-            {/* Dieta */}
-            <div>
-              <label className="text-sm font-medium text-[#1C1C1C] mb-2 block">Dieta</label>
-              <div className="space-y-2">
-                {['Clásico', 'Pescetariano', 'Vegetariano', 'Vegano'].map((diet) => (
-                  <button
-                    key={diet}
-                    onClick={() => setEditingProfile(prev => prev ? { 
-                      ...prev, 
-                      diet: prev.diet === diet ? undefined : diet 
-                    } : null)}
-                    className="w-full py-3 px-4 text-left text-base transition-colors"
-                    style={{
-                      backgroundColor: editingProfile?.diet === diet ? '#D9DADC' : '#F4F4F4',
-                      borderRadius: '8px',
-                      border: editingProfile?.diet === diet ? '1px solid #020817' : '1px solid transparent'
-                    }}
-                  >
-                    {diet}
-                  </button>
-                ))}
+          
+          {/* Profile Header with Avatar and Progress */}
+          <div className="px-4 pt-6 pb-4 flex items-center gap-4 border-b border-[#E5E5E5]">
+            <div className="relative flex-shrink-0 w-16 h-16">
+              <svg className="absolute inset-0 w-16 h-16" style={{ transform: 'rotate(-90deg)' }}>
+                <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
+                <circle
+                  cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="2.5" fill="none"
+                  strokeDasharray={`${2 * Math.PI * 30}`}
+                  strokeDashoffset={`${2 * Math.PI * 30 * (1 - (editingProfile ? getProfileCompletion(editingProfile as any) : 0) / 100)}`}
+                  strokeLinecap="round" className="transition-all duration-300"
+                />
+              </svg>
+              <div 
+                className="absolute inset-[8px] rounded-full flex items-center justify-center text-base font-medium"
+                style={{ backgroundColor: getProfileColor(healthProfiles.findIndex(p => p.id === editingProfile?.id) || healthProfiles.length), color: 'rgba(255, 255, 255, 0.8)' }}
+              >
+                {getInitials(editingProfile?.name || 'Comensal 1')}
               </div>
             </div>
-
-            {/* Alergias */}
-            <div>
-              <label className="text-sm font-medium text-[#1C1C1C] mb-2 block">Alergias e intolerancias</label>
-              <Input
-                value={editingProfile?.allergies || ''}
-                onChange={(e) => setEditingProfile(prev => prev ? { ...prev, allergies: e.target.value } : null)}
-                placeholder="Ej: Lactosa, gluten, frutos secos..."
-                className="w-full"
-              />
-            </div>
-
-            {/* Objetivo */}
-            <div>
-              <label className="text-sm font-medium text-[#1C1C1C] mb-2 block">Objetivo de salud</label>
-              <div className="space-y-2">
-                {['Perder peso', 'Ganar masa muscular', 'Mantener peso', 'Mejorar salud'].map((goal) => (
-                  <button
-                    key={goal}
-                    onClick={() => setEditingProfile(prev => prev ? { 
-                      ...prev, 
-                      healthGoal: prev.healthGoal === goal ? undefined : goal 
-                    } : null)}
-                    className="w-full py-3 px-4 text-left text-base transition-colors"
-                    style={{
-                      backgroundColor: editingProfile?.healthGoal === goal ? '#D9DADC' : '#F4F4F4',
-                      borderRadius: '8px',
-                      border: editingProfile?.healthGoal === goal ? '1px solid #020817' : '1px solid transparent'
-                    }}
-                  >
-                    {goal}
-                  </button>
-                ))}
-              </div>
+            <div className="flex-1">
+              <h3 className="text-xl font-semibold text-[#1C1C1C]">{editingProfile?.name || 'Comensal 1'}</h3>
+              <p className="text-sm text-[#898885]">
+                {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 25)}% perfil completado
+              </p>
             </div>
           </div>
+
+          <div className="px-4 py-6 space-y-3 overflow-y-auto max-h-[60vh]">
+            {/* Necesidades y preferencias nutricionales */}
+            <button className="w-full py-4 px-4 text-left bg-[#F4F4F4] rounded-lg hover:bg-[#E5E5E5] transition-colors">
+              <h4 className="text-base font-medium text-[#1C1C1C]">Necesidades y preferencias nutricionales</h4>
+            </button>
+
+            {/* Datos personales */}
+            <button className="w-full py-4 px-4 text-left bg-[#F4F4F4] rounded-lg hover:bg-[#E5E5E5] transition-colors">
+              <h4 className="text-base font-medium text-[#1C1C1C]">Datos personales</h4>
+            </button>
+
+            {/* Ajustes macronutrientes */}
+            <button className="w-full py-4 px-4 text-left bg-[#F4F4F4] rounded-lg hover:bg-[#E5E5E5] transition-colors">
+              <h4 className="text-base font-medium text-[#1C1C1C]">Ajustes macronutrientes</h4>
+              <p className="text-sm text-[#898885] mt-1">Hidratos, grasas, proteínas</p>
+            </button>
+
+            {/* Ajustes calorías */}
+            <button className="w-full py-4 px-4 text-left bg-[#F4F4F4] rounded-lg hover:bg-[#E5E5E5] transition-colors">
+              <h4 className="text-base font-medium text-[#1C1C1C]">Ajustes calorías</h4>
+              <p className="text-sm text-[#898885] mt-1">2500 kcal/día</p>
+            </button>
+          </div>
+
           <div className="px-4 pb-6 border-t border-[#E5E5E5] pt-4">
             <Button
               onClick={handleSaveProfile}
-              disabled={!editingProfile?.name.trim()}
+              disabled={!editingProfile?.name.trim() || editingProfile?.name === 'Comensal 1'}
               className="w-full bg-[#1C1C1C] text-white hover:bg-[#000000] disabled:opacity-50"
             >
               Guardar perfil
