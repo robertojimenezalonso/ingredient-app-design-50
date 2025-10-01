@@ -463,16 +463,6 @@ export const RecipePreferencesPage = () => {
               </button>
             </Card>
           </div>
-
-          <div className="px-4 pb-6 border-t border-[#E5E5E5] pt-4">
-            <Button
-              onClick={handleSaveProfile}
-              disabled={!editingProfile?.name.trim() || editingProfile?.name === 'Comensal 1'}
-              className="w-full bg-[#1C1C1C] text-white hover:bg-[#000000] disabled:opacity-50"
-            >
-              Guardar perfil
-            </Button>
-          </div>
         </DrawerContent>
       </Drawer>
     </div>
