@@ -224,7 +224,7 @@ export const RecipePreferencesPage = () => {
                   {/* Health Profiles */}
                   {healthProfiles.map((profile) => (
                     <div key={profile.id} className="mb-4">
-                      <h3 className="text-lg font-semibold text-[#1C1C1C] mb-3">
+                      <h3 className="text-lg font-semibold text-[#1C1C1C] mb-2">
                         {profile.name || `Perfil ${profile.id}`}
                       </h3>
                       <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
