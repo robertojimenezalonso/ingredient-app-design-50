@@ -309,35 +309,35 @@ export const RecipePreferencesPage = () => {
                         <div className="flex items-center gap-3">
                           {/* Avatar with circular progress - only show when name exists */}
                           {profile.name && (
-                            <div className="relative flex-shrink-0 w-12 h-12">
-                              {/* Progress ring */}
-                              <svg className="absolute inset-0 w-12 h-12" style={{ transform: 'rotate(-90deg)' }}>
+                            <div className="relative flex-shrink-0 w-14 h-14">
+                              {/* Progress ring - more separated */}
+                              <svg className="absolute inset-0 w-14 h-14" style={{ transform: 'rotate(-90deg)' }}>
                                 {/* Background circle */}
                                 <circle
-                                  cx="24"
-                                  cy="24"
-                                  r="21"
+                                  cx="28"
+                                  cy="28"
+                                  r="26"
                                   stroke="#E5E5E5"
-                                  strokeWidth="2"
+                                  strokeWidth="2.5"
                                   fill="none"
                                 />
                                 {/* Progress circle */}
                                 <circle
-                                  cx="24"
-                                  cy="24"
-                                  r="21"
-                                  stroke={getProfileColor(index)}
-                                  strokeWidth="2"
+                                  cx="28"
+                                  cy="28"
+                                  r="26"
+                                  stroke={getProfileCompletion(profile) === 100 ? '#10B981' : getProfileColor(index)}
+                                  strokeWidth="2.5"
                                   fill="none"
-                                  strokeDasharray={`${2 * Math.PI * 21}`}
-                                  strokeDashoffset={`${2 * Math.PI * 21 * (1 - getProfileCompletion(profile) / 100)}`}
+                                  strokeDasharray={`${2 * Math.PI * 26}`}
+                                  strokeDashoffset={`${2 * Math.PI * 26 * (1 - getProfileCompletion(profile) / 100)}`}
                                   strokeLinecap="round"
                                   className="transition-all duration-300"
                                 />
                               </svg>
-                              {/* Avatar centered inside */}
+                              {/* Avatar centered inside with more space */}
                               <div 
-                                className="absolute inset-[4px] rounded-full flex items-center justify-center text-sm font-medium"
+                                className="absolute inset-[7px] rounded-full flex items-center justify-center text-sm font-medium"
                                 style={{ 
                                   backgroundColor: getProfileColor(index),
                                   color: 'rgba(255, 255, 255, 0.8)'
