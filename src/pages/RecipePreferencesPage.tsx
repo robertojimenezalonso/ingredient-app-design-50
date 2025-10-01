@@ -288,7 +288,7 @@ export const RecipePreferencesPage = () => {
                   <Button
                     variant="default"
                     onClick={handleAddProfile}
-                    className="bg-[#1C1C1C] text-white hover:bg-[#000000] w-auto"
+                    className="bg-[#1C1C1C] text-white hover:bg-[#000000] w-auto mt-6"
                   >
                     <Plus className="h-4 w-4 mr-2" />
                     Añadir perfil de salud
