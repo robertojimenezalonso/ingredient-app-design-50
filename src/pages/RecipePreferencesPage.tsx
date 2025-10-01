@@ -475,7 +475,7 @@ export const RecipePreferencesPage = () => {
           </div>
 
           {/* Fixed Button at Bottom */}
-          <div className="px-4 py-4 border-t border-[#E5E5E5]" style={{ backgroundColor: '#FFFFFF' }}>
+          <div className="px-4 py-4" style={{ backgroundColor: '#FFFFFF' }}>
             <Button
               variant="default"
               className="w-full bg-[#1C1C1C] text-white hover:bg-[#000000]"
