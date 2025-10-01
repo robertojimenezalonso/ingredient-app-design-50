@@ -243,7 +243,7 @@ export const RecipePreferencesPage = () => {
                                   value={profile.name}
                                   onChange={(e) => handleNameChange(profile.id, e.target.value)}
                                   onBlur={() => handleNameBlur(profile.id)}
-                                  className="h-8 w-32 text-sm"
+                                  className="h-8 flex-1 text-sm"
                                   placeholder="Escribe aquí"
                                 />
                               ) : (
