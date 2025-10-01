@@ -97,23 +97,33 @@ export const ProfileCreationDrawer = ({
     if (!isOpen) return;
     
     const focusInput = () => {
-      switch (currentStep) {
-        case 'name':
-          nameInputRef.current?.focus();
-          break;
-        case 'birthDate':
-          birthDateInputRef.current?.focus();
-          break;
-        case 'weight':
-          weightInputRef.current?.focus();
-          break;
-        case 'height':
-          heightInputRef.current?.focus();
-          break;
+      const input = (() => {
+        switch (currentStep) {
+          case 'name': return nameInputRef.current;
+          case 'birthDate': return birthDateInputRef.current;
+          case 'weight': return weightInputRef.current;
+          case 'height': return heightInputRef.current;
+          default: return null;
+        }
+      })();
+      
+      if (input) {
+        // Multiple attempts to trigger focus
+        input.focus();
+        input.click();
+        
+        // Try again after a short delay
+        requestAnimationFrame(() => {
+          input.focus();
+          input.click();
+        });
       }
     };
     
-    setTimeout(focusInput, 100);
+    // Multiple timeouts to ensure focus
+    setTimeout(focusInput, 50);
+    setTimeout(focusInput, 150);
+    setTimeout(focusInput, 300);
   }, [isOpen, currentStep]);
 
   const getStepTitle = () => {
