@@ -536,7 +536,7 @@ export const RecipePreferencesPage = () => {
                 >
                   <ArrowLeft className="h-5 w-5 text-[#1C1C1C]" />
                 </button>
-                <h3 className="flex-1 text-center text-sm font-semibold text-[#1C1C1C]">Datos personales</h3>
+                <h3 className="flex-1 text-center text-base font-medium text-[#1C1C1C]">Datos personales</h3>
                 <div className="w-5" /> {/* Spacer for centering */}
               </div>
 
