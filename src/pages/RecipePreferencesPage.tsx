@@ -427,7 +427,7 @@ export const RecipePreferencesPage = () => {
           </div>
 
           <div className="flex-1 px-4 py-8 overflow-y-auto" style={{ backgroundColor: '#FFFFFF' }}>
-            <Card className="overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.08)]">
+            <Card className="overflow-hidden shadow-[0_0_30px_rgba(0,0,0,0.08)]">
               {/* Datos personales */}
               <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5] min-h-[72px]">
                 <div className="flex-1 flex items-center gap-3">
