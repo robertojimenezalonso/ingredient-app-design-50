@@ -158,7 +158,9 @@ const PeopleAndDietPage = () => {
         </div>
 
         {/* Footer with Generate Plan Button */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 z-[9999]">
+        <div className="fixed left-0 right-0 p-4 z-[9999]" style={{
+          bottom: 'env(safe-area-inset-bottom, 0px)'
+        }}>
           <div className="flex justify-center mb-4">
             <Button 
               onClick={handleGeneratePlan} 

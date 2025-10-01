@@ -478,8 +478,9 @@ export const RecipePreferencesPage = () => {
         </div>
 
         {/* Fixed Button Area at Bottom of Screen */}
-        <div className="absolute bottom-0 left-0 right-0 z-[9999]" style={{
-          backgroundColor: '#FFFFFF'
+        <div className="absolute left-0 right-0 z-[9999]" style={{
+          backgroundColor: '#FFFFFF',
+          bottom: 'env(safe-area-inset-bottom, 0px)'
         }}>
           <div className="px-4 pt-4 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
             {healthProfiles.filter(p => p.name.trim() !== '').length > 0 && (

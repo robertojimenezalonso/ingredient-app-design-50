@@ -228,7 +228,9 @@ const MyListsPage = () => {
       </div>
       
       {/* Create New List Button - Fixed at bottom */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100 z-[9999]">
+      <div className="fixed left-0 right-0 p-4 bg-white border-t border-gray-100 z-[9999]" style={{
+        bottom: 'env(safe-area-inset-bottom, 0px)'
+      }}>
         <Button 
           onClick={handleCreateNewList}
           className="w-full h-14 text-lg font-medium rounded-lg bg-btnFloating text-btnFloating-foreground hover:bg-btnFloating/90 shadow-lg"

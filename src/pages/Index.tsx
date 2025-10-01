@@ -569,8 +569,9 @@ const Index = () => {
           {/* Error Message Area - Outside footer */}
 
           {/* Fixed Button Area at Bottom of Screen */}
-          <div className="absolute bottom-0 left-0 right-0 z-[9999]" style={{
-          backgroundColor: '#FFFFFF'
+          <div className="absolute left-0 right-0 z-[9999]" style={{
+          backgroundColor: '#FFFFFF',
+          bottom: 'env(safe-area-inset-bottom, 0px)'
         }}>
             {/* Error Message Area */}
             {dateSelectionError && (
