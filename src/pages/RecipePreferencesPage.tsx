@@ -404,8 +404,8 @@ export const RecipePreferencesPage = () => {
       </div>
 
       {/* Profile Drawer */}
-      <Drawer open={profileDrawerOpen} onOpenChange={setProfileDrawerOpen}>
-        <DrawerContent className="bg-white animate-slide-in-right h-[80vh]">
+      {profileDrawerOpen && (
+        <div className="fixed inset-0 z-50 bg-white flex flex-col">
           
           {/* Profile Header with Avatar and Progress - Only show in main view */}
           {currentSection === 'main' && (
@@ -428,15 +428,21 @@ export const RecipePreferencesPage = () => {
                       : getProfileColor(healthProfiles.length)
                   }}
                 >
-                  {getInitials(editingProfile?.name || 'Comensal 1')}
+                  {getInitials(editingProfile?.name || 'C')}
                 </div>
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-semibold text-[#1C1C1C]">{editingProfile?.name || 'Comensal 1'}</h3>
+                <h3 className="text-xl font-semibold text-[#1C1C1C]">{editingProfile?.name || 'Nuevo perfil'}</h3>
                 <p className="text-sm text-[#898885]">
-                  {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 25)}% perfil completado
+                  {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 0)}% perfil completado
                 </p>
               </div>
+              <button 
+                onClick={handleCancelProfile}
+                className="p-2 hover:bg-[#F4F4F4] rounded-full transition-colors"
+              >
+                <X className="h-5 w-5 text-[#1C1C1C]" />
+              </button>
             </div>
           )}
 
@@ -596,8 +602,8 @@ export const RecipePreferencesPage = () => {
               </Button>
             </div>
           )}
-        </DrawerContent>
-      </Drawer>
+        </div>
+      )}
     </div>
   );
 };
