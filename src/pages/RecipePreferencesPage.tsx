@@ -309,8 +309,9 @@ export const RecipePreferencesPage = () => {
                         <div className="flex items-center gap-3">
                           {/* Avatar with circular progress - only show when name exists */}
                           {profile.name && (
-                            <div className="relative flex-shrink-0">
-                              <svg className="absolute inset-0 w-12 h-12 -rotate-90">
+                            <div className="relative flex-shrink-0 w-12 h-12">
+                              {/* Background circle */}
+                              <svg className="absolute inset-0 w-12 h-12 -rotate-90" style={{ zIndex: 1 }}>
                                 <circle
                                   cx="24"
                                   cy="24"
@@ -332,18 +333,20 @@ export const RecipePreferencesPage = () => {
                                   className="transition-all duration-300"
                                 />
                               </svg>
-                              <Avatar className="w-12 h-12" style={{ backgroundColor: getProfileColor(index) }}>
-                                <AvatarFallback 
-                                  className="text-sm font-medium text-white"
-                                  style={{ 
-                                    backgroundColor: getProfileColor(index),
-                                    opacity: 1,
-                                    color: 'rgba(255, 255, 255, 0.8)'
-                                  }}
-                                >
-                                  {getInitials(profile.name)}
-                                </AvatarFallback>
-                              </Avatar>
+                              {/* Avatar in the center */}
+                              <div className="absolute inset-[3px] rounded-full overflow-hidden" style={{ zIndex: 2 }}>
+                                <Avatar className="w-full h-full" style={{ backgroundColor: getProfileColor(index) }}>
+                                  <AvatarFallback 
+                                    className="text-sm font-medium"
+                                    style={{ 
+                                      backgroundColor: getProfileColor(index),
+                                      color: 'rgba(255, 255, 255, 0.8)'
+                                    }}
+                                  >
+                                    {getInitials(profile.name)}
+                                  </AvatarFallback>
+                                </Avatar>
+                              </div>
                             </div>
                           )}
                           <div>
