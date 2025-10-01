@@ -472,6 +472,13 @@ export const RecipePreferencesPage = () => {
                 <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
               </button>
             </Card>
+
+            <Button
+              variant="default"
+              className="w-full mt-4 bg-[#1C1C1C] text-white hover:bg-[#000000]"
+            >
+              Crear nuevo perfil
+            </Button>
           </div>
         </DrawerContent>
       </Drawer>
