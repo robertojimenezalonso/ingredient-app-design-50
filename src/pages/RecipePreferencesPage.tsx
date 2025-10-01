@@ -406,36 +406,38 @@ export const RecipePreferencesPage = () => {
       <Drawer open={profileDrawerOpen} onOpenChange={setProfileDrawerOpen}>
         <DrawerContent className="bg-white animate-slide-in-right h-[80vh]">
           
-          {/* Profile Header with Avatar and Progress */}
-          <div className="px-4 pt-6 pb-4 flex items-center gap-4 border-b border-[#E5E5E5]">
-            <div className="relative flex-shrink-0 w-16 h-16">
-              <svg className="absolute inset-0 w-16 h-16" style={{ transform: 'rotate(-90deg)' }}>
-                <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
-                <circle
-                  cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="2.5" fill="none"
-                  strokeDasharray={`${2 * Math.PI * 30}`}
-                  strokeDashoffset={`${2 * Math.PI * 30 * (1 - (editingProfile ? getProfileCompletion(editingProfile as any) : 0) / 100)}`}
-                  strokeLinecap="round" className="transition-all duration-300"
-                />
-              </svg>
-              <div 
-                className="absolute inset-2 rounded-full flex items-center justify-center text-xl font-semibold text-white"
-                style={{ 
-                  backgroundColor: editingProfile?.id 
-                    ? getProfileColor(healthProfiles.findIndex(p => p.id === editingProfile.id))
-                    : getProfileColor(healthProfiles.length)
-                }}
-              >
-                {getInitials(editingProfile?.name || 'Comensal 1')}
+          {/* Profile Header with Avatar and Progress - Only show in main view */}
+          {currentSection === 'main' && (
+            <div className="px-4 pt-6 pb-4 flex items-center gap-4 border-b border-[#E5E5E5]">
+              <div className="relative flex-shrink-0 w-16 h-16">
+                <svg className="absolute inset-0 w-16 h-16" style={{ transform: 'rotate(-90deg)' }}>
+                  <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
+                  <circle
+                    cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="2.5" fill="none"
+                    strokeDasharray={`${2 * Math.PI * 30}`}
+                    strokeDashoffset={`${2 * Math.PI * 30 * (1 - (editingProfile ? getProfileCompletion(editingProfile as any) : 0) / 100)}`}
+                    strokeLinecap="round" className="transition-all duration-300"
+                  />
+                </svg>
+                <div 
+                  className="absolute inset-2 rounded-full flex items-center justify-center text-xl font-semibold text-white"
+                  style={{ 
+                    backgroundColor: editingProfile?.id 
+                      ? getProfileColor(healthProfiles.findIndex(p => p.id === editingProfile.id))
+                      : getProfileColor(healthProfiles.length)
+                  }}
+                >
+                  {getInitials(editingProfile?.name || 'Comensal 1')}
+                </div>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold text-[#1C1C1C]">{editingProfile?.name || 'Comensal 1'}</h3>
+                <p className="text-sm text-[#898885]">
+                  {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 25)}% perfil completado
+                </p>
               </div>
             </div>
-            <div className="flex-1">
-              <h3 className="text-xl font-semibold text-[#1C1C1C]">{editingProfile?.name || 'Comensal 1'}</h3>
-              <p className="text-sm text-[#898885]">
-                {Math.round(editingProfile ? getProfileCompletion(editingProfile as any) : 25)}% perfil completado
-              </p>
-            </div>
-          </div>
+          )}
 
           {/* Main View */}
           {currentSection === 'main' && (
