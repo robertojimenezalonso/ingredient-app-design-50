@@ -36,10 +36,34 @@ export const RecipePreferencesPage = () => {
     return null;
   };
   
+  // Mock data for testing
+  const getMockData = () => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const dayAfter = new Date(today);
+    dayAfter.setDate(dayAfter.getDate() + 2);
+    
+    return {
+      confirmedDates: [today, tomorrow, dayAfter],
+      selectedSupermarket: 'mercadona',
+      mealSelections: [
+        { date: today, mealType: 'Desayuno' },
+        { date: today, mealType: 'Comida' },
+        { date: today, mealType: 'Cena' },
+        { date: tomorrow, mealType: 'Comida' },
+        { date: tomorrow, mealType: 'Cena' },
+        { date: dayAfter, mealType: 'Desayuno' },
+        { date: dayAfter, mealType: 'Comida' },
+      ]
+    };
+  };
+  
   const persistedData = getPersistedData();
-  const confirmedDates = location.state?.confirmedDates || persistedData?.confirmedDates || [];
-  const selectedSupermarket = location.state?.selectedSupermarket || persistedData?.selectedSupermarket || null;
-  const mealSelections = location.state?.mealSelections || persistedData?.mealSelections || [];
+  const mockData = getMockData();
+  const confirmedDates = location.state?.confirmedDates || persistedData?.confirmedDates || mockData.confirmedDates;
+  const selectedSupermarket = location.state?.selectedSupermarket || persistedData?.selectedSupermarket || mockData.selectedSupermarket;
+  const mealSelections = location.state?.mealSelections || persistedData?.mealSelections || mockData.mealSelections;
   const shouldSkipAnimations = location.state?.shouldRestoreSelection || !!persistedData;
   
   // Save data to localStorage whenever it changes
@@ -179,6 +203,14 @@ export const RecipePreferencesPage = () => {
   const [showIcon, setShowIcon] = useState(true);
   const [displayedText, setDisplayedText] = useState(skipAnimations ? fullText : '');
   const [showCursor, setShowCursor] = useState(!skipAnimations);
+
+  // Auto-open drawer on load for testing
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleAddProfile();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleAddProfile = () => {
     setEditingProfile({
