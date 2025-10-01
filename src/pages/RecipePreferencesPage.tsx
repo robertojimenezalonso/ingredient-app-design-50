@@ -465,7 +465,9 @@ export const RecipePreferencesPage = () => {
               <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors">
                 <div className="flex-1 flex items-center gap-3">
                   <Apple className="h-5 w-5 text-[#898885] flex-shrink-0" />
-                  <h4 className="text-base text-[#1C1C1C]">Necesidades y preferencias nutricionales</h4>
+                  <div className="text-left">
+                    <h4 className="text-base text-[#1C1C1C]">Necesidades y preferencias nutricionales</h4>
+                  </div>
                 </div>
                 <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
               </button>
