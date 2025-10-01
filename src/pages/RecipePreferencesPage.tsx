@@ -326,7 +326,7 @@ export const RecipePreferencesPage = () => {
                                   cx="28"
                                   cy="28"
                                   r="26"
-                                  stroke={getProfileCompletion(profile) === 100 ? '#10B981' : getProfileColor(index)}
+                                  stroke="#10B981"
                                   strokeWidth="2.5"
                                   fill="none"
                                   strokeDasharray={`${2 * Math.PI * 26}`}
