@@ -272,7 +272,7 @@ export const ProfileCreationDrawer = ({
                 type="text"
                 value={profileData.name}
                 onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                placeholder="Escribe tu nombre"
+                placeholder="Escribe aqui"
                 className="w-full"
                 autoFocus
               />
