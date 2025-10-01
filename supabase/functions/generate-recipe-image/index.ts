@@ -3,7 +3,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
@@ -33,20 +33,14 @@ function sanitizeRecipeName(name: string): string {
     .slice(0, 200); // Limit length to 200 characters
 }
 
-// Function to download image from URL and upload to Supabase Storage
-async function downloadAndUploadImage(imageUrl: string, fileName: string): Promise<string> {
-  console.log('Downloading image from OpenAI URL:', imageUrl);
+// Function to upload base64 image to Supabase Storage
+async function uploadBase64Image(base64Data: string, fileName: string): Promise<string> {
+  console.log('Converting base64 image to buffer...');
   
-  // Download the image from OpenAI
-  const imageResponse = await fetch(imageUrl);
-  if (!imageResponse.ok) {
-    throw new Error(`Failed to download image: ${imageResponse.status}`);
-  }
+  // Convert base64 to buffer
+  const imageBuffer = Uint8Array.from(atob(base64Data), c => c.charCodeAt(0));
   
-  const imageBlob = await imageResponse.blob();
-  const imageBuffer = await imageBlob.arrayBuffer();
-  
-  console.log('Image downloaded, size:', imageBuffer.byteLength, 'bytes');
+  console.log('Image buffer size:', imageBuffer.byteLength, 'bytes');
   
   // Generate unique filename
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
@@ -117,39 +111,45 @@ serve(async (req) => {
         `Ultra-realistic, professional food photography of ${name}. Perfect golden-brown texture, beautifully melted cheese visible, fresh spinach leaves and sautéed mushrooms clearly shown. Served on elegant white ceramic plate, shot from slight angle to show thickness and layers. Restaurant-quality presentation with natural lighting, shallow depth of field, macro details showing appetizing textures. Photorealistic, award-winning culinary photography style, 8K resolution quality.`
       );
 
-      console.log('Making batch request to OpenAI with prompts:', prompts);
+      console.log('Making batch request to Lovable AI with prompts:', prompts);
 
-      // For multiple images, we need to make separate calls as DALL-E doesn't support multiple different prompts in one call
+      // For multiple images, we need to make separate calls
       const imageResults = await Promise.all(
         prompts.map(async (prompt, index) => {
           try {
-            const response = await fetch('https://api.openai.com/v1/images/generations', {
+            const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
               method: 'POST',
               headers: {
-                'Authorization': `Bearer ${openAIApiKey}`,
+                'Authorization': `Bearer ${lovableApiKey}`,
                 'Content-Type': 'application/json',
               },
               body: JSON.stringify({
-                model: 'dall-e-3',
-                prompt: prompt,
-                n: 1,
-                size: '1024x1024',
-                quality: 'hd',
-                style: 'natural'
+                model: 'google/gemini-2.5-flash-image-preview',
+                messages: [
+                  { role: 'user', content: prompt }
+                ],
+                max_tokens: 1024
               }),
             });
 
             if (!response.ok) {
               const errorText = await response.text();
-              console.error(`OpenAI API error for recipe ${recipesToProcess[index]}:`, errorText);
-              throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
+              console.error(`Lovable AI error for recipe ${recipesToProcess[index]}:`, errorText);
+              if (response.status === 429) {
+                throw new Error('Rate limit exceeded. Please try again later.');
+              }
+              if (response.status === 402) {
+                throw new Error('Payment required. Please add credits to your Lovable workspace.');
+              }
+              throw new Error(`Lovable AI error: ${response.status} - ${errorText}`);
             }
 
             const data = await response.json();
+            const base64Image = data.choices[0].message.content;
             
-            // Download and upload the image to Supabase Storage
-            const permanentImageUrl = await downloadAndUploadImage(
-              data.data[0].url, 
+            // Upload base64 image to Supabase Storage
+            const permanentImageUrl = await uploadBase64Image(
+              base64Image, 
               recipesToProcess[index]
             );
             
@@ -179,52 +179,57 @@ serve(async (req) => {
       // Single recipe processing (backward compatibility)
       const prompt = `Ultra-realistic, professional food photography of ${recipesToProcess[0]}. Perfect golden-brown texture, beautifully melted cheese visible, fresh spinach leaves and sautéed mushrooms clearly shown. Served on elegant white ceramic plate, shot from slight angle to show thickness and layers. Restaurant-quality presentation with natural lighting, shallow depth of field, macro details showing appetizing textures. Photorealistic, award-winning culinary photography style, 8K resolution quality.`;
 
-      console.log('Making single request to OpenAI with prompt:', prompt);
+      console.log('Making single request to Lovable AI with prompt:', prompt);
 
-      const response = await fetch('https://api.openai.com/v1/images/generations', {
+      const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${openAIApiKey}`,
+          'Authorization': `Bearer ${lovableApiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'dall-e-3',
-          prompt: prompt,
-          n: 1,
-          size: '1024x1024',
-          quality: 'hd',
-          style: 'natural'
+          model: 'google/gemini-2.5-flash-image-preview',
+          messages: [
+            { role: 'user', content: prompt }
+          ],
+          max_tokens: 1024
         }),
       });
 
-      console.log('OpenAI response status:', response.status);
+      console.log('Lovable AI response status:', response.status);
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('OpenAI API error:', errorText);
-        throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
+        console.error('Lovable AI error:', errorText);
+        if (response.status === 429) {
+          throw new Error('Rate limit exceeded. Please try again later.');
+        }
+        if (response.status === 402) {
+          throw new Error('Payment required. Please add credits to your Lovable workspace.');
+        }
+        throw new Error(`Lovable AI error: ${response.status} - ${errorText}`);
       }
 
       const data = await response.json();
-      console.log('OpenAI response data:', JSON.stringify(data, null, 2));
+      console.log('Lovable AI response data:', JSON.stringify(data, null, 2));
 
       // Verificar que la respuesta tiene la estructura esperada
-      if (!data || !data.data || !Array.isArray(data.data) || data.data.length === 0) {
-        console.error('Invalid response structure from OpenAI:', data);
-        throw new Error('Invalid response structure from OpenAI API');
+      if (!data || !data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
+        console.error('Invalid response structure from Lovable AI:', data);
+        throw new Error('Invalid response structure from Lovable AI Gateway');
       }
 
-      const imageUrl = data.data[0].url;
+      const base64Image = data.choices[0].message.content;
       
-      if (!imageUrl) {
-        console.error('No image URL in response:', data.data[0]);
-        throw new Error('No image URL returned from OpenAI API');
+      if (!base64Image) {
+        console.error('No image data in response:', data.choices[0]);
+        throw new Error('No image data returned from Lovable AI Gateway');
       }
 
-      console.log('Successfully generated image URL:', imageUrl);
+      console.log('Successfully generated image');
 
-      // Download and upload the image to Supabase Storage
-      const permanentImageUrl = await downloadAndUploadImage(imageUrl, recipesToProcess[0]);
+      // Upload base64 image to Supabase Storage
+      const permanentImageUrl = await uploadBase64Image(base64Image, recipesToProcess[0]);
 
       return new Response(JSON.stringify({ imageUrl: permanentImageUrl }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

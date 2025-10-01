@@ -2,7 +2,7 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
@@ -130,10 +130,10 @@ serve(async (req) => {
       // No body or invalid JSON, use default (all categories)
     }
     
-    console.log('Starting recipe bank generation with DALL-E images...', category ? `for category: ${category}` : 'for all categories');
+    console.log('Starting recipe bank generation with Lovable AI...', category ? `for category: ${category}` : 'for all categories');
     
-    if (!openAIApiKey) {
-      throw new Error('OpenAI API key not configured');
+    if (!lovableApiKey) {
+      throw new Error('Lovable AI API key not configured');
     }
 
     if (!supabaseUrl || !supabaseServiceKey) {
@@ -223,20 +223,19 @@ Responde en formato JSON con esta estructura exacta:
 
 RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostada.`;
 
-          console.log('Calling OpenAI for recipe generation...');
-          const recipeResponse = await rateLimitedFetch('https://api.openai.com/v1/chat/completions', {
+          console.log('Calling Lovable AI for recipe generation...');
+          const recipeResponse = await rateLimitedFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${openAIApiKey}`,
+              'Authorization': `Bearer ${lovableApiKey}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'gpt-4.1-2025-04-14',
+              model: 'google/gemini-2.5-flash',
               messages: [
                 { role: 'system', content: 'Eres un chef experto que crea recetas nutritivas y deliciosas. Responde siempre en JSON válido.' },
                 { role: 'user', content: recipePrompt }
               ],
-              temperature: 0.8,
               response_format: { type: "json_object" }
             }),
           });
@@ -250,26 +249,48 @@ RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostad
           const ingredientsList = recipe.ingredients.map(ing => ing.name).join(', ');
           const imagePrompt = `Fotografía profesional ultra realista de ${recipe.title}, servidas en una mesa de madera rústica, ángulo lateral ligeramente elevado (3/4), luz natural cálida y suave, colores ricos y vibrantes. Ingredientes claramente visibles y enfocados: ${ingredientsList}. Ambiente acogedor de restaurante, textura y detalles de los alimentos en primer plano, presentación elegante pero casera, sombras naturales, colores saturados pero realistas, estilo de fotografía gastronómica profesional, alta definición. Sin texto, logotipos, personas, cubiertos ni objetos ajenos a la comida.`;
 
-          console.log('Calling DALL-E for realistic image generation...');
+          console.log('Calling Lovable AI for realistic image generation...');
           console.log('Image prompt:', imagePrompt);
-          const imageResponse = await rateLimitedFetch('https://api.openai.com/v1/images/generations', {
+          const imageResponse = await rateLimitedFetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
             method: 'POST',
             headers: {
-              'Authorization': `Bearer ${openAIApiKey}`,
+              'Authorization': `Bearer ${lovableApiKey}`,
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              model: 'dall-e-3',
-              prompt: imagePrompt,
-              n: 1,
-              size: '1024x1024',
-              quality: 'hd',
-              style: 'natural'
+              model: 'google/gemini-2.5-flash-image-preview',
+              messages: [
+                { role: 'user', content: imagePrompt }
+              ],
+              max_tokens: 1024
             }),
           });
 
           const imageData = await imageResponse.json();
-          const temporaryImageUrl = imageData.data[0].url;
+          // Gemini image model returns base64 encoded image in the content
+          const base64Image = imageData.choices[0].message.content;
+          
+          // Convert base64 to blob and upload
+          const imageBuffer = Uint8Array.from(atob(base64Image), c => c.charCodeAt(0));
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+          const uniqueFileName = `${timestamp}-${recipe.title.replace(/[^a-zA-Z0-9]/g, '-')}.png`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('recipe-images')
+            .upload(uniqueFileName, imageBuffer, {
+              contentType: 'image/png',
+              upsert: false
+            });
+            
+          if (uploadError) {
+            throw new Error(`Failed to upload image: ${uploadError.message}`);
+          }
+          
+          const { data: publicUrlData } = supabase.storage
+            .from('recipe-images')
+            .getPublicUrl(uploadData.path);
+            
+          const temporaryImageUrl = publicUrlData.publicUrl;
           
           console.log(`✓ Generated temporary image for: "${recipe.title}"`);
 
@@ -342,7 +363,7 @@ RECUERDA: Debe ser una receta totalmente original y diferente a cualquier tostad
 
     return new Response(JSON.stringify({ 
       success: true,
-      message: `Generated ${allGeneratedRecipes.length} recipes with DALL-E images`,
+      message: `Generated ${allGeneratedRecipes.length} recipes with Lovable AI images`,
       total: allGeneratedRecipes.length,
       target: totalToGenerate,
       recipes: allGeneratedRecipes

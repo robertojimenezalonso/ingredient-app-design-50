@@ -1,7 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+const lovableApiKey = Deno.env.get('LOVABLE_API_KEY');
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -20,11 +20,11 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  console.log('Edge function started, checking OpenAI API key...');
+  console.log('Edge function started, checking Lovable AI API key...');
   
-  if (!openAIApiKey) {
-    console.error('OpenAI API key not found in environment variables');
-    return new Response(JSON.stringify({ error: 'OpenAI API key not configured' }), {
+  if (!lovableApiKey) {
+    console.error('Lovable AI API key not found in environment variables');
+    return new Response(JSON.stringify({ error: 'Lovable AI API key not configured' }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -93,15 +93,15 @@ La receta debe ser realista, saludable y adecuada para ${mealType.toLowerCase()}
 
     console.log('Generated prompt:', prompt.substring(0, 200) + '...');
 
-    console.log('Making request to OpenAI...');
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    console.log('Making request to Lovable AI Gateway...');
+    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${lovableApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
+        model: 'google/gemini-2.5-flash',
         messages: [
           { 
             role: 'system', 
@@ -109,21 +109,26 @@ La receta debe ser realista, saludable y adecuada para ${mealType.toLowerCase()}
           },
           { role: 'user', content: prompt }
         ],
-        temperature: 0.3,
         response_format: { type: "json_object" }
       }),
     });
 
-    console.log('OpenAI response status:', response.status);
+    console.log('Lovable AI response status:', response.status);
     const data = await response.json();
     
     if (!response.ok) {
-      console.error('OpenAI API error:', data);
-      throw new Error(`OpenAI API error: ${data.error?.message || 'Unknown error'}`);
+      console.error('Lovable AI Gateway error:', data);
+      if (response.status === 429) {
+        throw new Error('Rate limit exceeded. Please try again later.');
+      }
+      if (response.status === 402) {
+        throw new Error('Payment required. Please add credits to your Lovable workspace.');
+      }
+      throw new Error(`Lovable AI Gateway error: ${data.error?.message || 'Unknown error'}`);
     }
     
     const recipeText = data.choices[0].message.content;
-    console.log('Raw OpenAI response:', recipeText);
+    console.log('Raw Lovable AI response:', recipeText);
     
     // Parse the JSON response
     let recipe;
@@ -134,7 +139,7 @@ La receta debe ser realista, saludable y adecuada para ${mealType.toLowerCase()}
     } catch (parseError) {
       console.error('Error parsing recipe JSON:', parseError);
       console.error('Raw response:', recipeText);
-      throw new Error(`Invalid JSON response from OpenAI: ${parseError.message}`);
+      throw new Error(`Invalid JSON response from Lovable AI: ${parseError.message}`);
     }
 
     return new Response(JSON.stringify({ recipe }), {
