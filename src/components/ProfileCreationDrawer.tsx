@@ -84,12 +84,22 @@ export const ProfileCreationDrawer = ({
   // Prevent background scroll when drawer is open
   useEffect(() => {
     if (isOpen) {
+      // Fix body scroll
       document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100vh';
     } else {
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
     }
     return () => {
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
     };
   }, [isOpen]);
 
@@ -208,8 +218,9 @@ export const ProfileCreationDrawer = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex justify-center" style={{ paddingBottom: '16px' }}>
-      <Card className="w-full max-w-md max-h-[calc(100vh-136px)] flex flex-col rounded-3xl border-0 shadow-2xl mx-4 mt-[120px] self-start">
+    <div className="fixed inset-0 z-50 flex justify-center" style={{ height: '100vh', paddingBottom: '16px' }}>
+      <div className="absolute inset-0 bg-black/50" />
+      <Card className="relative w-full max-w-md max-h-[calc(100vh-136px)] flex flex-col rounded-3xl border-0 shadow-2xl mx-4 mt-[120px] self-start">
         {/* Header with profile info */}
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
           <div className="flex items-center gap-3 flex-1">
