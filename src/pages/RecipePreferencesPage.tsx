@@ -127,12 +127,12 @@ export const RecipePreferencesPage = () => {
 
   // Typewriter effect for text
   useEffect(() => {
-    if (skipAnimations) return;
+    if (skipAnimations || fullText.length === 0) return;
     
     if (displayedText.length === 0) {
       // Start typewriter
       setTimeout(() => {
-        setDisplayedText(fullText[0]);
+        setDisplayedText(fullText[0] || '');
       }, 300);
     } else if (displayedText.length < fullText.length) {
       const timeout = setTimeout(() => {
