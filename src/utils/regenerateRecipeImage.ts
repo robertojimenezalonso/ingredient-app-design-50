@@ -3,6 +3,12 @@ import { toast } from "sonner";
 import { sanitizeInput } from "@/lib/validation";
 
 export const regenerateRecipeImage = async (recipeId: string, recipeTitle: string) => {
+  // TEMPORALMENTE DESHABILITADO: Generación de imágenes para ahorrar créditos
+  toast.info('⚠️ La generación de imágenes está temporalmente deshabilitada para ahorrar créditos');
+  console.log('⚠️ Regeneración de imágenes DESHABILITADA');
+  return;
+  
+  /* CÓDIGO ORIGINAL COMENTADO
   try {
     toast.info('Regenerando imagen con mejor calidad...');
     
@@ -45,4 +51,5 @@ export const regenerateRecipeImage = async (recipeId: string, recipeTitle: strin
     console.error('Error regenerating image:', error);
     toast.error('Error al regenerar la imagen');
   }
+  */
 };

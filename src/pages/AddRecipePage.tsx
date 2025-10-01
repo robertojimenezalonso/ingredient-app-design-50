@@ -82,15 +82,9 @@ const AddRecipePage = () => {
         return;
       }
 
-      // Intentar generar imagen (opcional)
-      let imageUrl = '';
-      try {
-        toast.info('Generando imagen de la receta...');
-        imageUrl = await generateRecipeImage(recipeData.title, recipeData.ingredients);
-      } catch (imageError) {
-        console.warn('Error generating image, proceeding without it:', imageError);
-        toast.warning('No se pudo generar la imagen, pero la receta se guardará');
-      }
+      // TEMPORALMENTE DESHABILITADO: Generación de imágenes para ahorrar créditos
+      const imageUrl = '';
+      console.log('⚠️ Generación de imágenes DESHABILITADA - la receta se guardará sin imagen');
 
       // Preparar datos para guardar con valores por defecto
       const finalRecipeData = {

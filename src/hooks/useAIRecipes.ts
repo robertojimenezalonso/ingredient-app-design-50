@@ -33,40 +33,10 @@ export const useAIRecipes = () => {
 
       const recipe = recipeData.recipe;
 
-      // Generate recipe image with retry logic for rate limits
-      let imageUrl = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop';
-      let retryCount = 0;
-      const maxRetries = 3;
-      
-      while (retryCount < maxRetries) {
-        try {
-          const { data: imageData, error: imageError } = await supabase.functions.invoke(
-            'generate-recipe-image',
-            {
-              body: { recipeName: recipe.title }
-            }
-          );
-
-          if (imageError) {
-            // If it's a rate limit error, wait and retry
-            if (imageError.message.includes('rate_limit_exceeded') || imageError.message.includes('429')) {
-              console.log(`Rate limit hit, waiting before retry ${retryCount + 1}/${maxRetries}`);
-              await new Promise(resolve => setTimeout(resolve, (retryCount + 1) * 15000)); // Wait 15s, 30s, 45s
-              retryCount++;
-              continue;
-            } else {
-              console.warn('Error generating image:', imageError.message);
-              break;
-            }
-          } else if (imageData?.imageUrl) {
-            imageUrl = imageData.imageUrl;
-            break;
-          }
-        } catch (error) {
-          console.warn('Image generation attempt failed:', error);
-          retryCount++;
-        }
-      }
+      // TEMPORALMENTE DESHABILITADO: Generación de imágenes para ahorrar créditos
+      // Usando imágenes placeholder de Unsplash
+      const imageUrl = 'https://images.unsplash.com/photo-1546548970-71785318a17b?w=500&h=300&fit=crop';
+      console.log('⚠️ Generación de imágenes DESHABILITADA - usando placeholder');
 
       // Combine recipe with image
       const finalRecipe: Recipe = {
@@ -143,44 +113,9 @@ export const useAIRecipes = () => {
       let retryCount = 0;
       const maxRetries = 2; // Reduced retries to avoid long waits
       
-      while (retryCount < maxRetries && !imageGenerated) {
-        try {
-          const { data: imageData, error: imageError } = await supabase.functions.invoke(
-            'generate-recipe-image',
-            {
-              body: { recipeName }
-            }
-          );
-
-          if (imageError) {
-            const errorMsg = imageError.message || '';
-            if (errorMsg.includes('rate_limit_exceeded') || errorMsg.includes('429')) {
-              console.log(`⏳ Rate limit hit for "${recipeName}", using fallback image instead of waiting`);
-              imageGenerated = true; // Don't retry on rate limits, just use fallback
-            } else {
-              console.warn(`❌ Error generating image for "${recipeName}":`, errorMsg);
-              imageGenerated = true; // Use fallback on any error
-            }
-          } else if (imageData?.imageUrl) {
-            console.log(`✅ Successfully generated AI image for "${recipeName}"`);
-            imageMap[recipeName] = imageData.imageUrl;
-            imageGenerated = true;
-          } else {
-            console.warn(`⚠️ No image URL returned for "${recipeName}"`);
-            imageGenerated = true; // Use fallback
-          }
-        } catch (error) {
-          console.warn(`💥 Image generation failed for "${recipeName}":`, error);
-          retryCount++;
-          if (retryCount >= maxRetries) {
-            console.log(`Using fallback image for "${recipeName}"`);
-            imageGenerated = true;
-          } else {
-            // Short delay before retry
-            await new Promise(resolve => setTimeout(resolve, 5000));
-          }
-        }
-      }
+      // TEMPORALMENTE DESHABILITADO: Generación de imágenes para ahorrar créditos
+      console.log(`⚠️ Generación AI deshabilitada - usando imagen placeholder para "${recipeName}"`);
+      imageGenerated = true; // Usar siempre fallback
       
       // Reduced delay between requests to 12 seconds
       if (i < recipeNames.length - 1) {
