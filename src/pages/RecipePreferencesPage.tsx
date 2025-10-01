@@ -92,6 +92,21 @@ export const RecipePreferencesPage = () => {
     
     return (completed / total) * 100;
   };
+
+  // Helper function to get profile color
+  const getProfileColor = (index: number) => {
+    const colors = [
+      '#FF6B6B', // Coral red
+      '#4ECDC4', // Turquoise
+      '#45B7D1', // Sky blue
+      '#FFA07A', // Light salmon
+      '#98D8C8', // Mint
+      '#F7DC6F', // Yellow
+      '#BB8FCE', // Purple
+      '#85C1E2', // Light blue
+    ];
+    return colors[index % colors.length];
+  };
   
   // Animation states
   const skipAnimations = shouldSkipAnimations || (persistedData !== null);
@@ -308,7 +323,7 @@ export const RecipePreferencesPage = () => {
                                   cx="24"
                                   cy="24"
                                   r="20"
-                                  stroke="#1C1C1C"
+                                  stroke={getProfileColor(index)}
                                   strokeWidth="3"
                                   fill="none"
                                   strokeDasharray={`${2 * Math.PI * 20}`}
@@ -317,8 +332,15 @@ export const RecipePreferencesPage = () => {
                                   className="transition-all duration-300"
                                 />
                               </svg>
-                              <Avatar className="w-12 h-12">
-                                <AvatarFallback className="bg-[#F4F4F4] text-[#1C1C1C] text-sm font-medium">
+                              <Avatar className="w-12 h-12" style={{ backgroundColor: getProfileColor(index) }}>
+                                <AvatarFallback 
+                                  className="text-sm font-medium text-white"
+                                  style={{ 
+                                    backgroundColor: getProfileColor(index),
+                                    opacity: 1,
+                                    color: 'rgba(255, 255, 255, 0.8)'
+                                  }}
+                                >
                                   {getInitials(profile.name)}
                                 </AvatarFallback>
                               </Avatar>
