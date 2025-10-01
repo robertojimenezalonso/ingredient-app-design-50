@@ -75,7 +75,7 @@ export const RecipePreferencesPage = () => {
 
   // Helper functions
   const getInitials = (name: string) => {
-    if (!name || name === 'Comensal 1') return 'CO';
+    if (!name || name === 'Comensal 1') return 'C1';
     const parts = name.trim().split(' ');
     if (parts.length === 1) {
       return parts[0].substring(0, 2).toUpperCase();
