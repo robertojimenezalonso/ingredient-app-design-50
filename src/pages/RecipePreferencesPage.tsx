@@ -252,7 +252,7 @@ export const RecipePreferencesPage = () => {
                                 ) : profile.name ? (
                                   <button
                                     onClick={() => handleStartEditingName(profile.id)}
-                                    className="text-[#1C1C1C] text-base hover:underline"
+                                    className="text-[#1C1C1C] text-base"
                                   >
                                     {profile.name}
                                   </button>
