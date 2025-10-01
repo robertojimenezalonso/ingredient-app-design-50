@@ -62,6 +62,18 @@ export const ProfileCreationDrawer = ({
   const weightInputRef = useRef<HTMLInputElement>(null);
   const heightInputRef = useRef<HTMLInputElement>(null);
 
+  // Prevent background scroll when drawer is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
     
@@ -147,8 +159,10 @@ export const ProfileCreationDrawer = ({
     return Math.round((completedSteps / steps.length) * 100);
   };
 
+  const getDefaultName = () => `Comensal ${profileIndex + 1}`;
+
   const getInitials = (name: string) => {
-    if (!name || name === 'Nuevo comensal') return 'NC';
+    if (!name) return `C${profileIndex + 1}`;
     const parts = name.trim().split(' ');
     if (parts.length === 1) {
       return parts[0].substring(0, 2).toUpperCase();
@@ -164,8 +178,8 @@ export const ProfileCreationDrawer = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-end">
-      <Card className="w-full max-h-[90vh] flex flex-col rounded-t-3xl rounded-b-none border-0 shadow-2xl">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center px-4 pb-4">
+      <Card className="w-full max-w-md max-h-[85vh] flex flex-col rounded-3xl border-0 shadow-2xl">
         {/* Header with profile info */}
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
           <div className="flex items-center gap-3 flex-1">
@@ -186,12 +200,12 @@ export const ProfileCreationDrawer = ({
                   color: 'rgba(255, 255, 255, 0.8)' 
                 }}
               >
-                {getInitials(profileData.name || 'Nuevo comensal')}
+                {getInitials(profileData.name)}
               </div>
             </div>
             <div>
               <p className="text-sm font-medium">
-                {profileData.name || 'Nuevo comensal'}
+                {profileData.name || getDefaultName()}
               </p>
               <p className="text-xs text-muted-foreground">
                 {getCompletionPercentage()}% completado
