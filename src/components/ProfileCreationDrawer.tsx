@@ -279,23 +279,18 @@ export const ProfileCreationDrawer = ({
             )}
 
             {currentStep === 'birthDate' && (
-              <div className="space-y-4">
-                <Input
-                  ref={birthDateInputRef}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  value={profileData.birthDate}
-                  onChange={handleBirthDateChange}
-                  placeholder="DD/MM/AAAA"
-                  maxLength={10}
-                  className="w-full"
-                  autoFocus
-                />
-                <p className="text-xs text-muted-foreground">
-                  Te preguntamos esto porque la edad afecta la composición del cuerpo. Usamos esta información para ofrecerte recetas personalizadas.
-                </p>
-              </div>
+              <Input
+                ref={birthDateInputRef}
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                value={profileData.birthDate}
+                onChange={handleBirthDateChange}
+                placeholder="DD/MM/AAAA"
+                maxLength={10}
+                className="w-full"
+                autoFocus
+              />
             )}
 
             {currentStep === 'weight' && (
