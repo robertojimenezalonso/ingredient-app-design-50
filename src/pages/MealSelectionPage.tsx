@@ -319,7 +319,7 @@ export const MealSelectionPage = () => {
         </div>
 
         {/* Fixed Button Area at Bottom of Screen */}
-        <div className="absolute bottom-0 left-0 right-0" style={{
+        <div className="absolute bottom-0 left-0 right-0 z-[100]" style={{
           backgroundColor: '#FFFFFF'
         }}>
           <div className="px-4 pt-4 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
