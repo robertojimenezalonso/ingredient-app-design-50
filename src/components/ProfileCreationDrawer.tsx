@@ -48,7 +48,7 @@ export const ProfileCreationDrawer = ({
 
   const [profileData, setProfileData] = useState({
     name: editingProfile?.name || '',
-    birthDate: parseBirthDate(editingProfile?.birthDate),
+    birthDate: editingProfile?.birthDate || '',
     weight: parseWeight(editingProfile?.weight).value,
     weightUnit: parseWeight(editingProfile?.weight).unit,
     height: parseHeight(editingProfile?.height).value,
@@ -58,9 +58,28 @@ export const ProfileCreationDrawer = ({
   });
 
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const dayInputRef = useRef<HTMLInputElement>(null);
+  const birthDateInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
   const heightInputRef = useRef<HTMLInputElement>(null);
+
+  const formatBirthDate = (value: string) => {
+    // Remove all non-numeric characters
+    const numbers = value.replace(/\D/g, '');
+    
+    // Format as DD/MM/YYYY
+    if (numbers.length <= 2) {
+      return numbers;
+    } else if (numbers.length <= 4) {
+      return `${numbers.slice(0, 2)}/${numbers.slice(2)}`;
+    } else {
+      return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}/${numbers.slice(4, 8)}`;
+    }
+  };
+
+  const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatBirthDate(e.target.value);
+    setProfileData({ ...profileData, birthDate: formatted });
+  };
 
   // Prevent background scroll when drawer is open
   useEffect(() => {
@@ -83,7 +102,7 @@ export const ProfileCreationDrawer = ({
           nameInputRef.current?.focus();
           break;
         case 'birthDate':
-          dayInputRef.current?.focus();
+          birthDateInputRef.current?.focus();
           break;
         case 'weight':
           weightInputRef.current?.focus();
@@ -113,16 +132,16 @@ export const ProfileCreationDrawer = ({
   const canContinue = () => {
     switch (currentStep) {
       case 'name': return profileData.name.trim().length > 0;
-      case 'birthDate': 
-        return profileData.birthDate.day && 
-               profileData.birthDate.month && 
-               profileData.birthDate.year &&
-               parseInt(profileData.birthDate.day) >= 1 && 
-               parseInt(profileData.birthDate.day) <= 31 &&
-               parseInt(profileData.birthDate.month) >= 1 && 
-               parseInt(profileData.birthDate.month) <= 12 &&
-               parseInt(profileData.birthDate.year) >= 1900 && 
-               parseInt(profileData.birthDate.year) <= new Date().getFullYear();
+      case 'birthDate': {
+        const date = profileData.birthDate.replace(/\D/g, '');
+        if (date.length !== 8) return false;
+        const day = parseInt(date.slice(0, 2));
+        const month = parseInt(date.slice(2, 4));
+        const year = parseInt(date.slice(4, 8));
+        return day >= 1 && day <= 31 && 
+               month >= 1 && month <= 12 && 
+               year >= 1900 && year <= new Date().getFullYear();
+      }
       case 'weight': return profileData.weight && parseFloat(profileData.weight) > 0;
       case 'height': return profileData.height && parseFloat(profileData.height) > 0;
       case 'sex': return profileData.sex !== '';
@@ -148,7 +167,10 @@ export const ProfileCreationDrawer = ({
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name': return profileData.name.trim().length > 0;
-        case 'birthDate': return profileData.birthDate.day && profileData.birthDate.month && profileData.birthDate.year;
+        case 'birthDate': {
+          const date = profileData.birthDate.replace(/\D/g, '');
+          return date.length === 8;
+        }
         case 'weight': return profileData.weight && parseFloat(profileData.weight) > 0;
         case 'height': return profileData.height && parseFloat(profileData.height) > 0;
         case 'sex': return profileData.sex !== '';
@@ -239,46 +261,18 @@ export const ProfileCreationDrawer = ({
 
             {currentStep === 'birthDate' && (
               <div className="space-y-4">
-                <div className="flex gap-2">
-                  <Input
-                    ref={dayInputRef}
-                    type="number"
-                    value={profileData.birthDate.day}
-                    onChange={(e) => setProfileData({ 
-                      ...profileData, 
-                      birthDate: { ...profileData.birthDate, day: e.target.value }
-                    })}
-                    placeholder="DD"
-                    min="1"
-                    max="31"
-                    className="flex-1"
-                    autoFocus
-                  />
-                  <Input
-                    type="number"
-                    value={profileData.birthDate.month}
-                    onChange={(e) => setProfileData({ 
-                      ...profileData, 
-                      birthDate: { ...profileData.birthDate, month: e.target.value }
-                    })}
-                    placeholder="MM"
-                    min="1"
-                    max="12"
-                    className="flex-1"
-                  />
-                  <Input
-                    type="number"
-                    value={profileData.birthDate.year}
-                    onChange={(e) => setProfileData({ 
-                      ...profileData, 
-                      birthDate: { ...profileData.birthDate, year: e.target.value }
-                    })}
-                    placeholder="YYYY"
-                    min="1900"
-                    max={new Date().getFullYear()}
-                    className="flex-1"
-                  />
-                </div>
+                <Input
+                  ref={birthDateInputRef}
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={profileData.birthDate}
+                  onChange={handleBirthDateChange}
+                  placeholder="DD/MM/AAAA"
+                  maxLength={10}
+                  className="w-full"
+                  autoFocus
+                />
                 <p className="text-xs text-muted-foreground">
                   Te preguntamos esto porque la edad afecta la composición del cuerpo. Usamos esta información para ofrecerte recetas personalizadas.
                 </p>
@@ -289,9 +283,11 @@ export const ProfileCreationDrawer = ({
               <div className="space-y-4">
                 <Input
                   ref={weightInputRef}
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={profileData.weight}
-                  onChange={(e) => setProfileData({ ...profileData, weight: e.target.value })}
+                  onChange={(e) => setProfileData({ ...profileData, weight: e.target.value.replace(/\D/g, '') })}
                   placeholder="Escribe tu peso"
                   className="w-full"
                   autoFocus
@@ -319,9 +315,11 @@ export const ProfileCreationDrawer = ({
               <div className="space-y-4">
                 <Input
                   ref={heightInputRef}
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={profileData.height}
-                  onChange={(e) => setProfileData({ ...profileData, height: e.target.value })}
+                  onChange={(e) => setProfileData({ ...profileData, height: e.target.value.replace(/\D/g, '') })}
                   placeholder="Escribe tu altura"
                   className="w-full"
                   autoFocus

@@ -247,7 +247,7 @@ export const RecipePreferencesPage = () => {
       diet: editingProfile?.diet,
       allergies: editingProfile?.allergies,
       healthGoal: editingProfile?.healthGoal,
-      birthDate: `${profileData.birthDate.day}/${profileData.birthDate.month}/${profileData.birthDate.year}`,
+      birthDate: profileData.birthDate, // Already in DD/MM/YYYY format
       weight: `${profileData.weight} ${profileData.weightUnit}`,
       height: `${profileData.height} ${profileData.heightUnit}`,
       sex: profileData.sex,
