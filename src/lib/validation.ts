@@ -1,5 +1,10 @@
 import { z } from 'zod';
 
+/**
+ * Validation schemas and input sanitization utilities
+ * Security best practices for user input handling
+ */
+
 // Auth form validation schemas
 export const authSchemas = {
   signIn: z.object({
