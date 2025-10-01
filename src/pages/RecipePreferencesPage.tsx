@@ -236,7 +236,7 @@ export const RecipePreferencesPage = () => {
                     <div key={profile.id} className="mb-4">
                       <div className="flex items-center justify-between mb-2">
                         <h3 className="text-lg font-semibold text-[#1C1C1C]">
-                          {profile.name && `${index + 1}. `}{profile.name || `Perfil ${profile.id}`}
+                          {profile.name && `${index + 1} - `}{profile.name || `Perfil ${profile.id}`}
                         </h3>
                         <div className="relative">
                           <button
