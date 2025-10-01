@@ -449,7 +449,7 @@ export const RecipePreferencesPage = () => {
                     </div>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-[#1C1C1C]">
+                    <h3 className="text-xl font-medium text-[#1C1C1C]">
                       {editingProfile?.name && editingProfile.name.trim() ? editingProfile.name : 'Comensal 1'}
                     </h3>
                     <p className="text-sm text-[#898885]">
