@@ -205,7 +205,7 @@ export const RecipePreferencesPage = () => {
                   {healthProfiles.map((profileNum, index) => (
                     <div key={profileNum} className="mb-4">
                       <h3 className="text-lg font-semibold text-[#1C1C1C] mb-3">Perfil {profileNum}</h3>
-                      <div className="border border-[#E5E5E5] rounded-lg overflow-hidden">
+                      <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
                         {[
                           'Nombre',
                           'Dieta',
@@ -224,7 +224,7 @@ export const RecipePreferencesPage = () => {
                               </Button>
                             </div>
                             {fieldIndex < array.length - 1 && (
-                              <div className="border-t border-[#E5E5E5]" />
+                              <div className="border-t border-[#D1D1D1]" />
                             )}
                           </div>
                         ))}
