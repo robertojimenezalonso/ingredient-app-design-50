@@ -477,7 +477,7 @@ export const RecipePreferencesPage = () => {
               variant="default"
               className="w-full mt-4 bg-[#1C1C1C] text-white hover:bg-[#000000]"
             >
-              Crear nuevo perfil
+              Guardar perfil
             </Button>
           </div>
         </DrawerContent>
