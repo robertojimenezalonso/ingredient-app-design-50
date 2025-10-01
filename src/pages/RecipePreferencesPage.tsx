@@ -522,20 +522,20 @@ export const RecipePreferencesPage = () => {
               <div className="flex-1 overflow-y-auto">
                 {/* Nombre */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#1C1C1C]">Nombre</span>
+                  <span className="text-base text-[#898885]">Nombre</span>
                   {editingField === 'name' ? (
                     <Input
                       autoFocus
                       value={editingProfile?.name || ''}
                       onChange={(e) => setEditingProfile(prev => prev ? { ...prev, name: e.target.value } : null)}
                       onBlur={() => setEditingField(null)}
-                      className="w-32 h-8 text-sm text-right"
+                      className="w-32 h-8 text-base text-right"
                       placeholder="Escribe aquí"
                     />
                   ) : (
                     <button 
                       onClick={() => setEditingField('name')}
-                      className="text-sm text-[#898885]"
+                      className="text-base text-[#1C1C1C]"
                     >
                       {editingProfile?.name && editingProfile.name.trim() ? editingProfile.name : 'Añadir'}
                     </button>
@@ -544,40 +544,40 @@ export const RecipePreferencesPage = () => {
 
                 {/* Fecha de nacimiento */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#1C1C1C]">Fecha de nacimiento</span>
-                  <button className="text-sm text-[#898885]">
+                  <span className="text-base text-[#898885]">Fecha de nacimiento</span>
+                  <button className="text-base text-[#1C1C1C]">
                     {editingProfile?.birthDate || 'Añadir'}
                   </button>
                 </div>
 
                 {/* Peso actual */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#1C1C1C]">Peso actual</span>
-                  <button className="text-sm text-[#898885]">
+                  <span className="text-base text-[#898885]">Peso actual</span>
+                  <button className="text-base text-[#1C1C1C]">
                     {editingProfile?.weight || 'Añadir'}
                   </button>
                 </div>
 
                 {/* Altura */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#1C1C1C]">Altura</span>
-                  <button className="text-sm text-[#898885]">
+                  <span className="text-base text-[#898885]">Altura</span>
+                  <button className="text-base text-[#1C1C1C]">
                     {editingProfile?.height || 'Añadir'}
                   </button>
                 </div>
 
                 {/* Sexo */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#1C1C1C]">Sexo</span>
-                  <button className="text-sm text-[#898885]">
+                  <span className="text-base text-[#898885]">Sexo</span>
+                  <button className="text-base text-[#1C1C1C]">
                     {editingProfile?.sex || 'Añadir'}
                   </button>
                 </div>
 
                 {/* Nivel de actividad */}
                 <div className="px-4 py-4 flex items-center justify-between border-b border-[#E5E5E5]">
-                  <span className="text-base text-[#1C1C1C]">Nivel de actividad</span>
-                  <button className="text-sm text-[#898885]">
+                  <span className="text-base text-[#898885]">Nivel de actividad</span>
+                  <button className="text-base text-[#1C1C1C]">
                     {editingProfile?.activityLevel || 'Añadir'}
                   </button>
                 </div>
