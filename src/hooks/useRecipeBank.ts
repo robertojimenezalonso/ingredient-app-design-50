@@ -1,69 +1,12 @@
-import { useState, useEffect } from 'react';
+// Este hook ahora es un wrapper del hook optimizado para mantener compatibilidad
+// El código existente puede seguir usando useRecipeBank
+import { useOptimizedRecipes } from './useOptimizedRecipes';
 import { supabase } from '@/integrations/supabase/client';
-import { Recipe } from '@/types/recipe';
-import type { Database } from '@/integrations/supabase/types';
-
-type RecipeBankRow = Database['public']['Tables']['recipe_bank']['Row'];
-
-interface RecipeBankItem {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  image_url: string;
-  preparation_time: number;
-  calories: number;
-  servings: number;
-  ingredients: Array<{name: string, amount: string, unit: string}>;
-  instructions: string[];
-  macronutrients: {
-    protein: number;
-    fat: number;
-    carbs: number;
-  };
-  micronutrients: Record<string, string>;
-  created_at: string;
-  updated_at: string;
-}
+import { useState } from 'react';
 
 export const useRecipeBank = () => {
-  const [recipes, setRecipes] = useState<RecipeBankItem[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const optimizedRecipes = useOptimizedRecipes();
   const [isGenerating, setIsGenerating] = useState(false);
-
-  const loadRecipes = async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await supabase
-        .from('recipe_bank')
-        .select('*')
-        .order('category', { ascending: true })
-        .order('created_at', { ascending: true });
-
-      if (error) {
-        console.error('Error loading recipe bank:', error);
-        return;
-      }
-
-      // Transform the data to match our interface
-      const transformedData = (data || []).map(item => ({
-        ...item,
-        ingredients: item.ingredients as Array<{name: string, amount: string, unit: string}>,
-        macronutrients: item.macronutrients as {
-          protein: number;
-          fat: number;
-          carbs: number;
-        },
-        micronutrients: item.micronutrients as Record<string, string>
-      }));
-
-      setRecipes(transformedData);
-    } catch (error) {
-      console.error('Error loading recipe bank:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const generateRecipeBank = async (category?: string) => {
     try {
@@ -73,15 +16,9 @@ export const useRecipeBank = () => {
         body: { category }
       });
       
-      if (error) {
-        throw error;
-      }
+      if (error) throw error;
 
       console.log('Recipe bank generation result:', data);
-      
-      // Reload recipes after generation
-      await loadRecipes();
-      
       return data;
     } catch (error) {
       console.error('Error generating recipe bank:', error);
@@ -91,123 +28,47 @@ export const useRecipeBank = () => {
     }
   };
 
-  const getRecipesByCategory = (category: string): RecipeBankItem[] => {
-    return recipes.filter(recipe => recipe.category === category);
+  // Adaptador para mantener compatibilidad con la API anterior
+  const getRecipesByCategory = (category: string) => {
+    const categoryMap: { [key: string]: any } = {
+      'desayuno': 'breakfast',
+      'comida': 'lunch',
+      'cena': 'dinner',
+      'aperitivo': 'appetizer',
+      'snack': 'snacks'
+    };
+    
+    const mappedCategory = categoryMap[category] || category;
+    return optimizedRecipes.recipes.filter(r => r.category === mappedCategory);
   };
 
-  const getRandomRecipesByCategory = (category: string, count: number = 1): RecipeBankItem[] => {
-    const categoryRecipes = getRecipesByCategory(category);
-    const shuffled = [...categoryRecipes].sort(() => 0.5 - Math.random());
+  const getRandomRecipesByCategory = (category: string, count: number = 1) => {
+    const recipes = getRecipesByCategory(category);
+    const shuffled = [...recipes].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, count);
   };
 
-  // Convert RecipeBankItem to Recipe format for compatibility
-  const convertToRecipe = (bankItem: RecipeBankItem, servings: number = 1): Recipe => {
-    const servingMultiplier = servings / bankItem.servings;
-    
-    // Helper function to extract numeric value from macro data
-    const extractMacroValue = (macroData: any): number => {
-      if (typeof macroData === 'number') {
-        return macroData;
-      }
-      if (typeof macroData === 'object' && macroData !== null) {
-        return macroData.grams || macroData.value || 0;
-      }
-      return 0;
-    };
-    
-    const carbs = extractMacroValue(bankItem.macronutrients.carbs);
-    const protein = extractMacroValue(bankItem.macronutrients.protein);
-    const fat = extractMacroValue(bankItem.macronutrients.fat);
-    
-    return {
-      id: bankItem.id,
-      title: bankItem.title,
-      image: bankItem.image_url,
-      calories: Math.round(bankItem.calories * servingMultiplier),
-      time: bankItem.preparation_time,
-      category: bankItem.category,
-      servings: servings,
-      macros: {
-        carbs: Math.round(carbs * servingMultiplier),
-        protein: Math.round(protein * servingMultiplier),
-        fat: Math.round(fat * servingMultiplier),
-      },
-      ingredients: bankItem.ingredients.map(ingredient => ({
-        id: `${bankItem.id}-${ingredient.name}`,
-        name: ingredient.name,
-        amount: ingredient.amount,
-        unit: ingredient.unit,
-        selected: true
-      })),
-      instructions: bankItem.instructions,
-      nutrition: {
-        calories: Math.round(bankItem.calories * servingMultiplier),
-        protein: Math.round(protein * servingMultiplier),
-        carbs: Math.round(carbs * servingMultiplier),
-        fat: Math.round(fat * servingMultiplier),
-        fiber: 0, // Not available in bank data
-        sugar: 0, // Not available in bank data
-      }
-    };
-  };
-
-  const getRecipesForPlan = (
-    days: string[], 
-    meals: string[], 
-    people: number = 1
-  ): { [key: string]: { [key: string]: Recipe[] } } => {
-    console.log('useRecipeBank: getRecipesForPlan called with:', { days, meals, people });
-    const plan: { [key: string]: { [key: string]: Recipe[] } } = {};
-    
-    days.forEach(day => {
-      plan[day] = {};
-      meals.forEach(meal => {
-        // Map meal names to categories
-        const categoryMap: { [key: string]: string } = {
-          'Desayuno': 'desayuno',
-          'Almuerzo': 'comida',  // Fixed mapping
-          'Cena': 'cena',
-          'Snack': 'comida',     // Fallback to comida
-          'Aperitivo': 'comida', // Fallback to comida
-          'Merienda': 'comida'   // Fallback to comida
-        };
-        
-        const category = categoryMap[meal] || 'comida'; // Default fallback
-        console.log(`useRecipeBank: Mapping meal "${meal}" to category "${category}"`);
-        const randomRecipes = getRandomRecipesByCategory(category, 1);
-        console.log(`useRecipeBank: Found ${randomRecipes.length} recipes for category "${category}"`);
-        
-        if (randomRecipes.length > 0) {
-          const convertedRecipes = randomRecipes.map(recipe => 
-            convertToRecipe(recipe, people)
-          );
-          plan[day][meal] = convertedRecipes;
-          console.log(`useRecipeBank: Added ${convertedRecipes.length} converted recipes for ${day}/${meal}`);
-        } else {
-          plan[day][meal] = [];
-          console.warn(`useRecipeBank: No recipes found for category "${category}" (meal: ${meal})`);
-        }
-      });
-    });
-    
-    console.log('useRecipeBank: Final plan:', plan);
-    return plan;
-  };
-
-  useEffect(() => {
-    loadRecipes();
-  }, []);
-
   return {
-    recipes,
-    isLoading,
+    recipes: optimizedRecipes.recipes,
+    isLoading: optimizedRecipes.isLoading,
     isGenerating,
-    loadRecipes,
+    loadRecipes: () => {}, // React Query maneja esto automáticamente
     generateRecipeBank,
     getRecipesByCategory,
     getRandomRecipesByCategory,
-    convertToRecipe,
-    getRecipesForPlan
+    convertToRecipe: (recipe: any, servings: number) => {
+      // Si ya es una receta, ajustar servings
+      return {
+        ...recipe,
+        servings,
+        calories: Math.round(recipe.calories * (servings / recipe.servings)),
+        macros: {
+          carbs: Math.round(recipe.macros.carbs * (servings / recipe.servings)),
+          protein: Math.round(recipe.macros.protein * (servings / recipe.servings)),
+          fat: Math.round(recipe.macros.fat * (servings / recipe.servings)),
+        }
+      };
+    },
+    getRecipesForPlan: optimizedRecipes.getRecipesForPlan
   };
 };

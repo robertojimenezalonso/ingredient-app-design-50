@@ -196,7 +196,7 @@ export const RecipeBankManager = () => {
                         <div className="flex-1">
                           <div className="font-medium">{recipe.title}</div>
                           <div className="text-muted-foreground text-xs">
-                            {recipe.category} • {recipe.calories} cal • {recipe.preparation_time} min
+                            {recipe.category} • {recipe.calories} cal • {recipe.time} min
                           </div>
                         </div>
                         <Badge variant="outline" className="text-xs">

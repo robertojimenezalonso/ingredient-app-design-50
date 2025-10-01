@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { ArrowUp, ArrowRight, X, Plus, Minus, Menu, LogOut, User, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import cartlyLogo from '@/assets/cartly-logo.png';
-import { supabase } from '@/integrations/supabase/client';
+import { useOptimizedIngredients } from '@/hooks/useOptimizedIngredients';
 import { IngredientProgressAnimation } from '@/components/IngredientProgressAnimation';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -22,7 +22,7 @@ const Index = () => {
     signOut
   } = useAuth();
   const [selectedSupermarket, setSelectedSupermarket] = useState<string | null>(null);
-  const [supermarketIngredients, setSupermarketIngredients] = useState<any[]>([]);
+  const { data: supermarketIngredients = [] } = useOptimizedIngredients(selectedSupermarket);
 
   // Expanded state for calendar view
   const [isExpanded, setIsExpanded] = useState(false);
@@ -126,26 +126,7 @@ const Index = () => {
     }
   }, [user]);
 
-  // Cargar ingredientes del supermercado seleccionado
-  useEffect(() => {
-    const fetchIngredients = async () => {
-      if (selectedSupermarket) {
-        // Capitalizar la primera letra para que coincida con los datos en Supabase
-        const supermarketName = selectedSupermarket.charAt(0).toUpperCase() + selectedSupermarket.slice(1);
-        
-        const { data, error } = await supabase
-          .from('supermarket_ingredients')
-          .select('*')
-          .eq('supermarket', supermarketName);
-        
-        if (!error && data) {
-          setSupermarketIngredients(data);
-        }
-      }
-    };
-    
-    fetchIngredients();
-  }, [selectedSupermarket]);
+  // Ingredientes cargados via React Query - sin useEffect necesario
 
   // Cerrar menú al hacer clic fuera
   useEffect(() => {

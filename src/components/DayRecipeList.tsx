@@ -93,7 +93,7 @@ export const DayRecipeList = ({
     
     return MEAL_TYPES.map((mealType, index) => {
       const recipeIndex = (dayIndex + index) % recipes.length;
-      const recipe = convertToRecipe(recipes[recipeIndex]);
+      const recipe = convertToRecipe(recipes[recipeIndex], recipes[recipeIndex].servings || 1);
       return {
         ...recipe,
         category: index === 0 ? 'breakfast' : index === 1 ? 'lunch' : 'dinner',

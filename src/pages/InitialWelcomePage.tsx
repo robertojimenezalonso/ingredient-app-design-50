@@ -58,7 +58,6 @@ const InitialWelcomePage = () => {
               key={recipe.id}
               recipe={{
                 ...recipe,
-                image: recipe.image_url,
                 macros: {
                   protein: Math.floor(Math.random() * 30) + 10,
                   carbs: Math.floor(Math.random() * 50) + 20,

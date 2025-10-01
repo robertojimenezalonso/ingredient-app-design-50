@@ -1,81 +1,16 @@
 import { useState, useEffect } from 'react';
 import { Recipe, CategoryType } from '@/types/recipe';
-import { supabase } from '@/integrations/supabase/client';
+import { useOptimizedRecipes } from './useOptimizedRecipes';
 
+// Wrapper hook que mantiene compatibilidad con el código existente
+// pero usa el nuevo hook optimizado internamente
 export const useRecipes = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const { recipes, isLoading, getRecipesByCategory: getOptimizedRecipesByCategory, getRecipeById } = useOptimizedRecipes();
   const [favorites, setFavorites] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetchRecipes();
     loadFavoritesFromStorage();
   }, []);
-
-  const fetchRecipes = async () => {
-    try {
-      setIsLoading(true);
-      const { data, error } = await supabase
-        .from('recipe_bank')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error fetching recipes:', error);
-        return;
-      }
-
-      // Transform Supabase data to Recipe format
-      const transformedRecipes: Recipe[] = data.map(recipe => {
-        const macronutrients = recipe.macronutrients as any;
-        
-        // Map Spanish categories to English
-        const categoryMap: { [key: string]: CategoryType } = {
-          'desayuno': 'breakfast',
-          'almuerzo': 'lunch', 
-          'comida': 'lunch',
-          'cena': 'dinner',
-          'aperitivo': 'appetizer',
-          'snack': 'snacks',
-          'tentempie': 'snacks',
-          'postre': 'desserts'
-        };
-        
-        return {
-          id: recipe.id,
-          title: recipe.title,
-          image: recipe.image_url,
-          calories: recipe.calories,
-          time: recipe.preparation_time,
-          category: categoryMap[recipe.category.toLowerCase()] || 'lunch',
-          servings: recipe.servings,
-          macros: {
-            carbs: macronutrients?.carbs?.grams || macronutrients?.carbs || 0,
-            protein: macronutrients?.protein?.grams || macronutrients?.protein || 0,
-            fat: macronutrients?.fat?.grams || macronutrients?.fat || 0
-          },
-          ingredients: recipe.ingredients as any[] || [],
-          instructions: recipe.instructions || [],
-          nutrition: {
-            calories: recipe.calories,
-            protein: macronutrients?.protein?.grams || macronutrients?.protein || 0,
-            carbs: macronutrients?.carbs?.grams || macronutrients?.carbs || 0,
-            fat: macronutrients?.fat?.grams || macronutrients?.fat || 0,
-            fiber: macronutrients?.fiber?.grams || macronutrients?.fiber || 0,
-            sugar: macronutrients?.sugar?.grams || macronutrients?.sugar || 0
-          }
-        };
-      });
-
-      setRecipes(transformedRecipes);
-      console.log('🍽️ [useRecipes] Loaded recipes from Supabase:', transformedRecipes.length);
-      console.log('🖼️ [useRecipes] Sample image URLs:', transformedRecipes.slice(0,3).map(r => r.image));
-    } catch (error) {
-      console.error('Error in fetchRecipes:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const loadFavoritesFromStorage = () => {
     const savedFavorites = localStorage.getItem('recipe-favorites');
@@ -98,19 +33,11 @@ export const useRecipes = () => {
   };
 
   const getRecipesByCategory = (category: CategoryType, limit?: number) => {
-    let filteredRecipes = category === 'favorites' 
-      ? recipes.filter(recipe => favorites.includes(recipe.id))
-      : recipes.filter(recipe => recipe.category === category);
-    
-    if (limit) {
-      filteredRecipes = filteredRecipes.slice(0, limit);
+    if (category === 'favorites') {
+      const favoriteRecipes = recipes.filter(recipe => favorites.includes(recipe.id));
+      return limit ? favoriteRecipes.slice(0, limit) : favoriteRecipes;
     }
-    
-    return filteredRecipes;
-  };
-
-  const getRecipeById = (id: string) => {
-    return recipes.find(recipe => recipe.id === id);
+    return getOptimizedRecipesByCategory(category, limit);
   };
 
   return {
@@ -120,6 +47,6 @@ export const useRecipes = () => {
     toggleFavorite,
     getRecipesByCategory,
     getRecipeById,
-    refetch: fetchRecipes
+    refetch: () => {}, // React Query maneja el refetch automáticamente
   };
 };
