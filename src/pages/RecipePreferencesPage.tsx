@@ -305,7 +305,7 @@ export const RecipePreferencesPage = () => {
                   {/* Health Profiles */}
                   {healthProfiles.map((profile, index) => (
                     <div key={profile.id} className="mb-4">
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-3">
                           {/* Avatar with circular progress - only show when name exists */}
                           {profile.name && (
@@ -348,7 +348,7 @@ export const RecipePreferencesPage = () => {
                             </div>
                           )}
                           <div>
-                            <h3 className="text-lg font-semibold text-[#1C1C1C]">
+                            <h3 className="text-sm font-medium text-[#1C1C1C]">
                               {profile.name || `Perfil ${profile.id}`}
                             </h3>
                             {profile.name && (
@@ -377,15 +377,19 @@ export const RecipePreferencesPage = () => {
                           )}
                         </div>
                       </div>
-                      <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
+                      <div className="space-y-2">
                         {[
                           'Nombre',
                           'Dieta',
                           'Alergias e intolerancias',
                           'Objetivo de salud'
                         ].map((field, fieldIndex, array) => (
-                          <div key={field}>
-                            <div className="flex items-center justify-between px-4 py-3">
+                          <div 
+                            key={field}
+                            className="rounded-lg px-4 py-3"
+                            style={{ backgroundColor: '#F4F4F4' }}
+                          >
+                            <div className="flex items-center justify-between">
                               <span className="text-[#1C1C1C] text-base">
                                 {field === 'Nombre' ? 'Nombre*' : field}
                               </span>
@@ -434,19 +438,36 @@ export const RecipePreferencesPage = () => {
                                     Añadir
                                   </Button>
                                 )
-                              ) : (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
-                                >
-                                  Añadir
-                                </Button>
-                              )}
+                              ) : field === 'Alergias e intolerancias' ? (
+                                profile.allergies ? (
+                                  <button className="text-[#1C1C1C] text-base">
+                                    {profile.allergies}
+                                  </button>
+                                ) : (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
+                                  >
+                                    Añadir
+                                  </Button>
+                                )
+                              ) : field === 'Objetivo de salud' ? (
+                                profile.healthGoal ? (
+                                  <button className="text-[#1C1C1C] text-base">
+                                    {profile.healthGoal}
+                                  </button>
+                                ) : (
+                                  <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
+                                  >
+                                    Añadir
+                                  </Button>
+                                )
+                              ) : null}
                             </div>
-                            {fieldIndex < array.length - 1 && (
-                              <div className="border-t border-[#D1D1D1]" />
-                            )}
                           </div>
                         ))}
                       </div>
