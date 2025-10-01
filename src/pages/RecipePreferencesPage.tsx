@@ -426,7 +426,7 @@ export const RecipePreferencesPage = () => {
             </div>
           </div>
 
-          <div className="px-4 py-8 overflow-y-auto h-full" style={{ backgroundColor: '#F4F4F4' }}>
+          <div className="flex-1 px-4 py-8 overflow-y-auto" style={{ backgroundColor: '#F4F4F4' }}>
             <Card className="overflow-hidden">
               {/* Datos personales */}
               <button className="w-full py-4 px-4 flex items-center justify-between hover:bg-[#F4F4F4] transition-colors border-b border-[#E5E5E5] min-h-[72px]">
@@ -472,10 +472,13 @@ export const RecipePreferencesPage = () => {
                 <ChevronRight className="h-5 w-5 text-[#898885] flex-shrink-0" />
               </button>
             </Card>
+          </div>
 
+          {/* Fixed Button at Bottom */}
+          <div className="px-4 py-4 border-t border-[#E5E5E5]" style={{ backgroundColor: '#FFFFFF' }}>
             <Button
               variant="default"
-              className="w-full mt-4 bg-[#1C1C1C] text-white hover:bg-[#000000]"
+              className="w-full bg-[#1C1C1C] text-white hover:bg-[#000000]"
             >
               Guardar perfil
             </Button>
