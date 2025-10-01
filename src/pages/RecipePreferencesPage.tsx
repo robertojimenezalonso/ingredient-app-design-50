@@ -570,15 +570,17 @@ export const RecipePreferencesPage = () => {
             </div>
           )}
 
-          {/* Fixed Button at Bottom */}
-          <div className="px-4 py-4" style={{ backgroundColor: '#FFFFFF' }}>
-            <Button
-              variant="default"
-              className="w-full bg-[#1C1C1C] text-white hover:bg-[#000000]"
-            >
-              Guardar perfil
-            </Button>
-          </div>
+          {/* Fixed Button at Bottom - Only show in main view */}
+          {currentSection === 'main' && (
+            <div className="px-4 py-4" style={{ backgroundColor: '#FFFFFF' }}>
+              <Button
+                variant="default"
+                className="w-full bg-[#1C1C1C] text-white hover:bg-[#000000]"
+              >
+                Guardar perfil
+              </Button>
+            </div>
+          )}
         </DrawerContent>
       </Drawer>
     </div>
