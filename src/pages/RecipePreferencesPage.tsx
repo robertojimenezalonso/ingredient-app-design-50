@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { ArrowLeft, ArrowUp, Plus } from 'lucide-react';
+import { ArrowLeft, ArrowUp, Plus, MoreVertical } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -57,6 +57,7 @@ export const RecipePreferencesPage = () => {
   
   const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
   const [healthProfiles, setHealthProfiles] = useState<Array<{ id: number; name: string; isEditingName: boolean }>>([]);
+  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   
   // Animation states
   const skipAnimations = shouldSkipAnimations || (persistedData !== null);
@@ -85,6 +86,15 @@ export const RecipePreferencesPage = () => {
     setHealthProfiles(profiles =>
       profiles.map(p => p.id === profileId ? { ...p, isEditingName: false } : p)
     );
+  };
+
+  const handleDeleteProfile = (profileId: number) => {
+    setHealthProfiles(profiles => profiles.filter(p => p.id !== profileId));
+    setOpenMenuId(null);
+  };
+
+  const toggleMenu = (profileId: number) => {
+    setOpenMenuId(openMenuId === profileId ? null : profileId);
   };
 
   const handleContinue = () => {
@@ -222,11 +232,31 @@ export const RecipePreferencesPage = () => {
                   </div>
                   
                   {/* Health Profiles */}
-                  {healthProfiles.map((profile) => (
+                  {healthProfiles.map((profile, index) => (
                     <div key={profile.id} className="mb-4">
-                      <h3 className="text-lg font-semibold text-[#1C1C1C] mb-2">
-                        {profile.name || `Perfil ${profile.id}`}
-                      </h3>
+                      <div className="flex items-center justify-between mb-2">
+                        <h3 className="text-lg font-semibold text-[#1C1C1C]">
+                          {profile.name && `${index + 1}. `}{profile.name || `Perfil ${profile.id}`}
+                        </h3>
+                        <div className="relative">
+                          <button
+                            onClick={() => toggleMenu(profile.id)}
+                            className="p-1 hover:bg-[#F4F4F4] rounded-full transition-colors"
+                          >
+                            <MoreVertical className="h-5 w-5 text-[#1C1C1C]" />
+                          </button>
+                          {openMenuId === profile.id && (
+                            <div className="absolute right-0 top-8 bg-white border border-[#E5E5E5] rounded-lg shadow-lg py-1 z-10">
+                              <button
+                                onClick={() => handleDeleteProfile(profile.id)}
+                                className="px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left whitespace-nowrap"
+                              >
+                                Eliminar perfil
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                       <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
                         {[
                           'Nombre',
