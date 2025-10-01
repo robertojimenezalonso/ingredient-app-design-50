@@ -342,7 +342,7 @@ export const ProfileCreationDrawer = ({
             )}
 
             {currentStep === 'weight' && (
-              <div className="space-y-4">
+              <div className="relative">
                 <Input
                   ref={weightInputRef}
                   type="text"
@@ -351,34 +351,30 @@ export const ProfileCreationDrawer = ({
                   value={profileData.weight}
                   onChange={(e) => setProfileData({ ...profileData, weight: e.target.value.replace(/\D/g, '') })}
                   placeholder="Escribe tu peso"
-                  className="w-full"
+                  className="w-full pr-16"
                   autoFocus
                   onBlur={(e) => {
                     e.preventDefault();
                     setTimeout(() => e.target.focus({ preventScroll: true }), 0);
                   }}
                 />
-                <div className="flex gap-2">
-                  {['kg', 'lb', 'st'].map(unit => (
-                    <button
-                      key={unit}
-                      onClick={() => setProfileData({ ...profileData, weightUnit: unit })}
-                      className={cn(
-                        "px-4 py-2 rounded-lg border transition-colors",
-                        profileData.weightUnit === unit 
-                          ? "bg-primary text-primary-foreground" 
-                          : "bg-background hover:bg-accent"
-                      )}
-                    >
-                      {unit}
-                    </button>
-                  ))}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const units = ['kg', 'lb', 'st'];
+                    const currentIndex = units.indexOf(profileData.weightUnit);
+                    const nextIndex = (currentIndex + 1) % units.length;
+                    setProfileData({ ...profileData, weightUnit: units[nextIndex] });
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors"
+                >
+                  {profileData.weightUnit}
+                </button>
               </div>
             )}
 
             {currentStep === 'height' && (
-              <div className="space-y-4">
+              <div className="relative">
                 <Input
                   ref={heightInputRef}
                   type="text"
@@ -387,29 +383,25 @@ export const ProfileCreationDrawer = ({
                   value={profileData.height}
                   onChange={(e) => setProfileData({ ...profileData, height: e.target.value.replace(/\D/g, '') })}
                   placeholder="Escribe tu altura"
-                  className="w-full"
+                  className="w-full pr-16"
                   autoFocus
                   onBlur={(e) => {
                     e.preventDefault();
                     setTimeout(() => e.target.focus({ preventScroll: true }), 0);
                   }}
                 />
-                <div className="flex gap-2">
-                  {['cm', 'ft'].map(unit => (
-                    <button
-                      key={unit}
-                      onClick={() => setProfileData({ ...profileData, heightUnit: unit })}
-                      className={cn(
-                        "px-4 py-2 rounded-lg border transition-colors",
-                        profileData.heightUnit === unit 
-                          ? "bg-primary text-primary-foreground" 
-                          : "bg-background hover:bg-accent"
-                      )}
-                    >
-                      {unit}
-                    </button>
-                  ))}
-                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const units = ['cm', 'ft'];
+                    const currentIndex = units.indexOf(profileData.heightUnit);
+                    const nextIndex = (currentIndex + 1) % units.length;
+                    setProfileData({ ...profileData, heightUnit: units[nextIndex] });
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors"
+                >
+                  {profileData.heightUnit}
+                </button>
               </div>
             )}
 
