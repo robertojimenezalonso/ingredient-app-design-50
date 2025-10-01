@@ -106,7 +106,7 @@ const CalendarSelectionPage = () => {
         <div className="flex-1 min-h-[1rem]"></div>
 
         {/* Footer with Floating Continue Button and Reset */}
-        <div className="fixed bottom-0 left-0 right-0 p-4 z-[100]">
+        <div className="fixed bottom-0 left-0 right-0 p-4 z-[9999]">
           <div className="flex items-center justify-between mb-4">
             <button onClick={handleReset} className="text-foreground underline text-base font-medium">
               Restablecer

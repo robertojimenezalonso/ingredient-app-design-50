@@ -569,7 +569,7 @@ const Index = () => {
           {/* Error Message Area - Outside footer */}
 
           {/* Fixed Button Area at Bottom of Screen */}
-          <div className="absolute bottom-0 left-0 right-0 z-[100]" style={{
+          <div className="absolute bottom-0 left-0 right-0 z-[9999]" style={{
           backgroundColor: '#FFFFFF'
         }}>
             {/* Error Message Area */}
