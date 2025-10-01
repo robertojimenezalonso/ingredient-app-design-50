@@ -115,7 +115,7 @@ export const RecipePreferencesPage = () => {
 
   const handleAddProfile = () => {
     setEditingProfile({
-      name: 'Comensal 1',
+      name: '',
       diet: undefined,
       allergies: undefined,
       healthGoal: undefined
@@ -537,7 +537,7 @@ export const RecipePreferencesPage = () => {
                       onClick={() => setEditingField('name')}
                       className="text-sm text-[#898885]"
                     >
-                      Añadir
+                      {editingProfile?.name && editingProfile.name.trim() ? editingProfile.name : 'Añadir'}
                     </button>
                   )}
                 </div>
