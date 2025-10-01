@@ -292,39 +292,48 @@ export const RecipePreferencesPage = () => {
                     <div key={profile.id} className="mb-4">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-3">
-                          {/* Avatar with circular progress */}
-                          <div className="relative">
-                            <svg className="absolute inset-0 w-12 h-12 -rotate-90">
-                              <circle
-                                cx="24"
-                                cy="24"
-                                r="20"
-                                stroke="#E5E5E5"
-                                strokeWidth="3"
-                                fill="none"
-                              />
-                              <circle
-                                cx="24"
-                                cy="24"
-                                r="20"
-                                stroke="#1C1C1C"
-                                strokeWidth="3"
-                                fill="none"
-                                strokeDasharray={`${2 * Math.PI * 20}`}
-                                strokeDashoffset={`${2 * Math.PI * 20 * (1 - getProfileCompletion(profile) / 100)}`}
-                                strokeLinecap="round"
-                                className="transition-all duration-300"
-                              />
-                            </svg>
-                            <Avatar className="w-12 h-12">
-                              <AvatarFallback className="bg-[#F4F4F4] text-[#1C1C1C] text-sm font-medium">
-                                {getInitials(profile.name)}
-                              </AvatarFallback>
-                            </Avatar>
+                          {/* Avatar with circular progress - only show when name exists */}
+                          {profile.name && (
+                            <div className="relative flex-shrink-0">
+                              <svg className="absolute inset-0 w-12 h-12 -rotate-90">
+                                <circle
+                                  cx="24"
+                                  cy="24"
+                                  r="20"
+                                  stroke="#E5E5E5"
+                                  strokeWidth="3"
+                                  fill="none"
+                                />
+                                <circle
+                                  cx="24"
+                                  cy="24"
+                                  r="20"
+                                  stroke="#1C1C1C"
+                                  strokeWidth="3"
+                                  fill="none"
+                                  strokeDasharray={`${2 * Math.PI * 20}`}
+                                  strokeDashoffset={`${2 * Math.PI * 20 * (1 - getProfileCompletion(profile) / 100)}`}
+                                  strokeLinecap="round"
+                                  className="transition-all duration-300"
+                                />
+                              </svg>
+                              <Avatar className="w-12 h-12">
+                                <AvatarFallback className="bg-[#F4F4F4] text-[#1C1C1C] text-sm font-medium">
+                                  {getInitials(profile.name)}
+                                </AvatarFallback>
+                              </Avatar>
+                            </div>
+                          )}
+                          <div>
+                            <h3 className="text-lg font-semibold text-[#1C1C1C]">
+                              {profile.name || `Perfil ${profile.id}`}
+                            </h3>
+                            {profile.name && (
+                              <p className="text-xs text-[#898885]">
+                                {Math.round(getProfileCompletion(profile))}% perfil completado
+                              </p>
+                            )}
                           </div>
-                          <h3 className="text-lg font-semibold text-[#1C1C1C]">
-                            {profile.name || `Perfil ${profile.id}`}
-                          </h3>
                         </div>
                         <div className="relative">
                           <button
