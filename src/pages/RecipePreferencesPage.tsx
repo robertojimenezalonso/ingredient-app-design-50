@@ -462,6 +462,7 @@ export const RecipePreferencesPage = () => {
           {/* Main View */}
           {currentSection === 'main' && (
             <div className="flex-1 px-4 py-8 overflow-y-auto animate-fade-in" style={{ backgroundColor: '#FFFFFF' }}>
+              <h2 className="text-lg font-semibold text-[#1C1C1C] mb-4">Personalización</h2>
               <Card className="overflow-hidden shadow-[0_0_20px_rgba(0,0,0,0.08)]">
                 {/* Datos personales */}
                 <button 
