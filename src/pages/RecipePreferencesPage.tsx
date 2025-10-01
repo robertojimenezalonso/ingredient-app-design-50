@@ -518,20 +518,32 @@ export const RecipePreferencesPage = () => {
       <Drawer open={dietDrawerOpen} onOpenChange={setDietDrawerOpen}>
         <DrawerContent className="max-h-[50vh]">
           <DrawerHeader>
-            <DrawerTitle className="text-center text-xl font-semibold">
+            <DrawerTitle className="text-left text-lg font-medium">
               ¿Sigues alguna dieta específica?
             </DrawerTitle>
           </DrawerHeader>
           <div className="px-4 pb-8 space-y-2">
-            {['Clásico', 'Pescetariano', 'Vegetariano', 'Vegano'].map((diet) => (
-              <button
-                key={diet}
-                onClick={() => handleSelectDiet(diet)}
-                className="w-full py-4 px-4 text-left text-base hover:bg-[#F4F4F4] rounded-lg transition-colors"
-              >
-                {diet}
-              </button>
-            ))}
+            {['Clásico', 'Pescetariano', 'Vegetariano', 'Vegano'].map((diet) => {
+              const currentProfile = healthProfiles.find(p => p.id === selectedProfileForDiet);
+              const isSelected = currentProfile?.diet === diet;
+              
+              return (
+                <button
+                  key={diet}
+                  onClick={() => handleSelectDiet(diet)}
+                  className="w-full py-4 px-4 text-left text-base hover:bg-[#E5E5E5] transition-colors flex items-center justify-between"
+                  style={{
+                    backgroundColor: '#F4F4F4',
+                    borderRadius: '8px'
+                  }}
+                >
+                  {diet}
+                  {isSelected && (
+                    <span className="text-[#10B981] font-medium">✓</span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </DrawerContent>
       </Drawer>
