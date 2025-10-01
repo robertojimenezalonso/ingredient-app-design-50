@@ -236,7 +236,9 @@ export const RecipePreferencesPage = () => {
                         ].map((field, fieldIndex, array) => (
                           <div key={field}>
                             <div className="flex items-center justify-between px-4 py-3">
-                              <span className="text-[#1C1C1C] text-sm">{field}</span>
+                              <span className="text-[#1C1C1C] text-sm">
+                                {field === 'Nombre' ? 'Nombre*' : field}
+                              </span>
                               {field === 'Nombre' ? (
                                 profile.isEditingName ? (
                                   <Input
@@ -244,7 +246,7 @@ export const RecipePreferencesPage = () => {
                                     value={profile.name}
                                     onChange={(e) => handleNameChange(profile.id, e.target.value)}
                                     onBlur={() => handleNameBlur(profile.id)}
-                                    className="h-8 flex-1 text-sm"
+                                    className="h-8 w-40 text-sm"
                                     placeholder="Escribe aquí"
                                   />
                                 ) : profile.name ? (
