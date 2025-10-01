@@ -55,12 +55,32 @@ export const ProfileCreationDrawer = ({
     activityLevel: editingProfile?.activityLevel || ''
   });
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const dayInputRef = useRef<HTMLInputElement>(null);
+  const weightInputRef = useRef<HTMLInputElement>(null);
+  const heightInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isOpen && currentStep === 'name') {
-      setTimeout(() => inputRef.current?.focus(), 100);
-    }
+    if (!isOpen) return;
+    
+    const focusInput = () => {
+      switch (currentStep) {
+        case 'name':
+          nameInputRef.current?.focus();
+          break;
+        case 'birthDate':
+          dayInputRef.current?.focus();
+          break;
+        case 'weight':
+          weightInputRef.current?.focus();
+          break;
+        case 'height':
+          heightInputRef.current?.focus();
+          break;
+      }
+    };
+    
+    setTimeout(focusInput, 100);
   }, [isOpen, currentStep]);
 
   const getStepTitle = () => {
@@ -160,12 +180,13 @@ export const ProfileCreationDrawer = ({
             
             {currentStep === 'name' && (
               <Input
-                ref={inputRef}
+                ref={nameInputRef}
                 type="text"
                 value={profileData.name}
                 onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
                 placeholder="Escribe tu nombre"
                 className="w-full"
+                autoFocus
               />
             )}
 
@@ -173,6 +194,7 @@ export const ProfileCreationDrawer = ({
               <div className="space-y-4">
                 <div className="flex gap-2">
                   <Input
+                    ref={dayInputRef}
                     type="number"
                     value={profileData.birthDate.day}
                     onChange={(e) => setProfileData({ 
@@ -183,6 +205,7 @@ export const ProfileCreationDrawer = ({
                     min="1"
                     max="31"
                     className="flex-1"
+                    autoFocus
                   />
                   <Input
                     type="number"
@@ -218,11 +241,13 @@ export const ProfileCreationDrawer = ({
             {currentStep === 'weight' && (
               <div className="space-y-4">
                 <Input
+                  ref={weightInputRef}
                   type="number"
                   value={profileData.weight}
                   onChange={(e) => setProfileData({ ...profileData, weight: e.target.value })}
                   placeholder="Escribe tu peso"
                   className="w-full"
+                  autoFocus
                 />
                 <div className="flex gap-2">
                   {['kg', 'lb', 'st'].map(unit => (
@@ -246,11 +271,13 @@ export const ProfileCreationDrawer = ({
             {currentStep === 'height' && (
               <div className="space-y-4">
                 <Input
+                  ref={heightInputRef}
                   type="number"
                   value={profileData.height}
                   onChange={(e) => setProfileData({ ...profileData, height: e.target.value })}
                   placeholder="Escribe tu altura"
                   className="w-full"
+                  autoFocus
                 />
                 <div className="flex gap-2">
                   {['cm', 'ft'].map(unit => (
