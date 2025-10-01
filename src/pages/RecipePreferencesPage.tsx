@@ -506,7 +506,7 @@ export const RecipePreferencesPage = () => {
           {currentSection === 'personal-data' && (
             <div className="flex-1 flex flex-col animate-slide-in-right" style={{ backgroundColor: '#FFFFFF' }}>
               {/* Header */}
-              <div className="px-4 py-4 flex items-center border-b border-[#E5E5E5]">
+              <div className="px-4 py-6 flex items-center border-b border-[#E5E5E5]">
                 <button 
                   onClick={handleBackToMain}
                   className="mr-4"
