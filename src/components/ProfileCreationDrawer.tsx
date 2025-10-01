@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, User } from 'lucide-react';
+import { X, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ProfileCreationDrawerProps {
@@ -162,6 +162,15 @@ export const ProfileCreationDrawer = ({
     }
   };
 
+  const handleBack = () => {
+    const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
+    const currentIndex = steps.indexOf(currentStep);
+    
+    if (currentIndex > 0) {
+      setCurrentStep(steps[currentIndex - 1]);
+    }
+  };
+
   const getCompletionPercentage = () => {
     const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
     const completedSteps = steps.filter(step => {
@@ -245,7 +254,17 @@ export const ProfileCreationDrawer = ({
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4">
           <div className="space-y-4">
-            <h3 className="text-base font-medium">{getStepTitle()}</h3>
+            <div className="flex items-center gap-3">
+              {currentStep !== 'name' && (
+                <button
+                  onClick={handleBack}
+                  className="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+              )}
+              <h3 className="text-base font-medium">{getStepTitle()}</h3>
+            </div>
             
             {currentStep === 'name' && (
               <Input
