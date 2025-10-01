@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { ArrowLeft, ArrowUp, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -55,7 +56,7 @@ export const RecipePreferencesPage = () => {
   const totalNumbers = 10;
   
   const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
-  const [healthProfiles, setHealthProfiles] = useState<number[]>([]);
+  const [healthProfiles, setHealthProfiles] = useState<Array<{ id: number; name: string; isEditingName: boolean }>>([]);
   
   // Animation states
   const skipAnimations = shouldSkipAnimations || (persistedData !== null);
@@ -64,7 +65,26 @@ export const RecipePreferencesPage = () => {
   const [showCursor, setShowCursor] = useState(!skipAnimations);
 
   const handleAddProfile = () => {
-    setHealthProfiles([...healthProfiles, healthProfiles.length + 1]);
+    const newId = healthProfiles.length + 1;
+    setHealthProfiles([...healthProfiles, { id: newId, name: '', isEditingName: false }]);
+  };
+
+  const handleStartEditingName = (profileId: number) => {
+    setHealthProfiles(profiles => 
+      profiles.map(p => p.id === profileId ? { ...p, isEditingName: true } : p)
+    );
+  };
+
+  const handleNameChange = (profileId: number, newName: string) => {
+    setHealthProfiles(profiles =>
+      profiles.map(p => p.id === profileId ? { ...p, name: newName } : p)
+    );
+  };
+
+  const handleNameBlur = (profileId: number) => {
+    setHealthProfiles(profiles =>
+      profiles.map(p => p.id === profileId ? { ...p, isEditingName: false } : p)
+    );
   };
 
   const handleContinue = () => {
@@ -202,9 +222,11 @@ export const RecipePreferencesPage = () => {
                   </div>
                   
                   {/* Health Profiles */}
-                  {healthProfiles.map((profileNum, index) => (
-                    <div key={profileNum} className="mb-4">
-                      <h3 className="text-lg font-semibold text-[#1C1C1C] mb-3">Perfil {profileNum}</h3>
+                  {healthProfiles.map((profile) => (
+                    <div key={profile.id} className="mb-4">
+                      <h3 className="text-lg font-semibold text-[#1C1C1C] mb-3">
+                        {profile.name || `Perfil ${profile.id}`}
+                      </h3>
                       <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
                         {[
                           'Nombre',
@@ -215,13 +237,25 @@ export const RecipePreferencesPage = () => {
                           <div key={field}>
                             <div className="flex items-center justify-between px-4 py-3">
                               <span className="text-[#1C1C1C] text-sm">{field}</span>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-[#1C1C1C] hover:bg-[#F4F4F4] h-8 px-3"
-                              >
-                                Añadir
-                              </Button>
+                              {field === 'Nombre' && profile.isEditingName ? (
+                                <Input
+                                  autoFocus
+                                  value={profile.name}
+                                  onChange={(e) => handleNameChange(profile.id, e.target.value)}
+                                  onBlur={() => handleNameBlur(profile.id)}
+                                  className="h-8 w-32 text-sm"
+                                  placeholder="Escribe aquí"
+                                />
+                              ) : (
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3"
+                                  onClick={() => field === 'Nombre' && handleStartEditingName(profile.id)}
+                                >
+                                  Añadir
+                                </Button>
+                              )}
                             </div>
                             {fieldIndex < array.length - 1 && (
                               <div className="border-t border-[#D1D1D1]" />
