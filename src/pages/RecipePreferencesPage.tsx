@@ -483,6 +483,7 @@ export const RecipePreferencesPage = () => {
         onClose={handleCancelProfile}
         onSave={handleSaveProfile}
         editingProfile={editingProfile}
+        profileIndex={healthProfiles.length}
       />
     </div>
   );

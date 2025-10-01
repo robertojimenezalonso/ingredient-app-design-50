@@ -10,6 +10,7 @@ interface ProfileCreationDrawerProps {
   onClose: () => void;
   onSave: (profileData: any) => void;
   editingProfile?: any;
+  profileIndex?: number;
 }
 
 type Step = 'name' | 'birthDate' | 'weight' | 'height' | 'sex' | 'activityLevel';
@@ -18,7 +19,8 @@ export const ProfileCreationDrawer = ({
   isOpen, 
   onClose, 
   onSave,
-  editingProfile 
+  editingProfile,
+  profileIndex = 0
 }: ProfileCreationDrawerProps) => {
   const [currentStep, setCurrentStep] = useState<Step>('name');
   
@@ -145,6 +147,20 @@ export const ProfileCreationDrawer = ({
     return Math.round((completedSteps / steps.length) * 100);
   };
 
+  const getInitials = (name: string) => {
+    if (!name || name === 'Nuevo comensal') return 'NC';
+    const parts = name.trim().split(' ');
+    if (parts.length === 1) {
+      return parts[0].substring(0, 2).toUpperCase();
+    }
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  };
+
+  const getProfileColor = (index: number) => {
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
+    return colors[index % colors.length];
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -153,8 +169,25 @@ export const ProfileCreationDrawer = ({
         {/* Header with profile info */}
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
           <div className="flex items-center gap-3 flex-1">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="w-5 h-5 text-primary" />
+            <div className="relative flex-shrink-0 w-12 h-12">
+              <svg className="absolute inset-0 w-12 h-12" style={{ transform: 'rotate(-90deg)' }}>
+                <circle cx="24" cy="24" r="22" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
+                <circle
+                  cx="24" cy="24" r="22" stroke="#10B981" strokeWidth="2.5" fill="none"
+                  strokeDasharray={`${2 * Math.PI * 22}`}
+                  strokeDashoffset={`${2 * Math.PI * 22 * (1 - getCompletionPercentage() / 100)}`}
+                  strokeLinecap="round" className="transition-all duration-300"
+                />
+              </svg>
+              <div 
+                className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium"
+                style={{ 
+                  backgroundColor: getProfileColor(profileIndex), 
+                  color: 'rgba(255, 255, 255, 0.8)' 
+                }}
+              >
+                {getInitials(profileData.name || 'Nuevo comensal')}
+              </div>
             </div>
             <div>
               <p className="text-sm font-medium">
@@ -345,7 +378,7 @@ export const ProfileCreationDrawer = ({
             disabled={!canContinue()}
             className="w-full"
           >
-            Guardar y continuar
+            Continuar
           </Button>
         </div>
       </Card>
