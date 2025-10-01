@@ -415,7 +415,7 @@ export const RecipePreferencesPage = () => {
                 />
               </svg>
               <div 
-                className="absolute inset-[8px] rounded-full flex items-center justify-center text-base font-medium text-white/80"
+                className="absolute inset-[8px] rounded-full flex items-center justify-center text-xl font-semibold text-white/80"
                 style={{ 
                   backgroundColor: editingProfile?.id 
                     ? getProfileColor(healthProfiles.findIndex(p => p.id === editingProfile.id))
