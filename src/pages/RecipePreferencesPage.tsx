@@ -1,11 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { ArrowLeft, ArrowUp, Plus, MoreVertical } from 'lucide-react';
+import { ArrowLeft, ArrowUp, Plus, MoreVertical, X } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 
@@ -23,7 +22,6 @@ export const RecipePreferencesPage = () => {
     const stored = localStorage.getItem('recipePreferencesData');
     if (stored) {
       const parsed = JSON.parse(stored);
-      // Convert date strings back to Date objects
       return {
         confirmedDates: parsed.confirmedDates.map((d: string) => new Date(d)),
         selectedSupermarket: parsed.selectedSupermarket,
@@ -54,23 +52,28 @@ export const RecipePreferencesPage = () => {
   }, [confirmedDates, selectedSupermarket, mealSelections]);
   
   const fullText = "";
-  const secondFullText = "O también puedes:";
-  const totalNumbers = 10;
   
-  const [selectedServings, setSelectedServings] = useState<number | 'custom' | null>(null);
   const [healthProfiles, setHealthProfiles] = useState<Array<{ 
     id: number; 
     name: string; 
     diet?: string;
     allergies?: string;
     healthGoal?: string;
-    isEditingName: boolean 
   }>>([]);
   const [openMenuId, setOpenMenuId] = useState<number | null>(null);
   const [dietDrawerOpen, setDietDrawerOpen] = useState(false);
-  const [selectedProfileForDiet, setSelectedProfileForDiet] = useState<number | null>(null);
+  const [allergiesDrawerOpen, setAllergiesDrawerOpen] = useState(false);
+  const [goalDrawerOpen, setGoalDrawerOpen] = useState(false);
+  const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
+  const [editingProfile, setEditingProfile] = useState<{
+    id?: number;
+    name: string;
+    diet?: string;
+    allergies?: string;
+    healthGoal?: string;
+  } | null>(null);
 
-  // Helper function to get initials from name
+  // Helper functions
   const getInitials = (name: string) => {
     if (!name) return '';
     const parts = name.trim().split(' ');
@@ -80,10 +83,9 @@ export const RecipePreferencesPage = () => {
     return (parts[0][0] + parts[1][0]).toUpperCase();
   };
 
-  // Helper function to calculate profile completion percentage
   const getProfileCompletion = (profile: typeof healthProfiles[0]) => {
     let completed = 0;
-    const total = 4; // Nombre, Dieta, Alergias, Objetivo
+    const total = 4;
     
     if (profile.name) completed++;
     if (profile.diet) completed++;
@@ -93,80 +95,68 @@ export const RecipePreferencesPage = () => {
     return (completed / total) * 100;
   };
 
-  // Helper function to get profile color
   const getProfileColor = (index: number) => {
-    const colors = [
-      '#FF6B6B', // Coral red
-      '#4ECDC4', // Turquoise
-      '#45B7D1', // Sky blue
-      '#FFA07A', // Light salmon
-      '#98D8C8', // Mint
-      '#F7DC6F', // Yellow
-      '#BB8FCE', // Purple
-      '#85C1E2', // Light blue
-    ];
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
     return colors[index % colors.length];
   };
   
-  // Animation states
   const skipAnimations = shouldSkipAnimations || (persistedData !== null);
   const [showIcon, setShowIcon] = useState(true);
   const [displayedText, setDisplayedText] = useState(skipAnimations ? fullText : '');
   const [showCursor, setShowCursor] = useState(!skipAnimations);
 
   const handleAddProfile = () => {
-    const newId = healthProfiles.length + 1;
-    setHealthProfiles([...healthProfiles, { 
-      id: newId, 
-      name: '', 
-      diet: undefined, 
+    setEditingProfile({
+      name: '',
+      diet: undefined,
       allergies: undefined,
-      healthGoal: undefined,
-      isEditingName: false 
-    }]);
+      healthGoal: undefined
+    });
+    setProfileDrawerOpen(true);
   };
 
-  const handleOpenDietDrawer = (profileId: number) => {
-    setSelectedProfileForDiet(profileId);
-    setDietDrawerOpen(true);
+  const handleEditProfile = (profile: typeof healthProfiles[0]) => {
+    setEditingProfile({
+      id: profile.id,
+      name: profile.name,
+      diet: profile.diet,
+      allergies: profile.allergies,
+      healthGoal: profile.healthGoal
+    });
+    setProfileDrawerOpen(true);
   };
 
-  const handleSelectDiet = (diet: string) => {
-    if (selectedProfileForDiet !== null) {
+  const handleSaveProfile = () => {
+    if (!editingProfile || !editingProfile.name.trim()) return;
+
+    if (editingProfile.id) {
       setHealthProfiles(profiles =>
-        profiles.map(p => {
-          if (p.id === selectedProfileForDiet) {
-            // Si ya está seleccionada esta dieta, la deseleccionamos
-            if (p.diet === diet) {
-              return { ...p, diet: undefined };
-            }
-            // Si no, la seleccionamos
-            return { ...p, diet };
-          }
-          return p;
-        })
+        profiles.map(p => p.id === editingProfile.id ? {
+          ...p,
+          name: editingProfile.name,
+          diet: editingProfile.diet,
+          allergies: editingProfile.allergies,
+          healthGoal: editingProfile.healthGoal
+        } : p)
       );
+    } else {
+      const newId = healthProfiles.length + 1;
+      setHealthProfiles([...healthProfiles, {
+        id: newId,
+        name: editingProfile.name,
+        diet: editingProfile.diet,
+        allergies: editingProfile.allergies,
+        healthGoal: editingProfile.healthGoal
+      }]);
     }
-    setDietDrawerOpen(false);
-    setSelectedProfileForDiet(null);
+    
+    setProfileDrawerOpen(false);
+    setEditingProfile(null);
   };
 
-  const handleStartEditingName = (profileId: number) => {
-    setHealthProfiles(profiles => 
-      profiles.map(p => p.id === profileId ? { ...p, isEditingName: true } : p)
-    );
-  };
-
-  const handleNameChange = (profileId: number, newName: string) => {
-    setHealthProfiles(profiles =>
-      profiles.map(p => p.id === profileId ? { ...p, name: newName } : p)
-    );
-  };
-
-  const handleNameBlur = (profileId: number) => {
-    setHealthProfiles(profiles =>
-      profiles.map(p => p.id === profileId ? { ...p, isEditingName: false } : p)
-    );
+  const handleCancelProfile = () => {
+    setProfileDrawerOpen(false);
+    setEditingProfile(null);
   };
 
   const handleDeleteProfile = (profileId: number) => {
@@ -179,22 +169,7 @@ export const RecipePreferencesPage = () => {
   };
 
   const handleContinue = () => {
-    if (selectedServings !== null) {
-      if (selectedServings === 'custom') {
-        // Navegar a la pantalla de customización
-        navigate('/customize-servings', {
-          state: { 
-            confirmedDates,
-            selectedSupermarket,
-            mealSelections
-          }
-        });
-      } else {
-        // Aquí navegaremos a la siguiente pantalla con los datos
-        console.log('Continuing with servings:', selectedServings);
-        // TODO: navigate to next page
-      }
-    }
+    // TODO: navigate to next page
   };
 
   const canContinue = healthProfiles.some(profile => profile.name.trim() !== '');
@@ -210,7 +185,6 @@ export const RecipePreferencesPage = () => {
     });
   };
 
-  // Agrupar selecciones por fecha y ordenar tipos de comida
   const mealTypeOrder = ['Desayuno', 'Comida', 'Cena', 'Postre', 'Snack'];
   const groupedSelections = mealSelections.reduce((acc: any, selection: MealSelection) => {
     const dateKey = selection.date.getTime();
@@ -224,7 +198,6 @@ export const RecipePreferencesPage = () => {
     return acc;
   }, {});
 
-  // Ordenar los tipos de comida en cada grupo
   Object.values(groupedSelections).forEach((group: any) => {
     group.mealTypes.sort((a: string, b: string) => {
       return mealTypeOrder.indexOf(a) - mealTypeOrder.indexOf(b);
@@ -236,12 +209,10 @@ export const RecipePreferencesPage = () => {
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
   };
 
-  // Typewriter effect for text
   useEffect(() => {
     if (skipAnimations || fullText.length === 0) return;
     
     if (displayedText.length === 0) {
-      // Start typewriter
       setTimeout(() => {
         setDisplayedText(fullText[0] || '');
       }, 300);
@@ -258,9 +229,7 @@ export const RecipePreferencesPage = () => {
   }, [displayedText, fullText, showCursor, skipAnimations]);
 
   return (
-    <div className="min-h-screen flex flex-col relative" style={{
-      backgroundColor: '#FCFBF8'
-    }}>
+    <div className="min-h-screen flex flex-col relative" style={{ backgroundColor: '#FCFBF8' }}>
       {/* Fixed Header */}
       <div className="fixed top-0 left-0 right-0 z-20 h-16 flex items-center border-b" style={{
         backgroundColor: '#FFFFFF',
@@ -274,19 +243,14 @@ export const RecipePreferencesPage = () => {
         </button>
       </div>
 
-      {/* Chat area - starts below fixed header */}
+      {/* Chat area */}
       <div className="h-screen flex flex-col relative pt-16">
-        <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{
-          backgroundColor: '#FFFFFF'
-        }}>
+        <div className="flex-1 transition-all duration-500 ease-out overflow-hidden" style={{ backgroundColor: '#FFFFFF' }}>
           <div className="flex flex-col h-full overflow-y-auto scrollbar-hide pb-48">
-            {/* User response - meal selections (right-aligned) */}
+            {/* User response */}
             <div className="px-4 pt-4 mb-6">
               <div className="flex justify-end">
-                <div 
-                  className="text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" 
-                  style={{ backgroundColor: '#F4F4F4' }}
-                >
+                <div className="text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" style={{ backgroundColor: '#F4F4F4' }}>
                   {Object.values(groupedSelections).map((group: any, index: number) => (
                     <span key={index}>
                       <span className="font-bold">{formatShortDate(group.date)}</span>
@@ -299,7 +263,7 @@ export const RecipePreferencesPage = () => {
               </div>
             </div>
 
-            {/* Bot question - servings selection */}
+            {/* Bot question */}
             <div className="px-4 mb-6">
               <div className="flex justify-start">
                 <div className="w-full">
@@ -315,62 +279,41 @@ export const RecipePreferencesPage = () => {
                   {/* Health Profiles */}
                   {healthProfiles.map((profile, index) => (
                     <div key={profile.id} className="mb-4">
-                      <div className="flex items-center justify-between mb-2">
+                      <div 
+                        onClick={() => handleEditProfile(profile)}
+                        className="flex items-center justify-between mb-2 cursor-pointer hover:opacity-80 transition-opacity"
+                      >
                         <div className="flex items-center gap-3">
-                          {/* Avatar with circular progress - only show when name exists */}
-                          {profile.name && (
-                            <div className="relative flex-shrink-0 w-14 h-14">
-                              {/* Progress ring - more separated */}
-                              <svg className="absolute inset-0 w-14 h-14" style={{ transform: 'rotate(-90deg)' }}>
-                                {/* Background circle */}
-                                <circle
-                                  cx="28"
-                                  cy="28"
-                                  r="26"
-                                  stroke="#E5E5E5"
-                                  strokeWidth="2.5"
-                                  fill="none"
-                                />
-                                {/* Progress circle */}
-                                <circle
-                                  cx="28"
-                                  cy="28"
-                                  r="26"
-                                  stroke="#10B981"
-                                  strokeWidth="2.5"
-                                  fill="none"
-                                  strokeDasharray={`${2 * Math.PI * 26}`}
-                                  strokeDashoffset={`${2 * Math.PI * 26 * (1 - getProfileCompletion(profile) / 100)}`}
-                                  strokeLinecap="round"
-                                  className="transition-all duration-300"
-                                />
-                              </svg>
-                              {/* Avatar centered inside with more space */}
-                              <div 
-                                className="absolute inset-[7px] rounded-full flex items-center justify-center text-sm font-medium"
-                                style={{ 
-                                  backgroundColor: getProfileColor(index),
-                                  color: 'rgba(255, 255, 255, 0.8)'
-                                }}
-                              >
-                                {getInitials(profile.name)}
-                              </div>
+                          <div className="relative flex-shrink-0 w-14 h-14">
+                            <svg className="absolute inset-0 w-14 h-14" style={{ transform: 'rotate(-90deg)' }}>
+                              <circle cx="28" cy="28" r="26" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
+                              <circle
+                                cx="28" cy="28" r="26" stroke="#10B981" strokeWidth="2.5" fill="none"
+                                strokeDasharray={`${2 * Math.PI * 26}`}
+                                strokeDashoffset={`${2 * Math.PI * 26 * (1 - getProfileCompletion(profile) / 100)}`}
+                                strokeLinecap="round" className="transition-all duration-300"
+                              />
+                            </svg>
+                            <div 
+                              className="absolute inset-[7px] rounded-full flex items-center justify-center text-sm font-medium"
+                              style={{ backgroundColor: getProfileColor(index), color: 'rgba(255, 255, 255, 0.8)' }}
+                            >
+                              {getInitials(profile.name)}
                             </div>
-                          )}
+                          </div>
                           <div>
-                            <h3 className="text-lg font-semibold text-[#1C1C1C]">
-                              {profile.name || `Perfil ${profile.id}`}
-                            </h3>
-                            {profile.name && (
-                              <p className="text-xs text-[#898885]">
-                                {Math.round(getProfileCompletion(profile))}% perfil completado
-                              </p>
-                            )}
+                            <h3 className="text-lg font-semibold text-[#1C1C1C]">{profile.name}</h3>
+                            <p className="text-xs text-[#898885]">
+                              {Math.round(getProfileCompletion(profile))}% perfil completado
+                            </p>
                           </div>
                         </div>
                         <div className="relative">
                           <button
-                            onClick={() => toggleMenu(profile.id)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleMenu(profile.id);
+                            }}
                             className="p-1 hover:bg-[#F4F4F4] rounded-full transition-colors"
                           >
                             <MoreVertical className="h-5 w-5 text-[#1C1C1C]" />
@@ -378,7 +321,10 @@ export const RecipePreferencesPage = () => {
                           {openMenuId === profile.id && (
                             <div className="absolute right-0 top-8 bg-white border border-[#E5E5E5] rounded-lg shadow-lg py-1 z-10">
                               <button
-                                onClick={() => handleDeleteProfile(profile.id)}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteProfile(profile.id);
+                                }}
                                 className="px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left whitespace-nowrap"
                               >
                                 Eliminar perfil
@@ -386,79 +332,6 @@ export const RecipePreferencesPage = () => {
                             </div>
                           )}
                         </div>
-                      </div>
-                      <div className="rounded-lg overflow-hidden" style={{ backgroundColor: '#F4F4F4' }}>
-                        {[
-                          'Nombre',
-                          'Dieta',
-                          'Alergias e intolerancias',
-                          'Objetivo de salud'
-                        ].map((field, fieldIndex, array) => (
-                          <div key={field}>
-                            <div className="flex items-center justify-between px-4 py-3">
-                              <span className="text-[#1C1C1C] text-base">
-                                {field === 'Nombre' ? 'Nombre*' : field}
-                              </span>
-                              {field === 'Nombre' ? (
-                                profile.isEditingName ? (
-                                  <Input
-                                    autoFocus
-                                    value={profile.name}
-                                    onChange={(e) => handleNameChange(profile.id, e.target.value)}
-                                    onBlur={() => handleNameBlur(profile.id)}
-                                    className="h-8 w-40 text-base"
-                                    placeholder="Escribe aquí"
-                                  />
-                                ) : profile.name ? (
-                                  <button
-                                    onClick={() => handleStartEditingName(profile.id)}
-                                    className="text-[#1C1C1C] text-base"
-                                  >
-                                    {profile.name}
-                                  </button>
-                                ) : (
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
-                                    onClick={() => handleStartEditingName(profile.id)}
-                                  >
-                                    Añadir
-                                  </Button>
-                                )
-                              ) : field === 'Dieta' ? (
-                                profile.diet ? (
-                                  <button
-                                    onClick={() => handleOpenDietDrawer(profile.id)}
-                                    className="text-[#1C1C1C] text-base"
-                                  >
-                                    {profile.diet}
-                                  </button>
-                                ) : (
-                                  <Button
-                                    variant="ghost"
-                                    size="sm"
-                                    className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
-                                    onClick={() => handleOpenDietDrawer(profile.id)}
-                                  >
-                                    Añadir
-                                  </Button>
-                                )
-                              ) : (
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
-                                >
-                                  Añadir
-                                </Button>
-                              )}
-                            </div>
-                            {fieldIndex < array.length - 1 && (
-                              <div className="border-t border-[#D1D1D1]" />
-                            )}
-                          </div>
-                        ))}
                       </div>
                     </div>
                   ))}
@@ -477,7 +350,7 @@ export const RecipePreferencesPage = () => {
           </div>
         </div>
 
-        {/* Fixed Button Area at Bottom of Screen */}
+        {/* Fixed Button Area */}
         <div className="absolute left-0 right-0 z-[9999]" style={{
           backgroundColor: '#FFFFFF',
           bottom: 'env(safe-area-inset-bottom, 0px)'
@@ -485,26 +358,18 @@ export const RecipePreferencesPage = () => {
           <div className="px-4 pt-4 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
             {healthProfiles.filter(p => p.name.trim() !== '').length > 0 && (
               <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{ 
-                backgroundColor: '#F2F2F2',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
+                backgroundColor: '#F2F2F2'
               }}>
-                {healthProfiles
-                  .filter(profile => profile.name.trim() !== '')
-                  .map(profile => (
-                    <Badge 
-                      key={profile.id}
-                      variant="secondary" 
-                      className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
-                      style={{ 
-                        backgroundColor: '#D9DADC', 
-                        color: '#020818',
-                        borderRadius: '8px'
-                      }}
-                    >
-                      {profile.name}
-                    </Badge>
-                  ))}
+                {healthProfiles.filter(profile => profile.name.trim() !== '').map(profile => (
+                  <Badge 
+                    key={profile.id}
+                    variant="secondary" 
+                    className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
+                    style={{ backgroundColor: '#D9DADC', color: '#020818', borderRadius: '8px' }}
+                  >
+                    {profile.name}
+                  </Badge>
+                ))}
               </div>
             )}
             <Button 
@@ -525,34 +390,96 @@ export const RecipePreferencesPage = () => {
         </div>
       </div>
 
-      {/* Diet Drawer */}
-      <Drawer open={dietDrawerOpen} onOpenChange={setDietDrawerOpen}>
-        <DrawerContent className="max-h-[50vh] bg-white">
-          <DrawerHeader>
-            <DrawerTitle className="text-left text-lg font-medium">
-              ¿Sigues alguna dieta específica?
+      {/* Profile Drawer */}
+      <Drawer open={profileDrawerOpen} onOpenChange={setProfileDrawerOpen}>
+        <DrawerContent className="bg-white animate-slide-in-right">
+          <DrawerHeader className="flex items-center justify-between border-b border-[#E5E5E5]">
+            <DrawerTitle className="text-left text-lg font-semibold">
+              {editingProfile?.id ? 'Editar perfil' : 'Nuevo perfil'}
             </DrawerTitle>
+            <button onClick={handleCancelProfile} className="p-1">
+              <X className="h-5 w-5" />
+            </button>
           </DrawerHeader>
-          <div className="px-4 pb-8 space-y-2">
-            {['Clásico', 'Pescetariano', 'Vegetariano', 'Vegano'].map((diet) => {
-              const currentProfile = healthProfiles.find(p => p.id === selectedProfileForDiet);
-              const isSelected = currentProfile?.diet === diet;
-              
-              return (
-                <button
-                  key={diet}
-                  onClick={() => handleSelectDiet(diet)}
-                  className="w-full py-4 px-4 text-left text-base transition-colors flex items-center justify-between"
-                  style={{
-                    backgroundColor: isSelected ? '#D9DADC' : '#F4F4F4',
-                    borderRadius: '8px',
-                    border: isSelected ? '1px solid #020817' : '1px solid transparent'
-                  }}
-                >
-                  {diet}
-                </button>
-              );
-            })}
+          <div className="px-4 py-6 space-y-6 overflow-y-auto max-h-[70vh]">
+            {/* Nombre */}
+            <div>
+              <label className="text-sm font-medium text-[#1C1C1C] mb-2 block">Nombre*</label>
+              <Input
+                value={editingProfile?.name || ''}
+                onChange={(e) => setEditingProfile(prev => prev ? { ...prev, name: e.target.value } : null)}
+                placeholder="Escribe el nombre"
+                className="w-full"
+              />
+            </div>
+
+            {/* Dieta */}
+            <div>
+              <label className="text-sm font-medium text-[#1C1C1C] mb-2 block">Dieta</label>
+              <div className="space-y-2">
+                {['Clásico', 'Pescetariano', 'Vegetariano', 'Vegano'].map((diet) => (
+                  <button
+                    key={diet}
+                    onClick={() => setEditingProfile(prev => prev ? { 
+                      ...prev, 
+                      diet: prev.diet === diet ? undefined : diet 
+                    } : null)}
+                    className="w-full py-3 px-4 text-left text-base transition-colors"
+                    style={{
+                      backgroundColor: editingProfile?.diet === diet ? '#D9DADC' : '#F4F4F4',
+                      borderRadius: '8px',
+                      border: editingProfile?.diet === diet ? '1px solid #020817' : '1px solid transparent'
+                    }}
+                  >
+                    {diet}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Alergias */}
+            <div>
+              <label className="text-sm font-medium text-[#1C1C1C] mb-2 block">Alergias e intolerancias</label>
+              <Input
+                value={editingProfile?.allergies || ''}
+                onChange={(e) => setEditingProfile(prev => prev ? { ...prev, allergies: e.target.value } : null)}
+                placeholder="Ej: Lactosa, gluten, frutos secos..."
+                className="w-full"
+              />
+            </div>
+
+            {/* Objetivo */}
+            <div>
+              <label className="text-sm font-medium text-[#1C1C1C] mb-2 block">Objetivo de salud</label>
+              <div className="space-y-2">
+                {['Perder peso', 'Ganar masa muscular', 'Mantener peso', 'Mejorar salud'].map((goal) => (
+                  <button
+                    key={goal}
+                    onClick={() => setEditingProfile(prev => prev ? { 
+                      ...prev, 
+                      healthGoal: prev.healthGoal === goal ? undefined : goal 
+                    } : null)}
+                    className="w-full py-3 px-4 text-left text-base transition-colors"
+                    style={{
+                      backgroundColor: editingProfile?.healthGoal === goal ? '#D9DADC' : '#F4F4F4',
+                      borderRadius: '8px',
+                      border: editingProfile?.healthGoal === goal ? '1px solid #020817' : '1px solid transparent'
+                    }}
+                  >
+                    {goal}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="px-4 pb-6 border-t border-[#E5E5E5] pt-4">
+            <Button
+              onClick={handleSaveProfile}
+              disabled={!editingProfile?.name.trim()}
+              className="w-full bg-[#1C1C1C] text-white hover:bg-[#000000] disabled:opacity-50"
+            >
+              Guardar perfil
+            </Button>
           </div>
         </DrawerContent>
       </Drawer>
