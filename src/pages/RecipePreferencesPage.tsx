@@ -236,7 +236,7 @@ export const RecipePreferencesPage = () => {
                         ].map((field, fieldIndex, array) => (
                           <div key={field}>
                             <div className="flex items-center justify-between px-4 py-3">
-                              <span className="text-[#1C1C1C] text-sm">
+                              <span className="text-[#1C1C1C] text-base">
                                 {field === 'Nombre' ? 'Nombre*' : field}
                               </span>
                               {field === 'Nombre' ? (
@@ -246,13 +246,13 @@ export const RecipePreferencesPage = () => {
                                     value={profile.name}
                                     onChange={(e) => handleNameChange(profile.id, e.target.value)}
                                     onBlur={() => handleNameBlur(profile.id)}
-                                    className="h-8 w-40 text-sm"
+                                    className="h-8 w-40 text-base"
                                     placeholder="Escribe aquí"
                                   />
                                 ) : profile.name ? (
                                   <button
                                     onClick={() => handleStartEditingName(profile.id)}
-                                    className="text-[#1C1C1C] text-sm hover:underline"
+                                    className="text-[#1C1C1C] text-base hover:underline"
                                   >
                                     {profile.name}
                                   </button>
@@ -260,7 +260,7 @@ export const RecipePreferencesPage = () => {
                                   <Button
                                     variant="ghost"
                                     size="sm"
-                                    className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3"
+                                    className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
                                     onClick={() => handleStartEditingName(profile.id)}
                                   >
                                     Añadir
@@ -270,7 +270,7 @@ export const RecipePreferencesPage = () => {
                                 <Button
                                   variant="ghost"
                                   size="sm"
-                                  className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3"
+                                  className="text-[#1C1C1C] hover:bg-[#E5E5E5] h-8 px-3 text-base"
                                 >
                                   Añadir
                                 </Button>
