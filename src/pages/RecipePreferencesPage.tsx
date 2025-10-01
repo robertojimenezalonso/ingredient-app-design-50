@@ -120,6 +120,7 @@ export const RecipePreferencesPage = () => {
       allergies: undefined,
       healthGoal: undefined
     });
+    setCurrentSection('main');
     setProfileDrawerOpen(true);
   };
 
@@ -131,6 +132,7 @@ export const RecipePreferencesPage = () => {
       allergies: profile.allergies,
       healthGoal: profile.healthGoal
     });
+    setCurrentSection('main');
     setProfileDrawerOpen(true);
   };
 
