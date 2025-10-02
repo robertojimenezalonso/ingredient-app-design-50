@@ -14,7 +14,7 @@ interface ProfileCreationDrawerProps {
   editingProfile?: any;
   profileIndex?: number;
 }
-type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'weight' | 'height' | 'sex' | 'activityLevel';
+type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'completeProfile' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel';
 export const ProfileCreationDrawer = ({
   isOpen,
   onClose,
@@ -99,6 +99,7 @@ export const ProfileCreationDrawer = ({
     weightUnit: parseWeight(editingProfile?.weight).unit,
     height: parseHeight(editingProfile?.height).value,
     heightUnit: parseHeight(editingProfile?.height).unit,
+    birthDate: editingProfile?.birthDate || '',
     sex: editingProfile?.sex || '',
     activityLevel: editingProfile?.activityLevel || ''
   });
@@ -122,6 +123,16 @@ export const ProfileCreationDrawer = ({
   );
 
   const goalSubtextFull = "Esto nos ayudará a generar un plan para su gesta calórica";
+
+  // Helper to get goal verb
+  const getGoalVerb = () => {
+    const goal = profileData.goal.toLowerCase();
+    if (goal.includes('perder')) return 'perder peso';
+    if (goal.includes('mantener')) return 'mantener su peso';
+    if (goal.includes('aumentar peso')) return 'aumentar su peso';
+    if (goal.includes('músculo')) return 'aumentar músculo';
+    return 'alcanzar su objetivo';
+  };
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
@@ -354,10 +365,14 @@ export const ProfileCreationDrawer = ({
         return isEditing?.allergies ? 'Actualizar alergias' : 'Añadir alergias';
       case 'goal':
         return isEditing?.goal ? 'Actualizar objetivo' : 'Añadir objetivo';
+      case 'completeProfile':
+        return '';
       case 'weight':
         return isEditing?.weight ? 'Actualizar peso' : 'Añadir peso';
       case 'height':
         return isEditing?.height ? 'Actualizar altura' : 'Añadir altura';
+      case 'birthdate':
+        return isEditing?.birthDate ? 'Actualizar fecha de nacimiento' : 'Añadir fecha de nacimiento';
       case 'sex':
         return isEditing?.sex ? 'Actualizar sexo' : 'Añadir sexo';
       case 'activityLevel':
@@ -376,10 +391,14 @@ export const ProfileCreationDrawer = ({
         return profileData.allergies.length > 0;
       case 'goal':
         return profileData.goal !== '';
+      case 'completeProfile':
+        return profileData.weight && profileData.height && profileData.birthDate && profileData.sex && profileData.activityLevel;
       case 'weight':
         return profileData.weight && parseFloat(profileData.weight) > 0;
       case 'height':
         return profileData.height && parseFloat(profileData.height) > 0;
+      case 'birthdate':
+        return profileData.birthDate !== '';
       case 'sex':
         return profileData.sex !== '';
       case 'activityLevel':
@@ -389,7 +408,7 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'completeProfile'];
     const currentIndex = steps.indexOf(currentStep);
     
     if (currentIndex < steps.length - 1) {
@@ -418,7 +437,7 @@ export const ProfileCreationDrawer = ({
     }
   };
   const getCompletionPercentage = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'completeProfile'];
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
@@ -429,14 +448,8 @@ export const ProfileCreationDrawer = ({
           return true; // Always considered complete
         case 'goal':
           return profileData.goal !== '';
-        case 'weight':
-          return profileData.weight && parseFloat(profileData.weight) > 0;
-        case 'height':
-          return profileData.height && parseFloat(profileData.height) > 0;
-        case 'sex':
-          return profileData.sex !== '';
-        case 'activityLevel':
-          return profileData.activityLevel !== '';
+        case 'completeProfile':
+          return profileData.weight && profileData.height && profileData.birthDate && profileData.sex && profileData.activityLevel;
         default:
           return false;
       }
@@ -764,31 +777,137 @@ export const ProfileCreationDrawer = ({
                   </div>}
               </div>}
 
-            {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'goal' && currentStep !== 'overview' && <div>
+            {currentStep === 'completeProfile' && <div className="space-y-6">
+                {/* Message */}
+                <div className="mb-6">
+                  <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                    ¡Genial! Para que {profileData.name || 'este comensal'} pueda {getGoalVerb()}, vamos a necesitar completar su ficha con esta información:
+                  </p>
+                </div>
+
+                {/* Profile completion fields */}
+                <div className="space-y-2">
+                  <button
+                    onClick={() => setCurrentStep('weight')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
+                  >
+                    <span className="text-sm font-medium flex-shrink-0">Peso actual</span>
+                    <span className="text-sm text-muted-foreground text-right ml-4">
+                      {profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : 'Añadir'}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentStep('height')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
+                  >
+                    <span className="text-sm font-medium flex-shrink-0">Altura</span>
+                    <span className="text-sm text-muted-foreground text-right ml-4">
+                      {profileData.height ? `${profileData.height} ${profileData.heightUnit}` : 'Añadir'}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentStep('birthdate')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
+                  >
+                    <span className="text-sm font-medium flex-shrink-0">Fecha de nacimiento</span>
+                    <span className="text-sm text-muted-foreground text-right ml-4">
+                      {profileData.birthDate || 'Añadir'}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentStep('sex')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
+                  >
+                    <span className="text-sm font-medium flex-shrink-0">Sexo</span>
+                    <span className="text-sm text-muted-foreground text-right ml-4">
+                      {profileData.sex || 'Añadir'}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => setCurrentStep('activityLevel')}
+                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
+                  >
+                    <span className="text-sm font-medium flex-shrink-0">Nivel de actividad</span>
+                    <span className="text-sm text-muted-foreground text-right ml-4">
+                      {profileData.activityLevel || 'Añadir'}
+                    </span>
+                  </button>
+                </div>
+              </div>}
+
+            {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'goal' && currentStep !== 'overview' && currentStep !== 'completeProfile' && <div>
                 <h3 className="text-base font-medium mb-4">{getStepTitle()}</h3>
               </div>}
 
-            {currentStep === 'weight' && <div className="relative">
-                <Input ref={weightInputRef} type="text" inputMode="numeric" pattern="[0-9]*" value={profileData.weight} onChange={e => setProfileData({
-              ...profileData,
-              weight: e.target.value.replace(/\D/g, '')
-            })} placeholder="Escribe tu peso" className="w-full pr-16" autoFocus onBlur={e => {
-              e.preventDefault();
-              setTimeout(() => e.target.focus({
-                preventScroll: true
-              }), 0);
-            }} />
-                <button type="button" onClick={() => {
-              const units = ['kg', 'lb'];
-              const currentIndex = units.indexOf(profileData.weightUnit);
-              const nextIndex = (currentIndex + 1) % units.length;
-              setProfileData({
-                ...profileData,
-                weightUnit: units[nextIndex]
-              });
-            }} className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors">
-                  {profileData.weightUnit}
+            {currentStep === 'weight' && <div className="flex flex-col items-center space-y-6">
+                {/* Weight display */}
+                <div className="text-6xl font-bold text-center">
+                  {profileData.weight || '0'}
+                </div>
+                
+                {/* Plus/Minus buttons */}
+                <div className="flex items-center gap-8">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const current = parseInt(profileData.weight) || 0;
+                      if (current > 0) {
+                        setProfileData({
+                          ...profileData,
+                          weight: String(current - 1)
+                        });
+                      }
+                    }}
+                    className="w-16 h-16 rounded-full bg-accent hover:bg-accent/80 flex items-center justify-center text-3xl font-bold transition-colors"
+                  >
+                    -
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const current = parseInt(profileData.weight) || 0;
+                      setProfileData({
+                        ...profileData,
+                        weight: String(current + 1)
+                      });
+                    }}
+                    className="w-16 h-16 rounded-full bg-accent hover:bg-accent/80 flex items-center justify-center text-3xl font-bold transition-colors"
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Unit selector */}
+                <button 
+                  type="button" 
+                  onClick={() => {
+                    const units = ['kg', 'lb'];
+                    const currentIndex = units.indexOf(profileData.weightUnit);
+                    const nextIndex = (currentIndex + 1) % units.length;
+                    setProfileData({
+                      ...profileData,
+                      weightUnit: units[nextIndex]
+                    });
+                  }} 
+                  className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {profileData.weightUnit === 'kg' ? 'Kilos' : 'Libras'}
                 </button>
+
+                {/* Add weight button */}
+                <Button 
+                  onClick={() => {
+                    setCurrentStep('completeProfile');
+                  }} 
+                  disabled={!profileData.weight || parseInt(profileData.weight) === 0}
+                  className="w-full"
+                >
+                  Añadir peso
+                </Button>
               </div>}
 
             {currentStep === 'height' && <div className="relative">
@@ -900,11 +1019,20 @@ export const ProfileCreationDrawer = ({
           </div>}
 
         {/* Regular button for other steps */}
-        {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'goal' && currentStep !== 'overview' && <div className="p-4 border-t flex-shrink-0">
-            <Button onClick={handleContinue} disabled={!canContinue()} className="w-full">
+        {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'goal' && currentStep !== 'overview' && currentStep !== 'weight' && <div className="p-4 border-t flex-shrink-0">
+            <Button onClick={() => setCurrentStep('completeProfile')} disabled={!canContinue()} className="w-full">
               Continuar
             </Button>
           </div>}
+
+        {/* Save button for completeProfile */}
+        {currentStep === 'completeProfile' && canContinue() && (
+          <div className="p-4 border-t flex-shrink-0">
+            <Button onClick={() => onSave(profileData)} className="w-full">
+              Guardar perfil
+            </Button>
+          </div>
+        )}
 
         {/* Save button for overview */}
         {currentStep === 'overview' && getCompletionPercentage() === 100 && (
