@@ -528,7 +528,6 @@ export const ProfileCreationDrawer = ({
                   diet: profileData.diet === option ? '' : option
                 })} className={cn("w-full px-4 py-3 rounded-lg transition-all text-left text-base font-medium", profileData.diet === option ? "" : "border-0")} style={{
                   ...profileData.diet === option ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' },
-                  opacity: 0,
                   animation: 'fade-in 0.3s ease-out forwards',
                   animationDelay: `${index * 0.1}s`
                 }}>
@@ -566,7 +565,6 @@ export const ProfileCreationDrawer = ({
                       const isChecked = profileData.allergies.includes(option);
                       return (
                         <div key={option} style={{
-                          opacity: 0,
                           animation: 'fade-in 0.3s ease-out forwards',
                           animationDelay: `${index * 0.08}s`
                         }}>
