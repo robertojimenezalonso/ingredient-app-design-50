@@ -417,7 +417,7 @@ export const ProfileCreationDrawer = ({
                     {['Clásica', 'Pescetariano', 'Vegetariano', 'Vegano'].map(option => <button key={option} onClick={() => setProfileData({
                   ...profileData,
                   diet: option
-                })} className={cn("w-full px-4 py-3 rounded-lg border-2 transition-all text-left font-medium", profileData.diet === option ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border hover:border-primary/50")}>
+                })} className={cn("w-full px-4 py-3 rounded-lg transition-all text-left font-medium", profileData.diet === option ? "bg-primary text-primary-foreground border-2 border-primary" : "border-0")} style={profileData.diet !== option ? { backgroundColor: '#F4F4F4' } : undefined}>
                         {option}
                       </button>)}
                   </div>}
