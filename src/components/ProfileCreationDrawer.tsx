@@ -740,7 +740,7 @@ export const ProfileCreationDrawer = ({
 
                 {/* Goal options - appears after typewriter completes */}
                 {goalShowOptions && <div className="mb-6 space-y-2">
-                    {['Perder peso', 'Mantener', 'Aumentar músculo'].map((option, index) => {
+                    {['Perder peso', 'Mantener', 'Aumentar peso', 'Aumentar músculo'].map((option, index) => {
                       const isSelected = profileData.goal === option;
                       return (
                         <button 
