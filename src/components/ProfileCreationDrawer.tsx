@@ -13,7 +13,7 @@ interface ProfileCreationDrawerProps {
   editingProfile?: any;
   profileIndex?: number;
 }
-type Step = 'name' | 'birthDate' | 'weight' | 'height' | 'sex' | 'activityLevel';
+type Step = 'name' | 'diet' | 'weight' | 'height' | 'sex' | 'activityLevel';
 export const ProfileCreationDrawer = ({
   isOpen,
   onClose,
@@ -28,6 +28,11 @@ export const ProfileCreationDrawer = ({
   const [showCursor, setShowCursor] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const fullText = "Escribe el nombre o alias para este comensal";
+
+  // Typewriter effect states for diet step
+  const [dietDisplayedText, setDietDisplayedText] = useState('');
+  const [dietShowCursor, setDietShowCursor] = useState(false);
+  const [dietShowOptions, setDietShowOptions] = useState(false);
 
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -74,7 +79,7 @@ export const ProfileCreationDrawer = ({
   };
   const [profileData, setProfileData] = useState({
     name: editingProfile?.name || '',
-    birthDate: editingProfile?.birthDate || '',
+    diet: editingProfile?.diet || '',
     weight: parseWeight(editingProfile?.weight).value,
     weightUnit: parseWeight(editingProfile?.weight).unit,
     height: parseHeight(editingProfile?.height).value,
@@ -82,30 +87,13 @@ export const ProfileCreationDrawer = ({
     sex: editingProfile?.sex || '',
     activityLevel: editingProfile?.activityLevel || ''
   });
+
+  // Compute dietFullText based on profileData.name
+  const dietFullText = `¿Qué dieta sigue ${profileData.name || 'este comensal'}?`;
+
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const birthDateInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
   const heightInputRef = useRef<HTMLInputElement>(null);
-  const formatBirthDate = (value: string) => {
-    // Remove all non-numeric characters
-    const numbers = value.replace(/\D/g, '');
-
-    // Format as DD/MM/YYYY
-    if (numbers.length <= 2) {
-      return numbers;
-    } else if (numbers.length <= 4) {
-      return `${numbers.slice(0, 2)}/${numbers.slice(2)}`;
-    } else {
-      return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}/${numbers.slice(4, 8)}`;
-    }
-  };
-  const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatBirthDate(e.target.value);
-    setProfileData({
-      ...profileData,
-      birthDate: formatted
-    });
-  };
 
   // Prevent background scroll and keyboard behavior when drawer is open
   useEffect(() => {
@@ -155,6 +143,24 @@ export const ProfileCreationDrawer = ({
       }, 300);
     }
   }, [isOpen, currentStep]);
+
+  // Typewriter effect for diet step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'diet') {
+      setDietDisplayedText('');
+      setDietShowCursor(false);
+      setDietShowOptions(false);
+      return;
+    }
+
+    // Start typewriter
+    if (dietDisplayedText.length === 0) {
+      setTimeout(() => {
+        setDietDisplayedText(dietFullText[0]);
+        setDietShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, dietFullText]);
   useEffect(() => {
     if (!isOpen || currentStep !== 'name') return;
     if (displayedText.length > 0 && displayedText.length < fullText.length) {
@@ -169,6 +175,21 @@ export const ProfileCreationDrawer = ({
       }, 200);
     }
   }, [displayedText, fullText, showCursor, isOpen, currentStep]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'diet') return;
+    if (dietDisplayedText.length > 0 && dietDisplayedText.length < dietFullText.length) {
+      const timeout = setTimeout(() => {
+        setDietDisplayedText(dietFullText.slice(0, dietDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (dietDisplayedText.length === dietFullText.length && dietShowCursor) {
+      setTimeout(() => {
+        setDietShowCursor(false);
+        setDietShowOptions(true);
+      }, 200);
+    }
+  }, [dietDisplayedText, dietFullText, dietShowCursor, isOpen, currentStep]);
   // Show keyboard immediately when drawer opens for name step
   useEffect(() => {
     if (!isOpen) return;
@@ -190,8 +211,6 @@ export const ProfileCreationDrawer = ({
         switch (currentStep) {
           case 'name':
             return showInput ? nameInputRef.current : null;
-          case 'birthDate':
-            return birthDateInputRef.current;
           case 'weight':
             return weightInputRef.current;
           case 'height':
@@ -212,8 +231,8 @@ export const ProfileCreationDrawer = ({
     switch (currentStep) {
       case 'name':
         return isEditing?.name ? 'Actualizar nombre' : 'Añadir nombre';
-      case 'birthDate':
-        return isEditing?.birthDate ? 'Actualizar fecha de nacimiento' : 'Añadir fecha de nacimiento';
+      case 'diet':
+        return isEditing?.diet ? 'Actualizar dieta' : 'Añadir dieta';
       case 'weight':
         return isEditing?.weight ? 'Actualizar peso' : 'Añadir peso';
       case 'height':
@@ -230,15 +249,8 @@ export const ProfileCreationDrawer = ({
     switch (currentStep) {
       case 'name':
         return profileData.name.trim().length > 0;
-      case 'birthDate':
-        {
-          const date = profileData.birthDate.replace(/\D/g, '');
-          if (date.length !== 8) return false;
-          const day = parseInt(date.slice(0, 2));
-          const month = parseInt(date.slice(2, 4));
-          const year = parseInt(date.slice(4, 8));
-          return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= new Date().getFullYear();
-        }
+      case 'diet':
+        return profileData.diet !== '';
       case 'weight':
         return profileData.weight && parseFloat(profileData.weight) > 0;
       case 'height':
@@ -252,7 +264,7 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
-    const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
@@ -262,23 +274,20 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleBack = () => {
-    const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
     }
   };
   const getCompletionPercentage = () => {
-    const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
           return profileData.name.trim().length > 0;
-        case 'birthDate':
-          {
-            const date = profileData.birthDate.replace(/\D/g, '');
-            return date.length === 8;
-          }
+        case 'diet':
+          return profileData.diet !== '';
         case 'weight':
           return profileData.weight && parseFloat(profileData.weight) > 0;
         case 'height':
@@ -353,7 +362,7 @@ export const ProfileCreationDrawer = ({
 
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4" style={{
-        paddingBottom: currentStep === 'name' ? '120px' : '16px'
+        paddingBottom: currentStep === 'name' || currentStep === 'diet' ? '120px' : '16px'
       }}>
           <div className="space-y-4">
             
@@ -387,7 +396,31 @@ export const ProfileCreationDrawer = ({
                 {profileData.name && showInput}
               </div>}
 
-            {currentStep !== 'name' && <div>
+            {currentStep === 'diet' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
+                <div className="px-4 mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {dietDisplayedText}
+                        {dietShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Diet options - appears after typewriter completes */}
+                {dietShowOptions && <div className="px-4 mb-6 animate-fade-in space-y-2">
+                    {['Clásica', 'Pescetariano', 'Vegetariano', 'Vegano'].map(option => <button key={option} onClick={() => setProfileData({
+                  ...profileData,
+                  diet: option
+                })} className={cn("w-full px-4 py-3 rounded-lg border-2 transition-all text-left font-medium", profileData.diet === option ? "bg-primary text-primary-foreground border-primary" : "bg-background border-border hover:border-primary/50")}>
+                        {option}
+                      </button>)}
+                  </div>}
+              </div>}
+
+            {currentStep !== 'name' && currentStep !== 'diet' && <div>
                 <div className="flex items-center gap-3 mb-4">
                   <button onClick={handleBack} className="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors">
                     <ChevronLeft className="w-5 h-5" />
@@ -395,13 +428,6 @@ export const ProfileCreationDrawer = ({
                   <h3 className="text-base font-medium">{getStepTitle()}</h3>
                 </div>
               </div>}
-
-            {currentStep === 'birthDate' && <Input ref={birthDateInputRef} type="text" inputMode="numeric" pattern="[0-9]*" value={profileData.birthDate} onChange={handleBirthDateChange} placeholder="DD/MM/AAAA" maxLength={10} className="w-full" autoFocus onBlur={e => {
-            e.preventDefault();
-            setTimeout(() => e.target.focus({
-              preventScroll: true
-            }), 0);
-          }} />}
 
             {currentStep === 'weight' && <div className="relative">
                 <Input ref={weightInputRef} type="text" inputMode="numeric" pattern="[0-9]*" value={profileData.weight} onChange={e => setProfileData({
@@ -469,14 +495,14 @@ export const ProfileCreationDrawer = ({
           </div>
         </CardContent>
 
-        {/* Bottom area - chat send style for name step */}
-        {currentStep === 'name' && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+        {/* Bottom area - chat send style for name and diet steps */}
+        {(currentStep === 'name' || currentStep === 'diet') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
         backgroundColor: '#FFFFFF'
       }}>
             <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{
           paddingBottom: 'max(2rem, calc(env(safe-area-inset-bottom) + 16px))'
         }}>
-              {profileData.name && <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
+              {(currentStep === 'name' ? profileData.name : profileData.diet) && <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
             backgroundColor: '#F2F2F2',
             scrollbarWidth: 'none',
             msOverflowStyle: 'none'
@@ -486,7 +512,7 @@ export const ProfileCreationDrawer = ({
               color: '#020818',
               borderRadius: '8px'
             }}>
-                    {profileData.name}
+                    {currentStep === 'name' ? profileData.name : profileData.diet}
                   </Badge>
                 </div>}
               <button onClick={handleContinue} disabled={!canContinue()} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" style={{
@@ -501,7 +527,7 @@ export const ProfileCreationDrawer = ({
           </div>}
 
         {/* Regular button for other steps */}
-        {currentStep !== 'name' && <div className="p-4 border-t flex-shrink-0">
+        {currentStep !== 'name' && currentStep !== 'diet' && <div className="p-4 border-t flex-shrink-0">
             <Button onClick={handleContinue} disabled={!canContinue()} className="w-full">
               Continuar
             </Button>
