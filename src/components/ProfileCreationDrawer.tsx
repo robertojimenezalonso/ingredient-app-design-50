@@ -472,7 +472,7 @@ export const ProfileCreationDrawer = ({
                     {['Sin preferencia alimentaria', 'Pescetariano', 'Vegetariano', 'Vegano'].map(option => <button key={option} onClick={() => setProfileData({
                   ...profileData,
                   diet: profileData.diet === option ? '' : option
-                })} className={cn("w-full px-4 py-3 rounded-lg transition-all text-left text-xs font-medium", profileData.diet === option ? "" : "border-0")} style={profileData.diet === option ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' }}>
+                })} className={cn("w-full px-4 py-3 rounded-lg transition-all text-left text-base font-medium", profileData.diet === option ? "" : "border-0")} style={profileData.diet === option ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' }}>
                         {option}
                       </button>)}
                   </div>}
@@ -532,7 +532,7 @@ export const ProfileCreationDrawer = ({
                 {['Masculino', 'Femenino', 'Otro'].map(option => <button key={option} onClick={() => setProfileData({
               ...profileData,
               sex: option
-            })} className={cn("w-full px-4 py-3 rounded-lg border transition-colors text-left text-xs font-medium", profileData.sex === option ? "bg-primary text-primary-foreground" : "bg-background hover:bg-accent")}>
+            })} className={cn("w-full px-4 py-3 rounded-lg border transition-colors text-left text-base font-medium", profileData.sex === option ? "bg-primary text-primary-foreground" : "bg-background hover:bg-accent")}>
                     {option}
                   </button>)}
               </div>}
@@ -541,7 +541,7 @@ export const ProfileCreationDrawer = ({
                 {['Bajo', 'Moderado', 'Alto', 'Muy alto'].map(option => <button key={option} onClick={() => setProfileData({
               ...profileData,
               activityLevel: option
-            })} className={cn("w-full px-4 py-3 rounded-lg border transition-colors text-left text-xs font-medium", profileData.activityLevel === option ? "bg-primary text-primary-foreground" : "bg-background hover:bg-accent")}>
+            })} className={cn("w-full px-4 py-3 rounded-lg border transition-colors text-left text-base font-medium", profileData.activityLevel === option ? "bg-primary text-primary-foreground" : "bg-background hover:bg-accent")}>
                     {option}
                   </button>)}
               </div>}
