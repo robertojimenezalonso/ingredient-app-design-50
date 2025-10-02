@@ -393,7 +393,7 @@ export const ProfileCreationDrawer = ({
   const menuItems = [
     { step: 'name' as Step, label: 'Nombre', value: profileData.name },
     { step: 'diet' as Step, label: 'Preferencia alimentaria', value: profileData.diet },
-    { step: 'allergies' as Step, label: 'Alergias e intolerancias', value: profileData.allergies.length > 0 ? profileData.allergies.join(', ') : '' },
+    { step: 'allergies' as Step, label: 'Alergias e intolerancias', value: profileData.allergies.length > 0 ? `${profileData.allergies.length}` : '' },
     { step: 'weight' as Step, label: 'Peso', value: profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : '' },
     { step: 'height' as Step, label: 'Altura', value: profileData.height ? `${profileData.height} ${profileData.heightUnit}` : '' },
     { step: 'sex' as Step, label: 'Sexo', value: profileData.sex },
