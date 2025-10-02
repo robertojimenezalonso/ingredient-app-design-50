@@ -408,7 +408,19 @@ export const ProfileCreationDrawer = ({
     paddingTop: 'env(safe-area-inset-top)',
     paddingBottom: '16px',
     backgroundColor: 'rgba(0, 0, 0, 0.5)'
-  }}>
+      }}>
+        <style>{`
+          @keyframes fadeInUp {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+        `}</style>
       <Card className="relative w-full max-w-md flex flex-col rounded-3xl border-0 shadow-2xl mx-4 self-start overflow-hidden" style={{
       marginTop: '100px',
       maxHeight: 'calc(100% - 116px)'
@@ -545,19 +557,6 @@ export const ProfileCreationDrawer = ({
                       );
                     })}
                   </div>}
-                  
-                  <style>{`
-                    @keyframes fadeInUp {
-                      from {
-                        opacity: 0;
-                        transform: translateY(10px);
-                      }
-                      to {
-                        opacity: 1;
-                        transform: translateY(0);
-                      }
-                    }
-                  `}</style>
               </div>}
 
             {currentStep === 'allergies' && <div className="space-y-6">
