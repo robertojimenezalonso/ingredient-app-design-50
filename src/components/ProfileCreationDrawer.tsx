@@ -371,7 +371,7 @@ export const ProfileCreationDrawer = ({
             
             {currentStep === 'name' && <div className="space-y-6">
                 {/* Bot message with typewriter */}
-                <div className="px-4 mb-6">
+                <div className="mb-6">
                   <div className="flex justify-start">
                     <div className="max-w-xs">
                       <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
@@ -383,7 +383,7 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Input field - appears after typewriter completes */}
-                {showInput && <div className="px-4 mb-6 animate-fade-in">
+                {showInput && <div className="mb-6 animate-fade-in">
                     <Input ref={nameInputRef} type="text" value={profileData.name} onChange={e => setProfileData({
                 ...profileData,
                 name: e.target.value
@@ -401,7 +401,7 @@ export const ProfileCreationDrawer = ({
 
             {currentStep === 'diet' && <div className="space-y-6">
                 {/* Bot message with typewriter */}
-                <div className="px-4 mb-6">
+                <div className="mb-6">
                   <div className="flex justify-start">
                     <div className="max-w-xs">
                       <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
@@ -413,7 +413,7 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Diet options - appears after typewriter completes */}
-                {dietShowOptions && <div className="px-4 mb-6 animate-fade-in space-y-2">
+                {dietShowOptions && <div className="mb-6 animate-fade-in space-y-2">
                     {['Clásica', 'Pescetariano', 'Vegetariano', 'Vegano'].map(option => <button key={option} onClick={() => setProfileData({
                   ...profileData,
                   diet: option
