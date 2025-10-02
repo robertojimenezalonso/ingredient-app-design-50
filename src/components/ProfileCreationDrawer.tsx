@@ -14,7 +14,7 @@ interface ProfileCreationDrawerProps {
   editingProfile?: any;
   profileIndex?: number;
 }
-type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'weight' | 'height' | 'sex' | 'activityLevel';
+type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'weight' | 'height' | 'sex' | 'activityLevel';
 export const ProfileCreationDrawer = ({
   isOpen,
   onClose,
@@ -40,6 +40,12 @@ export const ProfileCreationDrawer = ({
   const [allergiesDisplayedText, setAllergiesDisplayedText] = useState('');
   const [allergiesShowCursor, setAllergiesShowCursor] = useState(false);
   const [allergiesShowOptions, setAllergiesShowOptions] = useState(false);
+
+  // Typewriter effect states for goal step
+  const [goalDisplayedText, setGoalDisplayedText] = useState('');
+  const [goalSubtext, setGoalSubtext] = useState('');
+  const [goalShowCursor, setGoalShowCursor] = useState(false);
+  const [goalShowOptions, setGoalShowOptions] = useState(false);
 
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -88,6 +94,7 @@ export const ProfileCreationDrawer = ({
     name: editingProfile?.name || '',
     diet: editingProfile?.diet || '',
     allergies: editingProfile?.allergies || [],
+    goal: editingProfile?.goal || '',
     weight: parseWeight(editingProfile?.weight).value,
     weightUnit: parseWeight(editingProfile?.weight).unit,
     height: parseHeight(editingProfile?.height).value,
@@ -107,6 +114,14 @@ export const ProfileCreationDrawer = ({
     `¿${profileData.name || 'Este comensal'} tiene alguna alergia o intolerancia?`,
     [profileData.name]
   );
+
+  // Compute goalFullText based on profileData.name using useMemo
+  const goalFullText = useMemo(() => 
+    `¿Cuál es el objetivo de ${profileData.name || 'este comensal'}?`,
+    [profileData.name]
+  );
+
+  const goalSubtextFull = "Esto nos ayudará a generar un plan para su gesta calórica";
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
@@ -241,6 +256,57 @@ export const ProfileCreationDrawer = ({
     }
   }, [allergiesDisplayedText, allergiesFullText, allergiesShowCursor, isOpen, currentStep]);
 
+  // Typewriter effect for goal step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'goal') {
+      setGoalDisplayedText('');
+      setGoalSubtext('');
+      setGoalShowCursor(false);
+      setGoalShowOptions(false);
+      return;
+    }
+
+    // Start typewriter for main text
+    if (goalDisplayedText.length === 0) {
+      setTimeout(() => {
+        setGoalDisplayedText(goalFullText[0]);
+        setGoalShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, goalFullText]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'goal') return;
+    
+    // Type main text
+    if (goalDisplayedText.length > 0 && goalDisplayedText.length < goalFullText.length) {
+      const timeout = setTimeout(() => {
+        setGoalDisplayedText(goalFullText.slice(0, goalDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } 
+    // When main text is complete, start subtext
+    else if (goalDisplayedText.length === goalFullText.length && goalSubtext.length === 0) {
+      setTimeout(() => {
+        setGoalShowCursor(false);
+        setGoalSubtext(goalSubtextFull[0]);
+      }, 200);
+    }
+    // Type subtext
+    else if (goalSubtext.length > 0 && goalSubtext.length < goalSubtextFull.length) {
+      const timeout = setTimeout(() => {
+        setGoalSubtext(goalSubtextFull.slice(0, goalSubtext.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    }
+    // When all text is complete, show options
+    else if (goalSubtext.length === goalSubtextFull.length) {
+      setTimeout(() => {
+        setGoalShowOptions(true);
+      }, 200);
+    }
+  }, [goalDisplayedText, goalFullText, goalSubtext, goalSubtextFull, isOpen, currentStep]);
+
   // Show keyboard immediately when drawer opens for name step
   useEffect(() => {
     if (!isOpen) return;
@@ -286,6 +352,8 @@ export const ProfileCreationDrawer = ({
         return isEditing?.diet ? 'Actualizar dieta' : 'Añadir dieta';
       case 'allergies':
         return isEditing?.allergies ? 'Actualizar alergias' : 'Añadir alergias';
+      case 'goal':
+        return isEditing?.goal ? 'Actualizar objetivo' : 'Añadir objetivo';
       case 'weight':
         return isEditing?.weight ? 'Actualizar peso' : 'Añadir peso';
       case 'height':
@@ -306,6 +374,8 @@ export const ProfileCreationDrawer = ({
         return profileData.diet !== '';
       case 'allergies':
         return profileData.allergies.length > 0;
+      case 'goal':
+        return profileData.goal !== '';
       case 'weight':
         return profileData.weight && parseFloat(profileData.weight) > 0;
       case 'height':
@@ -319,7 +389,7 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     
     if (currentIndex < steps.length - 1) {
@@ -341,14 +411,14 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
-    const steps: Step[] = ['name', 'diet', 'allergies', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
     }
   };
   const getCompletionPercentage = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'sex', 'activityLevel'];
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
@@ -357,6 +427,8 @@ export const ProfileCreationDrawer = ({
           return profileData.diet !== '';
         case 'allergies':
           return true; // Always considered complete
+        case 'goal':
+          return profileData.goal !== '';
         case 'weight':
           return profileData.weight && parseFloat(profileData.weight) > 0;
         case 'height':
@@ -394,6 +466,7 @@ export const ProfileCreationDrawer = ({
     { step: 'name' as Step, label: 'Nombre', value: profileData.name },
     { step: 'diet' as Step, label: 'Preferencia alimentaria', value: profileData.diet },
     { step: 'allergies' as Step, label: 'Alergias e intolerancias', value: profileData.allergies.length > 0 ? `${profileData.allergies.length}` : '' },
+    { step: 'goal' as Step, label: 'Objetivo', value: profileData.goal },
     { step: 'weight' as Step, label: 'Peso', value: profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : '' },
     { step: 'height' as Step, label: 'Altura', value: profileData.height ? `${profileData.height} ${profileData.heightUnit}` : '' },
     { step: 'sex' as Step, label: 'Sexo', value: profileData.sex },
@@ -461,7 +534,7 @@ export const ProfileCreationDrawer = ({
 
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4" style={{
-        paddingBottom: currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' ? '120px' : '16px'
+        paddingBottom: currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' ? '120px' : '16px'
       }}>
           <div className="space-y-4">
             
@@ -647,7 +720,51 @@ export const ProfileCreationDrawer = ({
                   </div>}
               </div>}
 
-            {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'overview' && <div>
+            {currentStep === 'goal' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
+                <div className="mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {goalDisplayedText}
+                        {goalShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                      {goalSubtext && (
+                        <p className="text-sm leading-relaxed text-left text-muted-foreground mt-2">
+                          {goalSubtext}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Goal options - appears after typewriter completes */}
+                {goalShowOptions && <div className="mb-6 space-y-2">
+                    {['Perder peso', 'Mantener', 'Aumentar músculo'].map((option, index) => {
+                      const isSelected = profileData.goal === option;
+                      return (
+                        <button 
+                          key={option} 
+                          onClick={() => setProfileData({
+                            ...profileData,
+                            goal: profileData.goal === option ? '' : option
+                          })} 
+                          className={cn("w-full px-4 py-3 rounded-lg text-left text-base font-medium", isSelected ? "" : "border-0")} 
+                          style={{
+                            opacity: 0,
+                            transform: 'translateY(10px)',
+                            animation: `fadeInUp 0.4s ease-out ${index * 0.15}s forwards`,
+                            ...(isSelected ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' })
+                          }}
+                        >
+                          {option}
+                        </button>
+                      );
+                    })}
+                  </div>}
+              </div>}
+
+            {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'goal' && currentStep !== 'overview' && <div>
                 <h3 className="text-base font-medium mb-4">{getStepTitle()}</h3>
               </div>}
 
@@ -717,8 +834,8 @@ export const ProfileCreationDrawer = ({
           </div>
         </CardContent>
 
-        {/* Bottom area - chat send style for name, diet and allergies steps */}
-        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+        {/* Bottom area - chat send style for name, diet, allergies and goal steps */}
+        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
         backgroundColor: '#FFFFFF'
       }}>
             <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{
@@ -726,7 +843,8 @@ export const ProfileCreationDrawer = ({
         }}>
               {((currentStep === 'name' && profileData.name) || 
                 (currentStep === 'diet' && profileData.diet) || 
-                (currentStep === 'allergies' && profileData.allergies.length > 0)) && 
+                (currentStep === 'allergies' && profileData.allergies.length > 0) ||
+                (currentStep === 'goal' && profileData.goal)) && 
                 <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
                   backgroundColor: '#F2F2F2',
                   scrollbarWidth: 'none',
@@ -759,6 +877,15 @@ export const ProfileCreationDrawer = ({
                       {allergy}
                     </Badge>
                   ))}
+                  {currentStep === 'goal' && (
+                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {profileData.goal}
+                    </Badge>
+                  )}
                 </div>
               }
               <button onClick={handleContinue} disabled={!canContinue()} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" style={{
@@ -773,7 +900,7 @@ export const ProfileCreationDrawer = ({
           </div>}
 
         {/* Regular button for other steps */}
-        {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'overview' && <div className="p-4 border-t flex-shrink-0">
+        {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'goal' && currentStep !== 'overview' && <div className="p-4 border-t flex-shrink-0">
             <Button onClick={handleContinue} disabled={!canContinue()} className="w-full">
               Continuar
             </Button>
