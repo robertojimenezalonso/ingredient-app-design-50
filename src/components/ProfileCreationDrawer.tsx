@@ -13,6 +13,7 @@ interface ProfileCreationDrawerProps {
   onSave: (profileData: any) => void;
   editingProfile?: any;
   profileIndex?: number;
+  selectedSupermarket?: string | null;
 }
 type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'completeProfile' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel';
 export const ProfileCreationDrawer = ({
@@ -20,16 +21,35 @@ export const ProfileCreationDrawer = ({
   onClose,
   onSave,
   editingProfile,
-  profileIndex = 0
+  profileIndex = 0,
+  selectedSupermarket
 }: ProfileCreationDrawerProps) => {
   const [currentStep, setCurrentStep] = useState<Step>('name');
   const [returnToOverview, setReturnToOverview] = useState(false);
+
+  // Typewriter effect states for intro text (before name)
+  const [introDisplayedText, setIntroDisplayedText] = useState('');
+  const [introShowCursor, setIntroShowCursor] = useState(false);
+  const [introComplete, setIntroComplete] = useState(false);
 
   // Typewriter effect states for name step
   const [displayedText, setDisplayedText] = useState('');
   const [showCursor, setShowCursor] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const fullText = "Escribe el nombre o alias para este comensal";
+
+  // Helper to get supermarket name
+  const getSupermarketName = () => {
+    switch (selectedSupermarket) {
+      case 'mercadona': return 'Mercadona';
+      case 'carrefour': return 'Carrefour';
+      case 'lidl': return 'Lidl';
+      case 'alcampo': return 'Alcampo';
+      default: return 'tu supermercado';
+    }
+  };
+
+  const introFullText = `Para darte las recetas más personalizadas usando ingredientes de ${getSupermarketName()}, necesitamos que completes la ficha de cada comensal.`;
 
   // Typewriter effect states for diet step
   const [dietDisplayedText, setDietDisplayedText] = useState('');
@@ -169,23 +189,55 @@ export const ProfileCreationDrawer = ({
     }
   }, [isOpen]);
 
-  // Typewriter effect for name step
+  // Typewriter effect for intro text
   useEffect(() => {
     if (!isOpen || currentStep !== 'name') {
+      setIntroDisplayedText('');
+      setIntroShowCursor(false);
+      setIntroComplete(false);
       setDisplayedText('');
       setShowCursor(false);
       setShowInput(false);
       return;
     }
 
-    // Start typewriter
+    // Start intro typewriter
+    if (introDisplayedText.length === 0) {
+      setTimeout(() => {
+        setIntroDisplayedText(introFullText[0]);
+        setIntroShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, introFullText]);
+
+  // Continue typing intro text
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'name') return;
+    if (introDisplayedText.length > 0 && introDisplayedText.length < introFullText.length) {
+      const timeout = setTimeout(() => {
+        setIntroDisplayedText(introFullText.slice(0, introDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (introDisplayedText.length === introFullText.length && introShowCursor) {
+      setTimeout(() => {
+        setIntroShowCursor(false);
+        setIntroComplete(true);
+      }, 200);
+    }
+  }, [introDisplayedText, introFullText, introShowCursor, isOpen, currentStep]);
+
+  // Start name typewriter after intro completes
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'name' || !introComplete) return;
+
+    // Start name typewriter
     if (displayedText.length === 0) {
       setTimeout(() => {
         setDisplayedText(fullText[0]);
         setShowCursor(true);
-      }, 300);
+      }, 500);
     }
-  }, [isOpen, currentStep]);
+  }, [isOpen, currentStep, introComplete, displayedText.length]);
 
   // Typewriter effect for diet step
   useEffect(() => {
@@ -570,17 +622,31 @@ export const ProfileCreationDrawer = ({
             )}
             
             {currentStep === 'name' && <div className="space-y-6">
-                {/* Bot message with typewriter */}
-                <div className="mb-6">
+                {/* Intro message with typewriter */}
+                <div className="mb-4">
                   <div className="flex justify-start">
                     <div className="max-w-xs">
                       <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                        {displayedText}
-                        {showCursor && <span className="animate-pulse">|</span>}
+                        {introDisplayedText}
+                        {introShowCursor && <span className="animate-pulse">|</span>}
                       </p>
                     </div>
                   </div>
                 </div>
+
+                {/* Name question with typewriter */}
+                {introComplete && (
+                  <div className="mb-6">
+                    <div className="flex justify-start">
+                      <div className="max-w-xs">
+                        <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                          {displayedText}
+                          {showCursor && <span className="animate-pulse">|</span>}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Input field - appears after typewriter completes */}
                 {showInput && <div className="mb-6 animate-fade-in">

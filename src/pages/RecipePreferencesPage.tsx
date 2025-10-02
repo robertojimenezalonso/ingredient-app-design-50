@@ -509,6 +509,7 @@ export const RecipePreferencesPage = () => {
         onSave={handleSaveProfile}
         editingProfile={editingProfile}
         profileIndex={healthProfiles.length}
+        selectedSupermarket={selectedSupermarket}
       />
     </div>
   );
