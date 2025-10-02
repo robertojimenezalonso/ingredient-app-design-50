@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, ChevronLeft } from 'lucide-react';
+import { X, ChevronLeft, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
 
@@ -294,33 +294,62 @@ export const ProfileCreationDrawer = ({
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4">
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              {currentStep !== 'name' && (
-                <button
-                  onClick={handleBack}
-                  className="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors"
-                >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
-              )}
-              <h3 className="text-base font-medium">{getStepTitle()}</h3>
-            </div>
             
             {currentStep === 'name' && (
-              <Input
-                ref={nameInputRef}
-                type="text"
-                value={profileData.name}
-                onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                placeholder="Escribe aqui"
-                className="w-full"
-                autoFocus
-                onBlur={(e) => {
-                  // Prevent keyboard from hiding
-                  e.preventDefault();
-                  setTimeout(() => e.target.focus({ preventScroll: true }), 0);
-                }}
-              />
+              <div className="space-y-6">
+                {/* Bot message */}
+                <div className="flex justify-start">
+                  <div className="max-w-xs">
+                    <div className="flex items-start gap-2">
+                      <span className="text-lg">👤</span>
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        Escribe el nombre o alias para este comensal
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* User input bubble - appears when typing */}
+                {profileData.name && (
+                  <div className="flex justify-end animate-fade-in">
+                    <div 
+                      className="text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" 
+                      style={{ backgroundColor: '#F4F4F4' }}
+                    >
+                      {profileData.name}
+                    </div>
+                  </div>
+                )}
+
+                {/* Hidden input for keyboard */}
+                <Input
+                  ref={nameInputRef}
+                  type="text"
+                  value={profileData.name}
+                  onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                  placeholder="Escribe aqui"
+                  className="w-full opacity-0 h-0 absolute"
+                  autoFocus
+                  onBlur={(e) => {
+                    e.preventDefault();
+                    setTimeout(() => e.target.focus({ preventScroll: true }), 0);
+                  }}
+                />
+              </div>
+            )}
+
+            {currentStep !== 'name' && (
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <button
+                    onClick={handleBack}
+                    className="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <h3 className="text-base font-medium">{getStepTitle()}</h3>
+                </div>
+              </div>
             )}
 
             {currentStep === 'birthDate' && (
@@ -446,15 +475,30 @@ export const ProfileCreationDrawer = ({
           </div>
         </CardContent>
 
-        {/* Bottom button - part of the card */}
+        {/* Bottom button - chat send style for name step */}
         <div className="p-4 border-t flex-shrink-0">
-          <Button
-            onClick={handleContinue}
-            disabled={!canContinue()}
-            className="w-full"
-          >
-            Continuar
-          </Button>
+          {currentStep === 'name' ? (
+            <button
+              onClick={handleContinue}
+              disabled={!canContinue()}
+              className={cn(
+                "w-12 h-12 rounded-full flex items-center justify-center transition-all ml-auto",
+                canContinue() 
+                  ? "bg-[#1C1C1C] text-white hover:bg-[#2C2C2C]" 
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+              )}
+            >
+              <Send className="w-5 h-5" />
+            </button>
+          ) : (
+            <Button
+              onClick={handleContinue}
+              disabled={!canContinue()}
+              className="w-full"
+            >
+              Continuar
+            </Button>
+          )}
         </div>
       </Card>
     </div>
