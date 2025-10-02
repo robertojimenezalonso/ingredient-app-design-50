@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { X, ChevronLeft, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -24,6 +25,12 @@ export const ProfileCreationDrawer = ({
   profileIndex = 0
 }: ProfileCreationDrawerProps) => {
   const [currentStep, setCurrentStep] = useState<Step>('name');
+  
+  // Typewriter effect states for name step
+  const [displayedText, setDisplayedText] = useState('');
+  const [showCursor, setShowCursor] = useState(false);
+  const [showInput, setShowInput] = useState(false);
+  const fullText = "Escribe el nombre o alias para este comensal";
   
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -111,6 +118,40 @@ export const ProfileCreationDrawer = ({
       };
     }
   }, [isOpen]);
+
+  // Typewriter effect for name step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'name') {
+      setDisplayedText('');
+      setShowCursor(false);
+      setShowInput(false);
+      return;
+    }
+
+    // Start typewriter
+    if (displayedText.length === 0) {
+      setTimeout(() => {
+        setDisplayedText(fullText[0]);
+        setShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'name') return;
+    
+    if (displayedText.length > 0 && displayedText.length < fullText.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedText(fullText.slice(0, displayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (displayedText.length === fullText.length && showCursor) {
+      setTimeout(() => {
+        setShowCursor(false);
+        setShowInput(true);
+      }, 200);
+    }
+  }, [displayedText, fullText, showCursor, isOpen, currentStep]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -297,21 +338,40 @@ export const ProfileCreationDrawer = ({
             
             {currentStep === 'name' && (
               <div className="space-y-6">
-                {/* Bot message */}
-                <div className="flex justify-start">
-                  <div className="max-w-xs">
-                    <div className="flex items-start gap-2">
-                      <span className="text-lg">👤</span>
+                {/* Bot message with typewriter */}
+                <div className="px-4 mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
                       <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                        Escribe el nombre o alias para este comensal
+                        {displayedText}
+                        {showCursor && <span className="animate-pulse">|</span>}
                       </p>
                     </div>
                   </div>
                 </div>
 
-                {/* User input bubble - appears when typing */}
-                {profileData.name && (
-                  <div className="flex justify-end animate-fade-in">
+                {/* Input field - appears after typewriter completes */}
+                {showInput && (
+                  <div className="px-4 mb-6 animate-fade-in">
+                    <Input
+                      ref={nameInputRef}
+                      type="text"
+                      value={profileData.name}
+                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+                      placeholder="Escribe aqui"
+                      className="w-full"
+                      autoFocus
+                      onBlur={(e) => {
+                        e.preventDefault();
+                        setTimeout(() => e.target.focus({ preventScroll: true }), 0);
+                      }}
+                    />
+                  </div>
+                )}
+
+                {/* User tag bubble - appears when typing */}
+                {profileData.name && showInput && (
+                  <div className="px-4 flex justify-end animate-fade-in">
                     <div 
                       className="text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" 
                       style={{ backgroundColor: '#F4F4F4' }}
@@ -320,21 +380,6 @@ export const ProfileCreationDrawer = ({
                     </div>
                   </div>
                 )}
-
-                {/* Hidden input for keyboard */}
-                <Input
-                  ref={nameInputRef}
-                  type="text"
-                  value={profileData.name}
-                  onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                  placeholder="Escribe aqui"
-                  className="w-full opacity-0 h-0 absolute"
-                  autoFocus
-                  onBlur={(e) => {
-                    e.preventDefault();
-                    setTimeout(() => e.target.focus({ preventScroll: true }), 0);
-                  }}
-                />
               </div>
             )}
 
@@ -475,22 +520,52 @@ export const ProfileCreationDrawer = ({
           </div>
         </CardContent>
 
-        {/* Bottom button - chat send style for name step */}
-        <div className="p-4 border-t flex-shrink-0">
-          {currentStep === 'name' ? (
-            <button
-              onClick={handleContinue}
-              disabled={!canContinue()}
-              className={cn(
-                "w-12 h-12 rounded-full flex items-center justify-center transition-all ml-auto",
-                canContinue() 
-                  ? "bg-[#1C1C1C] text-white hover:bg-[#2C2C2C]" 
-                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+        {/* Bottom area - chat send style for name step */}
+        {currentStep === 'name' && showInput && (
+          <div className="absolute left-0 right-0 z-[9999]" style={{
+            backgroundColor: '#FFFFFF',
+            bottom: 'env(safe-area-inset-bottom, 0px)'
+          }}>
+            <div className="px-4 pt-4 pb-8 flex items-center gap-2 border-t" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
+              {profileData.name && (
+                <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
+                  backgroundColor: '#F2F2F2',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}>
+                  <Badge 
+                    variant="secondary" 
+                    className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
+                    style={{ 
+                      backgroundColor: '#D9DADC', 
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}
+                  >
+                    {profileData.name}
+                  </Badge>
+                </div>
               )}
-            >
-              <Send className="w-5 h-5" />
-            </button>
-          ) : (
+              <button
+                onClick={handleContinue}
+                disabled={!canContinue()}
+                className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto"
+                style={{
+                  backgroundColor: canContinue() ? '#000000' : '#898885',
+                  color: canContinue() ? '#ffffff' : '#F9F8F2',
+                  border: 'none',
+                  opacity: 1
+                }}
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Regular button for other steps */}
+        {currentStep !== 'name' && (
+          <div className="p-4 border-t flex-shrink-0">
             <Button
               onClick={handleContinue}
               disabled={!canContinue()}
@@ -498,8 +573,8 @@ export const ProfileCreationDrawer = ({
             >
               Continuar
             </Button>
-          )}
-        </div>
+          </div>
+        )}
       </Card>
     </div>
   );
