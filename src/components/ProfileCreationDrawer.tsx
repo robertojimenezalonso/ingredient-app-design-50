@@ -756,7 +756,7 @@ export const ProfileCreationDrawer = ({
 
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4" style={{
-        paddingBottom: currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' ? '120px' : '16px'
+        paddingBottom: (currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') ? '120px' : '16px'
       }}>
           <div className="space-y-4">
             
