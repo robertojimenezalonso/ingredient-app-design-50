@@ -1771,7 +1771,10 @@ export const ProfileCreationDrawer = ({
                 Restaurar datos
               </button>
               <Button 
-                onClick={() => onSave(profileData)} 
+                onClick={() => {
+                  onSave(profileData);
+                  onClose();
+                }} 
                 disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
                 className="flex-1"
                 style={{
