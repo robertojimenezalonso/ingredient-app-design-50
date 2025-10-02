@@ -177,7 +177,7 @@ export const ProfileCreationDrawer = ({
       const input = (() => {
         switch (currentStep) {
           case 'name':
-            return nameInputRef.current;
+            return showInput ? nameInputRef.current : null;
           case 'birthDate':
             return birthDateInputRef.current;
           case 'weight':
@@ -200,7 +200,7 @@ export const ProfileCreationDrawer = ({
         });
       }
     });
-  }, [isOpen, currentStep]);
+  }, [isOpen, currentStep, showInput]);
   const getStepTitle = () => {
     const isEditing = editingProfile;
     switch (currentStep) {
@@ -464,7 +464,7 @@ export const ProfileCreationDrawer = ({
         </CardContent>
 
         {/* Bottom area - chat send style for name step */}
-        {currentStep === 'name' && showInput && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+        {currentStep === 'name' && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
         backgroundColor: '#FFFFFF'
       }}>
             <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{
