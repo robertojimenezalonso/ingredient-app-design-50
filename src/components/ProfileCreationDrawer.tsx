@@ -815,8 +815,10 @@ export const ProfileCreationDrawer = ({
     { step: 'goal' as Step, label: 'Objetivo', value: profileData.goal },
     { step: 'weight' as Step, label: 'Peso', value: profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : '' },
     { step: 'height' as Step, label: 'Altura', value: profileData.height ? `${profileData.height} ${profileData.heightUnit}` : '' },
+    { step: 'birthdate' as Step, label: 'Fecha de nacimiento', value: profileData.birthDate },
     { step: 'sex' as Step, label: 'Sexo', value: profileData.sex },
     { step: 'activityLevel' as Step, label: 'Nivel de actividad', value: profileData.activityLevel },
+    { step: 'macros' as Step, label: 'Métricas', value: profileData.calories && profileData.carbs && profileData.protein && profileData.fat ? `${profileData.calories} kcal` : '' },
   ];
   if (!isOpen) return null;
   return <div className="fixed z-50 flex justify-center" style={{
@@ -894,7 +896,7 @@ export const ProfileCreationDrawer = ({
                     className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
                   >
                     <span className="text-sm font-medium flex-shrink-0">{item.label}</span>
-                    <span className="text-sm text-muted-foreground text-right ml-4">
+                    <span className={`text-sm text-right ml-4 ${item.value ? 'text-muted-foreground font-normal' : 'font-medium'}`} style={!item.value ? { color: '#000000' } : {}}>
                       {item.value || 'Añadir'}
                     </span>
                   </button>
