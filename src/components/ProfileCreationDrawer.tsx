@@ -532,11 +532,10 @@ export const ProfileCreationDrawer = ({
                             ...profileData,
                             diet: profileData.diet === option ? '' : option
                           })} 
-                          className={cn("w-full px-4 py-3 rounded-lg transition-all text-left text-base font-medium", isSelected ? "" : "border-0")} 
+                          className={cn("w-full px-4 py-3 rounded-lg transition-all text-left text-base font-medium animate-fade-in", isSelected ? "" : "border-0")} 
                           style={{
-                            opacity: 0,
-                            animation: 'fade-in 0.3s ease-out forwards',
                             animationDelay: `${index * 0.1}s`,
+                            animationFillMode: 'backwards',
                             ...(isSelected ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' })
                           }}
                         >
@@ -575,10 +574,9 @@ export const ProfileCreationDrawer = ({
                     ].map((option, index, array) => {
                       const isChecked = profileData.allergies.includes(option);
                       return (
-                        <div key={option} style={{
-                          opacity: 0,
-                          animation: 'fade-in 0.3s ease-out forwards',
-                          animationDelay: `${index * 0.08}s`
+                        <div key={option} className="animate-fade-in" style={{
+                          animationDelay: `${index * 0.08}s`,
+                          animationFillMode: 'backwards'
                         }}>
                           <div
                             className="flex items-center justify-between py-3 px-4 cursor-pointer hover:bg-accent/50 transition-colors"
