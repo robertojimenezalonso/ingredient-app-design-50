@@ -1000,45 +1000,27 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Weight input - appears after typewriter completes */}
-                {weightShowInput && <div className="flex flex-col items-center space-y-6">
-                    {/* Weight display */}
-                    <div className="text-6xl font-bold text-center">
-                      {profileData.weight || '0'}
-                    </div>
-                    
-                    {/* Plus/Minus buttons */}
-                    <div className="flex items-center gap-8">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const current = parseInt(profileData.weight) || 0;
-                          if (current > 0) {
-                            setProfileData({
-                              ...profileData,
-                              weight: String(current - 1)
-                            });
-                          }
-                        }}
-                        className="w-16 h-16 rounded-full bg-accent hover:bg-accent/80 flex items-center justify-center text-3xl font-bold transition-colors"
-                      >
-                        -
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const current = parseInt(profileData.weight) || 0;
-                          setProfileData({
-                            ...profileData,
-                            weight: String(current + 1)
-                          });
-                        }}
-                        className="w-16 h-16 rounded-full bg-accent hover:bg-accent/80 flex items-center justify-center text-3xl font-bold transition-colors"
-                      >
-                        +
-                      </button>
-                    </div>
-
-                    {/* Unit selector */}
+                {weightShowInput && <div className="relative">
+                    <Input 
+                      ref={weightInputRef} 
+                      type="text" 
+                      inputMode="numeric" 
+                      pattern="[0-9]*" 
+                      value={profileData.weight} 
+                      onChange={e => setProfileData({
+                        ...profileData,
+                        weight: e.target.value.replace(/\D/g, '')
+                      })} 
+                      placeholder="Escribe el peso" 
+                      className="w-full pr-16" 
+                      autoFocus 
+                      onBlur={e => {
+                        e.preventDefault();
+                        setTimeout(() => e.target.focus({
+                          preventScroll: true
+                        }), 0);
+                      }} 
+                    />
                     <button 
                       type="button" 
                       onClick={() => {
@@ -1050,9 +1032,9 @@ export const ProfileCreationDrawer = ({
                           weightUnit: units[nextIndex]
                         });
                       }} 
-                      className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors"
                     >
-                      {profileData.weightUnit === 'kg' ? 'Kilos' : 'Libras'}
+                      {profileData.weightUnit}
                     </button>
                   </div>}
               </div>}
@@ -1127,6 +1109,7 @@ export const ProfileCreationDrawer = ({
                 {birthdateShowInput && <div className="relative">
                     <Input 
                       type="date" 
+                      inputMode="numeric"
                       value={profileData.birthDate} 
                       onChange={e => setProfileData({
                         ...profileData,
@@ -1134,6 +1117,12 @@ export const ProfileCreationDrawer = ({
                       })} 
                       className="w-full" 
                       autoFocus
+                      onBlur={e => {
+                        e.preventDefault();
+                        setTimeout(() => e.target.focus({
+                          preventScroll: true
+                        }), 0);
+                      }}
                     />
                   </div>}
               </div>}
