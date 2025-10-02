@@ -1012,14 +1012,23 @@ export const ProfileCreationDrawer = ({
                         weight: e.target.value.replace(/\D/g, '')
                       })} 
                       placeholder="Escribe el peso" 
-                      className="w-full pr-16" 
-                      autoFocus 
+                      className="w-full pr-16 border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
+                      style={{
+                        backgroundColor: '#F4F4F4',
+                        borderColor: 'transparent'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#020817';
+                        e.target.style.borderWidth = '1px';
+                      }}
                       onBlur={e => {
+                        e.target.style.borderColor = 'transparent';
                         e.preventDefault();
                         setTimeout(() => e.target.focus({
                           preventScroll: true
                         }), 0);
-                      }} 
+                      }}
+                      autoFocus 
                     />
                     <button 
                       type="button" 
@@ -1065,14 +1074,23 @@ export const ProfileCreationDrawer = ({
                         height: e.target.value.replace(/\D/g, '')
                       })} 
                       placeholder="Escribe la altura" 
-                      className="w-full pr-16" 
-                      autoFocus 
+                      className="w-full pr-16 border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
+                      style={{
+                        backgroundColor: '#F4F4F4',
+                        borderColor: 'transparent'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#020817';
+                        e.target.style.borderWidth = '1px';
+                      }}
                       onBlur={e => {
+                        e.target.style.borderColor = 'transparent';
                         e.preventDefault();
                         setTimeout(() => e.target.focus({
                           preventScroll: true
                         }), 0);
-                      }} 
+                      }}
+                      autoFocus 
                     />
                     <button 
                       type="button" 
@@ -1115,14 +1133,23 @@ export const ProfileCreationDrawer = ({
                         ...profileData,
                         birthDate: e.target.value
                       })} 
-                      className="w-full" 
-                      autoFocus
+                      className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
+                      style={{
+                        backgroundColor: '#F4F4F4',
+                        borderColor: 'transparent'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#020817';
+                        e.target.style.borderWidth = '1px';
+                      }}
                       onBlur={e => {
+                        e.target.style.borderColor = 'transparent';
                         e.preventDefault();
                         setTimeout(() => e.target.focus({
                           preventScroll: true
                         }), 0);
                       }}
+                      autoFocus
                     />
                   </div>}
               </div>}
