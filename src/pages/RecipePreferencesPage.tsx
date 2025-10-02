@@ -204,13 +204,6 @@ export const RecipePreferencesPage = () => {
   const [displayedText, setDisplayedText] = useState(skipAnimations ? fullText : '');
   const [showCursor, setShowCursor] = useState(!skipAnimations);
 
-  // Auto-open drawer on load for testing
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      handleAddProfile();
-    }, 500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleAddProfile = () => {
     setEditingProfile({
