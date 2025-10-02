@@ -532,10 +532,11 @@ export const ProfileCreationDrawer = ({
                             ...profileData,
                             diet: profileData.diet === option ? '' : option
                           })} 
-                          className={cn("w-full px-4 py-3 rounded-lg transition-all text-left text-base font-medium animate-fade-in", isSelected ? "" : "border-0")} 
+                          className={cn("w-full px-4 py-3 rounded-lg text-left text-base font-medium", isSelected ? "" : "border-0")} 
                           style={{
-                            animationDelay: `${index * 0.1}s`,
-                            animationFillMode: 'backwards',
+                            opacity: 0,
+                            transform: 'translateY(10px)',
+                            animation: `fadeInUp 0.4s ease-out ${index * 0.15}s forwards`,
                             ...(isSelected ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' })
                           }}
                         >
@@ -544,6 +545,19 @@ export const ProfileCreationDrawer = ({
                       );
                     })}
                   </div>}
+                  
+                  <style>{`
+                    @keyframes fadeInUp {
+                      from {
+                        opacity: 0;
+                        transform: translateY(10px);
+                      }
+                      to {
+                        opacity: 1;
+                        transform: translateY(0);
+                      }
+                    }
+                  `}</style>
               </div>}
 
             {currentStep === 'allergies' && <div className="space-y-6">
@@ -574,9 +588,10 @@ export const ProfileCreationDrawer = ({
                     ].map((option, index, array) => {
                       const isChecked = profileData.allergies.includes(option);
                       return (
-                        <div key={option} className="animate-fade-in" style={{
-                          animationDelay: `${index * 0.08}s`,
-                          animationFillMode: 'backwards'
+                        <div key={option} style={{
+                          opacity: 0,
+                          transform: 'translateY(10px)',
+                          animation: `fadeInUp 0.4s ease-out ${index * 0.1}s forwards`
                         }}>
                           <div
                             className="flex items-center justify-between py-3 px-4 cursor-pointer hover:bg-accent/50 transition-colors"
