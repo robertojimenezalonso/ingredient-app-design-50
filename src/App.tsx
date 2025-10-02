@@ -47,8 +47,8 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* Redirect to index for testing */}
-            <Route path="/" element={<Navigate to="/index" replace />} />
+            {/* Redirect to recipe-preferences for testing */}
+            <Route path="/" element={<Navigate to="/recipe-preferences" replace />} />
             <Route path="/index" element={<Index />} />
             <Route path="/meal-selection" element={<MealSelectionPage />} />
             <Route path="/recipe-preferences" element={<RecipePreferencesPage />} />
