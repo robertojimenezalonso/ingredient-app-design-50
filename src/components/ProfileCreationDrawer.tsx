@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -88,8 +88,11 @@ export const ProfileCreationDrawer = ({
     activityLevel: editingProfile?.activityLevel || ''
   });
 
-  // Compute dietFullText based on profileData.name
-  const dietFullText = `¿Qué dieta sigue ${profileData.name || 'este comensal'}?`;
+  // Compute dietFullText based on profileData.name using useMemo
+  const dietFullText = useMemo(() => 
+    `¿Qué dieta sigue ${profileData.name || 'este comensal'}?`,
+    [profileData.name]
+  );
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
