@@ -21,7 +21,7 @@ export const ProfileCreationDrawer = ({
   editingProfile,
   profileIndex = 0
 }: ProfileCreationDrawerProps) => {
-  const [currentStep, setCurrentStep] = useState<Step>('overview');
+  const [currentStep, setCurrentStep] = useState<Step>('name');
   const [returnToOverview, setReturnToOverview] = useState(false);
 
   // Typewriter effect states for name step
@@ -476,13 +476,8 @@ export const ProfileCreationDrawer = ({
                   </div>}
               </div>}
 
-            {currentStep !== 'name' && currentStep !== 'diet' && <div>
-                <div className="flex items-center gap-3 mb-4">
-                  <button onClick={handleBack} className="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors">
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <h3 className="text-base font-medium">{getStepTitle()}</h3>
-                </div>
+            {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'overview' && <div>
+                <h3 className="text-base font-medium mb-4">{getStepTitle()}</h3>
               </div>}
 
             {currentStep === 'weight' && <div className="relative">
