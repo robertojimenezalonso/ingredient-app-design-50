@@ -1590,6 +1590,48 @@ export const ProfileCreationDrawer = ({
                     </div>
                   </div>
                 </div>
+
+                {/* Calories slider - separate box */}
+                <div className="bg-background rounded-xl p-4 shadow-sm">
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Calorías</span>
+                      <span className="font-medium">{profileData.calories} kcal</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileData({ ...profileData, calories: Math.max(1000, profileData.calories - 50) });
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="range"
+                        min="1000"
+                        max="5000"
+                        step="50"
+                        value={profileData.calories}
+                        onChange={(e) => setProfileData({ ...profileData, calories: parseInt(e.target.value) })}
+                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #10B981 0%, #10B981 ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 100%)`
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileData({ ...profileData, calories: Math.min(5000, profileData.calories + 50) });
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
               </div>}
           </div>
         </CardContent>
@@ -1711,29 +1753,35 @@ export const ProfileCreationDrawer = ({
 
         {/* Buttons for macros step */}
         {currentStep === 'macros' && (
-          <div className="p-4 border-t flex-shrink-0 space-y-3">
-            <Button 
-              onClick={() => onSave(profileData)} 
-              disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
-              className="w-full bg-green-600 hover:bg-green-700 text-white"
-            >
-              GUARDAR AJUSTES
-            </Button>
-            <button
-              type="button"
-              onClick={() => {
-                setProfileData({
-                  ...profileData,
-                  carbs: recommendedMacros.carbs,
-                  protein: recommendedMacros.protein,
-                  fat: recommendedMacros.fat,
-                  calories: recommendedMacros.calories
-                });
-              }}
-              className="w-full text-center py-3 text-sm font-medium hover:underline"
-            >
-              AJUSTAR A LO ORIGINAL
-            </button>
+          <div className="p-4 border-t flex-shrink-0">
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setProfileData({
+                    ...profileData,
+                    carbs: recommendedMacros.carbs,
+                    protein: recommendedMacros.protein,
+                    fat: recommendedMacros.fat,
+                    calories: recommendedMacros.calories
+                  });
+                }}
+                className="flex-1 text-center py-3 text-sm font-medium border rounded-lg hover:bg-accent transition-colors"
+              >
+                Restaurar datos
+              </button>
+              <Button 
+                onClick={() => onSave(profileData)} 
+                disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
+                className="flex-1"
+                style={{
+                  backgroundColor: '#020817',
+                  color: '#ffffff'
+                }}
+              >
+                Crear perfil
+              </Button>
+            </div>
           </div>
         )}
 
