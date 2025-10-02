@@ -100,7 +100,6 @@ export const RecipePreferencesPage = () => {
   const [allergiesDrawerOpen, setAllergiesDrawerOpen] = useState(false);
   const [goalDrawerOpen, setGoalDrawerOpen] = useState(false);
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
-  const [expandedProfileId, setExpandedProfileId] = useState<number | null>(null);
   const [currentSection, setCurrentSection] = useState<'main' | 'personal-data' | 'macros' | 'calories' | 'nutrition'>('main');
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editingProfile, setEditingProfile] = useState<{
@@ -246,28 +245,24 @@ export const RecipePreferencesPage = () => {
   };
 
   const handleEditProfile = (profile: typeof healthProfiles[0]) => {
-    if (getProfileCompletion(profile) === 100) {
-      setExpandedProfileId(profile.id);
-    } else {
-      setEditingProfile({
-        id: profile.id,
-        name: profile.name,
-        diet: profile.diet,
-        allergies: profile.allergies,
-        healthGoal: profile.healthGoal,
-        birthDate: profile.birthDate,
-        weight: profile.weight,
-        height: profile.height,
-        sex: profile.sex,
-        activityLevel: profile.activityLevel,
-        calories: profile.calories,
-        carbs: profile.carbs,
-        protein: profile.protein,
-        fat: profile.fat
-      });
-      setCurrentSection('main');
-      setProfileDrawerOpen(true);
-    }
+    setEditingProfile({
+      id: profile.id,
+      name: profile.name,
+      diet: profile.diet,
+      allergies: profile.allergies,
+      healthGoal: profile.healthGoal,
+      birthDate: profile.birthDate,
+      weight: profile.weight,
+      height: profile.height,
+      sex: profile.sex,
+      activityLevel: profile.activityLevel,
+      calories: profile.calories,
+      carbs: profile.carbs,
+      protein: profile.protein,
+      fat: profile.fat
+    });
+    setCurrentSection('main');
+    setProfileDrawerOpen(true);
   };
 
   const handleSaveProfile = (profileData: any) => {
@@ -464,32 +459,30 @@ export const RecipePreferencesPage = () => {
                             </p>
                           </div>
                         </div>
-                        {getProfileCompletion(profile) < 100 && (
-                          <div className="relative">
-                            <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggleMenu(profile.id);
-                              }}
-                              className="p-1 hover:bg-[#F4F4F4] rounded-full transition-colors"
-                            >
-                              <MoreVertical className="h-5 w-5 text-[#1C1C1C]" />
-                            </button>
-                            {openMenuId === profile.id && (
-                              <div className="absolute right-0 top-8 bg-white border border-[#E5E5E5] rounded-lg shadow-lg py-1 z-10">
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteProfile(profile.id);
-                                  }}
-                                  className="px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left whitespace-nowrap"
-                                >
-                                  Eliminar perfil
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                        <div className="relative">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              toggleMenu(profile.id);
+                            }}
+                            className="p-1 hover:bg-[#F4F4F4] rounded-full transition-colors"
+                          >
+                            <MoreVertical className="h-5 w-5 text-[#1C1C1C]" />
+                          </button>
+                          {openMenuId === profile.id && (
+                            <div className="absolute right-0 top-8 bg-white border border-[#E5E5E5] rounded-lg shadow-lg py-1 z-10">
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteProfile(profile.id);
+                                }}
+                                className="px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left whitespace-nowrap"
+                              >
+                                Eliminar perfil
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -556,162 +549,6 @@ export const RecipePreferencesPage = () => {
         editingProfile={editingProfile}
         profileIndex={healthProfiles.length}
       />
-
-      {/* Expanded Profile View Drawer */}
-      <Drawer open={expandedProfileId !== null} onOpenChange={(open) => !open && setExpandedProfileId(null)}>
-        <DrawerContent className="h-[85vh]">
-          <DrawerHeader className="border-b">
-            <div className="flex items-center justify-between">
-              <DrawerTitle className="text-xl font-semibold">
-                {healthProfiles.find(p => p.id === expandedProfileId)?.name || 'Perfil'}
-              </DrawerTitle>
-              <button
-                onClick={() => setExpandedProfileId(null)}
-                className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-          </DrawerHeader>
-          
-          <div className="flex-1 overflow-y-auto p-6">
-            {expandedProfileId && (() => {
-              const profile = healthProfiles.find(p => p.id === expandedProfileId);
-              if (!profile) return null;
-              
-              return (
-                <div className="space-y-6">
-                  {/* Personal Data Section */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <User className="h-5 w-5" />
-                      Datos personales
-                    </h3>
-                    <div className="space-y-3 bg-gray-50 rounded-lg p-4">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Nombre</span>
-                        <span className="font-medium">{profile.name}</span>
-                      </div>
-                      {profile.sex && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Sexo</span>
-                          <span className="font-medium">{profile.sex}</span>
-                        </div>
-                      )}
-                      {profile.birthDate && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Fecha de nacimiento</span>
-                          <span className="font-medium">{profile.birthDate}</span>
-                        </div>
-                      )}
-                      {profile.weight && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Peso</span>
-                          <span className="font-medium">{profile.weight}</span>
-                        </div>
-                      )}
-                      {profile.height && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Altura</span>
-                          <span className="font-medium">{profile.height}</span>
-                        </div>
-                      )}
-                      {profile.activityLevel && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Nivel de actividad</span>
-                          <span className="font-medium">{profile.activityLevel}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Nutrition Goals Section */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <Utensils className="h-5 w-5" />
-                      Objetivos nutricionales
-                    </h3>
-                    <div className="space-y-3 bg-gray-50 rounded-lg p-4">
-                      {profile.healthGoal && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Objetivo</span>
-                          <span className="font-medium">{profile.healthGoal}</span>
-                        </div>
-                      )}
-                      {profile.calories && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Calorías</span>
-                          <span className="font-medium">{profile.calories} kcal</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Macros Section */}
-                  {profile.carbs && profile.protein && profile.fat && (
-                    <div>
-                      <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                        <Flame className="h-5 w-5" />
-                        Macronutrientes
-                      </h3>
-                      <div className="space-y-3 bg-gray-50 rounded-lg p-4">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Carbohidratos</span>
-                          <span className="font-medium">{profile.carbs}% ({Math.round((profile.calories || 0) * (profile.carbs / 100) / 4)}g)</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Proteínas</span>
-                          <span className="font-medium">{profile.protein}% ({Math.round((profile.calories || 0) * (profile.protein / 100) / 4)}g)</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Grasas</span>
-                          <span className="font-medium">{profile.fat}% ({Math.round((profile.calories || 0) * (profile.fat / 100) / 9)}g)</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Diet & Allergies Section */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
-                      <Apple className="h-5 w-5" />
-                      Dieta y alergias
-                    </h3>
-                    <div className="space-y-3 bg-gray-50 rounded-lg p-4">
-                      {profile.diet && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Dieta</span>
-                          <span className="font-medium">{profile.diet}</span>
-                        </div>
-                      )}
-                      {profile.allergies && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Alergias/Intolerancias</span>
-                          <span className="font-medium">{profile.allergies}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Delete Button */}
-                  <div className="pt-4">
-                    <Button
-                      onClick={() => {
-                        handleDeleteProfile(profile.id);
-                        setExpandedProfileId(null);
-                      }}
-                      variant="destructive"
-                      className="w-full"
-                    >
-                      Eliminar perfil
-                    </Button>
-                  </div>
-                </div>
-              );
-            })()}
-          </div>
-        </DrawerContent>
-      </Drawer>
     </div>
   );
 };
