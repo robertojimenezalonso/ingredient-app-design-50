@@ -14,7 +14,7 @@ interface ProfileCreationDrawerProps {
   editingProfile?: any;
   profileIndex?: number;
 }
-type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'completeProfile' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel';
+type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel';
 export const ProfileCreationDrawer = ({
   isOpen,
   onClose,
@@ -46,6 +46,31 @@ export const ProfileCreationDrawer = ({
   const [goalSubtext, setGoalSubtext] = useState('');
   const [goalShowCursor, setGoalShowCursor] = useState(false);
   const [goalShowOptions, setGoalShowOptions] = useState(false);
+
+  // Typewriter effect states for weight step
+  const [weightDisplayedText, setWeightDisplayedText] = useState('');
+  const [weightShowCursor, setWeightShowCursor] = useState(false);
+  const [weightShowInput, setWeightShowInput] = useState(false);
+
+  // Typewriter effect states for height step
+  const [heightDisplayedText, setHeightDisplayedText] = useState('');
+  const [heightShowCursor, setHeightShowCursor] = useState(false);
+  const [heightShowInput, setHeightShowInput] = useState(false);
+
+  // Typewriter effect states for birthdate step
+  const [birthdateDisplayedText, setBirthdateDisplayedText] = useState('');
+  const [birthdateShowCursor, setBirthdateShowCursor] = useState(false);
+  const [birthdateShowInput, setBirthdateShowInput] = useState(false);
+
+  // Typewriter effect states for sex step
+  const [sexDisplayedText, setSexDisplayedText] = useState('');
+  const [sexShowCursor, setSexShowCursor] = useState(false);
+  const [sexShowOptions, setSexShowOptions] = useState(false);
+
+  // Typewriter effect states for activityLevel step
+  const [activityDisplayedText, setActivityDisplayedText] = useState('');
+  const [activityShowCursor, setActivityShowCursor] = useState(false);
+  const [activityShowOptions, setActivityShowOptions] = useState(false);
 
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -124,15 +149,35 @@ export const ProfileCreationDrawer = ({
 
   const goalSubtextFull = "Esto nos ayudará a generar un plan para su gesta calórica";
 
-  // Helper to get goal verb
-  const getGoalVerb = () => {
-    const goal = profileData.goal.toLowerCase();
-    if (goal.includes('perder')) return 'perder peso';
-    if (goal.includes('mantenerse')) return 'mantener su peso';
-    if (goal.includes('aumentar peso')) return 'aumentar su peso';
-    if (goal.includes('músculo')) return 'aumentar músculo';
-    return 'alcanzar su objetivo';
-  };
+  // Text for weight step
+  const weightFullText = useMemo(() => 
+    `¿Cuál es el peso actual de ${profileData.name || 'este comensal'}?`,
+    [profileData.name]
+  );
+
+  // Text for height step
+  const heightFullText = useMemo(() => 
+    `¿Cuál es la altura de ${profileData.name || 'este comensal'}?`,
+    [profileData.name]
+  );
+
+  // Text for birthdate step
+  const birthdateFullText = useMemo(() => 
+    `¿Cuál es la fecha de nacimiento de ${profileData.name || 'este comensal'}?`,
+    [profileData.name]
+  );
+
+  // Text for sex step
+  const sexFullText = useMemo(() => 
+    `¿Cuál es el sexo de ${profileData.name || 'este comensal'}?`,
+    [profileData.name]
+  );
+
+  // Text for activity level step
+  const activityFullText = useMemo(() => 
+    `¿Cuál es el nivel de actividad física de ${profileData.name || 'este comensal'}?`,
+    [profileData.name]
+  );
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
@@ -318,6 +363,166 @@ export const ProfileCreationDrawer = ({
     }
   }, [goalDisplayedText, goalFullText, goalSubtext, goalSubtextFull, isOpen, currentStep]);
 
+  // Typewriter effect for weight step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'weight') {
+      setWeightDisplayedText('');
+      setWeightShowCursor(false);
+      setWeightShowInput(false);
+      return;
+    }
+
+    if (weightDisplayedText.length === 0) {
+      setTimeout(() => {
+        setWeightDisplayedText(weightFullText[0]);
+        setWeightShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, weightFullText]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'weight') return;
+    if (weightDisplayedText.length > 0 && weightDisplayedText.length < weightFullText.length) {
+      const timeout = setTimeout(() => {
+        setWeightDisplayedText(weightFullText.slice(0, weightDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (weightDisplayedText.length === weightFullText.length && weightShowCursor) {
+      setTimeout(() => {
+        setWeightShowCursor(false);
+        setWeightShowInput(true);
+      }, 200);
+    }
+  }, [weightDisplayedText, weightFullText, weightShowCursor, isOpen, currentStep]);
+
+  // Typewriter effect for height step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'height') {
+      setHeightDisplayedText('');
+      setHeightShowCursor(false);
+      setHeightShowInput(false);
+      return;
+    }
+
+    if (heightDisplayedText.length === 0) {
+      setTimeout(() => {
+        setHeightDisplayedText(heightFullText[0]);
+        setHeightShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, heightFullText]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'height') return;
+    if (heightDisplayedText.length > 0 && heightDisplayedText.length < heightFullText.length) {
+      const timeout = setTimeout(() => {
+        setHeightDisplayedText(heightFullText.slice(0, heightDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (heightDisplayedText.length === heightFullText.length && heightShowCursor) {
+      setTimeout(() => {
+        setHeightShowCursor(false);
+        setHeightShowInput(true);
+      }, 200);
+    }
+  }, [heightDisplayedText, heightFullText, heightShowCursor, isOpen, currentStep]);
+
+  // Typewriter effect for birthdate step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'birthdate') {
+      setBirthdateDisplayedText('');
+      setBirthdateShowCursor(false);
+      setBirthdateShowInput(false);
+      return;
+    }
+
+    if (birthdateDisplayedText.length === 0) {
+      setTimeout(() => {
+        setBirthdateDisplayedText(birthdateFullText[0]);
+        setBirthdateShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, birthdateFullText]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'birthdate') return;
+    if (birthdateDisplayedText.length > 0 && birthdateDisplayedText.length < birthdateFullText.length) {
+      const timeout = setTimeout(() => {
+        setBirthdateDisplayedText(birthdateFullText.slice(0, birthdateDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (birthdateDisplayedText.length === birthdateFullText.length && birthdateShowCursor) {
+      setTimeout(() => {
+        setBirthdateShowCursor(false);
+        setBirthdateShowInput(true);
+      }, 200);
+    }
+  }, [birthdateDisplayedText, birthdateFullText, birthdateShowCursor, isOpen, currentStep]);
+
+  // Typewriter effect for sex step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'sex') {
+      setSexDisplayedText('');
+      setSexShowCursor(false);
+      setSexShowOptions(false);
+      return;
+    }
+
+    if (sexDisplayedText.length === 0) {
+      setTimeout(() => {
+        setSexDisplayedText(sexFullText[0]);
+        setSexShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, sexFullText]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'sex') return;
+    if (sexDisplayedText.length > 0 && sexDisplayedText.length < sexFullText.length) {
+      const timeout = setTimeout(() => {
+        setSexDisplayedText(sexFullText.slice(0, sexDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (sexDisplayedText.length === sexFullText.length && sexShowCursor) {
+      setTimeout(() => {
+        setSexShowCursor(false);
+        setSexShowOptions(true);
+      }, 200);
+    }
+  }, [sexDisplayedText, sexFullText, sexShowCursor, isOpen, currentStep]);
+
+  // Typewriter effect for activity level step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'activityLevel') {
+      setActivityDisplayedText('');
+      setActivityShowCursor(false);
+      setActivityShowOptions(false);
+      return;
+    }
+
+    if (activityDisplayedText.length === 0) {
+      setTimeout(() => {
+        setActivityDisplayedText(activityFullText[0]);
+        setActivityShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, activityFullText]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'activityLevel') return;
+    if (activityDisplayedText.length > 0 && activityDisplayedText.length < activityFullText.length) {
+      const timeout = setTimeout(() => {
+        setActivityDisplayedText(activityFullText.slice(0, activityDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (activityDisplayedText.length === activityFullText.length && activityShowCursor) {
+      setTimeout(() => {
+        setActivityShowCursor(false);
+        setActivityShowOptions(true);
+      }, 200);
+    }
+  }, [activityDisplayedText, activityFullText, activityShowCursor, isOpen, currentStep]);
+
   // Show keyboard immediately when drawer opens for name step
   useEffect(() => {
     if (!isOpen) return;
@@ -365,8 +570,6 @@ export const ProfileCreationDrawer = ({
         return isEditing?.allergies ? 'Actualizar alergias' : 'Añadir alergias';
       case 'goal':
         return isEditing?.goal ? 'Actualizar objetivo' : 'Añadir objetivo';
-      case 'completeProfile':
-        return '';
       case 'weight':
         return isEditing?.weight ? 'Actualizar peso' : 'Añadir peso';
       case 'height':
@@ -391,8 +594,6 @@ export const ProfileCreationDrawer = ({
         return profileData.allergies.length > 0;
       case 'goal':
         return profileData.goal !== '';
-      case 'completeProfile':
-        return profileData.weight && profileData.height && profileData.birthDate && profileData.sex && profileData.activityLevel;
       case 'weight':
         return profileData.weight && parseFloat(profileData.weight) > 0;
       case 'height':
@@ -408,7 +609,7 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'completeProfile'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     
     if (currentIndex < steps.length - 1) {
@@ -430,14 +631,14 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
     }
   };
   const getCompletionPercentage = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'completeProfile'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
@@ -448,8 +649,16 @@ export const ProfileCreationDrawer = ({
           return true; // Always considered complete
         case 'goal':
           return profileData.goal !== '';
-        case 'completeProfile':
-          return profileData.weight && profileData.height && profileData.birthDate && profileData.sex && profileData.activityLevel;
+        case 'weight':
+          return profileData.weight && parseFloat(profileData.weight) > 0;
+        case 'height':
+          return profileData.height && parseFloat(profileData.height) > 0;
+        case 'birthdate':
+          return profileData.birthDate !== '';
+        case 'sex':
+          return profileData.sex !== '';
+        case 'activityLevel':
+          return profileData.activityLevel !== '';
         default:
           return false;
       }
@@ -777,184 +986,240 @@ export const ProfileCreationDrawer = ({
                   </div>}
               </div>}
 
-            {currentStep === 'completeProfile' && <div className="space-y-6">
-                {/* Message */}
+            {currentStep === 'weight' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
                 <div className="mb-6">
-                  <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
-                    ¡Genial! Para que {profileData.name || 'este comensal'} pueda {getGoalVerb()}, vamos a necesitar completar su ficha con esta información:
-                  </p>
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {weightDisplayedText}
+                        {weightShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Profile completion fields */}
-                <div className="space-y-2">
-                  <button
-                    onClick={() => setCurrentStep('weight')}
-                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
-                  >
-                    <span className="text-sm font-medium flex-shrink-0">Peso actual</span>
-                    <span className="text-sm text-muted-foreground text-right ml-4">
-                      {profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : 'Añadir'}
-                    </span>
-                  </button>
+                {/* Weight input - appears after typewriter completes */}
+                {weightShowInput && <div className="flex flex-col items-center space-y-6">
+                    {/* Weight display */}
+                    <div className="text-6xl font-bold text-center">
+                      {profileData.weight || '0'}
+                    </div>
+                    
+                    {/* Plus/Minus buttons */}
+                    <div className="flex items-center gap-8">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = parseInt(profileData.weight) || 0;
+                          if (current > 0) {
+                            setProfileData({
+                              ...profileData,
+                              weight: String(current - 1)
+                            });
+                          }
+                        }}
+                        className="w-16 h-16 rounded-full bg-accent hover:bg-accent/80 flex items-center justify-center text-3xl font-bold transition-colors"
+                      >
+                        -
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const current = parseInt(profileData.weight) || 0;
+                          setProfileData({
+                            ...profileData,
+                            weight: String(current + 1)
+                          });
+                        }}
+                        className="w-16 h-16 rounded-full bg-accent hover:bg-accent/80 flex items-center justify-center text-3xl font-bold transition-colors"
+                      >
+                        +
+                      </button>
+                    </div>
 
-                  <button
-                    onClick={() => setCurrentStep('height')}
-                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
-                  >
-                    <span className="text-sm font-medium flex-shrink-0">Altura</span>
-                    <span className="text-sm text-muted-foreground text-right ml-4">
-                      {profileData.height ? `${profileData.height} ${profileData.heightUnit}` : 'Añadir'}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => setCurrentStep('birthdate')}
-                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
-                  >
-                    <span className="text-sm font-medium flex-shrink-0">Fecha de nacimiento</span>
-                    <span className="text-sm text-muted-foreground text-right ml-4">
-                      {profileData.birthDate || 'Añadir'}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => setCurrentStep('sex')}
-                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
-                  >
-                    <span className="text-sm font-medium flex-shrink-0">Sexo</span>
-                    <span className="text-sm text-muted-foreground text-right ml-4">
-                      {profileData.sex || 'Añadir'}
-                    </span>
-                  </button>
-
-                  <button
-                    onClick={() => setCurrentStep('activityLevel')}
-                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
-                  >
-                    <span className="text-sm font-medium flex-shrink-0">Nivel de actividad</span>
-                    <span className="text-sm text-muted-foreground text-right ml-4">
-                      {profileData.activityLevel || 'Añadir'}
-                    </span>
-                  </button>
-                </div>
-              </div>}
-
-            {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'goal' && currentStep !== 'overview' && currentStep !== 'completeProfile' && <div>
-                <h3 className="text-base font-medium mb-4">{getStepTitle()}</h3>
-              </div>}
-
-            {currentStep === 'weight' && <div className="flex flex-col items-center space-y-6">
-                {/* Weight display */}
-                <div className="text-6xl font-bold text-center">
-                  {profileData.weight || '0'}
-                </div>
-                
-                {/* Plus/Minus buttons */}
-                <div className="flex items-center gap-8">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const current = parseInt(profileData.weight) || 0;
-                      if (current > 0) {
+                    {/* Unit selector */}
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        const units = ['kg', 'lb'];
+                        const currentIndex = units.indexOf(profileData.weightUnit);
+                        const nextIndex = (currentIndex + 1) % units.length;
                         setProfileData({
                           ...profileData,
-                          weight: String(current - 1)
+                          weightUnit: units[nextIndex]
                         });
-                      }
-                    }}
-                    className="w-16 h-16 rounded-full bg-accent hover:bg-accent/80 flex items-center justify-center text-3xl font-bold transition-colors"
-                  >
-                    -
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      const current = parseInt(profileData.weight) || 0;
-                      setProfileData({
-                        ...profileData,
-                        weight: String(current + 1)
-                      });
-                    }}
-                    className="w-16 h-16 rounded-full bg-accent hover:bg-accent/80 flex items-center justify-center text-3xl font-bold transition-colors"
-                  >
-                    +
-                  </button>
+                      }} 
+                      className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {profileData.weightUnit === 'kg' ? 'Kilos' : 'Libras'}
+                    </button>
+                  </div>}
+              </div>}
+
+            {currentStep === 'height' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
+                <div className="mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {heightDisplayedText}
+                        {heightShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Unit selector */}
-                <button 
-                  type="button" 
-                  onClick={() => {
-                    const units = ['kg', 'lb'];
-                    const currentIndex = units.indexOf(profileData.weightUnit);
-                    const nextIndex = (currentIndex + 1) % units.length;
-                    setProfileData({
-                      ...profileData,
-                      weightUnit: units[nextIndex]
-                    });
-                  }} 
-                  className="text-lg font-medium text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {profileData.weightUnit === 'kg' ? 'Kilos' : 'Libras'}
-                </button>
-
-                {/* Add weight button */}
-                <Button 
-                  onClick={() => {
-                    setCurrentStep('completeProfile');
-                  }} 
-                  disabled={!profileData.weight || parseInt(profileData.weight) === 0}
-                  className="w-full"
-                >
-                  Añadir peso
-                </Button>
+                {/* Height input - appears after typewriter completes */}
+                {heightShowInput && <div className="relative">
+                    <Input 
+                      ref={heightInputRef} 
+                      type="text" 
+                      inputMode="numeric" 
+                      pattern="[0-9]*" 
+                      value={profileData.height} 
+                      onChange={e => setProfileData({
+                        ...profileData,
+                        height: e.target.value.replace(/\D/g, '')
+                      })} 
+                      placeholder="Escribe la altura" 
+                      className="w-full pr-16" 
+                      autoFocus 
+                      onBlur={e => {
+                        e.preventDefault();
+                        setTimeout(() => e.target.focus({
+                          preventScroll: true
+                        }), 0);
+                      }} 
+                    />
+                    <button 
+                      type="button" 
+                      onClick={() => {
+                        const units = ['cm', 'ft'];
+                        const currentIndex = units.indexOf(profileData.heightUnit);
+                        const nextIndex = (currentIndex + 1) % units.length;
+                        setProfileData({
+                          ...profileData,
+                          heightUnit: units[nextIndex]
+                        });
+                      }} 
+                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors"
+                    >
+                      {profileData.heightUnit}
+                    </button>
+                  </div>}
               </div>}
 
-            {currentStep === 'height' && <div className="relative">
-                <Input ref={heightInputRef} type="text" inputMode="numeric" pattern="[0-9]*" value={profileData.height} onChange={e => setProfileData({
-              ...profileData,
-              height: e.target.value.replace(/\D/g, '')
-            })} placeholder="Escribe tu altura" className="w-full pr-16" autoFocus onBlur={e => {
-              e.preventDefault();
-              setTimeout(() => e.target.focus({
-                preventScroll: true
-              }), 0);
-            }} />
-                <button type="button" onClick={() => {
-              const units = ['cm', 'ft'];
-              const currentIndex = units.indexOf(profileData.heightUnit);
-              const nextIndex = (currentIndex + 1) % units.length;
-              setProfileData({
-                ...profileData,
-                heightUnit: units[nextIndex]
-              });
-            }} className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors">
-                  {profileData.heightUnit}
-                </button>
+            {currentStep === 'birthdate' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
+                <div className="mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {birthdateDisplayedText}
+                        {birthdateShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Birthdate input - appears after typewriter completes */}
+                {birthdateShowInput && <div className="relative">
+                    <Input 
+                      type="date" 
+                      value={profileData.birthDate} 
+                      onChange={e => setProfileData({
+                        ...profileData,
+                        birthDate: e.target.value
+                      })} 
+                      className="w-full" 
+                      autoFocus
+                    />
+                  </div>}
               </div>}
 
-            {currentStep === 'sex' && <div className="space-y-2">
-                {['Masculino', 'Femenino', 'Otro'].map(option => <button key={option} onClick={() => setProfileData({
-              ...profileData,
-              sex: option
-            })} className={cn("w-full px-4 py-3 rounded-lg border transition-colors text-left text-base font-medium", profileData.sex === option ? "bg-primary text-primary-foreground" : "bg-background hover:bg-accent")}>
-                    {option}
-                  </button>)}
+            {currentStep === 'sex' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
+                <div className="mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {sexDisplayedText}
+                        {sexShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sex options - appears after typewriter completes */}
+                {sexShowOptions && <div className="mb-6 space-y-2">
+                    {['Masculino', 'Femenino', 'Otro'].map((option, index) => {
+                      const isSelected = profileData.sex === option;
+                      return (
+                        <button 
+                          key={option} 
+                          onClick={() => setProfileData({
+                            ...profileData,
+                            sex: profileData.sex === option ? '' : option
+                          })} 
+                          className={cn("w-full px-4 py-3 rounded-lg text-left text-base font-medium", isSelected ? "" : "border-0")} 
+                          style={{
+                            opacity: 0,
+                            transform: 'translateY(10px)',
+                            animation: `fadeInUp 0.4s ease-out ${index * 0.15}s forwards`,
+                            ...(isSelected ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' })
+                          }}
+                        >
+                          {option}
+                        </button>
+                      );
+                    })}
+                  </div>}
               </div>}
 
-            {currentStep === 'activityLevel' && <div className="space-y-2">
-                {['Bajo', 'Moderado', 'Alto', 'Muy alto'].map(option => <button key={option} onClick={() => setProfileData({
-              ...profileData,
-              activityLevel: option
-            })} className={cn("w-full px-4 py-3 rounded-lg border transition-colors text-left text-base font-medium", profileData.activityLevel === option ? "bg-primary text-primary-foreground" : "bg-background hover:bg-accent")}>
-                    {option}
-                  </button>)}
+            {currentStep === 'activityLevel' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
+                <div className="mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {activityDisplayedText}
+                        {activityShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Activity level options - appears after typewriter completes */}
+                {activityShowOptions && <div className="mb-6 space-y-2">
+                    {['Bajo', 'Moderado', 'Alto', 'Muy alto'].map((option, index) => {
+                      const isSelected = profileData.activityLevel === option;
+                      return (
+                        <button 
+                          key={option} 
+                          onClick={() => setProfileData({
+                            ...profileData,
+                            activityLevel: profileData.activityLevel === option ? '' : option
+                          })} 
+                          className={cn("w-full px-4 py-3 rounded-lg text-left text-base font-medium", isSelected ? "" : "border-0")} 
+                          style={{
+                            opacity: 0,
+                            transform: 'translateY(10px)',
+                            animation: `fadeInUp 0.4s ease-out ${index * 0.15}s forwards`,
+                            ...(isSelected ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' })
+                          }}
+                        >
+                          {option}
+                        </button>
+                      );
+                    })}
+                  </div>}
               </div>}
           </div>
         </CardContent>
 
-        {/* Bottom area - chat send style for name, diet, allergies and goal steps */}
-        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+        {/* Bottom area - chat send style for name, diet, allergies, goal, weight, height, birthdate, sex, activityLevel steps */}
+        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
         backgroundColor: '#FFFFFF'
       }}>
             <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{
@@ -963,7 +1228,12 @@ export const ProfileCreationDrawer = ({
               {((currentStep === 'name' && profileData.name) || 
                 (currentStep === 'diet' && profileData.diet) || 
                 (currentStep === 'allergies' && profileData.allergies.length > 0) ||
-                (currentStep === 'goal' && profileData.goal)) && 
+                (currentStep === 'goal' && profileData.goal) ||
+                (currentStep === 'weight' && profileData.weight) ||
+                (currentStep === 'height' && profileData.height) ||
+                (currentStep === 'birthdate' && profileData.birthDate) ||
+                (currentStep === 'sex' && profileData.sex) ||
+                (currentStep === 'activityLevel' && profileData.activityLevel)) &&
                 <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
                   backgroundColor: '#F2F2F2',
                   scrollbarWidth: 'none',
@@ -1005,6 +1275,51 @@ export const ProfileCreationDrawer = ({
                       {profileData.goal}
                     </Badge>
                   )}
+                  {currentStep === 'weight' && (
+                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {profileData.weight} {profileData.weightUnit}
+                    </Badge>
+                  )}
+                  {currentStep === 'height' && (
+                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {profileData.height} {profileData.heightUnit}
+                    </Badge>
+                  )}
+                  {currentStep === 'birthdate' && (
+                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {profileData.birthDate}
+                    </Badge>
+                  )}
+                  {currentStep === 'sex' && (
+                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {profileData.sex}
+                    </Badge>
+                  )}
+                  {currentStep === 'activityLevel' && (
+                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {profileData.activityLevel}
+                    </Badge>
+                  )}
                 </div>
               }
               <button onClick={handleContinue} disabled={!canContinue()} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" style={{
@@ -1017,22 +1332,6 @@ export const ProfileCreationDrawer = ({
               </button>
             </div>
           </div>}
-
-        {/* Regular button for other steps */}
-        {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'goal' && currentStep !== 'overview' && currentStep !== 'weight' && <div className="p-4 border-t flex-shrink-0">
-            <Button onClick={() => setCurrentStep('completeProfile')} disabled={!canContinue()} className="w-full">
-              Continuar
-            </Button>
-          </div>}
-
-        {/* Save button for completeProfile */}
-        {currentStep === 'completeProfile' && canContinue() && (
-          <div className="p-4 border-t flex-shrink-0">
-            <Button onClick={() => onSave(profileData)} className="w-full">
-              Guardar perfil
-            </Button>
-          </div>
-        )}
 
         {/* Save button for overview */}
         {currentStep === 'overview' && getCompletionPercentage() === 100 && (
