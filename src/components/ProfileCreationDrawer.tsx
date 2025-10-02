@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { X, ChevronLeft, Send } from 'lucide-react';
+import { X, ChevronLeft, ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
 interface ProfileCreationDrawerProps {
@@ -489,7 +489,7 @@ export const ProfileCreationDrawer = ({
             border: 'none',
             opacity: 1
           }}>
-                <Send className="w-4 h-4" />
+                <ArrowUp className="w-4 h-4" />
               </button>
             </div>
           </div>}
