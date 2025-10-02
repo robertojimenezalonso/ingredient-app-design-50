@@ -82,7 +82,7 @@ export const ProfileCreationDrawer = ({
     setProfileData({ ...profileData, birthDate: formatted });
   };
 
-  // Prevent background scroll when drawer is open
+  // Prevent background scroll and keyboard behavior when drawer is open
   useEffect(() => {
     if (isOpen) {
       // Configure keyboard to not resize viewport
@@ -90,29 +90,24 @@ export const ProfileCreationDrawer = ({
         console.log('Keyboard plugin not available:', err);
       });
       
-      // Lock the body completely
-      const originalStyle = {
-        overflow: document.body.style.overflow,
-        position: document.body.style.position,
-        height: document.body.style.height,
-        width: document.body.style.width,
-      };
-      
+      // Fix body scroll and position
+      const scrollY = window.scrollY;
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
-      document.body.style.height = '100dvh';
+      document.body.style.top = `-${scrollY}px`;
       document.body.style.width = '100%';
-      document.body.style.top = '0';
       document.body.style.left = '0';
+      document.body.style.right = '0';
       
       return () => {
-        // Restore original styles
-        document.body.style.overflow = originalStyle.overflow;
-        document.body.style.position = originalStyle.position;
-        document.body.style.height = originalStyle.height;
-        document.body.style.width = originalStyle.width;
+        // Restore scroll position
+        document.body.style.overflow = '';
+        document.body.style.position = '';
         document.body.style.top = '';
+        document.body.style.width = '';
         document.body.style.left = '';
+        document.body.style.right = '';
+        window.scrollTo(0, scrollY);
       };
     }
   }, [isOpen]);
@@ -238,26 +233,21 @@ export const ProfileCreationDrawer = ({
 
   return (
     <div 
-      className="absolute z-50 flex justify-center" 
+      className="fixed z-50 flex justify-center" 
       style={{ 
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        height: '100dvh',
         paddingBottom: '16px'
       }}
     >
-      <div 
-        className="absolute inset-0 bg-black/50" 
-        style={{ height: '100%' }}
-      />
+      <div className="absolute inset-0 bg-black/50" />
       <Card 
-        className="absolute w-full max-w-md flex flex-col rounded-3xl border-0 shadow-2xl mx-4"
+        className="relative w-full max-w-md flex flex-col rounded-3xl border-0 shadow-2xl mx-4 self-start"
         style={{
-          top: '120px',
-          bottom: '16px',
-          maxHeight: 'calc(100dvh - 136px)'
+          marginTop: '120px',
+          maxHeight: 'calc(100% - 136px)'
         }}
       >
         {/* Header with profile info */}
