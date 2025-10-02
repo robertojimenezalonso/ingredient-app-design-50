@@ -14,7 +14,7 @@ interface ProfileCreationDrawerProps {
   editingProfile?: any;
   profileIndex?: number;
 }
-type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel';
+type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel' | 'loading' | 'macros';
 export const ProfileCreationDrawer = ({
   isOpen,
   onClose,
@@ -126,7 +126,22 @@ export const ProfileCreationDrawer = ({
     heightUnit: parseHeight(editingProfile?.height).unit,
     birthDate: editingProfile?.birthDate || '',
     sex: editingProfile?.sex || '',
-    activityLevel: editingProfile?.activityLevel || ''
+    activityLevel: editingProfile?.activityLevel || '',
+    calories: editingProfile?.calories || 2000,
+    carbs: editingProfile?.carbs || 40,
+    protein: editingProfile?.protein || 30,
+    fat: editingProfile?.fat || 30,
+  });
+
+  // Loading progress
+  const [loadingProgress, setLoadingProgress] = useState(0);
+
+  // Store recommended macros
+  const [recommendedMacros, setRecommendedMacros] = useState({
+    carbs: 40,
+    protein: 30,
+    fat: 30,
+    calories: 2000
   });
 
   // Compute dietFullText based on profileData.name using useMemo
@@ -178,6 +193,60 @@ export const ProfileCreationDrawer = ({
     `¿Cuál es el nivel de actividad física de ${profileData.name || 'este comensal'}?`,
     [profileData.name]
   );
+
+  // Calculate recommended macros and calories based on profile data
+  const calculateRecommendedMacros = () => {
+    // Basic calorie calculation (simplified Harris-Benedict equation)
+    const weight = parseFloat(profileData.weight) || 70;
+    const height = parseFloat(profileData.height) || 170;
+    const age = profileData.birthDate ? new Date().getFullYear() - new Date(profileData.birthDate).getFullYear() : 30;
+    
+    let bmr = 0;
+    if (profileData.sex === 'Masculino') {
+      bmr = 10 * weight + 6.25 * height - 5 * age + 5;
+    } else {
+      bmr = 10 * weight + 6.25 * height - 5 * age - 161;
+    }
+
+    // Activity multiplier
+    let activityMultiplier = 1.2;
+    switch (profileData.activityLevel) {
+      case 'Bajo': activityMultiplier = 1.2; break;
+      case 'Moderado': activityMultiplier = 1.55; break;
+      case 'Alto': activityMultiplier = 1.725; break;
+      case 'Muy alto': activityMultiplier = 1.9; break;
+    }
+
+    let calories = Math.round(bmr * activityMultiplier);
+
+    // Adjust based on goal
+    const goal = profileData.goal.toLowerCase();
+    if (goal.includes('perder')) {
+      calories = Math.round(calories * 0.8); // 20% deficit
+    } else if (goal.includes('aumentar peso')) {
+      calories = Math.round(calories * 1.15); // 15% surplus
+    } else if (goal.includes('músculo')) {
+      calories = Math.round(calories * 1.1); // 10% surplus
+    }
+
+    // Macro distribution based on goal
+    let carbs = 40, protein = 30, fat = 30;
+    if (goal.includes('perder')) {
+      carbs = 35;
+      protein = 35;
+      fat = 30;
+    } else if (goal.includes('músculo')) {
+      carbs = 40;
+      protein = 35;
+      fat = 25;
+    } else if (goal.includes('aumentar peso')) {
+      carbs = 45;
+      protein = 25;
+      fat = 30;
+    }
+
+    return { carbs, protein, fat, calories };
+  };
 
   const nameInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
@@ -523,6 +592,47 @@ export const ProfileCreationDrawer = ({
     }
   }, [activityDisplayedText, activityFullText, activityShowCursor, isOpen, currentStep]);
 
+  // Loading progress effect
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'loading') {
+      setLoadingProgress(0);
+      return;
+    }
+
+    // Animate progress from 0 to 100 over 3 seconds
+    const duration = 3000;
+    const steps = 60;
+    const increment = 100 / steps;
+    const intervalTime = duration / steps;
+
+    let currentProgress = 0;
+    const interval = setInterval(() => {
+      currentProgress += increment;
+      if (currentProgress >= 100) {
+        setLoadingProgress(100);
+        clearInterval(interval);
+        // Calculate recommended macros
+        const recommended = calculateRecommendedMacros();
+        setRecommendedMacros(recommended);
+        setProfileData(prev => ({
+          ...prev,
+          calories: recommended.calories,
+          carbs: recommended.carbs,
+          protein: recommended.protein,
+          fat: recommended.fat
+        }));
+        // Move to macros step after a brief delay
+        setTimeout(() => {
+          setCurrentStep('macros');
+        }, 500);
+      } else {
+        setLoadingProgress(currentProgress);
+      }
+    }, intervalTime);
+
+    return () => clearInterval(interval);
+  }, [isOpen, currentStep]);
+
   // Show keyboard immediately when drawer opens for name step
   useEffect(() => {
     if (!isOpen) return;
@@ -580,6 +690,10 @@ export const ProfileCreationDrawer = ({
         return isEditing?.sex ? 'Actualizar sexo' : 'Añadir sexo';
       case 'activityLevel':
         return isEditing?.activityLevel ? 'Actualizar nivel de actividad' : 'Añadir nivel de actividad';
+      case 'loading':
+        return '';
+      case 'macros':
+        return 'Ajustar Macronutrientes';
       default:
         return '';
     }
@@ -604,15 +718,23 @@ export const ProfileCreationDrawer = ({
         return profileData.sex !== '';
       case 'activityLevel':
         return profileData.activityLevel !== '';
+      case 'macros':
+        return profileData.carbs + profileData.protein + profileData.fat === 100;
       default:
         return false;
     }
   };
   const handleContinue = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'loading', 'macros'];
     const currentIndex = steps.indexOf(currentStep);
     
-    if (currentIndex < steps.length - 1) {
+    if (currentStep === 'activityLevel') {
+      // Go directly to loading after activity level
+      setCurrentStep('loading');
+      return;
+    }
+    
+    if (currentIndex < steps.length - 1 && currentStep !== 'loading') {
       setCurrentStep(steps[currentIndex + 1]);
       setReturnToOverview(false);
     } else {
@@ -638,7 +760,7 @@ export const ProfileCreationDrawer = ({
     }
   };
   const getCompletionPercentage = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'macros'];
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
@@ -659,6 +781,8 @@ export const ProfileCreationDrawer = ({
           return profileData.sex !== '';
         case 'activityLevel':
           return profileData.activityLevel !== '';
+        case 'macros':
+          return profileData.carbs + profileData.protein + profileData.fat === 100;
         default:
           return false;
       }
@@ -756,7 +880,7 @@ export const ProfileCreationDrawer = ({
 
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4" style={{
-        paddingBottom: (currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') ? '120px' : '16px'
+        paddingBottom: (currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') ? '120px' : (currentStep === 'macros' ? '150px' : '16px')
       }}>
           <div className="space-y-4">
             
@@ -1231,6 +1355,242 @@ export const ProfileCreationDrawer = ({
                     })}
                   </div>}
               </div>}
+
+            {currentStep === 'loading' && <div className="flex flex-col items-center justify-center space-y-8 py-12">
+                {/* Circular progress */}
+                <div className="relative w-48 h-48">
+                  <svg className="absolute inset-0 w-48 h-48 -rotate-90">
+                    <circle 
+                      cx="96" 
+                      cy="96" 
+                      r="88" 
+                      stroke="#E5E5E5" 
+                      strokeWidth="8" 
+                      fill="none" 
+                    />
+                    <circle 
+                      cx="96" 
+                      cy="96" 
+                      r="88" 
+                      stroke="url(#gradient)" 
+                      strokeWidth="8" 
+                      fill="none" 
+                      strokeDasharray={`${2 * Math.PI * 88}`}
+                      strokeDashoffset={`${2 * Math.PI * 88 * (1 - loadingProgress / 100)}`}
+                      strokeLinecap="round"
+                      className="transition-all duration-100"
+                    />
+                    <defs>
+                      <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#EC4899" />
+                        <stop offset="33%" stopColor="#F97316" />
+                        <stop offset="66%" stopColor="#8B5CF6" />
+                        <stop offset="100%" stopColor="#EC4899" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-4xl font-bold">
+                      {Math.round(loadingProgress)}%
+                    </span>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-muted-foreground text-center px-8">
+                  Calculando recomendaciones personalizadas...
+                </p>
+              </div>}
+
+            {currentStep === 'macros' && <div className="space-y-6">
+                {/* Circular progress showing 100% */}
+                <div className="flex justify-center mb-4">
+                  <div className="relative w-40 h-40">
+                    <svg className="absolute inset-0 w-40 h-40 -rotate-90">
+                      <circle 
+                        cx="80" 
+                        cy="80" 
+                        r="72" 
+                        stroke="#E5E5E5" 
+                        strokeWidth="6" 
+                        fill="none" 
+                      />
+                      <circle 
+                        cx="80" 
+                        cy="80" 
+                        r="72" 
+                        stroke="url(#gradient2)" 
+                        strokeWidth="6" 
+                        fill="none" 
+                        strokeDasharray={`${2 * Math.PI * 72}`}
+                        strokeDashoffset={`${2 * Math.PI * 72 * (1 - (profileData.carbs + profileData.protein + profileData.fat) / 100)}`}
+                        strokeLinecap="round"
+                        className="transition-all duration-300"
+                      />
+                      <defs>
+                        <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#EC4899" />
+                          <stop offset="33%" stopColor="#F97316" />
+                          <stop offset="66%" stopColor="#8B5CF6" />
+                          <stop offset="100%" stopColor="#EC4899" />
+                        </linearGradient>
+                      </defs>
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-3xl font-bold">
+                        {profileData.carbs + profileData.protein + profileData.fat}%
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-sm text-center text-muted-foreground px-4">
+                  Ajusta los macronutrientes para que alcancen el 100% y coincidan con el objetivo de calorías. Busca una ingesta equilibrada que satisfaga las diversas necesidades corporales.
+                </p>
+
+                {/* Macros sliders */}
+                <div className="space-y-6 bg-background rounded-xl p-4 shadow-sm">
+                  {/* Carbs */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Hidratos</span>
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100 / 4)} g</span>
+                        <span className="font-medium">{profileData.carbs} %</span>
+                        <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100)} kcal</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.carbs > 0) {
+                            setProfileData({ ...profileData, carbs: Math.max(0, profileData.carbs - 1) });
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={profileData.carbs}
+                        onChange={(e) => setProfileData({ ...profileData, carbs: parseInt(e.target.value) })}
+                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #F97316 0%, #F97316 ${profileData.carbs}%, #E5E5E5 ${profileData.carbs}%, #E5E5E5 100%)`
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.carbs < 100) {
+                            setProfileData({ ...profileData, carbs: Math.min(100, profileData.carbs + 1) });
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Protein */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Proteínas</span>
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100 / 4)} g</span>
+                        <span className="font-medium">{profileData.protein} %</span>
+                        <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100)} kcal</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.protein > 0) {
+                            setProfileData({ ...profileData, protein: Math.max(0, profileData.protein - 1) });
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={profileData.protein}
+                        onChange={(e) => setProfileData({ ...profileData, protein: parseInt(e.target.value) })}
+                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #EC4899 0%, #EC4899 ${profileData.protein}%, #E5E5E5 ${profileData.protein}%, #E5E5E5 100%)`
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.protein < 100) {
+                            setProfileData({ ...profileData, protein: Math.min(100, profileData.protein + 1) });
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Fat */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Grasas</span>
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100 / 9)} g</span>
+                        <span className="font-medium">{profileData.fat} %</span>
+                        <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100)} kcal</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.fat > 0) {
+                            setProfileData({ ...profileData, fat: Math.max(0, profileData.fat - 1) });
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={profileData.fat}
+                        onChange={(e) => setProfileData({ ...profileData, fat: parseInt(e.target.value) })}
+                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #8B5CF6 0%, #8B5CF6 ${profileData.fat}%, #E5E5E5 ${profileData.fat}%, #E5E5E5 100%)`
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.fat < 100) {
+                            setProfileData({ ...profileData, fat: Math.min(100, profileData.fat + 1) });
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>}
           </div>
         </CardContent>
 
@@ -1348,6 +1708,34 @@ export const ProfileCreationDrawer = ({
               </button>
             </div>
           </div>}
+
+        {/* Buttons for macros step */}
+        {currentStep === 'macros' && (
+          <div className="p-4 border-t flex-shrink-0 space-y-3">
+            <Button 
+              onClick={() => onSave(profileData)} 
+              disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
+              className="w-full bg-green-600 hover:bg-green-700 text-white"
+            >
+              GUARDAR AJUSTES
+            </Button>
+            <button
+              type="button"
+              onClick={() => {
+                setProfileData({
+                  ...profileData,
+                  carbs: recommendedMacros.carbs,
+                  protein: recommendedMacros.protein,
+                  fat: recommendedMacros.fat,
+                  calories: recommendedMacros.calories
+                });
+              }}
+              className="w-full text-center py-3 text-sm font-medium hover:underline"
+            >
+              AJUSTAR A LO ORIGINAL
+            </button>
+          </div>
+        )}
 
         {/* Save button for overview */}
         {currentStep === 'overview' && getCompletionPercentage() === 100 && (
