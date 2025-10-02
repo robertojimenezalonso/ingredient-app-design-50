@@ -25,7 +25,9 @@ const config: CapacitorConfig = {
     Keyboard: {
       resize: 'none',
       style: 'dark',
-      resizeOnFullScreen: false
+      resizeOnFullScreen: false,
+      scrollAssist: false,
+      androidInputMode: 'adjustNothing'
     }
   }
 };
