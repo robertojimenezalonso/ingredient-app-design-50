@@ -435,12 +435,19 @@ export const ProfileCreationDrawer = ({
                     <Input ref={nameInputRef} type="text" value={profileData.name} onChange={e => setProfileData({
                 ...profileData,
                 name: e.target.value
-              })} placeholder="Escribe aqui" className="w-full" autoFocus onBlur={e => {
+              })} placeholder="Escribe aqui" className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" style={{
+                backgroundColor: '#F4F4F4',
+                borderColor: 'transparent'
+              }} onFocus={(e) => {
+                e.target.style.borderColor = '#020817';
+                e.target.style.borderWidth = '1px';
+              }} onBlur={e => {
+                e.target.style.borderColor = 'transparent';
                 e.preventDefault();
                 setTimeout(() => e.target.focus({
                   preventScroll: true
                 }), 0);
-              }} />
+              }} autoFocus />
                   </div>}
 
                 {/* User tag bubble - appears when typing */}
