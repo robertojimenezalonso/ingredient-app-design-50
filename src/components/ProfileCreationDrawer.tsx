@@ -169,10 +169,22 @@ export const ProfileCreationDrawer = ({
       }, 200);
     }
   }, [displayedText, fullText, showCursor, isOpen, currentStep]);
+  // Show keyboard immediately when drawer opens for name step
   useEffect(() => {
     if (!isOpen) return;
 
-    // Focus immediately and prevent scroll into view
+    if (currentStep === 'name') {
+      // Show keyboard immediately
+      Keyboard.show().catch(err => {
+        console.log('Keyboard show not available:', err);
+      });
+    }
+  }, [isOpen, currentStep]);
+
+  // Focus input when it appears
+  useEffect(() => {
+    if (!isOpen) return;
+
     requestAnimationFrame(() => {
       const input = (() => {
         switch (currentStep) {
@@ -189,14 +201,8 @@ export const ProfileCreationDrawer = ({
         }
       })();
       if (input) {
-        // Focus without scrolling
         input.focus({
           preventScroll: true
-        });
-
-        // Show keyboard explicitly
-        Keyboard.show().catch(err => {
-          console.log('Keyboard show not available:', err);
         });
       }
     });
