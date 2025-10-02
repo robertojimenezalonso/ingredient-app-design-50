@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { X, ChevronLeft, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
-
 interface ProfileCreationDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -14,46 +13,65 @@ interface ProfileCreationDrawerProps {
   editingProfile?: any;
   profileIndex?: number;
 }
-
 type Step = 'name' | 'birthDate' | 'weight' | 'height' | 'sex' | 'activityLevel';
-
-export const ProfileCreationDrawer = ({ 
-  isOpen, 
-  onClose, 
+export const ProfileCreationDrawer = ({
+  isOpen,
+  onClose,
   onSave,
   editingProfile,
   profileIndex = 0
 }: ProfileCreationDrawerProps) => {
   const [currentStep, setCurrentStep] = useState<Step>('name');
-  
+
   // Typewriter effect states for name step
   const [displayedText, setDisplayedText] = useState('');
   const [showCursor, setShowCursor] = useState(false);
   const [showInput, setShowInput] = useState(false);
   const fullText = "Escribe el nombre o alias para este comensal";
-  
+
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
-    if (!birthDateStr) return { day: '', month: '', year: '' };
+    if (!birthDateStr) return {
+      day: '',
+      month: '',
+      year: ''
+    };
     const parts = birthDateStr.split('/');
     if (parts.length === 3) {
-      return { day: parts[0], month: parts[1], year: parts[2] };
+      return {
+        day: parts[0],
+        month: parts[1],
+        year: parts[2]
+      };
     }
-    return { day: '', month: '', year: '' };
+    return {
+      day: '',
+      month: '',
+      year: ''
+    };
   };
-
   const parseWeight = (weightStr?: string) => {
-    if (!weightStr) return { value: '', unit: 'kg' };
+    if (!weightStr) return {
+      value: '',
+      unit: 'kg'
+    };
     const parts = weightStr.split(' ');
-    return { value: parts[0] || '', unit: parts[1] || 'kg' };
+    return {
+      value: parts[0] || '',
+      unit: parts[1] || 'kg'
+    };
   };
-
   const parseHeight = (heightStr?: string) => {
-    if (!heightStr) return { value: '', unit: 'cm' };
+    if (!heightStr) return {
+      value: '',
+      unit: 'cm'
+    };
     const parts = heightStr.split(' ');
-    return { value: parts[0] || '', unit: parts[1] || 'cm' };
+    return {
+      value: parts[0] || '',
+      unit: parts[1] || 'cm'
+    };
   };
-
   const [profileData, setProfileData] = useState({
     name: editingProfile?.name || '',
     birthDate: editingProfile?.birthDate || '',
@@ -64,16 +82,14 @@ export const ProfileCreationDrawer = ({
     sex: editingProfile?.sex || '',
     activityLevel: editingProfile?.activityLevel || ''
   });
-
   const nameInputRef = useRef<HTMLInputElement>(null);
   const birthDateInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
   const heightInputRef = useRef<HTMLInputElement>(null);
-
   const formatBirthDate = (value: string) => {
     // Remove all non-numeric characters
     const numbers = value.replace(/\D/g, '');
-    
+
     // Format as DD/MM/YYYY
     if (numbers.length <= 2) {
       return numbers;
@@ -83,20 +99,24 @@ export const ProfileCreationDrawer = ({
       return `${numbers.slice(0, 2)}/${numbers.slice(2, 4)}/${numbers.slice(4, 8)}`;
     }
   };
-
   const handleBirthDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatBirthDate(e.target.value);
-    setProfileData({ ...profileData, birthDate: formatted });
+    setProfileData({
+      ...profileData,
+      birthDate: formatted
+    });
   };
 
   // Prevent background scroll and keyboard behavior when drawer is open
   useEffect(() => {
     if (isOpen) {
       // Configure keyboard to not resize viewport
-      Keyboard.setResizeMode({ mode: 'none' as any }).catch(err => {
+      Keyboard.setResizeMode({
+        mode: 'none' as any
+      }).catch(err => {
         console.log('Keyboard plugin not available:', err);
       });
-      
+
       // Fix body scroll and position
       const scrollY = window.scrollY;
       document.body.style.overflow = 'hidden';
@@ -105,7 +125,6 @@ export const ProfileCreationDrawer = ({
       document.body.style.width = '100%';
       document.body.style.left = '0';
       document.body.style.right = '0';
-      
       return () => {
         // Restore scroll position
         document.body.style.overflow = '';
@@ -136,10 +155,8 @@ export const ProfileCreationDrawer = ({
       }, 300);
     }
   }, [isOpen, currentStep]);
-
   useEffect(() => {
     if (!isOpen || currentStep !== 'name') return;
-    
     if (displayedText.length > 0 && displayedText.length < fullText.length) {
       const timeout = setTimeout(() => {
         setDisplayedText(fullText.slice(0, displayedText.length + 1));
@@ -152,26 +169,31 @@ export const ProfileCreationDrawer = ({
       }, 200);
     }
   }, [displayedText, fullText, showCursor, isOpen, currentStep]);
-
   useEffect(() => {
     if (!isOpen) return;
-    
+
     // Focus immediately and prevent scroll into view
     requestAnimationFrame(() => {
       const input = (() => {
         switch (currentStep) {
-          case 'name': return nameInputRef.current;
-          case 'birthDate': return birthDateInputRef.current;
-          case 'weight': return weightInputRef.current;
-          case 'height': return heightInputRef.current;
-          default: return null;
+          case 'name':
+            return nameInputRef.current;
+          case 'birthDate':
+            return birthDateInputRef.current;
+          case 'weight':
+            return weightInputRef.current;
+          case 'height':
+            return heightInputRef.current;
+          default:
+            return null;
         }
       })();
-      
       if (input) {
         // Focus without scrolling
-        input.focus({ preventScroll: true });
-        
+        input.focus({
+          preventScroll: true
+        });
+
         // Show keyboard explicitly
         Keyboard.show().catch(err => {
           console.log('Keyboard show not available:', err);
@@ -179,45 +201,53 @@ export const ProfileCreationDrawer = ({
       }
     });
   }, [isOpen, currentStep]);
-
   const getStepTitle = () => {
     const isEditing = editingProfile;
     switch (currentStep) {
-      case 'name': return isEditing?.name ? 'Actualizar nombre' : 'Añadir nombre';
-      case 'birthDate': return isEditing?.birthDate ? 'Actualizar fecha de nacimiento' : 'Añadir fecha de nacimiento';
-      case 'weight': return isEditing?.weight ? 'Actualizar peso' : 'Añadir peso';
-      case 'height': return isEditing?.height ? 'Actualizar altura' : 'Añadir altura';
-      case 'sex': return isEditing?.sex ? 'Actualizar sexo' : 'Añadir sexo';
-      case 'activityLevel': return isEditing?.activityLevel ? 'Actualizar nivel de actividad' : 'Añadir nivel de actividad';
-      default: return '';
+      case 'name':
+        return isEditing?.name ? 'Actualizar nombre' : 'Añadir nombre';
+      case 'birthDate':
+        return isEditing?.birthDate ? 'Actualizar fecha de nacimiento' : 'Añadir fecha de nacimiento';
+      case 'weight':
+        return isEditing?.weight ? 'Actualizar peso' : 'Añadir peso';
+      case 'height':
+        return isEditing?.height ? 'Actualizar altura' : 'Añadir altura';
+      case 'sex':
+        return isEditing?.sex ? 'Actualizar sexo' : 'Añadir sexo';
+      case 'activityLevel':
+        return isEditing?.activityLevel ? 'Actualizar nivel de actividad' : 'Añadir nivel de actividad';
+      default:
+        return '';
     }
   };
-
   const canContinue = () => {
     switch (currentStep) {
-      case 'name': return profileData.name.trim().length > 0;
-      case 'birthDate': {
-        const date = profileData.birthDate.replace(/\D/g, '');
-        if (date.length !== 8) return false;
-        const day = parseInt(date.slice(0, 2));
-        const month = parseInt(date.slice(2, 4));
-        const year = parseInt(date.slice(4, 8));
-        return day >= 1 && day <= 31 && 
-               month >= 1 && month <= 12 && 
-               year >= 1900 && year <= new Date().getFullYear();
-      }
-      case 'weight': return profileData.weight && parseFloat(profileData.weight) > 0;
-      case 'height': return profileData.height && parseFloat(profileData.height) > 0;
-      case 'sex': return profileData.sex !== '';
-      case 'activityLevel': return profileData.activityLevel !== '';
-      default: return false;
+      case 'name':
+        return profileData.name.trim().length > 0;
+      case 'birthDate':
+        {
+          const date = profileData.birthDate.replace(/\D/g, '');
+          if (date.length !== 8) return false;
+          const day = parseInt(date.slice(0, 2));
+          const month = parseInt(date.slice(2, 4));
+          const year = parseInt(date.slice(4, 8));
+          return day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900 && year <= new Date().getFullYear();
+        }
+      case 'weight':
+        return profileData.weight && parseFloat(profileData.weight) > 0;
+      case 'height':
+        return profileData.height && parseFloat(profileData.height) > 0;
+      case 'sex':
+        return profileData.sex !== '';
+      case 'activityLevel':
+        return profileData.activityLevel !== '';
+      default:
+        return false;
     }
   };
-
   const handleContinue = () => {
     const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
-    
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
     } else {
@@ -225,37 +255,39 @@ export const ProfileCreationDrawer = ({
       onSave(profileData);
     }
   };
-
   const handleBack = () => {
     const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
-    
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
     }
   };
-
   const getCompletionPercentage = () => {
     const steps: Step[] = ['name', 'birthDate', 'weight', 'height', 'sex', 'activityLevel'];
     const completedSteps = steps.filter(step => {
       switch (step) {
-        case 'name': return profileData.name.trim().length > 0;
-        case 'birthDate': {
-          const date = profileData.birthDate.replace(/\D/g, '');
-          return date.length === 8;
-        }
-        case 'weight': return profileData.weight && parseFloat(profileData.weight) > 0;
-        case 'height': return profileData.height && parseFloat(profileData.height) > 0;
-        case 'sex': return profileData.sex !== '';
-        case 'activityLevel': return profileData.activityLevel !== '';
-        default: return false;
+        case 'name':
+          return profileData.name.trim().length > 0;
+        case 'birthDate':
+          {
+            const date = profileData.birthDate.replace(/\D/g, '');
+            return date.length === 8;
+          }
+        case 'weight':
+          return profileData.weight && parseFloat(profileData.weight) > 0;
+        case 'height':
+          return profileData.height && parseFloat(profileData.height) > 0;
+        case 'sex':
+          return profileData.sex !== '';
+        case 'activityLevel':
+          return profileData.activityLevel !== '';
+        default:
+          return false;
       }
     }).length;
-    return Math.round((completedSteps / steps.length) * 100);
+    return Math.round(completedSteps / steps.length * 100);
   };
-
   const getDefaultName = () => `Comensal ${profileIndex + 1}`;
-
   const getInitials = (name: string) => {
     if (!name) return `C${profileIndex + 1}`;
     const parts = name.trim().split(' ');
@@ -264,54 +296,38 @@ export const ProfileCreationDrawer = ({
     }
     return (parts[0][0] + parts[1][0]).toUpperCase();
   };
-
   const getProfileColor = (index: number) => {
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
     return colors[index % colors.length];
   };
-
   if (!isOpen) return null;
-
-  return (
-    <div 
-      className="fixed z-50 flex justify-center" 
-      style={{ 
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        paddingTop: 'env(safe-area-inset-top)',
-        paddingBottom: '16px',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)'
-      }}
-    >
-      <Card 
-        className="relative w-full max-w-md flex flex-col rounded-3xl border-0 shadow-2xl mx-4 self-start overflow-hidden"
-        style={{
-          marginTop: '100px',
-          maxHeight: 'calc(100% - 116px)'
-        }}
-      >
+  return <div className="fixed z-50 flex justify-center" style={{
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingTop: 'env(safe-area-inset-top)',
+    paddingBottom: '16px',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)'
+  }}>
+      <Card className="relative w-full max-w-md flex flex-col rounded-3xl border-0 shadow-2xl mx-4 self-start overflow-hidden" style={{
+      marginTop: '100px',
+      maxHeight: 'calc(100% - 116px)'
+    }}>
         {/* Header with profile info */}
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
           <div className="flex items-center gap-3 flex-1">
             <div className="relative flex-shrink-0 w-12 h-12">
-              <svg className="absolute inset-0 w-12 h-12" style={{ transform: 'rotate(-90deg)' }}>
+              <svg className="absolute inset-0 w-12 h-12" style={{
+              transform: 'rotate(-90deg)'
+            }}>
                 <circle cx="24" cy="24" r="22" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
-                <circle
-                  cx="24" cy="24" r="22" stroke="#10B981" strokeWidth="2.5" fill="none"
-                  strokeDasharray={`${2 * Math.PI * 22}`}
-                  strokeDashoffset={`${2 * Math.PI * 22 * (1 - getCompletionPercentage() / 100)}`}
-                  strokeLinecap="round" className="transition-all duration-300"
-                />
+                <circle cx="24" cy="24" r="22" stroke="#10B981" strokeWidth="2.5" fill="none" strokeDasharray={`${2 * Math.PI * 22}`} strokeDashoffset={`${2 * Math.PI * 22 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
               </svg>
-              <div 
-                className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium"
-                style={{ 
-                  backgroundColor: getProfileColor(profileIndex), 
-                  color: 'rgba(255, 255, 255, 0.8)' 
-                }}
-              >
+              <div className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium" style={{
+              backgroundColor: getProfileColor(profileIndex),
+              color: 'rgba(255, 255, 255, 0.8)'
+            }}>
                 {getInitials(profileData.name)}
               </div>
             </div>
@@ -324,22 +340,18 @@ export const ProfileCreationDrawer = ({
               </p>
             </div>
           </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors"
-          >
+          <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
             <X className="w-5 h-5" />
           </button>
         </CardHeader>
 
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4" style={{
-          paddingBottom: currentStep === 'name' ? '120px' : '16px'
-        }}>
+        paddingBottom: currentStep === 'name' ? '120px' : '16px'
+      }}>
           <div className="space-y-4">
             
-            {currentStep === 'name' && (
-              <div className="space-y-6">
+            {currentStep === 'name' && <div className="space-y-6">
                 {/* Bot message with typewriter */}
                 <div className="px-4 mb-6">
                   <div className="flex justify-start">
@@ -353,230 +365,141 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Input field - appears after typewriter completes */}
-                {showInput && (
-                  <div className="px-4 mb-6 animate-fade-in">
-                    <Input
-                      ref={nameInputRef}
-                      type="text"
-                      value={profileData.name}
-                      onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
-                      placeholder="Escribe aqui"
-                      className="w-full"
-                      autoFocus
-                      onBlur={(e) => {
-                        e.preventDefault();
-                        setTimeout(() => e.target.focus({ preventScroll: true }), 0);
-                      }}
-                    />
-                  </div>
-                )}
+                {showInput && <div className="px-4 mb-6 animate-fade-in">
+                    <Input ref={nameInputRef} type="text" value={profileData.name} onChange={e => setProfileData({
+                ...profileData,
+                name: e.target.value
+              })} placeholder="Escribe aqui" className="w-full" autoFocus onBlur={e => {
+                e.preventDefault();
+                setTimeout(() => e.target.focus({
+                  preventScroll: true
+                }), 0);
+              }} />
+                  </div>}
 
                 {/* User tag bubble - appears when typing */}
-                {profileData.name && showInput && (
-                  <div className="px-4 flex justify-end animate-fade-in">
-                    <div 
-                      className="text-[#1C1C1C] rounded-lg px-3 py-2 text-sm max-w-xs" 
-                      style={{ backgroundColor: '#F4F4F4' }}
-                    >
-                      {profileData.name}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
+                {profileData.name && showInput}
+              </div>}
 
-            {currentStep !== 'name' && (
-              <div>
+            {currentStep !== 'name' && <div>
                 <div className="flex items-center gap-3 mb-4">
-                  <button
-                    onClick={handleBack}
-                    className="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors"
-                  >
+                  <button onClick={handleBack} className="flex-shrink-0 w-8 h-8 flex items-center justify-center hover:bg-accent rounded-full transition-colors">
                     <ChevronLeft className="w-5 h-5" />
                   </button>
                   <h3 className="text-base font-medium">{getStepTitle()}</h3>
                 </div>
-              </div>
-            )}
+              </div>}
 
-            {currentStep === 'birthDate' && (
-              <Input
-                ref={birthDateInputRef}
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                value={profileData.birthDate}
-                onChange={handleBirthDateChange}
-                placeholder="DD/MM/AAAA"
-                maxLength={10}
-                className="w-full"
-                autoFocus
-                onBlur={(e) => {
-                  e.preventDefault();
-                  setTimeout(() => e.target.focus({ preventScroll: true }), 0);
-                }}
-              />
-            )}
+            {currentStep === 'birthDate' && <Input ref={birthDateInputRef} type="text" inputMode="numeric" pattern="[0-9]*" value={profileData.birthDate} onChange={handleBirthDateChange} placeholder="DD/MM/AAAA" maxLength={10} className="w-full" autoFocus onBlur={e => {
+            e.preventDefault();
+            setTimeout(() => e.target.focus({
+              preventScroll: true
+            }), 0);
+          }} />}
 
-            {currentStep === 'weight' && (
-              <div className="relative">
-                <Input
-                  ref={weightInputRef}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  value={profileData.weight}
-                  onChange={(e) => setProfileData({ ...profileData, weight: e.target.value.replace(/\D/g, '') })}
-                  placeholder="Escribe tu peso"
-                  className="w-full pr-16"
-                  autoFocus
-                  onBlur={(e) => {
-                    e.preventDefault();
-                    setTimeout(() => e.target.focus({ preventScroll: true }), 0);
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const units = ['kg', 'lb'];
-                    const currentIndex = units.indexOf(profileData.weightUnit);
-                    const nextIndex = (currentIndex + 1) % units.length;
-                    setProfileData({ ...profileData, weightUnit: units[nextIndex] });
-                  }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors"
-                >
+            {currentStep === 'weight' && <div className="relative">
+                <Input ref={weightInputRef} type="text" inputMode="numeric" pattern="[0-9]*" value={profileData.weight} onChange={e => setProfileData({
+              ...profileData,
+              weight: e.target.value.replace(/\D/g, '')
+            })} placeholder="Escribe tu peso" className="w-full pr-16" autoFocus onBlur={e => {
+              e.preventDefault();
+              setTimeout(() => e.target.focus({
+                preventScroll: true
+              }), 0);
+            }} />
+                <button type="button" onClick={() => {
+              const units = ['kg', 'lb'];
+              const currentIndex = units.indexOf(profileData.weightUnit);
+              const nextIndex = (currentIndex + 1) % units.length;
+              setProfileData({
+                ...profileData,
+                weightUnit: units[nextIndex]
+              });
+            }} className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors">
                   {profileData.weightUnit}
                 </button>
-              </div>
-            )}
+              </div>}
 
-            {currentStep === 'height' && (
-              <div className="relative">
-                <Input
-                  ref={heightInputRef}
-                  type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
-                  value={profileData.height}
-                  onChange={(e) => setProfileData({ ...profileData, height: e.target.value.replace(/\D/g, '') })}
-                  placeholder="Escribe tu altura"
-                  className="w-full pr-16"
-                  autoFocus
-                  onBlur={(e) => {
-                    e.preventDefault();
-                    setTimeout(() => e.target.focus({ preventScroll: true }), 0);
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const units = ['cm', 'ft'];
-                    const currentIndex = units.indexOf(profileData.heightUnit);
-                    const nextIndex = (currentIndex + 1) % units.length;
-                    setProfileData({ ...profileData, heightUnit: units[nextIndex] });
-                  }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors"
-                >
+            {currentStep === 'height' && <div className="relative">
+                <Input ref={heightInputRef} type="text" inputMode="numeric" pattern="[0-9]*" value={profileData.height} onChange={e => setProfileData({
+              ...profileData,
+              height: e.target.value.replace(/\D/g, '')
+            })} placeholder="Escribe tu altura" className="w-full pr-16" autoFocus onBlur={e => {
+              e.preventDefault();
+              setTimeout(() => e.target.focus({
+                preventScroll: true
+              }), 0);
+            }} />
+                <button type="button" onClick={() => {
+              const units = ['cm', 'ft'];
+              const currentIndex = units.indexOf(profileData.heightUnit);
+              const nextIndex = (currentIndex + 1) % units.length;
+              setProfileData({
+                ...profileData,
+                heightUnit: units[nextIndex]
+              });
+            }} className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors">
                   {profileData.heightUnit}
                 </button>
-              </div>
-            )}
+              </div>}
 
-            {currentStep === 'sex' && (
-              <div className="space-y-2">
-                {['Masculino', 'Femenino', 'Otro'].map(option => (
-                  <button
-                    key={option}
-                    onClick={() => setProfileData({ ...profileData, sex: option })}
-                    className={cn(
-                      "w-full px-4 py-3 rounded-lg border transition-colors text-left",
-                      profileData.sex === option 
-                        ? "bg-primary text-primary-foreground" 
-                        : "bg-background hover:bg-accent"
-                    )}
-                  >
+            {currentStep === 'sex' && <div className="space-y-2">
+                {['Masculino', 'Femenino', 'Otro'].map(option => <button key={option} onClick={() => setProfileData({
+              ...profileData,
+              sex: option
+            })} className={cn("w-full px-4 py-3 rounded-lg border transition-colors text-left", profileData.sex === option ? "bg-primary text-primary-foreground" : "bg-background hover:bg-accent")}>
                     {option}
-                  </button>
-                ))}
-              </div>
-            )}
+                  </button>)}
+              </div>}
 
-            {currentStep === 'activityLevel' && (
-              <div className="space-y-2">
-                {['Bajo', 'Moderado', 'Alto', 'Muy alto'].map(option => (
-                  <button
-                    key={option}
-                    onClick={() => setProfileData({ ...profileData, activityLevel: option })}
-                    className={cn(
-                      "w-full px-4 py-3 rounded-lg border transition-colors text-left",
-                      profileData.activityLevel === option 
-                        ? "bg-primary text-primary-foreground" 
-                        : "bg-background hover:bg-accent"
-                    )}
-                  >
+            {currentStep === 'activityLevel' && <div className="space-y-2">
+                {['Bajo', 'Moderado', 'Alto', 'Muy alto'].map(option => <button key={option} onClick={() => setProfileData({
+              ...profileData,
+              activityLevel: option
+            })} className={cn("w-full px-4 py-3 rounded-lg border transition-colors text-left", profileData.activityLevel === option ? "bg-primary text-primary-foreground" : "bg-background hover:bg-accent")}>
                     {option}
-                  </button>
-                ))}
-              </div>
-            )}
+                  </button>)}
+              </div>}
           </div>
         </CardContent>
 
         {/* Bottom area - chat send style for name step */}
-        {currentStep === 'name' && showInput && (
-          <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
-            backgroundColor: '#FFFFFF'
+        {currentStep === 'name' && showInput && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+        backgroundColor: '#FFFFFF'
+      }}>
+            <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{
+          paddingBottom: 'max(2rem, calc(env(safe-area-inset-bottom) + 16px))'
+        }}>
+              {profileData.name && <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
+            backgroundColor: '#F2F2F2',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
           }}>
-            <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{ paddingBottom: 'max(2rem, calc(env(safe-area-inset-bottom) + 16px))' }}>
-              {profileData.name && (
-                <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
-                  backgroundColor: '#F2F2F2',
-                  scrollbarWidth: 'none',
-                  msOverflowStyle: 'none'
-                }}>
-                  <Badge 
-                    variant="secondary" 
-                    className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
-                    style={{ 
-                      backgroundColor: '#D9DADC', 
-                      color: '#020818',
-                      borderRadius: '8px'
-                    }}
-                  >
+                  <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+              backgroundColor: '#D9DADC',
+              color: '#020818',
+              borderRadius: '8px'
+            }}>
                     {profileData.name}
                   </Badge>
-                </div>
-              )}
-              <button
-                onClick={handleContinue}
-                disabled={!canContinue()}
-                className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto"
-                style={{
-                  backgroundColor: canContinue() ? '#000000' : '#898885',
-                  color: canContinue() ? '#ffffff' : '#F9F8F2',
-                  border: 'none',
-                  opacity: 1
-                }}
-              >
+                </div>}
+              <button onClick={handleContinue} disabled={!canContinue()} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" style={{
+            backgroundColor: canContinue() ? '#000000' : '#898885',
+            color: canContinue() ? '#ffffff' : '#F9F8F2',
+            border: 'none',
+            opacity: 1
+          }}>
                 <Send className="w-4 h-4" />
               </button>
             </div>
-          </div>
-        )}
+          </div>}
 
         {/* Regular button for other steps */}
-        {currentStep !== 'name' && (
-          <div className="p-4 border-t flex-shrink-0">
-            <Button
-              onClick={handleContinue}
-              disabled={!canContinue()}
-              className="w-full"
-            >
+        {currentStep !== 'name' && <div className="p-4 border-t flex-shrink-0">
+            <Button onClick={handleContinue} disabled={!canContinue()} className="w-full">
               Continuar
             </Button>
-          </div>
-        )}
+          </div>}
       </Card>
-    </div>
-  );
+    </div>;
 };
