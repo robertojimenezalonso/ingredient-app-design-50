@@ -566,7 +566,7 @@ export const ProfileCreationDrawer = ({
                             onClick={() => {
                               const newAllergies = isChecked
                                 ? profileData.allergies.filter((a: string) => a !== option)
-                                : [...profileData.allergies, option];
+                                : [option, ...profileData.allergies]; // Add to beginning
                               setProfileData({
                                 ...profileData,
                                 allergies: newAllergies
@@ -578,7 +578,7 @@ export const ProfileCreationDrawer = ({
                               checked={isChecked}
                               onCheckedChange={(checked) => {
                                 const newAllergies = checked
-                                  ? [...profileData.allergies, option]
+                                  ? [option, ...profileData.allergies] // Add to beginning
                                   : profileData.allergies.filter((a: string) => a !== option);
                                 setProfileData({
                                   ...profileData,
