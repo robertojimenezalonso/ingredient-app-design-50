@@ -128,7 +128,7 @@ export const ProfileCreationDrawer = ({
   const getGoalVerb = () => {
     const goal = profileData.goal.toLowerCase();
     if (goal.includes('perder')) return 'perder peso';
-    if (goal.includes('mantener')) return 'mantener su peso';
+    if (goal.includes('mantenerse')) return 'mantener su peso';
     if (goal.includes('aumentar peso')) return 'aumentar su peso';
     if (goal.includes('músculo')) return 'aumentar músculo';
     return 'alcanzar su objetivo';
@@ -753,7 +753,7 @@ export const ProfileCreationDrawer = ({
 
                 {/* Goal options - appears after typewriter completes */}
                 {goalShowOptions && <div className="mb-6 space-y-2">
-                    {['Perder peso', 'Mantener', 'Aumentar peso', 'Aumentar músculo'].map((option, index) => {
+                    {['Perder peso', 'Mantenerse', 'Aumentar peso', 'Aumentar músculo'].map((option, index) => {
                       const isSelected = profileData.goal === option;
                       return (
                         <button 
