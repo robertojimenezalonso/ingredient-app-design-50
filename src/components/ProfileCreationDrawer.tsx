@@ -809,6 +809,9 @@ export const ProfileCreationDrawer = ({
     setReturnToOverview(true);
   };
 
+  const hasRequiredDataForMacros = profileData.weight && profileData.height && profileData.birthDate && profileData.sex && profileData.activityLevel && profileData.goal;
+  const hasMacrosCalculated = profileData.calories && profileData.carbs && profileData.protein && profileData.fat;
+  
   const menuItems = [
     { step: 'name' as Step, label: 'Nombre', value: profileData.name },
     { step: 'diet' as Step, label: 'Preferencia alimentaria', value: profileData.diet },
@@ -819,7 +822,7 @@ export const ProfileCreationDrawer = ({
     { step: 'birthdate' as Step, label: 'Fecha de nacimiento', value: profileData.birthDate },
     { step: 'sex' as Step, label: 'Sexo', value: profileData.sex },
     { step: 'activityLevel' as Step, label: 'Nivel de actividad', value: profileData.activityLevel },
-    { step: 'macros' as Step, label: 'Macros y calorías', value: profileData.calories && profileData.carbs && profileData.protein && profileData.fat ? 'Ver plan' : '' },
+    ...(hasRequiredDataForMacros ? [{ step: 'macros' as Step, label: 'Macros y calorías', value: hasMacrosCalculated ? 'Ver plan' : '' }] : []),
   ];
   if (!isOpen) return null;
   return <div className="fixed z-50 flex justify-center" style={{
