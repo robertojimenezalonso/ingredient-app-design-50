@@ -406,10 +406,10 @@ export const ProfileCreationDrawer = ({
                   <button
                     key={item.step}
                     onClick={() => handleQuickEdit(item.step)}
-                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent"
+                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent text-left"
                   >
-                    <span className="text-sm font-medium">{item.label}</span>
-                    <span className="text-sm text-muted-foreground">
+                    <span className="text-sm font-medium flex-shrink-0">{item.label}</span>
+                    <span className="text-sm text-muted-foreground text-right ml-4">
                       {item.value || 'Añadir'}
                     </span>
                   </button>
@@ -464,7 +464,7 @@ export const ProfileCreationDrawer = ({
                 {dietShowOptions && <div className="mb-6 animate-fade-in space-y-2">
                     {['Sin preferencia alimentaria', 'Pescetariano', 'Vegetariano', 'Vegano'].map(option => <button key={option} onClick={() => setProfileData({
                   ...profileData,
-                  diet: option
+                  diet: profileData.diet === option ? '' : option
                 })} className={cn("w-full px-4 py-3 rounded-lg transition-all text-left font-medium", profileData.diet === option ? "" : "border-0")} style={profileData.diet === option ? { backgroundColor: '#D9DADC', border: '1px solid #020817', color: '#020817' } : { backgroundColor: '#F4F4F4' }}>
                         {option}
                       </button>)}
