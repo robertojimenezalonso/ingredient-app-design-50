@@ -239,15 +239,16 @@ export const ProfileCreationDrawer = ({
         left: 0,
         right: 0,
         bottom: 0,
-        paddingBottom: '16px'
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: '16px',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)'
       }}
     >
-      <div className="absolute inset-0 bg-black/50" />
       <Card 
         className="relative w-full max-w-md flex flex-col rounded-3xl border-0 shadow-2xl mx-4 self-start"
         style={{
-          marginTop: '120px',
-          maxHeight: 'calc(100% - 136px)'
+          marginTop: '100px',
+          maxHeight: 'calc(100% - 116px)'
         }}
       >
         {/* Header with profile info */}

@@ -108,9 +108,13 @@ export const AirbnbHeader = ({
     : `En tienda • ${servingsText}`;
 
   return (
-    <div className={`fixed top-0 left-0 right-0 z-50 bg-background transition-all duration-300 ${
+    <div className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
       isScrolled ? 'border-b border-gray-200/30 shadow-[0_4px_20px_rgba(0,0,0,0.08)]' : ''
-    }`} style={{ paddingTop: 'env(safe-area-inset-top)' }}>
+    }`} style={{ 
+      top: 0,
+      paddingTop: 'env(safe-area-inset-top)',
+      backgroundColor: 'white'
+    }}>
       
       {/* Main Header - Always Visible */}
       <div className="flex items-center gap-3 p-4 bg-white">
