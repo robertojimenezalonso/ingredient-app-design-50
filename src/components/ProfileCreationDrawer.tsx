@@ -286,7 +286,7 @@ export const ProfileCreationDrawer = ({
       }}
     >
       <Card 
-        className="relative w-full max-w-md flex flex-col rounded-3xl border-0 shadow-2xl mx-4 self-start"
+        className="relative w-full max-w-md flex flex-col rounded-3xl border-0 shadow-2xl mx-4 self-start overflow-hidden"
         style={{
           marginTop: '100px',
           maxHeight: 'calc(100% - 116px)'
@@ -333,7 +333,9 @@ export const ProfileCreationDrawer = ({
         </CardHeader>
 
         {/* Content */}
-        <CardContent className="flex-1 overflow-y-auto p-4">
+        <CardContent className="flex-1 overflow-y-auto p-4" style={{
+          paddingBottom: currentStep === 'name' ? '120px' : '16px'
+        }}>
           <div className="space-y-4">
             
             {currentStep === 'name' && (
@@ -522,11 +524,10 @@ export const ProfileCreationDrawer = ({
 
         {/* Bottom area - chat send style for name step */}
         {currentStep === 'name' && showInput && (
-          <div className="absolute left-0 right-0 z-[9999]" style={{
-            backgroundColor: '#FFFFFF',
-            bottom: 'env(safe-area-inset-bottom, 0px)'
+          <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+            backgroundColor: '#FFFFFF'
           }}>
-            <div className="px-4 pt-4 pb-8 flex items-center gap-2 border-t" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
+            <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{ paddingBottom: 'max(2rem, calc(env(safe-area-inset-bottom) + 16px))' }}>
               {profileData.name && (
                 <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
                   backgroundColor: '#F2F2F2',
