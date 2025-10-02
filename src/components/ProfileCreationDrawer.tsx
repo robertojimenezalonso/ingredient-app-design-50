@@ -546,7 +546,7 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Allergies options - appears after typewriter completes */}
-                {allergiesShowOptions && <div className="mb-6 animate-fade-in space-y-0">
+                {allergiesShowOptions && <div className="mb-6 animate-fade-in space-y-0 -mx-4">
                     {[
                       'Sin alergias',
                       'Intolerancias al gluten',
@@ -573,7 +573,7 @@ export const ProfileCreationDrawer = ({
                               });
                             }}
                           >
-                            <span className="text-base font-medium">{option}</span>
+                            <span className="text-base font-normal">{option}</span>
                             <Switch 
                               checked={isChecked}
                               onCheckedChange={(checked) => {
