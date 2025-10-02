@@ -90,7 +90,7 @@ export const ProfileCreationDrawer = ({
 
   // Compute dietFullText based on profileData.name using useMemo
   const dietFullText = useMemo(() => 
-    `${profileData.name || 'Este comensal'} tiene algún tipo de preferencia alimentaria?`,
+    `¿${profileData.name || 'Este comensal'} tiene algún tipo de preferencia alimentaria?`,
     [profileData.name]
   );
 
