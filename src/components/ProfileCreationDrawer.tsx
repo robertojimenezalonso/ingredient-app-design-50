@@ -13,7 +13,7 @@ interface ProfileCreationDrawerProps {
   editingProfile?: any;
   profileIndex?: number;
 }
-type Step = 'name' | 'diet' | 'weight' | 'height' | 'sex' | 'activityLevel';
+type Step = 'overview' | 'name' | 'diet' | 'weight' | 'height' | 'sex' | 'activityLevel';
 export const ProfileCreationDrawer = ({
   isOpen,
   onClose,
@@ -21,7 +21,8 @@ export const ProfileCreationDrawer = ({
   editingProfile,
   profileIndex = 0
 }: ProfileCreationDrawerProps) => {
-  const [currentStep, setCurrentStep] = useState<Step>('name');
+  const [currentStep, setCurrentStep] = useState<Step>('overview');
+  const [returnToOverview, setReturnToOverview] = useState(false);
 
   // Typewriter effect states for name step
   const [displayedText, setDisplayedText] = useState('');
@@ -267,6 +268,13 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
+    // If we came from overview, return to it
+    if (returnToOverview) {
+      setCurrentStep('overview');
+      setReturnToOverview(false);
+      return;
+    }
+
     const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex < steps.length - 1) {
@@ -277,6 +285,16 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleBack = () => {
+    if (currentStep === 'overview') {
+      return;
+    }
+    
+    if (returnToOverview) {
+      setCurrentStep('overview');
+      setReturnToOverview(false);
+      return;
+    }
+
     const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
@@ -318,6 +336,20 @@ export const ProfileCreationDrawer = ({
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
     return colors[index % colors.length];
   };
+
+  const handleQuickEdit = (step: Step) => {
+    setCurrentStep(step);
+    setReturnToOverview(true);
+  };
+
+  const menuItems = [
+    { step: 'name' as Step, label: 'Nombre', value: profileData.name },
+    { step: 'diet' as Step, label: 'Preferencia alimentaria', value: profileData.diet },
+    { step: 'weight' as Step, label: 'Peso', value: profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : '' },
+    { step: 'height' as Step, label: 'Altura', value: profileData.height ? `${profileData.height} ${profileData.heightUnit}` : '' },
+    { step: 'sex' as Step, label: 'Sexo', value: profileData.sex },
+    { step: 'activityLevel' as Step, label: 'Nivel de actividad', value: profileData.activityLevel },
+  ];
   if (!isOpen) return null;
   return <div className="fixed z-50 flex justify-center" style={{
     top: 0,
@@ -334,7 +366,10 @@ export const ProfileCreationDrawer = ({
     }}>
         {/* Header with profile info */}
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
-          <div className="flex items-center gap-3 flex-1">
+          <button 
+            onClick={() => setCurrentStep('overview')}
+            className="flex items-center gap-3 flex-1 hover:bg-accent/50 rounded-lg p-1 -m-1 transition-colors"
+          >
             <div className="relative flex-shrink-0 w-12 h-12">
               <svg className="absolute inset-0 w-12 h-12" style={{
               transform: 'rotate(-90deg)'
@@ -349,7 +384,7 @@ export const ProfileCreationDrawer = ({
                 {getInitials(profileData.name)}
               </div>
             </div>
-            <div>
+            <div className="text-left">
               <p className="text-sm font-medium">
                 {profileData.name || getDefaultName()}
               </p>
@@ -357,7 +392,7 @@ export const ProfileCreationDrawer = ({
                 {getCompletionPercentage()}% completado
               </p>
             </div>
-          </div>
+          </button>
           <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
             <X className="w-5 h-5" />
           </button>
@@ -368,6 +403,24 @@ export const ProfileCreationDrawer = ({
         paddingBottom: currentStep === 'name' || currentStep === 'diet' ? '120px' : '16px'
       }}>
           <div className="space-y-4">
+            
+            {/* Overview menu */}
+            {currentStep === 'overview' && (
+              <div className="space-y-2">
+                {menuItems.map((item) => (
+                  <button
+                    key={item.step}
+                    onClick={() => handleQuickEdit(item.step)}
+                    className="w-full flex items-center justify-between p-4 rounded-lg border transition-colors hover:bg-accent"
+                  >
+                    <span className="text-sm font-medium">{item.label}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {item.value || 'Añadir'}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
             
             {currentStep === 'name' && <div className="space-y-6">
                 {/* Bot message with typewriter */}
@@ -530,11 +583,20 @@ export const ProfileCreationDrawer = ({
           </div>}
 
         {/* Regular button for other steps */}
-        {currentStep !== 'name' && currentStep !== 'diet' && <div className="p-4 border-t flex-shrink-0">
+        {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'overview' && <div className="p-4 border-t flex-shrink-0">
             <Button onClick={handleContinue} disabled={!canContinue()} className="w-full">
               Continuar
             </Button>
           </div>}
+
+        {/* Save button for overview */}
+        {currentStep === 'overview' && getCompletionPercentage() === 100 && (
+          <div className="p-4 border-t flex-shrink-0">
+            <Button onClick={() => onSave(profileData)} className="w-full">
+              Guardar perfil
+            </Button>
+          </div>
+        )}
       </Card>
     </div>;
 };
