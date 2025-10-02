@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import { X, ChevronLeft, ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
@@ -13,7 +14,7 @@ interface ProfileCreationDrawerProps {
   editingProfile?: any;
   profileIndex?: number;
 }
-type Step = 'overview' | 'name' | 'diet' | 'weight' | 'height' | 'sex' | 'activityLevel';
+type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'weight' | 'height' | 'sex' | 'activityLevel';
 export const ProfileCreationDrawer = ({
   isOpen,
   onClose,
@@ -34,6 +35,11 @@ export const ProfileCreationDrawer = ({
   const [dietDisplayedText, setDietDisplayedText] = useState('');
   const [dietShowCursor, setDietShowCursor] = useState(false);
   const [dietShowOptions, setDietShowOptions] = useState(false);
+
+  // Typewriter effect states for allergies step
+  const [allergiesDisplayedText, setAllergiesDisplayedText] = useState('');
+  const [allergiesShowCursor, setAllergiesShowCursor] = useState(false);
+  const [allergiesShowOptions, setAllergiesShowOptions] = useState(false);
 
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -81,6 +87,7 @@ export const ProfileCreationDrawer = ({
   const [profileData, setProfileData] = useState({
     name: editingProfile?.name || '',
     diet: editingProfile?.diet || '',
+    allergies: editingProfile?.allergies || [],
     weight: parseWeight(editingProfile?.weight).value,
     weightUnit: parseWeight(editingProfile?.weight).unit,
     height: parseHeight(editingProfile?.height).value,
@@ -92,6 +99,12 @@ export const ProfileCreationDrawer = ({
   // Compute dietFullText based on profileData.name using useMemo
   const dietFullText = useMemo(() => 
     `¿${profileData.name || 'Este comensal'} tiene algún tipo de preferencia alimentaria?`,
+    [profileData.name]
+  );
+
+  // Compute allergiesFullText based on profileData.name using useMemo
+  const allergiesFullText = useMemo(() => 
+    `¿${profileData.name || 'Este comensal'} tiene alguna alergia o intolerancia?`,
     [profileData.name]
   );
 
@@ -194,6 +207,40 @@ export const ProfileCreationDrawer = ({
       }, 200);
     }
   }, [dietDisplayedText, dietFullText, dietShowCursor, isOpen, currentStep]);
+
+  // Typewriter effect for allergies step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'allergies') {
+      setAllergiesDisplayedText('');
+      setAllergiesShowCursor(false);
+      setAllergiesShowOptions(false);
+      return;
+    }
+
+    // Start typewriter
+    if (allergiesDisplayedText.length === 0) {
+      setTimeout(() => {
+        setAllergiesDisplayedText(allergiesFullText[0]);
+        setAllergiesShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, allergiesFullText]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'allergies') return;
+    if (allergiesDisplayedText.length > 0 && allergiesDisplayedText.length < allergiesFullText.length) {
+      const timeout = setTimeout(() => {
+        setAllergiesDisplayedText(allergiesFullText.slice(0, allergiesDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (allergiesDisplayedText.length === allergiesFullText.length && allergiesShowCursor) {
+      setTimeout(() => {
+        setAllergiesShowCursor(false);
+        setAllergiesShowOptions(true);
+      }, 200);
+    }
+  }, [allergiesDisplayedText, allergiesFullText, allergiesShowCursor, isOpen, currentStep]);
+
   // Show keyboard immediately when drawer opens for name step
   useEffect(() => {
     if (!isOpen) return;
@@ -237,6 +284,8 @@ export const ProfileCreationDrawer = ({
         return isEditing?.name ? 'Actualizar nombre' : 'Añadir nombre';
       case 'diet':
         return isEditing?.diet ? 'Actualizar dieta' : 'Añadir dieta';
+      case 'allergies':
+        return isEditing?.allergies ? 'Actualizar alergias' : 'Añadir alergias';
       case 'weight':
         return isEditing?.weight ? 'Actualizar peso' : 'Añadir peso';
       case 'height':
@@ -255,6 +304,8 @@ export const ProfileCreationDrawer = ({
         return profileData.name.trim().length > 0;
       case 'diet':
         return profileData.diet !== '';
+      case 'allergies':
+        return true; // Always can continue from allergies
       case 'weight':
         return profileData.weight && parseFloat(profileData.weight) > 0;
       case 'height':
@@ -268,7 +319,7 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
-    const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     
     if (currentIndex < steps.length - 1) {
@@ -290,20 +341,22 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
-    const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
     }
   };
   const getCompletionPercentage = () => {
-    const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'weight', 'height', 'sex', 'activityLevel'];
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
           return profileData.name.trim().length > 0;
         case 'diet':
           return profileData.diet !== '';
+        case 'allergies':
+          return true; // Always considered complete
         case 'weight':
           return profileData.weight && parseFloat(profileData.weight) > 0;
         case 'height':
@@ -340,6 +393,7 @@ export const ProfileCreationDrawer = ({
   const menuItems = [
     { step: 'name' as Step, label: 'Nombre', value: profileData.name },
     { step: 'diet' as Step, label: 'Preferencia alimentaria', value: profileData.diet },
+    { step: 'allergies' as Step, label: 'Alergias e intolerancias', value: profileData.allergies.length > 0 ? profileData.allergies.join(', ') : '' },
     { step: 'weight' as Step, label: 'Peso', value: profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : '' },
     { step: 'height' as Step, label: 'Altura', value: profileData.height ? `${profileData.height} ${profileData.heightUnit}` : '' },
     { step: 'sex' as Step, label: 'Sexo', value: profileData.sex },
@@ -395,7 +449,7 @@ export const ProfileCreationDrawer = ({
 
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4" style={{
-        paddingBottom: currentStep === 'name' || currentStep === 'diet' ? '120px' : '16px'
+        paddingBottom: currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' ? '120px' : '16px'
       }}>
           <div className="space-y-4">
             
@@ -478,7 +532,71 @@ export const ProfileCreationDrawer = ({
                   </div>}
               </div>}
 
-            {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'overview' && <div>
+            {currentStep === 'allergies' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
+                <div className="mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {allergiesDisplayedText}
+                        {allergiesShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Allergies options - appears after typewriter completes */}
+                {allergiesShowOptions && <div className="mb-6 animate-fade-in space-y-0">
+                    {[
+                      'Sin alergias',
+                      'Intolerancias al gluten',
+                      'Intolerancias al trigo',
+                      'Intolerancias a la lactosa',
+                      'Alergia a la leche',
+                      'Alergia al huevo',
+                      'Alergia al marisco',
+                      'Alergia al pescado',
+                      'Alergia a las nueces'
+                    ].map((option, index, array) => {
+                      const isChecked = profileData.allergies.includes(option);
+                      return (
+                        <div key={option}>
+                          <div
+                            className="flex items-center justify-between py-3 px-4 cursor-pointer hover:bg-accent/50 transition-colors"
+                            onClick={() => {
+                              const newAllergies = isChecked
+                                ? profileData.allergies.filter((a: string) => a !== option)
+                                : [...profileData.allergies, option];
+                              setProfileData({
+                                ...profileData,
+                                allergies: newAllergies
+                              });
+                            }}
+                          >
+                            <span className="text-base font-medium">{option}</span>
+                            <Switch 
+                              checked={isChecked}
+                              onCheckedChange={(checked) => {
+                                const newAllergies = checked
+                                  ? [...profileData.allergies, option]
+                                  : profileData.allergies.filter((a: string) => a !== option);
+                                setProfileData({
+                                  ...profileData,
+                                  allergies: newAllergies
+                                });
+                              }}
+                            />
+                          </div>
+                          {index < array.length - 1 && (
+                            <div className="border-b border-border mx-4" />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>}
+              </div>}
+
+            {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'overview' && <div>
                 <h3 className="text-base font-medium mb-4">{getStepTitle()}</h3>
               </div>}
 
@@ -548,26 +666,50 @@ export const ProfileCreationDrawer = ({
           </div>
         </CardContent>
 
-        {/* Bottom area - chat send style for name and diet steps */}
-        {(currentStep === 'name' || currentStep === 'diet') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+        {/* Bottom area - chat send style for name, diet and allergies steps */}
+        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
         backgroundColor: '#FFFFFF'
       }}>
             <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{
           paddingBottom: 'max(2rem, calc(env(safe-area-inset-bottom) + 16px))'
         }}>
-              {(currentStep === 'name' ? profileData.name : profileData.diet) && <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
-            backgroundColor: '#F2F2F2',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none'
-          }}>
-                  <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
-              backgroundColor: '#D9DADC',
-              color: '#020818',
-              borderRadius: '8px'
-            }}>
-                    {currentStep === 'name' ? profileData.name : profileData.diet}
-                  </Badge>
-                </div>}
+              {((currentStep === 'name' && profileData.name) || 
+                (currentStep === 'diet' && profileData.diet) || 
+                (currentStep === 'allergies' && profileData.allergies.length > 0)) && 
+                <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
+                  backgroundColor: '#F2F2F2',
+                  scrollbarWidth: 'none',
+                  msOverflowStyle: 'none'
+                }}>
+                  {currentStep === 'name' && (
+                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {profileData.name}
+                    </Badge>
+                  )}
+                  {currentStep === 'diet' && (
+                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {profileData.diet}
+                    </Badge>
+                  )}
+                  {currentStep === 'allergies' && profileData.allergies.map((allergy: string) => (
+                    <Badge key={allergy} variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {allergy}
+                    </Badge>
+                  ))}
+                </div>
+              }
               <button onClick={handleContinue} disabled={!canContinue()} className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" style={{
             backgroundColor: canContinue() ? '#000000' : '#898885',
             color: canContinue() ? '#ffffff' : '#F9F8F2',
@@ -580,7 +722,7 @@ export const ProfileCreationDrawer = ({
           </div>}
 
         {/* Regular button for other steps */}
-        {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'overview' && <div className="p-4 border-t flex-shrink-0">
+        {currentStep !== 'name' && currentStep !== 'diet' && currentStep !== 'allergies' && currentStep !== 'overview' && <div className="p-4 border-t flex-shrink-0">
             <Button onClick={handleContinue} disabled={!canContinue()} className="w-full">
               Continuar
             </Button>
