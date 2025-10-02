@@ -268,17 +268,12 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
-    // If we came from overview, return to it
-    if (returnToOverview) {
-      setCurrentStep('overview');
-      setReturnToOverview(false);
-      return;
-    }
-
     const steps: Step[] = ['name', 'diet', 'weight', 'height', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
+    
     if (currentIndex < steps.length - 1) {
       setCurrentStep(steps[currentIndex + 1]);
+      setReturnToOverview(false);
     } else {
       // Last step - save profile
       onSave(profileData);
