@@ -305,7 +305,7 @@ export const ProfileCreationDrawer = ({
       case 'diet':
         return profileData.diet !== '';
       case 'allergies':
-        return true; // Always can continue from allergies
+        return profileData.allergies.length > 0;
       case 'weight':
         return profileData.weight && parseFloat(profileData.weight) > 0;
       case 'height':
