@@ -564,9 +564,19 @@ export const ProfileCreationDrawer = ({
                           <div
                             className="flex items-center justify-between py-3 px-4 cursor-pointer hover:bg-accent/50 transition-colors"
                             onClick={() => {
-                              const newAllergies = isChecked
-                                ? profileData.allergies.filter((a: string) => a !== option)
-                                : [option, ...profileData.allergies]; // Add to beginning
+                              let newAllergies;
+                              if (option === 'Sin alergias') {
+                                // If selecting "Sin alergias", clear all others
+                                newAllergies = isChecked ? [] : ['Sin alergias'];
+                              } else {
+                                // If selecting another option, remove "Sin alergias" if present
+                                if (isChecked) {
+                                  newAllergies = profileData.allergies.filter((a: string) => a !== option);
+                                } else {
+                                  const withoutNoAllergies = profileData.allergies.filter((a: string) => a !== 'Sin alergias');
+                                  newAllergies = [option, ...withoutNoAllergies];
+                                }
+                              }
                               setProfileData({
                                 ...profileData,
                                 allergies: newAllergies
@@ -577,9 +587,19 @@ export const ProfileCreationDrawer = ({
                             <Switch 
                               checked={isChecked}
                               onCheckedChange={(checked) => {
-                                const newAllergies = checked
-                                  ? [option, ...profileData.allergies] // Add to beginning
-                                  : profileData.allergies.filter((a: string) => a !== option);
+                                let newAllergies;
+                                if (option === 'Sin alergias') {
+                                  // If selecting "Sin alergias", clear all others
+                                  newAllergies = checked ? ['Sin alergias'] : [];
+                                } else {
+                                  // If selecting another option, remove "Sin alergias" if present
+                                  if (checked) {
+                                    const withoutNoAllergies = profileData.allergies.filter((a: string) => a !== 'Sin alergias');
+                                    newAllergies = [option, ...withoutNoAllergies];
+                                  } else {
+                                    newAllergies = profileData.allergies.filter((a: string) => a !== option);
+                                  }
+                                }
                                 setProfileData({
                                   ...profileData,
                                   allergies: newAllergies
