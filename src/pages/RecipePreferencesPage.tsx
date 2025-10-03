@@ -466,14 +466,18 @@ export const RecipePreferencesPage = () => {
                         key={profile.id} 
                         className="inline-flex items-center gap-2 px-3 py-2 cursor-pointer hover:opacity-80 transition-opacity"
                         style={{ 
-                          backgroundColor: '#F2F2F2',
+                          backgroundColor: getProfileColor(profile, index),
                           borderRadius: '8px'
                         }}
                         onClick={() => handleEditProfile(profile)}
                       >
                         <div 
                           className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium overflow-hidden flex-shrink-0"
-                          style={{ backgroundColor: getProfileColor(profile, index), color: 'rgba(255, 255, 255, 0.8)' }}
+                          style={{ 
+                            backgroundColor: getProfileColor(profile, index), 
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            border: '1px solid white'
+                          }}
                         >
                           {profile.avatarUrl ? (
                             <img src={profile.avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
@@ -481,7 +485,7 @@ export const RecipePreferencesPage = () => {
                             getInitials(profile.name)
                           )}
                         </div>
-                        <span className="text-sm font-medium text-[#1C1C1C]">{profile.name}</span>
+                        <span className="text-sm font-medium text-white">{profile.name}</span>
                       </div>
                     ))}
                   </div>
