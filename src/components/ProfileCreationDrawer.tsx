@@ -1297,10 +1297,10 @@ export const ProfileCreationDrawer = ({
                 </svg>
               )}
               <div 
-                className="absolute inset-[5px] rounded-full flex items-center justify-center text-base font-medium overflow-hidden cursor-pointer" 
+                className="absolute inset-[5px] rounded-full flex items-center justify-center text-xl font-semibold overflow-hidden cursor-pointer" 
                 style={{
                   backgroundColor: getProfileColor(),
-                  color: 'rgba(255, 255, 255, 0.8)'
+                  color: '#FFFFFF'
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
@@ -1313,9 +1313,10 @@ export const ProfileCreationDrawer = ({
                   <div className="relative w-full h-full flex items-center justify-center">
                     <div 
                       className={cn(
-                        "absolute inset-0 flex items-center justify-center transition-all duration-500",
+                        "absolute inset-0 flex items-center justify-center transition-all duration-500 text-xl font-semibold",
                         showAvatarIcon ? "translate-x-[-100%] opacity-0" : "translate-x-0 opacity-100"
                       )}
+                      style={{ color: '#FFFFFF' }}
                     >
                       {getInitials(profileData.name)}
                     </div>
@@ -1325,7 +1326,7 @@ export const ProfileCreationDrawer = ({
                         showAvatarIcon ? "translate-x-0 opacity-100" : "translate-x-[100%] opacity-0"
                       )}
                     >
-                      <Camera className="w-5 h-5" style={{ color: 'rgba(255, 255, 255, 0.8)' }} />
+                      <Camera className="w-5 h-5" style={{ color: '#FFFFFF' }} />
                     </div>
                   </div>
                 )}
