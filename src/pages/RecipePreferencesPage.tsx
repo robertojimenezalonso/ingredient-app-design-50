@@ -420,7 +420,7 @@ export const RecipePreferencesPage = () => {
       }}>
         <button 
           onClick={handleBack} 
-          className="ml-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80 hover:bg-white transition-colors"
+          className="ml-6 flex items-center justify-center w-10 h-10 rounded-full bg-white/80"
         >
           <ArrowLeft className="h-5 w-5 text-[#1C1C1C]" />
         </button>
@@ -467,7 +467,7 @@ export const RecipePreferencesPage = () => {
                     <Button
                       variant="default"
                       onClick={handleAddProfile}
-                      className="bg-[#1C1C1C] text-white hover:bg-[#000000] w-auto"
+                      className="bg-[#1C1C1C] text-white w-auto"
                     >
                       <Plus className="h-5 w-5 mr-2" />
                       Añadir
@@ -479,7 +479,7 @@ export const RecipePreferencesPage = () => {
                     {healthProfiles.map((profile, index) => (
                       <div 
                         key={profile.id} 
-                        className="inline-flex items-center gap-2 px-3 py-2 cursor-pointer hover:opacity-80 transition-opacity"
+                        className="inline-flex items-center gap-2 px-3 py-2 cursor-pointer"
                         style={{ 
                           backgroundColor: getProfileColor(profile, index),
                           borderRadius: '8px'
@@ -524,7 +524,7 @@ export const RecipePreferencesPage = () => {
                   <Badge 
                     key={profile.id}
                     variant="secondary" 
-                    className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" 
+                    className="font-normal py-1 flex items-center gap-1 flex-shrink-0" 
                     style={{ backgroundColor: '#D9DADC', color: '#020818', borderRadius: '8px' }}
                   >
                     {profile.name}

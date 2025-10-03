@@ -28,7 +28,7 @@ export const AvatarOptionsSheet = ({
               onTakePhoto();
               onClose();
             }}
-            className="flex items-center gap-4 px-6 py-4 hover:bg-accent/50 transition-colors"
+            className="flex items-center gap-4 px-6 py-4"
           >
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
               <Camera className="w-6 h-6 text-primary" />
@@ -42,7 +42,7 @@ export const AvatarOptionsSheet = ({
               onChooseFromGallery();
               onClose();
             }}
-            className="flex items-center gap-4 px-6 py-4 hover:bg-accent/50 transition-colors"
+            className="flex items-center gap-4 px-6 py-4"
           >
             <div className="w-12 h-12 rounded-full bg-blue-500/10 flex items-center justify-center">
               <ImageIcon className="w-6 h-6 text-blue-500" />
@@ -57,7 +57,7 @@ export const AvatarOptionsSheet = ({
                 onDelete();
                 onClose();
               }}
-              className="flex items-center gap-4 px-6 py-4 hover:bg-accent/50 transition-colors"
+              className="flex items-center gap-4 px-6 py-4"
             >
               <div className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center">
                 <Trash2 className="w-6 h-6 text-red-500" />

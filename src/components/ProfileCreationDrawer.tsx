@@ -1183,7 +1183,7 @@ export const ProfileCreationDrawer = ({
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
           <button
             onClick={() => setCurrentStep('overview')}
-            className="flex items-center gap-3 flex-1 hover:bg-accent/50 rounded-lg p-1 -m-1 transition-colors"
+            className="flex items-center gap-3 flex-1 rounded-lg p-1 -m-1"
           >
             <div className="relative flex-shrink-0 w-16 h-16">
               {getCompletionPercentage() < 100 && (
@@ -1248,7 +1248,7 @@ export const ProfileCreationDrawer = ({
                     e.stopPropagation();
                     setShowMenuDropdown(!showMenuDropdown);
                   }}
-                  className="p-1 hover:bg-[#F4F4F4] rounded-full transition-colors"
+                  className="p-1 rounded-full"
                 >
                   <MoreVertical className="w-5 h-5" />
                 </button>
@@ -1265,7 +1265,7 @@ export const ProfileCreationDrawer = ({
                           setShowMenuDropdown(false);
                           onDelete();
                         }}
-                        className="w-full px-4 py-3 text-left text-sm hover:bg-accent transition-colors text-destructive"
+                        className="w-full px-4 py-3 text-left text-sm text-destructive"
                       >
                         Eliminar perfil
                       </button>
@@ -1282,7 +1282,7 @@ export const ProfileCreationDrawer = ({
                 // If it's a new profile not saved yet, show confirmation dialog
                 setShowCancelDialog(true);
               }
-            }} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
+            }} className="w-8 h-8 rounded-full flex items-center justify-center">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -1301,7 +1301,7 @@ export const ProfileCreationDrawer = ({
                   <div key={item.step}>
                     <button
                       onClick={() => handleQuickEdit(item.step)}
-                      className="w-full flex items-center justify-between py-4 transition-colors hover:bg-accent/50 text-left"
+                      className="w-full flex items-center justify-between py-4 text-left"
                     >
                       <span className="text-sm text-muted-foreground flex-shrink-0">{item.label}</span>
                       <span className="text-sm text-right ml-4">
@@ -1424,7 +1424,7 @@ export const ProfileCreationDrawer = ({
                           animation: `fadeInUp 0.4s ease-out ${index * 0.1}s forwards`
                         }}>
                           <div
-                            className="flex items-center justify-between py-3 px-4 cursor-pointer hover:bg-accent/50 transition-colors"
+                            className="flex items-center justify-between py-3 px-4 cursor-pointer"
                             onClick={() => {
                               let newAllergies;
                               if (option === 'Sin alergias') {
@@ -1577,7 +1577,7 @@ export const ProfileCreationDrawer = ({
                           weightUnit: units[nextIndex]
                         });
                       }} 
-                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary rounded-md"
                     >
                       {profileData.weightUnit}
                     </button>
@@ -1639,7 +1639,7 @@ export const ProfileCreationDrawer = ({
                           heightUnit: units[nextIndex]
                         });
                       }} 
-                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary hover:bg-accent rounded-md transition-colors"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary rounded-md"
                     >
                       {profileData.heightUnit}
                     </button>
@@ -1879,7 +1879,7 @@ export const ProfileCreationDrawer = ({
                             setProfileData({ ...profileData, carbs: Math.max(0, profileData.carbs - 1) });
                           }
                         }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
+                        className="text-xl text-muted-foreground"
                       >
                         −
                       </button>
@@ -1901,7 +1901,7 @@ export const ProfileCreationDrawer = ({
                             setProfileData({ ...profileData, carbs: Math.min(100, profileData.carbs + 1) });
                           }
                         }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
+                        className="text-xl text-muted-foreground"
                       >
                         +
                       </button>
@@ -2070,7 +2070,7 @@ export const ProfileCreationDrawer = ({
                   msOverflowStyle: 'none'
                 }}>
                   {currentStep === 'name' && (
-                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="font-normal py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2178,7 +2178,7 @@ export const ProfileCreationDrawer = ({
                     calories: recommendedMacros.calories
                   });
                 }}
-                className="flex-1 text-center py-3 text-sm font-medium border rounded-lg hover:bg-accent transition-colors"
+                className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
               >
                 Restaurar datos
               </button>
@@ -2212,7 +2212,7 @@ export const ProfileCreationDrawer = ({
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-row gap-3 sm:justify-between">
             <AlertDialogAction
-              className="flex-1 bg-destructive hover:bg-destructive/90"
+              className="flex-1 bg-destructive"
               onClick={() => {
                 // Reset all data
                 setProfileData({
