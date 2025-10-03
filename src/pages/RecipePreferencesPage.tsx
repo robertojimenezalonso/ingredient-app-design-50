@@ -459,24 +459,24 @@ export const RecipePreferencesPage = () => {
                     )}
                   </div>
                   
-                  {/* Contador de comensales y botón añadir */}
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-lg font-semibold text-[#1C1C1C]">
-                      {healthProfiles.length === 0 ? 'Sin comensales' : `${healthProfiles.length} ${healthProfiles.length === 1 ? 'comensal' : 'comensales'}`}
-                    </h2>
-                    <button
-                      onClick={handleAddProfile}
-                      className="flex items-center gap-2"
-                    >
-                      <div className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center">
-                        <Plus className="h-5 w-5 text-gray-600" />
-                      </div>
-                      <span className="text-base font-medium text-gray-700">Añadir</span>
-                    </button>
-                  </div>
-                  
-                  {/* Rectángulo contenedor para los tags */}
+                  {/* Rectángulo contenedor para título, botón y tags */}
                   <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#F9F8F2' }}>
+                    {/* Contador de comensales y botón añadir */}
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-lg font-semibold text-[#1C1C1C]">
+                        {healthProfiles.length === 0 ? 'Sin comensales' : `${healthProfiles.length} ${healthProfiles.length === 1 ? 'comensal' : 'comensales'}`}
+                      </h2>
+                      <button
+                        onClick={handleAddProfile}
+                        className="flex items-center gap-2"
+                      >
+                        <div className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                          <Plus className="h-5 w-5 text-gray-600" />
+                        </div>
+                        <span className="text-base font-medium text-gray-700">Añadir</span>
+                      </button>
+                    </div>
+                    
                     {/* Health Profiles - Compact Tags */}
                     <div className="flex flex-col gap-3">
                       {healthProfiles.map((profile, index) => (
