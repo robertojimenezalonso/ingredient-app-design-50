@@ -464,14 +464,15 @@ export const RecipePreferencesPage = () => {
                     <h2 className="text-lg font-semibold text-[#1C1C1C]">
                       {healthProfiles.length === 0 ? 'Sin comensales' : `${healthProfiles.length} ${healthProfiles.length === 1 ? 'comensal' : 'comensales'}`}
                     </h2>
-                    <Button
-                      variant="default"
+                    <button
                       onClick={handleAddProfile}
-                      className="bg-[#1C1C1C] text-white w-auto h-[46px]"
+                      className="flex items-center gap-2"
                     >
-                      <Plus className="h-5 w-5 mr-2" />
-                      Añadir
-                    </Button>
+                      <div className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center">
+                        <Plus className="h-5 w-5 text-gray-600" />
+                      </div>
+                      <span className="text-base font-medium text-gray-700">Añadir</span>
+                    </button>
                   </div>
                   
                   {/* Rectángulo contenedor para los tags */}
@@ -479,15 +480,15 @@ export const RecipePreferencesPage = () => {
                     {/* Health Profiles - Compact Tags */}
                     <div className="flex flex-col gap-3">
                       {healthProfiles.map((profile, index) => (
-                        <div 
-                          key={profile.id} 
-                          className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px]"
-                          style={{ 
-                            backgroundColor: getProfileColor(profile, index),
-                            borderRadius: '8px'
-                          }}
-                          onClick={() => handleEditProfile(profile)}
-                        >
+                      <div 
+                        key={profile.id} 
+                        className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px] w-fit"
+                        style={{ 
+                          backgroundColor: getProfileColor(profile, index),
+                          borderRadius: '8px'
+                        }}
+                        onClick={() => handleEditProfile(profile)}
+                      >
                           <div 
                             className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium overflow-hidden flex-shrink-0"
                             style={{ 
