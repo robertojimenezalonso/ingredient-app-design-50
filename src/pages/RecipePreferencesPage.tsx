@@ -113,6 +113,8 @@ export const RecipePreferencesPage = () => {
     carbs: profile.carbs,
     protein: profile.protein,
     fat: profile.fat,
+    profileColor: profile.profile_color,
+    avatarUrl: profile.avatar_url,
   }));
 
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
@@ -137,6 +139,8 @@ export const RecipePreferencesPage = () => {
     carbs?: number;
     protein?: number;
     fat?: number;
+    profileColor?: string;
+    avatarUrl?: string;
   } | null>(null);
 
   // Handle returning from edit pages
@@ -233,7 +237,11 @@ export const RecipePreferencesPage = () => {
     return (completed / total) * 100;
   };
 
-  const getProfileColor = (index: number) => {
+  const getProfileColor = (profile: typeof healthProfiles[0], index: number) => {
+    // Use saved color if exists, otherwise assign one based on index
+    if (profile.profileColor) {
+      return profile.profileColor;
+    }
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
     return colors[index % colors.length];
   };
@@ -278,7 +286,9 @@ export const RecipePreferencesPage = () => {
       calories: profile.calories,
       carbs: profile.carbs,
       protein: profile.protein,
-      fat: profile.fat
+      fat: profile.fat,
+      profileColor: profile.profileColor,
+      avatarUrl: profile.avatarUrl
     });
     setCurrentSection('main');
     setProfileDrawerOpen(true);
@@ -466,10 +476,14 @@ export const RecipePreferencesPage = () => {
                                 />
                               </svg>
                               <div 
-                                className="absolute inset-[7px] rounded-full flex items-center justify-center text-sm font-medium"
-                                style={{ backgroundColor: getProfileColor(index), color: 'rgba(255, 255, 255, 0.8)' }}
+                                className="absolute inset-[7px] rounded-full flex items-center justify-center text-sm font-medium overflow-hidden"
+                                style={{ backgroundColor: getProfileColor(profile, index), color: 'rgba(255, 255, 255, 0.8)' }}
                               >
-                                {getInitials(profile.name)}
+                                {profile.avatarUrl ? (
+                                  <img src={profile.avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
+                                ) : (
+                                  getInitials(profile.name)
+                                )}
                               </div>
                             </div>
                             <div>

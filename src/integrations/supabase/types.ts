@@ -50,6 +50,7 @@ export type Database = {
         Row: {
           activity_level: string | null
           allergies: string[] | null
+          avatar_url: string | null
           birth_date: string | null
           calories: number | null
           carbs: number | null
@@ -60,6 +61,7 @@ export type Database = {
           height: string | null
           id: string
           name: string
+          profile_color: string | null
           protein: number | null
           sex: string | null
           updated_at: string
@@ -69,6 +71,7 @@ export type Database = {
         Insert: {
           activity_level?: string | null
           allergies?: string[] | null
+          avatar_url?: string | null
           birth_date?: string | null
           calories?: number | null
           carbs?: number | null
@@ -79,6 +82,7 @@ export type Database = {
           height?: string | null
           id?: string
           name: string
+          profile_color?: string | null
           protein?: number | null
           sex?: string | null
           updated_at?: string
@@ -88,6 +92,7 @@ export type Database = {
         Update: {
           activity_level?: string | null
           allergies?: string[] | null
+          avatar_url?: string | null
           birth_date?: string | null
           calories?: number | null
           carbs?: number | null
@@ -98,6 +103,7 @@ export type Database = {
           height?: string | null
           id?: string
           name?: string
+          profile_color?: string | null
           protein?: number | null
           sex?: string | null
           updated_at?: string

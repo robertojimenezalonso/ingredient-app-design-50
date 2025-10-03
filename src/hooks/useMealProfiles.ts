@@ -18,6 +18,8 @@ export type MealProfile = {
   carbs?: number;
   protein?: number;
   fat?: number;
+  profile_color?: string;
+  avatar_url?: string;
   created_at?: string;
   updated_at?: string;
 };
@@ -78,11 +80,16 @@ export const useMealProfiles = () => {
         return null;
       }
 
+      // Assign a color if not provided
+      const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
+      const profileColor = profileData.profile_color || colors[profiles.length % colors.length];
+
       const { data, error } = await supabase
         .from('meal_profiles')
         .insert([{
           user_id: user.id,
-          ...profileData
+          ...profileData,
+          profile_color: profileColor
         }])
         .select()
         .single();

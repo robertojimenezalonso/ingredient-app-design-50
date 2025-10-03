@@ -15,9 +15,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { X, ChevronLeft, ArrowUp, MoreVertical } from 'lucide-react';
+import { X, ChevronLeft, ArrowUp, MoreVertical, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 interface ProfileCreationDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -39,6 +41,9 @@ export const ProfileCreationDrawer = ({
   const [returnToOverview, setReturnToOverview] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showMenuDropdown, setShowMenuDropdown] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   // Set initial step based on editingProfile when drawer opens
   useEffect(() => {
@@ -1000,9 +1005,14 @@ export const ProfileCreationDrawer = ({
     }
     return (parts[0][0] + parts[1][0]).toUpperCase();
   };
-  const getProfileColor = (index: number) => {
+  const getProfileColor = () => {
+    // Use saved color from editingProfile if available
+    if (editingProfile?.profileColor) {
+      return editingProfile.profileColor;
+    }
+    // Otherwise assign based on index
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
-    return colors[index % colors.length];
+    return colors[profileIndex % colors.length];
   };
 
   const handleQuickEdit = (step: Step) => {
@@ -1066,11 +1076,15 @@ export const ProfileCreationDrawer = ({
                 <circle cx="24" cy="24" r="22" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
                 <circle cx="24" cy="24" r="22" stroke="#10B981" strokeWidth="2.5" fill="none" strokeDasharray={`${2 * Math.PI * 22}`} strokeDashoffset={`${2 * Math.PI * 22 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
               </svg>
-              <div className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium" style={{
-              backgroundColor: getProfileColor(profileIndex),
+              <div className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium overflow-hidden" style={{
+              backgroundColor: getProfileColor(),
               color: 'rgba(255, 255, 255, 0.8)'
             }}>
-                {getInitials(profileData.name)}
+                {editingProfile?.avatarUrl ? (
+                  <img src={editingProfile.avatarUrl} alt={profileData.name} className="w-full h-full object-cover" />
+                ) : (
+                  getInitials(profileData.name)
+                )}
               </div>
             </div>
             <div className="text-left">
@@ -1138,7 +1152,7 @@ export const ProfileCreationDrawer = ({
             
             {/* Overview menu */}
             {currentStep === 'overview' && (
-              <div>
+              <div className="relative">
                 {menuItems.map((item, index) => (
                   <div key={item.step}>
                     <button
@@ -1153,6 +1167,82 @@ export const ProfileCreationDrawer = ({
                     {index < menuItems.length - 1 && <Separator />}
                   </div>
                 ))}
+                
+                {/* Floating camera button for avatar upload */}
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingAvatar}
+                  className="fixed bottom-24 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 transition-all hover:scale-110 disabled:opacity-50"
+                  style={{ 
+                    backgroundColor: getProfileColor(),
+                    color: 'white'
+                  }}
+                >
+                  {uploadingAvatar ? (
+                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
+                  ) : (
+                    <Camera className="w-6 h-6" />
+                  )}
+                </button>
+                
+                {/* Hidden file input */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file || !editingProfile?.id) return;
+                    
+                    setUploadingAvatar(true);
+                    try {
+                      const fileExt = file.name.split('.').pop();
+                      const fileName = `${editingProfile.id}-${Date.now()}.${fileExt}`;
+                      const filePath = `${fileName}`;
+
+                      const { error: uploadError } = await supabase.storage
+                        .from('profile-avatars')
+                        .upload(filePath, file, { upsert: true });
+
+                      if (uploadError) throw uploadError;
+
+                      const { data: { publicUrl } } = supabase.storage
+                        .from('profile-avatars')
+                        .getPublicUrl(filePath);
+
+                      // Update profile with avatar URL
+                      const { error: updateError } = await supabase
+                        .from('meal_profiles')
+                        .update({ avatar_url: publicUrl })
+                        .eq('id', editingProfile.id);
+
+                      if (updateError) throw updateError;
+
+                      // Update local state
+                      if (editingProfile) {
+                        editingProfile.avatarUrl = publicUrl;
+                      }
+
+                      toast({
+                        title: 'Foto actualizada',
+                        description: 'La foto de perfil se guardó correctamente',
+                      });
+
+                      // Refresh the page to show new avatar
+                      window.location.reload();
+                    } catch (error) {
+                      console.error('Error uploading avatar:', error);
+                      toast({
+                        title: 'Error',
+                        description: 'No se pudo subir la foto de perfil',
+                        variant: 'destructive',
+                      });
+                    } finally {
+                      setUploadingAvatar(false);
+                    }
+                  }}
+                />
               </div>
             )}
             
