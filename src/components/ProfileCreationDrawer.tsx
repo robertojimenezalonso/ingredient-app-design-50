@@ -1856,7 +1856,7 @@ export const ProfileCreationDrawer = ({
                 onClose();
               }}
             >
-              Eliminar
+              Cancelar
             </AlertDialogAction>
             <AlertDialogCancel className="flex-1 m-0">No</AlertDialogCancel>
           </AlertDialogFooter>
