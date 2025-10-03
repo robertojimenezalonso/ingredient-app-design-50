@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      diner_profiles: {
+        Row: {
+          activity_level: string | null
+          allergies: string[] | null
+          birth_date: string | null
+          calories: number | null
+          carbs: number | null
+          created_at: string
+          diet: string | null
+          fat: number | null
+          health_goal: string | null
+          height: string | null
+          id: string
+          name: string
+          protein: number | null
+          sex: string | null
+          updated_at: string
+          user_id: string
+          weight: string | null
+        }
+        Insert: {
+          activity_level?: string | null
+          allergies?: string[] | null
+          birth_date?: string | null
+          calories?: number | null
+          carbs?: number | null
+          created_at?: string
+          diet?: string | null
+          fat?: number | null
+          health_goal?: string | null
+          height?: string | null
+          id?: string
+          name: string
+          protein?: number | null
+          sex?: string | null
+          updated_at?: string
+          user_id: string
+          weight?: string | null
+        }
+        Update: {
+          activity_level?: string | null
+          allergies?: string[] | null
+          birth_date?: string | null
+          calories?: number | null
+          carbs?: number | null
+          created_at?: string
+          diet?: string | null
+          fat?: number | null
+          health_goal?: string | null
+          height?: string | null
+          id?: string
+          name?: string
+          protein?: number | null
+          sex?: string | null
+          updated_at?: string
+          user_id?: string
+          weight?: string | null
+        }
+        Relationships: []
+      }
       list_recipes: {
         Row: {
           created_at: string

@@ -9,6 +9,7 @@ import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ProfileCreationDrawer } from '@/components/ProfileCreationDrawer';
+import { useDinerProfiles, type DinerProfile } from '@/hooks/useDinerProfiles';
 
 type MealSelection = {
   date: Date;
@@ -79,23 +80,28 @@ export const RecipePreferencesPage = () => {
   
   const fullText = "";
   
-  const [healthProfiles, setHealthProfiles] = useState<Array<{ 
-    id: number; 
-    name: string; 
-    diet?: string;
-    allergies?: string;
-    healthGoal?: string;
-    birthDate?: string;
-    weight?: string;
-    height?: string;
-    sex?: string;
-    activityLevel?: string;
-    calories?: number;
-    carbs?: number;
-    protein?: number;
-    fat?: number;
-  }>>([]);
-  const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+  // Use Supabase hook for diner profiles
+  const { profiles: supabaseProfiles, loading: profilesLoading, createProfile, updateProfile, deleteProfile } = useDinerProfiles();
+  
+  // Transform Supabase profiles to local format
+  const healthProfiles = supabaseProfiles.map(profile => ({
+    id: profile.id,
+    name: profile.name,
+    diet: profile.diet,
+    allergies: profile.allergies?.join(', '),
+    healthGoal: profile.health_goal,
+    birthDate: profile.birth_date,
+    weight: profile.weight,
+    height: profile.height,
+    sex: profile.sex,
+    activityLevel: profile.activity_level,
+    calories: profile.calories,
+    carbs: profile.carbs,
+    protein: profile.protein,
+    fat: profile.fat,
+  }));
+
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [dietDrawerOpen, setDietDrawerOpen] = useState(false);
   const [allergiesDrawerOpen, setAllergiesDrawerOpen] = useState(false);
   const [goalDrawerOpen, setGoalDrawerOpen] = useState(false);
@@ -103,7 +109,7 @@ export const RecipePreferencesPage = () => {
   const [currentSection, setCurrentSection] = useState<'main' | 'personal-data' | 'macros' | 'calories' | 'nutrition'>('main');
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editingProfile, setEditingProfile] = useState<{
-    id?: number;
+    id?: string;
     name: string;
     diet?: string;
     allergies?: string;
@@ -226,7 +232,6 @@ export const RecipePreferencesPage = () => {
 
   const handleAddProfile = () => {
     setEditingProfile({
-      id: Date.now(),
       name: '',
       diet: undefined,
       allergies: undefined,
@@ -265,32 +270,38 @@ export const RecipePreferencesPage = () => {
     setProfileDrawerOpen(true);
   };
 
-  const handleSaveProfile = (profileData: any) => {
-    const newProfile = {
-      id: editingProfile?.id || Date.now(),
+  const handleSaveProfile = async (profileData: any) => {
+    // Convert allergies array to proper format
+    const allergiesArray = Array.isArray(profileData.allergies) 
+      ? profileData.allergies 
+      : (profileData.allergies ? [profileData.allergies] : []);
+
+    const profileToSave = {
       name: profileData.name,
-      diet: profileData.diet,
-      allergies: profileData.allergies,
-      healthGoal: profileData.goal,
-      birthDate: profileData.birthDate,
-      weight: `${profileData.weight} ${profileData.weightUnit}`,
-      height: `${profileData.height} ${profileData.heightUnit}`,
-      sex: profileData.sex,
-      activityLevel: profileData.activityLevel,
-      calories: profileData.calories,
-      carbs: profileData.carbs,
-      protein: profileData.protein,
-      fat: profileData.fat
+      diet: profileData.diet || undefined,
+      allergies: allergiesArray,
+      health_goal: profileData.goal || undefined,
+      birth_date: profileData.birthDate || undefined,
+      weight: profileData.weight && profileData.weightUnit 
+        ? `${profileData.weight} ${profileData.weightUnit}` 
+        : undefined,
+      height: profileData.height && profileData.heightUnit 
+        ? `${profileData.height} ${profileData.heightUnit}` 
+        : undefined,
+      sex: profileData.sex || undefined,
+      activity_level: profileData.activityLevel || undefined,
+      calories: profileData.calories || undefined,
+      carbs: profileData.carbs || undefined,
+      protein: profileData.protein || undefined,
+      fat: profileData.fat || undefined,
     };
 
-    const existingIndex = healthProfiles.findIndex(p => p.id === newProfile.id);
-    
-    if (existingIndex >= 0) {
-      setHealthProfiles(profiles =>
-        profiles.map(p => p.id === newProfile.id ? newProfile : p)
-      );
+    if (editingProfile?.id) {
+      // Update existing profile
+      await updateProfile(editingProfile.id, profileToSave);
     } else {
-      setHealthProfiles([...healthProfiles, newProfile]);
+      // Create new profile
+      await createProfile(profileToSave);
     }
     
     setProfileDrawerOpen(false);
@@ -307,12 +318,12 @@ export const RecipePreferencesPage = () => {
     setCurrentSection('main');
   };
 
-  const handleDeleteProfile = (profileId: number) => {
-    setHealthProfiles(profiles => profiles.filter(p => p.id !== profileId));
+  const handleDeleteProfile = async (profileId: string) => {
+    await deleteProfile(profileId);
     setOpenMenuId(null);
   };
 
-  const toggleMenu = (profileId: number) => {
+  const toggleMenu = (profileId: string) => {
     setOpenMenuId(openMenuId === profileId ? null : profileId);
   };
 
