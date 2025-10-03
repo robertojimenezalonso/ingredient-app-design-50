@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-export type DinerProfile = {
+export type MealProfile = {
   id: string;
   user_id: string;
   name: string;
@@ -22,8 +22,8 @@ export type DinerProfile = {
   updated_at?: string;
 };
 
-export const useDinerProfiles = () => {
-  const [profiles, setProfiles] = useState<DinerProfile[]>([]);
+export const useMealProfiles = () => {
+  const [profiles, setProfiles] = useState<MealProfile[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
@@ -40,13 +40,13 @@ export const useDinerProfiles = () => {
       }
 
       const { data, error } = await supabase
-        .from('diner_profiles')
+        .from('meal_profiles')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: true });
 
       if (error) {
-        console.error('Error fetching diner profiles:', error);
+        console.error('Error fetching meal profiles:', error);
         toast({
           title: 'Error',
           description: 'No se pudieron cargar los perfiles de comensales',
@@ -65,7 +65,7 @@ export const useDinerProfiles = () => {
   };
 
   // Create a new profile
-  const createProfile = async (profileData: Omit<DinerProfile, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+  const createProfile = async (profileData: Omit<MealProfile, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
@@ -79,7 +79,7 @@ export const useDinerProfiles = () => {
       }
 
       const { data, error } = await supabase
-        .from('diner_profiles')
+        .from('meal_profiles')
         .insert([{
           user_id: user.id,
           ...profileData
@@ -88,7 +88,7 @@ export const useDinerProfiles = () => {
         .single();
 
       if (error) {
-        console.error('Error creating diner profile:', error);
+        console.error('Error creating meal profile:', error);
         toast({
           title: 'Error',
           description: 'No se pudo crear el perfil de comensal',
@@ -111,15 +111,15 @@ export const useDinerProfiles = () => {
   };
 
   // Update an existing profile
-  const updateProfile = async (id: string, profileData: Partial<DinerProfile>) => {
+  const updateProfile = async (id: string, profileData: Partial<MealProfile>) => {
     try {
       const { error } = await supabase
-        .from('diner_profiles')
+        .from('meal_profiles')
         .update(profileData)
         .eq('id', id);
 
       if (error) {
-        console.error('Error updating diner profile:', error);
+        console.error('Error updating meal profile:', error);
         toast({
           title: 'Error',
           description: 'No se pudo actualizar el perfil de comensal',
@@ -145,12 +145,12 @@ export const useDinerProfiles = () => {
   const deleteProfile = async (id: string) => {
     try {
       const { error } = await supabase
-        .from('diner_profiles')
+        .from('meal_profiles')
         .delete()
         .eq('id', id);
 
       if (error) {
-        console.error('Error deleting diner profile:', error);
+        console.error('Error deleting meal profile:', error);
         toast({
           title: 'Error',
           description: 'No se pudo eliminar el perfil de comensal',

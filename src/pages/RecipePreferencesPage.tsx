@@ -9,7 +9,7 @@ import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ProfileCreationDrawer } from '@/components/ProfileCreationDrawer';
-import { useDinerProfiles, type DinerProfile } from '@/hooks/useDinerProfiles';
+import { useMealProfiles, type MealProfile } from '@/hooks/useMealProfiles';
 
 type MealSelection = {
   date: Date;
@@ -80,8 +80,8 @@ export const RecipePreferencesPage = () => {
   
   const fullText = "";
   
-  // Use Supabase hook for diner profiles
-  const { profiles: supabaseProfiles, loading: profilesLoading, createProfile, updateProfile, deleteProfile } = useDinerProfiles();
+  // Use Supabase hook for meal profiles
+  const { profiles: supabaseProfiles, loading: profilesLoading, createProfile, updateProfile, deleteProfile } = useMealProfiles();
   
   // Transform Supabase profiles to local format
   const healthProfiles = supabaseProfiles.map(profile => ({

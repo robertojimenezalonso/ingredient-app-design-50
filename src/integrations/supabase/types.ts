@@ -14,7 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
-      diner_profiles: {
+      list_recipes: {
+        Row: {
+          created_at: string
+          id: string
+          list_id: string
+          position: number
+          recipe_data: Json
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          list_id: string
+          position?: number
+          recipe_data: Json
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          list_id?: string
+          position?: number
+          recipe_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "list_recipes_list_id_fkey"
+            columns: ["list_id"]
+            isOneToOne: false
+            referencedRelation: "shopping_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      meal_profiles: {
         Row: {
           activity_level: string | null
           allergies: string[] | null
@@ -73,38 +105,6 @@ export type Database = {
           weight?: string | null
         }
         Relationships: []
-      }
-      list_recipes: {
-        Row: {
-          created_at: string
-          id: string
-          list_id: string
-          position: number
-          recipe_data: Json
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          list_id: string
-          position?: number
-          recipe_data: Json
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          list_id?: string
-          position?: number
-          recipe_data?: Json
-        }
-        Relationships: [
-          {
-            foreignKeyName: "list_recipes_list_id_fkey"
-            columns: ["list_id"]
-            isOneToOne: false
-            referencedRelation: "shopping_lists"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       profiles: {
         Row: {
