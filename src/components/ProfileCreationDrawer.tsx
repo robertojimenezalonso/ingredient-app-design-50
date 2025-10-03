@@ -1186,14 +1186,16 @@ export const ProfileCreationDrawer = ({
             className="flex items-center gap-3 flex-1 hover:bg-accent/50 rounded-lg p-1 -m-1 transition-colors"
           >
             <div className="relative flex-shrink-0 w-16 h-16">
-              <svg className="absolute inset-0 w-16 h-16" style={{
-              transform: 'rotate(-90deg)'
-            }}>
-                <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="3" fill="none" />
-                <circle cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="3" fill="none" strokeDasharray={`${2 * Math.PI * 30}`} strokeDashoffset={`${2 * Math.PI * 30 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
-              </svg>
+              {getCompletionPercentage() < 100 && (
+                <svg className="absolute inset-0 w-16 h-16" style={{
+                  transform: 'rotate(-90deg)'
+                }}>
+                  <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="3" fill="none" />
+                  <circle cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="3" fill="none" strokeDasharray={`${2 * Math.PI * 30}`} strokeDashoffset={`${2 * Math.PI * 30 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
+                </svg>
+              )}
               <div 
-                className="absolute inset-[5px] rounded-full flex items-center justify-center text-base font-medium overflow-hidden cursor-pointer"
+                className="absolute inset-[5px] rounded-full flex items-center justify-center text-base font-medium overflow-hidden cursor-pointer" 
                 style={{
                   backgroundColor: getProfileColor(),
                   color: 'rgba(255, 255, 255, 0.8)'
@@ -1231,9 +1233,11 @@ export const ProfileCreationDrawer = ({
               <p className="text-lg font-medium">
                 {profileData.name || getDefaultName()}
               </p>
-              <p className="text-xs text-muted-foreground">
-                {getCompletionPercentage()}% completado
-              </p>
+              {getCompletionPercentage() < 100 && (
+                <p className="text-xs text-muted-foreground">
+                  {getCompletionPercentage()}% completado
+                </p>
+              )}
             </div>
           </button>
           <div className="flex items-center gap-2">
