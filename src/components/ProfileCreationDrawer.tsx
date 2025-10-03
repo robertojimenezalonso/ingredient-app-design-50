@@ -1117,9 +1117,11 @@ export const ProfileCreationDrawer = ({
               </div>
             )}
             <button onClick={() => {
-              if (getCompletionPercentage() === 100) {
+              // If profile has been saved to database (has an ID), just close
+              if (editingProfile?.id) {
                 onClose();
               } else {
+                // If it's a new profile not saved yet, show confirmation dialog
                 setShowCancelDialog(true);
               }
             }} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
