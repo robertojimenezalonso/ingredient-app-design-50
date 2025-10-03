@@ -470,10 +470,10 @@ export const RecipePreferencesPage = () => {
                         onClick={handleAddProfile}
                         className="flex items-center gap-2"
                       >
-                        <div className="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center">
-                          <Plus className="h-5 w-5 text-gray-600" />
-                        </div>
                         <span className="text-base font-medium text-gray-700">Añadir</span>
+                        <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">
+                          <Plus className="h-4 w-4 text-white" />
+                        </div>
                       </button>
                     </div>
                     
