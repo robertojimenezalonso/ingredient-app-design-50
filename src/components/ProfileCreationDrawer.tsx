@@ -1610,23 +1610,27 @@ export const ProfileCreationDrawer = ({
                               });
                             }}
                             className={cn(
-                              "overflow-hidden rounded-xl transition-all",
-                              isSelected
-                                ? "ring-4 ring-primary"
-                                : "hover:ring-2 hover:ring-primary/50"
+                              "overflow-hidden rounded-xl transition-all relative"
                             )}
                             style={{
                               opacity: 0,
                               transform: 'translateY(10px)',
                               animation: `fadeInUp 0.4s ease-out ${index * 0.08}s forwards`,
+                              border: isSelected ? '1px solid #020817' : 'none'
                             }}
                           >
-                            <div className="w-full aspect-square">
+                            <div className="w-full aspect-square relative">
                               <img 
                                 src={gusto.image} 
                                 alt={gusto.label}
                                 className="w-full h-full object-cover"
                               />
+                              {isSelected && (
+                                <div 
+                                  className="absolute inset-0" 
+                                  style={{ backgroundColor: 'rgba(217, 218, 220, 0.3)' }}
+                                />
+                              )}
                             </div>
                           </button>
                         );
