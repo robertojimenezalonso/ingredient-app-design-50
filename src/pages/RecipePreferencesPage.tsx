@@ -461,16 +461,16 @@ export const RecipePreferencesPage = () => {
                   
                   {/* Contador de comensales y botón añadir */}
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-base text-[#1C1C1C]">
+                    <h2 className="text-lg font-semibold text-[#1C1C1C]">
                       {healthProfiles.length === 0 ? 'Sin comensales' : `${healthProfiles.length} ${healthProfiles.length === 1 ? 'comensal' : 'comensales'}`}
-                    </span>
+                    </h2>
                     <Button
                       variant="default"
                       onClick={handleAddProfile}
                       className="bg-[#1C1C1C] text-white hover:bg-[#000000] w-auto"
                     >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Añadir comensal
+                      <Plus className="h-5 w-5 mr-2" />
+                      Añadir
                     </Button>
                   </div>
                   
