@@ -165,10 +165,20 @@ export const ProfileCreationDrawer = ({
   // Update profileData when editingProfile changes
   useEffect(() => {
     if (isOpen && editingProfile) {
+      // Handle allergies: convert to array if it's a string
+      let allergiesArray: string[] = [];
+      if (editingProfile.allergies) {
+        if (Array.isArray(editingProfile.allergies)) {
+          allergiesArray = editingProfile.allergies;
+        } else if (typeof editingProfile.allergies === 'string') {
+          allergiesArray = editingProfile.allergies.split(',').map(a => a.trim()).filter(a => a.length > 0);
+        }
+      }
+      
       setProfileData({
         name: editingProfile.name || '',
         diet: editingProfile.diet || '',
-        allergies: editingProfile.allergies || [],
+        allergies: allergiesArray,
         goal: editingProfile.goal || '',
         weight: parseWeight(editingProfile.weight).value,
         weightUnit: parseWeight(editingProfile.weight).unit,
@@ -2019,7 +2029,7 @@ export const ProfileCreationDrawer = ({
                       {profileData.diet}
                     </Badge>
                   )}
-                  {currentStep === 'allergies' && profileData.allergies.map((allergy: string) => (
+                  {currentStep === 'allergies' && Array.isArray(profileData.allergies) && profileData.allergies.map((allergy: string) => (
                     <Badge key={allergy} variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
