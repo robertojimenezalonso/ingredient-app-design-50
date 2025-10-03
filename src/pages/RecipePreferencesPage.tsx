@@ -467,7 +467,7 @@ export const RecipePreferencesPage = () => {
                     <Button
                       variant="default"
                       onClick={handleAddProfile}
-                      className="bg-[#1C1C1C] text-white w-auto"
+                      className="bg-[#1C1C1C] text-white w-auto h-[46px]"
                     >
                       <Plus className="h-5 w-5 mr-2" />
                       Añadir
@@ -479,7 +479,7 @@ export const RecipePreferencesPage = () => {
                     {healthProfiles.map((profile, index) => (
                       <div 
                         key={profile.id} 
-                        className="inline-flex items-center gap-2 px-3 py-2 cursor-pointer"
+                        className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px]"
                         style={{ 
                           backgroundColor: getProfileColor(profile, index),
                           borderRadius: '8px'
