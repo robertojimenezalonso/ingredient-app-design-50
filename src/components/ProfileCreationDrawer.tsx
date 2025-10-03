@@ -1234,7 +1234,9 @@ export const ProfileCreationDrawer = ({
                 <p className="text-lg font-medium">
                   {profileData.name || getDefaultName()}
                 </p>
-                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                {currentStep !== 'overview' && (
+                  <ChevronRight className="w-5 h-5 text-muted-foreground" />
+                )}
               </div>
               {getCompletionPercentage() < 100 && (
                 <p className="text-xs text-muted-foreground">
