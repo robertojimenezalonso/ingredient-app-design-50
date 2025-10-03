@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { X, ChevronLeft, ArrowUp, MoreVertical, Camera } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ArrowUp, MoreVertical, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
 import { supabase } from '@/integrations/supabase/client';
@@ -1229,10 +1229,13 @@ export const ProfileCreationDrawer = ({
                 )}
               </div>
             </div>
-            <div className="text-left">
-              <p className="text-lg font-medium">
-                {profileData.name || getDefaultName()}
-              </p>
+            <div className="text-left flex-1">
+              <div className="flex items-center gap-2">
+                <p className="text-lg font-medium">
+                  {profileData.name || getDefaultName()}
+                </p>
+                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              </div>
               {getCompletionPercentage() < 100 && (
                 <p className="text-xs text-muted-foreground">
                   {getCompletionPercentage()}% completado
