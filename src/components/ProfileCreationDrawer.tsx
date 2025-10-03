@@ -1587,7 +1587,6 @@ export const ProfileCreationDrawer = ({
                         { id: 'desayunos', label: 'Desayunos', image: '/food-types/desayunos.jpg' },
                         { id: 'arroces', label: 'Arroces', image: '/food-types/arroces.jpg' },
                         { id: 'pasta', label: 'Pasta', image: '/food-types/pasta.jpg' },
-                        { id: 'tostadas', label: 'Tostadas', image: '/food-types/tostadas.jpg' },
                         { id: 'ensaladas', label: 'Ensaladas', image: '/food-types/ensaladas.jpg' },
                         { id: 'vegetales', label: 'Vegetales', image: '/food-types/vegetales.jpg' },
                         { id: 'bowls', label: 'Bowls', image: '/food-types/bowls.jpg' },
