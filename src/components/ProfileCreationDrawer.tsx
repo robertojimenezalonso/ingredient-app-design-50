@@ -1297,7 +1297,7 @@ export const ProfileCreationDrawer = ({
                 </svg>
               )}
               <div 
-                className="absolute inset-[5px] rounded-full flex items-center justify-center text-xl font-semibold overflow-hidden cursor-pointer" 
+                className="absolute inset-[5px] rounded-full flex items-center justify-center text-lg font-medium overflow-hidden cursor-pointer" 
                 style={{
                   backgroundColor: getProfileColor(),
                   color: '#FFFFFF'
@@ -1313,7 +1313,7 @@ export const ProfileCreationDrawer = ({
                   <div className="relative w-full h-full flex items-center justify-center">
                     <div 
                       className={cn(
-                        "absolute inset-0 flex items-center justify-center transition-all duration-500 text-xl font-semibold",
+                        "absolute inset-0 flex items-center justify-center transition-all duration-500 text-lg font-medium",
                         showAvatarIcon ? "translate-x-[-100%] opacity-0" : "translate-x-0 opacity-100"
                       )}
                       style={{ color: '#FFFFFF' }}
@@ -2232,7 +2232,7 @@ export const ProfileCreationDrawer = ({
                   msOverflowStyle: 'none'
                 }}>
                   {currentStep === 'name' && (
-                    <Badge variant="secondary" className="font-normal py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="text-xs font-normal py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2241,7 +2241,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   )}
                   {currentStep === 'diet' && (
-                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2250,7 +2250,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   )}
                   {currentStep === 'allergies' && Array.isArray(profileData.allergies) && profileData.allergies.map((allergy: string) => (
-                    <Badge key={allergy} variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge key={allergy} variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2259,7 +2259,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   ))}
                   {currentStep === 'gustos' && Array.isArray(profileData.gustos) && profileData.gustos.map((gusto: string) => (
-                    <Badge key={gusto} variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge key={gusto} variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2268,7 +2268,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   ))}
                   {currentStep === 'goal' && (
-                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2277,7 +2277,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   )}
                   {currentStep === 'weight' && (
-                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2286,7 +2286,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   )}
                   {currentStep === 'height' && (
-                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2295,7 +2295,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   )}
                   {currentStep === 'birthdate' && (
-                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2304,7 +2304,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   )}
                   {currentStep === 'sex' && (
-                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
@@ -2313,7 +2313,7 @@ export const ProfileCreationDrawer = ({
                     </Badge>
                   )}
                   {currentStep === 'activityLevel' && (
-                    <Badge variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                    <Badge variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
