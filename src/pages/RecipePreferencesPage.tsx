@@ -459,47 +459,28 @@ export const RecipePreferencesPage = () => {
                     )}
                   </div>
                   
-                  {/* Health Profiles */}
-                  {healthProfiles.map((profile, index) => (
-                    <Card key={profile.id} className="mb-4 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => handleEditProfile(profile)}>
-                      <CardContent className="p-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="relative flex-shrink-0 w-14 h-14">
-                              <svg className="absolute inset-0 w-14 h-14" style={{ transform: 'rotate(-90deg)' }}>
-                                <circle cx="28" cy="28" r="26" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
-                                <circle
-                                  cx="28" cy="28" r="26" stroke="#10B981" strokeWidth="2.5" fill="none"
-                                  strokeDasharray={`${2 * Math.PI * 26}`}
-                                  strokeDashoffset={`${2 * Math.PI * 26 * (1 - getProfileCompletion(profile) / 100)}`}
-                                  strokeLinecap="round" className="transition-all duration-300"
-                                />
-                              </svg>
-                              <div 
-                                className="absolute inset-[7px] rounded-full flex items-center justify-center text-sm font-medium overflow-hidden"
-                                style={{ backgroundColor: getProfileColor(profile, index), color: 'rgba(255, 255, 255, 0.8)' }}
-                              >
-                                {profile.avatarUrl ? (
-                                  <img src={profile.avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
-                                ) : (
-                                  getInitials(profile.name)
-                                )}
-                              </div>
-                            </div>
-                            <div>
-                              <h3 className="text-lg font-semibold text-[#1C1C1C]">{profile.name}</h3>
-                              <p className="text-xs text-[#898885]">
-                                {getProfileCompletion(profile) === 100 
-                                  ? `Objetivo: ${profile.healthGoal || 'No especificado'}`
-                                  : `${Math.round(getProfileCompletion(profile))}% perfil completado`
-                                }
-                              </p>
-                            </div>
-                          </div>
+                  {/* Health Profiles - Compact Tags */}
+                  <div className="flex flex-wrap gap-3 mb-4">
+                    {healthProfiles.map((profile, index) => (
+                      <div 
+                        key={profile.id} 
+                        className="inline-flex items-center gap-2 px-3 py-2 bg-white border border-[#E5E5E5] rounded-full cursor-pointer hover:bg-[#F9F8F2] transition-colors"
+                        onClick={() => handleEditProfile(profile)}
+                      >
+                        <div 
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium overflow-hidden flex-shrink-0"
+                          style={{ backgroundColor: getProfileColor(profile, index), color: 'rgba(255, 255, 255, 0.8)' }}
+                        >
+                          {profile.avatarUrl ? (
+                            <img src={profile.avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
+                          ) : (
+                            getInitials(profile.name)
+                          )}
+                        </div>
+                        <span className="text-sm font-medium text-[#1C1C1C]">{profile.name}</span>
                       </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                    ))}
+                  </div>
                   
                   <Button
                     variant="default"
