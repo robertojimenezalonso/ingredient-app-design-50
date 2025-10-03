@@ -11,6 +11,8 @@ import { es } from 'date-fns/locale';
 import { ProfileCreationDrawer } from '@/components/ProfileCreationDrawer';
 import { useMealProfiles } from '@/hooks/useMealProfiles';
 import type { MealProfile } from '@/hooks/useMealProfiles';
+import { useAuth } from '@/hooks/useAuth';
+import { AuthModal } from '@/components/AuthModal';
 
 type MealSelection = {
   date: Date;
@@ -81,8 +83,19 @@ export const RecipePreferencesPage = () => {
   
   const fullText = "";
   
+  // Auth state
+  const { user, loading: authLoading } = useAuth();
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  
   // Use Supabase hook for meal profiles
   const { profiles: supabaseProfiles, loading: profilesLoading, createProfile, updateProfile, deleteProfile } = useMealProfiles();
+  
+  // Show auth modal if not authenticated after loading
+  useEffect(() => {
+    if (!authLoading && !user) {
+      setAuthModalOpen(true);
+    }
+  }, [authLoading, user]);
   
   // Transform Supabase profiles to local format
   const healthProfiles = supabaseProfiles.map(profile => ({
@@ -561,6 +574,9 @@ export const RecipePreferencesPage = () => {
         profileIndex={healthProfiles.length}
         onDelete={editingProfile?.id ? () => handleDeleteProfile(editingProfile.id) : undefined}
       />
+
+      {/* Auth Modal */}
+      <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
     </div>
   );
 };
