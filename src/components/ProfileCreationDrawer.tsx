@@ -902,6 +902,12 @@ export const ProfileCreationDrawer = ({
   const handleContinue = () => {
     const isProfileComplete = getCompletionPercentage() === 100;
     
+    console.log('=== HandleContinue Debug ===');
+    console.log('Current step:', currentStep);
+    console.log('Is profile complete:', isProfileComplete);
+    console.log('Has editingProfile.id:', !!editingProfile?.id);
+    console.log('Profile data:', profileData);
+    
     // Save current step data to database before continuing if editing an existing profile
     if (editingProfile?.id && canContinue()) {
       const stepDataToSave: any = {};
@@ -979,10 +985,12 @@ export const ProfileCreationDrawer = ({
 
     // If profile is NOT complete, find first incomplete step from the beginning
     if (!isProfileComplete) {
+      console.log('Profile not complete, checking steps...');
       const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
       
       // Check if current step can continue (is valid)
       if (!canContinue()) {
+        console.log('Cannot continue from current step');
         return;
       }
       
@@ -1016,7 +1024,10 @@ export const ProfileCreationDrawer = ({
           }
         })();
         
+        console.log(`Step ${step} complete:`, isStepComplete);
+        
         if (!isStepComplete) {
+          console.log('Going to incomplete step:', step);
           setCurrentStep(step);
           setReturnToOverview(false);
           return;
@@ -1024,6 +1035,7 @@ export const ProfileCreationDrawer = ({
       }
       
       // All steps complete, go to loading
+      console.log('All steps complete! Going to loading screen');
       setCurrentStep('loading');
       setReturnToOverview(false);
       return;
