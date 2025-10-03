@@ -1146,7 +1146,7 @@ export const ProfileCreationDrawer = ({
             </div>
           </button>
           <div className="flex items-center gap-2">
-            {onDelete && (
+            {onDelete && currentStep === 'overview' && (
               <div className="relative">
                 <button
                   onClick={(e) => {
