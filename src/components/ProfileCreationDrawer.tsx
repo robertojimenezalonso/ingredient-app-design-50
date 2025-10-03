@@ -42,6 +42,7 @@ export const ProfileCreationDrawer = ({
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showMenuDropdown, setShowMenuDropdown] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [showAvatarIcon, setShowAvatarIcon] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -787,6 +788,20 @@ export const ProfileCreationDrawer = ({
     return () => clearInterval(interval);
   }, [isOpen, currentStep]);
 
+  // Avatar icon animation - alternate between initials and camera icon every 3 seconds
+  useEffect(() => {
+    if (!isOpen) {
+      setShowAvatarIcon(false);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setShowAvatarIcon(prev => !prev);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [isOpen]);
+
   // Show keyboard immediately when drawer opens for name step
   useEffect(() => {
     if (!isOpen) return;
@@ -1075,7 +1090,7 @@ export const ProfileCreationDrawer = ({
     }}>
         {/* Header with profile info */}
         <CardHeader className="flex flex-row items-center justify-between p-4 border-b flex-shrink-0">
-          <button 
+          <button
             onClick={() => setCurrentStep('overview')}
             className="flex items-center gap-3 flex-1 hover:bg-accent/50 rounded-lg p-1 -m-1 transition-colors"
           >
@@ -1086,14 +1101,38 @@ export const ProfileCreationDrawer = ({
                 <circle cx="24" cy="24" r="22" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
                 <circle cx="24" cy="24" r="22" stroke="#10B981" strokeWidth="2.5" fill="none" strokeDasharray={`${2 * Math.PI * 22}`} strokeDashoffset={`${2 * Math.PI * 22 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
               </svg>
-              <div className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium overflow-hidden" style={{
-              backgroundColor: getProfileColor(),
-              color: 'rgba(255, 255, 255, 0.8)'
-            }}>
+              <div 
+                className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium overflow-hidden cursor-pointer" 
+                style={{
+                  backgroundColor: getProfileColor(),
+                  color: 'rgba(255, 255, 255, 0.8)'
+                }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  fileInputRef.current?.click();
+                }}
+              >
                 {editingProfile?.avatarUrl ? (
                   <img src={editingProfile.avatarUrl} alt={profileData.name} className="w-full h-full object-cover" />
                 ) : (
-                  getInitials(profileData.name)
+                  <div className="relative w-full h-full flex items-center justify-center">
+                    <div 
+                      className={cn(
+                        "absolute inset-0 flex items-center justify-center transition-all duration-500",
+                        showAvatarIcon ? "translate-x-[-100%] opacity-0" : "translate-x-0 opacity-100"
+                      )}
+                    >
+                      {getInitials(profileData.name)}
+                    </div>
+                    <div 
+                      className={cn(
+                        "absolute inset-0 flex items-center justify-center transition-all duration-500",
+                        showAvatarIcon ? "translate-x-0 opacity-100" : "translate-x-[100%] opacity-0"
+                      )}
+                    >
+                      <Camera className="w-4 h-4" style={{ color: 'rgba(255, 255, 255, 0.8)' }} />
+                    </div>
+                  </div>
                 )}
               </div>
             </div>
@@ -1177,23 +1216,6 @@ export const ProfileCreationDrawer = ({
                     {index < menuItems.length - 1 && <Separator />}
                   </div>
                 ))}
-                
-                {/* Floating camera button for avatar upload */}
-                <button
-                  onClick={() => fileInputRef.current?.click()}
-                  disabled={uploadingAvatar}
-                  className="fixed bottom-24 right-6 w-14 h-14 rounded-full flex items-center justify-center shadow-lg z-50 transition-all hover:scale-110 disabled:opacity-50"
-                  style={{ 
-                    backgroundColor: getProfileColor(),
-                    color: 'white'
-                  }}
-                >
-                  {uploadingAvatar ? (
-                    <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
-                  ) : (
-                    <Camera className="w-6 h-6" />
-                  )}
-                </button>
                 
                 {/* Hidden file input */}
                 <input
