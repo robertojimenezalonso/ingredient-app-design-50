@@ -505,6 +505,31 @@ export const RecipePreferencesPage = () => {
                         </div>
                       ))}
                     </div>
+                    
+                    {/* Macros y calorías section - Disabled until profiles are filled */}
+                    <div 
+                      className={`rounded-xl p-4 ${
+                        healthProfiles.length === 0 || !healthProfiles.every(p => 
+                          p.name && p.birthDate && p.weight && p.height && p.sex && p.activityLevel
+                        ) 
+                          ? 'opacity-40 pointer-events-none' 
+                          : 'cursor-pointer'
+                      }`}
+                      style={{ backgroundColor: '#F9F8F2' }}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-[#1C1C1C]/10 flex items-center justify-center">
+                            <Flame className="h-5 w-5 text-[#1C1C1C]" />
+                          </div>
+                          <div>
+                            <h3 className="text-base font-semibold text-[#1C1C1C]">Macros y calorías</h3>
+                            <p className="text-sm text-[#666666]">Completa los perfiles primero</p>
+                          </div>
+                        </div>
+                        <ChevronRight className="h-5 w-5 text-[#666666]" />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
