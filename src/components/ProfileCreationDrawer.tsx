@@ -1600,18 +1600,16 @@ export const ProfileCreationDrawer = ({
                 {gustosShowOptions && <div className="mb-6">
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { id: 'carnes', label: 'Carnes', emoji: '🥩' },
-                        { id: 'pescado', label: 'Pescado', emoji: '🐟' },
-                        { id: 'vegetales', label: 'Vegetales', emoji: '🥗' },
-                        { id: 'frutas', label: 'Frutas', emoji: '🍎' },
-                        { id: 'lacteos', label: 'Lácteos', emoji: '🧀' },
-                        { id: 'granos', label: 'Granos', emoji: '🌾' },
-                        { id: 'legumbres', label: 'Legumbres', emoji: '🫘' },
-                        { id: 'frutos_secos', label: 'Frutos secos', emoji: '🥜' },
-                        { id: 'comida_rapida', label: 'Comida rápida', emoji: '🍔' },
-                        { id: 'postres', label: 'Postres', emoji: '🍰' },
-                        { id: 'pasta', label: 'Pasta', emoji: '🍝' },
-                        { id: 'arroz', label: 'Arroz', emoji: '🍚' },
+                        { id: 'desayunos', label: 'Desayunos', image: '/food-types/desayunos.jpg' },
+                        { id: 'arroces', label: 'Arroces', image: '/food-types/arroces.jpg' },
+                        { id: 'pasta', label: 'Pasta', image: '/food-types/pasta.jpg' },
+                        { id: 'tostadas', label: 'Tostadas', image: '/food-types/tostadas.jpg' },
+                        { id: 'ensaladas', label: 'Ensaladas', image: '/food-types/ensaladas.jpg' },
+                        { id: 'vegetales', label: 'Vegetales', image: '/food-types/vegetales.jpg' },
+                        { id: 'bowls', label: 'Bowls', image: '/food-types/bowls.jpg' },
+                        { id: 'pescado', label: 'Pescado', image: '/food-types/pescado.jpg' },
+                        { id: 'vegetariano', label: 'Vegetariano', image: '/food-types/vegetariano.jpg' },
+                        { id: 'huevos', label: 'Huevos', image: '/food-types/huevos.jpg' },
                       ].map((gusto, index) => {
                         const isSelected = profileData.gustos.includes(gusto.id);
                         return (
@@ -1639,7 +1637,13 @@ export const ProfileCreationDrawer = ({
                               animation: `fadeInUp 0.4s ease-out ${index * 0.08}s forwards`,
                             }}
                           >
-                            <span className="text-3xl mb-1">{gusto.emoji}</span>
+                            <div className="w-full aspect-square rounded-lg overflow-hidden mb-2">
+                              <img 
+                                src={gusto.image} 
+                                alt={gusto.label}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
                             <span className="text-xs text-center font-medium leading-tight">{gusto.label}</span>
                           </button>
                         );
