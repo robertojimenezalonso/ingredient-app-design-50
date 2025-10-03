@@ -2216,7 +2216,7 @@ export const ProfileCreationDrawer = ({
                     color: '#ffffff'
                   }}
                 >
-                  Crear perfil
+                  Guardar perfil
                 </Button>
               </div>
             )}
