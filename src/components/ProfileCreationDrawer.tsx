@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { X, ChevronLeft, ArrowUp } from 'lucide-react';
+import { X, ChevronLeft, ArrowUp, MoreVertical } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
 interface ProfileCreationDrawerProps {
@@ -24,6 +24,7 @@ interface ProfileCreationDrawerProps {
   onSave: (profileData: any) => void;
   editingProfile?: any;
   profileIndex?: number;
+  onDelete?: () => void;
 }
 type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel' | 'loading' | 'macros';
 export const ProfileCreationDrawer = ({
@@ -31,11 +32,13 @@ export const ProfileCreationDrawer = ({
   onClose,
   onSave,
   editingProfile,
-  profileIndex = 0
+  profileIndex = 0,
+  onDelete
 }: ProfileCreationDrawerProps) => {
   const [currentStep, setCurrentStep] = useState<Step>(editingProfile?.name ? 'overview' : 'name');
   const [returnToOverview, setReturnToOverview] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [showMenuDropdown, setShowMenuDropdown] = useState(false);
 
   // Typewriter effect states for name step
   const [displayedText, setDisplayedText] = useState('');
@@ -973,15 +976,50 @@ export const ProfileCreationDrawer = ({
               </p>
             </div>
           </button>
-          <button onClick={() => {
-            if (getCompletionPercentage() === 100) {
-              onClose();
-            } else {
-              setShowCancelDialog(true);
-            }
-          }} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {getCompletionPercentage() === 100 && onDelete && (
+              <div className="relative">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowMenuDropdown(!showMenuDropdown);
+                  }}
+                  className="p-1 hover:bg-[#F4F4F4] rounded-full transition-colors"
+                >
+                  <MoreVertical className="w-5 h-5" />
+                </button>
+                {showMenuDropdown && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setShowMenuDropdown(false)}
+                    />
+                    <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border z-50 overflow-hidden">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowMenuDropdown(false);
+                          onDelete();
+                        }}
+                        className="w-full px-4 py-3 text-left text-sm hover:bg-accent transition-colors text-destructive"
+                      >
+                        Eliminar perfil
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+            <button onClick={() => {
+              if (getCompletionPercentage() === 100) {
+                onClose();
+              } else {
+                setShowCancelDialog(true);
+              }
+            }} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </CardHeader>
 
         {/* Content */}

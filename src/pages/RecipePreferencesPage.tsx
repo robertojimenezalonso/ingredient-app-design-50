@@ -547,6 +547,7 @@ export const RecipePreferencesPage = () => {
         onSave={handleSaveProfile}
         editingProfile={editingProfile}
         profileIndex={healthProfiles.length}
+        onDelete={editingProfile?.id ? () => handleDeleteProfile(editingProfile.id) : undefined}
       />
     </div>
   );
