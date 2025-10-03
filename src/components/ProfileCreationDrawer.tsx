@@ -304,6 +304,14 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if profile already has a name (editing existing profile)
+    if (profileData.name) {
+      setDisplayedText(fullText);
+      setShowCursor(false);
+      setShowInput(true);
+      return;
+    }
+
     // Start typewriter
     if (displayedText.length === 0) {
       setTimeout(() => {
@@ -311,7 +319,7 @@ export const ProfileCreationDrawer = ({
         setShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep]);
+  }, [isOpen, currentStep, profileData.name]);
 
   // Typewriter effect for diet step
   useEffect(() => {
@@ -322,6 +330,14 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if diet is already selected
+    if (profileData.diet) {
+      setDietDisplayedText(dietFullText);
+      setDietShowCursor(false);
+      setDietShowOptions(true);
+      return;
+    }
+
     // Start typewriter
     if (dietDisplayedText.length === 0) {
       setTimeout(() => {
@@ -329,7 +345,7 @@ export const ProfileCreationDrawer = ({
         setDietShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep, dietFullText]);
+  }, [isOpen, currentStep, dietFullText, profileData.diet]);
   useEffect(() => {
     if (!isOpen || currentStep !== 'name') return;
     if (displayedText.length > 0 && displayedText.length < fullText.length) {
@@ -369,6 +385,14 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if allergies are already set
+    if (profileData.allergies && profileData.allergies.length > 0) {
+      setAllergiesDisplayedText(allergiesFullText);
+      setAllergiesShowCursor(false);
+      setAllergiesShowOptions(true);
+      return;
+    }
+
     // Start typewriter
     if (allergiesDisplayedText.length === 0) {
       setTimeout(() => {
@@ -376,7 +400,7 @@ export const ProfileCreationDrawer = ({
         setAllergiesShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep, allergiesFullText]);
+  }, [isOpen, currentStep, allergiesFullText, profileData.allergies]);
 
   useEffect(() => {
     if (!isOpen || currentStep !== 'allergies') return;
@@ -403,6 +427,15 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if goal is already set
+    if (profileData.goal) {
+      setGoalDisplayedText(goalFullText);
+      setGoalSubtext(goalSubtextFull);
+      setGoalShowCursor(false);
+      setGoalShowOptions(true);
+      return;
+    }
+
     // Start typewriter for main text
     if (goalDisplayedText.length === 0) {
       setTimeout(() => {
@@ -410,7 +443,7 @@ export const ProfileCreationDrawer = ({
         setGoalShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep, goalFullText]);
+  }, [isOpen, currentStep, goalFullText, profileData.goal]);
 
   useEffect(() => {
     if (!isOpen || currentStep !== 'goal') return;
@@ -453,13 +486,21 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if weight is already set
+    if (profileData.weight) {
+      setWeightDisplayedText(weightFullText);
+      setWeightShowCursor(false);
+      setWeightShowInput(true);
+      return;
+    }
+
     if (weightDisplayedText.length === 0) {
       setTimeout(() => {
         setWeightDisplayedText(weightFullText[0]);
         setWeightShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep, weightFullText]);
+  }, [isOpen, currentStep, weightFullText, profileData.weight]);
 
   useEffect(() => {
     if (!isOpen || currentStep !== 'weight') return;
@@ -485,13 +526,21 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if height is already set
+    if (profileData.height) {
+      setHeightDisplayedText(heightFullText);
+      setHeightShowCursor(false);
+      setHeightShowInput(true);
+      return;
+    }
+
     if (heightDisplayedText.length === 0) {
       setTimeout(() => {
         setHeightDisplayedText(heightFullText[0]);
         setHeightShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep, heightFullText]);
+  }, [isOpen, currentStep, heightFullText, profileData.height]);
 
   useEffect(() => {
     if (!isOpen || currentStep !== 'height') return;
@@ -517,13 +566,21 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if birthdate is already set
+    if (profileData.birthDate) {
+      setBirthdateDisplayedText(birthdateFullText);
+      setBirthdateShowCursor(false);
+      setBirthdateShowInput(true);
+      return;
+    }
+
     if (birthdateDisplayedText.length === 0) {
       setTimeout(() => {
         setBirthdateDisplayedText(birthdateFullText[0]);
         setBirthdateShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep, birthdateFullText]);
+  }, [isOpen, currentStep, birthdateFullText, profileData.birthDate]);
 
   useEffect(() => {
     if (!isOpen || currentStep !== 'birthdate') return;
@@ -549,13 +606,21 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if sex is already set
+    if (profileData.sex) {
+      setSexDisplayedText(sexFullText);
+      setSexShowCursor(false);
+      setSexShowOptions(true);
+      return;
+    }
+
     if (sexDisplayedText.length === 0) {
       setTimeout(() => {
         setSexDisplayedText(sexFullText[0]);
         setSexShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep, sexFullText]);
+  }, [isOpen, currentStep, sexFullText, profileData.sex]);
 
   useEffect(() => {
     if (!isOpen || currentStep !== 'sex') return;
@@ -581,13 +646,21 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Skip animation if activity level is already set
+    if (profileData.activityLevel) {
+      setActivityDisplayedText(activityFullText);
+      setActivityShowCursor(false);
+      setActivityShowOptions(true);
+      return;
+    }
+
     if (activityDisplayedText.length === 0) {
       setTimeout(() => {
         setActivityDisplayedText(activityFullText[0]);
         setActivityShowCursor(true);
       }, 300);
     }
-  }, [isOpen, currentStep, activityFullText]);
+  }, [isOpen, currentStep, activityFullText, profileData.activityLevel]);
 
   useEffect(() => {
     if (!isOpen || currentStep !== 'activityLevel') return;
