@@ -181,6 +181,17 @@ export const useMealProfiles = () => {
 
   useEffect(() => {
     fetchProfiles();
+    
+    // Listen for profile updates from the drawer
+    const handleProfileUpdate = () => {
+      fetchProfiles();
+    };
+    
+    window.addEventListener('meal-profile-updated', handleProfileUpdate);
+    
+    return () => {
+      window.removeEventListener('meal-profile-updated', handleProfileUpdate);
+    };
   }, []);
 
   return {

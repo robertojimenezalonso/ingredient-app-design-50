@@ -904,34 +904,46 @@ export const ProfileCreationDrawer = ({
       switch (currentStep) {
         case 'name':
           stepDataToSave.name = profileData.name;
+          if (editingProfile) editingProfile.name = profileData.name;
           break;
         case 'diet':
           stepDataToSave.diet = profileData.diet;
+          if (editingProfile) editingProfile.diet = profileData.diet;
           break;
         case 'allergies':
           stepDataToSave.allergies = profileData.allergies;
+          if (editingProfile) editingProfile.allergies = profileData.allergies;
           break;
         case 'goal':
           stepDataToSave.health_goal = profileData.goal;
+          if (editingProfile) {
+            editingProfile.goal = profileData.goal;
+            editingProfile.healthGoal = profileData.goal;
+          }
           break;
         case 'weight':
           stepDataToSave.weight = profileData.weight && profileData.weightUnit 
             ? `${profileData.weight} ${profileData.weightUnit}` 
             : undefined;
+          if (editingProfile) editingProfile.weight = stepDataToSave.weight;
           break;
         case 'height':
           stepDataToSave.height = profileData.height && profileData.heightUnit 
             ? `${profileData.height} ${profileData.heightUnit}` 
             : undefined;
+          if (editingProfile) editingProfile.height = stepDataToSave.height;
           break;
         case 'birthdate':
           stepDataToSave.birth_date = profileData.birthDate;
+          if (editingProfile) editingProfile.birthDate = profileData.birthDate;
           break;
         case 'sex':
           stepDataToSave.sex = profileData.sex;
+          if (editingProfile) editingProfile.sex = profileData.sex;
           break;
         case 'activityLevel':
           stepDataToSave.activity_level = profileData.activityLevel;
+          if (editingProfile) editingProfile.activityLevel = profileData.activityLevel;
           break;
       }
       
@@ -944,6 +956,9 @@ export const ProfileCreationDrawer = ({
           .then(({ error }) => {
             if (error) {
               console.error('Error saving step data:', error);
+            } else {
+              // Trigger parent component to refetch profiles
+              window.dispatchEvent(new CustomEvent('meal-profile-updated'));
             }
           });
       }
