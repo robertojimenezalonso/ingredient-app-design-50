@@ -2376,7 +2376,7 @@ export const ProfileCreationDrawer = ({
             )}
             
             {/* Delete profile button */}
-            {onDelete && editingProfile?.id && (
+            {onDelete && (
               <button
                 type="button"
                 onClick={onDelete}
