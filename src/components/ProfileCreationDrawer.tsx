@@ -765,11 +765,13 @@ export const ProfileCreationDrawer = ({
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
-          return profileData.name.trim().length > 0;
+          // Only count if name is not the default name
+          return profileData.name.trim().length > 0 && profileData.name !== getDefaultName();
         case 'diet':
           return profileData.diet !== '';
         case 'allergies':
-          return true; // Always considered complete
+          // Only count if user has explicitly set allergies (even if empty)
+          return editingProfile?.allergies !== undefined || profileData.allergies.length > 0;
         case 'goal':
           return profileData.goal !== '';
         case 'weight':
