@@ -5,6 +5,16 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { X, ChevronLeft, ArrowUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
@@ -25,6 +35,7 @@ export const ProfileCreationDrawer = ({
 }: ProfileCreationDrawerProps) => {
   const [currentStep, setCurrentStep] = useState<Step>('name');
   const [returnToOverview, setReturnToOverview] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
 
   // Typewriter effect states for name step
   const [displayedText, setDisplayedText] = useState('');
@@ -882,7 +893,7 @@ export const ProfileCreationDrawer = ({
               </p>
             </div>
           </button>
-          <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
+          <button onClick={() => setShowCancelDialog(true)} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
             <X className="w-5 h-5" />
           </button>
         </CardHeader>
@@ -1808,5 +1819,48 @@ export const ProfileCreationDrawer = ({
           </div>
         )}
       </Card>
+
+      {/* Cancel Confirmation Dialog */}
+      <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
+            <AlertDialogDescription>
+              ¿Estás seguro de que deseas cancelar la creación de este perfil de comensal? Se perderá toda la información ingresada.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>No</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                // Reset all data
+                setProfileData({
+                  name: '',
+                  diet: '',
+                  allergies: [],
+                  goal: '',
+                  weight: '',
+                  weightUnit: 'kg',
+                  height: '',
+                  heightUnit: 'cm',
+                  birthDate: '',
+                  sex: '',
+                  activityLevel: '',
+                  calories: 2000,
+                  carbs: 40,
+                  protein: 30,
+                  fat: 30,
+                });
+                setCurrentStep('name');
+                setReturnToOverview(false);
+                setShowCancelDialog(false);
+                onClose();
+              }}
+            >
+              Sí
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>;
 };
