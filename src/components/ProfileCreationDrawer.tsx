@@ -1094,12 +1094,12 @@ export const ProfileCreationDrawer = ({
             onClick={() => setCurrentStep('overview')}
             className="flex items-center gap-3 flex-1 hover:bg-accent/50 rounded-lg p-1 -m-1 transition-colors"
           >
-            <div className="relative flex-shrink-0 w-12 h-12">
-              <svg className="absolute inset-0 w-12 h-12" style={{
+            <div className="relative flex-shrink-0 w-16 h-16">
+              <svg className="absolute inset-0 w-16 h-16" style={{
               transform: 'rotate(-90deg)'
             }}>
-                <circle cx="24" cy="24" r="22" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
-                <circle cx="24" cy="24" r="22" stroke="#10B981" strokeWidth="2.5" fill="none" strokeDasharray={`${2 * Math.PI * 22}`} strokeDashoffset={`${2 * Math.PI * 22 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
+                <circle cx="32" cy="32" r="30" stroke="#E5E5E5" strokeWidth="3" fill="none" />
+                <circle cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="3" fill="none" strokeDasharray={`${2 * Math.PI * 30}`} strokeDashoffset={`${2 * Math.PI * 30 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
               </svg>
               <div 
                 className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium overflow-hidden cursor-pointer" 
@@ -1130,7 +1130,7 @@ export const ProfileCreationDrawer = ({
                         showAvatarIcon ? "translate-x-0 opacity-100" : "translate-x-[100%] opacity-0"
                       )}
                     >
-                      <Camera className="w-4 h-4" style={{ color: 'rgba(255, 255, 255, 0.8)' }} />
+                      <Camera className="w-5 h-5" style={{ color: 'rgba(255, 255, 255, 0.8)' }} />
                     </div>
                   </div>
                 )}
