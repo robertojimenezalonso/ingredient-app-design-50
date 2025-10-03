@@ -463,7 +463,7 @@ export const RecipePreferencesPage = () => {
                   <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#F9F8F2' }}>
                     {/* Contador de comensales y botón añadir */}
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-lg font-semibold text-[#1C1C1C]">
+                      <h2 className="text-base font-semibold text-[#1C1C1C]">
                         {healthProfiles.length === 0 ? 'Sin comensales' : `${healthProfiles.length} ${healthProfiles.length === 1 ? 'comensal' : 'comensales'}`}
                       </h2>
                       <button
