@@ -1137,7 +1137,7 @@ export const ProfileCreationDrawer = ({
               </div>
             </div>
             <div className="text-left">
-              <p className="text-sm font-medium">
+              <p className="text-base font-medium">
                 {profileData.name || getDefaultName()}
               </p>
               <p className="text-xs text-muted-foreground">
