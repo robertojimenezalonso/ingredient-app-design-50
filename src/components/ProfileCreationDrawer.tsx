@@ -1816,14 +1816,6 @@ export const ProfileCreationDrawer = ({
           </div>
         )}
 
-        {/* Save button for overview */}
-        {currentStep === 'overview' && getCompletionPercentage() === 100 && (
-          <div className="p-4 border-t flex-shrink-0">
-            <Button onClick={() => onSave(profileData)} className="w-full">
-              Guardar perfil
-            </Button>
-          </div>
-        )}
       </Card>
 
       {/* Cancel Confirmation Dialog */}
