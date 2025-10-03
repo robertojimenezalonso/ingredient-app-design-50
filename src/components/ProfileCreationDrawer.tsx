@@ -900,12 +900,19 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
-    const isProfileComplete = getCompletionPercentage() === 100;
-    
     console.log('=== HandleContinue Debug ===');
     console.log('Current step:', currentStep);
-    console.log('Is profile complete:', isProfileComplete);
     console.log('Has editingProfile.id:', !!editingProfile?.id);
+    
+    // CRITICAL: When creating a NEW profile and on activityLevel step, go to loading
+    if (currentStep === 'activityLevel' && !editingProfile?.id) {
+      console.log('Activity level complete for NEW profile - going to loading!');
+      setCurrentStep('loading');
+      return;
+    }
+    
+    const isProfileComplete = getCompletionPercentage() === 100;
+    console.log('Is profile complete:', isProfileComplete);
     console.log('Profile data:', profileData);
     
     // Save current step data to database before continuing if editing an existing profile
