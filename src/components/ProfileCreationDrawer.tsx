@@ -1822,7 +1822,7 @@ export const ProfileCreationDrawer = ({
 
       {/* Cancel Confirmation Dialog */}
       <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-        <AlertDialogContent className="mx-4">
+        <AlertDialogContent className="mx-6 rounded-2xl">
           <AlertDialogHeader>
             <AlertDialogDescription className="text-center text-base">
               ¿Estás seguro de que deseas cancelar la creación de este perfil de comensal? Se perderá toda la información ingresada.
