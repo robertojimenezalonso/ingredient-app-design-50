@@ -477,7 +477,7 @@ export const RecipePreferencesPage = () => {
                   {/* Rectángulo contenedor para los tags */}
                   <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#F9F8F2' }}>
                     {/* Health Profiles - Compact Tags */}
-                    <div className="flex flex-wrap gap-3">
+                    <div className="flex flex-col gap-3">
                       {healthProfiles.map((profile, index) => (
                         <div 
                           key={profile.id} 
