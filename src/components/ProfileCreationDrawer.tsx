@@ -810,6 +810,13 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
+    // If editing from overview (profile already complete), return to overview
+    if (returnToOverview) {
+      setCurrentStep('overview');
+      setReturnToOverview(false);
+      return;
+    }
+
     const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'loading', 'macros'];
     const currentIndex = steps.indexOf(currentStep);
     
