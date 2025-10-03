@@ -1858,7 +1858,7 @@ export const ProfileCreationDrawer = ({
             >
               Cancelar
             </AlertDialogAction>
-            <AlertDialogCancel className="flex-1 m-0">No</AlertDialogCancel>
+            <AlertDialogCancel className="flex-1 m-0">Volver atrás</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
