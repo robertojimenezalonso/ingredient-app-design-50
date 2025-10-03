@@ -1193,7 +1193,7 @@ export const ProfileCreationDrawer = ({
                 <circle cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="3" fill="none" strokeDasharray={`${2 * Math.PI * 30}`} strokeDashoffset={`${2 * Math.PI * 30 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
               </svg>
               <div 
-                className="absolute inset-[5px] rounded-full flex items-center justify-center text-lg font-semibold overflow-hidden cursor-pointer" 
+                className="absolute inset-[5px] rounded-full flex items-center justify-center text-2xl font-bold overflow-hidden cursor-pointer"
                 style={{
                   backgroundColor: getProfileColor(),
                   color: 'rgba(255, 255, 255, 0.8)'
