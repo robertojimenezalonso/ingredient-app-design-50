@@ -30,7 +30,7 @@ interface ProfileCreationDrawerProps {
   profileIndex?: number;
   onDelete?: () => void;
 }
-type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'goal' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel' | 'loading' | 'macros';
+type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'gustos' | 'goal' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel' | 'loading' | 'macros';
 export const ProfileCreationDrawer = ({
   isOpen,
   onClose,
@@ -108,6 +108,11 @@ export const ProfileCreationDrawer = ({
   const [activityShowCursor, setActivityShowCursor] = useState(false);
   const [activityShowOptions, setActivityShowOptions] = useState(false);
 
+  // Typewriter effect states for gustos step
+  const [gustosDisplayedText, setGustosDisplayedText] = useState('');
+  const [gustosShowCursor, setGustosShowCursor] = useState(false);
+  const [gustosShowOptions, setGustosShowOptions] = useState(false);
+
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
     if (!birthDateStr) return {
@@ -155,6 +160,7 @@ export const ProfileCreationDrawer = ({
     name: '',
     diet: '',
     allergies: [],
+    gustos: [],
     goal: '',
     weight: '',
     weightUnit: 'kg',
@@ -182,10 +188,21 @@ export const ProfileCreationDrawer = ({
         }
       }
       
+      // Handle gustos: convert to array if it's a string
+      let gustosArray: string[] = [];
+      if (editingProfile.gustos) {
+        if (Array.isArray(editingProfile.gustos)) {
+          gustosArray = editingProfile.gustos;
+        } else if (typeof editingProfile.gustos === 'string') {
+          gustosArray = editingProfile.gustos.split(',').map(g => g.trim()).filter(g => g.length > 0);
+        }
+      }
+      
       setProfileData({
         name: editingProfile.name || '',
         diet: editingProfile.diet || '',
         allergies: allergiesArray,
+        gustos: gustosArray,
         goal: editingProfile.goal || editingProfile.healthGoal || '',
         weight: parseWeight(editingProfile.weight).value,
         weightUnit: parseWeight(editingProfile.weight).unit,
@@ -205,6 +222,7 @@ export const ProfileCreationDrawer = ({
         name: '',
         diet: '',
         allergies: [],
+        gustos: [],
         goal: '',
         weight: '',
         weightUnit: 'kg',
@@ -279,6 +297,12 @@ export const ProfileCreationDrawer = ({
   // Text for activity level step
   const activityFullText = useMemo(() => 
     `¿Cuál es el nivel de actividad física de ${profileData.name || 'este comensal'}?`,
+    [profileData.name]
+  );
+
+  // Text for gustos step
+  const gustosFullText = useMemo(() => 
+    `Ayúdanos a entender un poco más qué tipos de comida le podría gustar a ${profileData.name || 'este comensal'}`,
     [profileData.name]
   );
 
@@ -753,6 +777,46 @@ export const ProfileCreationDrawer = ({
     }
   }, [activityDisplayedText, activityFullText, activityShowCursor, isOpen, currentStep]);
 
+  // Typewriter effect for gustos step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'gustos') {
+      setGustosDisplayedText('');
+      setGustosShowCursor(false);
+      setGustosShowOptions(false);
+      return;
+    }
+
+    // Skip animation if gustos are already set
+    if (profileData.gustos && profileData.gustos.length > 0) {
+      setGustosDisplayedText(gustosFullText);
+      setGustosShowCursor(false);
+      setGustosShowOptions(true);
+      return;
+    }
+
+    if (gustosDisplayedText.length === 0) {
+      setTimeout(() => {
+        setGustosDisplayedText(gustosFullText[0]);
+        setGustosShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, gustosFullText, profileData.gustos]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'gustos') return;
+    if (gustosDisplayedText.length > 0 && gustosDisplayedText.length < gustosFullText.length) {
+      const timeout = setTimeout(() => {
+        setGustosDisplayedText(gustosFullText.slice(0, gustosDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } else if (gustosDisplayedText.length === gustosFullText.length && gustosShowCursor) {
+      setTimeout(() => {
+        setGustosShowCursor(false);
+        setGustosShowOptions(true);
+      }, 200);
+    }
+  }, [gustosDisplayedText, gustosFullText, gustosShowCursor, isOpen, currentStep]);
+
   // Loading progress effect
   useEffect(() => {
     if (!isOpen || currentStep !== 'loading') {
@@ -853,6 +917,8 @@ export const ProfileCreationDrawer = ({
         return isEditing?.diet ? 'Actualizar dieta' : 'Añadir dieta';
       case 'allergies':
         return isEditing?.allergies ? 'Actualizar alergias' : 'Añadir alergias';
+      case 'gustos':
+        return isEditing?.gustos ? 'Actualizar gustos' : 'Añadir gustos';
       case 'goal':
         return isEditing?.goal ? 'Actualizar objetivo' : 'Añadir objetivo';
       case 'weight':
@@ -881,6 +947,8 @@ export const ProfileCreationDrawer = ({
         return profileData.diet !== '';
       case 'allergies':
         return profileData.allergies.length > 0;
+      case 'gustos':
+        return profileData.gustos.length > 0;
       case 'goal':
         return profileData.goal !== '';
       case 'weight':
@@ -932,6 +1000,10 @@ export const ProfileCreationDrawer = ({
         case 'allergies':
           stepDataToSave.allergies = profileData.allergies;
           if (editingProfile) editingProfile.allergies = profileData.allergies;
+          break;
+        case 'gustos':
+          stepDataToSave.gustos = profileData.gustos;
+          if (editingProfile) editingProfile.gustos = profileData.gustos;
           break;
         case 'goal':
           stepDataToSave.health_goal = profileData.goal;
@@ -993,7 +1065,7 @@ export const ProfileCreationDrawer = ({
     // If profile is NOT complete, find first incomplete step from the beginning
     if (!isProfileComplete) {
       console.log('Profile not complete, checking steps...');
-      const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
+      const steps: Step[] = ['name', 'diet', 'allergies', 'gustos', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
       
       // Check if current step can continue (is valid)
       if (!canContinue()) {
@@ -1014,6 +1086,8 @@ export const ProfileCreationDrawer = ({
               return profileData.diet !== '';
             case 'allergies':
               return editingProfile?.allergies !== undefined || profileData.allergies.length > 0;
+            case 'gustos':
+              return editingProfile?.gustos !== undefined || profileData.gustos.length > 0;
             case 'goal':
               return profileData.goal !== '';
             case 'weight':
@@ -1056,7 +1130,7 @@ export const ProfileCreationDrawer = ({
     }
 
     // Fallback: normal flow progression
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'loading', 'macros'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'gustos', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'loading', 'macros'];
     const currentIndex = steps.indexOf(currentStep);
     
     if (currentStep === 'activityLevel') {
@@ -1321,7 +1395,7 @@ export const ProfileCreationDrawer = ({
 
         {/* Content */}
         <CardContent className="flex-1 overflow-y-auto p-4" style={{
-        paddingBottom: (currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') ? '120px' : (currentStep === 'macros' ? '150px' : '16px')
+        paddingBottom: (currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'gustos' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') ? '120px' : (currentStep === 'macros' ? '150px' : '16px')
       }}>
           <div className="space-y-4">
             
@@ -1506,6 +1580,76 @@ export const ProfileCreationDrawer = ({
                         </div>
                       );
                     })}
+                  </div>}
+              </div>}
+
+            {currentStep === 'gustos' && <div className="space-y-6">
+                {/* Bot message with typewriter */}
+                <div className="mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {gustosDisplayedText}
+                        {gustosShowCursor && <span className="animate-pulse">|</span>}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Gustos options - appears after typewriter completes */}
+                {gustosShowOptions && <div className="mb-6">
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { id: 'carnes', label: 'Carnes', emoji: '🥩' },
+                        { id: 'pescado', label: 'Pescado', emoji: '🐟' },
+                        { id: 'vegetales', label: 'Vegetales', emoji: '🥗' },
+                        { id: 'frutas', label: 'Frutas', emoji: '🍎' },
+                        { id: 'lacteos', label: 'Lácteos', emoji: '🧀' },
+                        { id: 'granos', label: 'Granos', emoji: '🌾' },
+                        { id: 'legumbres', label: 'Legumbres', emoji: '🫘' },
+                        { id: 'frutos_secos', label: 'Frutos secos', emoji: '🥜' },
+                        { id: 'comida_rapida', label: 'Comida rápida', emoji: '🍔' },
+                        { id: 'postres', label: 'Postres', emoji: '🍰' },
+                        { id: 'pasta', label: 'Pasta', emoji: '🍝' },
+                        { id: 'arroz', label: 'Arroz', emoji: '🍚' },
+                      ].map((gusto, index) => {
+                        const isSelected = profileData.gustos.includes(gusto.id);
+                        return (
+                          <button
+                            key={gusto.id}
+                            type="button"
+                            onClick={() => {
+                              const newGustos = isSelected
+                                ? profileData.gustos.filter((g) => g !== gusto.id)
+                                : [...profileData.gustos, gusto.id];
+                              setProfileData({
+                                ...profileData,
+                                gustos: newGustos,
+                              });
+                            }}
+                            className={cn(
+                              "flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all",
+                              isSelected
+                                ? "border-primary bg-primary/10"
+                                : "border-border bg-card hover:border-primary/50"
+                            )}
+                            style={{
+                              opacity: 0,
+                              transform: 'translateY(10px)',
+                              animation: `fadeInUp 0.4s ease-out ${index * 0.08}s forwards`,
+                            }}
+                          >
+                            <span className="text-3xl mb-1">{gusto.emoji}</span>
+                            <span className="text-xs text-center font-medium leading-tight">{gusto.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {profileData.gustos.length > 0 && (
+                      <p className="text-sm text-muted-foreground text-center mt-4">
+                        {profileData.gustos.length} tipo{profileData.gustos.length !== 1 ? 's' : ''} de comida seleccionado{profileData.gustos.length !== 1 ? 's' : ''}
+                      </p>
+                    )}
                   </div>}
               </div>}
 
@@ -2079,8 +2223,8 @@ export const ProfileCreationDrawer = ({
           </div>
         </CardContent>
 
-        {/* Bottom area - chat send style for name, diet, allergies, goal, weight, height, birthdate, sex, activityLevel steps */}
-        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+        {/* Bottom area - chat send style for name, diet, allergies, gustos, goal, weight, height, birthdate, sex, activityLevel steps */}
+        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'gustos' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
         backgroundColor: '#FFFFFF'
       }}>
             <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{
@@ -2089,6 +2233,7 @@ export const ProfileCreationDrawer = ({
               {((currentStep === 'name' && profileData.name) || 
                 (currentStep === 'diet' && profileData.diet) || 
                 (currentStep === 'allergies' && profileData.allergies.length > 0) ||
+                (currentStep === 'gustos' && profileData.gustos.length > 0) ||
                 (currentStep === 'goal' && profileData.goal) ||
                 (currentStep === 'weight' && profileData.weight) ||
                 (currentStep === 'height' && profileData.height) ||
@@ -2125,6 +2270,15 @@ export const ProfileCreationDrawer = ({
                       borderRadius: '8px'
                     }}>
                       {allergy}
+                    </Badge>
+                  ))}
+                  {currentStep === 'gustos' && Array.isArray(profileData.gustos) && profileData.gustos.map((gusto: string) => (
+                    <Badge key={gusto} variant="secondary" className="font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
+                      backgroundColor: '#D9DADC',
+                      color: '#020818',
+                      borderRadius: '8px'
+                    }}>
+                      {gusto}
                     </Badge>
                   ))}
                   {currentStep === 'goal' && (
@@ -2275,6 +2429,7 @@ export const ProfileCreationDrawer = ({
                   name: '',
                   diet: '',
                   allergies: [],
+                  gustos: [],
                   goal: '',
                   weight: '',
                   weightUnit: 'kg',
