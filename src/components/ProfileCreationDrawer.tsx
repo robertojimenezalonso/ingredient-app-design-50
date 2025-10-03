@@ -20,6 +20,8 @@ import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { AvatarOptionsSheet } from '@/components/AvatarOptionsSheet';
+import { ImageCropDialog } from '@/components/ImageCropDialog';
 interface ProfileCreationDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -43,7 +45,11 @@ export const ProfileCreationDrawer = ({
   const [showMenuDropdown, setShowMenuDropdown] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [showAvatarIcon, setShowAvatarIcon] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [showCropDialog, setShowCropDialog] = useState(false);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
   // Set initial step based on editingProfile when drawer opens
@@ -1194,7 +1200,7 @@ export const ProfileCreationDrawer = ({
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  fileInputRef.current?.click();
+                  setShowAvatarOptions(true);
                 }}
               >
                 {editingProfile?.avatarUrl ? (
@@ -1301,67 +1307,6 @@ export const ProfileCreationDrawer = ({
                     {index < menuItems.length - 1 && <Separator />}
                   </div>
                 ))}
-                
-                {/* Hidden file input */}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (!file || !editingProfile?.id) return;
-                    
-                    setUploadingAvatar(true);
-                    try {
-                      const fileExt = file.name.split('.').pop();
-                      const fileName = `${editingProfile.id}-${Date.now()}.${fileExt}`;
-                      const filePath = `${fileName}`;
-
-                      const { error: uploadError } = await supabase.storage
-                        .from('profile-avatars')
-                        .upload(filePath, file, { upsert: true });
-
-                      if (uploadError) throw uploadError;
-
-                      const { data: { publicUrl } } = supabase.storage
-                        .from('profile-avatars')
-                        .getPublicUrl(filePath);
-
-                      // Update profile with avatar URL
-                      const { error: updateError } = await supabase
-                        .from('meal_profiles')
-                        .update({ avatar_url: publicUrl })
-                        .eq('id', editingProfile.id);
-
-                      if (updateError) throw updateError;
-
-                      // Update local state
-                      if (editingProfile) {
-                        editingProfile.avatarUrl = publicUrl;
-                      }
-
-                      toast({
-                        title: 'Foto actualizada',
-                        description: 'La foto de perfil se guardó correctamente',
-                      });
-
-                      // Stay on overview step instead of closing
-                      setCurrentStep('overview');
-                    } catch (error) {
-                      console.error('Error uploading avatar:', error);
-                      toast({
-                        title: 'Error',
-                        description: 'No se pudo subir la foto de perfil',
-                        variant: 'destructive',
-                      });
-                    } finally {
-                      setUploadingAvatar(false);
-                      // Reset file input
-                      if (e.target) e.target.value = '';
-                    }
-                  }}
-                />
               </div>
             )}
             
@@ -2295,5 +2240,149 @@ export const ProfileCreationDrawer = ({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Avatar Options Sheet */}
+      <AvatarOptionsSheet
+        isOpen={showAvatarOptions}
+        onClose={() => setShowAvatarOptions(false)}
+        onTakePhoto={() => {
+          cameraInputRef.current?.click();
+        }}
+        onChooseFromGallery={() => {
+          galleryInputRef.current?.click();
+        }}
+        onDelete={editingProfile?.avatarUrl ? async () => {
+          if (!editingProfile?.id) return;
+          
+          try {
+            const { error } = await supabase
+              .from('meal_profiles')
+              .update({ avatar_url: null })
+              .eq('id', editingProfile.id);
+
+            if (error) throw error;
+
+            if (editingProfile) {
+              editingProfile.avatarUrl = null;
+            }
+            
+            window.dispatchEvent(new CustomEvent('meal-profile-updated'));
+            toast({
+              title: "Foto eliminada",
+              description: "La foto de perfil se ha eliminado correctamente"
+            });
+          } catch (error) {
+            console.error('Error deleting avatar:', error);
+            toast({
+              title: "Error",
+              description: "No se pudo eliminar la foto de perfil",
+              variant: "destructive"
+            });
+          }
+        } : undefined}
+        hasAvatar={!!editingProfile?.avatarUrl}
+      />
+
+      {/* Hidden file inputs */}
+      <input
+        ref={cameraInputRef}
+        type="file"
+        accept="image/*"
+        capture="environment"
+        className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            setSelectedImage(event.target?.result as string);
+            setShowCropDialog(true);
+          };
+          reader.readAsDataURL(file);
+          e.target.value = '';
+        }}
+      />
+
+      <input
+        ref={galleryInputRef}
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={async (e) => {
+          const file = e.target.files?.[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            setSelectedImage(event.target?.result as string);
+            setShowCropDialog(true);
+          };
+          reader.readAsDataURL(file);
+          e.target.value = '';
+        }}
+      />
+
+      {/* Image Crop Dialog */}
+      {selectedImage && (
+        <ImageCropDialog
+          imageSrc={selectedImage}
+          isOpen={showCropDialog}
+          onClose={() => {
+            setShowCropDialog(false);
+            setSelectedImage(null);
+          }}
+          onCropComplete={async (croppedBlob) => {
+            if (!editingProfile?.id) return;
+
+            setUploadingAvatar(true);
+            try {
+              const fileName = `${editingProfile.id}-${Date.now()}.jpg`;
+              const filePath = `${editingProfile.id}/${fileName}`;
+
+              const { error: uploadError } = await supabase.storage
+                .from('profile-avatars')
+                .upload(filePath, croppedBlob, {
+                  contentType: 'image/jpeg',
+                  upsert: true
+                });
+
+              if (uploadError) throw uploadError;
+
+              const { data: { publicUrl } } = supabase.storage
+                .from('profile-avatars')
+                .getPublicUrl(filePath);
+
+              const { error: updateError } = await supabase
+                .from('meal_profiles')
+                .update({ avatar_url: publicUrl })
+                .eq('id', editingProfile.id);
+
+              if (updateError) throw updateError;
+
+              if (editingProfile) {
+                editingProfile.avatarUrl = publicUrl;
+              }
+
+              window.dispatchEvent(new CustomEvent('meal-profile-updated'));
+              toast({
+                title: "Foto actualizada",
+                description: "La foto de perfil se ha actualizado correctamente"
+              });
+            } catch (error) {
+              console.error('Error uploading avatar:', error);
+              toast({
+                title: "Error",
+                description: "No se pudo actualizar la foto de perfil",
+                variant: "destructive"
+              });
+            } finally {
+              setUploadingAvatar(false);
+              setShowCropDialog(false);
+              setSelectedImage(null);
+            }
+          }}
+        />
+      )}
     </div>;
 };
