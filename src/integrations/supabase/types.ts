@@ -57,6 +57,7 @@ export type Database = {
           created_at: string
           diet: string | null
           fat: number | null
+          gustos: string[] | null
           health_goal: string | null
           height: string | null
           id: string
@@ -78,6 +79,7 @@ export type Database = {
           created_at?: string
           diet?: string | null
           fat?: number | null
+          gustos?: string[] | null
           health_goal?: string | null
           height?: string | null
           id?: string
@@ -99,6 +101,7 @@ export type Database = {
           created_at?: string
           diet?: string | null
           fat?: number | null
+          gustos?: string[] | null
           health_goal?: string | null
           height?: string | null
           id?: string
