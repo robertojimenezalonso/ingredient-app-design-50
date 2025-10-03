@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple } from 'lucide-react';
 import { format } from 'date-fns';
@@ -426,40 +426,38 @@ export const RecipePreferencesPage = () => {
                   
                   {/* Health Profiles */}
                   {healthProfiles.map((profile, index) => (
-                    <div key={profile.id} className="mb-4">
-                      <div 
-                        onClick={() => handleEditProfile(profile)}
-                        className="flex items-center justify-between mb-2 cursor-pointer hover:opacity-80 transition-opacity"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="relative flex-shrink-0 w-14 h-14">
-                            <svg className="absolute inset-0 w-14 h-14" style={{ transform: 'rotate(-90deg)' }}>
-                              <circle cx="28" cy="28" r="26" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
-                              <circle
-                                cx="28" cy="28" r="26" stroke="#10B981" strokeWidth="2.5" fill="none"
-                                strokeDasharray={`${2 * Math.PI * 26}`}
-                                strokeDashoffset={`${2 * Math.PI * 26 * (1 - getProfileCompletion(profile) / 100)}`}
-                                strokeLinecap="round" className="transition-all duration-300"
-                              />
-                            </svg>
-                            <div 
-                              className="absolute inset-[7px] rounded-full flex items-center justify-center text-sm font-medium"
-                              style={{ backgroundColor: getProfileColor(index), color: 'rgba(255, 255, 255, 0.8)' }}
-                            >
-                              {getInitials(profile.name)}
+                    <Card key={profile.id} className="mb-4 cursor-pointer hover:opacity-80 transition-opacity" onClick={() => handleEditProfile(profile)}>
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="relative flex-shrink-0 w-14 h-14">
+                              <svg className="absolute inset-0 w-14 h-14" style={{ transform: 'rotate(-90deg)' }}>
+                                <circle cx="28" cy="28" r="26" stroke="#E5E5E5" strokeWidth="2.5" fill="none" />
+                                <circle
+                                  cx="28" cy="28" r="26" stroke="#10B981" strokeWidth="2.5" fill="none"
+                                  strokeDasharray={`${2 * Math.PI * 26}`}
+                                  strokeDashoffset={`${2 * Math.PI * 26 * (1 - getProfileCompletion(profile) / 100)}`}
+                                  strokeLinecap="round" className="transition-all duration-300"
+                                />
+                              </svg>
+                              <div 
+                                className="absolute inset-[7px] rounded-full flex items-center justify-center text-sm font-medium"
+                                style={{ backgroundColor: getProfileColor(index), color: 'rgba(255, 255, 255, 0.8)' }}
+                              >
+                                {getInitials(profile.name)}
+                              </div>
+                            </div>
+                            <div>
+                              <h3 className="text-lg font-semibold text-[#1C1C1C]">{profile.name}</h3>
+                              <p className="text-xs text-[#898885]">
+                                {getProfileCompletion(profile) === 100 
+                                  ? `Objetivo: ${profile.healthGoal || 'No especificado'}`
+                                  : `${Math.round(getProfileCompletion(profile))}% perfil completado`
+                                }
+                              </p>
                             </div>
                           </div>
-                          <div>
-                            <h3 className="text-lg font-semibold text-[#1C1C1C]">{profile.name}</h3>
-                            <p className="text-xs text-[#898885]">
-                              {getProfileCompletion(profile) === 100 
-                                ? `Objetivo: ${profile.healthGoal || 'No especificado'}`
-                                : `${Math.round(getProfileCompletion(profile))}% perfil completado`
-                              }
-                            </p>
-                          </div>
-                        </div>
-                        <div className="relative">
+                          <div className="relative">
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
@@ -484,7 +482,8 @@ export const RecipePreferencesPage = () => {
                           )}
                         </div>
                       </div>
-                    </div>
+                      </CardContent>
+                    </Card>
                   ))}
                   
                   <Button
