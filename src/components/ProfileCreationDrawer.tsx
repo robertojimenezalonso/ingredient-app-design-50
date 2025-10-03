@@ -35,10 +35,19 @@ export const ProfileCreationDrawer = ({
   profileIndex = 0,
   onDelete
 }: ProfileCreationDrawerProps) => {
-  const [currentStep, setCurrentStep] = useState<Step>(editingProfile?.name ? 'overview' : 'name');
+  const [currentStep, setCurrentStep] = useState<Step>('name');
   const [returnToOverview, setReturnToOverview] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [showMenuDropdown, setShowMenuDropdown] = useState(false);
+
+  // Set initial step based on editingProfile when drawer opens
+  useEffect(() => {
+    if (isOpen && editingProfile?.name) {
+      setCurrentStep('overview');
+    } else if (isOpen) {
+      setCurrentStep('name');
+    }
+  }, [isOpen, editingProfile?.name]);
 
   // Typewriter effect states for name step
   const [displayedText, setDisplayedText] = useState('');
@@ -131,22 +140,64 @@ export const ProfileCreationDrawer = ({
     };
   };
   const [profileData, setProfileData] = useState({
-    name: editingProfile?.name || '',
-    diet: editingProfile?.diet || '',
-    allergies: editingProfile?.allergies || [],
-    goal: editingProfile?.goal || '',
-    weight: parseWeight(editingProfile?.weight).value,
-    weightUnit: parseWeight(editingProfile?.weight).unit,
-    height: parseHeight(editingProfile?.height).value,
-    heightUnit: parseHeight(editingProfile?.height).unit,
-    birthDate: editingProfile?.birthDate || '',
-    sex: editingProfile?.sex || '',
-    activityLevel: editingProfile?.activityLevel || '',
-    calories: editingProfile?.calories || 2000,
-    carbs: editingProfile?.carbs || 40,
-    protein: editingProfile?.protein || 30,
-    fat: editingProfile?.fat || 30,
+    name: '',
+    diet: '',
+    allergies: [],
+    goal: '',
+    weight: '',
+    weightUnit: 'kg',
+    height: '',
+    heightUnit: 'cm',
+    birthDate: '',
+    sex: '',
+    activityLevel: '',
+    calories: 2000,
+    carbs: 40,
+    protein: 30,
+    fat: 30,
   });
+
+  // Update profileData when editingProfile changes
+  useEffect(() => {
+    if (isOpen && editingProfile) {
+      setProfileData({
+        name: editingProfile.name || '',
+        diet: editingProfile.diet || '',
+        allergies: editingProfile.allergies || [],
+        goal: editingProfile.goal || '',
+        weight: parseWeight(editingProfile.weight).value,
+        weightUnit: parseWeight(editingProfile.weight).unit,
+        height: parseHeight(editingProfile.height).value,
+        heightUnit: parseHeight(editingProfile.height).unit,
+        birthDate: editingProfile.birthDate || '',
+        sex: editingProfile.sex || '',
+        activityLevel: editingProfile.activityLevel || '',
+        calories: editingProfile.calories || 2000,
+        carbs: editingProfile.carbs || 40,
+        protein: editingProfile.protein || 30,
+        fat: editingProfile.fat || 30,
+      });
+    } else if (isOpen && !editingProfile) {
+      // Reset to default when adding new profile
+      setProfileData({
+        name: '',
+        diet: '',
+        allergies: [],
+        goal: '',
+        weight: '',
+        weightUnit: 'kg',
+        height: '',
+        heightUnit: 'cm',
+        birthDate: '',
+        sex: '',
+        activityLevel: '',
+        calories: 2000,
+        carbs: 40,
+        protein: 30,
+        fat: 30,
+      });
+    }
+  }, [isOpen, editingProfile]);
 
   // Loading progress
   const [loadingProgress, setLoadingProgress] = useState(0);
