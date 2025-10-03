@@ -475,6 +475,11 @@ export const RecipePreferencesPage = () => {
                       </button>
                     </div>
                     
+                    {/* Subtítulo informativo */}
+                    <p className="text-sm text-[#666666] mb-4">
+                      Los perfiles de comensales se almacenarán en tu perfil para que no tengas que volver a crearlos
+                    </p>
+                    
                     {/* Health Profiles - Compact Tags */}
                     <div className="flex flex-col gap-3">
                       {healthProfiles.map((profile, index) => (
