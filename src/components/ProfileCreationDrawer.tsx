@@ -1261,8 +1261,8 @@ export const ProfileCreationDrawer = ({
                         description: 'La foto de perfil se guardó correctamente',
                       });
 
-                      // Refresh the page to show new avatar
-                      window.location.reload();
+                      // Stay on overview step instead of closing
+                      setCurrentStep('overview');
                     } catch (error) {
                       console.error('Error uploading avatar:', error);
                       toast({
@@ -1272,6 +1272,8 @@ export const ProfileCreationDrawer = ({
                       });
                     } finally {
                       setUploadingAvatar(false);
+                      // Reset file input
+                      if (e.target) e.target.value = '';
                     }
                   }}
                 />
