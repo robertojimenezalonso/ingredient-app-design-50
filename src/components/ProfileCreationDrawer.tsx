@@ -1629,10 +1629,10 @@ export const ProfileCreationDrawer = ({
                               });
                             }}
                             className={cn(
-                              "overflow-hidden rounded-xl border-2 transition-all",
+                              "overflow-hidden rounded-xl transition-all",
                               isSelected
-                                ? "border-primary bg-primary/10"
-                                : "border-border bg-card hover:border-primary/50"
+                                ? "ring-4 ring-primary"
+                                : "hover:ring-2 hover:ring-primary/50"
                             )}
                             style={{
                               opacity: 0,
