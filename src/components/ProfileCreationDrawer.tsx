@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { X, ChevronLeft, ChevronRight, ArrowUp, MoreVertical, Camera } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ArrowUp, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
 import { supabase } from '@/integrations/supabase/client';
@@ -42,7 +42,6 @@ export const ProfileCreationDrawer = ({
   const [currentStep, setCurrentStep] = useState<Step>('name');
   const [returnToOverview, setReturnToOverview] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
-  const [showMenuDropdown, setShowMenuDropdown] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [showAvatarIcon, setShowAvatarIcon] = useState(false);
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
@@ -1349,39 +1348,6 @@ export const ProfileCreationDrawer = ({
             </div>
           </button>
           <div className="flex items-center gap-2">
-            {onDelete && currentStep === 'overview' && (
-              <div className="relative">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowMenuDropdown(!showMenuDropdown);
-                  }}
-                  className="p-1 rounded-full"
-                >
-                  <MoreVertical className="w-5 h-5" />
-                </button>
-                {showMenuDropdown && (
-                  <>
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setShowMenuDropdown(false)}
-                    />
-                    <div className="absolute right-0 top-full mt-1 w-48 bg-white rounded-lg shadow-lg border z-50 overflow-hidden">
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setShowMenuDropdown(false);
-                          onDelete();
-                        }}
-                        className="w-full px-4 py-3 text-left text-sm text-destructive"
-                      >
-                        Eliminar perfil
-                      </button>
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
             <button onClick={() => {
               // If profile has been saved to database (has an ID), just close
               if (editingProfile?.id) {
@@ -2407,6 +2373,17 @@ export const ProfileCreationDrawer = ({
                   Guardar perfil
                 </Button>
               </div>
+            )}
+            
+            {/* Delete profile button */}
+            {onDelete && editingProfile?.id && (
+              <button
+                type="button"
+                onClick={onDelete}
+                className="w-full text-center py-3 text-sm font-medium text-destructive mt-6"
+              >
+                Eliminar perfil
+              </button>
             )}
           </div>
         )}
