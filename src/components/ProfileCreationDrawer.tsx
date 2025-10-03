@@ -2197,7 +2197,14 @@ export const ProfileCreationDrawer = ({
         {/* Buttons for macros step */}
         {currentStep === 'macros' && (
           <div className="p-4 border-t flex-shrink-0">
-            {editingProfile ? (
+            {(() => {
+              console.log('=== Macros Button Section ===');
+              console.log('editingProfile:', editingProfile);
+              console.log('editingProfile?.id:', editingProfile?.id);
+              console.log('Should show "Guardar perfil" button:', !editingProfile?.id);
+              return null;
+            })()}
+            {editingProfile?.id ? (
               <button
                 type="button"
                 onClick={() => {
