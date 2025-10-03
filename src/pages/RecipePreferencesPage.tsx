@@ -9,7 +9,8 @@ import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ProfileCreationDrawer } from '@/components/ProfileCreationDrawer';
-import { useMealProfiles, type MealProfile } from '@/hooks/useMealProfiles';
+import { useMealProfiles } from '@/hooks/useMealProfiles';
+import type { MealProfile } from '@/hooks/useMealProfiles';
 
 type MealSelection = {
   date: Date;
