@@ -873,27 +873,20 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
-    // If profile is NOT complete, find next incomplete step
+    // If profile is NOT complete, find first incomplete step from the beginning
     if (!isProfileComplete) {
       const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
-      const currentIndex = steps.indexOf(currentStep);
       
-      // Special handling for activityLevel - go to loading
-      if (currentStep === 'activityLevel') {
-        setCurrentStep('loading');
-        setReturnToOverview(false);
+      // Check if current step can continue (is valid)
+      if (!canContinue()) {
         return;
       }
       
-      // Find next incomplete step
-      for (let i = currentIndex + 1; i < steps.length; i++) {
+      // Find first incomplete step from the beginning
+      for (let i = 0; i < steps.length; i++) {
         const step = steps[i];
-        if (!canContinue()) {
-          // Current step not complete, stay here
-          return;
-        }
         
-        // Check if next step is complete
+        // Check if this step is complete
         const isStepComplete = (() => {
           switch (step) {
             case 'name':
