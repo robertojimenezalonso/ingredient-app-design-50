@@ -1651,11 +1651,6 @@ export const ProfileCreationDrawer = ({
                         );
                       })}
                     </div>
-                    {profileData.gustos.length > 0 && (
-                      <p className="text-sm text-muted-foreground text-center mt-4">
-                        {profileData.gustos.length} tipo{profileData.gustos.length !== 1 ? 's' : ''} de comida seleccionado{profileData.gustos.length !== 1 ? 's' : ''}
-                      </p>
-                    )}
                   </div>}
               </div>}
 
