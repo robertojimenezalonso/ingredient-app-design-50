@@ -1303,8 +1303,8 @@ export const ProfileCreationDrawer = ({
                       onClick={() => handleQuickEdit(item.step)}
                       className="w-full flex items-center justify-between py-4 text-left"
                     >
-                      <span className="text-sm text-muted-foreground flex-shrink-0">{item.label}</span>
-                      <span className="text-sm text-right ml-4">
+                      <span className="text-base text-muted-foreground flex-shrink-0">{item.label}</span>
+                      <span className="text-base text-right ml-4">
                         {item.value || 'Añadir'}
                       </span>
                     </button>
