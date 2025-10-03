@@ -864,18 +864,79 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleContinue = () => {
-    // If editing from overview (profile already complete), return to overview
-    if (returnToOverview) {
+    const isProfileComplete = getCompletionPercentage() === 100;
+    
+    // If editing from overview and profile is complete, return to overview
+    if (returnToOverview && isProfileComplete) {
       setCurrentStep('overview');
       setReturnToOverview(false);
       return;
     }
 
+    // If profile is NOT complete, find next incomplete step
+    if (!isProfileComplete) {
+      const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
+      const currentIndex = steps.indexOf(currentStep);
+      
+      // Special handling for activityLevel - go to loading
+      if (currentStep === 'activityLevel') {
+        setCurrentStep('loading');
+        setReturnToOverview(false);
+        return;
+      }
+      
+      // Find next incomplete step
+      for (let i = currentIndex + 1; i < steps.length; i++) {
+        const step = steps[i];
+        if (!canContinue()) {
+          // Current step not complete, stay here
+          return;
+        }
+        
+        // Check if next step is complete
+        const isStepComplete = (() => {
+          switch (step) {
+            case 'name':
+              return profileData.name.trim().length > 0 && profileData.name !== getDefaultName();
+            case 'diet':
+              return profileData.diet !== '';
+            case 'allergies':
+              return editingProfile?.allergies !== undefined || profileData.allergies.length > 0;
+            case 'goal':
+              return profileData.goal !== '';
+            case 'weight':
+              return profileData.weight && parseFloat(profileData.weight) > 0;
+            case 'height':
+              return profileData.height && parseFloat(profileData.height) > 0;
+            case 'birthdate':
+              return profileData.birthDate !== '';
+            case 'sex':
+              return profileData.sex !== '';
+            case 'activityLevel':
+              return profileData.activityLevel !== '';
+            default:
+              return false;
+          }
+        })();
+        
+        if (!isStepComplete) {
+          setCurrentStep(step);
+          setReturnToOverview(false);
+          return;
+        }
+      }
+      
+      // All steps complete, go to loading
+      setCurrentStep('loading');
+      setReturnToOverview(false);
+      return;
+    }
+
+    // Fallback: normal flow progression
     const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'loading', 'macros'];
     const currentIndex = steps.indexOf(currentStep);
     
     if (currentStep === 'activityLevel') {
-      // Go directly to loading after activity level
       setCurrentStep('loading');
       return;
     }
@@ -884,7 +945,6 @@ export const ProfileCreationDrawer = ({
       setCurrentStep(steps[currentIndex + 1]);
       setReturnToOverview(false);
     } else {
-      // Last step - save profile
       onSave(profileData);
     }
   };
@@ -954,7 +1014,9 @@ export const ProfileCreationDrawer = ({
 
   const handleQuickEdit = (step: Step) => {
     setCurrentStep(step);
-    setReturnToOverview(true);
+    // Only set returnToOverview if profile is complete
+    const isProfileComplete = getCompletionPercentage() === 100;
+    setReturnToOverview(isProfileComplete);
   };
 
   const hasRequiredDataForMacros = profileData.weight && profileData.height && profileData.birthDate && profileData.sex && profileData.activityLevel && profileData.goal;
@@ -1028,7 +1090,7 @@ export const ProfileCreationDrawer = ({
             </div>
           </button>
           <div className="flex items-center gap-2">
-            {getCompletionPercentage() === 100 && onDelete && (
+            {onDelete && (
               <div className="relative">
                 <button
                   onClick={(e) => {
