@@ -893,7 +893,13 @@ export const ProfileCreationDrawer = ({
               </p>
             </div>
           </button>
-          <button onClick={() => setShowCancelDialog(true)} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
+          <button onClick={() => {
+            if (getCompletionPercentage() === 100) {
+              onClose();
+            } else {
+              setShowCancelDialog(true);
+            }
+          }} className="w-8 h-8 rounded-full hover:bg-accent flex items-center justify-center transition-colors">
             <X className="w-5 h-5" />
           </button>
         </CardHeader>
