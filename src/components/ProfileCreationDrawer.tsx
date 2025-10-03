@@ -1385,6 +1385,20 @@ export const ProfileCreationDrawer = ({
                     {index < menuItems.length - 1 && <Separator />}
                   </div>
                 ))}
+                
+                {/* Delete profile button */}
+                {onDelete && (
+                  <>
+                    <Separator className="my-6" />
+                    <button
+                      type="button"
+                      onClick={onDelete}
+                      className="w-full text-center py-3 text-sm font-medium text-destructive"
+                    >
+                      Eliminar perfil
+                    </button>
+                  </>
+                )}
               </div>
             )}
             
@@ -2373,17 +2387,6 @@ export const ProfileCreationDrawer = ({
                   Guardar perfil
                 </Button>
               </div>
-            )}
-            
-            {/* Delete profile button */}
-            {onDelete && (
-              <button
-                type="button"
-                onClick={onDelete}
-                className="w-full text-center py-3 text-sm font-medium text-destructive mt-6"
-              >
-                Eliminar perfil
-              </button>
             )}
           </div>
         )}
