@@ -1629,7 +1629,7 @@ export const ProfileCreationDrawer = ({
                               });
                             }}
                             className={cn(
-                              "flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all",
+                              "overflow-hidden rounded-xl border-2 transition-all",
                               isSelected
                                 ? "border-primary bg-primary/10"
                                 : "border-border bg-card hover:border-primary/50"
@@ -1640,7 +1640,7 @@ export const ProfileCreationDrawer = ({
                               animation: `fadeInUp 0.4s ease-out ${index * 0.08}s forwards`,
                             }}
                           >
-                            <div className="w-full aspect-square rounded-lg overflow-hidden">
+                            <div className="w-full aspect-square">
                               <img 
                                 src={gusto.image} 
                                 alt={gusto.label}
