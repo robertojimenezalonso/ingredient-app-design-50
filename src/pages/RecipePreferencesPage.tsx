@@ -501,7 +501,7 @@ export const RecipePreferencesPage = () => {
                               getInitials(profile.name)
                             )}
                           </div>
-                          <span className="text-base font-medium text-white">{profile.name}</span>
+                          <span className="text-base font-normal text-white">{profile.name}</span>
                         </div>
                       ))}
                     </div>
