@@ -1173,14 +1173,14 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'gustos', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
     const currentIndex = steps.indexOf(currentStep);
     if (currentIndex > 0) {
       setCurrentStep(steps[currentIndex - 1]);
     }
   };
   const getCompletionPercentage = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'macros'];
+    const steps: Step[] = ['name', 'diet', 'allergies', 'gustos', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'macros'];
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
@@ -1191,6 +1191,8 @@ export const ProfileCreationDrawer = ({
         case 'allergies':
           // Only count if user has explicitly set allergies (even if empty)
           return editingProfile?.allergies !== undefined || profileData.allergies.length > 0;
+        case 'gustos':
+          return profileData.gustos.length > 0;
         case 'goal':
           return profileData.goal !== '';
         case 'weight':
@@ -1209,8 +1211,8 @@ export const ProfileCreationDrawer = ({
           return false;
       }
     }).length;
-    // 10 steps total, each step = 10%
-    return completedSteps * 10;
+    // 11 steps total, calculate percentage dynamically
+    return Math.round((completedSteps / steps.length) * 100);
   };
   const getDefaultName = () => `Comensal ${profileIndex + 1}`;
   const getInitials = (name: string) => {
@@ -1245,6 +1247,7 @@ export const ProfileCreationDrawer = ({
     { step: 'name' as Step, label: 'Nombre', value: profileData.name },
     { step: 'diet' as Step, label: 'Preferencia alimentaria', value: profileData.diet },
     { step: 'allergies' as Step, label: 'Alergias e intolerancias', value: profileData.allergies.length > 0 ? `${profileData.allergies.length}` : '' },
+    { step: 'gustos' as Step, label: 'Gustos', value: profileData.gustos.length > 0 ? `${profileData.gustos.length}` : '' },
     { step: 'goal' as Step, label: 'Objetivo', value: profileData.goal },
     { step: 'weight' as Step, label: 'Peso', value: profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : '' },
     { step: 'height' as Step, label: 'Altura', value: profileData.height ? `${profileData.height} ${profileData.heightUnit}` : '' },
