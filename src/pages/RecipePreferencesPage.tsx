@@ -491,7 +491,7 @@ export const RecipePreferencesPage = () => {
                             className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium overflow-hidden flex-shrink-0"
                             style={{ 
                               backgroundColor: getProfileColor(profile, index), 
-                              color: '#FFFFFF',
+                              color: 'rgba(255, 255, 255, 0.8)',
                               border: '1px solid white'
                             }}
                           >

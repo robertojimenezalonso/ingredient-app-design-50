@@ -1316,7 +1316,7 @@ export const ProfileCreationDrawer = ({
                         "absolute inset-0 flex items-center justify-center transition-all duration-500 text-lg font-medium",
                         showAvatarIcon ? "translate-x-[-100%] opacity-0" : "translate-x-0 opacity-100"
                       )}
-                      style={{ color: '#FFFFFF' }}
+                      style={{ color: 'rgba(255, 255, 255, 0.8)' }}
                     >
                       {getInitials(profileData.name)}
                     </div>
