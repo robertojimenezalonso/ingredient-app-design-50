@@ -1822,16 +1822,15 @@ export const ProfileCreationDrawer = ({
 
       {/* Cancel Confirmation Dialog */}
       <AlertDialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="mx-4">
           <AlertDialogHeader>
-            <AlertDialogTitle>¿Estás seguro?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="text-center text-base">
               ¿Estás seguro de que deseas cancelar la creación de este perfil de comensal? Se perderá toda la información ingresada.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>No</AlertDialogCancel>
+          <AlertDialogFooter className="flex-row gap-3 sm:justify-between">
             <AlertDialogAction
+              className="flex-1 bg-destructive hover:bg-destructive/90"
               onClick={() => {
                 // Reset all data
                 setProfileData({
@@ -1857,8 +1856,9 @@ export const ProfileCreationDrawer = ({
                 onClose();
               }}
             >
-              Sí
+              Eliminar
             </AlertDialogAction>
+            <AlertDialogCancel className="flex-1 m-0">No</AlertDialogCancel>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
