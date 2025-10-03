@@ -33,7 +33,7 @@ export const ProfileCreationDrawer = ({
   editingProfile,
   profileIndex = 0
 }: ProfileCreationDrawerProps) => {
-  const [currentStep, setCurrentStep] = useState<Step>('name');
+  const [currentStep, setCurrentStep] = useState<Step>(editingProfile?.name ? 'overview' : 'name');
   const [returnToOverview, setReturnToOverview] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
 
