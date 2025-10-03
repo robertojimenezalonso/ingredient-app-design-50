@@ -43,6 +43,7 @@ export const ProfileCreationDrawer = ({
   const [showMenuDropdown, setShowMenuDropdown] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [showAvatarIcon, setShowAvatarIcon] = useState(false);
+  const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -1187,18 +1188,82 @@ export const ProfileCreationDrawer = ({
                 <circle cx="32" cy="32" r="30" stroke="#10B981" strokeWidth="3" fill="none" strokeDasharray={`${2 * Math.PI * 30}`} strokeDashoffset={`${2 * Math.PI * 30 * (1 - getCompletionPercentage() / 100)}`} strokeLinecap="round" className="transition-all duration-300" />
               </svg>
               <div 
-                className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium overflow-hidden cursor-pointer" 
+                className="absolute inset-[5px] rounded-full flex items-center justify-center text-xs font-medium overflow-hidden cursor-pointer relative" 
                 style={{
                   backgroundColor: getProfileColor(),
                   color: 'rgba(255, 255, 255, 0.8)'
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  fileInputRef.current?.click();
+                  if (editingProfile?.avatarUrl) {
+                    setShowAvatarOptions(!showAvatarOptions);
+                  } else {
+                    fileInputRef.current?.click();
+                  }
                 }}
               >
                 {editingProfile?.avatarUrl ? (
-                  <img src={editingProfile.avatarUrl} alt={profileData.name} className="w-full h-full object-cover" />
+                  <>
+                    <img src={editingProfile.avatarUrl} alt={profileData.name} className="w-full h-full object-cover" />
+                    {showAvatarOptions && (
+                      <>
+                        <div
+                          className="fixed inset-0 z-40"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowAvatarOptions(false);
+                          }}
+                        />
+                        <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-lg shadow-lg border z-50 overflow-hidden">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setShowAvatarOptions(false);
+                              fileInputRef.current?.click();
+                            }}
+                            className="w-full px-4 py-3 text-left text-sm hover:bg-accent transition-colors"
+                          >
+                            Cambiar foto
+                          </button>
+                          <button
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              setShowAvatarOptions(false);
+                              if (!editingProfile?.id) return;
+                              
+                              try {
+                                const { error } = await supabase
+                                  .from('meal_profiles')
+                                  .update({ avatar_url: null })
+                                  .eq('id', editingProfile.id);
+
+                                if (error) throw error;
+
+                                editingProfile.avatarUrl = undefined;
+                                
+                                toast({
+                                  title: 'Foto eliminada',
+                                  description: 'La foto de perfil se eliminó correctamente',
+                                });
+                                
+                                window.dispatchEvent(new CustomEvent('meal-profile-updated'));
+                              } catch (error) {
+                                console.error('Error deleting avatar:', error);
+                                toast({
+                                  title: 'Error',
+                                  description: 'No se pudo eliminar la foto de perfil',
+                                  variant: 'destructive',
+                                });
+                              }
+                            }}
+                            className="w-full px-4 py-3 text-left text-sm hover:bg-accent transition-colors text-destructive"
+                          >
+                            Eliminar foto
+                          </button>
+                        </div>
+                      </>
+                    )}
+                  </>
                 ) : (
                   <div className="relative w-full h-full flex items-center justify-center">
                     <div 
