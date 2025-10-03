@@ -955,6 +955,13 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // If profile is complete, return to overview
+    if (isProfileComplete) {
+      setCurrentStep('overview');
+      setReturnToOverview(false);
+      return;
+    }
+
     // Fallback: normal flow progression
     const steps: Step[] = ['name', 'diet', 'allergies', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'loading', 'macros'];
     const currentIndex = steps.indexOf(currentStep);
