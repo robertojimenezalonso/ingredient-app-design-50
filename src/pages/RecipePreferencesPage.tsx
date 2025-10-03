@@ -496,30 +496,6 @@ export const RecipePreferencesPage = () => {
                               </p>
                             </div>
                           </div>
-                          <div className="relative">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              toggleMenu(profile.id);
-                            }}
-                            className="p-1 hover:bg-[#F4F4F4] rounded-full transition-colors"
-                          >
-                            <MoreVertical className="h-5 w-5 text-[#1C1C1C]" />
-                          </button>
-                          {openMenuId === profile.id && (
-                            <div className="absolute right-0 top-8 bg-white border border-[#E5E5E5] rounded-lg shadow-lg py-1 z-10">
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleDeleteProfile(profile.id);
-                                }}
-                                className="px-4 py-2 text-red-600 hover:bg-red-50 w-full text-left whitespace-nowrap"
-                              >
-                                Eliminar perfil
-                              </button>
-                            </div>
-                          )}
-                        </div>
                       </div>
                       </CardContent>
                     </Card>
