@@ -1825,7 +1825,7 @@ export const ProfileCreationDrawer = ({
         <AlertDialogContent className="max-w-[calc(100vw-2rem)] rounded-2xl">
           <AlertDialogHeader>
             <AlertDialogDescription className="text-center text-base">
-              ¿Estás seguro de que deseas cancelar la creación de este perfil de comensal? Se perderá toda la información ingresada.
+              ¿Quieres cancelar la creación de este perfil de comensal? Se perderá toda la información ingresada.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-row gap-3 sm:justify-between">
