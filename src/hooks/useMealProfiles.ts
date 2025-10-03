@@ -81,7 +81,7 @@ export const useMealProfiles = () => {
       }
 
       // Assign a color if not provided
-      const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
+      const colors = ['#A4243B', '#BD632F', '#273E47', '#6E9075', '#EB6534', '#6494AA', '#90A959', '#64B6AC', '#6E8898', '#26A96C'];
       const profileColor = profileData.profile_color || colors[profiles.length % colors.length];
 
       const { data, error } = await supabase

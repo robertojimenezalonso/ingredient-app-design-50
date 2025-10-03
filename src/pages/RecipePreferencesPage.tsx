@@ -242,7 +242,7 @@ export const RecipePreferencesPage = () => {
     if (profile.profileColor) {
       return profile.profileColor;
     }
-    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2'];
+    const colors = ['#A4243B', '#BD632F', '#273E47', '#6E9075', '#EB6534', '#6494AA', '#90A959', '#64B6AC', '#6E8898', '#26A96C'];
     return colors[index % colors.length];
   };
   
