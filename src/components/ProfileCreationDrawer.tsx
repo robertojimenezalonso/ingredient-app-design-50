@@ -788,7 +788,8 @@ export const ProfileCreationDrawer = ({
           return false;
       }
     }).length;
-    return Math.round(completedSteps / steps.length * 100);
+    // 10 steps total, each step = 10%
+    return completedSteps * 10;
   };
   const getDefaultName = () => `Comensal ${profileIndex + 1}`;
   const getInitials = (name: string) => {
