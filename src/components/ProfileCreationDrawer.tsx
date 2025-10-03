@@ -180,7 +180,7 @@ export const ProfileCreationDrawer = ({
         name: editingProfile.name || '',
         diet: editingProfile.diet || '',
         allergies: allergiesArray,
-        goal: editingProfile.goal || '',
+        goal: editingProfile.goal || editingProfile.healthGoal || '',
         weight: parseWeight(editingProfile.weight).value,
         weightUnit: parseWeight(editingProfile.weight).unit,
         height: parseHeight(editingProfile.height).value,
@@ -896,6 +896,59 @@ export const ProfileCreationDrawer = ({
   const handleContinue = () => {
     const isProfileComplete = getCompletionPercentage() === 100;
     
+    // Save current step data to database before continuing if editing an existing profile
+    if (editingProfile?.id && canContinue()) {
+      const stepDataToSave: any = {};
+      
+      // Map current step data to database fields
+      switch (currentStep) {
+        case 'name':
+          stepDataToSave.name = profileData.name;
+          break;
+        case 'diet':
+          stepDataToSave.diet = profileData.diet;
+          break;
+        case 'allergies':
+          stepDataToSave.allergies = profileData.allergies;
+          break;
+        case 'goal':
+          stepDataToSave.health_goal = profileData.goal;
+          break;
+        case 'weight':
+          stepDataToSave.weight = profileData.weight && profileData.weightUnit 
+            ? `${profileData.weight} ${profileData.weightUnit}` 
+            : undefined;
+          break;
+        case 'height':
+          stepDataToSave.height = profileData.height && profileData.heightUnit 
+            ? `${profileData.height} ${profileData.heightUnit}` 
+            : undefined;
+          break;
+        case 'birthdate':
+          stepDataToSave.birth_date = profileData.birthDate;
+          break;
+        case 'sex':
+          stepDataToSave.sex = profileData.sex;
+          break;
+        case 'activityLevel':
+          stepDataToSave.activity_level = profileData.activityLevel;
+          break;
+      }
+      
+      // Save to database if there's data to save
+      if (Object.keys(stepDataToSave).length > 0) {
+        supabase
+          .from('meal_profiles')
+          .update(stepDataToSave)
+          .eq('id', editingProfile.id)
+          .then(({ error }) => {
+            if (error) {
+              console.error('Error saving step data:', error);
+            }
+          });
+      }
+    }
+    
     // If editing from overview and profile is complete, return to overview
     if (returnToOverview && isProfileComplete) {
       setCurrentStep('overview');
@@ -979,6 +1032,16 @@ export const ProfileCreationDrawer = ({
     }
   };
   const handleBack = () => {
+    // Prevent going back if current step is incomplete
+    if (currentStep !== 'overview' && currentStep !== 'loading' && currentStep !== 'macros' && !canContinue()) {
+      toast({
+        title: 'Campo requerido',
+        description: 'Por favor completa este campo antes de continuar',
+        variant: 'destructive',
+      });
+      return;
+    }
+    
     if (currentStep === 'overview') {
       return;
     }
