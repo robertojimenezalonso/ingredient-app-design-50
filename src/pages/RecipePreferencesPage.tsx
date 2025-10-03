@@ -472,7 +472,7 @@ export const RecipePreferencesPage = () => {
                         onClick={() => handleEditProfile(profile)}
                       >
                         <div 
-                          className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium overflow-hidden flex-shrink-0"
+                          className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-medium overflow-hidden flex-shrink-0"
                           style={{ 
                             backgroundColor: getProfileColor(profile, index), 
                             color: 'rgba(255, 255, 255, 0.8)',
