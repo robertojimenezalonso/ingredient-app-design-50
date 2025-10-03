@@ -508,7 +508,7 @@ export const RecipePreferencesPage = () => {
                     
                     {/* Subtítulo informativo */}
                     <p className="text-sm text-[#666666] mt-4">
-                      Los perfiles de comensales se guardan automáticamente para que no tengas que volver a configurarlos.
+                      Guardaremos los perfiles de comensales para que no tengas que configurarlos de nuevo.
                     </p>
                   </div>
                 </div>
