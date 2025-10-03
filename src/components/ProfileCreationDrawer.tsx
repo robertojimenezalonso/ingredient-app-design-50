@@ -2166,7 +2166,7 @@ export const ProfileCreationDrawer = ({
         {/* Buttons for macros step */}
         {currentStep === 'macros' && (
           <div className="p-4 border-t flex-shrink-0">
-            <div className="flex gap-3">
+            {editingProfile ? (
               <button
                 type="button"
                 onClick={() => {
@@ -2178,25 +2178,43 @@ export const ProfileCreationDrawer = ({
                     calories: recommendedMacros.calories
                   });
                 }}
-                className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
+                className="w-full text-center py-3 text-sm font-medium border rounded-lg"
               >
                 Restaurar datos
               </button>
-              <Button 
-                onClick={() => {
-                  onSave(profileData);
-                  onClose();
-                }} 
-                disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
-                className="flex-1"
-                style={{
-                  backgroundColor: '#020817',
-                  color: '#ffffff'
-                }}
-              >
-                Crear perfil
-              </Button>
-            </div>
+            ) : (
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProfileData({
+                      ...profileData,
+                      carbs: recommendedMacros.carbs,
+                      protein: recommendedMacros.protein,
+                      fat: recommendedMacros.fat,
+                      calories: recommendedMacros.calories
+                    });
+                  }}
+                  className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
+                >
+                  Restaurar datos
+                </button>
+                <Button 
+                  onClick={() => {
+                    onSave(profileData);
+                    onClose();
+                  }} 
+                  disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
+                  className="flex-1"
+                  style={{
+                    backgroundColor: '#020817',
+                    color: '#ffffff'
+                  }}
+                >
+                  Crear perfil
+                </Button>
+              </div>
+            )}
           </div>
         )}
 
