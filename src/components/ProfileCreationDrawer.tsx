@@ -1640,14 +1640,13 @@ export const ProfileCreationDrawer = ({
                               animation: `fadeInUp 0.4s ease-out ${index * 0.08}s forwards`,
                             }}
                           >
-                            <div className="w-full aspect-square rounded-lg overflow-hidden mb-2">
+                            <div className="w-full aspect-square rounded-lg overflow-hidden">
                               <img 
                                 src={gusto.image} 
                                 alt={gusto.label}
                                 className="w-full h-full object-cover"
                               />
                             </div>
-                            <span className="text-xs text-center font-medium leading-tight">{gusto.label}</span>
                           </button>
                         );
                       })}
