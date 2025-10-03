@@ -459,6 +459,21 @@ export const RecipePreferencesPage = () => {
                     )}
                   </div>
                   
+                  {/* Contador de comensales y botón añadir */}
+                  <div className="flex items-center justify-between mb-4">
+                    <span className="text-base text-[#1C1C1C]">
+                      {healthProfiles.length === 0 ? 'Sin comensales' : `${healthProfiles.length} ${healthProfiles.length === 1 ? 'comensal' : 'comensales'}`}
+                    </span>
+                    <Button
+                      variant="default"
+                      onClick={handleAddProfile}
+                      className="bg-[#1C1C1C] text-white hover:bg-[#000000] w-auto"
+                    >
+                      <Plus className="h-4 w-4 mr-2" />
+                      Añadir comensal
+                    </Button>
+                  </div>
+                  
                   {/* Health Profiles - Compact Tags */}
                   <div className="flex flex-wrap gap-3 mb-4">
                     {healthProfiles.map((profile, index) => (
@@ -489,15 +504,6 @@ export const RecipePreferencesPage = () => {
                       </div>
                     ))}
                   </div>
-                  
-                  <Button
-                    variant="default"
-                    onClick={handleAddProfile}
-                    className="bg-[#1C1C1C] text-white hover:bg-[#000000] w-auto mt-6"
-                  >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Añadir perfil comensal
-                  </Button>
                 </div>
               </div>
             </div>
