@@ -1041,8 +1041,15 @@ export const ProfileCreationDrawer = ({
     const currentIndex = steps.indexOf(currentStep);
     
     if (currentStep === 'activityLevel') {
-      setCurrentStep('loading');
-      return;
+      // Solo ir a loading y macros cuando se está CREANDO un perfil nuevo
+      if (!editingProfile?.id) {
+        setCurrentStep('loading');
+        return;
+      } else {
+        // Si está editando, volver al overview
+        setCurrentStep('overview');
+        return;
+      }
     }
     
     if (currentIndex < steps.length - 1 && currentStep !== 'loading') {
