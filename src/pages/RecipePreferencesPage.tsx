@@ -460,7 +460,7 @@ export const RecipePreferencesPage = () => {
                   </div>
                   
                   {/* Rectángulo contenedor para título, botón y tags */}
-                  <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#F9F8F2' }}>
+                  <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#F4F4F4' }}>
                     {/* Contador de comensales y botón añadir */}
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-base font-semibold text-[#1C1C1C]">
