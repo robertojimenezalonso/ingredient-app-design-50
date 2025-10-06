@@ -73,7 +73,7 @@ export const ImageCropDialog = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-background">
+    <div className="fixed inset-0 z-[10000] bg-background">
       {/* Crop area */}
       <div className="relative w-full h-[calc(100vh-80px)]">
         <Cropper

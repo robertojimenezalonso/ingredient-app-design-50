@@ -2749,7 +2749,7 @@ export const ProfileCreationDrawer = ({
         ref={cameraInputRef}
         type="file"
         accept="image/*"
-        capture="environment"
+        capture="user"
         className="hidden"
         onChange={async (e) => {
           const file = e.target.files?.[0];
