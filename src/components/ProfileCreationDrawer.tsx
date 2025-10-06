@@ -985,17 +985,38 @@ export const ProfileCreationDrawer = ({
     if (currentStep === 'name' && showInput && nameInputRef.current) {
       console.log('=== Auto-focusing name input ===');
       
-      // Usar setTimeout para asegurar que el DOM esté listo
-      setTimeout(() => {
-        if (nameInputRef.current) {
-          nameInputRef.current.focus({
-            preventScroll: true
-          });
-          
-          // En móvil, forzar la apertura del teclado
-          nameInputRef.current.click();
-        }
-      }, 100);
+      // Usar varios intentos con timeouts incrementales para asegurar que funcione
+      const focusAttempts = [50, 150, 300, 500];
+      
+      focusAttempts.forEach((delay) => {
+        setTimeout(() => {
+          if (nameInputRef.current && currentStep === 'name') {
+            console.log(`Intento de focus con delay ${delay}ms`);
+            
+            // Scroll al input primero
+            nameInputRef.current.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'center' 
+            });
+            
+            // Focus
+            nameInputRef.current.focus({
+              preventScroll: false
+            });
+            
+            // En móvil, simular click para forzar teclado
+            nameInputRef.current.click();
+            
+            // También intentar con touchstart en móviles
+            const touchEvent = new TouchEvent('touchstart', {
+              bubbles: true,
+              cancelable: true
+            });
+            nameInputRef.current.dispatchEvent(touchEvent);
+          }
+        }, delay);
+      });
+      
       return;
     }
 
@@ -1013,9 +1034,11 @@ export const ProfileCreationDrawer = ({
       })();
       
       if (input) {
-        input.focus({
-          preventScroll: true
-        });
+        setTimeout(() => {
+          input.focus({
+            preventScroll: true
+          });
+        }, 200);
       }
     });
   }, [isOpen, currentStep, showInput]);
