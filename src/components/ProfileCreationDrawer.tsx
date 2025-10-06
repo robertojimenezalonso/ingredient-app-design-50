@@ -1843,17 +1843,25 @@ export const ProfileCreationDrawer = ({
                     <div className="flex gap-2 items-center justify-center">
                       {/* Day Wheel */}
                       <div className="relative h-48 w-20 overflow-hidden">
-                        <div className="absolute inset-0 pointer-events-none z-10">
+                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
                           <div className="h-16 bg-gradient-to-b from-white to-transparent" />
-                          <div className="h-16 rounded-full" style={{ backgroundColor: '#D9DADC' }} />
+                          <div className="h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                            <span className="text-2xl font-medium text-[#020817]">
+                              {parseBirthDate(profileData.birthDate).day || 'DD'}
+                            </span>
+                          </div>
                           <div className="h-16 bg-gradient-to-t from-white to-transparent" />
                         </div>
                         <div 
                           className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          style={{
+                            scrollSnapType: 'y mandatory',
+                            WebkitOverflowScrolling: 'touch'
+                          }}
                           onScroll={(e) => {
                             const container = e.currentTarget;
                             const scrollTop = container.scrollTop;
-                            const itemHeight = 64; // h-16
+                            const itemHeight = 64;
                             const index = Math.round(scrollTop / itemHeight);
                             const day = index + 1;
                             const { month, year } = parseBirthDate(profileData.birthDate);
@@ -1871,9 +1879,10 @@ export const ProfileCreationDrawer = ({
                           {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
                             <div 
                               key={day}
-                              className="h-16 flex items-center justify-center text-2xl font-light text-gray-400"
+                              className="h-16 flex items-center justify-center text-2xl font-light"
                               style={{
-                                color: parseBirthDate(profileData.birthDate).day === day.toString().padStart(2, '0') ? '#020817' : '#D1D5DB'
+                                scrollSnapAlign: 'start',
+                                color: '#D1D5DB'
                               }}
                             >
                               {day}
@@ -1884,19 +1893,28 @@ export const ProfileCreationDrawer = ({
                       
                       {/* Month Wheel */}
                       <div className="relative h-48 w-32 overflow-hidden">
-                        <div className="absolute inset-0 pointer-events-none z-10">
+                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
                           <div className="h-16 bg-gradient-to-b from-white to-transparent" />
-                          <div className="h-16 rounded-full" style={{ backgroundColor: '#D9DADC' }} />
+                          <div className="h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                            <span className="text-2xl font-medium text-[#020817]">
+                              {parseBirthDate(profileData.birthDate).month ? 
+                                ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][parseInt(parseBirthDate(profileData.birthDate).month) - 1] 
+                                : 'mes'}
+                            </span>
+                          </div>
                           <div className="h-16 bg-gradient-to-t from-white to-transparent" />
                         </div>
                         <div 
                           className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          style={{
+                            scrollSnapType: 'y mandatory',
+                            WebkitOverflowScrolling: 'touch'
+                          }}
                           onScroll={(e) => {
                             const container = e.currentTarget;
                             const scrollTop = container.scrollTop;
                             const itemHeight = 64;
                             const index = Math.round(scrollTop / itemHeight);
-                            const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
                             const month = (index + 1).toString().padStart(2, '0');
                             const { day, year } = parseBirthDate(profileData.birthDate);
                             if (day && year) {
@@ -1907,12 +1925,13 @@ export const ProfileCreationDrawer = ({
                             }
                           }}
                         >
-                          {['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((month, idx) => (
+                          {['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((month) => (
                             <div 
                               key={month}
                               className="h-16 flex items-center justify-center text-2xl font-light"
                               style={{
-                                color: parseBirthDate(profileData.birthDate).month === (idx + 1).toString().padStart(2, '0') ? '#020817' : '#D1D5DB'
+                                scrollSnapAlign: 'start',
+                                color: '#D1D5DB'
                               }}
                             >
                               {month}
@@ -1923,13 +1942,21 @@ export const ProfileCreationDrawer = ({
                       
                       {/* Year Wheel */}
                       <div className="relative h-48 w-24 overflow-hidden">
-                        <div className="absolute inset-0 pointer-events-none z-10">
+                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
                           <div className="h-16 bg-gradient-to-b from-white to-transparent" />
-                          <div className="h-16 rounded-full" style={{ backgroundColor: '#D9DADC' }} />
+                          <div className="h-16 rounded-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                            <span className="text-2xl font-medium text-[#020817]">
+                              {parseBirthDate(profileData.birthDate).year || 'año'}
+                            </span>
+                          </div>
                           <div className="h-16 bg-gradient-to-t from-white to-transparent" />
                         </div>
                         <div 
                           className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          style={{
+                            scrollSnapType: 'y mandatory',
+                            WebkitOverflowScrolling: 'touch'
+                          }}
                           onScroll={(e) => {
                             const container = e.currentTarget;
                             const scrollTop = container.scrollTop;
@@ -1952,7 +1979,8 @@ export const ProfileCreationDrawer = ({
                               key={year}
                               className="h-16 flex items-center justify-center text-2xl font-light"
                               style={{
-                                color: parseBirthDate(profileData.birthDate).year === year.toString() ? '#020817' : '#D1D5DB'
+                                scrollSnapAlign: 'start',
+                                color: '#D1D5DB'
                               }}
                             >
                               {year}
