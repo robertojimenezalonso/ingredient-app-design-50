@@ -112,6 +112,7 @@ export const ProfileCreationDrawer = ({
   const [gustosShowCursor, setGustosShowCursor] = useState(false);
   const [gustosShowOptions, setGustosShowOptions] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
   
   // State to track if gustos section has been submitted
   const [gustosSubmitted, setGustosSubmitted] = useState(false);
@@ -1679,23 +1680,32 @@ export const ProfileCreationDrawer = ({
                   const currentFood = foodTypes[currentImageIndex];
                   
                   const handleLikeDislike = (liked: boolean) => {
-                    // Si le gusta, añadirlo a gustos
-                    if (liked && !profileData.gustos.includes(currentFood.id)) {
-                      setProfileData({
-                        ...profileData,
-                        gustos: [...profileData.gustos, currentFood.id],
-                      });
-                    }
+                    // Trigger swipe animation
+                    setSwipeDirection(liked ? 'right' : 'left');
                     
-                    // Avanzar a la siguiente imagen
-                    if (currentImageIndex < foodTypes.length - 1) {
-                      setCurrentImageIndex(currentImageIndex + 1);
-                    } else {
-                      // Última imagen - avanzar al siguiente paso automáticamente
-                      setTimeout(() => {
-                        handleContinue();
-                      }, 300);
-                    }
+                    // Wait for animation to complete, then update state
+                    setTimeout(() => {
+                      // Si le gusta, añadirlo a gustos
+                      if (liked && !profileData.gustos.includes(currentFood.id)) {
+                        setProfileData({
+                          ...profileData,
+                          gustos: [...profileData.gustos, currentFood.id],
+                        });
+                      }
+                      
+                      // Reset swipe direction
+                      setSwipeDirection(null);
+                      
+                      // Avanzar a la siguiente imagen
+                      if (currentImageIndex < foodTypes.length - 1) {
+                        setCurrentImageIndex(currentImageIndex + 1);
+                      } else {
+                        // Última imagen - avanzar al siguiente paso automáticamente
+                        setTimeout(() => {
+                          handleContinue();
+                        }, 100);
+                      }
+                    }, 300);
                   };
 
                   return (
@@ -1705,10 +1715,13 @@ export const ProfileCreationDrawer = ({
                         <img 
                           src={currentFood.image} 
                           alt={currentFood.label}
-                          className="w-full h-full object-cover"
-                          style={{
-                            animation: 'fadeIn 0.3s ease-out'
-                          }}
+                          className={`w-full h-full object-cover transition-all duration-300 ${
+                            swipeDirection === 'right' 
+                              ? 'translate-x-[150%] rotate-12 opacity-0' 
+                              : swipeDirection === 'left' 
+                              ? '-translate-x-[150%] -rotate-12 opacity-0' 
+                              : 'translate-x-0 rotate-0 opacity-100'
+                          }`}
                         />
                       </div>
                       
