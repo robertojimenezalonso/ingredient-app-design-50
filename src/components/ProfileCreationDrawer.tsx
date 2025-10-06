@@ -989,8 +989,8 @@ export const ProfileCreationDrawer = ({
         const year = parseInt(birthdateYear);
         const today = new Date();
         
-        // Validate ranges
-        if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > today.getFullYear()) {
+        // Validate ranges (minimum year is 1915)
+        if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1915 || year > today.getFullYear()) {
           return false;
         }
         
@@ -1986,6 +1986,12 @@ export const ProfileCreationDrawer = ({
                       value={birthdateYear}
                       onChange={(e) => {
                         const numValue = e.target.value.replace(/\D/g, '').slice(0, 4);
+                        const yearNum = parseInt(numValue);
+                        
+                        // Only allow years between 1915 and current year
+                        if (numValue.length === 4 && (yearNum < 1915 || yearNum > new Date().getFullYear())) {
+                          return;
+                        }
                         
                         setBirthdateYear(numValue);
                         
