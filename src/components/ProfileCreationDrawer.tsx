@@ -1930,9 +1930,8 @@ export const ProfileCreationDrawer = ({
                       }}
                       maxLength={2}
                       autoFocus
-                      autoComplete="new-password"
-                      data-lpignore="true"
-                      data-form-type="other"
+                      autoComplete="bday-day"
+                      name="bday-day"
                     />
                     <Input
                       ref={monthInputRef}
@@ -1985,9 +1984,8 @@ export const ProfileCreationDrawer = ({
                         e.target.style.borderColor = 'transparent';
                       }}
                       maxLength={2}
-                      autoComplete="new-password"
-                      data-lpignore="true"
-                      data-form-type="other"
+                      autoComplete="bday-month"
+                      name="bday-month"
                     />
                     <Input
                       ref={yearInputRef}
@@ -2029,9 +2027,8 @@ export const ProfileCreationDrawer = ({
                         e.target.style.borderColor = 'transparent';
                       }}
                       maxLength={4}
-                      autoComplete="new-password"
-                      data-lpignore="true"
-                      data-form-type="other"
+                      autoComplete="bday-year"
+                      name="bday-year"
                     />
                   </div>
                 )}
