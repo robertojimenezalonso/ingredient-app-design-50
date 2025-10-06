@@ -2322,7 +2322,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <Flame className="h-4 w-4" style={{ color: '#10B981' }} />
+                        <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
                         <span className="font-medium">Calorías</span>
                       </div>
                       <span className="font-medium">{profileData.calories} kcal</span>
@@ -2337,7 +2337,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                         onChange={(e) => setProfileData({ ...profileData, calories: parseInt(e.target.value) })}
                         className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
                         style={{
-                          background: `linear-gradient(to right, #10B981 0%, #10B981 ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 100%)`
+                          background: `linear-gradient(to right, #6C6C6C 0%, #6C6C6C ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 100%)`
                         }}
                       />
                     </div>
