@@ -2311,6 +2311,35 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
               </div>}
 
             {currentStep === 'macros' && <div className="space-y-6">
+                {/* Introduction text - animated */}
+                <div className="space-y-4">
+                  <div className="flex items-start gap-3 animate-in fade-in-up duration-500">
+                    <div 
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium flex-shrink-0"
+                      style={{
+                        backgroundColor: '#020817',
+                        color: '#ffffff'
+                      }}
+                    >
+                      C
+                    </div>
+                    <div className="flex-1 bg-muted rounded-2xl rounded-tl-none p-4 text-sm leading-relaxed">
+                      <p className="mb-3">
+                        Hemos preparado este plan para <span className="font-medium">{profileData.name || 'ti'}</span>, según el objetivo que elegiste{profileData.goal ? `: ${profileData.goal.toLowerCase()}` : ''}.
+                      </p>
+                      <p className="mb-3">
+                        Este plan nos ayudará a entender mejor tus necesidades nutricionales y ajustar tus recetas en función de lo que necesitas.
+                      </p>
+                      <p className="mb-3">
+                        Lo utilizaremos como referencia tanto para tus comidas individuales como para las que compartas con otras personas, teniendo siempre en cuenta tu plan nutricional dentro de cada receta.
+                      </p>
+                      <p>
+                        Si lo deseas, puedes editar tus calorías y tus macros en cualquier momento para afinar aún más tus recomendaciones.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Calories slider - at the top */}
                 <div className="bg-background rounded-xl p-4 shadow-sm">
                   <div className="space-y-2">
