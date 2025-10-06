@@ -1858,7 +1858,7 @@ export const ProfileCreationDrawer = ({
                           <div className="h-16 bg-gradient-to-b from-white to-transparent" />
                           <div className="h-16 rounded-l-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-semibold text-[#020817]">
-                              {parseBirthDate(profileData.birthDate).day || 'DD'}
+                              {parseBirthDate(profileData.birthDate).day ? parseInt(parseBirthDate(profileData.birthDate).day) : 'DD'}
                             </span>
                           </div>
                           <div className="h-16 bg-gradient-to-t from-white to-transparent" />
