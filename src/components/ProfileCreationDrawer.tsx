@@ -1636,7 +1636,7 @@ export const ProfileCreationDrawer = ({
                         <button
                           type="button"
                           onClick={() => handleLikeDislike(false)}
-                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 hover:border-red-400 transition-all shadow-md hover:shadow-lg"
+                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 hover:border-red-400 transition-all"
                         >
                           <X className="w-8 h-8 text-red-500" strokeWidth={2.5} />
                         </button>
@@ -1645,25 +1645,12 @@ export const ProfileCreationDrawer = ({
                         <button
                           type="button"
                           onClick={() => handleLikeDislike(true)}
-                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 hover:border-green-400 transition-all shadow-md hover:shadow-lg"
+                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 hover:border-green-400 transition-all"
                         >
-                          <svg className="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          <svg className="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                           </svg>
                         </button>
-                      </div>
-                      
-                      {/* Indicador de progreso */}
-                      <div className="flex items-center gap-2">
-                        {foodTypes.map((_, index) => (
-                          <div 
-                            key={index}
-                            className="w-2 h-2 rounded-full transition-all"
-                            style={{
-                              backgroundColor: index === currentImageIndex ? '#020817' : '#D9DADC'
-                            }}
-                          />
-                        ))}
                       </div>
                     </div>
                   );
