@@ -1392,7 +1392,11 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     { step: 'activityLevel' as Step, label: 'Nivel de actividad', value: profileData.activityLevel },
     ...(hasRequiredDataForMacros ? [{ step: 'macros' as Step, label: 'Macros y calorías', value: hasMacrosCalculated ? 'Ver plan' : '' }] : []),
   ];
-  if (!isOpen) return null;
+  
+  if (!isOpen) {
+    return null;
+  }
+  
   return <div className="fixed z-50 flex justify-center" style={{
     top: 0,
     left: 0,
