@@ -1808,8 +1808,8 @@ export const ProfileCreationDrawer = ({
                           weightGramsInputRef.current?.focus();
                         }
                       }} 
-                      placeholder="kg" 
-                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
+                      placeholder={profileData.weightUnit === 'kg' ? 'kg' : 'lbs'} 
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -1843,8 +1843,8 @@ export const ProfileCreationDrawer = ({
                           weight: totalWeight
                         });
                       }} 
-                      placeholder="g" 
-                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
+                      placeholder={profileData.weightUnit === 'kg' ? 'g' : 'oz'} 
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
