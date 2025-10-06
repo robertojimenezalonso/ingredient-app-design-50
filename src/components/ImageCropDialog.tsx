@@ -89,22 +89,23 @@ export const ImageCropDialog = ({
   // Usar portal para renderizar fuera del árbol DOM del drawer
   return createPortal(
     <div 
-      className="fixed inset-0 bg-background"
+      className="fixed inset-0 bg-background flex flex-col"
       style={{
         zIndex: 99999,
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
-        bottom: 0
+        bottom: 0,
+        touchAction: 'none'
       }}
     >
       {/* Crop area */}
       <div 
-        className="relative w-full"
+        className="flex-1 relative"
         style={{
-          height: 'calc(100vh - 100px)',
-          position: 'relative'
+          position: 'relative',
+          touchAction: 'none'
         }}
       >
         <Cropper
@@ -129,17 +130,15 @@ export const ImageCropDialog = ({
         />
       </div>
 
-      {/* Bottom button */}
+      {/* Bottom button - Separado para asegurar que capture eventos */}
       <div 
-        className="fixed bottom-0 left-0 right-0 p-4 bg-background" 
+        className="flex-shrink-0 p-4 bg-background" 
         style={{
           paddingBottom: 'max(1rem, calc(env(safe-area-inset-bottom) + 16px))',
+          position: 'relative',
           zIndex: 100000,
-          position: 'fixed'
-        }}
-        onClick={(e) => {
-          console.log('Button container clicked');
-          e.stopPropagation();
+          touchAction: 'auto',
+          pointerEvents: 'auto'
         }}
       >
         <button
@@ -149,11 +148,14 @@ export const ImageCropDialog = ({
             e.stopPropagation();
             handleSetImage();
           }}
-          onTouchStart={(e) => {
-            console.log('=== BUTTON TOUCH START ===');
+          onTouchEnd={(e) => {
+            console.log('=== BUTTON TOUCH END ===');
+            e.preventDefault();
+            e.stopPropagation();
+            handleSetImage();
           }}
           type="button"
-          className="w-full h-14 text-lg font-medium rounded-full"
+          className="w-full h-14 text-lg font-medium rounded-full active:opacity-80"
           style={{
             backgroundColor: '#020817',
             color: '#ffffff',
@@ -162,7 +164,8 @@ export const ImageCropDialog = ({
             position: 'relative',
             zIndex: 100001,
             pointerEvents: 'auto',
-            touchAction: 'manipulation'
+            touchAction: 'manipulation',
+            WebkitTapHighlightColor: 'transparent'
           }}
         >
           Establecer
