@@ -1574,9 +1574,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                 e.target.style.borderColor = 'transparent';
               }} autoFocus />
                   </div>
-
-                {/* User tag bubble - aparece cuando hay texto */}
-                {profileData.name}
               </div>}
 
             {currentStep === 'diet' && <div className="space-y-6">
