@@ -1289,11 +1289,11 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
   const handleBack = () => {
     // Prevent going back if current step is incomplete
     if (currentStep !== 'overview' && currentStep !== 'loading' && currentStep !== 'macros' && !canContinue()) {
-      toast({
-        title: 'Campo requerido',
-        description: 'Por favor completa este campo antes de continuar',
-        variant: 'destructive',
-      });
+      // toast({
+      //   title: 'Campo requerido',
+      //   description: 'Por favor completa este campo antes de continuar',
+      //   variant: 'destructive',
+      // });
       return;
     }
     
@@ -2835,17 +2835,17 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
             }
             
             window.dispatchEvent(new CustomEvent('meal-profile-updated'));
-            toast({
-              title: "Foto eliminada",
-              description: "La foto de perfil se ha eliminado correctamente"
-            });
+            // toast({
+            //   title: "Foto eliminada",
+            //   description: "La foto de perfil se ha eliminado correctamente"
+            // });
           } catch (error) {
             console.error('Error deleting avatar:', error);
-            toast({
-              title: "Error",
-              description: "No se pudo eliminar la foto de perfil",
-              variant: "destructive"
-            });
+            // toast({
+            //   title: "Error",
+            //   description: "No se pudo eliminar la foto de perfil",
+            //   variant: "destructive"
+            // });
           }
         } : undefined}
         hasAvatar={!!editingProfile?.avatarUrl}
@@ -2892,11 +2892,11 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
             
             if (!profileId) {
               console.error('No profile ID available!');
-              toast({
-                title: "Error",
-                description: "No se pudo guardar la foto. Intenta de nuevo.",
-                variant: "destructive"
-              });
+              // toast({
+              //   title: "Error",
+              //   description: "No se pudo guardar la foto. Intenta de nuevo.",
+              //   variant: "destructive"
+              // });
               setShowCropDialog(false);
               setSelectedImage(null);
               return;
@@ -2941,17 +2941,17 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
               }
 
               window.dispatchEvent(new CustomEvent('meal-profile-updated'));
-              toast({
-                title: "Foto actualizada",
-                description: "La foto de perfil se ha actualizado correctamente"
-              });
+              // toast({
+              //   title: "Foto actualizada",
+              //   description: "La foto de perfil se ha actualizado correctamente"
+              // });
             } catch (error) {
               console.error('Error uploading avatar:', error);
-              toast({
-                title: "Error",
-                description: "No se pudo actualizar la foto de perfil",
-                variant: "destructive"
-              });
+              // toast({
+              //   title: "Error",
+              //   description: "No se pudo actualizar la foto de perfil",
+              //   variant: "destructive"
+              // });
             } finally {
               setUploadingAvatar(false);
               setShowCropDialog(false);
