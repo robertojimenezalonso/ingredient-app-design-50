@@ -2522,6 +2522,28 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </button>
                     </div>
                   </div>
+
+                  {/* Restablecer datos button - solo para perfiles nuevos */}
+                  {!editingProfile?.id && (
+                    <div className="flex justify-end mt-4">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileData({
+                            ...profileData,
+                            carbs: recommendedMacros.carbs,
+                            protein: recommendedMacros.protein,
+                            fat: recommendedMacros.fat,
+                            calories: recommendedMacros.calories
+                          });
+                          setMacrosModified(false);
+                        }}
+                        className="text-sm underline text-muted-foreground hover:text-foreground"
+                      >
+                        Restablecer datos
+                      </button>
+                    </div>
+                  )}
                 </div>
               </div>}
           </div>
@@ -2646,13 +2668,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
         {/* Buttons for macros step */}
         {currentStep === 'macros' && (
           <div className="p-4 border-t flex-shrink-0">
-            {(() => {
-              console.log('=== Macros Button Section ===');
-              console.log('editingProfile:', editingProfile);
-              console.log('editingProfile?.id:', editingProfile?.id);
-              console.log('Should show "Guardar perfil" button:', !editingProfile?.id);
-              return null;
-            })()}
             {editingProfile?.id ? (
               <button
                 type="button"
@@ -2664,56 +2679,40 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                     fat: recommendedMacros.fat,
                     calories: recommendedMacros.calories
                   });
+                  setMacrosModified(false);
                 }}
                 className="w-full text-center py-3 text-sm font-medium border rounded-lg"
               >
-                Restaurar datos
+                Restablecer datos
               </button>
             ) : (
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setProfileData({
-                      ...profileData,
-                      carbs: recommendedMacros.carbs,
-                      protein: recommendedMacros.protein,
-                      fat: recommendedMacros.fat,
-                      calories: recommendedMacros.calories
+              <Button 
+                onClick={async () => {
+                  // Guardar macros finales
+                  const profileId = editingProfile?.id || createdProfileId;
+                  if (profileId) {
+                    await updateProfile(profileId, {
+                      calories: profileData.calories,
+                      carbs: profileData.carbs,
+                      protein: profileData.protein,
+                      fat: profileData.fat
                     });
-                  }}
-                  className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
-                >
-                  Restaurar datos
-                </button>
-                <Button 
-                  onClick={async () => {
-                    // Guardar macros finales
-                    const profileId = editingProfile?.id || createdProfileId;
-                    if (profileId) {
-                      await updateProfile(profileId, {
-                        calories: profileData.calories,
-                        carbs: profileData.carbs,
-                        protein: profileData.protein,
-                        fat: profileData.fat
-                      });
-                    }
-                    
-                    // Limpiar el ID creado y cerrar
-                    setCreatedProfileId(null);
-                    onSave(profileData);
-                    onClose();
-                  }}
-                  disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
-                  className="flex-1"
-                  style={{
-                    backgroundColor: '#020817',
-                    color: '#ffffff'
-                  }}
-                >
-                  Guardar perfil
-                </Button>
-              </div>
+                  }
+                  
+                  // Limpiar el ID creado y cerrar
+                  setCreatedProfileId(null);
+                  onSave(profileData);
+                  onClose();
+                }}
+                disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
+                className="w-full"
+                style={{
+                  backgroundColor: '#020817',
+                  color: '#ffffff'
+                }}
+              >
+                Guardar perfil
+              </Button>
             )}
           </div>
         )}
