@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -8,7 +8,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/u
 import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { ProfileCreationDrawer } from '@/components/ProfileCreationDrawer';
+import { ProfileCreationDrawer, ProfileCreationDrawerRef } from '@/components/ProfileCreationDrawer';
 import { useMealProfiles } from '@/hooks/useMealProfiles';
 import type { MealProfile } from '@/hooks/useMealProfiles';
 import { useAuth } from '@/hooks/useAuth';
@@ -124,6 +124,7 @@ export const RecipePreferencesPage = () => {
   const [goalDrawerOpen, setGoalDrawerOpen] = useState(false);
   const [profileDrawerOpen, setProfileDrawerOpen] = useState(false);
   const [currentSection, setCurrentSection] = useState<'main' | 'personal-data' | 'macros' | 'calories' | 'nutrition'>('main');
+  const profileDrawerRef = useRef<ProfileCreationDrawerRef>(null);
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editingProfile, setEditingProfile] = useState<{
     id?: string;
@@ -271,6 +272,11 @@ export const RecipePreferencesPage = () => {
       fat: undefined
     });
     setProfileDrawerOpen(true);
+    
+    // Hacer focus en el input después de abrir el drawer
+    setTimeout(() => {
+      profileDrawerRef.current?.focusNameInput();
+    }, 100);
   };
 
   const handleEditProfile = (profile: typeof healthProfiles[0]) => {
@@ -568,6 +574,7 @@ export const RecipePreferencesPage = () => {
 
       {/* Profile Creation Drawer */}
       <ProfileCreationDrawer
+        ref={profileDrawerRef}
         isOpen={profileDrawerOpen}
         onClose={handleCancelProfile}
         onSave={handleSaveProfile}

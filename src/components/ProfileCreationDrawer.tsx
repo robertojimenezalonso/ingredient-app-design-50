@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useImperativeHandle, forwardRef } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,15 +31,21 @@ interface ProfileCreationDrawerProps {
   profileIndex?: number;
   onDelete?: () => void;
 }
+
+export interface ProfileCreationDrawerRef {
+  focusNameInput: () => void;
+}
+
 type Step = 'overview' | 'name' | 'diet' | 'allergies' | 'gustos' | 'goal' | 'weight' | 'height' | 'birthdate' | 'sex' | 'activityLevel' | 'loading' | 'macros';
-export const ProfileCreationDrawer = ({
+
+export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, ProfileCreationDrawerProps>(({
   isOpen,
   onClose,
   onSave,
   editingProfile,
   profileIndex = 0,
   onDelete
-}: ProfileCreationDrawerProps) => {
+}, ref) => {
   const [currentStep, setCurrentStep] = useState<Step>('name');
   const [returnToOverview, setReturnToOverview] = useState(false);
   const [showCancelDialog, setShowCancelDialog] = useState(false);
@@ -55,6 +61,22 @@ export const ProfileCreationDrawer = ({
   
   // Estado para trackear el ID del perfil en creación
   const [createdProfileId, setCreatedProfileId] = useState<string | null>(null);
+
+  // Exponer método para hacer focus en el input de nombre desde el componente padre
+  useImperativeHandle(ref, () => ({
+    focusNameInput: () => {
+      console.log('=== focusNameInput llamado desde padre ===');
+      if (nameInputRef.current) {
+        setTimeout(() => {
+          if (nameInputRef.current) {
+            console.log('Haciendo focus en name input');
+            nameInputRef.current.focus();
+            nameInputRef.current.click();
+          }
+        }, 300); // Delay para asegurar que el drawer esté completamente renderizado
+      }
+    }
+  }), []);
 
   // Efecto para crear perfil inmediatamente cuando se abre el drawer en modo "crear nuevo"
   useEffect(() => {
@@ -2919,5 +2941,7 @@ export const ProfileCreationDrawer = ({
           }}
         />
       )}
-    </div>;
-};
+    </div>
+});
+
+ProfileCreationDrawer.displayName = 'ProfileCreationDrawer';
