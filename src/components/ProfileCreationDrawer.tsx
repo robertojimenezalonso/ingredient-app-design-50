@@ -1884,20 +1884,27 @@ export const ProfileCreationDrawer = ({
                       value={birthdateDay}
                       onChange={(e) => {
                         const numValue = e.target.value.replace(/\D/g, '').slice(0, 2);
-                        const dayNum = parseInt(numValue);
+                        
+                        // Don't allow just "0"
+                        if (numValue === '0') return;
                         
                         setBirthdateDay(numValue);
                         
                         // Update main profile data
-                        const newBirthDate = `${numValue}/${birthdateMonth}/${birthdateYear}`;
+                        const newBirthDate = `${numValue.padStart(2, '0')}/${birthdateMonth.padStart(2, '0')}/${birthdateYear}`;
                         setProfileData({
                           ...profileData,
                           birthDate: newBirthDate
                         });
                         
-                        // Auto-advance to month when day is complete (2 digits)
-                        if (numValue.length === 2 && dayNum >= 1 && dayNum <= 31) {
-                          monthInputRef.current?.focus();
+                        // Auto-advance logic:
+                        // If single digit 4-9, it's complete (no day can be 40+)
+                        // If two digits, it's complete
+                        const numInt = parseInt(numValue);
+                        if ((numValue.length === 1 && numInt >= 4 && numInt <= 9) || numValue.length === 2) {
+                          if (numInt >= 1 && numInt <= 31) {
+                            monthInputRef.current?.focus();
+                          }
                         }
                       }}
                       placeholder="DD"
@@ -1926,20 +1933,27 @@ export const ProfileCreationDrawer = ({
                       value={birthdateMonth}
                       onChange={(e) => {
                         const numValue = e.target.value.replace(/\D/g, '').slice(0, 2);
-                        const monthNum = parseInt(numValue);
+                        
+                        // Don't allow just "0"
+                        if (numValue === '0') return;
                         
                         setBirthdateMonth(numValue);
                         
                         // Update main profile data
-                        const newBirthDate = `${birthdateDay}/${numValue}/${birthdateYear}`;
+                        const newBirthDate = `${birthdateDay.padStart(2, '0')}/${numValue.padStart(2, '0')}/${birthdateYear}`;
                         setProfileData({
                           ...profileData,
                           birthDate: newBirthDate
                         });
                         
-                        // Auto-advance to year when month is complete (2 digits)
-                        if (numValue.length === 2 && monthNum >= 1 && monthNum <= 12) {
-                          yearInputRef.current?.focus();
+                        // Auto-advance logic:
+                        // If single digit 2-9, it's complete (no month can be 20+)
+                        // If two digits, it's complete
+                        const numInt = parseInt(numValue);
+                        if ((numValue.length === 1 && numInt >= 2 && numInt <= 9) || numValue.length === 2) {
+                          if (numInt >= 1 && numInt <= 12) {
+                            yearInputRef.current?.focus();
+                          }
                         }
                       }}
                       placeholder="MM"
@@ -1970,8 +1984,10 @@ export const ProfileCreationDrawer = ({
                         
                         setBirthdateYear(numValue);
                         
-                        // Update main profile data
-                        const newBirthDate = `${birthdateDay}/${birthdateMonth}/${numValue}`;
+                        // Update main profile data (only if year has 4 digits, otherwise keep it incomplete)
+                        const formattedDay = birthdateDay.padStart(2, '0');
+                        const formattedMonth = birthdateMonth.padStart(2, '0');
+                        const newBirthDate = `${formattedDay}/${formattedMonth}/${numValue}`;
                         setProfileData({
                           ...profileData,
                           birthDate: newBirthDate
