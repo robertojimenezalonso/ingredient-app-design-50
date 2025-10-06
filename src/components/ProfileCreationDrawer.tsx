@@ -1916,12 +1916,10 @@ export const ProfileCreationDrawer = ({
                         }
                       }}
                       placeholder="DD"
-                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 [&:-webkit-autofill]:!bg-[#F4F4F4] [&:-webkit-autofill]:!shadow-[inset_0_0_0_1000px_#F4F4F4] [&:-webkit-autofill]:![-webkit-text-fill-color:#020817]"
                       style={{
                         backgroundColor: '#F4F4F4',
-                        borderColor: 'transparent',
-                        WebkitBoxShadow: '0 0 0 1000px #F4F4F4 inset',
-                        WebkitTextFillColor: '#020817'
+                        borderColor: 'transparent'
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = '#020817';
@@ -1933,8 +1931,9 @@ export const ProfileCreationDrawer = ({
                       maxLength={2}
                       autoFocus
                       autoComplete="off"
-                      name="birthdate-day"
-                      id="birthdate-day"
+                      name="birthdate-day-custom"
+                      id="birthdate-day-custom"
+                      data-form-type="other"
                     />
                     <Input
                       ref={monthInputRef}
@@ -1974,12 +1973,10 @@ export const ProfileCreationDrawer = ({
                         }
                       }}
                       placeholder="MM"
-                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 [&:-webkit-autofill]:!bg-[#F4F4F4] [&:-webkit-autofill]:!shadow-[inset_0_0_0_1000px_#F4F4F4] [&:-webkit-autofill]:![-webkit-text-fill-color:#020817]"
                       style={{
                         backgroundColor: '#F4F4F4',
-                        borderColor: 'transparent',
-                        WebkitBoxShadow: '0 0 0 1000px #F4F4F4 inset',
-                        WebkitTextFillColor: '#020817'
+                        borderColor: 'transparent'
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = '#020817';
@@ -1990,8 +1987,9 @@ export const ProfileCreationDrawer = ({
                       }}
                       maxLength={2}
                       autoComplete="off"
-                      name="birthdate-month"
-                      id="birthdate-month"
+                      name="birthdate-month-custom"
+                      id="birthdate-month-custom"
+                      data-form-type="other"
                     />
                     <Input
                       ref={yearInputRef}
@@ -2020,12 +2018,10 @@ export const ProfileCreationDrawer = ({
                         }
                       }}
                       placeholder="AAAA"
-                      className="w-24 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="w-24 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 [&:-webkit-autofill]:!bg-[#F4F4F4] [&:-webkit-autofill]:!shadow-[inset_0_0_0_1000px_#F4F4F4] [&:-webkit-autofill]:![-webkit-text-fill-color:#020817]"
                       style={{
                         backgroundColor: '#F4F4F4',
-                        borderColor: 'transparent',
-                        WebkitBoxShadow: '0 0 0 1000px #F4F4F4 inset',
-                        WebkitTextFillColor: '#020817'
+                        borderColor: 'transparent'
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = '#020817';
@@ -2036,8 +2032,9 @@ export const ProfileCreationDrawer = ({
                       }}
                       maxLength={4}
                       autoComplete="off"
-                      name="birthdate-year"
-                      id="birthdate-year"
+                      name="birthdate-year-custom"
+                      id="birthdate-year-custom"
+                      data-form-type="other"
                     />
                   </div>
                 )}
