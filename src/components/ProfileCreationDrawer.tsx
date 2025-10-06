@@ -1876,7 +1876,7 @@ export const ProfileCreationDrawer = ({
 
                 {/* Birthdate input - appears after typewriter completes */}
                 {birthdateShowInput && (
-                  <div className="flex gap-3 justify-center items-center">
+                  <div className="flex gap-3 justify-between items-center w-full px-2">
                     <Input
                       ref={dayInputRef}
                       type="tel"
@@ -1911,7 +1911,7 @@ export const ProfileCreationDrawer = ({
                         }
                       }}
                       placeholder="DD"
-                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -1962,7 +1962,7 @@ export const ProfileCreationDrawer = ({
                         }
                       }}
                       placeholder="MM"
-                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -1999,7 +1999,7 @@ export const ProfileCreationDrawer = ({
                         });
                       }}
                       placeholder="AAAA"
-                      className="w-24 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
