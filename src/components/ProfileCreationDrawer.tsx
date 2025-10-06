@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { X, ChevronLeft, ChevronRight, ArrowUp, Camera, Wheat, Drumstick, Droplet } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ArrowUp, Camera, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
 import { supabase } from '@/integrations/supabase/client';
@@ -2321,7 +2321,10 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                 <div className="bg-background rounded-xl p-4 shadow-sm">
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">Calorías</span>
+                      <div className="flex items-center gap-2">
+                        <Flame className="h-4 w-4" style={{ color: '#10B981' }} />
+                        <span className="font-medium">Calorías</span>
+                      </div>
                       <span className="font-medium">{profileData.calories} kcal</span>
                     </div>
                     <div className="flex items-center gap-3">
@@ -2359,7 +2362,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <Wheat className="h-4 w-4" style={{ color: '#F97316' }} />
+                        <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
                         <span className="font-medium">Hidratos</span>
                       </div>
                       <div className="flex items-center gap-3 text-sm">
@@ -2380,7 +2383,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                         }}
                         className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
                         style={{
-                          background: `linear-gradient(to right, #F97316 0%, #F97316 ${profileData.carbs}%, #E5E5E5 ${profileData.carbs}%, #E5E5E5 100%)`
+                          background: `linear-gradient(to right, #DE9A69 0%, #DE9A69 ${profileData.carbs}%, #E5E5E5 ${profileData.carbs}%, #E5E5E5 100%)`
                         }}
                       />
                     </div>
@@ -2390,7 +2393,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <Drumstick className="h-4 w-4" style={{ color: '#EC4899' }} />
+                        <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
                         <span className="font-medium">Proteínas</span>
                       </div>
                       <div className="flex items-center gap-3 text-sm">
@@ -2411,7 +2414,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                         }}
                         className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
                         style={{
-                          background: `linear-gradient(to right, #EC4899 0%, #EC4899 ${profileData.protein}%, #E5E5E5 ${profileData.protein}%, #E5E5E5 100%)`
+                          background: `linear-gradient(to right, #DE6968 0%, #DE6968 ${profileData.protein}%, #E5E5E5 ${profileData.protein}%, #E5E5E5 100%)`
                         }}
                       />
                     </div>
@@ -2421,7 +2424,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
-                        <Droplet className="h-4 w-4" style={{ color: '#8B5CF6' }} />
+                        <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
                         <span className="font-medium">Grasas</span>
                       </div>
                       <div className="flex items-center gap-3 text-sm">
@@ -2442,7 +2445,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                         }}
                         className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
                         style={{
-                          background: `linear-gradient(to right, #8B5CF6 0%, #8B5CF6 ${profileData.fat}%, #E5E5E5 ${profileData.fat}%, #E5E5E5 100%)`
+                          background: `linear-gradient(to right, #6998DD 0%, #6998DD ${profileData.fat}%, #E5E5E5 ${profileData.fat}%, #E5E5E5 100%)`
                         }}
                       />
                     </div>
