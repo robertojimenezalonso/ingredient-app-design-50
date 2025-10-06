@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
+import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
 import {
   AlertDialog,
@@ -2328,17 +2329,13 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       <span className="font-medium">{profileData.calories} kcal</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <input
-                        type="range"
-                        min="1000"
-                        max="5000"
-                        step="50"
-                        value={profileData.calories}
-                        onChange={(e) => setProfileData({ ...profileData, calories: parseInt(e.target.value) })}
-                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
-                        style={{
-                          background: `linear-gradient(to right, #6C6C6C 0%, #6C6C6C ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 100%)`
-                        }}
+                      <Slider
+                        min={1000}
+                        max={5000}
+                        step={50}
+                        value={[profileData.calories]}
+                        onValueChange={(value) => setProfileData({ ...profileData, calories: value[0] })}
+                        className="flex-1"
                       />
                     </div>
                   </div>
@@ -2372,19 +2369,16 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={profileData.carbs}
-                        onChange={(e) => {
-                          setProfileData({ ...profileData, carbs: parseInt(e.target.value) });
+                      <Slider
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={[profileData.carbs]}
+                        onValueChange={(value) => {
+                          setProfileData({ ...profileData, carbs: value[0] });
                           setMacrosModified(true);
                         }}
-                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
-                        style={{
-                          background: `linear-gradient(to right, #DE9A69 0%, #DE9A69 ${profileData.carbs}%, #E5E5E5 ${profileData.carbs}%, #E5E5E5 100%)`
-                        }}
+                        className="flex-1"
                       />
                     </div>
                   </div>
@@ -2403,19 +2397,16 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={profileData.protein}
-                        onChange={(e) => {
-                          setProfileData({ ...profileData, protein: parseInt(e.target.value) });
+                      <Slider
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={[profileData.protein]}
+                        onValueChange={(value) => {
+                          setProfileData({ ...profileData, protein: value[0] });
                           setMacrosModified(true);
                         }}
-                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
-                        style={{
-                          background: `linear-gradient(to right, #DE6968 0%, #DE6968 ${profileData.protein}%, #E5E5E5 ${profileData.protein}%, #E5E5E5 100%)`
-                        }}
+                        className="flex-1"
                       />
                     </div>
                   </div>
@@ -2434,19 +2425,16 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={profileData.fat}
-                        onChange={(e) => {
-                          setProfileData({ ...profileData, fat: parseInt(e.target.value) });
+                      <Slider
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={[profileData.fat]}
+                        onValueChange={(value) => {
+                          setProfileData({ ...profileData, fat: value[0] });
                           setMacrosModified(true);
                         }}
-                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
-                        style={{
-                          background: `linear-gradient(to right, #6998DD 0%, #6998DD ${profileData.fat}%, #E5E5E5 ${profileData.fat}%, #E5E5E5 100%)`
-                        }}
+                        className="flex-1"
                       />
                     </div>
                   </div>
