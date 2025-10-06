@@ -136,13 +136,23 @@ export const ProfileCreationDrawer = ({
   };
   const parseWeight = (weightStr?: string) => {
     if (!weightStr) return {
-      value: '',
+      kg: '',
+      grams: '',
       unit: 'kg'
     };
+    
+    // Extract unit (kg or lb)
     const parts = weightStr.split(' ');
+    const value = parts[0] || '';
+    const unit = parts[1] || 'kg';
+    
+    // Split kg and grams by decimal point
+    const [kg, grams = ''] = value.split('.');
+    
     return {
-      value: parts[0] || '',
-      unit: parts[1] || 'kg'
+      kg,
+      grams,
+      unit
     };
   };
   const parseHeight = (heightStr?: string) => {
@@ -179,6 +189,10 @@ export const ProfileCreationDrawer = ({
   const [birthdateDay, setBirthdateDay] = useState('');
   const [birthdateMonth, setBirthdateMonth] = useState('');
   const [birthdateYear, setBirthdateYear] = useState('');
+  
+  // States for weight inputs
+  const [weightKg, setWeightKg] = useState('');
+  const [weightGrams, setWeightGrams] = useState('');
 
   // Update profileData when editingProfile changes
   useEffect(() => {
@@ -209,14 +223,19 @@ export const ProfileCreationDrawer = ({
       setBirthdateMonth(birthDateParts.month);
       setBirthdateYear(birthDateParts.year);
       
+      // Parse weight
+      const weightParts = parseWeight(editingProfile.weight);
+      setWeightKg(weightParts.kg);
+      setWeightGrams(weightParts.grams);
+      
       setProfileData({
         name: editingProfile.name || '',
         diet: editingProfile.diet || '',
         allergies: allergiesArray,
         gustos: gustosArray,
         goal: editingProfile.goal || editingProfile.healthGoal || '',
-        weight: parseWeight(editingProfile.weight).value,
-        weightUnit: parseWeight(editingProfile.weight).unit,
+        weight: `${weightParts.kg}.${weightParts.grams}`,
+        weightUnit: weightParts.unit,
         height: parseHeight(editingProfile.height).value,
         heightUnit: parseHeight(editingProfile.height).unit,
         birthDate: editingProfile.birthDate || '',
@@ -232,6 +251,8 @@ export const ProfileCreationDrawer = ({
       setBirthdateDay('');
       setBirthdateMonth('');
       setBirthdateYear('');
+      setWeightKg('');
+      setWeightGrams('');
       
       setProfileData({
         name: '',
@@ -376,7 +397,8 @@ export const ProfileCreationDrawer = ({
   };
 
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const weightInputRef = useRef<HTMLInputElement>(null);
+  const weightKgInputRef = useRef<HTMLInputElement>(null);
+  const weightGramsInputRef = useRef<HTMLInputElement>(null);
   const heightInputRef = useRef<HTMLInputElement>(null);
   const dayInputRef = useRef<HTMLInputElement>(null);
   const monthInputRef = useRef<HTMLInputElement>(null);
@@ -916,7 +938,7 @@ export const ProfileCreationDrawer = ({
           case 'name':
             return showInput ? nameInputRef.current : null;
           case 'weight':
-            return weightInputRef.current;
+            return weightKgInputRef.current;
           case 'height':
             return heightInputRef.current;
           default:
@@ -974,7 +996,8 @@ export const ProfileCreationDrawer = ({
       case 'goal':
         return profileData.goal !== '';
       case 'weight':
-        return profileData.weight && parseFloat(profileData.weight) > 0;
+        // Require at least kg field to be filled
+        return weightKg && parseInt(weightKg) > 0;
       case 'height':
         return profileData.height && parseFloat(profileData.height) > 0;
       case 'birthdate':
@@ -1751,19 +1774,42 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Weight input - appears after typewriter completes */}
-                {weightShowInput && <div className="relative">
+                {weightShowInput && <div className="flex gap-3 justify-between items-center w-full px-2">
                     <Input 
-                      ref={weightInputRef} 
-                      type="text" 
+                      ref={weightKgInputRef} 
+                      type="tel" 
                       inputMode="numeric" 
                       pattern="[0-9]*" 
-                      value={profileData.weight} 
-                      onChange={e => setProfileData({
-                        ...profileData,
-                        weight: e.target.value.replace(/\D/g, '')
-                      })} 
-                      placeholder="Escribe el peso" 
-                      className="w-full pr-16 border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
+                      value={weightKg} 
+                      onChange={e => {
+                        const numValue = e.target.value.replace(/\D/g, '').slice(0, 3);
+                        
+                        // Don't allow just "0"
+                        if (numValue === '0') return;
+                        
+                        setWeightKg(numValue);
+                        
+                        // Update main profile data
+                        const grams = weightGrams || '0';
+                        const totalWeight = `${numValue}.${grams.padStart(3, '0')}`;
+                        setProfileData({
+                          ...profileData,
+                          weight: totalWeight
+                        });
+                        
+                        // Auto-advance logic:
+                        // If starts with 1: need 3 digits to advance
+                        // If starts with 2-9: 2 digits to advance
+                        const numInt = parseInt(numValue);
+                        const firstDigit = numValue[0];
+                        if (firstDigit === '1' && numValue.length === 3) {
+                          weightGramsInputRef.current?.focus();
+                        } else if (firstDigit !== '1' && numValue.length === 2 && numInt >= 10) {
+                          weightGramsInputRef.current?.focus();
+                        }
+                      }} 
+                      placeholder="kg" 
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -1774,12 +1820,42 @@ export const ProfileCreationDrawer = ({
                       }}
                       onBlur={e => {
                         e.target.style.borderColor = 'transparent';
-                        e.preventDefault();
-                        setTimeout(() => e.target.focus({
-                          preventScroll: true
-                        }), 0);
                       }}
                       autoFocus 
+                    />
+                    <span className="text-muted-foreground text-lg">,</span>
+                    <Input 
+                      ref={weightGramsInputRef} 
+                      type="tel" 
+                      inputMode="numeric" 
+                      pattern="[0-9]*" 
+                      value={weightGrams} 
+                      onChange={e => {
+                        const numValue = e.target.value.replace(/\D/g, '').slice(0, 3);
+                        
+                        setWeightGrams(numValue);
+                        
+                        // Update main profile data
+                        const kg = weightKg || '0';
+                        const totalWeight = `${kg}.${numValue.padStart(3, '0')}`;
+                        setProfileData({
+                          ...profileData,
+                          weight: totalWeight
+                        });
+                      }} 
+                      placeholder="g" 
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
+                      style={{
+                        backgroundColor: '#F4F4F4',
+                        borderColor: 'transparent'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#020817';
+                        e.target.style.borderWidth = '1px';
+                      }}
+                      onBlur={e => {
+                        e.target.style.borderColor = 'transparent';
+                      }}
                     />
                     <button 
                       type="button" 
@@ -1792,7 +1868,7 @@ export const ProfileCreationDrawer = ({
                           weightUnit: units[nextIndex]
                         });
                       }} 
-                      className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1 text-sm font-medium text-primary rounded-md"
+                      className="px-3 py-1 text-sm font-medium text-primary rounded-md"
                     >
                       {profileData.weightUnit}
                     </button>
@@ -2440,13 +2516,13 @@ export const ProfileCreationDrawer = ({
                       {profileData.goal}
                     </Badge>
                   )}
-                  {currentStep === 'weight' && (
+                  {currentStep === 'weight' && weightKg && (
                     <Badge variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
                       backgroundColor: '#D9DADC',
                       color: '#020818',
                       borderRadius: '8px'
                     }}>
-                      {profileData.weight} {profileData.weightUnit}
+                      {weightKg}{weightGrams ? `,${weightGrams}` : ''} {profileData.weightUnit}
                     </Badge>
                   )}
                   {currentStep === 'height' && (
