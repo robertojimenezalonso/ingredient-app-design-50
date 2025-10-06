@@ -666,16 +666,6 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
-    // Initialize with default date if empty
-    if (!profileData.birthDate) {
-      const currentYear = new Date().getFullYear();
-      const defaultYear = currentYear - 30;
-      setProfileData({
-        ...profileData,
-        birthDate: `01/01/${defaultYear}`
-      });
-    }
-
     // Skip animation if birthdate is already set
     if (profileData.birthDate) {
       setBirthdateDisplayedText(birthdateFullText);
@@ -1849,236 +1839,33 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Birthdate input - appears after typewriter completes */}
-                {birthdateShowInput && <div className="space-y-3">
-                    {/* Contenedor único unificado para las tres ruedas */}
-                    <div className="flex gap-0 items-center justify-center">
-                      {/* Day Wheel */}
-                      <div className="relative h-48 flex-1 overflow-hidden">
-                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-20" />
-                          <div className="h-10 rounded-l-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
-                            <span className="text-lg font-normal text-[#020817]">
-                              {parseBirthDate(profileData.birthDate).day ? parseInt(parseBirthDate(profileData.birthDate).day) : 'DD'}
-                            </span>
-                          </div>
-                          <div className="h-[72px]" />
-                        </div>
-                        <div 
-                          className="overflow-y-scroll scrollbar-hide h-full"
-                          style={{
-                            perspective: '1000px',
-                            perspectiveOrigin: 'center center',
-                            scrollSnapType: 'y mandatory',
-                            WebkitOverflowScrolling: 'touch',
-                            paddingTop: '0px',
-                            paddingBottom: '152px'
-                          }}
-                          onScroll={(e) => {
-                            const container = e.currentTarget;
-                            const scrollTop = container.scrollTop;
-                            const itemHeight = 40;
-                            const index = Math.round(scrollTop / itemHeight);
-                            const day = index + 1;
-                            if (day >= 1 && day <= 31) {
-                              const paddedDay = day.toString().padStart(2, '0');
-                              const { month, year } = parseBirthDate(profileData.birthDate);
-                              const newMonth = month || '01';
-                              const newYear = year || new Date().getFullYear().toString();
-                              setProfileData({
-                                ...profileData,
-                                birthDate: `${paddedDay}/${newMonth}/${newYear}`
-                              });
-                            }
-                            
-                            // Apply wheel effect
-                            const items = container.children;
-                            const centerY = container.offsetHeight / 2;
-                            
-                            Array.from(items).forEach((item: any) => {
-                              const rect = item.getBoundingClientRect();
-                              const containerRect = container.getBoundingClientRect();
-                              const itemCenter = rect.top + rect.height / 2 - containerRect.top;
-                              const distance = centerY - itemCenter;
-                              const maxDistance = centerY;
-                              const normalizedDistance = Math.min(Math.abs(distance) / maxDistance, 1);
-                              
-                              // Scale and opacity based on distance from center
-                              const scale = 1 - (normalizedDistance * 0.3);
-                              const opacity = 1 - (normalizedDistance * 0.7);
-                              
-                              // Rotation for 3D wheel effect (items above rotate forward, below rotate backward)
-                              const rotateX = (distance / maxDistance) * 20;
-                              
-                              item.style.transform = `scale(${scale}) rotateX(${rotateX}deg)`;
-                              item.style.opacity = opacity;
-                            });
-                          }}
-                        >
-                          {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
-                            <div 
-                              key={day}
-                              className="h-10 flex items-center justify-center text-lg text-[#1C1C1C] transition-all duration-200"
-                              style={{
-                                scrollSnapAlign: 'start'
-                              }}
-                            >
-                              {day}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      {/* Month Wheel */}
-                      <div className="relative h-48 flex-1 overflow-hidden">
-                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-20" />
-                          <div className="h-10 flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
-                            <span className="text-lg font-normal text-[#020817]">
-                              {parseBirthDate(profileData.birthDate).month ? 
-                                ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][parseInt(parseBirthDate(profileData.birthDate).month) - 1] 
-                                : 'mes'}
-                            </span>
-                          </div>
-                          <div className="h-[72px]" />
-                        </div>
-                        <div 
-                          className="overflow-y-scroll scrollbar-hide h-full"
-                          style={{
-                            perspective: '1000px',
-                            perspectiveOrigin: 'center center',
-                            scrollSnapType: 'y mandatory',
-                            WebkitOverflowScrolling: 'touch',
-                            paddingTop: '0px',
-                            paddingBottom: '152px'
-                          }}
-                          onScroll={(e) => {
-                            const container = e.currentTarget;
-                            const scrollTop = container.scrollTop;
-                            const itemHeight = 40;
-                            const index = Math.round(scrollTop / itemHeight);
-                            const month = (index + 1).toString().padStart(2, '0');
-                            const { day, year } = parseBirthDate(profileData.birthDate);
-                            const newDay = day || '01';
-                            const newYear = year || new Date().getFullYear().toString();
-                            setProfileData({
-                              ...profileData,
-                              birthDate: `${newDay}/${month}/${newYear}`
-                            });
-                            
-                            // Apply wheel effect
-                            const items = container.children;
-                            const centerY = container.offsetHeight / 2;
-                            
-                            Array.from(items).forEach((item: any) => {
-                              const rect = item.getBoundingClientRect();
-                              const containerRect = container.getBoundingClientRect();
-                              const itemCenter = rect.top + rect.height / 2 - containerRect.top;
-                              const distance = centerY - itemCenter;
-                              const maxDistance = centerY;
-                              const normalizedDistance = Math.min(Math.abs(distance) / maxDistance, 1);
-                              
-                              // Scale and opacity based on distance from center
-                              const scale = 1 - (normalizedDistance * 0.3);
-                              const opacity = 1 - (normalizedDistance * 0.7);
-                              
-                              // Rotation for 3D wheel effect (items above rotate forward, below rotate backward)
-                              const rotateX = (distance / maxDistance) * 20;
-                              
-                              item.style.transform = `scale(${scale}) rotateX(${rotateX}deg)`;
-                              item.style.opacity = opacity;
-                            });
-                          }}
-                        >
-                          {['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((month) => (
-                            <div 
-                              key={month}
-                              className="h-10 flex items-center justify-center text-lg text-[#1C1C1C] transition-all duration-200"
-                              style={{
-                                scrollSnapAlign: 'start'
-                              }}
-                            >
-                              {month}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      {/* Year Wheel */}
-                      <div className="relative h-48 flex-1 overflow-hidden">
-                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-20" />
-                          <div className="h-10 rounded-r-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
-                            <span className="text-lg font-normal text-[#020817]">
-                              {parseBirthDate(profileData.birthDate).year || 'año'}
-                            </span>
-                          </div>
-                          <div className="h-[72px]" />
-                        </div>
-                        <div 
-                          className="overflow-y-scroll scrollbar-hide h-full"
-                          style={{
-                            perspective: '1000px',
-                            perspectiveOrigin: 'center center',
-                            scrollSnapType: 'y mandatory',
-                            WebkitOverflowScrolling: 'touch',
-                            paddingTop: '0px',
-                            paddingBottom: '152px'
-                          }}
-                          onScroll={(e) => {
-                            const container = e.currentTarget;
-                            const scrollTop = container.scrollTop;
-                            const itemHeight = 40;
-                            const currentYear = new Date().getFullYear();
-                            const index = Math.round(scrollTop / itemHeight);
-                            const year = currentYear - index;
-                            if (year >= 1920 && year <= currentYear) {
-                              const { day, month } = parseBirthDate(profileData.birthDate);
-                              const newDay = day || '01';
-                              const newMonth = month || '01';
-                              setProfileData({
-                                ...profileData,
-                                birthDate: `${newDay}/${newMonth}/${year}`
-                              });
-                            }
-                            
-                            // Apply wheel effect
-                            const items = container.children;
-                            const centerY = container.offsetHeight / 2;
-                            
-                            Array.from(items).forEach((item: any) => {
-                              const rect = item.getBoundingClientRect();
-                              const containerRect = container.getBoundingClientRect();
-                              const itemCenter = rect.top + rect.height / 2 - containerRect.top;
-                              const distance = centerY - itemCenter;
-                              const maxDistance = centerY;
-                              const normalizedDistance = Math.min(Math.abs(distance) / maxDistance, 1);
-                              
-                              // Scale and opacity based on distance from center
-                              const scale = 1 - (normalizedDistance * 0.3);
-                              const opacity = 1 - (normalizedDistance * 0.7);
-                              
-                              // Rotation for 3D wheel effect (items above rotate forward, below rotate backward)
-                              const rotateX = (distance / maxDistance) * 20;
-                              
-                              item.style.transform = `scale(${scale}) rotateX(${rotateX}deg)`;
-                              item.style.opacity = opacity;
-                            });
-                          }}
-                        >
-                          {Array.from({ length: new Date().getFullYear() - 1920 + 1 }, (_, i) => new Date().getFullYear() - i).map((year) => (
-                            <div 
-                              key={year}
-                              className="h-10 flex items-center justify-center text-lg text-[#1C1C1C] transition-all duration-200"
-                              style={{
-                                scrollSnapAlign: 'start'
-                              }}
-                            >
-                              {year}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+                {birthdateShowInput && <div className="relative">
+                    <Input 
+                      type="date" 
+                      inputMode="numeric"
+                      value={profileData.birthDate} 
+                      onChange={e => setProfileData({
+                        ...profileData,
+                        birthDate: e.target.value
+                      })} 
+                      className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
+                      style={{
+                        backgroundColor: '#F4F4F4',
+                        borderColor: 'transparent'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#020817';
+                        e.target.style.borderWidth = '1px';
+                      }}
+                      onBlur={e => {
+                        e.target.style.borderColor = 'transparent';
+                        e.preventDefault();
+                        setTimeout(() => e.target.focus({
+                          preventScroll: true
+                        }), 0);
+                      }}
+                      autoFocus
+                    />
                   </div>}
               </div>}
 
