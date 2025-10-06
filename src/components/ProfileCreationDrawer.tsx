@@ -111,6 +111,7 @@ export const ProfileCreationDrawer = ({
   const [gustosDisplayedText, setGustosDisplayedText] = useState('');
   const [gustosShowCursor, setGustosShowCursor] = useState(false);
   const [gustosShowOptions, setGustosShowOptions] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -782,8 +783,12 @@ export const ProfileCreationDrawer = ({
       setGustosDisplayedText('');
       setGustosShowCursor(false);
       setGustosShowOptions(false);
+      setCurrentImageIndex(0); // Reset image index when leaving step
       return;
     }
+
+    // Reset image index when entering gustos step
+    setCurrentImageIndex(0);
 
     // Skip animation if gustos are already set
     if (profileData.gustos && profileData.gustos.length > 0) {
@@ -947,7 +952,7 @@ export const ProfileCreationDrawer = ({
       case 'allergies':
         return profileData.allergies.length > 0;
       case 'gustos':
-        return profileData.gustos.length > 0;
+        return true; // Siempre puede continuar, la selección es opcional
       case 'goal':
         return profileData.goal !== '';
       case 'weight':
@@ -1580,62 +1585,89 @@ export const ProfileCreationDrawer = ({
                   </div>
                 </div>
 
-                {/* Gustos options - appears after typewriter completes */}
-                {gustosShowOptions && <div className="mb-6">
-                    <div className="grid grid-cols-3 gap-3">
-                      {[
-                        { id: 'desayunos', label: 'Desayunos', image: '/food-types/desayunos.jpg' },
-                        { id: 'arroces', label: 'Arroces', image: '/food-types/arroces.jpg' },
-                        { id: 'pasta', label: 'Pasta', image: '/food-types/pasta.jpg' },
-                        { id: 'ensaladas', label: 'Ensaladas', image: '/food-types/ensaladas.jpg' },
-                        { id: 'vegetales', label: 'Vegetales', image: '/food-types/vegetales.jpg' },
-                        { id: 'bowls', label: 'Bowls', image: '/food-types/bowls.jpg' },
-                        { id: 'pescado', label: 'Pescado', image: '/food-types/pescado.jpg' },
-                        { id: 'vegetariano', label: 'Vegetariano', image: '/food-types/vegetariano.jpg' },
-                        { id: 'huevos', label: 'Huevos', image: '/food-types/huevos.jpg' },
-                      ].map((gusto, index) => {
-                        const isSelected = profileData.gustos.includes(gusto.id);
-                        return (
-                          <button
-                            key={gusto.id}
-                            type="button"
-                            onClick={() => {
-                              const newGustos = isSelected
-                                ? profileData.gustos.filter((g) => g !== gusto.id)
-                                : [...profileData.gustos, gusto.id];
-                              setProfileData({
-                                ...profileData,
-                                gustos: newGustos,
-                              });
-                            }}
-                            className={cn(
-                              "overflow-hidden rounded-xl transition-all relative"
-                            )}
+                {/* Gustos - Swipeable image view */}
+                {gustosShowOptions && (() => {
+                  const foodTypes = [
+                    { id: 'desayunos', label: 'Desayunos', image: '/food-types/desayunos.jpg' },
+                    { id: 'arroces', label: 'Arroces', image: '/food-types/arroces.jpg' },
+                    { id: 'pasta', label: 'Pasta', image: '/food-types/pasta.jpg' },
+                    { id: 'ensaladas', label: 'Ensaladas', image: '/food-types/ensaladas.jpg' },
+                  ];
+                  
+                  const currentFood = foodTypes[currentImageIndex];
+                  
+                  const handleLikeDislike = (liked: boolean) => {
+                    // Si le gusta, añadirlo a gustos
+                    if (liked && !profileData.gustos.includes(currentFood.id)) {
+                      setProfileData({
+                        ...profileData,
+                        gustos: [...profileData.gustos, currentFood.id],
+                      });
+                    }
+                    
+                    // Avanzar a la siguiente imagen
+                    if (currentImageIndex < foodTypes.length - 1) {
+                      setCurrentImageIndex(currentImageIndex + 1);
+                    } else {
+                      // Última imagen - avanzar al siguiente paso automáticamente
+                      setTimeout(() => {
+                        handleContinue();
+                      }, 300);
+                    }
+                  };
+
+                  return (
+                    <div className="flex flex-col items-center gap-6 pb-8">
+                      {/* Imagen grande */}
+                      <div className="w-full max-w-md aspect-square rounded-2xl overflow-hidden relative">
+                        <img 
+                          src={currentFood.image} 
+                          alt={currentFood.label}
+                          className="w-full h-full object-cover"
+                          style={{
+                            animation: 'fadeIn 0.3s ease-out'
+                          }}
+                        />
+                      </div>
+                      
+                      {/* Botones de me gusta / no me gusta */}
+                      <div className="flex items-center justify-center gap-8 w-full px-8">
+                        {/* No me gusta - izquierda */}
+                        <button
+                          type="button"
+                          onClick={() => handleLikeDislike(false)}
+                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 hover:border-red-400 transition-all shadow-md hover:shadow-lg"
+                        >
+                          <X className="w-8 h-8 text-red-500" strokeWidth={2.5} />
+                        </button>
+                        
+                        {/* Me gusta - derecha */}
+                        <button
+                          type="button"
+                          onClick={() => handleLikeDislike(true)}
+                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 hover:border-green-400 transition-all shadow-md hover:shadow-lg"
+                        >
+                          <svg className="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </div>
+                      
+                      {/* Indicador de progreso */}
+                      <div className="flex items-center gap-2">
+                        {foodTypes.map((_, index) => (
+                          <div 
+                            key={index}
+                            className="w-2 h-2 rounded-full transition-all"
                             style={{
-                              opacity: 0,
-                              transform: 'translateY(10px)',
-                              animation: `fadeInUp 0.4s ease-out ${index * 0.08}s forwards`,
-                              border: isSelected ? '1px solid #020817' : 'none'
+                              backgroundColor: index === currentImageIndex ? '#020817' : '#D9DADC'
                             }}
-                          >
-                            <div className="w-full aspect-square relative">
-                              <img 
-                                src={gusto.image} 
-                                alt={gusto.label}
-                                className="w-full h-full object-cover"
-                              />
-                              {isSelected && (
-                                <div 
-                                  className="absolute inset-0" 
-                                  style={{ backgroundColor: 'rgba(217, 218, 220, 0.3)' }}
-                                />
-                              )}
-                            </div>
-                          </button>
-                        );
-                      })}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  </div>}
+                  );
+                })()}
               </div>}
 
             {currentStep === 'goal' && <div className="space-y-6">
@@ -2208,8 +2240,8 @@ export const ProfileCreationDrawer = ({
           </div>
         </CardContent>
 
-        {/* Bottom area - chat send style for name, diet, allergies, gustos, goal, weight, height, birthdate, sex, activityLevel steps */}
-        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'gustos' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
+        {/* Bottom area - chat send style for name, diet, allergies, goal, weight, height, birthdate, sex, activityLevel steps (NOT gustos) */}
+        {(currentStep === 'name' || currentStep === 'diet' || currentStep === 'allergies' || currentStep === 'goal' || currentStep === 'weight' || currentStep === 'height' || currentStep === 'birthdate' || currentStep === 'sex' || currentStep === 'activityLevel') && <div className="absolute left-0 right-0 bottom-0 z-[9999] rounded-b-3xl overflow-hidden" style={{
         backgroundColor: '#FFFFFF'
       }}>
             <div className="px-4 pt-4 flex items-center gap-2 border-t" style={{
@@ -2218,7 +2250,6 @@ export const ProfileCreationDrawer = ({
               {((currentStep === 'name' && profileData.name) || 
                 (currentStep === 'diet' && profileData.diet) || 
                 (currentStep === 'allergies' && profileData.allergies.length > 0) ||
-                (currentStep === 'gustos' && profileData.gustos.length > 0) ||
                 (currentStep === 'goal' && profileData.goal) ||
                 (currentStep === 'weight' && profileData.weight) ||
                 (currentStep === 'height' && profileData.height) ||
@@ -2255,15 +2286,6 @@ export const ProfileCreationDrawer = ({
                       borderRadius: '8px'
                     }}>
                       {allergy}
-                    </Badge>
-                  ))}
-                  {currentStep === 'gustos' && Array.isArray(profileData.gustos) && profileData.gustos.map((gusto: string) => (
-                    <Badge key={gusto} variant="secondary" className="text-xs font-normal hover:bg-[#D9DADC] py-1 flex items-center gap-1 flex-shrink-0" style={{
-                      backgroundColor: '#D9DADC',
-                      color: '#020818',
-                      borderRadius: '8px'
-                    }}>
-                      {gusto}
                     </Badge>
                   ))}
                   {currentStep === 'goal' && (
