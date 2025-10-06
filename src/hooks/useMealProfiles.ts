@@ -8,6 +8,7 @@ export type MealProfile = {
   name: string;
   diet?: string;
   allergies?: string[];
+  gustos?: string[];
   health_goal?: string;
   birth_date?: string;
   weight?: string;

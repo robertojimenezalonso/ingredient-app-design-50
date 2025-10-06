@@ -1243,39 +1243,41 @@ export const ProfileCreationDrawer = ({
     }
   };
   const getCompletionPercentage = () => {
-    const steps: Step[] = ['name', 'diet', 'allergies', 'gustos', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel', 'macros'];
+    // If we're on the macros screen, show 100% automatically
+    if (currentStep === 'macros') {
+      return 100;
+    }
+    
+    // 10 steps total, each worth 10%
+    const steps: Step[] = ['name', 'diet', 'allergies', 'gustos', 'goal', 'weight', 'height', 'birthdate', 'sex', 'activityLevel'];
     const completedSteps = steps.filter(step => {
       switch (step) {
         case 'name':
-          // Only count if name is not the default name
           return profileData.name.trim().length > 0 && profileData.name !== getDefaultName();
         case 'diet':
           return profileData.diet !== '';
         case 'allergies':
-          // Only count if user has explicitly set allergies (even if empty)
           return editingProfile?.allergies !== undefined || profileData.allergies.length > 0;
         case 'gustos':
           return profileData.gustos.length > 0;
         case 'goal':
           return profileData.goal !== '';
         case 'weight':
-          return profileData.weight && parseFloat(profileData.weight) > 0;
+          return weightKg && parseInt(weightKg) > 0;
         case 'height':
           return profileData.height && parseFloat(profileData.height) > 0;
         case 'birthdate':
-          return profileData.birthDate !== '';
+          return birthdateDay && birthdateMonth && birthdateYear;
         case 'sex':
           return profileData.sex !== '';
         case 'activityLevel':
           return profileData.activityLevel !== '';
-        case 'macros':
-          return profileData.carbs + profileData.protein + profileData.fat === 100;
         default:
           return false;
       }
     }).length;
-    // 11 steps total, calculate percentage dynamically
-    return Math.round((completedSteps / steps.length) * 100);
+    // Each step is worth 10%
+    return completedSteps * 10;
   };
   const getDefaultName = () => `Comensal ${profileIndex + 1}`;
   const getInitials = (name: string) => {

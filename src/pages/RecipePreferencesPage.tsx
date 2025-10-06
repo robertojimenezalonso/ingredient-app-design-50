@@ -103,6 +103,7 @@ export const RecipePreferencesPage = () => {
     name: profile.name,
     diet: profile.diet,
     allergies: profile.allergies?.join(', '),
+    gustos: profile.gustos?.join(', '),
     healthGoal: profile.health_goal,
     birthDate: profile.birth_date,
     weight: profile.weight,
@@ -129,6 +130,7 @@ export const RecipePreferencesPage = () => {
     name: string;
     diet?: string;
     allergies?: string;
+    gustos?: string;
     healthGoal?: string;
     birthDate?: string;
     weight?: string;
@@ -226,13 +228,13 @@ export const RecipePreferencesPage = () => {
     if (profile.name) completed++;
     if (profile.diet) completed++;
     if (profile.allergies) completed++;
+    if (profile.gustos) completed++;
     if (profile.healthGoal) completed++;
-    if (profile.birthDate) completed++;
     if (profile.weight) completed++;
     if (profile.height) completed++;
+    if (profile.birthDate) completed++;
     if (profile.sex) completed++;
     if (profile.activityLevel) completed++;
-    if (profile.calories && profile.carbs && profile.protein && profile.fat) completed++;
     
     return (completed / total) * 100;
   };
@@ -277,6 +279,7 @@ export const RecipePreferencesPage = () => {
       name: profile.name,
       diet: profile.diet,
       allergies: profile.allergies,
+      gustos: profile.gustos,
       healthGoal: profile.healthGoal,
       birthDate: profile.birthDate,
       weight: profile.weight,
@@ -299,11 +302,17 @@ export const RecipePreferencesPage = () => {
     const allergiesArray = Array.isArray(profileData.allergies) 
       ? profileData.allergies 
       : (profileData.allergies ? [profileData.allergies] : []);
+    
+    // Convert gustos array to proper format
+    const gustosArray = Array.isArray(profileData.gustos) 
+      ? profileData.gustos 
+      : (profileData.gustos ? [profileData.gustos] : []);
 
     const profileToSave = {
       name: profileData.name,
       diet: profileData.diet || undefined,
       allergies: allergiesArray,
+      gustos: gustosArray,
       health_goal: profileData.goal || undefined,
       birth_date: profileData.birthDate || undefined,
       weight: profileData.weight && profileData.weightUnit 
