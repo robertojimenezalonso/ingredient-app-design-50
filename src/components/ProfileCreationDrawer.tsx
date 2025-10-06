@@ -1855,23 +1855,23 @@ export const ProfileCreationDrawer = ({
                       {/* Day Wheel */}
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-10" />
-                          <div className="h-10" />
+                          <div className="h-20" />
                           <div className="h-10 rounded-l-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).day ? parseInt(parseBirthDate(profileData.birthDate).day) : 'DD'}
                             </span>
                           </div>
-                          <div className="h-10" />
-                          <div className="h-10" />
+                          <div className="h-[72px]" />
                         </div>
                         <div 
-                          className="overflow-y-scroll scrollbar-hide h-full py-20"
+                          className="overflow-y-scroll scrollbar-hide h-full"
                           style={{
                             perspective: '1000px',
                             perspectiveOrigin: 'center center',
                             scrollSnapType: 'y mandatory',
-                            WebkitOverflowScrolling: 'touch'
+                            WebkitOverflowScrolling: 'touch',
+                            paddingTop: '80px',
+                            paddingBottom: '112px'
                           }}
                           onScroll={(e) => {
                             const container = e.currentTarget;
@@ -1883,7 +1883,7 @@ export const ProfileCreationDrawer = ({
                               const paddedDay = day.toString().padStart(2, '0');
                               const { month, year } = parseBirthDate(profileData.birthDate);
                               const newMonth = month || '01';
-                              const newYear = year || new Date().getFullYear() - 30;
+                              const newYear = year || new Date().getFullYear().toString();
                               setProfileData({
                                 ...profileData,
                                 birthDate: `${paddedDay}/${newMonth}/${newYear}`
@@ -1931,8 +1931,7 @@ export const ProfileCreationDrawer = ({
                       {/* Month Wheel */}
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-10" />
-                          <div className="h-10" />
+                          <div className="h-20" />
                           <div className="h-10 flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).month ? 
@@ -1940,16 +1939,17 @@ export const ProfileCreationDrawer = ({
                                 : 'mes'}
                             </span>
                           </div>
-                          <div className="h-10" />
-                          <div className="h-10" />
+                          <div className="h-[72px]" />
                         </div>
                         <div 
-                          className="overflow-y-scroll scrollbar-hide h-full py-20"
+                          className="overflow-y-scroll scrollbar-hide h-full"
                           style={{
                             perspective: '1000px',
                             perspectiveOrigin: 'center center',
                             scrollSnapType: 'y mandatory',
-                            WebkitOverflowScrolling: 'touch'
+                            WebkitOverflowScrolling: 'touch',
+                            paddingTop: '80px',
+                            paddingBottom: '112px'
                           }}
                           onScroll={(e) => {
                             const container = e.currentTarget;
@@ -1959,7 +1959,7 @@ export const ProfileCreationDrawer = ({
                             const month = (index + 1).toString().padStart(2, '0');
                             const { day, year } = parseBirthDate(profileData.birthDate);
                             const newDay = day || '01';
-                            const newYear = year || new Date().getFullYear() - 30;
+                            const newYear = year || new Date().getFullYear().toString();
                             setProfileData({
                               ...profileData,
                               birthDate: `${newDay}/${month}/${newYear}`
@@ -2006,15 +2006,13 @@ export const ProfileCreationDrawer = ({
                       {/* Year Wheel */}
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-10" />
-                          <div className="h-10" />
+                          <div className="h-20" />
                           <div className="h-10 rounded-r-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).year || 'año'}
                             </span>
                           </div>
-                          <div className="h-10" />
-                          <div className="h-10" />
+                          <div className="h-[72px]" />
                         </div>
                         <div 
                           className="overflow-y-scroll scrollbar-hide h-full py-20"
@@ -2027,10 +2025,9 @@ export const ProfileCreationDrawer = ({
                             const scrollTop = container.scrollTop;
                             const itemHeight = 40;
                             const currentYear = new Date().getFullYear();
-                            const startYear = 1920;
                             const index = Math.round(scrollTop / itemHeight);
-                            const year = startYear + index;
-                            if (year >= startYear && year <= currentYear) {
+                            const year = currentYear - index;
+                            if (year >= 1920 && year <= currentYear) {
                               const { day, month } = parseBirthDate(profileData.birthDate);
                               const newDay = day || '01';
                               const newMonth = month || '01';
@@ -2064,7 +2061,7 @@ export const ProfileCreationDrawer = ({
                             });
                           }}
                         >
-                          {Array.from({ length: new Date().getFullYear() - 1920 + 1 }, (_, i) => 1920 + i).map((year) => (
+                          {Array.from({ length: new Date().getFullYear() - 1920 + 1 }, (_, i) => new Date().getFullYear() - i).map((year) => (
                             <div 
                               key={year}
                               className="h-10 flex items-center justify-center text-lg text-[#1C1C1C] transition-all duration-200"
