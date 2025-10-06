@@ -1868,6 +1868,8 @@ export const ProfileCreationDrawer = ({
                         <div 
                           className="overflow-y-scroll scrollbar-hide h-full py-20"
                           style={{
+                            perspective: '1000px',
+                            perspectiveOrigin: 'center center',
                             scrollSnapType: 'y mandatory',
                             WebkitOverflowScrolling: 'touch'
                           }}
@@ -1896,15 +1898,18 @@ export const ProfileCreationDrawer = ({
                               const rect = item.getBoundingClientRect();
                               const containerRect = container.getBoundingClientRect();
                               const itemCenter = rect.top + rect.height / 2 - containerRect.top;
-                              const distance = Math.abs(centerY - itemCenter);
+                              const distance = centerY - itemCenter;
                               const maxDistance = centerY;
-                              const normalizedDistance = Math.min(distance / maxDistance, 1);
+                              const normalizedDistance = Math.min(Math.abs(distance) / maxDistance, 1);
                               
                               // Scale and opacity based on distance from center
                               const scale = 1 - (normalizedDistance * 0.3);
                               const opacity = 1 - (normalizedDistance * 0.7);
                               
-                              item.style.transform = `scale(${scale})`;
+                              // Rotation for 3D wheel effect (items above rotate forward, below rotate backward)
+                              const rotateX = (distance / maxDistance) * 20;
+                              
+                              item.style.transform = `scale(${scale}) rotateX(${rotateX}deg)`;
                               item.style.opacity = opacity;
                             });
                           }}
@@ -1941,6 +1946,8 @@ export const ProfileCreationDrawer = ({
                         <div 
                           className="overflow-y-scroll scrollbar-hide h-full py-20"
                           style={{
+                            perspective: '1000px',
+                            perspectiveOrigin: 'center center',
                             scrollSnapType: 'y mandatory',
                             WebkitOverflowScrolling: 'touch'
                           }}
@@ -1966,15 +1973,18 @@ export const ProfileCreationDrawer = ({
                               const rect = item.getBoundingClientRect();
                               const containerRect = container.getBoundingClientRect();
                               const itemCenter = rect.top + rect.height / 2 - containerRect.top;
-                              const distance = Math.abs(centerY - itemCenter);
+                              const distance = centerY - itemCenter;
                               const maxDistance = centerY;
-                              const normalizedDistance = Math.min(distance / maxDistance, 1);
+                              const normalizedDistance = Math.min(Math.abs(distance) / maxDistance, 1);
                               
                               // Scale and opacity based on distance from center
                               const scale = 1 - (normalizedDistance * 0.3);
                               const opacity = 1 - (normalizedDistance * 0.7);
                               
-                              item.style.transform = `scale(${scale})`;
+                              // Rotation for 3D wheel effect (items above rotate forward, below rotate backward)
+                              const rotateX = (distance / maxDistance) * 20;
+                              
+                              item.style.transform = `scale(${scale}) rotateX(${rotateX}deg)`;
                               item.style.opacity = opacity;
                             });
                           }}
@@ -2038,15 +2048,18 @@ export const ProfileCreationDrawer = ({
                               const rect = item.getBoundingClientRect();
                               const containerRect = container.getBoundingClientRect();
                               const itemCenter = rect.top + rect.height / 2 - containerRect.top;
-                              const distance = Math.abs(centerY - itemCenter);
+                              const distance = centerY - itemCenter;
                               const maxDistance = centerY;
-                              const normalizedDistance = Math.min(distance / maxDistance, 1);
+                              const normalizedDistance = Math.min(Math.abs(distance) / maxDistance, 1);
                               
                               // Scale and opacity based on distance from center
                               const scale = 1 - (normalizedDistance * 0.3);
                               const opacity = 1 - (normalizedDistance * 0.7);
                               
-                              item.style.transform = `scale(${scale})`;
+                              // Rotation for 3D wheel effect (items above rotate forward, below rotate backward)
+                              const rotateX = (distance / maxDistance) * 20;
+                              
+                              item.style.transform = `scale(${scale}) rotateX(${rotateX}deg)`;
                               item.style.opacity = opacity;
                             });
                           }}
