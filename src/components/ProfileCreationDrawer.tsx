@@ -1851,162 +1851,151 @@ export const ProfileCreationDrawer = ({
                 {/* Birthdate input - appears after typewriter completes */}
                 {birthdateShowInput && <div className="space-y-3">
                     {/* Contenedor único unificado para las tres ruedas */}
-                    <div className="rounded-3xl overflow-hidden" style={{ backgroundColor: '#D9DADC' }}>
-                      <div className="flex gap-0 items-center justify-center py-4">
-                        {/* Day Wheel */}
-                        <div className="relative h-48 flex-1 overflow-hidden">
-                          <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                            <div className="h-16 bg-gradient-to-b from-[#D9DADC] to-transparent" />
-                            <div className="h-16 flex items-center justify-center">
-                              <span className="text-3xl font-medium text-[#020817]">
-                                {parseBirthDate(profileData.birthDate).day || 'DD'}
-                              </span>
-                            </div>
-                            <div className="h-16 bg-gradient-to-t from-[#D9DADC] to-transparent" />
+                    <div className="flex gap-0 items-center justify-center">
+                      {/* Day Wheel */}
+                      <div className="relative h-48 flex-1 overflow-hidden">
+                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
+                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-16 rounded-l-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                            <span className="text-lg font-semibold text-[#020817]">
+                              {parseBirthDate(profileData.birthDate).day || 'DD'}
+                            </span>
                           </div>
-                          <div 
-                            className="overflow-y-scroll scrollbar-hide h-full py-16"
-                            style={{
-                              scrollSnapType: 'y mandatory',
-                              WebkitOverflowScrolling: 'touch'
-                            }}
-                            onScroll={(e) => {
-                              const container = e.currentTarget;
-                              const scrollTop = container.scrollTop;
-                              const itemHeight = 64;
-                              const index = Math.round(scrollTop / itemHeight);
-                              const day = index + 1;
-                              if (day >= 1 && day <= 31) {
-                                const paddedDay = day.toString().padStart(2, '0');
-                                const { month, year } = parseBirthDate(profileData.birthDate);
-                                const newMonth = month || '01';
-                                const newYear = year || new Date().getFullYear() - 30;
-                                setProfileData({
-                                  ...profileData,
-                                  birthDate: `${paddedDay}/${newMonth}/${newYear}`
-                                });
-                              }
-                            }}
-                          >
-                            {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
-                              <div 
-                                key={day}
-                                className="h-16 flex items-center justify-center text-3xl font-light"
-                                style={{
-                                  scrollSnapAlign: 'start',
-                                  color: '#9CA3AF'
-                                }}
-                              >
-                                {day}
-                              </div>
-                            ))}
-                          </div>
+                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
                         </div>
-                        
-                        {/* Separador visual */}
-                        <div className="w-px h-32 bg-white/30" />
-                        
-                        {/* Month Wheel */}
-                        <div className="relative h-48 flex-1 overflow-hidden">
-                          <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                            <div className="h-16 bg-gradient-to-b from-[#D9DADC] to-transparent" />
-                            <div className="h-16 flex items-center justify-center">
-                              <span className="text-3xl font-medium text-[#020817]">
-                                {parseBirthDate(profileData.birthDate).month ? 
-                                  ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][parseInt(parseBirthDate(profileData.birthDate).month) - 1] 
-                                  : 'mes'}
-                              </span>
-                            </div>
-                            <div className="h-16 bg-gradient-to-t from-[#D9DADC] to-transparent" />
-                          </div>
-                          <div 
-                            className="overflow-y-scroll scrollbar-hide h-full py-16"
-                            style={{
-                              scrollSnapType: 'y mandatory',
-                              WebkitOverflowScrolling: 'touch'
-                            }}
-                            onScroll={(e) => {
-                              const container = e.currentTarget;
-                              const scrollTop = container.scrollTop;
-                              const itemHeight = 64;
-                              const index = Math.round(scrollTop / itemHeight);
-                              const month = (index + 1).toString().padStart(2, '0');
-                              const { day, year } = parseBirthDate(profileData.birthDate);
-                              const newDay = day || '01';
+                        <div 
+                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          style={{
+                            scrollSnapType: 'y mandatory',
+                            WebkitOverflowScrolling: 'touch'
+                          }}
+                          onScroll={(e) => {
+                            const container = e.currentTarget;
+                            const scrollTop = container.scrollTop;
+                            const itemHeight = 64;
+                            const index = Math.round(scrollTop / itemHeight);
+                            const day = index + 1;
+                            if (day >= 1 && day <= 31) {
+                              const paddedDay = day.toString().padStart(2, '0');
+                              const { month, year } = parseBirthDate(profileData.birthDate);
+                              const newMonth = month || '01';
                               const newYear = year || new Date().getFullYear() - 30;
                               setProfileData({
                                 ...profileData,
-                                birthDate: `${newDay}/${month}/${newYear}`
+                                birthDate: `${paddedDay}/${newMonth}/${newYear}`
                               });
-                            }}
-                          >
-                            {['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((month) => (
-                              <div 
-                                key={month}
-                                className="h-16 flex items-center justify-center text-3xl font-light"
-                                style={{
-                                  scrollSnapAlign: 'start',
-                                  color: '#9CA3AF'
-                                }}
-                              >
-                                {month}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        {/* Separador visual */}
-                        <div className="w-px h-32 bg-white/30" />
-                        
-                        {/* Year Wheel */}
-                        <div className="relative h-48 flex-1 overflow-hidden">
-                          <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                            <div className="h-16 bg-gradient-to-b from-[#D9DADC] to-transparent" />
-                            <div className="h-16 flex items-center justify-center">
-                              <span className="text-3xl font-medium text-[#020817]">
-                                {parseBirthDate(profileData.birthDate).year || 'año'}
-                              </span>
+                            }
+                          }}
+                        >
+                          {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+                            <div 
+                              key={day}
+                              className="h-16 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
+                              style={{
+                                scrollSnapAlign: 'start'
+                              }}
+                            >
+                              {day}
                             </div>
-                            <div className="h-16 bg-gradient-to-t from-[#D9DADC] to-transparent" />
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Month Wheel */}
+                      <div className="relative h-48 flex-1 overflow-hidden">
+                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
+                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-16 flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                            <span className="text-lg font-semibold text-[#020817]">
+                              {parseBirthDate(profileData.birthDate).month ? 
+                                ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][parseInt(parseBirthDate(profileData.birthDate).month) - 1] 
+                                : 'mes'}
+                            </span>
                           </div>
-                          <div 
-                            className="overflow-y-scroll scrollbar-hide h-full py-16"
-                            style={{
-                              scrollSnapType: 'y mandatory',
-                              WebkitOverflowScrolling: 'touch'
-                            }}
-                            onScroll={(e) => {
-                              const container = e.currentTarget;
-                              const scrollTop = container.scrollTop;
-                              const itemHeight = 64;
-                              const currentYear = new Date().getFullYear();
-                              const startYear = 1920;
-                              const index = Math.round(scrollTop / itemHeight);
-                              const year = startYear + index;
-                              if (year >= startYear && year <= currentYear) {
-                                const { day, month } = parseBirthDate(profileData.birthDate);
-                                const newDay = day || '01';
-                                const newMonth = month || '01';
-                                setProfileData({
-                                  ...profileData,
-                                  birthDate: `${newDay}/${newMonth}/${year}`
-                                });
-                              }
-                            }}
-                          >
-                            {Array.from({ length: new Date().getFullYear() - 1920 + 1 }, (_, i) => 1920 + i).map((year) => (
-                              <div 
-                                key={year}
-                                className="h-16 flex items-center justify-center text-3xl font-light"
-                                style={{
-                                  scrollSnapAlign: 'start',
-                                  color: '#9CA3AF'
-                                }}
-                              >
-                                {year}
-                              </div>
-                            ))}
+                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+                        </div>
+                        <div 
+                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          style={{
+                            scrollSnapType: 'y mandatory',
+                            WebkitOverflowScrolling: 'touch'
+                          }}
+                          onScroll={(e) => {
+                            const container = e.currentTarget;
+                            const scrollTop = container.scrollTop;
+                            const itemHeight = 64;
+                            const index = Math.round(scrollTop / itemHeight);
+                            const month = (index + 1).toString().padStart(2, '0');
+                            const { day, year } = parseBirthDate(profileData.birthDate);
+                            const newDay = day || '01';
+                            const newYear = year || new Date().getFullYear() - 30;
+                            setProfileData({
+                              ...profileData,
+                              birthDate: `${newDay}/${month}/${newYear}`
+                            });
+                          }}
+                        >
+                          {['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((month) => (
+                            <div 
+                              key={month}
+                              className="h-16 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
+                              style={{
+                                scrollSnapAlign: 'start'
+                              }}
+                            >
+                              {month}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      {/* Year Wheel */}
+                      <div className="relative h-48 flex-1 overflow-hidden">
+                        <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
+                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-16 rounded-r-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                            <span className="text-lg font-semibold text-[#020817]">
+                              {parseBirthDate(profileData.birthDate).year || 'año'}
+                            </span>
                           </div>
+                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+                        </div>
+                        <div 
+                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          style={{
+                            scrollSnapType: 'y mandatory',
+                            WebkitOverflowScrolling: 'touch'
+                          }}
+                          onScroll={(e) => {
+                            const container = e.currentTarget;
+                            const scrollTop = container.scrollTop;
+                            const itemHeight = 64;
+                            const currentYear = new Date().getFullYear();
+                            const startYear = 1920;
+                            const index = Math.round(scrollTop / itemHeight);
+                            const year = startYear + index;
+                            if (year >= startYear && year <= currentYear) {
+                              const { day, month } = parseBirthDate(profileData.birthDate);
+                              const newDay = day || '01';
+                              const newMonth = month || '01';
+                              setProfileData({
+                                ...profileData,
+                                birthDate: `${newDay}/${newMonth}/${year}`
+                              });
+                            }
+                          }}
+                        >
+                          {Array.from({ length: new Date().getFullYear() - 1920 + 1 }, (_, i) => 1920 + i).map((year) => (
+                            <div 
+                              key={year}
+                              className="h-16 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
+                              style={{
+                                scrollSnapAlign: 'start'
+                              }}
+                            >
+                              {year}
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
