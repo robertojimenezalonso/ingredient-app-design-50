@@ -1840,105 +1840,125 @@ export const ProfileCreationDrawer = ({
 
                 {/* Birthdate input - appears after typewriter completes */}
                 {birthdateShowInput && <div className="space-y-3">
-                    <div className="flex gap-3">
-                      {/* Day */}
-                      <div className="flex-1">
-                        <Input 
-                          type="number" 
-                          inputMode="numeric"
-                          placeholder="DD"
-                          value={parseBirthDate(profileData.birthDate).day}
-                          onChange={e => {
-                            const day = e.target.value.slice(0, 2);
+                    <div className="flex gap-2 items-center justify-center">
+                      {/* Day Wheel */}
+                      <div className="relative h-48 w-20 overflow-hidden">
+                        <div className="absolute inset-0 pointer-events-none z-10">
+                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-16 rounded-full" style={{ backgroundColor: '#D9DADC' }} />
+                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+                        </div>
+                        <div 
+                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          onScroll={(e) => {
+                            const container = e.currentTarget;
+                            const scrollTop = container.scrollTop;
+                            const itemHeight = 64; // h-16
+                            const index = Math.round(scrollTop / itemHeight);
+                            const day = index + 1;
                             const { month, year } = parseBirthDate(profileData.birthDate);
-                            if (day && month && year) {
-                              setProfileData({
-                                ...profileData,
-                                birthDate: `${day}/${month}/${year}`
-                              });
+                            if (day >= 1 && day <= 31) {
+                              const paddedDay = day.toString().padStart(2, '0');
+                              if (month && year) {
+                                setProfileData({
+                                  ...profileData,
+                                  birthDate: `${paddedDay}/${month}/${year}`
+                                });
+                              }
                             }
                           }}
-                          className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 text-center" 
-                          style={{
-                            backgroundColor: '#F4F4F4',
-                            borderColor: 'transparent'
-                          }}
-                          onFocus={(e) => {
-                            e.target.style.borderColor = '#020817';
-                            e.target.style.borderWidth = '1px';
-                          }}
-                          onBlur={e => {
-                            e.target.style.borderColor = 'transparent';
-                          }}
-                          maxLength={2}
-                          autoFocus
-                        />
+                        >
+                          {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
+                            <div 
+                              key={day}
+                              className="h-16 flex items-center justify-center text-2xl font-light text-gray-400"
+                              style={{
+                                color: parseBirthDate(profileData.birthDate).day === day.toString().padStart(2, '0') ? '#020817' : '#D1D5DB'
+                              }}
+                            >
+                              {day}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                       
-                      {/* Month */}
-                      <div className="flex-1">
-                        <Input 
-                          type="number" 
-                          inputMode="numeric"
-                          placeholder="MM"
-                          value={parseBirthDate(profileData.birthDate).month}
-                          onChange={e => {
-                            const month = e.target.value.slice(0, 2);
+                      {/* Month Wheel */}
+                      <div className="relative h-48 w-32 overflow-hidden">
+                        <div className="absolute inset-0 pointer-events-none z-10">
+                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-16 rounded-full" style={{ backgroundColor: '#D9DADC' }} />
+                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+                        </div>
+                        <div 
+                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          onScroll={(e) => {
+                            const container = e.currentTarget;
+                            const scrollTop = container.scrollTop;
+                            const itemHeight = 64;
+                            const index = Math.round(scrollTop / itemHeight);
+                            const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+                            const month = (index + 1).toString().padStart(2, '0');
                             const { day, year } = parseBirthDate(profileData.birthDate);
-                            if (day && month && year) {
+                            if (day && year) {
                               setProfileData({
                                 ...profileData,
                                 birthDate: `${day}/${month}/${year}`
                               });
                             }
                           }}
-                          className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 text-center" 
-                          style={{
-                            backgroundColor: '#F4F4F4',
-                            borderColor: 'transparent'
-                          }}
-                          onFocus={(e) => {
-                            e.target.style.borderColor = '#020817';
-                            e.target.style.borderWidth = '1px';
-                          }}
-                          onBlur={e => {
-                            e.target.style.borderColor = 'transparent';
-                          }}
-                          maxLength={2}
-                        />
+                        >
+                          {['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((month, idx) => (
+                            <div 
+                              key={month}
+                              className="h-16 flex items-center justify-center text-2xl font-light"
+                              style={{
+                                color: parseBirthDate(profileData.birthDate).month === (idx + 1).toString().padStart(2, '0') ? '#020817' : '#D1D5DB'
+                              }}
+                            >
+                              {month}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                       
-                      {/* Year */}
-                      <div className="flex-[1.5]">
-                        <Input 
-                          type="number" 
-                          inputMode="numeric"
-                          placeholder="AAAA"
-                          value={parseBirthDate(profileData.birthDate).year}
-                          onChange={e => {
-                            const year = e.target.value.slice(0, 4);
+                      {/* Year Wheel */}
+                      <div className="relative h-48 w-24 overflow-hidden">
+                        <div className="absolute inset-0 pointer-events-none z-10">
+                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-16 rounded-full" style={{ backgroundColor: '#D9DADC' }} />
+                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+                        </div>
+                        <div 
+                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          onScroll={(e) => {
+                            const container = e.currentTarget;
+                            const scrollTop = container.scrollTop;
+                            const itemHeight = 64;
+                            const currentYear = new Date().getFullYear();
+                            const startYear = 1920;
+                            const index = Math.round(scrollTop / itemHeight);
+                            const year = startYear + index;
                             const { day, month } = parseBirthDate(profileData.birthDate);
-                            if (day && month && year) {
+                            if (day && month && year >= startYear && year <= currentYear) {
                               setProfileData({
                                 ...profileData,
                                 birthDate: `${day}/${month}/${year}`
                               });
                             }
                           }}
-                          className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 text-center" 
-                          style={{
-                            backgroundColor: '#F4F4F4',
-                            borderColor: 'transparent'
-                          }}
-                          onFocus={(e) => {
-                            e.target.style.borderColor = '#020817';
-                            e.target.style.borderWidth = '1px';
-                          }}
-                          onBlur={e => {
-                            e.target.style.borderColor = 'transparent';
-                          }}
-                          maxLength={4}
-                        />
+                        >
+                          {Array.from({ length: new Date().getFullYear() - 1920 + 1 }, (_, i) => 1920 + i).map((year) => (
+                            <div 
+                              key={year}
+                              className="h-16 flex items-center justify-center text-2xl font-light"
+                              style={{
+                                color: parseBirthDate(profileData.birthDate).year === year.toString() ? '#020817' : '#D1D5DB'
+                              }}
+                            >
+                              {year}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>}
