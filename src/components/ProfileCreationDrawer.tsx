@@ -1839,33 +1839,108 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Birthdate input - appears after typewriter completes */}
-                {birthdateShowInput && <div className="relative">
-                    <Input 
-                      type="date" 
-                      inputMode="numeric"
-                      value={profileData.birthDate} 
-                      onChange={e => setProfileData({
-                        ...profileData,
-                        birthDate: e.target.value
-                      })} 
-                      className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
-                      style={{
-                        backgroundColor: '#F4F4F4',
-                        borderColor: 'transparent'
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = '#020817';
-                        e.target.style.borderWidth = '1px';
-                      }}
-                      onBlur={e => {
-                        e.target.style.borderColor = 'transparent';
-                        e.preventDefault();
-                        setTimeout(() => e.target.focus({
-                          preventScroll: true
-                        }), 0);
-                      }}
-                      autoFocus
-                    />
+                {birthdateShowInput && <div className="space-y-3">
+                    <div className="flex gap-3">
+                      {/* Day */}
+                      <div className="flex-1">
+                        <Input 
+                          type="number" 
+                          inputMode="numeric"
+                          placeholder="DD"
+                          value={parseBirthDate(profileData.birthDate).day}
+                          onChange={e => {
+                            const day = e.target.value.slice(0, 2);
+                            const { month, year } = parseBirthDate(profileData.birthDate);
+                            if (day && month && year) {
+                              setProfileData({
+                                ...profileData,
+                                birthDate: `${day}/${month}/${year}`
+                              });
+                            }
+                          }}
+                          className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 text-center" 
+                          style={{
+                            backgroundColor: '#F4F4F4',
+                            borderColor: 'transparent'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#020817';
+                            e.target.style.borderWidth = '1px';
+                          }}
+                          onBlur={e => {
+                            e.target.style.borderColor = 'transparent';
+                          }}
+                          maxLength={2}
+                          autoFocus
+                        />
+                      </div>
+                      
+                      {/* Month */}
+                      <div className="flex-1">
+                        <Input 
+                          type="number" 
+                          inputMode="numeric"
+                          placeholder="MM"
+                          value={parseBirthDate(profileData.birthDate).month}
+                          onChange={e => {
+                            const month = e.target.value.slice(0, 2);
+                            const { day, year } = parseBirthDate(profileData.birthDate);
+                            if (day && month && year) {
+                              setProfileData({
+                                ...profileData,
+                                birthDate: `${day}/${month}/${year}`
+                              });
+                            }
+                          }}
+                          className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 text-center" 
+                          style={{
+                            backgroundColor: '#F4F4F4',
+                            borderColor: 'transparent'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#020817';
+                            e.target.style.borderWidth = '1px';
+                          }}
+                          onBlur={e => {
+                            e.target.style.borderColor = 'transparent';
+                          }}
+                          maxLength={2}
+                        />
+                      </div>
+                      
+                      {/* Year */}
+                      <div className="flex-[1.5]">
+                        <Input 
+                          type="number" 
+                          inputMode="numeric"
+                          placeholder="AAAA"
+                          value={parseBirthDate(profileData.birthDate).year}
+                          onChange={e => {
+                            const year = e.target.value.slice(0, 4);
+                            const { day, month } = parseBirthDate(profileData.birthDate);
+                            if (day && month && year) {
+                              setProfileData({
+                                ...profileData,
+                                birthDate: `${day}/${month}/${year}`
+                              });
+                            }
+                          }}
+                          className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 text-center" 
+                          style={{
+                            backgroundColor: '#F4F4F4',
+                            borderColor: 'transparent'
+                          }}
+                          onFocus={(e) => {
+                            e.target.style.borderColor = '#020817';
+                            e.target.style.borderWidth = '1px';
+                          }}
+                          onBlur={e => {
+                            e.target.style.borderColor = 'transparent';
+                          }}
+                          maxLength={4}
+                        />
+                      </div>
+                    </div>
                   </div>}
               </div>}
 
