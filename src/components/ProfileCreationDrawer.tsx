@@ -2542,51 +2542,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   )}
                 </div>}
 
-                {/* Restablecer datos y Guardar buttons - solo si hay modificaciones */}
-                {macrosModified && (
-                  <div className="flex justify-end gap-3 mt-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setProfileData({
-                          ...profileData,
-                          carbs: recommendedMacros.carbs,
-                          protein: recommendedMacros.protein,
-                          fat: recommendedMacros.fat,
-                          calories: recommendedMacros.calories
-                        });
-                        setMacrosModified(false);
-                      }}
-                      className="text-sm underline text-muted-foreground hover:text-foreground"
-                    >
-                      Restablecer datos
-                    </button>
-                    {/* Guardar button - solo si el perfil ya está guardado y macros suman 100% */}
-                    {(editingProfile?.id || createdProfileId) && (profileData.carbs + profileData.protein + profileData.fat === 100) && (
-                      <Button
-                        type="button"
-                        onClick={async () => {
-                          // Guardar los cambios en el perfil
-                          const profileId = editingProfile?.id || createdProfileId;
-                          await updateProfile(profileId!, {
-                            calories: profileData.calories,
-                            carbs: profileData.carbs,
-                            protein: profileData.protein,
-                            fat: profileData.fat
-                          });
-                          toast({
-                            title: "Cambios guardados",
-                            description: "Los macronutrientes se han actualizado correctamente."
-                          });
-                          setMacrosModified(false);
-                        }}
-                        className="text-sm px-4 py-2"
-                      >
-                        Guardar
-                      </Button>
-                    )}
-                  </div>
-                )}
+                {/* Espacio para el mensaje de error/validación si es necesario */}
               </div>}
           </div>
         </CardContent>
@@ -2710,49 +2666,62 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
         {/* Buttons for macros step */}
         {currentStep === 'macros' && (
           <div className="p-4 border-t flex-shrink-0">
-            {editingProfile?.id ? (
-              <button
-                type="button"
-                onClick={() => {
-                  setProfileData({
-                    ...profileData,
-                    carbs: recommendedMacros.carbs,
-                    protein: recommendedMacros.protein,
-                    fat: recommendedMacros.fat,
-                    calories: recommendedMacros.calories
-                  });
-                  setMacrosModified(false);
-                }}
-                className="w-full text-center py-3 text-sm font-medium border rounded-lg"
-              >
-                Restablecer datos
-              </button>
-            ) : (
-              <div className="flex gap-3">
-                {/* Botón Restablecer datos - solo si hay modificaciones */}
-                {macrosModified && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setProfileData({
-                        ...profileData,
-                        carbs: recommendedMacros.carbs,
-                        protein: recommendedMacros.protein,
-                        fat: recommendedMacros.fat,
-                        calories: recommendedMacros.calories
+            {/* Footer con botones Restablecer datos y Guardar */}
+            <div className="flex gap-3">
+              {/* Botón Restablecer datos - solo si hay modificaciones */}
+              {macrosModified && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProfileData({
+                      ...profileData,
+                      carbs: recommendedMacros.carbs,
+                      protein: recommendedMacros.protein,
+                      fat: recommendedMacros.fat,
+                      calories: recommendedMacros.calories
+                    });
+                    setMacrosModified(false);
+                  }}
+                  className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
+                >
+                  Restablecer datos
+                </button>
+              )}
+              
+              {/* Botón Guardar - solo si hay modificaciones y macros suman 100% */}
+              {macrosModified && (profileData.carbs + profileData.protein + profileData.fat === 100) && (
+                <Button
+                  type="button"
+                  onClick={async () => {
+                    const profileId = editingProfile?.id || createdProfileId;
+                    if (profileId) {
+                      await updateProfile(profileId, {
+                        calories: profileData.calories,
+                        carbs: profileData.carbs,
+                        protein: profileData.protein,
+                        fat: profileData.fat
+                      });
+                      toast({
+                        title: "Cambios guardados",
+                        description: "Los macronutrientes se han actualizado correctamente."
                       });
                       setMacrosModified(false);
-                    }}
-                    className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
-                  >
-                    Restablecer datos
-                  </button>
-                )}
-                
-                {/* Botón Guardar perfil */}
+                    }
+                  }}
+                  className="flex-1 text-center py-3 text-sm font-medium"
+                  style={{
+                    backgroundColor: '#020817',
+                    color: '#ffffff'
+                  }}
+                >
+                  Guardar
+                </Button>
+              )}
+              
+              {/* Botón Guardar perfil - solo si NO hay modificaciones pendientes */}
+              {!macrosModified && (
                 <Button 
                   onClick={async () => {
-                    // Guardar macros finales
                     const profileId = editingProfile?.id || createdProfileId;
                     if (profileId) {
                       await updateProfile(profileId, {
@@ -2763,13 +2732,12 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       });
                     }
                     
-                    // Limpiar el ID creado y cerrar
                     setCreatedProfileId(null);
                     onSave(profileData);
                     onClose();
                   }}
                   disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
-                  className={macrosModified ? "flex-1" : "w-full"}
+                  className="w-full"
                   style={{
                     backgroundColor: '#020817',
                     color: '#ffffff'
@@ -2777,8 +2745,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                 >
                   Guardar perfil
                 </Button>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
 
