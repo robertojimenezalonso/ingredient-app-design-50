@@ -1891,16 +1891,14 @@ export const ProfileCreationDrawer = ({
                             const currentDay = parseBirthDate(profileData.birthDate).day;
                             const selectedIndex = currentDay ? parseInt(currentDay) - 1 : 0;
                             const distance = Math.abs(index - selectedIndex);
-                            const scale = Math.max(0.5, 1 - (distance * 0.15));
-                            const opacity = Math.max(0.2, 1 - (distance * 0.25));
+                            const opacity = distance === 0 ? 1 : Math.max(0.3, 1 - (distance * 0.2));
                             
                             return (
                               <div 
                                 key={day}
-                                className="h-10 flex items-center justify-center text-lg font-semibold text-[#1C1C1C] transition-all duration-200"
+                                className="h-10 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
                                 style={{
                                   scrollSnapAlign: 'start',
-                                  transform: `scale(${scale})`,
                                   opacity: opacity
                                 }}
                               >
@@ -1949,16 +1947,14 @@ export const ProfileCreationDrawer = ({
                             const currentMonth = parseBirthDate(profileData.birthDate).month;
                             const selectedIndex = currentMonth ? parseInt(currentMonth) - 1 : 0;
                             const distance = Math.abs(index - selectedIndex);
-                            const scale = Math.max(0.5, 1 - (distance * 0.15));
-                            const opacity = Math.max(0.2, 1 - (distance * 0.25));
+                            const opacity = distance === 0 ? 1 : Math.max(0.3, 1 - (distance * 0.2));
                             
                             return (
                               <div 
                                 key={month}
-                                className="h-10 flex items-center justify-center text-lg font-semibold text-[#1C1C1C] transition-all duration-200"
+                                className="h-10 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
                                 style={{
                                   scrollSnapAlign: 'start',
-                                  transform: `scale(${scale})`,
                                   opacity: opacity
                                 }}
                               >
@@ -2009,16 +2005,14 @@ export const ProfileCreationDrawer = ({
                             const currentYear = parseBirthDate(profileData.birthDate).year;
                             const selectedIndex = currentYear ? parseInt(currentYear) - 1920 : new Date().getFullYear() - 30 - 1920;
                             const distance = Math.abs(index - selectedIndex);
-                            const scale = Math.max(0.5, 1 - (distance * 0.15));
-                            const opacity = Math.max(0.2, 1 - (distance * 0.25));
+                            const opacity = distance === 0 ? 1 : Math.max(0.3, 1 - (distance * 0.2));
                             
                             return (
                               <div 
                                 key={year}
-                                className="h-10 flex items-center justify-center text-lg font-semibold text-[#1C1C1C] transition-all duration-200"
+                                className="h-10 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
                                 style={{
                                   scrollSnapAlign: 'start',
-                                  transform: `scale(${scale})`,
                                   opacity: opacity
                                 }}
                               >
