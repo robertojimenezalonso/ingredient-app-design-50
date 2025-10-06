@@ -273,10 +273,8 @@ export const RecipePreferencesPage = () => {
     });
     setProfileDrawerOpen(true);
     
-    // Hacer focus en el input después de abrir el drawer
-    setTimeout(() => {
-      profileDrawerRef.current?.focusNameInput();
-    }, 100);
+    // Hacer focus en el input inmediatamente aprovechando el clic del usuario
+    profileDrawerRef.current?.focusNameInput();
   };
 
   const handleEditProfile = (profile: typeof healthProfiles[0]) => {

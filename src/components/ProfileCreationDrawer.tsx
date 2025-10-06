@@ -65,16 +65,18 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
   // Exponer método para hacer focus en el input de nombre desde el componente padre
   useImperativeHandle(ref, () => ({
     focusNameInput: () => {
-      console.log('=== focusNameInput llamado desde padre ===');
-      if (nameInputRef.current) {
-        setTimeout(() => {
+      console.log('=== focusNameInput llamado ===');
+      // Usar requestAnimationFrame para ejecutar después del próximo repaint
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
           if (nameInputRef.current) {
-            console.log('Haciendo focus en name input');
+            console.log('Haciendo focus y mostrando teclado');
             nameInputRef.current.focus();
-            nameInputRef.current.click();
+            // Forzar apertura del teclado en móvil
+            Keyboard.show().catch(err => console.log('Keyboard.show error (expected on web):', err));
           }
-        }, 300); // Delay para asegurar que el drawer esté completamente renderizado
-      }
+        });
+      });
     }
   }), []);
 
