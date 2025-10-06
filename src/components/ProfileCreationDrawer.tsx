@@ -1450,7 +1450,13 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                 }}
                 onClick={(e) => {
                   e.stopPropagation();
-                  setShowAvatarOptions(true);
+                  // En móvil, abrir directamente el selector de archivos
+                  if (window.innerWidth < 768 || 'ontouchstart' in window) {
+                    setUseCamera(false);
+                    fileInputRef.current?.click();
+                  } else {
+                    setShowAvatarOptions(true);
+                  }
                 }}
               >
                 {editingProfile?.avatarUrl ? (
@@ -2804,10 +2810,12 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
         isOpen={showAvatarOptions}
         onClose={() => setShowAvatarOptions(false)}
         onTakePhoto={() => {
+          setShowAvatarOptions(false);
           setUseCamera(true);
           setTimeout(() => fileInputRef.current?.click(), 100);
         }}
         onChooseFromGallery={() => {
+          setShowAvatarOptions(false);
           setUseCamera(false);
           setTimeout(() => fileInputRef.current?.click(), 100);
         }}
