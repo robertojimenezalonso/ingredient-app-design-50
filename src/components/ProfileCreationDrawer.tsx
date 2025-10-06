@@ -1138,7 +1138,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
         // Require at least kg field to be filled
         return weightKg && parseInt(weightKg) > 0;
       case 'height':
-        return profileData.height && parseFloat(profileData.height) > 0;
+        const heightValue = parseFloat(profileData.height);
+        return profileData.height && heightValue >= 40 && heightValue <= 240;
       case 'birthdate':
         // Require all three fields to be filled and valid
         // Accept 1 or 2 digits for day and month
@@ -2061,10 +2062,17 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       inputMode="numeric" 
                       pattern="[0-9]*" 
                       value={profileData.height} 
-                      onChange={e => setProfileData({
-                        ...profileData,
-                        height: e.target.value.replace(/\D/g, '')
-                      })} 
+                      onChange={e => {
+                        const value = e.target.value.replace(/\D/g, '');
+                        const numValue = parseInt(value) || 0;
+                        // Limitar entre 40 y 240 cm
+                        if (value === '' || (numValue >= 40 && numValue <= 240)) {
+                          setProfileData({
+                            ...profileData,
+                            height: value
+                          });
+                        }
+                      }}
                       placeholder="Escribe la altura" 
                       className="w-full pr-16 border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
                       style={{
