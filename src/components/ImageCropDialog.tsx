@@ -1,7 +1,6 @@
 import { useState, useCallback } from 'react';
 import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop';
-import { Button } from '@/components/ui/button';
 
 interface ImageCropDialogProps {
   imageSrc: string;
@@ -90,14 +89,24 @@ export const ImageCropDialog = ({
       </div>
 
       {/* Bottom button */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 pb-safe bg-background">
-        <Button
+      <div 
+        className="fixed bottom-0 left-0 right-0 p-4 bg-background z-[10001]" 
+        style={{
+          paddingBottom: 'max(1rem, calc(env(safe-area-inset-bottom) + 16px))'
+        }}
+      >
+        <button
           onClick={handleSetImage}
           className="w-full h-14 text-lg font-medium rounded-full"
-          size="lg"
+          style={{
+            backgroundColor: '#020817',
+            color: '#ffffff',
+            border: 'none',
+            cursor: 'pointer'
+          }}
         >
           Establecer
-        </Button>
+        </button>
       </div>
     </div>
   );
