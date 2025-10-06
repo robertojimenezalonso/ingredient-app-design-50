@@ -1424,7 +1424,7 @@ export const ProfileCreationDrawer = ({
                   <ChevronRight className="w-5 h-5 text-muted-foreground" />
                 )}
               </div>
-              {getCompletionPercentage() < 100 && (
+              {getCompletionPercentage() <= 100 && (
                 <p className="text-xs text-muted-foreground">
                   {getCompletionPercentage()}% completado
                 </p>
