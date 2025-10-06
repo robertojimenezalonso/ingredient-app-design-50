@@ -1636,7 +1636,7 @@ export const ProfileCreationDrawer = ({
                         <button
                           type="button"
                           onClick={() => handleLikeDislike(false)}
-                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 hover:border-red-400 transition-all"
+                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 transition-all"
                         >
                           <X className="w-8 h-8 text-red-500" strokeWidth={2.5} />
                         </button>
@@ -1645,7 +1645,7 @@ export const ProfileCreationDrawer = ({
                         <button
                           type="button"
                           onClick={() => handleLikeDislike(true)}
-                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 hover:border-green-400 transition-all"
+                          className="flex items-center justify-center w-16 h-16 rounded-full bg-white border-2 border-gray-300 transition-all"
                         >
                           <svg className="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
