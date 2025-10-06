@@ -2366,18 +2366,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.carbs > 0) {
-                            setProfileData({ ...profileData, carbs: Math.max(0, profileData.carbs - 1) });
-                            setMacrosModified(true);
-                          }
-                        }}
-                        className="text-xl text-muted-foreground"
-                      >
-                        −
-                      </button>
                       <input
                         type="range"
                         min="0"
@@ -2392,18 +2380,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                           background: `linear-gradient(to right, #F97316 0%, #F97316 ${profileData.carbs}%, #E5E5E5 ${profileData.carbs}%, #E5E5E5 100%)`
                         }}
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.carbs < 100) {
-                            setProfileData({ ...profileData, carbs: Math.min(100, profileData.carbs + 1) });
-                            setMacrosModified(true);
-                          }
-                        }}
-                        className="text-xl text-muted-foreground"
-                      >
-                        +
-                      </button>
                     </div>
                   </div>
 
