@@ -54,8 +54,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
   const [showAvatarOptions, setShowAvatarOptions] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showCropDialog, setShowCropDialog] = useState(false);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const galleryInputRef = useRef<HTMLInputElement>(null);
+  const [useCamera, setUseCamera] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { createProfile, updateProfile, deleteProfile } = useMealProfiles();
   
@@ -2804,10 +2804,12 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
         isOpen={showAvatarOptions}
         onClose={() => setShowAvatarOptions(false)}
         onTakePhoto={() => {
-          cameraInputRef.current?.click();
+          setUseCamera(true);
+          setTimeout(() => fileInputRef.current?.click(), 100);
         }}
         onChooseFromGallery={() => {
-          galleryInputRef.current?.click();
+          setUseCamera(false);
+          setTimeout(() => fileInputRef.current?.click(), 100);
         }}
         onDelete={editingProfile?.avatarUrl ? async () => {
           if (!editingProfile?.id) return;
@@ -2841,31 +2843,12 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
         hasAvatar={!!editingProfile?.avatarUrl}
       />
 
-      {/* Hidden file inputs */}
+      {/* Hidden file input */}
       <input
-        ref={cameraInputRef}
+        ref={fileInputRef}
         type="file"
         accept="image/*"
-        capture="user"
-        className="hidden"
-        onChange={async (e) => {
-          const file = e.target.files?.[0];
-          if (!file) return;
-
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            setSelectedImage(event.target?.result as string);
-            setShowCropDialog(true);
-          };
-          reader.readAsDataURL(file);
-          e.target.value = '';
-        }}
-      />
-
-      <input
-        ref={galleryInputRef}
-        type="file"
-        accept="image/*"
+        {...(useCamera ? { capture: "environment" as const } : {})}
         className="hidden"
         onChange={async (e) => {
           const file = e.target.files?.[0];
