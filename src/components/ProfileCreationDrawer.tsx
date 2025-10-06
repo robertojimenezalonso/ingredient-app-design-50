@@ -363,6 +363,9 @@ export const ProfileCreationDrawer = ({
   const nameInputRef = useRef<HTMLInputElement>(null);
   const weightInputRef = useRef<HTMLInputElement>(null);
   const heightInputRef = useRef<HTMLInputElement>(null);
+  const dayInputRef = useRef<HTMLInputElement>(null);
+  const monthInputRef = useRef<HTMLInputElement>(null);
+  const yearInputRef = useRef<HTMLInputElement>(null);
 
   // Prevent background scroll and keyboard behavior when drawer is open
   useEffect(() => {
@@ -1839,34 +1842,132 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Birthdate input - appears after typewriter completes */}
-                {birthdateShowInput && <div className="relative">
-                    <Input 
-                      type="date" 
-                      inputMode="numeric"
-                      value={profileData.birthDate} 
-                      onChange={e => setProfileData({
-                        ...profileData,
-                        birthDate: e.target.value
-                      })} 
-                      className="w-full border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
-                      style={{
-                        backgroundColor: '#F4F4F4',
-                        borderColor: 'transparent'
-                      }}
-                      onFocus={(e) => {
-                        e.target.style.borderColor = '#020817';
-                        e.target.style.borderWidth = '1px';
-                      }}
-                      onBlur={e => {
-                        e.target.style.borderColor = 'transparent';
-                        e.preventDefault();
-                        setTimeout(() => e.target.focus({
-                          preventScroll: true
-                        }), 0);
-                      }}
-                      autoFocus
-                    />
-                  </div>}
+                {birthdateShowInput && (() => {
+                  const birthDateParts = parseBirthDate(profileData.birthDate);
+                  const [day, setDay] = useState(birthDateParts.day);
+                  const [month, setMonth] = useState(birthDateParts.month);
+                  const [year, setYear] = useState(birthDateParts.year);
+                  
+                  const handleDayChange = (value: string) => {
+                    const numValue = value.replace(/\D/g, '').slice(0, 2);
+                    setDay(numValue);
+                    
+                    // Update main profile data
+                    const newBirthDate = `${numValue}/${month}/${year}`;
+                    setProfileData({
+                      ...profileData,
+                      birthDate: newBirthDate
+                    });
+                    
+                    // Auto-advance to month when day is complete
+                    if (numValue.length === 2 && parseInt(numValue) >= 1 && parseInt(numValue) <= 31) {
+                      monthInputRef.current?.focus();
+                    }
+                  };
+                  
+                  const handleMonthChange = (value: string) => {
+                    const numValue = value.replace(/\D/g, '').slice(0, 2);
+                    setMonth(numValue);
+                    
+                    // Update main profile data
+                    const newBirthDate = `${day}/${numValue}/${year}`;
+                    setProfileData({
+                      ...profileData,
+                      birthDate: newBirthDate
+                    });
+                    
+                    // Auto-advance to year when month is complete
+                    if (numValue.length === 2 && parseInt(numValue) >= 1 && parseInt(numValue) <= 12) {
+                      yearInputRef.current?.focus();
+                    }
+                  };
+                  
+                  const handleYearChange = (value: string) => {
+                    const numValue = value.replace(/\D/g, '').slice(0, 4);
+                    setYear(numValue);
+                    
+                    // Update main profile data
+                    const newBirthDate = `${day}/${month}/${numValue}`;
+                    setProfileData({
+                      ...profileData,
+                      birthDate: newBirthDate
+                    });
+                  };
+                  
+                  return (
+                    <div className="flex gap-2 justify-center items-center">
+                      <Input
+                        ref={dayInputRef}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={day}
+                        onChange={(e) => handleDayChange(e.target.value)}
+                        placeholder="DD"
+                        className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                        style={{
+                          backgroundColor: '#F4F4F4',
+                          borderColor: 'transparent'
+                        }}
+                        onFocus={(e) => {
+                          e.target.style.borderColor = '#020817';
+                          e.target.style.borderWidth = '1px';
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = 'transparent';
+                        }}
+                        maxLength={2}
+                        autoFocus
+                      />
+                      <span className="text-muted-foreground text-lg">/</span>
+                      <Input
+                        ref={monthInputRef}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={month}
+                        onChange={(e) => handleMonthChange(e.target.value)}
+                        placeholder="MM"
+                        className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                        style={{
+                          backgroundColor: '#F4F4F4',
+                          borderColor: 'transparent'
+                        }}
+                        onFocus={(e) => {
+                          e.target.style.borderColor = '#020817';
+                          e.target.style.borderWidth = '1px';
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = 'transparent';
+                        }}
+                        maxLength={2}
+                      />
+                      <span className="text-muted-foreground text-lg">/</span>
+                      <Input
+                        ref={yearInputRef}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={year}
+                        onChange={(e) => handleYearChange(e.target.value)}
+                        placeholder="AAAA"
+                        className="w-24 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                        style={{
+                          backgroundColor: '#F4F4F4',
+                          borderColor: 'transparent'
+                        }}
+                        onFocus={(e) => {
+                          e.target.style.borderColor = '#020817';
+                          e.target.style.borderWidth = '1px';
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = 'transparent';
+                        }}
+                        maxLength={4}
+                      />
+                    </div>
+                  );
+                })()}
               </div>}
 
             {currentStep === 'sex' && <div className="space-y-6">
