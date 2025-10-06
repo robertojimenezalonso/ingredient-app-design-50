@@ -1856,7 +1856,7 @@ export const ProfileCreationDrawer = ({
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
                           <div className="h-16 bg-gradient-to-b from-white to-transparent" />
-                          <div className="h-16 rounded-l-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                          <div className="h-10 rounded-l-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).day ? parseInt(parseBirthDate(profileData.birthDate).day) : 'DD'}
                             </span>
@@ -1905,7 +1905,7 @@ export const ProfileCreationDrawer = ({
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
                           <div className="h-16 bg-gradient-to-b from-white to-transparent" />
-                          <div className="h-16 flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                          <div className="h-10 flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).month ? 
                                 ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][parseInt(parseBirthDate(profileData.birthDate).month) - 1] 
@@ -1953,7 +1953,7 @@ export const ProfileCreationDrawer = ({
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
                           <div className="h-16 bg-gradient-to-b from-white to-transparent" />
-                          <div className="h-16 rounded-r-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
+                          <div className="h-10 rounded-r-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).year || 'año'}
                             </span>
