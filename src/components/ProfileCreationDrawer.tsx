@@ -2325,15 +2325,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       <span className="font-medium">{profileData.calories} kcal</span>
                     </div>
                     <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setProfileData({ ...profileData, calories: Math.max(1000, profileData.calories - 50) });
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        −
-                      </button>
                       <input
                         type="range"
                         min="1000"
@@ -2346,15 +2337,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                           background: `linear-gradient(to right, #10B981 0%, #10B981 ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 ${((profileData.calories - 1000) / 4000) * 100}%, #E5E5E5 100%)`
                         }}
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setProfileData({ ...profileData, calories: Math.min(5000, profileData.calories + 50) });
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        +
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -2436,18 +2418,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.protein > 0) {
-                            setProfileData({ ...profileData, protein: Math.max(0, profileData.protein - 1) });
-                            setMacrosModified(true);
-                          }
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        −
-                      </button>
                       <input
                         type="range"
                         min="0"
@@ -2462,18 +2432,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                           background: `linear-gradient(to right, #EC4899 0%, #EC4899 ${profileData.protein}%, #E5E5E5 ${profileData.protein}%, #E5E5E5 100%)`
                         }}
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.protein < 100) {
-                            setProfileData({ ...profileData, protein: Math.min(100, profileData.protein + 1) });
-                            setMacrosModified(true);
-                          }
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        +
-                      </button>
                     </div>
                   </div>
 
@@ -2488,18 +2446,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.fat > 0) {
-                            setProfileData({ ...profileData, fat: Math.max(0, profileData.fat - 1) });
-                            setMacrosModified(true);
-                          }
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        −
-                      </button>
                       <input
                         type="range"
                         min="0"
@@ -2514,18 +2460,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                           background: `linear-gradient(to right, #8B5CF6 0%, #8B5CF6 ${profileData.fat}%, #E5E5E5 ${profileData.fat}%, #E5E5E5 100%)`
                         }}
                       />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.fat < 100) {
-                            setProfileData({ ...profileData, fat: Math.min(100, profileData.fat + 1) });
-                            setMacrosModified(true);
-                          }
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        +
-                      </button>
                     </div>
                   </div>
 
