@@ -64,12 +64,26 @@ export const ImageCropDialog = ({
   };
 
   const handleSetImage = async () => {
-    const croppedBlob = await createCroppedImage();
-    if (croppedBlob) {
-      onCropComplete(croppedBlob);
+    console.log('=== handleSetImage CALLED ===');
+    console.log('croppedAreaPixels:', croppedAreaPixels);
+    
+    try {
+      const croppedBlob = await createCroppedImage();
+      console.log('croppedBlob created:', croppedBlob);
+      
+      if (croppedBlob) {
+        console.log('Calling onCropComplete with blob');
+        onCropComplete(croppedBlob);
+      } else {
+        console.log('ERROR: No croppedBlob created');
+      }
+    } catch (error) {
+      console.error('Error in handleSetImage:', error);
     }
   };
 
+  console.log('ImageCropDialog render - isOpen:', isOpen, 'imageSrc:', !!imageSrc);
+  
   if (!isOpen) return null;
 
   // Usar portal para renderizar fuera del árbol DOM del drawer
@@ -123,9 +137,21 @@ export const ImageCropDialog = ({
           zIndex: 100000,
           position: 'fixed'
         }}
+        onClick={(e) => {
+          console.log('Button container clicked');
+          e.stopPropagation();
+        }}
       >
         <button
-          onClick={handleSetImage}
+          onClick={(e) => {
+            console.log('=== BUTTON CLICKED ===');
+            e.preventDefault();
+            e.stopPropagation();
+            handleSetImage();
+          }}
+          onTouchStart={(e) => {
+            console.log('=== BUTTON TOUCH START ===');
+          }}
           type="button"
           className="w-full h-14 text-lg font-medium rounded-full"
           style={{
@@ -134,7 +160,9 @@ export const ImageCropDialog = ({
             border: 'none',
             cursor: 'pointer',
             position: 'relative',
-            zIndex: 100001
+            zIndex: 100001,
+            pointerEvents: 'auto',
+            touchAction: 'manipulation'
           }}
         >
           Establecer
