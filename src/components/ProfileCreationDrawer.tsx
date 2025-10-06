@@ -1710,17 +1710,18 @@ export const ProfileCreationDrawer = ({
 
                   return (
                     <div className="flex flex-col items-center gap-6 pb-2">
-                      {/* Imagen grande */}
-                      <div className="w-full max-w-md aspect-square rounded-2xl overflow-hidden relative">
+                      {/* Imagen grande - container permite overflow para ver el swipe completo */}
+                      <div className="w-full max-w-md aspect-square rounded-2xl relative">
                         <img 
+                          key={currentImageIndex}
                           src={currentFood.image} 
                           alt={currentFood.label}
-                          className={`w-full h-full object-cover transition-all duration-300 ${
+                          className={`absolute inset-0 w-full h-full object-cover rounded-2xl transition-all duration-300 ${
                             swipeDirection === 'right' 
-                              ? 'translate-x-[150%] rotate-12 opacity-0' 
+                              ? 'translate-x-[120%] rotate-[25deg] opacity-0' 
                               : swipeDirection === 'left' 
-                              ? '-translate-x-[150%] -rotate-12 opacity-0' 
-                              : 'translate-x-0 rotate-0 opacity-100'
+                              ? '-translate-x-[120%] -rotate-[25deg] opacity-0' 
+                              : 'translate-x-0 rotate-0 opacity-100 scale-100'
                           }`}
                         />
                       </div>
