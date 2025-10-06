@@ -1559,8 +1559,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   </div>
                 </div>
 
-                {/* Input field - appears after typewriter completes */}
-                {showInput && <div className="mb-6 animate-fade-in">
+                {/* Input field - siempre visible desde el inicio */}
+                <div className="mb-6">
                     <Input ref={nameInputRef} type="text" value={profileData.name} onChange={e => setProfileData({
                 ...profileData,
                 name: e.target.value
@@ -1572,15 +1572,11 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                 e.target.style.borderWidth = '1px';
               }} onBlur={e => {
                 e.target.style.borderColor = 'transparent';
-                e.preventDefault();
-                setTimeout(() => e.target.focus({
-                  preventScroll: true
-                }), 0);
               }} autoFocus />
-                  </div>}
+                  </div>
 
-                {/* User tag bubble - appears when typing */}
-                {profileData.name && showInput}
+                {/* User tag bubble - aparece cuando hay texto */}
+                {profileData.name}
               </div>}
 
             {currentStep === 'diet' && <div className="space-y-6">
