@@ -2361,8 +2361,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       <span className="font-medium">Hidratos</span>
                       <div className="flex items-center gap-3 text-sm">
                         <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100 / 4)} g</span>
-                        <span className="font-medium">{profileData.carbs} %</span>
                         <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100)} kcal</span>
+                        <span className="font-medium">{profileData.carbs} %</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -2389,8 +2389,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       <span className="font-medium">Proteínas</span>
                       <div className="flex items-center gap-3 text-sm">
                         <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100 / 4)} g</span>
-                        <span className="font-medium">{profileData.protein} %</span>
                         <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100)} kcal</span>
+                        <span className="font-medium">{profileData.protein} %</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
@@ -2417,8 +2417,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       <span className="font-medium">Grasas</span>
                       <div className="flex items-center gap-3 text-sm">
                         <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100 / 9)} g</span>
-                        <span className="font-medium">{profileData.fat} %</span>
                         <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100)} kcal</span>
+                        <span className="font-medium">{profileData.fat} %</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
