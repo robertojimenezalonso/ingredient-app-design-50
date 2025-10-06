@@ -1255,12 +1255,13 @@ export const ProfileCreationDrawer = ({
     }
   };
   const getCompletionPercentage = () => {
-    // If we're on or past the activityLevel step, show 100% automatically
-    if (currentStep === 'activityLevel' || currentStep === 'macros' || currentStep === 'loading') {
-      // Only show 100% if activityLevel is actually filled
-      if (profileData.activityLevel !== '') {
-        return 100;
-      }
+    // If we're on activityLevel and it's filled, OR on loading/macros, show 100%
+    if (currentStep === 'activityLevel' && profileData.activityLevel !== '') {
+      return 100;
+    }
+    
+    if (currentStep === 'macros' || currentStep === 'loading') {
+      return 100;
     }
     
     // 10 steps total, each worth 10%
