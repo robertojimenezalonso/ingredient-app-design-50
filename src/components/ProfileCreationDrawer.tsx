@@ -2562,12 +2562,13 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       Restablecer datos
                     </button>
                     {/* Guardar button - solo si el perfil ya está guardado y macros suman 100% */}
-                    {createdProfileId && (profileData.carbs + profileData.protein + profileData.fat === 100) && (
+                    {(editingProfile?.id || createdProfileId) && (profileData.carbs + profileData.protein + profileData.fat === 100) && (
                       <Button
                         type="button"
                         onClick={async () => {
                           // Guardar los cambios en el perfil
-                          await updateProfile(createdProfileId, {
+                          const profileId = editingProfile?.id || createdProfileId;
+                          await updateProfile(profileId!, {
                             calories: profileData.calories,
                             carbs: profileData.carbs,
                             protein: profileData.protein,
