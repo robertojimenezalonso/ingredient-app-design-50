@@ -979,7 +979,8 @@ export const ProfileCreationDrawer = ({
         return profileData.height && parseFloat(profileData.height) > 0;
       case 'birthdate':
         // Require all three fields to be filled and valid
-        if (birthdateDay.length !== 2 || birthdateMonth.length !== 2 || birthdateYear.length !== 4) {
+        // Accept 1 or 2 digits for day and month
+        if (!birthdateDay || !birthdateMonth || birthdateYear.length !== 4) {
           return false;
         }
         
@@ -1890,8 +1891,10 @@ export const ProfileCreationDrawer = ({
                         
                         setBirthdateDay(numValue);
                         
-                        // Update main profile data
-                        const newBirthDate = `${numValue.padStart(2, '0')}/${birthdateMonth.padStart(2, '0')}/${birthdateYear}`;
+                        // Update main profile data - save with padded zeros
+                        const formattedDay = numValue.padStart(2, '0');
+                        const formattedMonth = birthdateMonth.padStart(2, '0');
+                        const newBirthDate = `${formattedDay}/${formattedMonth}/${birthdateYear}`;
                         setProfileData({
                           ...profileData,
                           birthDate: newBirthDate
@@ -1939,8 +1942,10 @@ export const ProfileCreationDrawer = ({
                         
                         setBirthdateMonth(numValue);
                         
-                        // Update main profile data
-                        const newBirthDate = `${birthdateDay.padStart(2, '0')}/${numValue.padStart(2, '0')}/${birthdateYear}`;
+                        // Update main profile data - save with padded zeros
+                        const formattedDay = birthdateDay.padStart(2, '0');
+                        const formattedMonth = numValue.padStart(2, '0');
+                        const newBirthDate = `${formattedDay}/${formattedMonth}/${birthdateYear}`;
                         setProfileData({
                           ...profileData,
                           birthDate: newBirthDate
@@ -2453,7 +2458,8 @@ export const ProfileCreationDrawer = ({
                       color: '#020818',
                       borderRadius: '8px'
                     }}>
-                      {profileData.birthDate}
+                      {birthdateDay && birthdateMonth && birthdateYear && 
+                        `${parseInt(birthdateDay)}/${parseInt(birthdateMonth)}/${birthdateYear}`}
                     </Badge>
                   )}
                   {currentStep === 'sex' && (
