@@ -2399,7 +2399,10 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                         max={recommendedMacros.calories + 750}
                         step={50}
                         value={[profileData.calories]}
-                        onValueChange={(value) => setProfileData({ ...profileData, calories: value[0] })}
+                        onValueChange={(value) => {
+                          setProfileData({ ...profileData, calories: value[0] });
+                          setMacrosModified(true);
+                        }}
                         className="flex-1"
                         trackColor="#E5E5E5"
                         rangeColor="#000000"
