@@ -115,6 +115,9 @@ export const ProfileCreationDrawer = ({
   
   // State to track if gustos section has been submitted
   const [gustosSubmitted, setGustosSubmitted] = useState(false);
+  
+  // State to track if macros have been modified
+  const [macrosModified, setMacrosModified] = useState(false);
 
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -260,6 +263,7 @@ export const ProfileCreationDrawer = ({
       setWeightKg('');
       setWeightGrams('');
       setGustosSubmitted(false);
+      setMacrosModified(false);
       
       setProfileData({
         name: '',
@@ -2244,196 +2248,7 @@ export const ProfileCreationDrawer = ({
               </div>}
 
             {currentStep === 'macros' && <div className="space-y-6">
-                {/* Circular progress showing 100% */}
-                <div className="flex justify-center mb-4">
-                  <div className="relative w-40 h-40">
-                    <svg className="absolute inset-0 w-40 h-40 -rotate-90">
-                      <circle 
-                        cx="80" 
-                        cy="80" 
-                        r="72" 
-                        stroke="#E5E5E5" 
-                        strokeWidth="6" 
-                        fill="none" 
-                      />
-                      <circle 
-                        cx="80" 
-                        cy="80" 
-                        r="72" 
-                        stroke="url(#gradient2)" 
-                        strokeWidth="6" 
-                        fill="none" 
-                        strokeDasharray={`${2 * Math.PI * 72}`}
-                        strokeDashoffset={`${2 * Math.PI * 72 * (1 - (profileData.carbs + profileData.protein + profileData.fat) / 100)}`}
-                        strokeLinecap="round"
-                        className="transition-all duration-300"
-                      />
-                      <defs>
-                        <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#EC4899" />
-                          <stop offset="33%" stopColor="#F97316" />
-                          <stop offset="66%" stopColor="#8B5CF6" />
-                          <stop offset="100%" stopColor="#EC4899" />
-                        </linearGradient>
-                      </defs>
-                    </svg>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-3xl font-bold">
-                        {profileData.carbs + profileData.protein + profileData.fat}%
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <p className="text-sm text-center text-muted-foreground px-4">
-                  Ajusta los macronutrientes para que alcancen el 100% y coincidan con el objetivo de calorías. Busca una ingesta equilibrada que satisfaga las diversas necesidades corporales.
-                </p>
-
-                {/* Macros sliders */}
-                <div className="space-y-6 bg-background rounded-xl p-4 shadow-sm">
-                  {/* Carbs */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Hidratos</span>
-                      <div className="flex items-center gap-3 text-sm">
-                        <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100 / 4)} g</span>
-                        <span className="font-medium">{profileData.carbs} %</span>
-                        <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100)} kcal</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.carbs > 0) {
-                            setProfileData({ ...profileData, carbs: Math.max(0, profileData.carbs - 1) });
-                          }
-                        }}
-                        className="text-xl text-muted-foreground"
-                      >
-                        −
-                      </button>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={profileData.carbs}
-                        onChange={(e) => setProfileData({ ...profileData, carbs: parseInt(e.target.value) })}
-                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
-                        style={{
-                          background: `linear-gradient(to right, #F97316 0%, #F97316 ${profileData.carbs}%, #E5E5E5 ${profileData.carbs}%, #E5E5E5 100%)`
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.carbs < 100) {
-                            setProfileData({ ...profileData, carbs: Math.min(100, profileData.carbs + 1) });
-                          }
-                        }}
-                        className="text-xl text-muted-foreground"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Protein */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Proteínas</span>
-                      <div className="flex items-center gap-3 text-sm">
-                        <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100 / 4)} g</span>
-                        <span className="font-medium">{profileData.protein} %</span>
-                        <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100)} kcal</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.protein > 0) {
-                            setProfileData({ ...profileData, protein: Math.max(0, profileData.protein - 1) });
-                          }
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        −
-                      </button>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={profileData.protein}
-                        onChange={(e) => setProfileData({ ...profileData, protein: parseInt(e.target.value) })}
-                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
-                        style={{
-                          background: `linear-gradient(to right, #EC4899 0%, #EC4899 ${profileData.protein}%, #E5E5E5 ${profileData.protein}%, #E5E5E5 100%)`
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.protein < 100) {
-                            setProfileData({ ...profileData, protein: Math.min(100, profileData.protein + 1) });
-                          }
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Fat */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <span className="font-medium">Grasas</span>
-                      <div className="flex items-center gap-3 text-sm">
-                        <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100 / 9)} g</span>
-                        <span className="font-medium">{profileData.fat} %</span>
-                        <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100)} kcal</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.fat > 0) {
-                            setProfileData({ ...profileData, fat: Math.max(0, profileData.fat - 1) });
-                          }
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        −
-                      </button>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value={profileData.fat}
-                        onChange={(e) => setProfileData({ ...profileData, fat: parseInt(e.target.value) })}
-                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
-                        style={{
-                          background: `linear-gradient(to right, #8B5CF6 0%, #8B5CF6 ${profileData.fat}%, #E5E5E5 ${profileData.fat}%, #E5E5E5 100%)`
-                        }}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (profileData.fat < 100) {
-                            setProfileData({ ...profileData, fat: Math.min(100, profileData.fat + 1) });
-                          }
-                        }}
-                        className="text-xl text-muted-foreground hover:text-foreground"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Calories slider - separate box */}
+                {/* Calories slider - at the top */}
                 <div className="bg-background rounded-xl p-4 shadow-sm">
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
@@ -2466,6 +2281,177 @@ export const ProfileCreationDrawer = ({
                         type="button"
                         onClick={() => {
                           setProfileData({ ...profileData, calories: Math.min(5000, profileData.calories + 50) });
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Disclaimer - only shown when macros are modified */}
+                {macrosModified && (
+                  <div className="flex justify-between items-center text-sm px-4">
+                    <p className="text-muted-foreground flex-1">
+                      Ajusta los macronutrientes para que alcancen el 100%
+                    </p>
+                    <span className="font-medium text-foreground ml-2">
+                      {profileData.carbs + profileData.protein + profileData.fat}%
+                    </span>
+                  </div>
+                )}
+
+                {/* Macros sliders */}
+                <div className="space-y-6 bg-background rounded-xl p-4 shadow-sm">
+                  {/* Carbs */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Hidratos</span>
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100 / 4)} g</span>
+                        <span className="font-medium">{profileData.carbs} %</span>
+                        <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100)} kcal</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.carbs > 0) {
+                            setProfileData({ ...profileData, carbs: Math.max(0, profileData.carbs - 1) });
+                            setMacrosModified(true);
+                          }
+                        }}
+                        className="text-xl text-muted-foreground"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={profileData.carbs}
+                        onChange={(e) => {
+                          setProfileData({ ...profileData, carbs: parseInt(e.target.value) });
+                          setMacrosModified(true);
+                        }}
+                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #F97316 0%, #F97316 ${profileData.carbs}%, #E5E5E5 ${profileData.carbs}%, #E5E5E5 100%)`
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.carbs < 100) {
+                            setProfileData({ ...profileData, carbs: Math.min(100, profileData.carbs + 1) });
+                            setMacrosModified(true);
+                          }
+                        }}
+                        className="text-xl text-muted-foreground"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Protein */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Proteínas</span>
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100 / 4)} g</span>
+                        <span className="font-medium">{profileData.protein} %</span>
+                        <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100)} kcal</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.protein > 0) {
+                            setProfileData({ ...profileData, protein: Math.max(0, profileData.protein - 1) });
+                            setMacrosModified(true);
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={profileData.protein}
+                        onChange={(e) => {
+                          setProfileData({ ...profileData, protein: parseInt(e.target.value) });
+                          setMacrosModified(true);
+                        }}
+                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #EC4899 0%, #EC4899 ${profileData.protein}%, #E5E5E5 ${profileData.protein}%, #E5E5E5 100%)`
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.protein < 100) {
+                            setProfileData({ ...profileData, protein: Math.min(100, profileData.protein + 1) });
+                            setMacrosModified(true);
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Fat */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <span className="font-medium">Grasas</span>
+                      <div className="flex items-center gap-3 text-sm">
+                        <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100 / 9)} g</span>
+                        <span className="font-medium">{profileData.fat} %</span>
+                        <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100)} kcal</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.fat > 0) {
+                            setProfileData({ ...profileData, fat: Math.max(0, profileData.fat - 1) });
+                            setMacrosModified(true);
+                          }
+                        }}
+                        className="text-xl text-muted-foreground hover:text-foreground"
+                      >
+                        −
+                      </button>
+                      <input
+                        type="range"
+                        min="0"
+                        max="100"
+                        value={profileData.fat}
+                        onChange={(e) => {
+                          setProfileData({ ...profileData, fat: parseInt(e.target.value) });
+                          setMacrosModified(true);
+                        }}
+                        className="flex-1 h-2 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #8B5CF6 0%, #8B5CF6 ${profileData.fat}%, #E5E5E5 ${profileData.fat}%, #E5E5E5 100%)`
+                        }}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (profileData.fat < 100) {
+                            setProfileData({ ...profileData, fat: Math.min(100, profileData.fat + 1) });
+                            setMacrosModified(true);
+                          }
                         }}
                         className="text-xl text-muted-foreground hover:text-foreground"
                       >
