@@ -1875,7 +1875,30 @@ export const ProfileCreationDrawer = ({
 
                 {/* Birthdate input - appears after typewriter completes */}
                 {birthdateShowInput && (
-                  <div className="flex gap-3 justify-center items-center">
+                  <div className="flex gap-3 justify-center items-center relative">
+                    {/* Hidden date input for autocomplete */}
+                    <input
+                      type="date"
+                      autoComplete="bday"
+                      name="bday"
+                      className="absolute opacity-0 pointer-events-none"
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          const [year, month, day] = e.target.value.split('-');
+                          setBirthdateDay(day);
+                          setBirthdateMonth(month);
+                          setBirthdateYear(year);
+                          
+                          const newBirthDate = `${day}/${month}/${year}`;
+                          setProfileData({
+                            ...profileData,
+                            birthDate: newBirthDate
+                          });
+                        }
+                      }}
+                      tabIndex={-1}
+                    />
+                    
                     <Input
                       ref={dayInputRef}
                       type="text"
@@ -1930,8 +1953,7 @@ export const ProfileCreationDrawer = ({
                       }}
                       maxLength={2}
                       autoFocus
-                      autoComplete="bday-day"
-                      name="bday-day"
+                      autoComplete="off"
                     />
                     <Input
                       ref={monthInputRef}
@@ -1984,8 +2006,7 @@ export const ProfileCreationDrawer = ({
                         e.target.style.borderColor = 'transparent';
                       }}
                       maxLength={2}
-                      autoComplete="bday-month"
-                      name="bday-month"
+                      autoComplete="off"
                     />
                     <Input
                       ref={yearInputRef}
@@ -2027,8 +2048,7 @@ export const ProfileCreationDrawer = ({
                         e.target.style.borderColor = 'transparent';
                       }}
                       maxLength={4}
-                      autoComplete="bday-year"
-                      name="bday-year"
+                      autoComplete="off"
                     />
                   </div>
                 )}
