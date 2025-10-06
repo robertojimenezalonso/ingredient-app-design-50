@@ -1855,16 +1855,18 @@ export const ProfileCreationDrawer = ({
                       {/* Day Wheel */}
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-10" />
+                          <div className="h-10" />
                           <div className="h-10 rounded-l-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).day ? parseInt(parseBirthDate(profileData.birthDate).day) : 'DD'}
                             </span>
                           </div>
-                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+                          <div className="h-10" />
+                          <div className="h-10" />
                         </div>
                         <div 
-                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          className="overflow-y-scroll scrollbar-hide h-full py-20"
                           style={{
                             scrollSnapType: 'y mandatory',
                             WebkitOverflowScrolling: 'touch'
@@ -1872,7 +1874,7 @@ export const ProfileCreationDrawer = ({
                           onScroll={(e) => {
                             const container = e.currentTarget;
                             const scrollTop = container.scrollTop;
-                            const itemHeight = 64;
+                            const itemHeight = 40;
                             const index = Math.round(scrollTop / itemHeight);
                             const day = index + 1;
                             if (day >= 1 && day <= 31) {
@@ -1885,12 +1887,32 @@ export const ProfileCreationDrawer = ({
                                 birthDate: `${paddedDay}/${newMonth}/${newYear}`
                               });
                             }
+                            
+                            // Apply wheel effect
+                            const items = container.children;
+                            const centerY = container.offsetHeight / 2;
+                            
+                            Array.from(items).forEach((item: any) => {
+                              const rect = item.getBoundingClientRect();
+                              const containerRect = container.getBoundingClientRect();
+                              const itemCenter = rect.top + rect.height / 2 - containerRect.top;
+                              const distance = Math.abs(centerY - itemCenter);
+                              const maxDistance = centerY;
+                              const normalizedDistance = Math.min(distance / maxDistance, 1);
+                              
+                              // Scale and opacity based on distance from center
+                              const scale = 1 - (normalizedDistance * 0.3);
+                              const opacity = 1 - (normalizedDistance * 0.7);
+                              
+                              item.style.transform = `scale(${scale})`;
+                              item.style.opacity = opacity;
+                            });
                           }}
                         >
                           {Array.from({ length: 31 }, (_, i) => i + 1).map((day) => (
                             <div 
                               key={day}
-                              className="h-16 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
+                              className="h-10 flex items-center justify-center text-lg text-[#1C1C1C] transition-all duration-200"
                               style={{
                                 scrollSnapAlign: 'start'
                               }}
@@ -1904,7 +1926,8 @@ export const ProfileCreationDrawer = ({
                       {/* Month Wheel */}
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-10" />
+                          <div className="h-10" />
                           <div className="h-10 flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).month ? 
@@ -1912,10 +1935,11 @@ export const ProfileCreationDrawer = ({
                                 : 'mes'}
                             </span>
                           </div>
-                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+                          <div className="h-10" />
+                          <div className="h-10" />
                         </div>
                         <div 
-                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          className="overflow-y-scroll scrollbar-hide h-full py-20"
                           style={{
                             scrollSnapType: 'y mandatory',
                             WebkitOverflowScrolling: 'touch'
@@ -1923,7 +1947,7 @@ export const ProfileCreationDrawer = ({
                           onScroll={(e) => {
                             const container = e.currentTarget;
                             const scrollTop = container.scrollTop;
-                            const itemHeight = 64;
+                            const itemHeight = 40;
                             const index = Math.round(scrollTop / itemHeight);
                             const month = (index + 1).toString().padStart(2, '0');
                             const { day, year } = parseBirthDate(profileData.birthDate);
@@ -1933,12 +1957,32 @@ export const ProfileCreationDrawer = ({
                               ...profileData,
                               birthDate: `${newDay}/${month}/${newYear}`
                             });
+                            
+                            // Apply wheel effect
+                            const items = container.children;
+                            const centerY = container.offsetHeight / 2;
+                            
+                            Array.from(items).forEach((item: any) => {
+                              const rect = item.getBoundingClientRect();
+                              const containerRect = container.getBoundingClientRect();
+                              const itemCenter = rect.top + rect.height / 2 - containerRect.top;
+                              const distance = Math.abs(centerY - itemCenter);
+                              const maxDistance = centerY;
+                              const normalizedDistance = Math.min(distance / maxDistance, 1);
+                              
+                              // Scale and opacity based on distance from center
+                              const scale = 1 - (normalizedDistance * 0.3);
+                              const opacity = 1 - (normalizedDistance * 0.7);
+                              
+                              item.style.transform = `scale(${scale})`;
+                              item.style.opacity = opacity;
+                            });
                           }}
                         >
                           {['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((month) => (
                             <div 
                               key={month}
-                              className="h-16 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
+                              className="h-10 flex items-center justify-center text-lg text-[#1C1C1C] transition-all duration-200"
                               style={{
                                 scrollSnapAlign: 'start'
                               }}
@@ -1952,16 +1996,18 @@ export const ProfileCreationDrawer = ({
                       {/* Year Wheel */}
                       <div className="relative h-48 flex-1 overflow-hidden">
                         <div className="absolute inset-0 pointer-events-none z-10 flex flex-col">
-                          <div className="h-16 bg-gradient-to-b from-white to-transparent" />
+                          <div className="h-10" />
+                          <div className="h-10" />
                           <div className="h-10 rounded-r-full flex items-center justify-center" style={{ backgroundColor: '#D9DADC' }}>
                             <span className="text-lg font-normal text-[#020817]">
                               {parseBirthDate(profileData.birthDate).year || 'año'}
                             </span>
                           </div>
-                          <div className="h-16 bg-gradient-to-t from-white to-transparent" />
+                          <div className="h-10" />
+                          <div className="h-10" />
                         </div>
                         <div 
-                          className="overflow-y-scroll scrollbar-hide h-full py-16"
+                          className="overflow-y-scroll scrollbar-hide h-full py-20"
                           style={{
                             scrollSnapType: 'y mandatory',
                             WebkitOverflowScrolling: 'touch'
@@ -1969,7 +2015,7 @@ export const ProfileCreationDrawer = ({
                           onScroll={(e) => {
                             const container = e.currentTarget;
                             const scrollTop = container.scrollTop;
-                            const itemHeight = 64;
+                            const itemHeight = 40;
                             const currentYear = new Date().getFullYear();
                             const startYear = 1920;
                             const index = Math.round(scrollTop / itemHeight);
@@ -1983,12 +2029,32 @@ export const ProfileCreationDrawer = ({
                                 birthDate: `${newDay}/${newMonth}/${year}`
                               });
                             }
+                            
+                            // Apply wheel effect
+                            const items = container.children;
+                            const centerY = container.offsetHeight / 2;
+                            
+                            Array.from(items).forEach((item: any) => {
+                              const rect = item.getBoundingClientRect();
+                              const containerRect = container.getBoundingClientRect();
+                              const itemCenter = rect.top + rect.height / 2 - containerRect.top;
+                              const distance = Math.abs(centerY - itemCenter);
+                              const maxDistance = centerY;
+                              const normalizedDistance = Math.min(distance / maxDistance, 1);
+                              
+                              // Scale and opacity based on distance from center
+                              const scale = 1 - (normalizedDistance * 0.3);
+                              const opacity = 1 - (normalizedDistance * 0.7);
+                              
+                              item.style.transform = `scale(${scale})`;
+                              item.style.opacity = opacity;
+                            });
                           }}
                         >
                           {Array.from({ length: new Date().getFullYear() - 1920 + 1 }, (_, i) => 1920 + i).map((year) => (
                             <div 
                               key={year}
-                              className="h-16 flex items-center justify-center text-lg font-semibold text-[#1C1C1C]"
+                              className="h-10 flex items-center justify-center text-lg text-[#1C1C1C] transition-all duration-200"
                               style={{
                                 scrollSnapAlign: 'start'
                               }}
