@@ -2064,9 +2064,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       value={profileData.height} 
                       onChange={e => {
                         const value = e.target.value.replace(/\D/g, '');
-                        const numValue = parseInt(value) || 0;
-                        // Limitar entre 40 y 240 cm
-                        if (value === '' || (numValue >= 40 && numValue <= 240)) {
+                        // Permitir escribir cualquier número, pero limitar a 3 dígitos (999 cm max)
+                        if (value.length <= 3) {
                           setProfileData({
                             ...profileData,
                             height: value
