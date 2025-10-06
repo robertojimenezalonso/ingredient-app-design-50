@@ -977,15 +977,32 @@ export const ProfileCreationDrawer = ({
     }
   }, [isOpen, currentStep]);
 
-  // Focus input when it appears
+  // Focus input when it appears - MEJORADO para abrir teclado inmediatamente
   useEffect(() => {
     if (!isOpen) return;
 
+    // Para el paso de nombre, esperamos a que showInput sea true
+    if (currentStep === 'name' && showInput && nameInputRef.current) {
+      console.log('=== Auto-focusing name input ===');
+      
+      // Usar setTimeout para asegurar que el DOM esté listo
+      setTimeout(() => {
+        if (nameInputRef.current) {
+          nameInputRef.current.focus({
+            preventScroll: true
+          });
+          
+          // En móvil, forzar la apertura del teclado
+          nameInputRef.current.click();
+        }
+      }, 100);
+      return;
+    }
+
+    // Para otros pasos con inputs
     requestAnimationFrame(() => {
       const input = (() => {
         switch (currentStep) {
-          case 'name':
-            return showInput ? nameInputRef.current : null;
           case 'weight':
             return weightKgInputRef.current;
           case 'height':
@@ -994,6 +1011,7 @@ export const ProfileCreationDrawer = ({
             return null;
         }
       })();
+      
       if (input) {
         input.focus({
           preventScroll: true
