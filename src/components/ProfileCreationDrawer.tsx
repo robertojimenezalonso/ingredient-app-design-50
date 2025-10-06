@@ -666,6 +666,16 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // Initialize with default date if empty
+    if (!profileData.birthDate) {
+      const currentYear = new Date().getFullYear();
+      const defaultYear = currentYear - 30;
+      setProfileData({
+        ...profileData,
+        birthDate: `01/01/${defaultYear}`
+      });
+    }
+
     // Skip animation if birthdate is already set
     if (profileData.birthDate) {
       setBirthdateDisplayedText(birthdateFullText);
@@ -1864,15 +1874,15 @@ export const ProfileCreationDrawer = ({
                             const itemHeight = 64;
                             const index = Math.round(scrollTop / itemHeight);
                             const day = index + 1;
-                            const { month, year } = parseBirthDate(profileData.birthDate);
                             if (day >= 1 && day <= 31) {
                               const paddedDay = day.toString().padStart(2, '0');
-                              if (month && year) {
-                                setProfileData({
-                                  ...profileData,
-                                  birthDate: `${paddedDay}/${month}/${year}`
-                                });
-                              }
+                              const { month, year } = parseBirthDate(profileData.birthDate);
+                              const newMonth = month || '01';
+                              const newYear = year || new Date().getFullYear() - 30;
+                              setProfileData({
+                                ...profileData,
+                                birthDate: `${paddedDay}/${newMonth}/${newYear}`
+                              });
                             }
                           }}
                         >
@@ -1917,12 +1927,12 @@ export const ProfileCreationDrawer = ({
                             const index = Math.round(scrollTop / itemHeight);
                             const month = (index + 1).toString().padStart(2, '0');
                             const { day, year } = parseBirthDate(profileData.birthDate);
-                            if (day && year) {
-                              setProfileData({
-                                ...profileData,
-                                birthDate: `${day}/${month}/${year}`
-                              });
-                            }
+                            const newDay = day || '01';
+                            const newYear = year || new Date().getFullYear() - 30;
+                            setProfileData({
+                              ...profileData,
+                              birthDate: `${newDay}/${month}/${newYear}`
+                            });
                           }}
                         >
                           {['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'].map((month) => (
@@ -1965,11 +1975,13 @@ export const ProfileCreationDrawer = ({
                             const startYear = 1920;
                             const index = Math.round(scrollTop / itemHeight);
                             const year = startYear + index;
-                            const { day, month } = parseBirthDate(profileData.birthDate);
-                            if (day && month && year >= startYear && year <= currentYear) {
+                            if (year >= startYear && year <= currentYear) {
+                              const { day, month } = parseBirthDate(profileData.birthDate);
+                              const newDay = day || '01';
+                              const newMonth = month || '01';
                               setProfileData({
                                 ...profileData,
-                                birthDate: `${day}/${month}/${year}`
+                                birthDate: `${newDay}/${newMonth}/${year}`
                               });
                             }
                           }}
