@@ -185,7 +185,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
   // Typewriter effect states for macros step
   const [macrosDisplayedText, setMacrosDisplayedText] = useState('');
   const [macrosShowCursor, setMacrosShowCursor] = useState(false);
-  const [macrosShowContent, setMacrosShowContent] = useState(false);
+  const [macrosShowCalories, setMacrosShowCalories] = useState(false);
+  const [macrosShowMacros, setMacrosShowMacros] = useState(false);
 
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -1003,7 +1004,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     if (!isOpen || currentStep !== 'macros') {
       setMacrosDisplayedText('');
       setMacrosShowCursor(false);
-      setMacrosShowContent(false);
+      setMacrosShowCalories(false);
+      setMacrosShowMacros(false);
       return;
     }
 
@@ -1026,14 +1028,25 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       }, 30);
       return () => clearTimeout(timeout);
     } 
-    // When text is complete, show content
+    // When text is complete, show calories box
     else if (macrosDisplayedText.length === macrosFullText.length && macrosShowCursor) {
       setTimeout(() => {
         setMacrosShowCursor(false);
-        setMacrosShowContent(true);
+        setMacrosShowCalories(true);
       }, 200);
     }
   }, [macrosDisplayedText, macrosFullText, macrosShowCursor, isOpen, currentStep]);
+
+  // Show macros box after calories box
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'macros' || !macrosShowCalories) return;
+    
+    const timeout = setTimeout(() => {
+      setMacrosShowMacros(true);
+    }, 400);
+    
+    return () => clearTimeout(timeout);
+  }, [isOpen, currentStep, macrosShowCalories]);
 
   // Avatar icon animation - alternate between initials and camera icon every 3 seconds
   useEffect(() => {
@@ -2384,7 +2397,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                 </div>
 
                 {/* Calories slider - at the top */}
-                {macrosShowContent && <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
+                {macrosShowCalories && <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
@@ -2414,7 +2427,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
 
 
                 {/* Macros sliders */}
-                {macrosShowContent && <div className="space-y-6 rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
+                {macrosShowMacros && <div className="space-y-6 rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
                   {/* Carbs */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
