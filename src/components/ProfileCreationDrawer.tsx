@@ -2470,9 +2470,9 @@ export const ProfileCreationDrawer = ({
                 (currentStep === 'diet' && profileData.diet) || 
                 (currentStep === 'allergies' && profileData.allergies.length > 0) ||
                 (currentStep === 'goal' && profileData.goal) ||
-                (currentStep === 'weight' && profileData.weight) ||
+                (currentStep === 'weight' && weightKg) ||
                 (currentStep === 'height' && profileData.height) ||
-                (currentStep === 'birthdate' && profileData.birthDate) ||
+                (currentStep === 'birthdate' && birthdateDay && birthdateMonth && birthdateYear) ||
                 (currentStep === 'sex' && profileData.sex) ||
                 (currentStep === 'activityLevel' && profileData.activityLevel)) &&
                 <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{
