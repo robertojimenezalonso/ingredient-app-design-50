@@ -2519,51 +2519,51 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </span>
                     </div>
                   )}
+                </div>}
 
-                  {/* Restablecer datos y Guardar buttons - solo si hay modificaciones */}
-                  {!editingProfile?.id && macrosModified && (
-                    <div className="flex justify-end gap-3 mt-4">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setProfileData({
-                            ...profileData,
-                            carbs: recommendedMacros.carbs,
-                            protein: recommendedMacros.protein,
-                            fat: recommendedMacros.fat,
-                            calories: recommendedMacros.calories
+                {/* Restablecer datos y Guardar buttons - solo si hay modificaciones */}
+                {!editingProfile?.id && macrosModified && (
+                  <div className="flex justify-end gap-3 mt-4">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setProfileData({
+                          ...profileData,
+                          carbs: recommendedMacros.carbs,
+                          protein: recommendedMacros.protein,
+                          fat: recommendedMacros.fat,
+                          calories: recommendedMacros.calories
+                        });
+                        setMacrosModified(false);
+                      }}
+                      className="text-sm underline text-muted-foreground hover:text-foreground"
+                    >
+                      Restablecer datos
+                    </button>
+                    <Button
+                      type="button"
+                      onClick={async () => {
+                        // Guardar los cambios en el perfil
+                        if (createdProfileId) {
+                          await updateProfile(createdProfileId, {
+                            calories: profileData.calories,
+                            carbs: profileData.carbs,
+                            protein: profileData.protein,
+                            fat: profileData.fat
+                          });
+                          toast({
+                            title: "Cambios guardados",
+                            description: "Los macronutrientes se han actualizado correctamente."
                           });
                           setMacrosModified(false);
-                        }}
-                        className="text-sm underline text-muted-foreground hover:text-foreground"
-                      >
-                        Restablecer datos
-                      </button>
-                      <Button
-                        type="button"
-                        onClick={async () => {
-                          // Guardar los cambios en el perfil
-                          if (createdProfileId) {
-                            await updateProfile(createdProfileId, {
-                              calories: profileData.calories,
-                              carbs: profileData.carbs,
-                              protein: profileData.protein,
-                              fat: profileData.fat
-                            });
-                            toast({
-                              title: "Cambios guardados",
-                              description: "Los macronutrientes se han actualizado correctamente."
-                            });
-                            setMacrosModified(false);
-                          }
-                        }}
-                        className="text-sm px-4 py-2"
-                      >
-                        Guardar
-                      </Button>
-                    </div>
-                  )}
-                </div>}
+                        }
+                      }}
+                      className="text-sm px-4 py-2"
+                    >
+                      Guardar
+                    </Button>
+                  </div>
+                )}
               </div>}
           </div>
         </CardContent>
