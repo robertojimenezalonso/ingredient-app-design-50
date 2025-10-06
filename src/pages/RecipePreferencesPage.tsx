@@ -496,7 +496,7 @@ export const RecipePreferencesPage = () => {
                         className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px] w-fit"
                         style={{ 
                           backgroundColor: '#D9DADC',
-                          borderRadius: '8px'
+                          borderRadius: '9999px'
                         }}
                         onClick={() => handleEditProfile(profile)}
                       >
