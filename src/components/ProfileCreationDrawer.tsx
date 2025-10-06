@@ -1870,8 +1870,8 @@ export const ProfileCreationDrawer = ({
                             perspectiveOrigin: 'center center',
                             scrollSnapType: 'y mandatory',
                             WebkitOverflowScrolling: 'touch',
-                            paddingTop: '80px',
-                            paddingBottom: '112px'
+                            paddingTop: '0px',
+                            paddingBottom: '152px'
                           }}
                           onScroll={(e) => {
                             const container = e.currentTarget;
@@ -1948,8 +1948,8 @@ export const ProfileCreationDrawer = ({
                             perspectiveOrigin: 'center center',
                             scrollSnapType: 'y mandatory',
                             WebkitOverflowScrolling: 'touch',
-                            paddingTop: '80px',
-                            paddingBottom: '112px'
+                            paddingTop: '0px',
+                            paddingBottom: '152px'
                           }}
                           onScroll={(e) => {
                             const container = e.currentTarget;
@@ -2015,10 +2015,14 @@ export const ProfileCreationDrawer = ({
                           <div className="h-[72px]" />
                         </div>
                         <div 
-                          className="overflow-y-scroll scrollbar-hide h-full py-20"
+                          className="overflow-y-scroll scrollbar-hide h-full"
                           style={{
+                            perspective: '1000px',
+                            perspectiveOrigin: 'center center',
                             scrollSnapType: 'y mandatory',
-                            WebkitOverflowScrolling: 'touch'
+                            WebkitOverflowScrolling: 'touch',
+                            paddingTop: '0px',
+                            paddingBottom: '152px'
                           }}
                           onScroll={(e) => {
                             const container = e.currentTarget;
