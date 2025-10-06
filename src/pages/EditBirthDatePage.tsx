@@ -1,12 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, CalendarIcon } from 'lucide-react';
-import { Calendar } from '@/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { cn } from '@/lib/utils';
+import { ArrowLeft } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 export const EditBirthDatePage = () => {
   const navigate = useNavigate();
@@ -16,23 +12,40 @@ export const EditBirthDatePage = () => {
   const profileId = location.state?.profileId;
   const isEditing = !!existingBirthDate;
   
-  // Parse existing date if available
-  const parseExistingDate = (dateStr: string): Date | undefined => {
-    if (!dateStr) return undefined;
-    const [day, month, year] = dateStr.split('/');
-    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  const [day, setDay] = useState(existingBirthDate ? existingBirthDate.split('/')[0] : '');
+  const [month, setMonth] = useState(existingBirthDate ? existingBirthDate.split('/')[1] : '');
+  const [year, setYear] = useState(existingBirthDate ? existingBirthDate.split('/')[2] : '');
+  
+  const monthRef = useRef<HTMLInputElement>(null);
+  const yearRef = useRef<HTMLInputElement>(null);
+  
+  const handleDayChange = (value: string) => {
+    const numValue = value.replace(/\D/g, '').slice(0, 2);
+    setDay(numValue);
+    
+    // Auto-advance to month when day is complete
+    if (numValue.length === 2 && parseInt(numValue) >= 1 && parseInt(numValue) <= 31) {
+      monthRef.current?.focus();
+    }
   };
   
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(parseExistingDate(existingBirthDate));
+  const handleMonthChange = (value: string) => {
+    const numValue = value.replace(/\D/g, '').slice(0, 2);
+    setMonth(numValue);
+    
+    // Auto-advance to year when month is complete
+    if (numValue.length === 2 && parseInt(numValue) >= 1 && parseInt(numValue) <= 12) {
+      yearRef.current?.focus();
+    }
+  };
+  
+  const handleYearChange = (value: string) => {
+    const numValue = value.replace(/\D/g, '').slice(0, 4);
+    setYear(numValue);
+  };
   
   const handleContinue = () => {
-    if (!selectedDate) return;
-    
-    const day = selectedDate.getDate().toString().padStart(2, '0');
-    const month = (selectedDate.getMonth() + 1).toString().padStart(2, '0');
-    const year = selectedDate.getFullYear().toString();
     const birthDate = `${day}/${month}/${year}`;
-    
     navigate('/recipe-preferences', { 
       state: { 
         editedField: 'birthDate',
@@ -47,7 +60,10 @@ export const EditBirthDatePage = () => {
     navigate('/recipe-preferences');
   };
   
-  const isValid = selectedDate !== undefined;
+  const isValid = day && month && year && 
+                  parseInt(day) >= 1 && parseInt(day) <= 31 &&
+                  parseInt(month) >= 1 && parseInt(month) <= 12 &&
+                  parseInt(year) >= 1900 && parseInt(year) <= new Date().getFullYear();
   
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -66,37 +82,46 @@ export const EditBirthDatePage = () => {
       </div>
       
       {/* Content */}
-      <div className="flex-1 p-4 flex flex-col items-center">
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className={cn(
-                "w-full max-w-sm justify-start text-left font-normal",
-                !selectedDate && "text-muted-foreground"
-              )}
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {selectedDate ? format(selectedDate, "PPP", { locale: es }) : <span>Selecciona tu fecha de nacimiento</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="center">
-            <Calendar
-              mode="single"
-              selected={selectedDate}
-              onSelect={setSelectedDate}
-              disabled={(date) =>
-                date > new Date() || date < new Date("1900-01-01")
-              }
-              initialFocus
-              captionLayout="dropdown-buttons"
-              fromYear={1900}
-              toYear={new Date().getFullYear()}
-            />
-          </PopoverContent>
-        </Popover>
+      <div className="flex-1 flex flex-col justify-center px-4">
+        <div className="flex gap-2 justify-center items-center mb-4 max-w-md mx-auto w-full">
+          <Input
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={day}
+            onChange={(e) => handleDayChange(e.target.value)}
+            placeholder="DD"
+            className="w-20 text-center text-lg"
+            maxLength={2}
+            autoFocus
+          />
+          <span className="text-muted-foreground text-lg">/</span>
+          <Input
+            ref={monthRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={month}
+            onChange={(e) => handleMonthChange(e.target.value)}
+            placeholder="MM"
+            className="w-20 text-center text-lg"
+            maxLength={2}
+          />
+          <span className="text-muted-foreground text-lg">/</span>
+          <Input
+            ref={yearRef}
+            type="text"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={year}
+            onChange={(e) => handleYearChange(e.target.value)}
+            placeholder="AAAA"
+            className="w-24 text-center text-lg"
+            maxLength={4}
+          />
+        </div>
         
-        <p className="text-xs text-muted-foreground text-center px-4 mt-6">
+        <p className="text-xs text-muted-foreground text-center px-4 max-w-md mx-auto">
           Te preguntamos esto porque la edad afecta la composición del cuerpo. Usamos esta información para ofrecerte recetas personalizadas.
         </p>
       </div>
