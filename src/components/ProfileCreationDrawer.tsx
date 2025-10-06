@@ -1805,6 +1805,12 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                     { id: 'arroces', label: 'Arroces', image: '/food-types/arroces.jpg' },
                     { id: 'pasta', label: 'Pasta', image: '/food-types/pasta.jpg' },
                     { id: 'ensaladas', label: 'Ensaladas', image: '/food-types/ensaladas.jpg' },
+                    { id: 'pescado', label: 'Pescado', image: '/food-types/pescado.jpg' },
+                    { id: 'vegetales', label: 'Vegetales', image: '/food-types/vegetales.jpg' },
+                    { id: 'huevos', label: 'Huevos', image: '/food-types/huevos.jpg' },
+                    { id: 'bowls', label: 'Bowls', image: '/food-types/bowls.jpg' },
+                    { id: 'tostadas', label: 'Tostadas', image: '/food-types/tostadas.jpg' },
+                    { id: 'vegetariano', label: 'Vegetariano', image: '/food-types/vegetariano.jpg' },
                   ];
                   
                   const currentFood = foodTypes[currentImageIndex];
