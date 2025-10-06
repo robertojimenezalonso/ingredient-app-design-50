@@ -493,8 +493,9 @@ export const RecipePreferencesPage = () => {
                       {healthProfiles.map((profile, index) => (
                       <div 
                         key={profile.id} 
-                        className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px] w-fit bg-white"
+                        className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px] w-fit"
                         style={{ 
+                          backgroundColor: '#D9DADC',
                           borderRadius: '8px'
                         }}
                         onClick={() => handleEditProfile(profile)}
