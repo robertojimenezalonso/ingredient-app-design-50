@@ -1617,7 +1617,7 @@ export const ProfileCreationDrawer = ({
                   };
 
                   return (
-                    <div className="flex flex-col items-center gap-6 pb-8">
+                    <div className="flex flex-col items-center gap-6 pb-2">
                       {/* Imagen grande */}
                       <div className="w-full max-w-md aspect-square rounded-2xl overflow-hidden relative">
                         <img 
