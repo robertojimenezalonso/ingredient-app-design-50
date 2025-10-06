@@ -702,11 +702,22 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       return;
     }
 
+    // Mostrar input inmediatamente
+    setWeightShowInput(true);
+
     // Skip animation if weight is already set
     if (profileData.weight) {
       setWeightDisplayedText(weightFullText);
       setWeightShowCursor(false);
-      setWeightShowInput(true);
+      // Focus automático en el input
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (weightKgInputRef.current) {
+            weightKgInputRef.current.focus();
+            Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
+          }
+        });
+      });
       return;
     }
 
@@ -714,6 +725,15 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       setTimeout(() => {
         setWeightDisplayedText(weightFullText[0]);
         setWeightShowCursor(true);
+        // Focus automático en el input
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (weightKgInputRef.current) {
+              weightKgInputRef.current.focus();
+              Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
+            }
+          });
+        });
       }, 300);
     }
   }, [isOpen, currentStep, weightFullText, profileData.weight]);
@@ -728,7 +748,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     } else if (weightDisplayedText.length === weightFullText.length && weightShowCursor) {
       setTimeout(() => {
         setWeightShowCursor(false);
-        setWeightShowInput(true);
       }, 200);
     }
   }, [weightDisplayedText, weightFullText, weightShowCursor, isOpen, currentStep]);
@@ -742,11 +761,22 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       return;
     }
 
+    // Mostrar input inmediatamente
+    setHeightShowInput(true);
+
     // Skip animation if height is already set
     if (profileData.height) {
       setHeightDisplayedText(heightFullText);
       setHeightShowCursor(false);
-      setHeightShowInput(true);
+      // Focus automático en el input
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (heightInputRef.current) {
+            heightInputRef.current.focus();
+            Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
+          }
+        });
+      });
       return;
     }
 
@@ -754,6 +784,15 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       setTimeout(() => {
         setHeightDisplayedText(heightFullText[0]);
         setHeightShowCursor(true);
+        // Focus automático en el input
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (heightInputRef.current) {
+              heightInputRef.current.focus();
+              Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
+            }
+          });
+        });
       }, 300);
     }
   }, [isOpen, currentStep, heightFullText, profileData.height]);
@@ -768,7 +807,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     } else if (heightDisplayedText.length === heightFullText.length && heightShowCursor) {
       setTimeout(() => {
         setHeightShowCursor(false);
-        setHeightShowInput(true);
       }, 200);
     }
   }, [heightDisplayedText, heightFullText, heightShowCursor, isOpen, currentStep]);
@@ -782,11 +820,22 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       return;
     }
 
+    // Mostrar input inmediatamente
+    setBirthdateShowInput(true);
+
     // Skip animation if birthdate is already set
     if (profileData.birthDate) {
       setBirthdateDisplayedText(birthdateFullText);
       setBirthdateShowCursor(false);
-      setBirthdateShowInput(true);
+      // Focus automático en el input
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          if (dayInputRef.current) {
+            dayInputRef.current.focus();
+            Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
+          }
+        });
+      });
       return;
     }
 
@@ -794,6 +843,15 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       setTimeout(() => {
         setBirthdateDisplayedText(birthdateFullText[0]);
         setBirthdateShowCursor(true);
+        // Focus automático en el input
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            if (dayInputRef.current) {
+              dayInputRef.current.focus();
+              Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
+            }
+          });
+        });
       }, 300);
     }
   }, [isOpen, currentStep, birthdateFullText, profileData.birthDate]);
@@ -808,7 +866,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     } else if (birthdateDisplayedText.length === birthdateFullText.length && birthdateShowCursor) {
       setTimeout(() => {
         setBirthdateShowCursor(false);
-        setBirthdateShowInput(true);
       }, 200);
     }
   }, [birthdateDisplayedText, birthdateFullText, birthdateShowCursor, isOpen, currentStep]);
