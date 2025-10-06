@@ -2522,7 +2522,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                 </div>}
 
                 {/* Restablecer datos y Guardar buttons - solo si hay modificaciones */}
-                {!editingProfile?.id && macrosModified && (
+                {macrosModified && (
                   <div className="flex justify-end gap-3 mt-4">
                     <button
                       type="button"
@@ -2540,11 +2540,12 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                     >
                       Restablecer datos
                     </button>
-                    <Button
-                      type="button"
-                      onClick={async () => {
-                        // Guardar los cambios en el perfil
-                        if (createdProfileId) {
+                    {/* Guardar button - solo si el perfil ya está guardado y macros suman 100% */}
+                    {createdProfileId && (profileData.carbs + profileData.protein + profileData.fat === 100) && (
+                      <Button
+                        type="button"
+                        onClick={async () => {
+                          // Guardar los cambios en el perfil
                           await updateProfile(createdProfileId, {
                             calories: profileData.calories,
                             carbs: profileData.carbs,
@@ -2556,12 +2557,12 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                             description: "Los macronutrientes se han actualizado correctamente."
                           });
                           setMacrosModified(false);
-                        }
-                      }}
-                      className="text-sm px-4 py-2"
-                    >
-                      Guardar
-                    </Button>
+                        }}
+                        className="text-sm px-4 py-2"
+                      >
+                        Guardar
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>}
