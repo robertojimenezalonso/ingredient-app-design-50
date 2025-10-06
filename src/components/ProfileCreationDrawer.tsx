@@ -1371,7 +1371,7 @@ export const ProfileCreationDrawer = ({
             className="flex items-center gap-3 flex-1 rounded-lg p-1 -m-1"
           >
             <div className="relative flex-shrink-0 w-16 h-16">
-              {getCompletionPercentage() < 100 && (
+              {true && (
                 <svg className="absolute inset-0 w-16 h-16" style={{
                   transform: 'rotate(-90deg)'
                 }}>
