@@ -112,6 +112,9 @@ export const ProfileCreationDrawer = ({
   const [gustosShowCursor, setGustosShowCursor] = useState(false);
   const [gustosShowOptions, setGustosShowOptions] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // State to track if gustos section has been submitted
+  const [gustosSubmitted, setGustosSubmitted] = useState(false);
 
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
@@ -217,6 +220,9 @@ export const ProfileCreationDrawer = ({
         }
       }
       
+      // Set gustosSubmitted if editing profile has gustos
+      setGustosSubmitted(gustosArray.length > 0);
+      
       // Parse birthdate
       const birthDateParts = parseBirthDate(editingProfile.birthDate);
       setBirthdateDay(birthDateParts.day);
@@ -253,6 +259,7 @@ export const ProfileCreationDrawer = ({
       setBirthdateYear('');
       setWeightKg('');
       setWeightGrams('');
+      setGustosSubmitted(false);
       
       setProfileData({
         name: '',
@@ -1035,6 +1042,11 @@ export const ProfileCreationDrawer = ({
     console.log('Current step:', currentStep);
     console.log('Has editingProfile.id:', !!editingProfile?.id);
     
+    // Mark gustos as submitted when advancing from gustos step
+    if (currentStep === 'gustos') {
+      setGustosSubmitted(true);
+    }
+    
     // CRITICAL: When creating a NEW profile and on activityLevel step, go to loading
     if (currentStep === 'activityLevel' && !editingProfile?.id) {
       console.log('Activity level complete for NEW profile - going to loading!');
@@ -1262,7 +1274,8 @@ export const ProfileCreationDrawer = ({
         case 'allergies':
           return editingProfile?.allergies !== undefined || profileData.allergies.length > 0;
         case 'gustos':
-          return profileData.gustos.length > 0;
+          // Only count as complete when user has submitted (moved to next screen)
+          return gustosSubmitted;
         case 'goal':
           return profileData.goal !== '';
         case 'weight':
