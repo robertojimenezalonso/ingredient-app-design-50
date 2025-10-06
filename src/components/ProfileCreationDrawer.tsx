@@ -1539,7 +1539,12 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                     <Separator className="my-6" />
                     <button
                       type="button"
-                      onClick={onDelete}
+                      onClick={() => {
+                        if (onDelete) {
+                          onDelete();
+                          onClose();
+                        }
+                      }}
                       className="w-full text-center py-3 text-sm font-medium text-destructive"
                     >
                       Eliminar perfil
