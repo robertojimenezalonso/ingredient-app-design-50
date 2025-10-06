@@ -2336,6 +2336,9 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                         value={[profileData.calories]}
                         onValueChange={(value) => setProfileData({ ...profileData, calories: value[0] })}
                         className="flex-1"
+                        trackColor="#E5E5E5"
+                        rangeColor="#6C6C6C"
+                        thumbColor="#6C6C6C"
                       />
                     </div>
                   </div>
@@ -2379,6 +2382,9 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                           setMacrosModified(true);
                         }}
                         className="flex-1"
+                        trackColor="#E5E5E5"
+                        rangeColor="#DE9A69"
+                        thumbColor="#DE9A69"
                       />
                     </div>
                   </div>
@@ -2407,6 +2413,9 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                           setMacrosModified(true);
                         }}
                         className="flex-1"
+                        trackColor="#E5E5E5"
+                        rangeColor="#DE6968"
+                        thumbColor="#DE6968"
                       />
                     </div>
                   </div>
@@ -2435,6 +2444,9 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                           setMacrosModified(true);
                         }}
                         className="flex-1"
+                        trackColor="#E5E5E5"
+                        rangeColor="#6998DD"
+                        thumbColor="#6998DD"
                       />
                     </div>
                   </div>
