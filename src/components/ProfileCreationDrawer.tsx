@@ -2794,10 +2794,35 @@ export const ProfileCreationDrawer = ({
             setSelectedImage(null);
           }}
           onCropComplete={async (croppedBlob) => {
-            if (!editingProfile?.id) return;
+            console.log('=== onCropComplete called ===');
+            console.log('editingProfile:', editingProfile);
+            console.log('editingProfile?.id:', editingProfile?.id);
+            console.log('croppedBlob:', croppedBlob);
+            
+            // Si no hay perfil o no tiene ID, solo actualiza el avatar localmente
+            if (!editingProfile?.id) {
+              console.log('No profile ID - storing blob as local preview');
+              
+              // Convertir blob a URL para preview
+              const blobUrl = URL.createObjectURL(croppedBlob);
+              
+              if (editingProfile) {
+                editingProfile.avatarUrl = blobUrl;
+              }
+              
+              toast({
+                title: "Foto seleccionada",
+                description: "La foto se guardará cuando crees el perfil"
+              });
+              
+              setShowCropDialog(false);
+              setSelectedImage(null);
+              return;
+            }
 
             setUploadingAvatar(true);
             try {
+              console.log('Uploading to Supabase...');
               const fileName = `${editingProfile.id}-${Date.now()}.jpg`;
               const filePath = `${editingProfile.id}/${fileName}`;
 
@@ -2808,18 +2833,26 @@ export const ProfileCreationDrawer = ({
                   upsert: true
                 });
 
-              if (uploadError) throw uploadError;
+              if (uploadError) {
+                console.error('Upload error:', uploadError);
+                throw uploadError;
+              }
 
               const { data: { publicUrl } } = supabase.storage
                 .from('profile-avatars')
                 .getPublicUrl(filePath);
+
+              console.log('Public URL:', publicUrl);
 
               const { error: updateError } = await supabase
                 .from('meal_profiles')
                 .update({ avatar_url: publicUrl })
                 .eq('id', editingProfile.id);
 
-              if (updateError) throw updateError;
+              if (updateError) {
+                console.error('Update error:', updateError);
+                throw updateError;
+              }
 
               if (editingProfile) {
                 editingProfile.avatarUrl = publicUrl;
