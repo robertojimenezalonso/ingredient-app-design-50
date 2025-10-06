@@ -2319,7 +2319,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
 
             {currentStep === 'macros' && <div className="space-y-6">
                 {/* Calories slider - at the top */}
-                <div className="bg-background rounded-xl p-4 shadow-sm">
+                <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
@@ -2346,7 +2346,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
 
 
                 {/* Macros sliders */}
-                <div className="space-y-6 bg-background rounded-xl p-4 shadow-sm">
+                <div className="space-y-6 rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
                   {/* Carbs */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
