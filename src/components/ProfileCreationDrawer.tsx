@@ -978,7 +978,13 @@ export const ProfileCreationDrawer = ({
       case 'height':
         return profileData.height && parseFloat(profileData.height) > 0;
       case 'birthdate':
-        return profileData.birthDate !== '';
+        // Require all three fields to be filled (day, month, year)
+        return birthdateDay.length === 2 && 
+               birthdateMonth.length === 2 && 
+               birthdateYear.length === 4 &&
+               parseInt(birthdateDay) >= 1 && parseInt(birthdateDay) <= 31 &&
+               parseInt(birthdateMonth) >= 1 && parseInt(birthdateMonth) <= 12 &&
+               parseInt(birthdateYear) >= 1900 && parseInt(birthdateYear) <= new Date().getFullYear();
       case 'sex':
         return profileData.sex !== '';
       case 'activityLevel':
@@ -1858,7 +1864,7 @@ export const ProfileCreationDrawer = ({
 
                 {/* Birthdate input - appears after typewriter completes */}
                 {birthdateShowInput && (
-                  <div className="flex gap-2 justify-center items-center">
+                  <div className="flex gap-3 justify-center items-center">
                     <Input
                       ref={dayInputRef}
                       type="text"
@@ -1896,8 +1902,8 @@ export const ProfileCreationDrawer = ({
                       }}
                       maxLength={2}
                       autoFocus
+                      autoComplete="off"
                     />
-                    <span className="text-muted-foreground text-lg">/</span>
                     <Input
                       ref={monthInputRef}
                       type="text"
@@ -1934,8 +1940,8 @@ export const ProfileCreationDrawer = ({
                         e.target.style.borderColor = 'transparent';
                       }}
                       maxLength={2}
+                      autoComplete="off"
                     />
-                    <span className="text-muted-foreground text-lg">/</span>
                     <Input
                       ref={yearInputRef}
                       type="text"
@@ -1967,6 +1973,7 @@ export const ProfileCreationDrawer = ({
                         e.target.style.borderColor = 'transparent';
                       }}
                       maxLength={4}
+                      autoComplete="off"
                     />
                   </div>
                 )}
