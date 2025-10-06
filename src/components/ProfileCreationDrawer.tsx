@@ -182,6 +182,11 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
   // State to track if macros have been modified
   const [macrosModified, setMacrosModified] = useState(false);
 
+  // Typewriter effect states for macros step
+  const [macrosDisplayedText, setMacrosDisplayedText] = useState('');
+  const [macrosShowCursor, setMacrosShowCursor] = useState(false);
+  const [macrosShowContent, setMacrosShowContent] = useState(false);
+
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
     if (!birthDateStr) return {
@@ -413,6 +418,17 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
   // Text for gustos step
   const gustosFullText = useMemo(() => 
     `Ayúdanos a entender un poco más qué tipos de comida le podría gustar a ${profileData.name || 'este comensal'}`,
+    [profileData.name]
+  );
+
+  // Text for macros step
+  const macrosFullText = useMemo(() => {
+    const goalText = profileData.goal === 'Perder peso' ? 'perder peso' 
+      : profileData.goal === 'Aumentar peso' ? 'ganar peso'
+      : profileData.goal === 'Aumentar músculo' ? 'ganar músculo'
+      : 'mantener peso';
+    return `Aquí tienes el plan de ${profileData.name || 'Comensal'} para ${goalText}. Ajustaremos las recetas para ayudarle a cumplir tu objetivo.`;
+  },
     [profileData.name]
   );
 
@@ -981,6 +997,43 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
 
     return () => clearInterval(interval);
   }, [isOpen, currentStep]);
+
+  // Typewriter effect for macros step
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'macros') {
+      setMacrosDisplayedText('');
+      setMacrosShowCursor(false);
+      setMacrosShowContent(false);
+      return;
+    }
+
+    // Start typewriter
+    if (macrosDisplayedText.length === 0) {
+      setTimeout(() => {
+        setMacrosDisplayedText(macrosFullText[0]);
+        setMacrosShowCursor(true);
+      }, 300);
+    }
+  }, [isOpen, currentStep, macrosFullText]);
+
+  useEffect(() => {
+    if (!isOpen || currentStep !== 'macros') return;
+    
+    // Type text
+    if (macrosDisplayedText.length > 0 && macrosDisplayedText.length < macrosFullText.length) {
+      const timeout = setTimeout(() => {
+        setMacrosDisplayedText(macrosFullText.slice(0, macrosDisplayedText.length + 1));
+      }, 30);
+      return () => clearTimeout(timeout);
+    } 
+    // When text is complete, show content
+    else if (macrosDisplayedText.length === macrosFullText.length && macrosShowCursor) {
+      setTimeout(() => {
+        setMacrosShowCursor(false);
+        setMacrosShowContent(true);
+      }, 200);
+    }
+  }, [macrosDisplayedText, macrosFullText, macrosShowCursor, isOpen, currentStep]);
 
   // Avatar icon animation - alternate between initials and camera icon every 3 seconds
   useEffect(() => {
@@ -2318,24 +2371,20 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
               </div>}
 
             {currentStep === 'macros' && <div className="space-y-6">
-                {/* Chat message above calories */}
-                <div className="flex gap-3 animate-fade-in">
-                  <div className="flex-shrink-0">
-                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                      <span className="text-white text-xs font-semibold">🤖</span>
-                    </div>
-                  </div>
-                  <div className="flex-1">
-                    <div className="bg-muted rounded-2xl rounded-tl-none p-4">
-                      <p className="text-sm leading-relaxed">
-                        Aquí tienes el plan de <span className="font-semibold">{profileData.name || 'Comensal'}</span> para {profileData.goal === 'lose' ? 'perder peso' : profileData.goal === 'gain' ? 'ganar peso' : 'mantener peso'}. Ajustaremos las recetas para ayudarle a cumplir tu objetivo.
+                {/* Bot message with typewriter */}
+                <div className="mb-6">
+                  <div className="flex justify-start">
+                    <div className="max-w-xs">
+                      <p className="text-base leading-relaxed text-left text-[#1C1C1C]">
+                        {macrosDisplayedText}
+                        {macrosShowCursor && <span className="animate-pulse">|</span>}
                       </p>
                     </div>
                   </div>
                 </div>
 
                 {/* Calories slider - at the top */}
-                <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
+                {macrosShowContent && <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
                       <div className="flex items-center gap-2">
@@ -2358,11 +2407,11 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       />
                     </div>
                   </div>
-                </div>
+                </div>}
 
 
                 {/* Macros sliders */}
-                <div className="space-y-6 rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
+                {macrosShowContent && <div className="space-y-6 rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
                   {/* Carbs */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
@@ -2489,7 +2538,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       </button>
                     </div>
                   )}
-                </div>
+                </div>}
               </div>}
           </div>
         </CardContent>
