@@ -1916,7 +1916,7 @@ export const ProfileCreationDrawer = ({
                         }
                       }}
                       placeholder="DD"
-                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 [&:-webkit-autofill]:!bg-[#F4F4F4] [&:-webkit-autofill]:!shadow-[inset_0_0_0_1000px_#F4F4F4] [&:-webkit-autofill]:![-webkit-text-fill-color:#020817]"
+                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -1930,9 +1930,8 @@ export const ProfileCreationDrawer = ({
                       }}
                       maxLength={2}
                       autoFocus
-                      autoComplete="off"
-                      name="birthdate-day-custom"
-                      id="birthdate-day-custom"
+                      autoComplete="new-password"
+                      data-lpignore="true"
                       data-form-type="other"
                     />
                     <Input
@@ -1973,7 +1972,7 @@ export const ProfileCreationDrawer = ({
                         }
                       }}
                       placeholder="MM"
-                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 [&:-webkit-autofill]:!bg-[#F4F4F4] [&:-webkit-autofill]:!shadow-[inset_0_0_0_1000px_#F4F4F4] [&:-webkit-autofill]:![-webkit-text-fill-color:#020817]"
+                      className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -1986,9 +1985,8 @@ export const ProfileCreationDrawer = ({
                         e.target.style.borderColor = 'transparent';
                       }}
                       maxLength={2}
-                      autoComplete="off"
-                      name="birthdate-month-custom"
-                      id="birthdate-month-custom"
+                      autoComplete="new-password"
+                      data-lpignore="true"
                       data-form-type="other"
                     />
                     <Input
@@ -2018,7 +2016,7 @@ export const ProfileCreationDrawer = ({
                         }
                       }}
                       placeholder="AAAA"
-                      className="w-24 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0 [&:-webkit-autofill]:!bg-[#F4F4F4] [&:-webkit-autofill]:!shadow-[inset_0_0_0_1000px_#F4F4F4] [&:-webkit-autofill]:![-webkit-text-fill-color:#020817]"
+                      className="w-24 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -2031,9 +2029,8 @@ export const ProfileCreationDrawer = ({
                         e.target.style.borderColor = 'transparent';
                       }}
                       maxLength={4}
-                      autoComplete="off"
-                      name="birthdate-year-custom"
-                      id="birthdate-year-custom"
+                      autoComplete="new-password"
+                      data-lpignore="true"
                       data-form-type="other"
                     />
                   </div>
