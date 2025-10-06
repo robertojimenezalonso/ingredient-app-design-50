@@ -2318,6 +2318,22 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
               </div>}
 
             {currentStep === 'macros' && <div className="space-y-6">
+                {/* Chat message above calories */}
+                <div className="flex gap-3 animate-fade-in">
+                  <div className="flex-shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+                      <span className="text-white text-xs font-semibold">🤖</span>
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <div className="bg-muted rounded-2xl rounded-tl-none p-4">
+                      <p className="text-sm leading-relaxed">
+                        Aquí tienes el plan de <span className="font-semibold">{profileData.name || 'Comensal'}</span> para {profileData.goal === 'lose' ? 'perder peso' : profileData.goal === 'gain' ? 'ganar peso' : 'mantener peso'}. Ajustaremos las recetas para ayudarle a cumplir tu objetivo.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Calories slider - at the top */}
                 <div className="rounded-xl p-4 shadow-sm" style={{ backgroundColor: '#F4F4F4' }}>
                   <div className="space-y-2">
