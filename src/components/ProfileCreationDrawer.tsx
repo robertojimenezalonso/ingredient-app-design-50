@@ -1952,7 +1952,7 @@ export const ProfileCreationDrawer = ({
 
                 {/* Birthdate input - appears after typewriter completes */}
                 {birthdateShowInput && (
-                  <div className="flex gap-3 justify-start items-center w-full px-2">
+                  <div className="flex gap-3 justify-start items-center w-full pr-2">
                     <Input
                       ref={dayInputRef}
                       type="tel"
