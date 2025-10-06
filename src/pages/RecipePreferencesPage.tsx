@@ -512,7 +512,7 @@ export const RecipePreferencesPage = () => {
                               getInitials(profile.name)
                             )}
                           </div>
-                          <span className="text-base font-normal text-black font-['Covered_By_Your_Grace']">{profile.name}</span>
+                          <span className="text-base font-normal text-black">{profile.name}</span>
                         </div>
                       ))}
                     </div>
