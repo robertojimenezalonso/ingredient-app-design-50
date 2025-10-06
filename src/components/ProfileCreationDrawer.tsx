@@ -2727,33 +2727,56 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                 Restablecer datos
               </button>
             ) : (
-              <Button 
-                onClick={async () => {
-                  // Guardar macros finales
-                  const profileId = editingProfile?.id || createdProfileId;
-                  if (profileId) {
-                    await updateProfile(profileId, {
-                      calories: profileData.calories,
-                      carbs: profileData.carbs,
-                      protein: profileData.protein,
-                      fat: profileData.fat
-                    });
-                  }
-                  
-                  // Limpiar el ID creado y cerrar
-                  setCreatedProfileId(null);
-                  onSave(profileData);
-                  onClose();
-                }}
-                disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
-                className="w-full"
-                style={{
-                  backgroundColor: '#020817',
-                  color: '#ffffff'
-                }}
-              >
-                Guardar perfil
-              </Button>
+              <div className="flex gap-3">
+                {/* Botón Restablecer datos - solo si hay modificaciones */}
+                {macrosModified && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setProfileData({
+                        ...profileData,
+                        carbs: recommendedMacros.carbs,
+                        protein: recommendedMacros.protein,
+                        fat: recommendedMacros.fat,
+                        calories: recommendedMacros.calories
+                      });
+                      setMacrosModified(false);
+                    }}
+                    className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
+                  >
+                    Restablecer datos
+                  </button>
+                )}
+                
+                {/* Botón Guardar perfil */}
+                <Button 
+                  onClick={async () => {
+                    // Guardar macros finales
+                    const profileId = editingProfile?.id || createdProfileId;
+                    if (profileId) {
+                      await updateProfile(profileId, {
+                        calories: profileData.calories,
+                        carbs: profileData.carbs,
+                        protein: profileData.protein,
+                        fat: profileData.fat
+                      });
+                    }
+                    
+                    // Limpiar el ID creado y cerrar
+                    setCreatedProfileId(null);
+                    onSave(profileData);
+                    onClose();
+                  }}
+                  disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
+                  className={macrosModified ? "flex-1" : "w-full"}
+                  style={{
+                    backgroundColor: '#020817',
+                    color: '#ffffff'
+                  }}
+                >
+                  Guardar perfil
+                </Button>
+              </div>
             )}
           </div>
         )}
