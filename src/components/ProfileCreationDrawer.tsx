@@ -978,13 +978,24 @@ export const ProfileCreationDrawer = ({
       case 'height':
         return profileData.height && parseFloat(profileData.height) > 0;
       case 'birthdate':
-        // Require all three fields to be filled (day, month, year)
-        return birthdateDay.length === 2 && 
-               birthdateMonth.length === 2 && 
-               birthdateYear.length === 4 &&
-               parseInt(birthdateDay) >= 1 && parseInt(birthdateDay) <= 31 &&
-               parseInt(birthdateMonth) >= 1 && parseInt(birthdateMonth) <= 12 &&
-               parseInt(birthdateYear) >= 1900 && parseInt(birthdateYear) <= new Date().getFullYear();
+        // Require all three fields to be filled and valid
+        if (birthdateDay.length !== 2 || birthdateMonth.length !== 2 || birthdateYear.length !== 4) {
+          return false;
+        }
+        
+        const day = parseInt(birthdateDay);
+        const month = parseInt(birthdateMonth);
+        const year = parseInt(birthdateYear);
+        const today = new Date();
+        
+        // Validate ranges
+        if (day < 1 || day > 31 || month < 1 || month > 12 || year < 1900 || year > today.getFullYear()) {
+          return false;
+        }
+        
+        // Check if date is not in the future
+        const selectedDate = new Date(year, month - 1, day);
+        return selectedDate <= today;
       case 'sex':
         return profileData.sex !== '';
       case 'activityLevel':
@@ -1873,25 +1884,44 @@ export const ProfileCreationDrawer = ({
                       value={birthdateDay}
                       onChange={(e) => {
                         const numValue = e.target.value.replace(/\D/g, '').slice(0, 2);
-                        setBirthdateDay(numValue);
+                        const dayNum = parseInt(numValue);
                         
-                        // Update main profile data
-                        const newBirthDate = `${numValue}/${birthdateMonth}/${birthdateYear}`;
-                        setProfileData({
-                          ...profileData,
-                          birthDate: newBirthDate
-                        });
+                        // Validate day is not in the future
+                        const today = new Date();
+                        const currentDay = today.getDate();
+                        const currentMonth = parseInt(birthdateMonth) || today.getMonth() + 1;
+                        const currentYear = parseInt(birthdateYear) || today.getFullYear();
                         
-                        // Auto-advance to month when day is complete
-                        if (numValue.length === 2 && parseInt(numValue) >= 1 && parseInt(numValue) <= 31) {
-                          monthInputRef.current?.focus();
+                        // Only set if valid day (1-31) and not future date
+                        if (numValue === '' || (dayNum >= 1 && dayNum <= 31)) {
+                          // Check if date would be in future
+                          if (numValue.length === 2) {
+                            const testDate = new Date(currentYear, currentMonth - 1, dayNum);
+                            if (testDate <= today) {
+                              setBirthdateDay(numValue);
+                              
+                              // Update main profile data
+                              const newBirthDate = `${numValue}/${birthdateMonth}/${birthdateYear}`;
+                              setProfileData({
+                                ...profileData,
+                                birthDate: newBirthDate
+                              });
+                              
+                              // Auto-advance to month when day is complete and valid
+                              monthInputRef.current?.focus();
+                            }
+                          } else {
+                            setBirthdateDay(numValue);
+                          }
                         }
                       }}
                       placeholder="DD"
                       className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
-                        borderColor: 'transparent'
+                        borderColor: 'transparent',
+                        WebkitBoxShadow: '0 0 0 1000px #F4F4F4 inset',
+                        WebkitTextFillColor: '#020817'
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = '#020817';
@@ -1903,6 +1933,8 @@ export const ProfileCreationDrawer = ({
                       maxLength={2}
                       autoFocus
                       autoComplete="off"
+                      name="birthdate-day"
+                      id="birthdate-day"
                     />
                     <Input
                       ref={monthInputRef}
@@ -1912,25 +1944,42 @@ export const ProfileCreationDrawer = ({
                       value={birthdateMonth}
                       onChange={(e) => {
                         const numValue = e.target.value.replace(/\D/g, '').slice(0, 2);
-                        setBirthdateMonth(numValue);
+                        const monthNum = parseInt(numValue);
                         
-                        // Update main profile data
-                        const newBirthDate = `${birthdateDay}/${numValue}/${birthdateYear}`;
-                        setProfileData({
-                          ...profileData,
-                          birthDate: newBirthDate
-                        });
+                        // Validate month is not in the future
+                        const today = new Date();
+                        const currentMonth = today.getMonth() + 1;
+                        const currentYear = parseInt(birthdateYear) || today.getFullYear();
                         
-                        // Auto-advance to year when month is complete
-                        if (numValue.length === 2 && parseInt(numValue) >= 1 && parseInt(numValue) <= 12) {
-                          yearInputRef.current?.focus();
+                        // Only set if valid month (1-12)
+                        if (numValue === '' || (monthNum >= 1 && monthNum <= 12)) {
+                          // Check if month would be in future (when year is current year)
+                          if (numValue.length === 2) {
+                            if (currentYear < today.getFullYear() || monthNum <= currentMonth) {
+                              setBirthdateMonth(numValue);
+                              
+                              // Update main profile data
+                              const newBirthDate = `${birthdateDay}/${numValue}/${birthdateYear}`;
+                              setProfileData({
+                                ...profileData,
+                                birthDate: newBirthDate
+                              });
+                              
+                              // Auto-advance to year when month is complete and valid
+                              yearInputRef.current?.focus();
+                            }
+                          } else {
+                            setBirthdateMonth(numValue);
+                          }
                         }
                       }}
                       placeholder="MM"
                       className="w-20 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
-                        borderColor: 'transparent'
+                        borderColor: 'transparent',
+                        WebkitBoxShadow: '0 0 0 1000px #F4F4F4 inset',
+                        WebkitTextFillColor: '#020817'
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = '#020817';
@@ -1941,6 +1990,8 @@ export const ProfileCreationDrawer = ({
                       }}
                       maxLength={2}
                       autoComplete="off"
+                      name="birthdate-month"
+                      id="birthdate-month"
                     />
                     <Input
                       ref={yearInputRef}
@@ -1950,20 +2001,31 @@ export const ProfileCreationDrawer = ({
                       value={birthdateYear}
                       onChange={(e) => {
                         const numValue = e.target.value.replace(/\D/g, '').slice(0, 4);
-                        setBirthdateYear(numValue);
+                        const yearNum = parseInt(numValue);
                         
-                        // Update main profile data
-                        const newBirthDate = `${birthdateDay}/${birthdateMonth}/${numValue}`;
-                        setProfileData({
-                          ...profileData,
-                          birthDate: newBirthDate
-                        });
+                        // Validate year is not in the future
+                        const today = new Date();
+                        const currentYear = today.getFullYear();
+                        
+                        // Only set if valid year (1900-current year)
+                        if (numValue === '' || (numValue.length <= 4 && yearNum >= 1900 && yearNum <= currentYear)) {
+                          setBirthdateYear(numValue);
+                          
+                          // Update main profile data
+                          const newBirthDate = `${birthdateDay}/${birthdateMonth}/${numValue}`;
+                          setProfileData({
+                            ...profileData,
+                            birthDate: newBirthDate
+                          });
+                        }
                       }}
                       placeholder="AAAA"
                       className="w-24 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
                       style={{
                         backgroundColor: '#F4F4F4',
-                        borderColor: 'transparent'
+                        borderColor: 'transparent',
+                        WebkitBoxShadow: '0 0 0 1000px #F4F4F4 inset',
+                        WebkitTextFillColor: '#020817'
                       }}
                       onFocus={(e) => {
                         e.target.style.borderColor = '#020817';
@@ -1974,6 +2036,8 @@ export const ProfileCreationDrawer = ({
                       }}
                       maxLength={4}
                       autoComplete="off"
+                      name="birthdate-year"
+                      id="birthdate-year"
                     />
                   </div>
                 )}
