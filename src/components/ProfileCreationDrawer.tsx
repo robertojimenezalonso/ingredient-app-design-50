@@ -1312,7 +1312,7 @@ export const ProfileCreationDrawer = ({
     { step: 'allergies' as Step, label: 'Alergias e intolerancias', value: profileData.allergies.length > 0 ? `${profileData.allergies.length}` : '' },
     { step: 'gustos' as Step, label: 'Gustos', value: profileData.gustos.length > 0 ? `${profileData.gustos.length}` : '' },
     { step: 'goal' as Step, label: 'Objetivo', value: profileData.goal },
-    { step: 'weight' as Step, label: 'Peso', value: profileData.weight ? `${profileData.weight} ${profileData.weightUnit}` : '' },
+    { step: 'weight' as Step, label: 'Peso', value: weightKg ? `${weightKg}${weightGrams ? `,${weightGrams}` : ''} ${profileData.weightUnit}` : '' },
     { step: 'height' as Step, label: 'Altura', value: profileData.height ? `${profileData.height} ${profileData.heightUnit}` : '' },
     { step: 'birthdate' as Step, label: 'Fecha de nacimiento', value: profileData.birthDate },
     { step: 'sex' as Step, label: 'Sexo', value: profileData.sex },
