@@ -2344,17 +2344,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   </div>
                 </div>
 
-                {/* Disclaimer - only shown when macros are modified */}
-                {macrosModified && (
-                  <div className="flex justify-between items-center text-sm px-4">
-                    <p className="text-muted-foreground flex-1">
-                      Ajusta los macronutrientes para que alcancen el 100%
-                    </p>
-                    <span className="font-medium text-foreground ml-2">
-                      {profileData.carbs + profileData.protein + profileData.fat}%
-                    </span>
-                  </div>
-                )}
 
                 {/* Macros sliders */}
                 <div className="space-y-6 bg-background rounded-xl p-4 shadow-sm">
@@ -2450,6 +2439,18 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       />
                     </div>
                   </div>
+
+                  {/* Disclaimer - only shown when macros are modified */}
+                  {macrosModified && (
+                    <div className="flex justify-between items-center text-sm px-4 mt-4">
+                      <p className="text-muted-foreground flex-1">
+                        Ajusta los macronutrientes para que alcancen el 100%
+                      </p>
+                      <span className="font-semibold text-foreground ml-2 text-xl">
+                        {profileData.carbs + profileData.protein + profileData.fat}%
+                      </span>
+                    </div>
+                  )}
 
                   {/* Restablecer datos button - solo para perfiles nuevos */}
                   {!editingProfile?.id && (
