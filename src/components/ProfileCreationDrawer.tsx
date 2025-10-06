@@ -2330,15 +2330,15 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                     </div>
                     <div className="flex items-center gap-3">
                       <Slider
-                        min={1000}
-                        max={5000}
+                        min={Math.max(1000, recommendedMacros.calories - 750)}
+                        max={recommendedMacros.calories + 750}
                         step={50}
                         value={[profileData.calories]}
                         onValueChange={(value) => setProfileData({ ...profileData, calories: value[0] })}
                         className="flex-1"
                         trackColor="#E5E5E5"
-                        rangeColor="#6C6C6C"
-                        thumbColor="#6C6C6C"
+                        rangeColor="#000000"
+                        thumbColor="#000000"
                       />
                     </div>
                   </div>
