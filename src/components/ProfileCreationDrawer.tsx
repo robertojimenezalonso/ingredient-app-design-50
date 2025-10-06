@@ -22,6 +22,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { AvatarOptionsSheet } from '@/components/AvatarOptionsSheet';
 import { ImageCropDialog } from '@/components/ImageCropDialog';
+import { useMealProfiles } from '@/hooks/useMealProfiles';
 interface ProfileCreationDrawerProps {
   isOpen: boolean;
   onClose: () => void;
@@ -50,6 +51,37 @@ export const ProfileCreationDrawer = ({
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const { createProfile, updateProfile, deleteProfile } = useMealProfiles();
+  
+  // Estado para trackear el ID del perfil en creación
+  const [createdProfileId, setCreatedProfileId] = useState<string | null>(null);
+
+  // Efecto para crear perfil inmediatamente cuando se abre el drawer en modo "crear nuevo"
+  useEffect(() => {
+    const initializeProfile = async () => {
+      // Solo crear si el drawer está abierto, no hay editingProfile, y no hemos creado ya un perfil
+      if (isOpen && !editingProfile && !createdProfileId) {
+        console.log('=== Creando perfil inicial en BD ===');
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        const colors = ['#A4243B', '#BD632F', '#273E47', '#6E9075', '#EB6534', '#6494AA', '#90A959', '#64B6AC', '#6E8898', '#26A96C'];
+        const defaultName = `Comensal ${profileIndex + 1}`;
+        
+        const newProfile = await createProfile({
+          name: defaultName,
+          profile_color: colors[profileIndex % colors.length]
+        });
+
+        if (newProfile) {
+          console.log('Perfil creado con ID:', newProfile.id);
+          setCreatedProfileId(newProfile.id);
+        }
+      }
+    };
+
+    initializeProfile();
+  }, [isOpen, editingProfile, createdProfileId, profileIndex]);
 
   // Set initial step based on editingProfile when drawer opens
   useEffect(() => {
@@ -57,6 +89,11 @@ export const ProfileCreationDrawer = ({
       setCurrentStep('overview');
     } else if (isOpen) {
       setCurrentStep('name');
+    }
+    
+    // Limpiar el ID creado cuando se cierra el drawer
+    if (!isOpen) {
+      setCreatedProfileId(null);
     }
   }, [isOpen, editingProfile?.name]);
 
@@ -1042,7 +1079,7 @@ export const ProfileCreationDrawer = ({
         return false;
     }
   };
-  const handleContinue = () => {
+  const handleContinue = async () => {
     console.log('=== HandleContinue Debug ===');
     console.log('Current step:', currentStep);
     console.log('Has editingProfile.id:', !!editingProfile?.id);
@@ -1053,7 +1090,7 @@ export const ProfileCreationDrawer = ({
     }
     
     // CRITICAL: When creating a NEW profile and on activityLevel step, go to loading
-    if (currentStep === 'activityLevel' && !editingProfile?.id) {
+    if (currentStep === 'activityLevel' && !editingProfile?.id && !createdProfileId) {
       console.log('Activity level complete for NEW profile - going to loading!');
       setCurrentStep('loading');
       return;
@@ -1063,8 +1100,11 @@ export const ProfileCreationDrawer = ({
     console.log('Is profile complete:', isProfileComplete);
     console.log('Profile data:', profileData);
     
-    // Save current step data to database before continuing if editing an existing profile
-    if (editingProfile?.id && canContinue()) {
+    // Determine which profile ID to use (editing existing or newly created)
+    const profileId = editingProfile?.id || createdProfileId;
+    
+    // AUTO-SAVE: Save current step data to database before continuing
+    if (profileId && canContinue()) {
       const stepDataToSave: any = {};
       
       // Map current step data to database fields
@@ -1120,18 +1160,9 @@ export const ProfileCreationDrawer = ({
       
       // Save to database if there's data to save
       if (Object.keys(stepDataToSave).length > 0) {
-        supabase
-          .from('meal_profiles')
-          .update(stepDataToSave)
-          .eq('id', editingProfile.id)
-          .then(({ error }) => {
-            if (error) {
-              console.error('Error saving step data:', error);
-            } else {
-              // Trigger parent component to refetch profiles
-              window.dispatchEvent(new CustomEvent('meal-profile-updated'));
-            }
-          });
+        console.log('=== AUTO-SAVING step data to ID:', profileId, '===', stepDataToSave);
+        await updateProfile(profileId, stepDataToSave);
+        window.dispatchEvent(new CustomEvent('meal-profile-updated'));
       }
     }
     
@@ -1438,11 +1469,11 @@ export const ProfileCreationDrawer = ({
           </button>
           <div className="flex items-center gap-2">
             <button onClick={() => {
-              // If profile has been saved to database (has an ID), just close
+              // Si editamos perfil existente, simplemente cerrar
               if (editingProfile?.id) {
                 onClose();
               } else {
-                // If it's a new profile not saved yet, show confirmation dialog
+                // Si es perfil nuevo, mostrar diálogo de confirmación
                 setShowCancelDialog(true);
               }
             }} className="w-8 h-8 rounded-full flex items-center justify-center">
@@ -2638,10 +2669,23 @@ export const ProfileCreationDrawer = ({
                   Restaurar datos
                 </button>
                 <Button 
-                  onClick={() => {
+                  onClick={async () => {
+                    // Guardar macros finales
+                    const profileId = editingProfile?.id || createdProfileId;
+                    if (profileId) {
+                      await updateProfile(profileId, {
+                        calories: profileData.calories,
+                        carbs: profileData.carbs,
+                        protein: profileData.protein,
+                        fat: profileData.fat
+                      });
+                    }
+                    
+                    // Limpiar el ID creado y cerrar
+                    setCreatedProfileId(null);
                     onSave(profileData);
                     onClose();
-                  }} 
+                  }}
                   disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
                   className="flex-1"
                   style={{
@@ -2669,7 +2713,14 @@ export const ProfileCreationDrawer = ({
           <AlertDialogFooter className="flex-row gap-3 sm:justify-between">
             <AlertDialogAction
               className="flex-1 bg-destructive"
-              onClick={() => {
+              onClick={async () => {
+                // Eliminar el perfil creado de la base de datos
+                if (createdProfileId) {
+                  console.log('=== Eliminando perfil creado:', createdProfileId);
+                  await deleteProfile(createdProfileId);
+                  setCreatedProfileId(null);
+                }
+                
                 // Reset all data
                 setProfileData({
                   name: '',
@@ -2796,25 +2847,19 @@ export const ProfileCreationDrawer = ({
           onCropComplete={async (croppedBlob) => {
             console.log('=== onCropComplete called ===');
             console.log('editingProfile:', editingProfile);
-            console.log('editingProfile?.id:', editingProfile?.id);
+            console.log('createdProfileId:', createdProfileId);
             console.log('croppedBlob:', croppedBlob);
             
-            // Si no hay perfil o no tiene ID, solo actualiza el avatar localmente
-            if (!editingProfile?.id) {
-              console.log('No profile ID - storing blob as local preview');
-              
-              // Convertir blob a URL para preview
-              const blobUrl = URL.createObjectURL(croppedBlob);
-              
-              if (editingProfile) {
-                editingProfile.avatarUrl = blobUrl;
-              }
-              
+            // Determinar qué ID usar
+            const profileId = editingProfile?.id || createdProfileId;
+            
+            if (!profileId) {
+              console.error('No profile ID available!');
               toast({
-                title: "Foto seleccionada",
-                description: "La foto se guardará cuando crees el perfil"
+                title: "Error",
+                description: "No se pudo guardar la foto. Intenta de nuevo.",
+                variant: "destructive"
               });
-              
               setShowCropDialog(false);
               setSelectedImage(null);
               return;
@@ -2822,9 +2867,9 @@ export const ProfileCreationDrawer = ({
 
             setUploadingAvatar(true);
             try {
-              console.log('Uploading to Supabase...');
-              const fileName = `${editingProfile.id}-${Date.now()}.jpg`;
-              const filePath = `${editingProfile.id}/${fileName}`;
+              console.log('Uploading to Supabase with profile ID:', profileId);
+              const fileName = `${profileId}-${Date.now()}.jpg`;
+              const filePath = `${profileId}/${fileName}`;
 
               const { error: uploadError } = await supabase.storage
                 .from('profile-avatars')
@@ -2847,7 +2892,7 @@ export const ProfileCreationDrawer = ({
               const { error: updateError } = await supabase
                 .from('meal_profiles')
                 .update({ avatar_url: publicUrl })
-                .eq('id', editingProfile.id);
+                .eq('id', profileId);
 
               if (updateError) {
                 console.error('Update error:', updateError);
