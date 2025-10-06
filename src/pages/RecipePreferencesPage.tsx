@@ -493,9 +493,8 @@ export const RecipePreferencesPage = () => {
                       {healthProfiles.map((profile, index) => (
                       <div 
                         key={profile.id} 
-                        className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px] w-fit"
+                        className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px] w-fit bg-white"
                         style={{ 
-                          backgroundColor: getProfileColor(profile, index),
                           borderRadius: '8px'
                         }}
                         onClick={() => handleEditProfile(profile)}
@@ -504,8 +503,7 @@ export const RecipePreferencesPage = () => {
                             className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium overflow-hidden flex-shrink-0"
                             style={{ 
                               backgroundColor: getProfileColor(profile, index), 
-                              color: 'rgba(255, 255, 255, 0.8)',
-                              border: '1px solid white'
+                              color: 'rgba(255, 255, 255, 0.8)'
                             }}
                           >
                             {profile.avatarUrl ? (
@@ -514,7 +512,7 @@ export const RecipePreferencesPage = () => {
                               getInitials(profile.name)
                             )}
                           </div>
-                          <span className="text-base font-normal text-white">{profile.name}</span>
+                          <span className="text-base font-normal text-black font-['Covered_By_Your_Grace']">{profile.name}</span>
                         </div>
                       ))}
                     </div>
