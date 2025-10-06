@@ -2664,32 +2664,30 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
           </div>}
 
         {/* Buttons for macros step */}
-        {currentStep === 'macros' && (
+        {currentStep === 'macros' && macrosModified && (
           <div className="p-4 border-t flex-shrink-0">
             {/* Footer con botones Restablecer datos y Guardar */}
             <div className="flex gap-3">
-              {/* Botón Restablecer datos - solo si hay modificaciones */}
-              {macrosModified && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setProfileData({
-                      ...profileData,
-                      carbs: recommendedMacros.carbs,
-                      protein: recommendedMacros.protein,
-                      fat: recommendedMacros.fat,
-                      calories: recommendedMacros.calories
-                    });
-                    setMacrosModified(false);
-                  }}
-                  className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
-                >
-                  Restablecer datos
-                </button>
-              )}
+              {/* Botón Restablecer datos */}
+              <button
+                type="button"
+                onClick={() => {
+                  setProfileData({
+                    ...profileData,
+                    carbs: recommendedMacros.carbs,
+                    protein: recommendedMacros.protein,
+                    fat: recommendedMacros.fat,
+                    calories: recommendedMacros.calories
+                  });
+                  setMacrosModified(false);
+                }}
+                className="flex-1 text-center py-3 text-sm font-medium border rounded-lg"
+              >
+                Restablecer datos
+              </button>
               
-              {/* Botón Guardar - solo si hay modificaciones y macros suman 100% */}
-              {macrosModified && (profileData.carbs + profileData.protein + profileData.fat === 100) && (
+              {/* Botón Guardar - solo si macros suman 100% */}
+              {(profileData.carbs + profileData.protein + profileData.fat === 100) && (
                 <Button
                   type="button"
                   onClick={async () => {
@@ -2715,35 +2713,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   }}
                 >
                   Guardar
-                </Button>
-              )}
-              
-              {/* Botón Guardar perfil - solo si NO hay modificaciones pendientes */}
-              {!macrosModified && (
-                <Button 
-                  onClick={async () => {
-                    const profileId = editingProfile?.id || createdProfileId;
-                    if (profileId) {
-                      await updateProfile(profileId, {
-                        calories: profileData.calories,
-                        carbs: profileData.carbs,
-                        protein: profileData.protein,
-                        fat: profileData.fat
-                      });
-                    }
-                    
-                    setCreatedProfileId(null);
-                    onSave(profileData);
-                    onClose();
-                  }}
-                  disabled={profileData.carbs + profileData.protein + profileData.fat !== 100}
-                  className="w-full"
-                  style={{
-                    backgroundColor: '#020817',
-                    color: '#ffffff'
-                  }}
-                >
-                  Guardar perfil
                 </Button>
               )}
             </div>
