@@ -709,15 +709,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     if (profileData.weight) {
       setWeightDisplayedText(weightFullText);
       setWeightShowCursor(false);
-      // Focus automático en el input
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (weightKgInputRef.current) {
-            weightKgInputRef.current.focus();
-            Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
-          }
-        });
-      });
       return;
     }
 
@@ -725,15 +716,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       setTimeout(() => {
         setWeightDisplayedText(weightFullText[0]);
         setWeightShowCursor(true);
-        // Focus automático en el input
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (weightKgInputRef.current) {
-              weightKgInputRef.current.focus();
-              Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
-            }
-          });
-        });
       }, 300);
     }
   }, [isOpen, currentStep, weightFullText, profileData.weight]);
@@ -768,15 +750,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     if (profileData.height) {
       setHeightDisplayedText(heightFullText);
       setHeightShowCursor(false);
-      // Focus automático en el input
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (heightInputRef.current) {
-            heightInputRef.current.focus();
-            Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
-          }
-        });
-      });
       return;
     }
 
@@ -784,15 +757,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       setTimeout(() => {
         setHeightDisplayedText(heightFullText[0]);
         setHeightShowCursor(true);
-        // Focus automático en el input
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (heightInputRef.current) {
-              heightInputRef.current.focus();
-              Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
-            }
-          });
-        });
       }, 300);
     }
   }, [isOpen, currentStep, heightFullText, profileData.height]);
@@ -827,15 +791,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     if (profileData.birthDate) {
       setBirthdateDisplayedText(birthdateFullText);
       setBirthdateShowCursor(false);
-      // Focus automático en el input
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (dayInputRef.current) {
-            dayInputRef.current.focus();
-            Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
-          }
-        });
-      });
       return;
     }
 
@@ -843,15 +798,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
       setTimeout(() => {
         setBirthdateDisplayedText(birthdateFullText[0]);
         setBirthdateShowCursor(true);
-        // Focus automático en el input
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            if (dayInputRef.current) {
-              dayInputRef.current.focus();
-              Keyboard.show().catch(err => console.log('Keyboard.show error:', err));
-            }
-          });
-        });
       }, 300);
     }
   }, [isOpen, currentStep, birthdateFullText, profileData.birthDate]);
@@ -1922,7 +1868,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       type="tel" 
                       inputMode="numeric" 
                       pattern="[0-9]*" 
-                      value={weightKg} 
+                      value={weightKg}
+                      autoFocus
                        onChange={e => {
                         const numValue = e.target.value.replace(/\D/g, '').slice(0, 3);
                         
@@ -1960,10 +1907,9 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                         e.target.style.borderColor = '#020817';
                         e.target.style.borderWidth = '1px';
                       }}
-                      onBlur={e => {
+                       onBlur={e => {
                         e.target.style.borderColor = 'transparent';
                       }}
-                      autoFocus 
                     />
                     <span className="text-muted-foreground text-lg">,</span>
                     <Input 
