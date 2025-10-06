@@ -1858,8 +1858,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   </div>
                 </div>
 
-                {/* Weight input - appears after typewriter completes */}
-                {weightShowInput && <div className="flex gap-3 justify-start items-center w-full">
+                {/* Weight input - siempre visible desde el inicio */}
+                <div className="flex gap-3 justify-start items-center w-full">
                     <Input 
                       ref={weightKgInputRef} 
                       type="tel" 
@@ -1955,9 +1955,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       }} 
                       className="px-3 py-1 text-base font-medium text-primary rounded-md"
                     >
-                      {profileData.weightUnit}
                     </button>
-                  </div>}
+                  </div>
               </div>}
 
             {currentStep === 'height' && <div className="space-y-6">
@@ -1973,11 +1972,11 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   </div>
                 </div>
 
-                {/* Height input - appears after typewriter completes */}
-                {heightShowInput && <div className="relative">
+                {/* Height input - siempre visible desde el inicio */}
+                <div className="relative">
                     <Input 
                       ref={heightInputRef} 
-                      type="text" 
+                      type="tel" 
                       inputMode="numeric" 
                       pattern="[0-9]*" 
                       value={profileData.height} 
@@ -1997,10 +1996,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       }}
                       onBlur={e => {
                         e.target.style.borderColor = 'transparent';
-                        e.preventDefault();
-                        setTimeout(() => e.target.focus({
-                          preventScroll: true
-                        }), 0);
                       }}
                       autoFocus 
                     />
@@ -2019,7 +2014,7 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                     >
                       {profileData.heightUnit}
                     </button>
-                  </div>}
+                  </div>
               </div>}
 
             {currentStep === 'birthdate' && <div className="space-y-6">
@@ -2035,9 +2030,8 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   </div>
                 </div>
 
-                {/* Birthdate input - appears after typewriter completes */}
-                {birthdateShowInput && (
-                  <div className="flex gap-3 justify-start items-center w-full pr-2">
+                {/* Birthdate input - siempre visible desde el inicio */}
+                <div className="flex gap-3 justify-start items-center w-full pr-2">
                     <Input
                       ref={dayInputRef}
                       type="tel"
@@ -2183,7 +2177,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                       name="bday-year"
                     />
                   </div>
-                )}
               </div>}
 
             {currentStep === 'sex' && <div className="space-y-6">
