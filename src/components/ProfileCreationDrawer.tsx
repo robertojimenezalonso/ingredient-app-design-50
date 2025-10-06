@@ -484,7 +484,7 @@ export const ProfileCreationDrawer = ({
     }
   }, [isOpen]);
 
-  // Typewriter effect for name step
+  // Typewriter effect for name step - MODIFICADO para mostrar input inmediatamente
   useEffect(() => {
     if (!isOpen || currentStep !== 'name') {
       setDisplayedText('');
@@ -493,15 +493,17 @@ export const ProfileCreationDrawer = ({
       return;
     }
 
+    // NUEVO: Mostrar input INMEDIATAMENTE para que el usuario pueda hacer tap
+    setShowInput(true);
+
     // Skip animation if profile already has a name (editing existing profile)
     if (profileData.name) {
       setDisplayedText(fullText);
       setShowCursor(false);
-      setShowInput(true);
       return;
     }
 
-    // Start typewriter
+    // Start typewriter - pero el input YA está visible
     if (displayedText.length === 0) {
       setTimeout(() => {
         setDisplayedText(fullText[0]);
@@ -535,6 +537,7 @@ export const ProfileCreationDrawer = ({
       }, 300);
     }
   }, [isOpen, currentStep, dietFullText, profileData.diet]);
+  // Typewriter animation loop for name - YA NO establece showInput
   useEffect(() => {
     if (!isOpen || currentStep !== 'name') return;
     if (displayedText.length > 0 && displayedText.length < fullText.length) {
@@ -545,7 +548,7 @@ export const ProfileCreationDrawer = ({
     } else if (displayedText.length === fullText.length && showCursor) {
       setTimeout(() => {
         setShowCursor(false);
-        setShowInput(true);
+        // YA NO hace setShowInput(true) aquí porque se hace inmediatamente
       }, 200);
     }
   }, [displayedText, fullText, showCursor, isOpen, currentStep]);
@@ -977,70 +980,22 @@ export const ProfileCreationDrawer = ({
     }
   }, [isOpen, currentStep]);
 
-  // Focus input when it appears - MEJORADO para abrir teclado inmediatamente
+  // Focus input when it appears - SIMPLIFICADO
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !showInput) return;
 
-    // Para el paso de nombre, esperamos a que showInput sea true
-    if (currentStep === 'name' && showInput && nameInputRef.current) {
-      console.log('=== Auto-focusing name input ===');
-      
-      // Usar varios intentos con timeouts incrementales para asegurar que funcione
-      const focusAttempts = [50, 150, 300, 500];
-      
-      focusAttempts.forEach((delay) => {
-        setTimeout(() => {
-          if (nameInputRef.current && currentStep === 'name') {
-            console.log(`Intento de focus con delay ${delay}ms`);
-            
-            // Scroll al input primero
-            nameInputRef.current.scrollIntoView({ 
-              behavior: 'smooth', 
-              block: 'center' 
-            });
-            
-            // Focus
-            nameInputRef.current.focus({
-              preventScroll: false
-            });
-            
-            // En móvil, simular click para forzar teclado
-            nameInputRef.current.click();
-            
-            // También intentar con touchstart en móviles
-            const touchEvent = new TouchEvent('touchstart', {
-              bubbles: true,
-              cancelable: true
-            });
-            nameInputRef.current.dispatchEvent(touchEvent);
-          }
-        }, delay);
-      });
-      
-      return;
-    }
-
-    // Para otros pasos con inputs
-    requestAnimationFrame(() => {
-      const input = (() => {
-        switch (currentStep) {
-          case 'weight':
-            return weightKgInputRef.current;
-          case 'height':
-            return heightInputRef.current;
-          default:
-            return null;
-        }
-      })();
-      
-      if (input) {
-        setTimeout(() => {
-          input.focus({
-            preventScroll: true
-          });
-        }, 200);
+    // Delay mínimo para asegurar que el DOM esté renderizado
+    const timer = setTimeout(() => {
+      if (currentStep === 'name' && nameInputRef.current) {
+        nameInputRef.current.focus();
+      } else if (currentStep === 'weight' && weightKgInputRef.current) {
+        weightKgInputRef.current.focus();
+      } else if (currentStep === 'height' && heightInputRef.current) {
+        heightInputRef.current.focus();
       }
-    });
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [isOpen, currentStep, showInput]);
   const getStepTitle = () => {
     const isEditing = editingProfile;
