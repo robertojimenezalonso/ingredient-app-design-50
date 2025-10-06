@@ -15,7 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { X, ChevronLeft, ChevronRight, ArrowUp, Camera } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight, ArrowUp, Camera, Wheat, Drumstick, Droplet } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Keyboard } from '@capacitor/keyboard';
 import { supabase } from '@/integrations/supabase/client';
@@ -2358,7 +2358,10 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   {/* Carbs */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">Hidratos</span>
+                      <div className="flex items-center gap-2">
+                        <Wheat className="h-4 w-4" style={{ color: '#F97316' }} />
+                        <span className="font-medium">Hidratos</span>
+                      </div>
                       <div className="flex items-center gap-3 text-sm">
                         <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100 / 4)} g</span>
                         <span className="text-muted-foreground">{Math.round(profileData.carbs * profileData.calories / 100)} kcal</span>
@@ -2386,7 +2389,10 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   {/* Protein */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">Proteínas</span>
+                      <div className="flex items-center gap-2">
+                        <Drumstick className="h-4 w-4" style={{ color: '#EC4899' }} />
+                        <span className="font-medium">Proteínas</span>
+                      </div>
                       <div className="flex items-center gap-3 text-sm">
                         <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100 / 4)} g</span>
                         <span className="text-muted-foreground">{Math.round(profileData.protein * profileData.calories / 100)} kcal</span>
@@ -2414,7 +2420,10 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
                   {/* Fat */}
                   <div className="space-y-2">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">Grasas</span>
+                      <div className="flex items-center gap-2">
+                        <Droplet className="h-4 w-4" style={{ color: '#8B5CF6' }} />
+                        <span className="font-medium">Grasas</span>
+                      </div>
                       <div className="flex items-center gap-3 text-sm">
                         <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100 / 9)} g</span>
                         <span className="text-muted-foreground">{Math.round(profileData.fat * profileData.calories / 100)} kcal</span>
