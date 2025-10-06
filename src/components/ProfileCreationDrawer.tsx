@@ -1774,14 +1774,14 @@ export const ProfileCreationDrawer = ({
                 </div>
 
                 {/* Weight input - appears after typewriter completes */}
-                {weightShowInput && <div className="flex gap-3 justify-between items-center w-full px-2">
+                {weightShowInput && <div className="flex gap-3 justify-start items-center w-full">
                     <Input 
                       ref={weightKgInputRef} 
                       type="tel" 
                       inputMode="numeric" 
                       pattern="[0-9]*" 
                       value={weightKg} 
-                      onChange={e => {
+                       onChange={e => {
                         const numValue = e.target.value.replace(/\D/g, '').slice(0, 3);
                         
                         // Don't allow just "0"
@@ -1809,7 +1809,7 @@ export const ProfileCreationDrawer = ({
                         }
                       }} 
                       placeholder={profileData.weightUnit === 'kg' ? 'kg' : 'lbs'} 
-                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -1844,7 +1844,7 @@ export const ProfileCreationDrawer = ({
                         });
                       }} 
                       placeholder={profileData.weightUnit === 'kg' ? 'g' : 'oz'} 
-                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0"
+                      className="flex-1 text-center text-lg border-0 focus:border focus-visible:ring-0 focus-visible:ring-offset-0" 
                       style={{
                         backgroundColor: '#F4F4F4',
                         borderColor: 'transparent'
@@ -1868,7 +1868,7 @@ export const ProfileCreationDrawer = ({
                           weightUnit: units[nextIndex]
                         });
                       }} 
-                      className="px-3 py-1 text-sm font-medium text-primary rounded-md"
+                      className="px-3 py-1 text-base font-medium text-primary rounded-md"
                     >
                       {profileData.weightUnit}
                     </button>
