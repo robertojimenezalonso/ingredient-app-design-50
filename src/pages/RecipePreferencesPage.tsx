@@ -94,10 +94,11 @@ export const RecipePreferencesPage = () => {
   // Use recipe bank for generating meal plan
   const { recipes, isLoading: recipesLoading } = useRecipeBank();
   
-  // Recipe generation animation state
-  const [isGenerating, setIsGenerating] = useState(true);
-  const [generationStep, setGenerationStep] = useState<'searching' | 'building' | 'complete'>('searching');
-  const [showRecipes, setShowRecipes] = useState(false);
+  // Recipe generation animation state - always start with animation unless explicitly told to restore
+  const shouldShowAnimation = !location.state?.skipAnimation;
+  const [isGenerating, setIsGenerating] = useState(shouldShowAnimation);
+  const [generationStep, setGenerationStep] = useState<'searching' | 'building' | 'complete'>(shouldShowAnimation ? 'searching' : 'complete');
+  const [showRecipes, setShowRecipes] = useState(!shouldShowAnimation);
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -385,7 +386,8 @@ export const RecipePreferencesPage = () => {
         confirmedDates,
         selectedSupermarket,
         mealSelections,
-        shouldRestoreSelection: true 
+        shouldRestoreSelection: true,
+        skipAnimation: true
       } 
     });
   };
@@ -444,7 +446,7 @@ export const RecipePreferencesPage = () => {
 
   // Recipe generation animation
   useEffect(() => {
-    if (skipAnimations || !isGenerating) return;
+    if (!shouldShowAnimation || !isGenerating) return;
 
     const timer1 = setTimeout(() => {
       setGenerationStep('building');
@@ -464,16 +466,7 @@ export const RecipePreferencesPage = () => {
       clearTimeout(timer2);
       clearTimeout(timer3);
     };
-  }, [skipAnimations, isGenerating]);
-
-  // Skip animations if needed
-  useEffect(() => {
-    if (skipAnimations) {
-      setIsGenerating(false);
-      setGenerationStep('complete');
-      setShowRecipes(true);
-    }
-  }, [skipAnimations]);
+  }, [shouldShowAnimation, isGenerating]);
 
   const mealPlanPreview = generateMealPlan();
   const totalRecipesNeeded = mealSelections.length;
