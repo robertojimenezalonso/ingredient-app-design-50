@@ -13,6 +13,7 @@ import { useMealProfiles } from '@/hooks/useMealProfiles';
 import type { MealProfile } from '@/hooks/useMealProfiles';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/AuthModal';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
 
 type MealSelection = {
   date: Date;
@@ -89,6 +90,9 @@ export const RecipePreferencesPage = () => {
   
   // Use Supabase hook for meal profiles
   const { profiles: supabaseProfiles, loading: profilesLoading, createProfile, updateProfile, deleteProfile } = useMealProfiles();
+  
+  // Use recipe bank for meal plan preview
+  const { getRandomRecipesByCategory } = useRecipeBank();
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -405,6 +409,31 @@ export const RecipePreferencesPage = () => {
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
   };
 
+  // Generate meal plan preview with random recipes
+  const mealPlanPreview = Object.values(groupedSelections).map((group: any) => {
+    const categoryMap: { [key: string]: string } = {
+      'Desayuno': 'desayuno',
+      'Comida': 'comida',
+      'Cena': 'cena',
+      'Postre': 'comida',
+      'Snack': 'snack'
+    };
+    
+    const meals = group.mealTypes.map((mealType: string) => {
+      const category = categoryMap[mealType] || 'comida';
+      const recipe = getRandomRecipesByCategory(category, 1)[0];
+      return {
+        mealType,
+        recipe
+      };
+    });
+    
+    return {
+      date: group.date,
+      meals
+    };
+  });
+
   useEffect(() => {
     if (skipAnimations || fullText.length === 0) return;
     
@@ -455,6 +484,51 @@ export const RecipePreferencesPage = () => {
                       {index < Object.values(groupedSelections).length - 1 && ' - '}
                     </span>
                   ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Meal Plan Preview */}
+            <div className="px-4 mb-6">
+              <div className="flex justify-start">
+                <div className="rounded-xl p-4 border" style={{ 
+                  backgroundColor: '#F4F4F4',
+                  borderColor: '#D9DADC'
+                }}>
+                  <p className="text-sm font-semibold text-[#1C1C1C] mb-3">
+                    438 planes encajan con tus preferencias
+                  </p>
+                  
+                  <div className="space-y-4">
+                    {mealPlanPreview.map((day, dayIndex) => (
+                      <div key={dayIndex}>
+                        <p className="text-xs font-medium text-[#666666] mb-2">
+                          {formatShortDate(day.date)}
+                        </p>
+                        <div className="flex gap-2">
+                          {day.meals.map((meal, mealIndex) => (
+                            meal.recipe && (
+                              <div key={mealIndex} className="flex flex-col items-center gap-1">
+                                <div 
+                                  className="w-16 h-16 rounded-lg overflow-hidden bg-white"
+                                  style={{ border: '1px solid #E5E5E5' }}
+                                >
+                                  <img 
+                                    src={meal.recipe.image} 
+                                    alt={meal.recipe.title}
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                <span className="text-[10px] text-[#666666]">
+                                  {meal.mealType}
+                                </span>
+                              </div>
+                            )
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
