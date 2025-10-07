@@ -13,6 +13,7 @@ import { useMealProfiles } from '@/hooks/useMealProfiles';
 import type { MealProfile } from '@/hooks/useMealProfiles';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/AuthModal';
+import { useRecipeBank } from '@/hooks/useRecipeBank';
 
 type MealSelection = {
   date: Date;
@@ -89,6 +90,14 @@ export const RecipePreferencesPage = () => {
   
   // Use Supabase hook for meal profiles
   const { profiles: supabaseProfiles, loading: profilesLoading, createProfile, updateProfile, deleteProfile } = useMealProfiles();
+  
+  // Use recipe bank for generating meal plan
+  const { recipes, isLoading: recipesLoading } = useRecipeBank();
+  
+  // Recipe generation animation state
+  const [isGenerating, setIsGenerating] = useState(true);
+  const [generationStep, setGenerationStep] = useState<'searching' | 'building' | 'complete'>('searching');
+  const [showRecipes, setShowRecipes] = useState(false);
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -405,6 +414,72 @@ export const RecipePreferencesPage = () => {
     return formatted.charAt(0).toUpperCase() + formatted.slice(1);
   };
 
+  // Generate meal plan preview with random recipes
+  const categoryMap: { [key: string]: string } = {
+    'Desayuno': 'desayuno',
+    'Comida': 'comida',
+    'Cena': 'cena',
+    'Postre': 'comida',
+    'Snack': 'snack'
+  };
+
+  const generateMealPlan = () => {
+    return Object.values(groupedSelections).map((group: any) => {
+      const meals = group.mealTypes.map((mealType: string) => {
+        const category = categoryMap[mealType] || 'comida';
+        const categoryRecipes = recipes.filter(r => r.category === category);
+        const recipe = categoryRecipes[Math.floor(Math.random() * categoryRecipes.length)];
+        return {
+          mealType,
+          recipe
+        };
+      });
+      
+      return {
+        date: group.date,
+        meals
+      };
+    });
+  };
+
+  // Recipe generation animation
+  useEffect(() => {
+    if (skipAnimations || !isGenerating) return;
+
+    const timer1 = setTimeout(() => {
+      setGenerationStep('building');
+    }, 2000);
+
+    const timer2 = setTimeout(() => {
+      setGenerationStep('complete');
+      setShowRecipes(true);
+    }, 4000);
+
+    const timer3 = setTimeout(() => {
+      setIsGenerating(false);
+    }, 5000);
+
+    return () => {
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      clearTimeout(timer3);
+    };
+  }, [skipAnimations, isGenerating]);
+
+  // Skip animations if needed
+  useEffect(() => {
+    if (skipAnimations) {
+      setIsGenerating(false);
+      setGenerationStep('complete');
+      setShowRecipes(true);
+    }
+  }, [skipAnimations]);
+
+  const mealPlanPreview = generateMealPlan();
+  const totalRecipesNeeded = mealSelections.length;
+  const uniqueRecipes = new Set(mealPlanPreview.flatMap(day => day.meals.map(m => m.recipe?.id))).size;
+  const totalPlans = Math.floor(recipes.length / totalRecipesNeeded) * 10;
+
   useEffect(() => {
     if (skipAnimations || fullText.length === 0) return;
     
@@ -458,6 +533,97 @@ export const RecipePreferencesPage = () => {
                 </div>
               </div>
             </div>
+
+            {/* Recipe Generation Progress */}
+            {isGenerating && (
+              <div className="px-4 mb-6">
+                <div className="flex justify-start">
+                  <div className="rounded-xl p-4 border max-w-md" style={{ 
+                    backgroundColor: '#F4F4F4',
+                    borderColor: '#D9DADC'
+                  }}>
+                    {generationStep === 'searching' && (
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-black animate-pulse"></div>
+                        <p className="text-sm text-[#1C1C1C]">
+                          Buscando recetas en {selectedSupermarket}...
+                        </p>
+                      </div>
+                    )}
+                    
+                    {generationStep === 'building' && (
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-2 h-2 rounded-full bg-black animate-pulse"></div>
+                          <p className="text-sm font-semibold text-[#1C1C1C]">
+                            Construyendo y definiendo recetas
+                          </p>
+                        </div>
+                        <p className="text-xs text-[#666666] mb-3">
+                          Estamos utilizando los ingredientes que encontramos en {selectedSupermarket} para producir recetas para ti
+                        </p>
+                        {showRecipes && (
+                          <div className="flex gap-2 overflow-x-auto">
+                            {mealPlanPreview.slice(0, 1).map((day) => 
+                              day.meals.slice(0, 4).map((meal, idx) => (
+                                meal.recipe && (
+                                  <div key={idx} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-[#E5E5E5]">
+                                    <img 
+                                      src={meal.recipe.image_url} 
+                                      alt={meal.recipe.title}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                )
+                              ))
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
+                    {generationStep === 'complete' && showRecipes && (
+                      <div>
+                        <p className="text-sm font-semibold text-[#1C1C1C] mb-3">
+                          Con estas {uniqueRecipes} recetas podemos hacer {totalPlans} planes para ti
+                        </p>
+                        
+                        <div className="space-y-4">
+                          {mealPlanPreview.slice(0, 2).map((day, dayIndex) => (
+                            <div key={dayIndex}>
+                              <p className="text-xs font-medium text-[#666666] mb-2">
+                                {formatShortDate(day.date)}
+                              </p>
+                              <div className="flex gap-2">
+                                {day.meals.map((meal, mealIndex) => (
+                                  meal.recipe && (
+                                    <div key={mealIndex} className="flex flex-col items-center gap-1">
+                                      <div 
+                                        className="w-16 h-16 rounded-lg overflow-hidden bg-white"
+                                        style={{ border: '1px solid #E5E5E5' }}
+                                      >
+                                        <img 
+                                          src={meal.recipe.image_url} 
+                                          alt={meal.recipe.title}
+                                          className="w-full h-full object-cover"
+                                        />
+                                      </div>
+                                      <span className="text-[10px] text-[#666666]">
+                                        {meal.mealType}
+                                      </span>
+                                    </div>
+                                  )
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Bot question */}
             <div className="px-4 mb-6">
