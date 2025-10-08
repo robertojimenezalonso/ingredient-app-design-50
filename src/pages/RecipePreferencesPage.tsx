@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple } from 'lucide-react';
+import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple, Search } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ProfileCreationDrawer, ProfileCreationDrawerRef } from '@/components/ProfileCreationDrawer';
@@ -537,10 +537,10 @@ export const RecipePreferencesPage = () => {
                   }}>
                     {generationStep === 'searching' && (
                       <div className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-black animate-pulse"></div>
-                        <p className="text-sm text-[#1C1C1C]">
-                          Buscando recetas en {selectedSupermarket}...
-                        </p>
+                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
+                        <span className="text-[#1C1C1C] text-base animate-pulse">
+                          Buscando recetas en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                        </span>
                       </div>
                     )}
                     
