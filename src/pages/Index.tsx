@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
+import { CustomCalendar } from '@/components/ui/custom-calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
@@ -541,7 +541,7 @@ const Index = () => {
                     </div>
                   </div>
                   <div className={`flex justify-center flex-shrink-0 ${showCalendar ? 'opacity-100' : 'opacity-0'}`}>
-                    <Calendar selected={selectedDates} onSelect={handleDateSelect} className="pointer-events-auto w-full" />
+                    <CustomCalendar selected={selectedDates} onSelect={handleDateSelect} className="pointer-events-auto w-full" />
                   </div>
                 </div>}
             </div>
