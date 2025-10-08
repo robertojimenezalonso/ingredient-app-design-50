@@ -547,16 +547,16 @@ export const RecipePreferencesPage = () => {
                   <div className="max-w-md">
                     {/* Loading dot */}
                     {showLoadingDot && !showSearchingText && !showBuildingText && (
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 mb-4">
                         <div className="w-3 h-3 bg-[#1C1C1C] rounded-full animate-pulse"></div>
                       </div>
                     )}
 
                     {/* Searching text */}
                     {showSearchingText && generationStep === 'searching' && (
-                      <div className="flex items-center gap-2">
-                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse flex-shrink-0" />
-                        <span className="text-[#1C1C1C] text-base animate-pulse leading-4">
+                      <div className="flex items-start gap-2 mb-4">
+                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse flex-shrink-0 mt-[2px]" />
+                        <span className="text-[#1C1C1C] text-base animate-pulse">
                           Creando recetas con los ingredientes de {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                         </span>
                       </div>
@@ -564,9 +564,9 @@ export const RecipePreferencesPage = () => {
                     
                     {/* Building text */}
                     {showBuildingText && generationStep === 'building' && (
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse flex-shrink-0" />
-                        <span className="text-[#1C1C1C] text-base animate-pulse leading-4">
+                      <div className="flex items-start gap-2 mb-4">
+                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse flex-shrink-0 mt-[2px]" />
+                        <span className="text-[#1C1C1C] text-base animate-pulse">
                           Adaptando las recetas creadas a los días que pediste
                         </span>
                       </div>
