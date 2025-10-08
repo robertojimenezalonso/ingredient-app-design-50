@@ -658,73 +658,6 @@ export const RecipePreferencesPage = () => {
               </div>
             )}
 
-            {/* Bot question */}
-            <div className="px-4 mb-6">
-              <div className="flex justify-start">
-                <div className="w-full">
-                  <div className="mb-4">
-                    {showIcon && (
-                      <p className="text-base text-[#1C1C1C] whitespace-pre-line">
-                        <span className="font-semibold">Veo que aún no tienes ningún perfil de comensal vinculado a tu cuenta.</span> Esto nos ayudará a entender mejor tus <span className="font-semibold">objetivos y preferencias,</span> y así ofrecerte recetas personalizadas con los ingredientes de <span className="font-semibold capitalize">{selectedSupermarket || 'tu supermercado favorito'}</span>.{'\n\n'}Añade tantos <span className="font-semibold">perfiles de comensal</span> como personas vayan a comer contigo en los días que seleccionaste.
-                        {showCursor && <span className="animate-pulse">|</span>}
-                      </p>
-                    )}
-                  </div>
-                  
-                  {/* Rectángulo contenedor para título, botón y tags */}
-                  <div className="rounded-xl p-4 mb-4" style={{ backgroundColor: '#F4F4F4' }}>
-                    {/* Contador de comensales y botón añadir */}
-                    <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-base font-semibold text-[#1C1C1C]">
-                        {healthProfiles.length === 0 ? 'Sin comensales' : `${healthProfiles.length} ${healthProfiles.length === 1 ? 'comensal' : 'comensales'}`}
-                      </h2>
-                      <button
-                        onClick={handleAddProfile}
-                        className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-full"
-                      >
-                        <Plus className="h-5 w-5" />
-                        <span className="text-base font-medium">Añadir</span>
-                      </button>
-                    </div>
-                    
-                    {/* Health Profiles - Compact Tags */}
-                    <div className="flex flex-col gap-3">
-                      {healthProfiles.map((profile, index) => (
-                      <div 
-                        key={profile.id} 
-                        className="inline-flex items-center gap-2 px-3 cursor-pointer h-[46px] w-fit"
-                        style={{ 
-                          backgroundColor: '#D9DADC',
-                          borderRadius: '8px'
-                        }}
-                        onClick={() => handleEditProfile(profile)}
-                      >
-                          <div 
-                            className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium overflow-hidden flex-shrink-0"
-                            style={{ 
-                              backgroundColor: getProfileColor(profile, index), 
-                              color: 'rgba(255, 255, 255, 0.8)'
-                            }}
-                          >
-                            {profile.avatarUrl ? (
-                              <img src={profile.avatarUrl} alt={profile.name} className="w-full h-full object-cover" />
-                            ) : (
-                              getInitials(profile.name)
-                            )}
-                          </div>
-                          <span className="text-base font-normal text-black">{profile.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                    
-                    {/* Subtítulo informativo */}
-                    <p className="text-sm text-[#666666] mt-4">
-                      Guardaremos los perfiles de comensales para que no tengas que configurarlos de nuevo.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -733,31 +666,14 @@ export const RecipePreferencesPage = () => {
           backgroundColor: '#FFFFFF',
           bottom: 'env(safe-area-inset-bottom, 0px)'
         }}>
-          <div className="px-4 pt-4 pb-8 flex items-center gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
-            {healthProfiles.filter(p => p.name.trim() !== '').length > 0 && (
-              <div className="flex-1 flex items-center gap-2 px-4 h-10 rounded-full overflow-x-auto scrollbar-hide" style={{ 
-                backgroundColor: '#F2F2F2'
-              }}>
-                {healthProfiles.filter(profile => profile.name.trim() !== '').map(profile => (
-                  <Badge 
-                    key={profile.id}
-                    variant="secondary" 
-                    className="font-normal py-1 flex items-center gap-1 flex-shrink-0" 
-                    style={{ backgroundColor: '#D9DADC', color: '#020818', borderRadius: '8px' }}
-                  >
-                    {profile.name}
-                  </Badge>
-                ))}
-              </div>
-            )}
+          <div className="px-4 pt-4 pb-8 flex items-center justify-end gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
             <Button 
               variant="ghost" 
               onClick={handleContinue} 
-              disabled={!canContinue} 
-              className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0 ml-auto" 
+              className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0" 
               style={{
-                backgroundColor: canContinue ? '#000000' : '#898885',
-                color: canContinue ? '#ffffff' : '#F9F8F2',
+                backgroundColor: '#000000',
+                color: '#ffffff',
                 border: 'none',
                 opacity: 1
               }}
@@ -767,17 +683,6 @@ export const RecipePreferencesPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Profile Creation Drawer */}
-      <ProfileCreationDrawer
-        ref={profileDrawerRef}
-        isOpen={profileDrawerOpen}
-        onClose={handleCancelProfile}
-        onSave={handleSaveProfile}
-        editingProfile={editingProfile}
-        profileIndex={healthProfiles.length}
-        onDelete={editingProfile?.id ? () => handleDeleteProfile(editingProfile.id) : undefined}
-      />
 
       {/* Auth Modal */}
       <AuthModal open={authModalOpen} onOpenChange={setAuthModalOpen} />
