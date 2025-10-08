@@ -102,6 +102,8 @@ export const RecipePreferencesPage = () => {
   const [showLoadingDot, setShowLoadingDot] = useState(shouldShowAnimation);
   const [showSearchingText, setShowSearchingText] = useState(false);
   const [showBuildingText, setShowBuildingText] = useState(false);
+  const [showFinalMessage, setShowFinalMessage] = useState(false);
+  const [finalMessageCursor, setFinalMessageCursor] = useState(true);
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -471,13 +473,19 @@ export const RecipePreferencesPage = () => {
 
     const timer3 = setTimeout(() => {
       setIsGenerating(false);
+      setShowFinalMessage(true);
     }, 10000);
+
+    const timer4 = setTimeout(() => {
+      setFinalMessageCursor(false);
+    }, 12000);
 
     return () => {
       clearTimeout(dotTimer);
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
+      clearTimeout(timer4);
     };
   }, [shouldShowAnimation, isGenerating]);
 
@@ -610,6 +618,20 @@ export const RecipePreferencesPage = () => {
                         </div>
                       </div>
                     )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Final message after animation */}
+            {showFinalMessage && (
+              <div className="px-4 mb-6">
+                <div className="flex justify-start">
+                  <div className="max-w-md">
+                    <p className="text-base text-[#1C1C1C]">
+                      Hemos encontrado cientos de posibles combinaciones para ti, selecciona la que más te gusta y compara el precio con otros supermercados
+                      {finalMessageCursor && <span className="animate-pulse">|</span>}
+                    </p>
                   </div>
                 </div>
               </div>
