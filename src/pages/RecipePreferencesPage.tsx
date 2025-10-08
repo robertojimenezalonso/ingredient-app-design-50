@@ -103,10 +103,7 @@ export const RecipePreferencesPage = () => {
   const [showSearchingText, setShowSearchingText] = useState(false);
   const [showBuildingText, setShowBuildingText] = useState(false);
   const [showFinalMessage, setShowFinalMessage] = useState(false);
-  const [displayedFinalMessage, setDisplayedFinalMessage] = useState('');
   const [finalMessageCursor, setFinalMessageCursor] = useState(true);
-  
-  const finalMessageText = 'Hemos creado <span class="font-semibold">184 planes</span> pensados para ti.<br /><br />Las recetas están optimizadas con los ingredientes de <span class="font-semibold">Mercadona</span>, para que ahorres <span class="font-semibold">tiempo y dinero</span> al planificar tus comidas. Además, podrás ver <span class="font-semibold">cuánto te costaría esa misma lista de la compra en otros supermercados.</span>';
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -478,7 +475,7 @@ export const RecipePreferencesPage = () => {
 
     const timer3 = setTimeout(() => {
       setFinalMessageCursor(false);
-    }, 11000);
+    }, 10000);
 
     return () => {
       clearTimeout(dotTimer);
@@ -487,24 +484,6 @@ export const RecipePreferencesPage = () => {
       clearTimeout(timer3);
     };
   }, [shouldShowAnimation, isGenerating]);
-  
-  // Typewriter effect for final message
-  useEffect(() => {
-    let timeout: NodeJS.Timeout;
-    if (showFinalMessage && displayedFinalMessage.length < finalMessageText.length) {
-      timeout = setTimeout(() => {
-        setDisplayedFinalMessage(finalMessageText.slice(0, displayedFinalMessage.length + 1));
-      }, 30); // 30ms per character for typewriter speed
-    } else if (showFinalMessage && displayedFinalMessage.length === finalMessageText.length) {
-      // Hide cursor after text is complete
-      setTimeout(() => {
-        setFinalMessageCursor(false);
-      }, 500);
-    }
-    return () => {
-      if (timeout) clearTimeout(timeout);
-    };
-  }, [showFinalMessage, displayedFinalMessage, finalMessageText]);
 
   const mealPlanPreview = generateMealPlan();
   const totalRecipesNeeded = mealSelections.length;
@@ -604,11 +583,13 @@ export const RecipePreferencesPage = () => {
 
             {/* Final message after animation */}
             {showFinalMessage && (
-              <div className="px-4 mb-6">
+              <div className="px-4 mb-6 animate-fade-in">
                 <div className="flex justify-start">
                   <div className="max-w-md">
                     <p className="text-base text-[#1C1C1C]">
-                      <span dangerouslySetInnerHTML={{ __html: displayedFinalMessage }} />
+                      Hemos creado <span className="font-semibold">184 planes</span> pensados para ti.
+                      <br /><br />
+                      Las recetas están optimizadas con los ingredientes de <span className="font-semibold">Mercadona</span>, para que ahorres <span className="font-semibold">tiempo y dinero</span> al planificar tus comidas. Además, podrás ver <span className="font-semibold">cuánto te costaría esa misma lista de la compra en otros supermercados.</span>
                       {finalMessageCursor && <span className="animate-pulse">|</span>}
                     </p>
                   </div>
