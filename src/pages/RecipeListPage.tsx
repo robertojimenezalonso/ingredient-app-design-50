@@ -9,7 +9,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
 import { useShoppingLists } from '@/hooks/useShoppingLists';
 import { AirbnbHeader } from '@/components/AirbnbHeader';
-import { CategoryCarousel } from '@/components/CategoryCarousel';
+import { DayRecipeList } from '@/components/DayRecipeList';
 import { FloatingButton } from '@/components/FloatingButton';
 import { useDateTabs } from '@/hooks/useDateTabs';
 import { Recipe, CategoryType } from '@/types/recipe';
@@ -450,13 +450,11 @@ const RecipeListPage = () => {
       />
       
       <div className="bg-white" style={{ paddingTop: '180px' }}>
-        <CategoryCarousel
-          category="trending"
-          recipes={recommendedRecipes}
-          onAddRecipe={handleAddRecipe}
+        <DayRecipeList
+          selectedDate={new Date()}
           onRecipeClick={handleRecipeClick}
-          onViewAll={handleViewAll}
-          sectionRefs={sectionRefs}
+          onAddRecipe={handleAddRecipe}
+          onTotalPriceChange={(price) => setTotalPrice(price)}
         />
       </div>
 
