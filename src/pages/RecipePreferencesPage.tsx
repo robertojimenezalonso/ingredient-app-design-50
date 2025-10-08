@@ -472,23 +472,19 @@ export const RecipePreferencesPage = () => {
       setShowBuildingText(false);
       setGenerationStep('complete');
       setShowRecipes(true);
+      setIsGenerating(false);
+      setShowFinalMessage(true);
     }, 9000);
 
     const timer3 = setTimeout(() => {
-      setIsGenerating(false);
-      setShowFinalMessage(true);
-    }, 10000);
-
-    const timer4 = setTimeout(() => {
       setFinalMessageCursor(false);
-    }, 12000);
+    }, 11000);
 
     return () => {
       clearTimeout(dotTimer);
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
-      clearTimeout(timer4);
     };
   }, [shouldShowAnimation, isGenerating]);
   
