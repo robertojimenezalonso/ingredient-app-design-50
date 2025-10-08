@@ -533,8 +533,8 @@ export const RecipePreferencesPage = () => {
                 <div className="flex justify-start">
                   <div className="max-w-md">
                     {generationStep === 'searching' && (
-                      <div className="flex items-center gap-2">
-                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
+                      <div className="flex items-start gap-2">
+                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse mt-0.5" />
                         <span className="text-[#1C1C1C] text-base animate-pulse">
                           Creando recetas con los ingredientes de {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                         </span>
@@ -542,8 +542,8 @@ export const RecipePreferencesPage = () => {
                     )}
                     
                     {generationStep === 'building' && (
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
+                      <div className="flex items-start gap-2">
+                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse mt-0.5" />
                         <span className="text-[#1C1C1C] text-base animate-pulse">
                           Adaptando las recetas creadas a los días que pediste
                         </span>
