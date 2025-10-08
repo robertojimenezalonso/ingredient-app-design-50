@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
-import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple, Search } from 'lucide-react';
+import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple, Search, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ProfileCreationDrawer, ProfileCreationDrawerRef } from '@/components/ProfileCreationDrawer';
@@ -450,16 +450,16 @@ export const RecipePreferencesPage = () => {
 
     const timer1 = setTimeout(() => {
       setGenerationStep('building');
-    }, 2000);
+    }, 4000);
 
     const timer2 = setTimeout(() => {
       setGenerationStep('complete');
       setShowRecipes(true);
-    }, 4000);
+    }, 7000);
 
     const timer3 = setTimeout(() => {
       setIsGenerating(false);
-    }, 5000);
+    }, 8000);
 
     return () => {
       clearTimeout(timer1);
@@ -536,39 +536,17 @@ export const RecipePreferencesPage = () => {
                       <div className="flex items-center gap-2">
                         <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
                         <span className="text-[#1C1C1C] text-base animate-pulse">
-                          Buscando recetas en {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
+                          Creando recetas con los ingredientes de {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                         </span>
                       </div>
                     )}
                     
                     {generationStep === 'building' && (
-                      <div>
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-2 h-2 rounded-full bg-black animate-pulse"></div>
-                          <p className="text-sm font-semibold text-[#1C1C1C]">
-                            Construyendo y definiendo recetas
-                          </p>
-                        </div>
-                        <p className="text-xs text-[#666666] mb-3">
-                          Estamos utilizando los ingredientes que encontramos en {selectedSupermarket} para producir recetas para ti
-                        </p>
-                        {showRecipes && (
-                          <div className="flex gap-2 overflow-x-auto">
-                            {mealPlanPreview.slice(0, 1).map((day) => 
-                              day.meals.slice(0, 4).map((meal, idx) => (
-                                meal.recipe && (
-                                  <div key={idx} className="w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 bg-white border border-[#E5E5E5]">
-                                    <img 
-                                      src={meal.recipe.image_url} 
-                                      alt={meal.recipe.title}
-                                      className="w-full h-full object-cover"
-                                    />
-                                  </div>
-                                )
-                              ))
-                            )}
-                          </div>
-                        )}
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
+                        <span className="text-[#1C1C1C] text-base animate-pulse">
+                          Adaptando las recetas creadas a los días que pediste
+                        </span>
                       </div>
                     )}
                     
