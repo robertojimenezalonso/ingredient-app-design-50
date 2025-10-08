@@ -660,28 +660,6 @@ export const RecipePreferencesPage = () => {
 
           </div>
         </div>
-
-        {/* Fixed Button Area */}
-        <div className="absolute left-0 right-0 z-10" style={{
-          backgroundColor: '#FFFFFF',
-          bottom: 'env(safe-area-inset-bottom, 0px)'
-        }}>
-          <div className="px-4 pt-4 pb-8 flex items-center justify-end gap-2" style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}>
-            <Button 
-              variant="ghost" 
-              onClick={handleContinue} 
-              className="w-10 h-10 rounded-full flex items-center justify-center border-0 p-0 flex-shrink-0" 
-              style={{
-                backgroundColor: '#000000',
-                color: '#ffffff',
-                border: 'none',
-                opacity: 1
-              }}
-            >
-              <ArrowUp size={16} />
-            </Button>
-          </div>
-        </div>
       </div>
 
       {/* Auth Modal */}
