@@ -103,7 +103,11 @@ export const RecipePreferencesPage = () => {
   const [showSearchingText, setShowSearchingText] = useState(false);
   const [showBuildingText, setShowBuildingText] = useState(false);
   const [showFinalMessage, setShowFinalMessage] = useState(false);
+  const [charIndex, setCharIndex] = useState(0);
   const [finalMessageCursor, setFinalMessageCursor] = useState(true);
+  
+  // Texto sin formato para la animación
+  const plainText = "Hemos creado 184 planes pensados para ti.\n\nLas recetas están optimizadas con los ingredientes de Mercadona, para que ahorres tiempo y dinero al planificar tus comidas. Además, podrás ver cuánto te costaría esa misma lista de la compra en otros supermercados.";
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -484,6 +488,22 @@ export const RecipePreferencesPage = () => {
       clearTimeout(timer3);
     };
   }, [shouldShowAnimation, isGenerating]);
+  
+  // Typewriter effect
+  useEffect(() => {
+    if (!showFinalMessage || charIndex >= plainText.length) {
+      if (charIndex >= plainText.length && finalMessageCursor) {
+        setTimeout(() => setFinalMessageCursor(false), 500);
+      }
+      return;
+    }
+    
+    const timeout = setTimeout(() => {
+      setCharIndex(charIndex + 1);
+    }, 30);
+    
+    return () => clearTimeout(timeout);
+  }, [showFinalMessage, charIndex, plainText.length, finalMessageCursor]);
 
   const mealPlanPreview = generateMealPlan();
   const totalRecipesNeeded = mealSelections.length;
@@ -583,13 +603,67 @@ export const RecipePreferencesPage = () => {
 
             {/* Final message after animation */}
             {showFinalMessage && (
-              <div className="px-4 mb-6 animate-fade-in">
+              <div className="px-4 mb-6">
                 <div className="flex justify-start">
                   <div className="max-w-md">
                     <p className="text-base text-[#1C1C1C]">
-                      Hemos creado <span className="font-semibold">184 planes</span> pensados para ti.
-                      <br /><br />
-                      Las recetas están optimizadas con los ingredientes de <span className="font-semibold">Mercadona</span>, para que ahorres <span className="font-semibold">tiempo y dinero</span> al planificar tus comidas. Además, podrás ver <span className="font-semibold">cuánto te costaría esa misma lista de la compra en otros supermercados.</span>
+                      {plainText.slice(0, charIndex).split('\n').map((line, i, arr) => {
+                        if (i === 0) {
+                          // Primera línea con negrita en "184 planes"
+                          const text = line;
+                          const match = text.match(/^(Hemos creado )(184 planes)( pensados para ti\.)$/);
+                          if (match && charIndex >= match[1].length) {
+                            return (
+                              <span key={i}>
+                                {match[1]}
+                                {charIndex >= match[1].length + match[2].length ? (
+                                  <span className="font-semibold">{match[2]}</span>
+                                ) : (
+                                  <span className="font-semibold">{match[2].slice(0, charIndex - match[1].length)}</span>
+                                )}
+                                {charIndex > match[1].length + match[2].length && match[3].slice(0, charIndex - match[1].length - match[2].length)}
+                              </span>
+                            );
+                          }
+                          return <span key={i}>{text}</span>;
+                        } else if (line.includes('Mercadona') || line.includes('tiempo y dinero') || line.includes('cuánto te costaría')) {
+                          // Líneas con múltiples negritas
+                          let result = line;
+                          const segments = [];
+                          let lastIndex = 0;
+                          
+                          const boldWords = ['Mercadona', 'tiempo y dinero', 'cuánto te costaría esa misma lista de la compra en otros supermercados.'];
+                          boldWords.forEach(word => {
+                            const index = result.indexOf(word);
+                            if (index !== -1) {
+                              if (index > lastIndex) {
+                                segments.push({ text: result.slice(lastIndex, index), bold: false });
+                              }
+                              segments.push({ text: word, bold: true });
+                              lastIndex = index + word.length;
+                            }
+                          });
+                          if (lastIndex < result.length) {
+                            segments.push({ text: result.slice(lastIndex), bold: false });
+                          }
+                          
+                          return (
+                            <span key={i}>
+                              {i > 0 && arr[i - 1] === '' && <br />}
+                              {segments.map((seg, j) => 
+                                seg.bold ? (
+                                  <span key={j} className="font-semibold">{seg.text}</span>
+                                ) : (
+                                  <span key={j}>{seg.text}</span>
+                                )
+                              )}
+                            </span>
+                          );
+                        } else if (line === '') {
+                          return <br key={i} />;
+                        }
+                        return <span key={i}>{line}</span>;
+                      })}
                       {finalMessageCursor && <span className="animate-pulse">|</span>}
                     </p>
                   </div>
