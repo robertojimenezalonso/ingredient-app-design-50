@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent } from '@/components/ui/card';
+import { CardContent } from '@/components/ui/card';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 import { ArrowLeft, ArrowUp, Plus, MoreVertical, X, ChevronRight, User, Utensils, Flame, Apple, Search, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
@@ -14,6 +14,8 @@ import type { MealProfile } from '@/hooks/useMealProfiles';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/AuthModal';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
+import { DayRecipeList } from '@/components/DayRecipeList';
+import { Card } from '@/components/ui/card';
 
 type MealSelection = {
   date: Date;
@@ -105,6 +107,7 @@ export const RecipePreferencesPage = () => {
   const [showFinalMessage, setShowFinalMessage] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
   const [finalMessageCursor, setFinalMessageCursor] = useState(true);
+  const [totalMealPlanPrice, setTotalMealPlanPrice] = useState(0);
   
   // Texto sin formato para la animación
   const plainText = "Hemos creado 184 planes pensados para ti.\n\nLas recetas están optimizadas con los ingredientes de Mercadona, para que ahorres tiempo y dinero al planificar tus comidas. Además, podrás ver cuánto te costaría esa misma lista de la compra en otros supermercados.";
@@ -668,6 +671,22 @@ export const RecipePreferencesPage = () => {
                     </p>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Meal Plan Card - appears after final message */}
+            {showFinalMessage && charIndex >= plainText.length && (
+              <div className="px-4 pb-20" style={{ marginBottom: '80px' }}>
+                <Card className="bg-white shadow-lg overflow-hidden">
+                  <div className="h-full overflow-y-auto">
+                    <DayRecipeList 
+                      selectedDate={confirmedDates[0] || new Date()}
+                      onRecipeClick={(recipe) => console.log('Recipe clicked:', recipe)}
+                      onAddRecipe={(recipe) => console.log('Add recipe:', recipe)}
+                      onTotalPriceChange={setTotalMealPlanPrice}
+                    />
+                  </div>
+                </Card>
               </div>
             )}
 
