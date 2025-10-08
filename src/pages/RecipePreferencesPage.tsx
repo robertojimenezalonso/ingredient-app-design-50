@@ -531,10 +531,7 @@ export const RecipePreferencesPage = () => {
             {isGenerating && (
               <div className="px-4 mb-6">
                 <div className="flex justify-start">
-                  <div className="rounded-xl p-4 border max-w-md" style={{ 
-                    backgroundColor: '#F4F4F4',
-                    borderColor: '#D9DADC'
-                  }}>
+                  <div className="max-w-md">
                     {generationStep === 'searching' && (
                       <div className="flex items-center gap-2">
                         <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
