@@ -99,6 +99,9 @@ export const RecipePreferencesPage = () => {
   const [isGenerating, setIsGenerating] = useState(shouldShowAnimation);
   const [generationStep, setGenerationStep] = useState<'searching' | 'building' | 'complete'>(shouldShowAnimation ? 'searching' : 'complete');
   const [showRecipes, setShowRecipes] = useState(!shouldShowAnimation);
+  const [showLoadingDot, setShowLoadingDot] = useState(shouldShowAnimation);
+  const [showSearchingText, setShowSearchingText] = useState(false);
+  const [showBuildingText, setShowBuildingText] = useState(false);
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -448,11 +451,20 @@ export const RecipePreferencesPage = () => {
   useEffect(() => {
     if (!shouldShowAnimation || !isGenerating) return;
 
+    // Show dot first
+    const dotTimer = setTimeout(() => {
+      setShowLoadingDot(false);
+      setShowSearchingText(true);
+    }, 500);
+
     const timer1 = setTimeout(() => {
+      setShowSearchingText(false);
+      setShowBuildingText(true);
       setGenerationStep('building');
     }, 4000);
 
     const timer2 = setTimeout(() => {
+      setShowBuildingText(false);
       setGenerationStep('complete');
       setShowRecipes(true);
     }, 7000);
@@ -462,6 +474,7 @@ export const RecipePreferencesPage = () => {
     }, 8000);
 
     return () => {
+      clearTimeout(dotTimer);
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
@@ -532,18 +545,27 @@ export const RecipePreferencesPage = () => {
               <div className="px-4 mb-6">
                 <div className="flex justify-start">
                   <div className="max-w-md">
-                    {generationStep === 'searching' && (
-                      <div className="flex items-start gap-2">
-                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse mt-0.5" />
+                    {/* Loading dot */}
+                    {showLoadingDot && !showSearchingText && !showBuildingText && (
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-[#1C1C1C] rounded-full animate-pulse"></div>
+                      </div>
+                    )}
+
+                    {/* Searching text */}
+                    {showSearchingText && generationStep === 'searching' && (
+                      <div className="flex items-center gap-2">
+                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
                         <span className="text-[#1C1C1C] text-base animate-pulse">
                           Creando recetas con los ingredientes de {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                         </span>
                       </div>
                     )}
                     
-                    {generationStep === 'building' && (
-                      <div className="flex items-start gap-2">
-                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse mt-0.5" />
+                    {/* Building text */}
+                    {showBuildingText && generationStep === 'building' && (
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
                         <span className="text-[#1C1C1C] text-base animate-pulse">
                           Adaptando las recetas creadas a los días que pediste
                         </span>
