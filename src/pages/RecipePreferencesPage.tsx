@@ -608,7 +608,7 @@ export const RecipePreferencesPage = () => {
                 <div className="flex justify-start">
                   <div className="max-w-md">
                     <p className="text-base text-[#1C1C1C]">
-                      <span className="font-semibold">Hemos creado 184 planes pensados para ti.</span>
+                      Hemos creado <span className="font-semibold">184 planes</span> pensados para ti.
                       <br /><br />
                       Las recetas están optimizadas con los ingredientes de <span className="font-semibold">Mercadona</span>, para que ahorres <span className="font-semibold">tiempo y dinero</span> al planificar tus comidas. Además, podrás ver <span className="font-semibold">cuánto te costaría esa misma lista de la compra en otros supermercados.</span>
                       {finalMessageCursor && <span className="animate-pulse">|</span>}
