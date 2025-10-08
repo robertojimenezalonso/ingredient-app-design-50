@@ -601,44 +601,6 @@ export const RecipePreferencesPage = () => {
                       </div>
                     )}
                     
-                    {generationStep === 'complete' && showRecipes && (
-                      <div>
-                        <p className="text-sm font-semibold text-[#1C1C1C] mb-3">
-                          Con estas {uniqueRecipes} recetas podemos hacer {totalPlans} planes para ti
-                        </p>
-                        
-                        <div className="space-y-4">
-                          {mealPlanPreview.slice(0, 2).map((day, dayIndex) => (
-                            <div key={dayIndex}>
-                              <p className="text-xs font-medium text-[#666666] mb-2">
-                                {formatShortDate(day.date)}
-                              </p>
-                              <div className="flex gap-2">
-                                {day.meals.map((meal, mealIndex) => (
-                                  meal.recipe && (
-                                    <div key={mealIndex} className="flex flex-col items-center gap-1">
-                                      <div 
-                                        className="w-16 h-16 rounded-lg overflow-hidden bg-white"
-                                        style={{ border: '1px solid #E5E5E5' }}
-                                      >
-                                        <img 
-                                          src={meal.recipe.image_url} 
-                                          alt={meal.recipe.title}
-                                          className="w-full h-full object-cover"
-                                        />
-                                      </div>
-                                      <span className="text-[10px] text-[#666666]">
-                                        {meal.mealType}
-                                      </span>
-                                    </div>
-                                  )
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
