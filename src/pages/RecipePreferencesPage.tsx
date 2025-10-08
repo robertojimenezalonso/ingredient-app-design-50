@@ -675,16 +675,92 @@ export const RecipePreferencesPage = () => {
             )}
 
             {/* Meal Plan Card - appears after final message */}
-            {showFinalMessage && charIndex >= plainText.length && (
+            {showFinalMessage && charIndex >= plainText.length && confirmedDates[0] && (
               <div className="px-4 pb-20" style={{ marginBottom: '80px' }}>
-                <Card className="bg-white shadow-lg overflow-hidden">
-                  <div className="h-full overflow-y-auto">
-                    <DayRecipeList 
-                      selectedDate={confirmedDates[0] || new Date()}
-                      onRecipeClick={(recipe) => console.log('Recipe clicked:', recipe)}
-                      onAddRecipe={(recipe) => console.log('Add recipe:', recipe)}
-                      onTotalPriceChange={setTotalMealPlanPrice}
-                    />
+                <Card className="bg-white shadow-lg rounded-xl p-6">
+                  {/* Date Header */}
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="text-3xl font-bold border-b-4 border-foreground pb-1 inline-block capitalize">
+                      {format(confirmedDates[0], "MMM. d", { locale: es })}
+                    </h3>
+                    <button className="w-10 h-10 rounded-lg bg-background hover:bg-accent flex items-center justify-center transition-colors">
+                      <Plus className="w-6 h-6" />
+                    </button>
+                  </div>
+
+                  {/* Recipe Cards */}
+                  <div className="space-y-4">
+                    {mealSelections
+                      .filter(selection => 
+                        format(selection.date, 'yyyy-MM-dd') === format(confirmedDates[0], 'yyyy-MM-dd')
+                      )
+                      .slice(0, 2)
+                      .map((selection, index) => {
+                        const categoryMap: Record<string, string> = {
+                          'Desayuno': 'breakfast',
+                          'Comida': 'lunch',
+                          'Cena': 'dinner',
+                          'Merienda': 'snacks'
+                        };
+                        
+                        const category = categoryMap[selection.mealType] || 'lunch';
+                        const categoryRecipes = recipes.filter(r => r.category === category);
+                        const recipe = categoryRecipes[index % categoryRecipes.length] || recipes[0];
+                        
+                        if (!recipe) return null;
+                        
+                        const mealLabels: Record<string, string> = {
+                          'Desayuno': 'Desa.',
+                          'Comida': 'Comi.',
+                          'Merienda': 'Meri.',
+                          'Cena': 'Cena'
+                        };
+                        
+                        return (
+                          <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors cursor-pointer">
+                            {/* Recipe Image */}
+                            <img 
+                              src={recipe.image} 
+                              alt={recipe.title}
+                              className="w-24 h-24 rounded-xl object-cover flex-shrink-0"
+                            />
+                            
+                            {/* Recipe Info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-2 mb-2">
+                                <h4 className="font-semibold text-lg truncate flex-1">
+                                  {recipe.title}
+                                </h4>
+                                <Badge variant="secondary" className="flex-shrink-0 text-xs px-2 py-1">
+                                  {mealLabels[selection.mealType] || selection.mealType}
+                                </Badge>
+                              </div>
+                              
+                              {/* Calories */}
+                              <div className="flex items-center gap-1 mb-2">
+                                <Flame className="w-4 h-4" />
+                                <span className="font-medium">{recipe.calories} kcal</span>
+                              </div>
+                              
+                              {/* Macros */}
+                              <div className="flex items-center gap-4 text-sm">
+                                <div className="flex items-center gap-1">
+                                  <div className="w-2 h-2 rounded-full bg-red-500" />
+                                  <span>{recipe.macros.protein}g</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                  <span>{recipe.macros.carbs}g</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <div className="w-2 h-2 rounded-full bg-blue-500" />
+                                  <span>{recipe.macros.fat}g</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
                 </Card>
               </div>
