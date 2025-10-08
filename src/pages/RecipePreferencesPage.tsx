@@ -106,7 +106,7 @@ export const RecipePreferencesPage = () => {
   const [displayedFinalMessage, setDisplayedFinalMessage] = useState('');
   const [finalMessageCursor, setFinalMessageCursor] = useState(true);
   
-  const finalMessageText = "Hemos encontrado cientos de posibles combinaciones para ti, selecciona la que más te gusta y compara el precio con otros supermercados";
+  const finalMessageText = "Hemos creado 184 planes pensados para ti. Las recetas están optimizadas con los ingredientes de Mercadona, para que ahorres tiempo y dinero al planificar tus comidas. Además, podrás ver cuánto te costaría esa misma lista de la compra en otros supermercados.";
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -608,7 +608,7 @@ export const RecipePreferencesPage = () => {
                 <div className="flex justify-start">
                   <div className="max-w-md">
                     <p className="text-base text-[#1C1C1C]">
-                      {displayedFinalMessage}
+                      Hemos creado 184 planes pensados para ti. Las recetas están optimizadas con los ingredientes de <span className="font-semibold">Mercadona</span>, para que ahorres <span className="font-semibold">tiempo y dinero</span> al planificar tus comidas. Además, podrás ver <span className="font-semibold">cuánto te costaría esa misma lista de la compra en otros supermercados.</span>
                       {finalMessageCursor && <span className="animate-pulse">|</span>}
                     </p>
                   </div>
