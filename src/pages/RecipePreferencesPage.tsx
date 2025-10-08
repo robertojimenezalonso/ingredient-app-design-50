@@ -455,23 +455,23 @@ export const RecipePreferencesPage = () => {
     const dotTimer = setTimeout(() => {
       setShowLoadingDot(false);
       setShowSearchingText(true);
-    }, 500);
+    }, 2000);
 
     const timer1 = setTimeout(() => {
       setShowSearchingText(false);
       setShowBuildingText(true);
       setGenerationStep('building');
-    }, 4000);
+    }, 6000);
 
     const timer2 = setTimeout(() => {
       setShowBuildingText(false);
       setGenerationStep('complete');
       setShowRecipes(true);
-    }, 7000);
+    }, 9000);
 
     const timer3 = setTimeout(() => {
       setIsGenerating(false);
-    }, 8000);
+    }, 10000);
 
     return () => {
       clearTimeout(dotTimer);
@@ -555,8 +555,8 @@ export const RecipePreferencesPage = () => {
                     {/* Searching text */}
                     {showSearchingText && generationStep === 'searching' && (
                       <div className="flex items-center gap-2">
-                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
-                        <span className="text-[#1C1C1C] text-base animate-pulse">
+                        <Search className="w-4 h-4 text-[#1C1C1C] animate-pulse flex-shrink-0" />
+                        <span className="text-[#1C1C1C] text-base animate-pulse leading-4">
                           Creando recetas con los ingredientes de {selectedSupermarket === 'mercadona' ? 'Mercadona' : selectedSupermarket === 'carrefour' ? 'Carrefour' : selectedSupermarket === 'lidl' ? 'Lidl' : 'Alcampo'}
                         </span>
                       </div>
@@ -565,8 +565,8 @@ export const RecipePreferencesPage = () => {
                     {/* Building text */}
                     {showBuildingText && generationStep === 'building' && (
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse" />
-                        <span className="text-[#1C1C1C] text-base animate-pulse">
+                        <Calendar className="w-4 h-4 text-[#1C1C1C] animate-pulse flex-shrink-0" />
+                        <span className="text-[#1C1C1C] text-base animate-pulse leading-4">
                           Adaptando las recetas creadas a los días que pediste
                         </span>
                       </div>
