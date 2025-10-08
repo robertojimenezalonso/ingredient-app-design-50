@@ -103,7 +103,10 @@ export const RecipePreferencesPage = () => {
   const [showSearchingText, setShowSearchingText] = useState(false);
   const [showBuildingText, setShowBuildingText] = useState(false);
   const [showFinalMessage, setShowFinalMessage] = useState(false);
+  const [displayedFinalMessage, setDisplayedFinalMessage] = useState('');
   const [finalMessageCursor, setFinalMessageCursor] = useState(true);
+  
+  const finalMessageText = "Hemos encontrado cientos de posibles combinaciones para ti, selecciona la que más te gusta y compara el precio con otros supermercados";
   
   // Show auth modal if not authenticated after loading
   useEffect(() => {
@@ -488,6 +491,24 @@ export const RecipePreferencesPage = () => {
       clearTimeout(timer4);
     };
   }, [shouldShowAnimation, isGenerating]);
+  
+  // Typewriter effect for final message
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (showFinalMessage && displayedFinalMessage.length < finalMessageText.length) {
+      timeout = setTimeout(() => {
+        setDisplayedFinalMessage(finalMessageText.slice(0, displayedFinalMessage.length + 1));
+      }, 30); // 30ms per character for typewriter speed
+    } else if (showFinalMessage && displayedFinalMessage.length === finalMessageText.length) {
+      // Hide cursor after text is complete
+      setTimeout(() => {
+        setFinalMessageCursor(false);
+      }, 500);
+    }
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [showFinalMessage, displayedFinalMessage, finalMessageText]);
 
   const mealPlanPreview = generateMealPlan();
   const totalRecipesNeeded = mealSelections.length;
@@ -629,7 +650,7 @@ export const RecipePreferencesPage = () => {
                 <div className="flex justify-start">
                   <div className="max-w-md">
                     <p className="text-base text-[#1C1C1C]">
-                      Hemos encontrado cientos de posibles combinaciones para ti, selecciona la que más te gusta y compara el precio con otros supermercados
+                      {displayedFinalMessage}
                       {finalMessageCursor && <span className="animate-pulse">|</span>}
                     </p>
                   </div>
