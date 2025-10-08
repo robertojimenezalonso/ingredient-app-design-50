@@ -188,6 +188,9 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
   const [macrosShowCalories, setMacrosShowCalories] = useState(false);
   const [macrosShowMacros, setMacrosShowMacros] = useState(false);
 
+  // Helper functions
+  const getDefaultName = () => `Comensal ${profileIndex + 1}`;
+
   // Parse existing data if editing
   const parseBirthDate = (birthDateStr?: string) => {
     if (!birthDateStr) return {
@@ -1423,7 +1426,6 @@ export const ProfileCreationDrawer = forwardRef<ProfileCreationDrawerRef, Profil
     // Each step is worth 10%
     return completedSteps * 10;
   };
-  const getDefaultName = () => `Comensal ${profileIndex + 1}`;
   const getInitials = (name: string) => {
     if (!name) return `C${profileIndex + 1}`;
     const parts = name.trim().split(' ');
