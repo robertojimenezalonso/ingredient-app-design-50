@@ -15,6 +15,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/AuthModal';
 import { useRecipeBank } from '@/hooks/useRecipeBank';
 import { DayRecipeList } from '@/components/DayRecipeList';
+import { RecipeGridCard } from '@/components/RecipeGridCard';
 import { Card } from '@/components/ui/card';
 
 type MealSelection = {
@@ -717,48 +718,13 @@ export const RecipePreferencesPage = () => {
                         };
                         
                         return (
-                          <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors cursor-pointer">
-                            {/* Recipe Image */}
-                            <img 
-                              src={recipe.image} 
-                              alt={recipe.title}
-                              className="w-24 h-24 rounded-xl object-cover flex-shrink-0"
-                            />
-                            
-                            {/* Recipe Info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-start justify-between gap-2 mb-2">
-                                <h4 className="font-semibold text-lg truncate flex-1">
-                                  {recipe.title}
-                                </h4>
-                                <Badge variant="secondary" className="flex-shrink-0 text-xs px-2 py-1">
-                                  {mealLabels[selection.mealType] || selection.mealType}
-                                </Badge>
-                              </div>
-                              
-                              {/* Calories */}
-                              <div className="flex items-center gap-1 mb-2">
-                                <Flame className="w-4 h-4" />
-                                <span className="font-medium">{recipe.calories} kcal</span>
-                              </div>
-                              
-                              {/* Macros */}
-                              <div className="flex items-center gap-4 text-sm">
-                                <div className="flex items-center gap-1">
-                                  <div className="w-2 h-2 rounded-full bg-red-500" />
-                                  <span>{recipe.macros.protein}g</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                  <span>{recipe.macros.carbs}g</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <div className="w-2 h-2 rounded-full bg-blue-500" />
-                                  <span>{recipe.macros.fat}g</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
+                          <RecipeGridCard
+                            key={index}
+                            recipe={recipe}
+                            onAdd={() => {}}
+                            onClick={() => {}}
+                            mealType={selection.mealType}
+                          />
                         );
                       })}
                   </div>
