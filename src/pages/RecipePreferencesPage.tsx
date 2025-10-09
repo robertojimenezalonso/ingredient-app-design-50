@@ -736,7 +736,7 @@ export const RecipePreferencesPage = () => {
                             <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
                               {/* Header with title and badge */}
                               <div className="flex items-start gap-2 mb-2 relative">
-                                <h4 className="font-medium text-base leading-tight mt-2 w-[140px] overflow-hidden whitespace-nowrap text-ellipsis">
+                                <h4 className="font-medium text-base leading-tight mt-2 flex-1 overflow-hidden whitespace-nowrap text-ellipsis pr-2">
                                   {recipe.title}
                                 </h4>
                                 <Badge 
