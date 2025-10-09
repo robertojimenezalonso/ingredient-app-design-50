@@ -677,16 +677,25 @@ export const RecipePreferencesPage = () => {
 
             {/* Meal Plan Card - appears after final message */}
             {showFinalMessage && charIndex >= plainText.length && confirmedDates[0] && (
-              <div className="px-4 pb-20" style={{ marginBottom: '80px' }}>
-                <Card className="bg-white shadow-lg rounded-xl p-6">
+              <div className="px-3 pb-20" style={{ marginBottom: '80px' }}>
+                <div 
+                  className="border-none px-3 py-2 mb-3 cursor-pointer rounded-lg"
+                  style={{ backgroundColor: '#F6F6F6' }}
+                >
                   {/* Date Header */}
-                  <div className="flex items-center justify-between mb-6">
-                    <h3 className="text-3xl font-bold border-b-4 border-foreground pb-1 inline-block capitalize">
+                  <div 
+                    className="flex items-center justify-between"
+                    style={{ backgroundColor: '#F6F6F6' }}
+                  >
+                    <h3 
+                      className="text-sm capitalize font-semibold underline"
+                      style={{ 
+                        color: '#000000',
+                        textUnderlineOffset: '4px'
+                      }}
+                    >
                       {format(confirmedDates[0], "MMM. d", { locale: es })}
                     </h3>
-                    <button className="w-10 h-10 rounded-lg bg-background hover:bg-accent flex items-center justify-center transition-colors">
-                      <Plus className="w-6 h-6" />
-                    </button>
                   </div>
 
                   {/* Recipe Cards */}
@@ -776,7 +785,7 @@ export const RecipePreferencesPage = () => {
                         );
                       })}
                   </div>
-                </Card>
+                </div>
               </div>
             )}
 
