@@ -718,7 +718,11 @@ export const RecipePreferencesPage = () => {
                         };
                         
                         return (
-                          <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors cursor-pointer">
+                          <div 
+                            key={index} 
+                            className="flex items-center gap-3 p-2 rounded-xl bg-white cursor-pointer transition-transform duration-200 h-[120px] mb-3"
+                            style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', border: '1px solid #F8F8FC' }}
+                          >
                             {/* Recipe Image */}
                             <img 
                               src={recipe.image} 
