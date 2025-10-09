@@ -720,46 +720,55 @@ export const RecipePreferencesPage = () => {
                         return (
                           <div 
                             key={index} 
-                            className="flex items-center gap-3 p-2 rounded-xl bg-white cursor-pointer transition-transform duration-200 h-[120px] mb-3"
+                            className="flex items-center gap-3 p-2 rounded-xl bg-white cursor-pointer transition-transform duration-200 h-[120px] mb-3 relative w-full"
                             style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', border: '1px solid #F8F8FC' }}
                           >
-                            {/* Recipe Image */}
-                            <img 
-                              src={recipe.image} 
-                              alt={recipe.title}
-                              className="w-24 h-24 rounded-xl object-cover flex-shrink-0"
-                            />
+                            {/* Recipe Image Container */}
+                            <div className="relative flex-shrink-0">
+                              <img 
+                                src={recipe.image} 
+                                alt={recipe.title}
+                                className="w-[104px] h-[104px] object-cover rounded-lg"
+                              />
+                            </div>
                             
-                            {/* Recipe Info */}
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-start justify-between gap-2 mb-2">
-                                <h4 className="font-semibold text-lg truncate flex-1">
+                            {/* Recipe Content */}
+                            <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
+                              {/* Header with title and badge */}
+                              <div className="flex items-start gap-2 mb-2 relative">
+                                <h4 className="font-medium text-base leading-tight mt-2 w-[140px] overflow-hidden whitespace-nowrap text-ellipsis">
                                   {recipe.title}
                                 </h4>
-                                <Badge variant="secondary" className="flex-shrink-0 text-xs px-2 py-1">
+                                <Badge 
+                                  className="text-xs font-normal px-2 py-1 absolute right-2 top-1 min-w-fit z-50"
+                                  style={{ backgroundColor: '#F6F6F6', color: '#000000' }}
+                                >
                                   {mealLabels[selection.mealType] || selection.mealType}
                                 </Badge>
                               </div>
                               
-                              {/* Calories */}
-                              <div className="flex items-center gap-1 mb-2">
-                                <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-                                <span className="font-medium">{recipe.calories} kcal</span>
-                              </div>
-                              
-                              {/* Macros */}
-                              <div className="flex items-center gap-4 text-sm">
-                                <div className="flex items-center gap-1">
-                                  <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
-                                  <span>{Math.round(recipe.macros.protein)}g</span>
+                              {/* Nutrition info */}
+                              <div className="mb-1.5">
+                                {/* Calories */}
+                                <div className="flex items-center gap-1 mb-2">
+                                  <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
                                 </div>
-                                <div className="flex items-center gap-1">
-                                  <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
-                                  <span>{Math.round(recipe.macros.carbs)}g</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
-                                  <span>{Math.round(recipe.macros.fat)}g</span>
+                                
+                                {/* Macros */}
+                                <div className="flex items-center gap-4">
+                                  <div className="flex items-center gap-1">
+                                    <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                                    <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.protein)}g</span>
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                                    <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.carbs)}g</span>
+                                  </div>
+                                  <div className="flex items-center gap-1">
+                                    <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                                    <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.fat)}g</span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
