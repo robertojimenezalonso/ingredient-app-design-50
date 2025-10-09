@@ -678,11 +678,11 @@ export const RecipePreferencesPage = () => {
             {/* Meal Plan Card - appears after final message */}
             {showFinalMessage && charIndex >= plainText.length && confirmedDates[0] && (
               <div className="px-3 pb-20" style={{ marginBottom: '80px' }}>
+                {/* Day Card - Independent header */}
                 <div 
                   className="border-none px-3 py-2 mb-3 cursor-pointer rounded-lg"
                   style={{ backgroundColor: '#F6F6F6' }}
                 >
-                  {/* Date Header */}
                   <div 
                     className="flex items-center justify-between"
                     style={{ backgroundColor: '#F6F6F6' }}
@@ -697,94 +697,94 @@ export const RecipePreferencesPage = () => {
                       {format(confirmedDates[0], "MMM. d", { locale: es })}
                     </h3>
                   </div>
+                </div>
 
-                  {/* Recipe Cards */}
-                  <div className="space-y-4">
-                    {mealSelections
-                      .filter(selection => 
-                        format(selection.date, 'yyyy-MM-dd') === format(confirmedDates[0], 'yyyy-MM-dd')
-                      )
-                      .slice(0, 2)
-                      .map((selection, index) => {
-                        const categoryMap: Record<string, string> = {
-                          'Desayuno': 'breakfast',
-                          'Comida': 'lunch',
-                          'Cena': 'dinner',
-                          'Merienda': 'snacks'
-                        };
-                        
-                        const category = categoryMap[selection.mealType] || 'lunch';
-                        const categoryRecipes = recipes.filter(r => r.category === category);
-                        const recipe = categoryRecipes[index % categoryRecipes.length] || recipes[0];
-                        
-                        if (!recipe) return null;
-                        
-                        const mealLabels: Record<string, string> = {
-                          'Desayuno': 'Desa.',
-                          'Comida': 'Comi.',
-                          'Merienda': 'Meri.',
-                          'Cena': 'Cena'
-                        };
-                        
-                        return (
-                          <div 
-                            key={index} 
-                            className="flex items-center gap-3 p-2 rounded-xl bg-white cursor-pointer transition-transform duration-200 h-[120px] mb-3 relative w-full"
-                            style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', border: '1px solid #F8F8FC' }}
-                          >
-                            {/* Recipe Image Container */}
-                            <div className="relative flex-shrink-0">
-                              <img 
-                                src={recipe.image} 
-                                alt={recipe.title}
-                                className="w-[104px] h-[104px] object-cover rounded-lg"
-                              />
+                {/* Recipe Cards - Below the day card */}
+                <div className="space-y-0">
+                  {mealSelections
+                    .filter(selection => 
+                      format(selection.date, 'yyyy-MM-dd') === format(confirmedDates[0], 'yyyy-MM-dd')
+                    )
+                    .slice(0, 2)
+                    .map((selection, index) => {
+                      const categoryMap: Record<string, string> = {
+                        'Desayuno': 'breakfast',
+                        'Comida': 'lunch',
+                        'Cena': 'dinner',
+                        'Merienda': 'snacks'
+                      };
+                      
+                      const category = categoryMap[selection.mealType] || 'lunch';
+                      const categoryRecipes = recipes.filter(r => r.category === category);
+                      const recipe = categoryRecipes[index % categoryRecipes.length] || recipes[0];
+                      
+                      if (!recipe) return null;
+                      
+                      const mealLabels: Record<string, string> = {
+                        'Desayuno': 'Desa.',
+                        'Comida': 'Comi.',
+                        'Merienda': 'Meri.',
+                        'Cena': 'Cena'
+                      };
+                      
+                      return (
+                        <div 
+                          key={index} 
+                          className="flex items-center gap-3 p-2 rounded-xl bg-white cursor-pointer transition-transform duration-200 h-[120px] mb-3 relative w-full"
+                          style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', border: '1px solid #F8F8FC' }}
+                        >
+                          {/* Recipe Image Container */}
+                          <div className="relative flex-shrink-0">
+                            <img 
+                              src={recipe.image} 
+                              alt={recipe.title}
+                              className="w-[104px] h-[104px] object-cover rounded-lg"
+                            />
+                          </div>
+                          
+                          {/* Recipe Content */}
+                          <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
+                            {/* Header with title and badge */}
+                            <div className="flex items-start gap-2 mb-2 relative">
+                              <h4 className="font-medium text-base leading-tight mt-2 flex-1 overflow-hidden whitespace-nowrap text-ellipsis pr-2">
+                                {recipe.title}
+                              </h4>
+                              <Badge 
+                                className="text-xs font-normal px-2 py-1 absolute right-2 top-1 min-w-fit z-50"
+                                style={{ backgroundColor: '#F6F6F6', color: '#000000' }}
+                              >
+                                {mealLabels[selection.mealType] || selection.mealType}
+                              </Badge>
                             </div>
                             
-                            {/* Recipe Content */}
-                            <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
-                              {/* Header with title and badge */}
-                              <div className="flex items-start gap-2 mb-2 relative">
-                                <h4 className="font-medium text-base leading-tight mt-2 flex-1 overflow-hidden whitespace-nowrap text-ellipsis pr-2">
-                                  {recipe.title}
-                                </h4>
-                                <Badge 
-                                  className="text-xs font-normal px-2 py-1 absolute right-2 top-1 min-w-fit z-50"
-                                  style={{ backgroundColor: '#F6F6F6', color: '#000000' }}
-                                >
-                                  {mealLabels[selection.mealType] || selection.mealType}
-                                </Badge>
+                            {/* Nutrition info */}
+                            <div className="mb-1.5">
+                              {/* Calories */}
+                              <div className="flex items-center gap-1 mb-2">
+                                <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                                <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
                               </div>
                               
-                              {/* Nutrition info */}
-                              <div className="mb-1.5">
-                                {/* Calories */}
-                                <div className="flex items-center gap-1 mb-2">
-                                  <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
+                              {/* Macros */}
+                              <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.protein)}g</span>
                                 </div>
-                                
-                                {/* Macros */}
-                                <div className="flex items-center gap-4">
-                                  <div className="flex items-center gap-1">
-                                    <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
-                                    <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.protein)}g</span>
-                                  </div>
-                                  <div className="flex items-center gap-1">
-                                    <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
-                                    <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.carbs)}g</span>
-                                  </div>
-                                  <div className="flex items-center gap-1">
-                                    <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
-                                    <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.fat)}g</span>
-                                  </div>
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.carbs)}g</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.fat)}g</span>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        );
-                      })}
-                  </div>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             )}
