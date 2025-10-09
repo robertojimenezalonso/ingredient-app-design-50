@@ -690,7 +690,7 @@ export const RecipePreferencesPage = () => {
                     <div 
                       key={format(date, 'yyyy-MM-dd')} 
                       className="mb-6 bg-white rounded-xl p-4"
-                      style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)' }}
+                      style={{ border: '1px solid #F8F8FC' }}
                     >
                       {/* Day Card - Independent header */}
                       <div 
