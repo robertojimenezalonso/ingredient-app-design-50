@@ -687,7 +687,11 @@ export const RecipePreferencesPage = () => {
                   if (daySelections.length === 0) return null;
 
                   return (
-                    <div key={format(date, 'yyyy-MM-dd')} className="mb-6">
+                    <div 
+                      key={format(date, 'yyyy-MM-dd')} 
+                      className="mb-6 bg-white rounded-xl p-4"
+                      style={{ boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)' }}
+                    >
                       {/* Day Card - Independent header */}
                       <div 
                         className="border-none px-3 py-2 mb-3 cursor-pointer rounded-lg"
