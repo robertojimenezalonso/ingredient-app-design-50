@@ -718,13 +718,48 @@ export const RecipePreferencesPage = () => {
                         };
                         
                         return (
-                          <RecipeGridCard
-                            key={index}
-                            recipe={recipe}
-                            onAdd={() => {}}
-                            onClick={() => {}}
-                            mealType={selection.mealType}
-                          />
+                          <div key={index} className="flex items-center gap-4 p-4 rounded-xl bg-accent/50 hover:bg-accent transition-colors cursor-pointer">
+                            {/* Recipe Image */}
+                            <img 
+                              src={recipe.image} 
+                              alt={recipe.title}
+                              className="w-24 h-24 rounded-xl object-cover flex-shrink-0"
+                            />
+                            
+                            {/* Recipe Info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-start justify-between gap-2 mb-2">
+                                <h4 className="font-semibold text-lg truncate flex-1">
+                                  {recipe.title}
+                                </h4>
+                                <Badge variant="secondary" className="flex-shrink-0 text-xs px-2 py-1">
+                                  {mealLabels[selection.mealType] || selection.mealType}
+                                </Badge>
+                              </div>
+                              
+                              {/* Calories */}
+                              <div className="flex items-center gap-1 mb-2">
+                                <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                                <span className="font-medium">{recipe.calories} kcal</span>
+                              </div>
+                              
+                              {/* Macros */}
+                              <div className="flex items-center gap-4 text-sm">
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                                  <span>{Math.round(recipe.macros.protein)}g</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                                  <span>{Math.round(recipe.macros.carbs)}g</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                                  <span>{Math.round(recipe.macros.fat)}g</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         );
                       })}
                   </div>
