@@ -899,60 +899,91 @@ export const RecipePreferencesPage = () => {
               </div>
             )}
 
-            {/* Expanded View - Full Screen */}
+            {/* Expanded View - Full Screen with same design */}
             {isExpanded && (
               <div 
-                className="fixed inset-0 bg-white z-50 overflow-y-auto animate-fade-in"
+                className="fixed inset-0 z-50 overflow-y-auto animate-fade-in"
                 style={{ 
+                  backgroundColor: '#FFFFFF',
                   paddingTop: '64px',
                   paddingBottom: '24px'
                 }}
               >
-                <div className="max-w-7xl mx-auto px-4">
-                  <h2 className="text-2xl font-semibold mb-6" style={{ color: '#1C1C1C' }}>
-                    Todas las recetas disponibles
-                  </h2>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {allExpandedRecipes.map((recipe, index) => (
-                      <div 
-                        key={recipe.id || index}
-                        className="bg-white rounded-xl overflow-hidden animate-fade-in"
-                        style={{ 
-                          border: '1px solid #F8F8FC',
-                          animationDelay: `${index * 0.03}s`
-                        }}
-                      >
-                        <img 
-                          src={recipe.image} 
-                          alt={recipe.title}
-                          className="w-full h-48 object-cover"
-                        />
-                        <div className="p-4">
-                          <h3 className="font-medium text-lg mb-2" style={{ color: '#1C1C1C' }}>
-                            {recipe.title}
-                          </h3>
-                          <div className="flex items-center gap-4 text-sm" style={{ color: '#6C6C6C' }}>
-                            <div className="flex items-center gap-1">
-                              <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-                              <span>{recipe.calories} kcal</span>
+                <div className="px-3 pb-20">
+                  <div 
+                    className="bg-white rounded-xl p-4"
+                    style={{ border: '1px solid #F8F8FC' }}
+                  >
+                    {/* Show all recipes with same design */}
+                    {allExpandedRecipes.map((recipe, index) => {
+                      const mealLabels: Record<string, string> = {
+                        'breakfast': 'Desa.',
+                        'lunch': 'Comi.',
+                        'snacks': 'Meri.',
+                        'dinner': 'Cena'
+                      };
+                      
+                      return (
+                        <div 
+                          key={recipe.id || index}
+                          className="flex items-center gap-3 p-2 rounded-xl bg-white cursor-pointer transition-transform duration-200 h-[120px] mb-3 relative w-full"
+                          style={{ 
+                            border: '1px solid #F8F8FC',
+                            animationDelay: `${index * 0.02}s`
+                          }}
+                        >
+                          {/* Recipe Image Container */}
+                          <div className="relative flex-shrink-0">
+                            <img 
+                              src={recipe.image} 
+                              alt={recipe.title}
+                              className="w-[104px] h-[104px] object-cover rounded-lg"
+                            />
+                          </div>
+                          
+                          {/* Recipe Content */}
+                          <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
+                            {/* Header with title and badge */}
+                            <div className="flex items-start gap-2 mb-2 relative">
+                              <h4 className="font-medium text-base leading-tight mt-2 w-[140px] overflow-hidden whitespace-nowrap text-ellipsis">
+                                {recipe.title}
+                              </h4>
+                              <Badge 
+                                className="text-xs font-normal px-2 py-1 absolute right-2 top-1 min-w-fit z-50"
+                                style={{ backgroundColor: '#F6F6F6', color: '#000000' }}
+                              >
+                                {mealLabels[recipe.category] || 'Comi.'}
+                              </Badge>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
-                              <span>{Math.round(recipe.macros.protein)}g</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
-                              <span>{Math.round(recipe.macros.carbs)}g</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
-                              <span>{Math.round(recipe.macros.fat)}g</span>
+                            
+                            {/* Nutrition info */}
+                            <div className="mb-1.5">
+                              {/* Calories */}
+                              <div className="flex items-center gap-1 mb-2">
+                                <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                                <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
+                              </div>
+                              
+                              {/* Macros */}
+                              <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.protein)}g</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.carbs)}g</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.fat)}g</span>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </div>
