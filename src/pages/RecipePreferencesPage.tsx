@@ -110,13 +110,6 @@ export const RecipePreferencesPage = () => {
   const [finalMessageCursor, setFinalMessageCursor] = useState(true);
   const [totalMealPlanPrice, setTotalMealPlanPrice] = useState(0);
   
-  // Expansion states
-  const [isExpanding, setIsExpanding] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [expansionProgress, setExpansionProgress] = useState(0);
-  const recipesAreaRef = useRef<HTMLDivElement>(null);
-  const lastScrollY = useRef(0);
-  
   // Texto sin formato para la animación
   const plainText = "Hemos creado 184 planes pensados para ti.\n\nLas recetas están optimizadas con los ingredientes de Mercadona, para que ahorres tiempo y dinero al planificar tus comidas. Además, podrás ver cuánto te costaría esa misma lista de la compra en otros supermercados.";
   
@@ -521,80 +514,6 @@ export const RecipePreferencesPage = () => {
   const uniqueRecipes = new Set(mealPlanPreview.flatMap(day => day.meals.map(m => m.recipe?.id))).size;
   const totalPlans = Math.floor(recipes.length / totalRecipesNeeded) * 10;
 
-  // Handle expansion animation
-  const startExpansion = () => {
-    if (isExpanded || isExpanding) return;
-    setIsExpanding(true);
-    lastScrollY.current = window.scrollY;
-    
-    let progress = 0;
-    const duration = 800; // 800ms animation
-    const startTime = Date.now();
-    
-    const animate = () => {
-      const elapsed = Date.now() - startTime;
-      progress = Math.min(elapsed / duration, 1);
-      
-      setExpansionProgress(progress);
-      
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setIsExpanding(false);
-        setIsExpanded(true);
-      }
-    };
-    
-    animate();
-  };
-
-  const cancelExpansion = () => {
-    if (isExpanded) return; // Can't cancel if already expanded
-    if (!isExpanding) return;
-    
-    setIsExpanding(false);
-    setExpansionProgress(0);
-  };
-
-  // Handle click on recipes area
-  const handleRecipesAreaClick = () => {
-    startExpansion();
-  };
-
-  // Handle scroll to detect scroll down/up
-  useEffect(() => {
-    if (!showFinalMessage) return;
-    
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      // Scroll down detection - start expansion
-      if (currentScrollY > lastScrollY.current && !isExpanding && !isExpanded) {
-        const recipesArea = recipesAreaRef.current;
-        if (recipesArea) {
-          const rect = recipesArea.getBoundingClientRect();
-          // If recipes area is in viewport and scrolling down
-          if (rect.top < window.innerHeight && rect.bottom > 0) {
-            startExpansion();
-          }
-        }
-      }
-      
-      // Scroll up detection during expansion - cancel
-      if (currentScrollY < lastScrollY.current && isExpanding && !isExpanded) {
-        cancelExpansion();
-      }
-      
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [showFinalMessage, isExpanding, isExpanded]);
-
-  // Generate all recipes for expanded view
-  const allExpandedRecipes = recipes.slice(0, 50); // Show first 50 recipes
-
   useEffect(() => {
     if (skipAnimations || fullText.length === 0) return;
     
@@ -757,27 +676,12 @@ export const RecipePreferencesPage = () => {
             )}
 
             {/* Meal Plan Card - appears after final message */}
-            {showFinalMessage && charIndex >= plainText.length && confirmedDates[0] && !isExpanded && (
-              <div 
-                ref={recipesAreaRef}
-                className="px-3 pb-20 transition-all duration-300" 
-                style={{ 
-                  marginBottom: '80px',
-                  position: isExpanding ? 'fixed' : 'relative',
-                  top: isExpanding ? '0' : 'auto',
-                  left: isExpanding ? '0' : 'auto',
-                  right: isExpanding ? '0' : 'auto',
-                  bottom: isExpanding ? '0' : 'auto',
-                  zIndex: isExpanding ? 50 : 'auto',
-                  transform: isExpanding ? `scale(${1 + expansionProgress * 0.2})` : 'scale(1)',
-                  opacity: isExpanding ? 1 - expansionProgress * 0.3 : 1
-                }}
-              >
+            {showFinalMessage && charIndex >= plainText.length && confirmedDates[0] && (
+              <div className="px-3 pb-20" style={{ marginBottom: '80px' }}>
                 {/* Single mother card containing all days */}
                 <div 
-                  className="bg-white rounded-xl p-4 cursor-pointer"
+                  className="bg-white rounded-xl p-4"
                   style={{ border: '1px solid #F8F8FC' }}
-                  onClick={handleRecipesAreaClick}
                 >
                   {/* Group selections by date */}
                   {confirmedDates.map((date) => {
@@ -895,96 +799,6 @@ export const RecipePreferencesPage = () => {
                       </div>
                     );
                   })}
-                </div>
-              </div>
-            )}
-
-            {/* Expanded View - Full Screen with same design */}
-            {isExpanded && (
-              <div 
-                className="fixed inset-0 z-50 overflow-y-auto animate-fade-in"
-                style={{ 
-                  backgroundColor: '#FFFFFF',
-                  paddingTop: '64px',
-                  paddingBottom: '24px'
-                }}
-              >
-                <div className="px-3 pb-20">
-                  <div 
-                    className="bg-white rounded-xl p-4"
-                    style={{ border: '1px solid #F8F8FC' }}
-                  >
-                    {/* Show all recipes with same design */}
-                    {allExpandedRecipes.map((recipe, index) => {
-                      const mealLabels: Record<string, string> = {
-                        'breakfast': 'Desa.',
-                        'lunch': 'Comi.',
-                        'snacks': 'Meri.',
-                        'dinner': 'Cena'
-                      };
-                      
-                      return (
-                        <div 
-                          key={recipe.id || index}
-                          className="flex items-center gap-3 p-2 rounded-xl bg-white cursor-pointer transition-transform duration-200 h-[120px] mb-3 relative w-full"
-                          style={{ 
-                            border: '1px solid #F8F8FC',
-                            animationDelay: `${index * 0.02}s`
-                          }}
-                        >
-                          {/* Recipe Image Container */}
-                          <div className="relative flex-shrink-0">
-                            <img 
-                              src={recipe.image} 
-                              alt={recipe.title}
-                              className="w-[104px] h-[104px] object-cover rounded-lg"
-                            />
-                          </div>
-                          
-                          {/* Recipe Content */}
-                          <div className="flex-1 flex flex-col justify-start relative h-[120px] pt-3">
-                            {/* Header with title and badge */}
-                            <div className="flex items-start gap-2 mb-2 relative">
-                              <h4 className="font-medium text-base leading-tight mt-2 w-[140px] overflow-hidden whitespace-nowrap text-ellipsis">
-                                {recipe.title}
-                              </h4>
-                              <Badge 
-                                className="text-xs font-normal px-2 py-1 absolute right-2 top-1 min-w-fit z-50"
-                                style={{ backgroundColor: '#F6F6F6', color: '#000000' }}
-                              >
-                                {mealLabels[recipe.category] || 'Comi.'}
-                              </Badge>
-                            </div>
-                            
-                            {/* Nutrition info */}
-                            <div className="mb-1.5">
-                              {/* Calories */}
-                              <div className="flex items-center gap-1 mb-2">
-                                <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
-                                <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{recipe.calories} kcal</span>
-                              </div>
-                              
-                              {/* Macros */}
-                              <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-1">
-                                  <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
-                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.protein)}g</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
-                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.carbs)}g</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
-                                  <span className="text-sm font-normal" style={{ color: '#6C6C6C' }}>{Math.round(recipe.macros.fat)}g</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
                 </div>
               </div>
             )}
