@@ -110,6 +110,13 @@ export const RecipePreferencesPage = () => {
   const [finalMessageCursor, setFinalMessageCursor] = useState(true);
   const [totalMealPlanPrice, setTotalMealPlanPrice] = useState(0);
   
+  // Expansion states
+  const [isExpanding, setIsExpanding] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [expansionProgress, setExpansionProgress] = useState(0);
+  const recipesAreaRef = useRef<HTMLDivElement>(null);
+  const lastScrollY = useRef(0);
+  
   // Texto sin formato para la animación
   const plainText = "Hemos creado 184 planes pensados para ti.\n\nLas recetas están optimizadas con los ingredientes de Mercadona, para que ahorres tiempo y dinero al planificar tus comidas. Además, podrás ver cuánto te costaría esa misma lista de la compra en otros supermercados.";
   
@@ -514,6 +521,80 @@ export const RecipePreferencesPage = () => {
   const uniqueRecipes = new Set(mealPlanPreview.flatMap(day => day.meals.map(m => m.recipe?.id))).size;
   const totalPlans = Math.floor(recipes.length / totalRecipesNeeded) * 10;
 
+  // Handle expansion animation
+  const startExpansion = () => {
+    if (isExpanded || isExpanding) return;
+    setIsExpanding(true);
+    lastScrollY.current = window.scrollY;
+    
+    let progress = 0;
+    const duration = 800; // 800ms animation
+    const startTime = Date.now();
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      progress = Math.min(elapsed / duration, 1);
+      
+      setExpansionProgress(progress);
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        setIsExpanding(false);
+        setIsExpanded(true);
+      }
+    };
+    
+    animate();
+  };
+
+  const cancelExpansion = () => {
+    if (isExpanded) return; // Can't cancel if already expanded
+    if (!isExpanding) return;
+    
+    setIsExpanding(false);
+    setExpansionProgress(0);
+  };
+
+  // Handle click on recipes area
+  const handleRecipesAreaClick = () => {
+    startExpansion();
+  };
+
+  // Handle scroll to detect scroll down/up
+  useEffect(() => {
+    if (!showFinalMessage) return;
+    
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Scroll down detection - start expansion
+      if (currentScrollY > lastScrollY.current && !isExpanding && !isExpanded) {
+        const recipesArea = recipesAreaRef.current;
+        if (recipesArea) {
+          const rect = recipesArea.getBoundingClientRect();
+          // If recipes area is in viewport and scrolling down
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            startExpansion();
+          }
+        }
+      }
+      
+      // Scroll up detection during expansion - cancel
+      if (currentScrollY < lastScrollY.current && isExpanding && !isExpanded) {
+        cancelExpansion();
+      }
+      
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [showFinalMessage, isExpanding, isExpanded]);
+
+  // Generate all recipes for expanded view
+  const allExpandedRecipes = recipes.slice(0, 50); // Show first 50 recipes
+
   useEffect(() => {
     if (skipAnimations || fullText.length === 0) return;
     
@@ -676,12 +757,27 @@ export const RecipePreferencesPage = () => {
             )}
 
             {/* Meal Plan Card - appears after final message */}
-            {showFinalMessage && charIndex >= plainText.length && confirmedDates[0] && (
-              <div className="px-3 pb-20" style={{ marginBottom: '80px' }}>
+            {showFinalMessage && charIndex >= plainText.length && confirmedDates[0] && !isExpanded && (
+              <div 
+                ref={recipesAreaRef}
+                className="px-3 pb-20 transition-all duration-300" 
+                style={{ 
+                  marginBottom: '80px',
+                  position: isExpanding ? 'fixed' : 'relative',
+                  top: isExpanding ? '0' : 'auto',
+                  left: isExpanding ? '0' : 'auto',
+                  right: isExpanding ? '0' : 'auto',
+                  bottom: isExpanding ? '0' : 'auto',
+                  zIndex: isExpanding ? 50 : 'auto',
+                  transform: isExpanding ? `scale(${1 + expansionProgress * 0.2})` : 'scale(1)',
+                  opacity: isExpanding ? 1 - expansionProgress * 0.3 : 1
+                }}
+              >
                 {/* Single mother card containing all days */}
                 <div 
-                  className="bg-white rounded-xl p-4"
+                  className="bg-white rounded-xl p-4 cursor-pointer"
                   style={{ border: '1px solid #F8F8FC' }}
+                  onClick={handleRecipesAreaClick}
                 >
                   {/* Group selections by date */}
                   {confirmedDates.map((date) => {
@@ -799,6 +895,65 @@ export const RecipePreferencesPage = () => {
                       </div>
                     );
                   })}
+                </div>
+              </div>
+            )}
+
+            {/* Expanded View - Full Screen */}
+            {isExpanded && (
+              <div 
+                className="fixed inset-0 bg-white z-50 overflow-y-auto animate-fade-in"
+                style={{ 
+                  paddingTop: '64px',
+                  paddingBottom: '24px'
+                }}
+              >
+                <div className="max-w-7xl mx-auto px-4">
+                  <h2 className="text-2xl font-semibold mb-6" style={{ color: '#1C1C1C' }}>
+                    Todas las recetas disponibles
+                  </h2>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {allExpandedRecipes.map((recipe, index) => (
+                      <div 
+                        key={recipe.id || index}
+                        className="bg-white rounded-xl overflow-hidden animate-fade-in"
+                        style={{ 
+                          border: '1px solid #F8F8FC',
+                          animationDelay: `${index * 0.03}s`
+                        }}
+                      >
+                        <img 
+                          src={recipe.image} 
+                          alt={recipe.title}
+                          className="w-full h-48 object-cover"
+                        />
+                        <div className="p-4">
+                          <h3 className="font-medium text-lg mb-2" style={{ color: '#1C1C1C' }}>
+                            {recipe.title}
+                          </h3>
+                          <div className="flex items-center gap-4 text-sm" style={{ color: '#6C6C6C' }}>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/d923963b-f4fc-4381-8216-90ad753ef245.png" alt="calories" className="h-4 w-4" />
+                              <span>{recipe.calories} kcal</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/967d027e-2a1d-40b3-b300-c73dbb88963a.png" alt="protein" className="h-4 w-4" />
+                              <span>{Math.round(recipe.macros.protein)}g</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/26934026-f2f8-4901-a7ba-e4e0c8ac36e1.png" alt="carbs" className="h-4 w-4" />
+                              <span>{Math.round(recipe.macros.carbs)}g</span>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              <img src="/lovable-uploads/7f516dd8-5753-49bd-9b5d-aa5c0bfeedd1.png" alt="fat" className="h-4 w-4" />
+                              <span>{Math.round(recipe.macros.fat)}g</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
